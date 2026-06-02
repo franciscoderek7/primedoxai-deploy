@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constitutional Defense Labs — Charter Research &amp; Development</title>
+  <meta name="description" content="R&D for Charter defense strategies. Constitutional Defense Labs advances constitutional education through research, analysis, and framework development. SR&ED eligible.">
+  <meta name="keywords" content="Constitutional Defense Labs, Charter research, SR&ED, section 7 Charter, constitutional education, BENO-X, Francisco Holdings, Charter jurisprudence">
+  <meta name="author" content="Francisco Holdings Inc.">
+  <meta property="og:title" content="Constitutional Defense Labs — Charter Research &amp; Development">
+  <meta property="og:description" content="R&D for Charter defense strategies. Advancing constitutional education through research, analysis, and framework development. SR&ED eligible.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://constitutionaldefenselabs.ca">
+  <meta property="og:image" content="https://constitutionaldefenselabs.ca/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Constitutional Defense Labs — Charter Research &amp; Development">
+  <meta name="twitter:description" content="R&D for Charter defense strategies. SR&ED eligible constitutional research.">
+  <link rel="canonical" href="https://constitutionaldefenselabs.ca">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #050815;
+      --cyan: #00D4FF;
+      --gold: #FFD700;
+      --bg: #050815;
+      --surface: #080E1E;
+      --surface2: #0D1428;
+      --text: #E8EDF8;
+      --text-muted: #7080A0;
+      --border: rgba(0,212,255,0.12);
+      --border-gold: rgba(255,215,0,0.15);
+      --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6; overflow-x: hidden;
+    }
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5,8,21,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 0 1rem;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text); font-weight: 700; font-size: 1rem;
+    }
+    .nav-logo svg { width: 38px; height: 38px; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-cta {
+      background: transparent; color: var(--cyan);
+      border: 1.5px solid var(--cyan); padding: 0.42rem 1rem;
+      border-radius: 6px; font-weight: 700; font-size: 0.83rem;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: rgba(0,212,255,0.1); }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+    .hero {
+      min-height: 90vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 4rem 1.5rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 20%, rgba(0,212,255,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 70% 70%, rgba(255,215,0,0.04) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .hero-logo {
+      width: 90px; height: 90px; margin-bottom: 1.5rem;
+      animation: helix-glow 3s ease-in-out infinite;
+    }
+    @keyframes helix-glow {
+      0%, 100% { filter: drop-shadow(0 0 6px rgba(0,212,255,0.35)); }
+      50% { filter: drop-shadow(0 0 20px rgba(0,212,255,0.75)); }
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.9rem, 5vw, 3.4rem);
+      font-weight: 900; line-height: 1.1; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 60%, var(--gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(0.95rem, 2.2vw, 1.15rem); color: var(--text-muted);
+      max-width: 640px; margin: 0 auto 0.75rem;
+    }
+    .sred-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,215,0,0.1); border: 1px solid var(--border-gold);
+      color: var(--gold); padding: 0.4rem 1rem; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 700; margin: 0.75rem 0 2rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-cyan {
+      background: var(--cyan); color: #000;
+      padding: 0.8rem 2rem; border-radius: 8px;
+      font-weight: 700; font-size: 1rem; text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-cyan:hover { opacity: 0.88; transform: translateY(-2px); }
+    .btn-outline-cyan {
+      background: transparent; color: var(--cyan);
+      border: 1.5px solid var(--cyan); padding: 0.8rem 2rem;
+      border-radius: 8px; font-weight: 600; font-size: 1rem;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .btn-outline-cyan:hover { background: rgba(0,212,255,0.08); }
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 0.75rem;
+    }
+    .section-title { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 800; margin-bottom: 1rem; }
+    .section-sub { color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin-bottom: 3rem; }
+    .about { background: var(--surface); }
+    .about-inner {
+      background: linear-gradient(135deg, rgba(0,212,255,0.04), rgba(255,215,0,0.03));
+      border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem;
+    }
+    .about-inner p { color: var(--text-muted); font-size: 1rem; max-width: 760px; line-height: 1.8; }
+    .about-inner p strong { color: var(--text); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .project-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem 1.5rem;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .project-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--gold));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .project-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+    .project-card:hover::before { opacity: 1; }
+    .project-status {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--cyan);
+      background: rgba(0,212,255,0.1); padding: 0.2rem 0.6rem;
+      border-radius: 4px; display: inline-block; margin-bottom: 0.75rem;
+    }
+    .project-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--text); }
+    .project-card p { color: var(--text-muted); font-size: 0.88rem; }
+    .sred-section { background: var(--surface); }
+    .sred-box {
+      background: linear-gradient(135deg, rgba(255,215,0,0.06), rgba(0,212,255,0.03));
+      border: 1px solid var(--border-gold); border-radius: var(--radius);
+      padding: 2rem 2.5rem; display: flex; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .sred-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .sred-box h3 { font-size: 1.2rem; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem; }
+    .sred-box p { color: var(--text-muted); font-size: 0.93rem; }
+    .publications-cta {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 3rem 2rem; max-width: 580px; margin: 0 auto; text-align: center;
+    }
+    .publications-cta h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .publications-cta p { color: var(--text-muted); margin-bottom: 1.5rem; }
+    .form-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .form-row input {
+      flex: 1; min-width: 200px; background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+      padding: 0.75rem 1rem; color: var(--text); font-size: 0.95rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-row input:focus { border-color: var(--cyan); }
+    .form-row input::placeholder { color: var(--text-muted); }
+    .btn-submit {
+      background: var(--cyan); color: #000; border: none;
+      border-radius: 8px; padding: 0.75rem 1.5rem;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      transition: opacity 0.2s; white-space: nowrap;
+    }
+    .btn-submit:hover { opacity: 0.85; }
+    .form-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.75rem; }
+    .collab-box {
+      background: var(--surface2); border: 1px solid var(--border-gold);
+      border-radius: var(--radius); padding: 2rem 2.5rem; text-align: center;
+    }
+    .collab-box h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.6rem; }
+    .collab-box p { color: var(--text-muted); font-size: 0.95rem; }
+    .collab-box a { color: var(--gold); font-weight: 600; }
+    .disclaimer {
+      background: rgba(0,212,255,0.03); border-top: 1px solid rgba(0,212,255,0.1);
+      padding: 1.2rem 1.5rem; text-align: center;
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    footer {
+      background: #03060F; border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 2.5rem 1.5rem; text-align: center;
+    }
+    footer p { color: var(--text-muted); font-size: 0.85rem; }
+    footer a { color: var(--cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .footer-contact { margin-top: 0.75rem; font-size: 0.82rem; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.7s ease both; }
+    .fade-up-1 { animation-delay: 0.15s; }
+    .fade-up-2 { animation-delay: 0.3s; }
+    .fade-up-3 { animation-delay: 0.45s; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 8 Q12 14 14 20 Q16 26 18 32" stroke="#00D4FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M10 8 Q14 11 18 14 Q22 17 26 20" stroke="#FFD700" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M14 20 Q18 17 22 14 Q26 11 30 8" stroke="#00D4FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M18 32 Q22 26 26 20 Q28 14 30 8" stroke="#FFD700" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="10" cy="8" r="2.5" fill="#00D4FF"/>
+        <circle cx="30" cy="8" r="2.5" fill="#FFD700"/>
+        <circle cx="18" cy="32" r="2.5" fill="#00D4FF"/>
+        <line x1="16" y1="20" x2="22" y2="20" stroke="#fff" stroke-width="1" opacity="0.5"/>
+        <line x1="12" y1="14" x2="26" y2="26" stroke="#fff" stroke-width="0.8" opacity="0.3"/>
+      </svg>
+      CDL
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#sred">SR&amp;ED</a></li>
+      <li><a href="#publications">Publications</a></li>
+    </ul>
+    <a href="#publications" class="nav-cta">Research</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <svg class="hero-logo" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 18 Q26 30 30 42 Q34 54 38 68" stroke="#00D4FF" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M22 18 Q30 24 38 30 Q46 36 54 42" stroke="#FFD700" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M30 42 Q38 36 46 30 Q54 24 62 18" stroke="#00D4FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M38 68 Q46 54 54 42 Q58 32 62 18" stroke="#FFD700" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="22" cy="18" r="5" fill="#00D4FF" opacity="0.9"/>
+    <circle cx="62" cy="18" r="5" fill="#FFD700" opacity="0.9"/>
+    <circle cx="38" cy="68" r="5" fill="#00D4FF" opacity="0.9"/>
+    <line x1="34" y1="42" x2="50" y2="42" stroke="#fff" stroke-width="1.5" opacity="0.4"/>
+    <line x1="26" y1="30" x2="58" y2="54" stroke="#fff" stroke-width="1" opacity="0.25"/>
+  </svg>
+  <div class="hero-eyebrow fade-up">Charter Research &amp; Development</div>
+  <h1 class="fade-up fade-up-1">Constitutional Defense Labs</h1>
+  <p class="fade-up fade-up-2">R&amp;D for Charter defense strategies. Advancing constitutional education through research, analysis, and framework development.</p>
+  <span class="sred-badge fade-up fade-up-2">⚗️ SR&amp;ED Eligible Research Activities</span>
+  <div class="hero-btns fade-up fade-up-3">
+    <a href="#projects" class="btn-cyan">Current Projects</a>
+    <a href="#publications" class="btn-outline-cyan">Download Research</a>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="container">
+    <div class="section-label">About CDL</div>
+    <h2 class="section-title">The Research Arm</h2>
+    <div class="about-inner">
+      <p>
+        <strong>Constitutional Defense Labs</strong> is the research arm of the Francisco Holdings legal education portfolio.
+        We study Charter jurisprudence, develop analytical frameworks, and publish educational resources designed to advance
+        understanding of constitutional rights in Canada.
+        <br><br>
+        Our work focuses on s.7 of the <em>Canadian Charter of Rights and Freedoms</em>, regulatory exemption analysis,
+        and the development of methodologies — including the BENO-X framework — that support constitutional education
+        for Canadians. We are not a law firm and do not provide legal representation or legal advice.
+        <br><br>
+        CDL operates within the Francisco Holdings innovation portfolio based in Lindsay, Ontario, with research activities
+        that may qualify for Scientific Research and Experimental Development (SR&amp;ED) tax incentives under the Income Tax Act.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="section-label">Active Research</div>
+    <h2 class="section-title">Current Projects</h2>
+    <p class="section-sub">Four active research streams advancing Charter education and analytical methodology.</p>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-status">Active</div>
+        <h3>Charter s.7 Analysis Database</h3>
+        <p>Cataloguing fundamental justice jurisprudence from 1982 to present. A systematic index of s.7 cases with analytical summaries, principled frameworks, and cross-references to regulatory law.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-status">Active</div>
+        <h3>BENO-X Framework v3.0</h3>
+        <p>Third-generation exemption analysis methodology. Building on Parker, Smith, and Allard, this iteration incorporates procedural jurisprudence and expanded regulatory defect typologies.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-status">Active</div>
+        <h3>12-Appearance Timeline Study</h3>
+        <p>Procedural defense optimization research examining the strategic and constitutional implications of case management timelines in the Ontario Court of Justice. Educational analysis only.</p>
+      </div>
+      <div class="project-card">
+        <div class="project-status">Research</div>
+        <h3>AI-Assisted Charter Research</h3>
+        <p>Technology tools for constitutional education — exploring how AI-powered research assistants can improve access to Charter jurisprudence for self-represented individuals and researchers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sred-section" id="sred">
+  <div class="container">
+    <div class="section-label">Tax Incentives</div>
+    <h2 class="section-title">SR&amp;ED Eligibility</h2>
+    <div class="sred-box">
+      <div class="sred-icon">⚗️</div>
+      <div>
+        <h3>Scientific Research &amp; Experimental Development</h3>
+        <p>Constitutional Defense Labs conducts systematic investigation and experimental development activities in the field of Canadian constitutional law and analytical framework development. These activities may qualify for SR&amp;ED tax credits under the <em>Income Tax Act</em>, potentially covering a significant portion of our research expenditures.</p>
+        <p style="margin-top:0.75rem;"><strong style="color:var(--gold)">Note:</strong> SR&amp;ED eligibility determinations are made by the Canada Revenue Agency. Consult your qualified tax advisor or SR&amp;ED specialist for guidance specific to your situation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="container">
+    <div class="publications-cta">
+      <div class="section-label" style="text-align:center">Publications</div>
+      <h3>Download Latest Research Summary</h3>
+      <p>Receive our quarterly research summary — covering active project updates, new case law analysis, and framework development progress.</p>
+      <form onsubmit="return false;">
+        <div class="form-row">
+          <input type="email" placeholder="Your email address" required>
+          <button type="submit" class="btn-submit">Download</button>
+        </div>
+      </form>
+      <p class="form-note">Quarterly publication. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="collab-box">
+      <div class="section-label" style="text-align:center">Collaboration</div>
+      <h3>Research Collaboration Inquiries</h3>
+      <p>Constitutional Defense Labs welcomes collaboration with legal academics, researchers, and institutions studying Canadian constitutional law. Joint publications, peer review, and framework testing partnerships available.</p>
+      <p style="margin-top:1rem;">Contact: <a href="mailto:derek@franciscoholdings.com">derek@franciscoholdings.com</a></p>
+    </div>
+  </div>
+</section>
+
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> Constitutional Defense Labs provides educational research only. Not legal advice. Not legal representation. For legal matters, consult a licensed lawyer.
+</div>
+
+<footer>
+  <p>&copy; 2026 Constitutional Defense Labs. A Francisco Holdings Inc. Company.</p>
+  <p class="footer-contact">
+    <a href="tel:7053078080">705-307-8080</a> &nbsp;|&nbsp;
+    <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a> &nbsp;|&nbsp;
+    Lindsay, Ontario
+  </p>
+</footer>
+
+</body>
+</html>
