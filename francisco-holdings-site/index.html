@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Holdings Inc. | Building the Future</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #FFD700;
+    --cyan: #00D4FF;
+    --dark: #050508;
+    --card: #0A0A0E;
+    --card2: #0F0F16;
+    --border: rgba(255,215,0,0.15);
+    --text: #E8E8F0;
+    --muted: #888899;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* PARTICLE CANVAS */
+  #particle-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(5,5,8,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .fh-logo {
+    width: 40px; height: 40px;
+    background: var(--gold);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 15px;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .nav-brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold);
+    color: #000 !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px !important;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { opacity: 0.85; color: #000 !important; }
+  .nav-mobile-menu { display: none; background: none; border: none; color: var(--text); cursor: pointer; font-size: 24px; }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 64px; left: 0; right: 0;
+      background: rgba(5,5,8,0.98);
+      padding: 20px 24px;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile-menu { display: block; }
+    .nav-brand-name { display: none; }
+  }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+  }
+  .hero-content { max-width: 900px; }
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.3);
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(42px, 8vw, 90px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--gold) 50%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(18px, 3vw, 26px);
+    color: var(--muted);
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .counter-display {
+    font-size: clamp(20px, 4vw, 32px);
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 48px;
+    padding: 20px 32px;
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 12px;
+    display: inline-block;
+  }
+  .counter-display .counter-num {
+    color: var(--gold);
+    font-size: 1.3em;
+  }
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .stat-pill {
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: var(--cyan);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: #000;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s, opacity 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: border-color 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--gold); transform: translateY(-2px); color: var(--gold); }
+
+  /* SECTION HEADERS */
+  .section-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 24px;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .section-tag {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-header h2 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .section-header p {
+    color: var(--muted);
+    font-size: 18px;
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* PORTFOLIO GRID */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 1100px) { .portfolio-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .portfolio-grid { grid-template-columns: 1fr; } }
+
+  .company-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .company-card:hover {
+    border-color: rgba(255,215,0,0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(255,215,0,0.1);
+  }
+  .card-num {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 28px;
+    height: 28px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .card-body { padding-top: 36px; }
+  .card-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .card-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--cyan);
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .status-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .status-live { background: rgba(0,200,80,0.15); color: #00C850; border: 1px solid rgba(0,200,80,0.3); }
+  .status-building { background: rgba(0,212,255,0.12); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
+  .status-concept { background: rgba(255,215,0,0.1); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
+
+  /* LEADERSHIP */
+  .leadership-section { background: rgba(255,215,0,0.02); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .leader-card {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .leader-card:hover { border-color: rgba(255,215,0,0.4); }
+  .leader-avatar {
+    width: 100px;
+    height: 100px;
+    background: rgba(255,215,0,0.1);
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    margin: 0 auto 24px;
+    letter-spacing: 1px;
+  }
+  .leader-name {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .leader-title {
+    color: var(--gold);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .leader-bio {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+  .leader-tags {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .leader-tag {
+    background: rgba(255,215,0,0.08);
+    border: 1px solid rgba(255,215,0,0.2);
+    color: var(--gold);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* INVESTMENT */
+  .partner-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
+  }
+  @media (max-width: 768px) { .partner-grid { grid-template-columns: 1fr; } }
+  .partner-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .partner-card:hover { border-color: rgba(255,215,0,0.4); transform: translateY(-3px); }
+  .partner-icon {
+    width: 48px; height: 48px;
+    background: rgba(255,215,0,0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  .partner-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .partner-card p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+  /* CONTACT FORM */
+  .contact-form {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group select option { background: #0A0A0E; color: var(--text); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-submit {
+    width: 100%;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    font-family: inherit;
+  }
+  .form-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 32px;
+    color: #00C850;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  /* FOOTER */
+  footer {
+    background: rgba(5,5,8,0.98);
+    border-top: 1px solid var(--border);
+    padding: 60px 24px 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 768px) { .footer-top { grid-template-columns: 1fr; gap: 32px; } }
+  .footer-brand h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .footer-brand p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+  .footer-col h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--gold); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom p { color: var(--muted); font-size: 13px; }
+  .footer-bottom a { color: var(--muted); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--gold); }
+
+  /* DIVIDER */
+  .gradient-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--cyan), transparent);
+    opacity: 0.3;
+    margin: 0;
+  }
+
+  /* SCROLL FADE IN */
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="fh-logo">FH</div>
+    <span class="nav-brand-name">Francisco Holdings Inc.</span>
+  </a>
+  <button class="nav-mobile-menu" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+  <ul class="nav-links">
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#leadership">Leadership</a></li>
+    <li><a href="#investment">Investment</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Partner With Us</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Lindsay, Ontario &rarr; Canada &rarr; World</div>
+    <h1>Francisco Holdings Inc.</h1>
+    <p class="hero-sub">Building the Future, One Company at a Time.</p>
+    <div class="counter-display">
+      <span class="counter-num" id="company-counter">0</span> Companies. One Vision. Zero Limits.
+    </div>
+    <div class="hero-stats">
+      <span class="stat-pill">$2M+ TAM Addressable</span>
+      <span class="stat-pill">6+ Industry Verticals</span>
+      <span class="stat-pill">100% Bootstrapped</span>
+      <span class="stat-pill">Lindsay, Ontario &rarr; Canada &rarr; World</span>
+    </div>
+    <div class="hero-ctas">
+      <a href="#portfolio" class="btn-primary">View Portfolio &rarr;</a>
+      <a href="#contact" class="btn-secondary">Partner With Us &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<div class="gradient-divider"></div>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <div class="section-tag">The Empire</div>
+      <h2>The Portfolio</h2>
+      <p>31 operating companies and ventures across technology, legal education, AI security, field service, privacy, health, media, and capital.</p>
+    </div>
+
+    <div class="portfolio-grid" id="portfolio-grid">
+      <!-- Cards rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<div class="gradient-divider"></div>
+
+<!-- LEADERSHIP -->
+<section id="leadership" class="leadership-section">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <div class="section-tag">Who We Are</div>
+      <h2>Leadership</h2>
+    </div>
+    <div class="leader-card fade-in">
+      <div class="leader-avatar">DF</div>
+      <div class="leader-name">Derek Francisco</div>
+      <div class="leader-title">CEO &amp; Founder</div>
+      <p class="leader-bio">Serial entrepreneur, constitutional researcher, and technology builder. Founder of Tech Pet Cage (registered), creator of CCLDR.NET, CleanSwarm, OmniaGuard, and PrimeDox AI. Building a 31-company empire from Lindsay, Ontario — one systematically executed company at a time.</p>
+      <div class="leader-tags">
+        <span class="leader-tag">Serial Founder</span>
+        <span class="leader-tag">Doc Weedlaw</span>
+        <span class="leader-tag">Lindsay, Ontario</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gradient-divider"></div>
+
+<!-- INVESTMENT -->
+<section id="investment">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <div class="section-tag">Partnerships</div>
+      <h2>Partner With Francisco Holdings</h2>
+      <p>We partner with operators, investors, and institutions who want exposure to our portfolio.</p>
+    </div>
+
+    <div class="partner-grid">
+      <div class="partner-card fade-in">
+        <div class="partner-icon">&#128200;</div>
+        <h3>Strategic Partners</h3>
+        <p>Co-marketing, integration, and channel partnerships across our 6 verticals. Work directly with operating companies across tech, legal education, AI, and field services.</p>
+      </div>
+      <div class="partner-card fade-in">
+        <div class="partner-icon">&#128176;</div>
+        <h3>Capital Partners</h3>
+        <p>Francisco Capital is building an investment thesis around Canadian founder-led tech. We are building funding infrastructure for the next generation of bootstrapped Canadian companies.</p>
+      </div>
+      <div class="partner-card fade-in">
+        <div class="partner-icon">&#129520;</div>
+        <h3>Operating Partners</h3>
+        <p>Experienced operators who want equity participation in specific portfolio companies. We offer structured operating agreements across portfolio businesses at various stages.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gradient-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="section-header fade-in">
+      <div class="section-tag">Get In Touch</div>
+      <h2>Submit an Inquiry</h2>
+      <p>Derek reviews every partnership inquiry personally. Expect a response within 48 hours.</p>
+    </div>
+
+    <div class="contact-form fade-in">
+      <form id="contact-form" onsubmit="handleFormSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">Name</label>
+            <input type="text" id="fname" name="name" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="femail">Email</label>
+            <input type="email" id="femail" name="email" placeholder="your@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="forg">Organization</label>
+          <input type="text" id="forg" name="organization" placeholder="Company or organization name">
+        </div>
+        <div class="form-group">
+          <label for="ftype">Partnership Type</label>
+          <select id="ftype" name="type" required>
+            <option value="" disabled selected>Select partnership type</option>
+            <option value="strategic">Strategic Partner</option>
+            <option value="capital">Capital Partner</option>
+            <option value="operating">Operating Partner</option>
+            <option value="media">Media / Press</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fmsg">Message</label>
+          <textarea id="fmsg" name="message" placeholder="Tell us about your interest and what you bring to the table..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Submit Inquiry &rarr;</button>
+      </form>
+      <div class="form-success" id="form-success">
+        &#10003; Thank you — Derek will respond within 48 hours.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>Francisco Holdings Inc.</h3>
+        <p>Building a 31-company empire from Lindsay, Ontario. Across AI, legal education, cybersecurity, field services, privacy, health, and capital markets.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Portfolio</h4>
+        <ul>
+          <li><a href="#">CleanSwarm</a></li>
+          <li><a href="#">CCLDR.NET</a></li>
+          <li><a href="#">OmniaGuard</a></li>
+          <li><a href="#">PrimeDox AI</a></li>
+          <li><a href="#">Sovereignty Privacy</a></li>
+          <li><a href="#">MindShift</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#leadership">Leadership</a></li>
+          <li><a href="#investment">Investment</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Francisco Holdings Inc. All Rights Reserved.</p>
+      <p>Derek Francisco, CEO</p>
+      <a href="#">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// PARTICLE SYSTEM
+(function() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function Particle() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.6;
+    this.r = Math.random() * 2 + 1;
+    this.color = Math.random() > 0.5 ? '#FFD700' : '#00D4FF';
+  }
+  Particle.prototype.update = function() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > W) this.vx *= -1;
+    if (this.y < 0 || this.y > H) this.vy *= -1;
+  };
+
+  for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      const p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.7;
+      ctx.fill();
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = p.color;
+          ctx.globalAlpha = (1 - dist/120) * 0.25;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// COMPANY COUNTER
+(function() {
+  const el = document.getElementById('company-counter');
+  const target = 31;
+  const duration = 2000;
+  const startTime = performance.now();
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+})();
+
+// PORTFOLIO CARDS
+const companies = [
+  { n:1,  name:"Tech Pet Cage",               desc:"Registered Ontario operating company",          tag:"Operations",       status:"LIVE" },
+  { n:2,  name:"CleanSwarm",                  desc:"AI dispatch for cleaning enterprises",           tag:"Field Service SaaS",status:"LIVE" },
+  { n:3,  name:"CCLDR.NET",                   desc:"Canadian constitutional cannabis education",     tag:"Legal Education",  status:"LIVE" },
+  { n:4,  name:"OmniaGuard",                  desc:"Enterprise AI security stack",                  tag:"Cybersecurity",    status:"LIVE" },
+  { n:5,  name:"PrimeDox AI",                 desc:"Sovereign digital twin system",                 tag:"AI Platform",      status:"LIVE" },
+  { n:6,  name:"Sovereignty Privacy",         desc:"Digital identity removal service",              tag:"Privacy Tech",     status:"LIVE" },
+  { n:7,  name:"Weedlaw Education",           desc:"Doc Weedlaw course platform",                   tag:"EdTech",           status:"BUILDING" },
+  { n:8,  name:"MindShift",                   desc:"Neuroplasticity executive coaching",            tag:"Health & Wellness",status:"LIVE" },
+  { n:9,  name:"SupplyChain Pro",             desc:"B2B supply chain optimization",                 tag:"Logistics",        status:"BUILDING" },
+  { n:10, name:"Francisco Capital",           desc:"Investment arm for founder funding",            tag:"Capital",          status:"CONCEPT" },
+  { n:11, name:"Weedlaw Publishing",          desc:"Books, courses, print media",                   tag:"Publishing",       status:"BUILDING" },
+  { n:12, name:"CCLDR Insurance",             desc:"Cannabis-specific business coverage",           tag:"Insurance",        status:"CONCEPT" },
+  { n:13, name:"Agent Marketplace",           desc:"AI agent licensing platform",                   tag:"AI Commerce",      status:"CONCEPT" },
+  { n:14, name:"Constitutional AI",           desc:"Charter-trained AI system",                     tag:"AI/Legal",         status:"CONCEPT" },
+  { n:15, name:"CleanSwarm Franchise",        desc:"White-label licensing program",                 tag:"Franchise",        status:"BUILDING" },
+  { n:16, name:"OmniaGuard Federal",          desc:"Government AI security contracts",              tag:"GovTech",          status:"CONCEPT" },
+  { n:17, name:"PrimeDox Health",             desc:"Medical AI & MMAR compliance",                  tag:"HealthTech",       status:"CONCEPT" },
+  { n:18, name:"Kawartha Digital",            desc:"Local digital services, Lindsay ON",            tag:"Digital Services", status:"BUILDING" },
+  { n:19, name:"Doc Weedlaw Media",           desc:"YouTube, podcast, personal brand",              tag:"Media",            status:"BUILDING" },
+  { n:20, name:"Francisco Holdings Properties",desc:"Real estate holding vehicle",                 tag:"Real Estate",      status:"CONCEPT" },
+  { n:21, name:"Sovereign Paralegal",         desc:"Legal document preparation",                   tag:"Legal Services",   status:"CONCEPT" },
+  { n:22, name:"CleanSwarm Academy",          desc:"Training for cleaning industry",                tag:"Education",        status:"CONCEPT" },
+  { n:23, name:"OmniaGuard Certified",        desc:"AI security certification body",               tag:"Certification",    status:"CONCEPT" },
+  { n:24, name:"BENO-X Legal Tech",           desc:"Constitutional analysis tools",                 tag:"LegalTech",        status:"CONCEPT" },
+  { n:25, name:"Francisco HR",                desc:"HR & compliance for small companies",           tag:"HR Services",      status:"CONCEPT" },
+  { n:26, name:"Charter Shield",              desc:"Emergency legal document generation",           tag:"Legal Tech",       status:"CONCEPT" },
+  { n:27, name:"PrimeDox B2B",               desc:"Enterprise digital twin licensing",             tag:"Enterprise AI",    status:"CONCEPT" },
+  { n:28, name:"Kawartha Cannabis",           desc:"Regional cannabis consulting",                  tag:"Cannabis",         status:"CONCEPT" },
+  { n:29, name:"Francisco Logistics",         desc:"Last-mile delivery for Kawartha",              tag:"Logistics",        status:"CONCEPT" },
+  { n:30, name:"TPC Repairs Pro",             desc:"Commercial tech repair contracts",              tag:"B2B Services",     status:"BUILDING" },
+  { n:31, name:"Sovereign AI Corp",           desc:"Parent AI holding entity",                     tag:"Holding",          status:"BUILDING" },
+];
+
+const grid = document.getElementById('portfolio-grid');
+companies.forEach(function(c) {
+  const statusClass = c.status === 'LIVE' ? 'status-live' : c.status === 'BUILDING' ? 'status-building' : 'status-concept';
+  const card = document.createElement('div');
+  card.className = 'company-card fade-in';
+  card.innerHTML = `
+    <div class="card-num">${c.n}</div>
+    <div class="card-body">
+      <div class="card-name">${c.name}</div>
+      <div class="card-desc">${c.desc}</div>
+      <div class="card-footer">
+        <span class="card-tag">${c.tag}</span>
+        <span class="status-badge ${statusClass}">${c.status}</span>
+      </div>
+    </div>`;
+  grid.appendChild(card);
+});
+
+// SCROLL FADE
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
+
+// FORM SUBMIT
+function handleFormSubmit(e) {
+  e.preventDefault();
+  document.getElementById('contact-form').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+}
+</script>
+</body>
+</html>

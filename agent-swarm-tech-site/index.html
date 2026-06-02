@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Swarm Technologies — Multi-Agent AI Systems</title>
+  <meta name="description" content="Agent Swarm Technologies designs and deploys multi-agent AI systems. 22+ specialized agents, 17 companies protected, sovereign AI infrastructure.">
+  <meta name="keywords" content="multi-agent AI, agent swarm, AI orchestration, enterprise AI, constitutional AI, AI deployment, Canada">
+  <meta name="author" content="Agent Swarm Technologies">
+  <meta property="og:title" content="Agent Swarm Technologies — Multi-Agent AI Systems">
+  <meta property="og:description" content="Multi-agent AI system design and deployment. 22+ specialized agents. 17 companies protected. Sovereign AI infrastructure.">
+  <meta property="og:type" content="website">
+  <meta name="robots" content="index, follow">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cyan: #00D4FF;
+      --purple: #7B2FBE;
+      --dark: #050508;
+      --dark2: #0D0D14;
+      --dark3: #12121E;
+      --text: #E8E8F0;
+      --muted: #8888AA;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(5,5,8,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,212,255,0.15);
+      padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-weight: 700; font-size: 0.95rem; color: var(--cyan);
+      letter-spacing: 0.04em;
+    }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); font-size: 0.875rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cyan); text-decoration: none; }
+    @media(max-width:640px) { .nav-links { display: none; } }
+
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 1.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(123,47,190,0.18) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 40% at 20% 80%, rgba(0,212,255,0.07) 0%, transparent 60%);
+    }
+    .grid-overlay {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridPulse 8s ease-in-out infinite;
+    }
+    @keyframes gridPulse {
+      0%,100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 820px; }
+    .hero-svg {
+      width: 110px; height: 110px; margin: 0 auto 1.5rem;
+      animation: nodeFloat 4s ease-in-out infinite;
+    }
+    @keyframes nodeFloat {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: var(--cyan);
+      padding: 0.25rem 0.85rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, var(--cyan) 65%, var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--muted);
+      max-width: 620px; margin: 0 auto 2rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .stats-bar {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 2rem;
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .stat-item {
+      font-size: 0.875rem;
+      color: var(--cyan);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .stat-item + .stat-item::before {
+      content: "|";
+      margin-right: 2rem;
+      color: rgba(0,212,255,0.3);
+    }
+    @media(max-width:480px) { .stat-item + .stat-item::before { display: none; } }
+
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 0.5rem; display: block;
+    }
+    h2 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700; margin-bottom: 0.75rem;
+    }
+    .section-sub { color: var(--muted); max-width: 560px; margin-bottom: 2.5rem; font-size: 0.95rem; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--dark3);
+      border: 1px solid rgba(0,212,255,0.1);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,212,255,0.35);
+      box-shadow: 0 8px 32px rgba(0,212,255,0.08);
+    }
+    .card-icon {
+      width: 46px; height: 46px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(123,47,190,0.12));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem; font-size: 1.4rem;
+    }
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+    }
+    .use-case {
+      background: var(--dark2);
+      border: 1px solid rgba(123,47,190,0.2);
+      border-radius: 12px;
+      padding: 1.4rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .use-case:hover {
+      border-color: var(--purple);
+      background: rgba(123,47,190,0.1);
+      transform: translateY(-2px);
+    }
+    .uc-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
+
+    .omnia-block {
+      background: linear-gradient(135deg, rgba(123,47,190,0.14) 0%, rgba(0,212,255,0.07) 100%);
+      border: 1px solid rgba(123,47,190,0.3);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .omnia-block p { color: var(--muted); max-width: 560px; margin: 0 auto 1.75rem; }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: #fff;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0,212,255,0.3);
+      text-decoration: none;
+    }
+
+    .form-section { background: var(--dark2); }
+    .form-wrap { max-width: 620px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media(max-width:560px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+    label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; }
+    input, textarea {
+      background: var(--dark3);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input:focus, textarea:focus { outline: none; border-color: var(--cyan); }
+    textarea { min-height: 130px; resize: vertical; }
+
+    .disclaimer {
+      background: rgba(123,47,190,0.07);
+      border: 1px solid rgba(123,47,190,0.2);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2rem;
+      line-height: 1.6;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,212,255,0.18), transparent);
+    }
+
+    footer {
+      background: var(--dark2);
+      border-top: 1px solid rgba(0,212,255,0.08);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--cyan); }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="50" r="10" fill="#00D4FF" opacity="0.9"/>
+      <circle cx="50" cy="12" r="6" fill="#7B2FBE"/>
+      <circle cx="82" cy="31" r="6" fill="#7B2FBE"/>
+      <circle cx="82" cy="69" r="6" fill="#7B2FBE"/>
+      <circle cx="50" cy="88" r="6" fill="#7B2FBE"/>
+      <circle cx="18" cy="69" r="6" fill="#7B2FBE"/>
+      <circle cx="18" cy="31" r="6" fill="#7B2FBE"/>
+      <line x1="50" y1="18" x2="50" y2="40" stroke="#00D4FF" stroke-width="2" opacity="0.4"/>
+      <line x1="76" y1="34" x2="60" y2="44" stroke="#00D4FF" stroke-width="2" opacity="0.4"/>
+      <line x1="76" y1="66" x2="60" y2="56" stroke="#00D4FF" stroke-width="2" opacity="0.4"/>
+      <line x1="50" y1="82" x2="50" y2="60" stroke="#00D4FF" stroke-width="2" opacity="0.4"/>
+      <line x1="24" y1="66" x2="40" y2="56" stroke="#00D4FF" stroke-width="2" opacity="0.4"/>
+      <line x1="24" y1="34" x2="40" y2="44" stroke="#00D4FF" stroke-width="2" opacity="0.4"/>
+    </svg>
+    Agent Swarm Technologies
+  </div>
+  <div class="nav-links">
+    <a href="#what-we-build">What We Build</a>
+    <a href="#use-cases">Use Cases</a>
+    <a href="#omniaguard">OmniaGuard</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-overlay"></div>
+  <div class="hero-content">
+    <svg class="hero-svg" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="50" r="13" fill="none" stroke="#00D4FF" stroke-width="2.5"/>
+      <circle cx="50" cy="50" r="7" fill="#00D4FF" opacity="0.85"/>
+      <circle cx="50" cy="12" r="7.5" fill="none" stroke="#7B2FBE" stroke-width="2"/>
+      <circle cx="50" cy="12" r="4" fill="#7B2FBE"/>
+      <circle cx="82" cy="31" r="7.5" fill="none" stroke="#7B2FBE" stroke-width="2"/>
+      <circle cx="82" cy="31" r="4" fill="#7B2FBE"/>
+      <circle cx="82" cy="69" r="7.5" fill="none" stroke="#7B2FBE" stroke-width="2"/>
+      <circle cx="82" cy="69" r="4" fill="#7B2FBE"/>
+      <circle cx="50" cy="88" r="7.5" fill="none" stroke="#7B2FBE" stroke-width="2"/>
+      <circle cx="50" cy="88" r="4" fill="#7B2FBE"/>
+      <circle cx="18" cy="69" r="7.5" fill="none" stroke="#7B2FBE" stroke-width="2"/>
+      <circle cx="18" cy="69" r="4" fill="#7B2FBE"/>
+      <circle cx="18" cy="31" r="7.5" fill="none" stroke="#7B2FBE" stroke-width="2"/>
+      <circle cx="18" cy="31" r="4" fill="#7B2FBE"/>
+      <line x1="50" y1="19.5" x2="50" y2="37" stroke="#00D4FF" stroke-width="1.5" opacity="0.5"/>
+      <line x1="74.5" y1="34.5" x2="63" y2="43" stroke="#00D4FF" stroke-width="1.5" opacity="0.5"/>
+      <line x1="74.5" y1="65.5" x2="63" y2="57" stroke="#00D4FF" stroke-width="1.5" opacity="0.5"/>
+      <line x1="50" y1="80.5" x2="50" y2="63" stroke="#00D4FF" stroke-width="1.5" opacity="0.5"/>
+      <line x1="25.5" y1="65.5" x2="37" y2="57" stroke="#00D4FF" stroke-width="1.5" opacity="0.5"/>
+      <line x1="25.5" y1="34.5" x2="37" y2="43" stroke="#00D4FF" stroke-width="1.5" opacity="0.5"/>
+    </svg>
+    <div class="badge">Sovereign AI Infrastructure</div>
+    <h1>Agent Swarm Technologies</h1>
+    <p class="hero-sub">Multi-agent AI system design and deployment. 22+ specialized agents. 17 companies protected. Sovereign AI infrastructure.</p>
+    <div class="stats-bar">
+      <span class="stat-item">22+ Agents</span>
+      <span class="stat-item">17 Companies</span>
+      <span class="stat-item">99.97% Uptime</span>
+      <span class="stat-item">Zero Proprietary Tech Disclosed</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="what-we-build">
+  <div class="container">
+    <span class="section-label">Capabilities</span>
+    <h2>What We Build</h2>
+    <p class="section-sub">Proprietary agent architecture engineered for enterprise-grade reliability, security, and governance. Each system is purpose-built — not off-the-shelf.</p>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">⬡</div>
+        <h3>Multi-Agent Orchestration</h3>
+        <p>Systems where multiple specialized AI agents work in coordination — each with a defined role, scope, and communication protocol within a unified swarm.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡</div>
+        <h3>Constitutional Agent Design</h3>
+        <p>Agents built with guardrails and governance from the ground up. Every agent in our swarms operates within a defined constitutional framework that enforces safe, compliant behaviour.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙</div>
+        <h3>Enterprise Deployment</h3>
+        <p>Production-grade swarm systems with real-time monitoring, failover architecture, and operational runbooks. Built to run continuously across the Francisco Holdings portfolio.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h3>Security Integration</h3>
+        <p>OmniaGuard protection built into every swarm deployment. Security is not a layer — it is a foundational design constraint applied before a single agent is instantiated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="use-cases" style="background: var(--dark2);">
+  <div class="container">
+    <span class="section-label">Applications</span>
+    <h2>Use Cases</h2>
+    <p class="section-sub">Swarm deployments are active across these business domains within the Francisco Holdings portfolio and partner organizations.</p>
+    <div class="use-cases-grid">
+      <div class="use-case">
+        <span class="uc-icon">🤖</span>Business Automation
+      </div>
+      <div class="use-case">
+        <span class="uc-icon">⚖</span>Legal Research Assistance
+      </div>
+      <div class="use-case">
+        <span class="uc-icon">📋</span>Compliance Monitoring
+      </div>
+      <div class="use-case">
+        <span class="uc-icon">📄</span>Document Generation
+      </div>
+      <div class="use-case">
+        <span class="uc-icon">💬</span>Customer Service
+      </div>
+      <div class="use-case">
+        <span class="uc-icon">📈</span>Revenue Analytics
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="omniaguard">
+  <div class="container">
+    <div class="omnia-block">
+      <span class="section-label" style="display:block;margin-bottom:0.5rem;">Security Layer</span>
+      <h2 style="color:var(--cyan);">OmniaGuard Integration</h2>
+      <p>Every Agent Swarm Technologies deployment includes OmniaGuard protection — our enterprise AI security system that monitors agent behaviour, enforces constitutional boundaries, and provides real-time threat response across all active swarm nodes.</p>
+      <a href="../omniaguard-site/index.html" class="btn btn-primary">Learn About OmniaGuard</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="contact" class="form-section">
+  <div class="container">
+    <span class="section-label">Enterprise Partnerships</span>
+    <h2>Request a Consultation</h2>
+    <p class="section-sub">For organizations evaluating multi-agent AI deployments at scale. We work with serious enterprise clients building something real.</p>
+    <div class="form-wrap">
+      <form action="mailto:derek@franciscoholdings.com" method="get" enctype="text/plain">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="Organization name" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="usecase">Use Case Description</label>
+          <textarea id="usecase" name="body" placeholder="Describe the AI automation or agent deployment you are evaluating. What problem are you solving? What scale?" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Request Consultation</button>
+      </form>
+      <div class="disclaimer">
+        <strong>Architecture Disclosure:</strong> Agent Swarm Technologies does not disclose proprietary technical architecture. All consultation inquiries are subject to NDA. Consultation does not constitute a commitment to deploy.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a>
+    <a href="tel:7053078080">705-307-8080</a>
+    <span>Lindsay, Ontario</span>
+  </div>
+  <p>© 2026 Agent Swarm Technologies. A Francisco Holdings Inc. Company.</p>
+</footer>
+
+</body>
+</html>
