@@ -345,5 +345,76 @@
   <p style="margin-top:8px;font-size:11px">Enterprise AI Security. Built to hold.</p>
 </footer>
 
+
+<!-- ═══════ PHASE 2: CONVERSION ENGINE — OMNIAGUARD ═══════ -->
+<div id="sp-toast" style="position:fixed;bottom:24px;left:24px;z-index:9000;max-width:320px;background:rgba(5,10,16,.97);border:1px solid rgba(0,212,255,.35);border-radius:14px;padding:14px 18px;display:none;backdrop-filter:blur(20px);box-shadow:0 8px 40px rgba(0,0,0,.5);animation:toast-in .3s ease">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#00D4FF,#0066FF);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🛡️</div>
+    <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:#fff" id="sp-name"></div><div style="font-size:11px;color:#4A6070;margin-top:2px" id="sp-action"></div></div>
+    <div style="font-size:10px;color:#304050;flex-shrink:0">just now</div>
+  </div>
+</div>
+
+<div id="em-overlay" style="position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#0A1018;border:1px solid rgba(0,212,255,.3);border-radius:20px;padding:44px 36px;max-width:460px;width:100%;text-align:center;box-shadow:0 0 80px rgba(0,212,255,.1);position:relative">
+    <button onclick="closeEM()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#4A6070;font-size:20px;cursor:pointer;line-height:1">✕</button>
+    <div style="font-size:32px;margin-bottom:14px">🔒</div>
+    <div style="font-size:11px;color:#00D4FF;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">FREE AUDIT</div>
+    <h3 style="font-size:22px;font-weight:900;margin-bottom:10px;color:#fff">Get Your Free<br>AI Security Audit</h3>
+    <p style="font-size:14px;color:#4A6070;margin-bottom:24px;line-height:1.6">14-point checklist to find prompt injection vulnerabilities in your AI deployments. Catch gaps before attackers do. Free PDF.</p>
+    <input type="email" id="em-input" placeholder="your@email.com" style="width:100%;padding:14px 16px;background:#040810;border:1px solid rgba(0,212,255,.2);border-radius:10px;color:#CCE0EE;font-size:14px;margin-bottom:12px;outline:none;font-family:inherit;transition:border-color .2s" onfocus="this.style.borderColor='#00D4FF'" onblur="this.style.borderColor='rgba(0,212,255,.2)'" onkeydown="if(event.key==='Enter')submitEM()"/>
+    <button onclick="submitEM()" id="em-btn" style="width:100%;padding:15px;background:linear-gradient(135deg,#00D4FF,#0066FF);color:#000;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer">Run My Free Audit →</button>
+    <div style="font-size:11px;color:#304050;margin-top:12px">🔒 Zero spam. Security researchers only.</div>
+  </div>
+</div>
+
+<style>
+  @keyframes toast-in{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes toast-out{from{opacity:1}to{opacity:0;transform:translateX(-20px)}}
+  .ur-bar{position:relative;z-index:150;background:linear-gradient(90deg,rgba(0,212,255,.08),rgba(0,102,255,.05),rgba(0,212,255,.08));border-bottom:1px solid rgba(0,212,255,.18);padding:9px 20px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:600;color:#4A6070}
+  .ur-cd{font-family:'SF Mono','Fira Code',monospace;font-size:15px;font-weight:800;color:#00D4FF;letter-spacing:1px}
+  .ur-spots{background:rgba(255,68,85,.12);border:1px solid rgba(255,68,85,.3);color:#FF7788;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700}
+</style>
+
+<script>
+(function(){
+  const SITE='og';
+  const DK=`ph2_dl_${SITE}`;let dl=parseInt(localStorage.getItem(DK));if(!dl||dl<Date.now()){dl=Date.now()+72*36e5;localStorage.setItem(DK,dl)}
+  const nav=document.querySelector('nav');
+  if(nav){const bar=document.createElement('div');bar.className='ur-bar';bar.innerHTML=`<span>🛡️ Early-Access Pricing Ends:</span><span class="ur-cd" id="ur-cd">--:--:--</span><span>|</span><span class="ur-spots" id="ur-spots">calculating...</span>`;nav.after(bar)}
+  function tick(){const r=dl-Date.now();if(r<=0){document.getElementById('ur-cd').textContent='ENDED';return}const h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);document.getElementById('ur-cd').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+  setInterval(tick,1000);tick();
+  const SK2=`ph2_sp_${SITE}`;let sp=parseInt(localStorage.getItem(SK2));if(!sp)sp=16;else sp=Math.max(4,sp-Math.floor(Math.random()*2));localStorage.setItem(SK2,sp);
+  setTimeout(()=>{const e=document.getElementById('ur-spots');if(e)e.textContent=`Only ${sp} early-access slots remaining`},600);
+
+  const proofs=[
+    {name:'AI startup, Series A, Toronto',action:'just activated OmniaGuard Professional'},
+    {name:'Agentic AI platform, BC',action:'just secured their swarm — 8 agents protected'},
+    {name:'Enterprise tech firm, Calgary',action:'just signed up for OmniaGuard Starter'},
+    {name:'ML infrastructure team, Montreal',action:'just enabled BENO-X framework protection'},
+    {name:'AI consulting group, Ottawa',action:'just upgraded to Professional tier'},
+    {name:'LLM deployment team, Vancouver',action:'just secured 15 agent endpoints'},
+    {name:'Fintech AI division, Toronto',action:'just passed NIST AI RMF compliance check'},
+    {name:'Healthcare AI platform, Ontario',action:'just joined OmniaGuard for HIPAA-adjacent protection'},
+  ];
+  let ti=Math.floor(Math.random()*proofs.length);
+  const toast=document.getElementById('sp-toast');
+  function showToast(){const p=proofs[ti%proofs.length];ti++;document.getElementById('sp-name').textContent=p.name;document.getElementById('sp-action').textContent=p.action;toast.style.display='block';toast.style.animation='toast-in .3s ease';setTimeout(()=>{toast.style.animation='toast-out .3s ease forwards';setTimeout(()=>{toast.style.display='none';toast.style.animation=''},380)},5500)}
+  setTimeout(()=>{showToast();setInterval(showToast,43000)},9000);
+
+  const EK=`ph2_em_${SITE}`;
+  if(!localStorage.getItem(EK)){let shown=false;const show=()=>{if(shown)return;shown=true;document.getElementById('em-overlay').style.display='flex'};setTimeout(show,22000);window.addEventListener('scroll',()=>{if(window.scrollY>document.body.scrollHeight*.6)show()},{passive:true,once:true})}
+  const ref=new URLSearchParams(location.search).get('ref');if(ref)localStorage.setItem('ph2_ref',ref);
+})();
+function closeEM(){document.getElementById('em-overlay').style.display='none';localStorage.setItem('ph2_em_og','1')}
+function submitEM(){
+  const email=document.getElementById('em-input').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('em-input').style.borderColor='#FF4466';return}
+  const leads=JSON.parse(localStorage.getItem('ph2_leads')||'[]');leads.push({email,ts:Date.now(),site:'omniaguard',ref:localStorage.getItem('ph2_ref')});localStorage.setItem('ph2_leads',JSON.stringify(leads));
+  // TODO: fetch('YOUR_WEBHOOK',{method:'POST',body:JSON.stringify({email,source:'omniaguard'}),headers:{'Content-Type':'application/json'}})
+  const btn=document.getElementById('em-btn');btn.textContent='✓ Audit incoming!';btn.style.background='#00FF88';btn.style.color='#000';
+  setTimeout(closeEM,2200);localStorage.setItem('ph2_em_og','1');
+}
+</script>
 </body>
 </html>

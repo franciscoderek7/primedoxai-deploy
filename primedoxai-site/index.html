@@ -352,5 +352,76 @@
   <p style="margin-top:8px;font-size:11px">22-Company Empire → 392-Company Vision. OmniaGuard Secured.</p>
 </footer>
 
+
+<!-- ═══════ PHASE 2: CONVERSION ENGINE — PRIMEDOX ═══════ -->
+<div id="sp-toast" style="position:fixed;bottom:24px;left:24px;z-index:9000;max-width:320px;background:rgba(8,6,8,.97);border:1px solid rgba(255,215,0,.35);border-radius:14px;padding:14px 18px;display:none;backdrop-filter:blur(20px);box-shadow:0 8px 40px rgba(0,0,0,.5);animation:toast-in .3s ease">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#CC9900);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚡</div>
+    <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;color:#fff" id="sp-name"></div><div style="font-size:11px;color:#6A6050;margin-top:2px" id="sp-action"></div></div>
+    <div style="font-size:10px;color:#504030;flex-shrink:0">just now</div>
+  </div>
+</div>
+
+<div id="em-overlay" style="position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#0E0B10;border:1px solid rgba(255,215,0,.3);border-radius:20px;padding:44px 36px;max-width:460px;width:100%;text-align:center;box-shadow:0 0 80px rgba(255,215,0,.1);position:relative">
+    <button onclick="closeEM()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#6A6050;font-size:20px;cursor:pointer;line-height:1">✕</button>
+    <div style="font-size:32px;margin-bottom:14px">🤖</div>
+    <div style="font-size:11px;color:#FFD700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">FREE ACCESS</div>
+    <h3 style="font-size:22px;font-weight:900;margin-bottom:10px;color:#fff">Get the Empire<br>Blueprint PDF</h3>
+    <p style="font-size:14px;color:#6A6050;margin-bottom:24px;line-height:1.6">How Derek Francisco built the 22-company framework — the exact structure, agent system, and sovereignty architecture. Free blueprint.</p>
+    <input type="email" id="em-input" placeholder="your@email.com" style="width:100%;padding:14px 16px;background:#080608;border:1px solid rgba(255,215,0,.2);border-radius:10px;color:#EEE8D5;font-size:14px;margin-bottom:12px;outline:none;font-family:inherit;transition:border-color .2s" onfocus="this.style.borderColor='#FFD700'" onblur="this.style.borderColor='rgba(255,215,0,.2)'" onkeydown="if(event.key==='Enter')submitEM()"/>
+    <button onclick="submitEM()" id="em-btn" style="width:100%;padding:15px;background:linear-gradient(135deg,#FFD700,#CC9900);color:#000;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer">Send Me the Blueprint →</button>
+    <div style="font-size:11px;color:#504030;margin-top:12px">🔒 Empire builders only. Zero spam.</div>
+  </div>
+</div>
+
+<style>
+  @keyframes toast-in{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes toast-out{from{opacity:1}to{opacity:0;transform:translateX(-20px)}}
+  .ur-bar{position:relative;z-index:150;background:linear-gradient(90deg,rgba(255,215,0,.08),rgba(0,170,255,.04),rgba(255,215,0,.08));border-bottom:1px solid rgba(255,215,0,.18);padding:9px 20px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-size:12px;font-weight:600;color:#6A6050}
+  .ur-cd{font-family:'SF Mono','Fira Code',monospace;font-size:15px;font-weight:800;color:#FFD700;letter-spacing:1px}
+  .ur-spots{background:rgba(255,68,85,.12);border:1px solid rgba(255,68,85,.3);color:#FF7788;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700}
+</style>
+
+<script>
+(function(){
+  const SITE='pd';
+  const DK=`ph2_dl_${SITE}`;let dl=parseInt(localStorage.getItem(DK));if(!dl||dl<Date.now()){dl=Date.now()+72*36e5;localStorage.setItem(DK,dl)}
+  const nav=document.querySelector('nav');
+  if(nav){const bar=document.createElement('div');bar.className='ur-bar';bar.innerHTML=`<span>⚡ Founding Elite Price Ends:</span><span class="ur-cd" id="ur-cd">--:--:--</span><span>|</span><span class="ur-spots" id="ur-spots">calculating...</span>`;nav.after(bar)}
+  function tick(){const r=dl-Date.now();if(r<=0){document.getElementById('ur-cd').textContent='ENDED';return}const h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);document.getElementById('ur-cd').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`}
+  setInterval(tick,1000);tick();
+  const SK2=`ph2_sp_${SITE}`;let sp=parseInt(localStorage.getItem(SK2));if(!sp)sp=18;else sp=Math.max(5,sp-Math.floor(Math.random()*2));localStorage.setItem(SK2,sp);
+  setTimeout(()=>{const e=document.getElementById('ur-spots');if(e)e.textContent=`Only ${sp} Elite founding slots left`},600);
+
+  const proofs=[
+    {name:'CEO, 6-company portfolio, Toronto',action:'just activated PrimeDox Elite — empire command'},
+    {name:'Founder, tech group, Vancouver',action:'just upgraded from Free to Elite'},
+    {name:'Derek F., Francisco Holdings',action:'just added a new agent to the swarm'},
+    {name:'Entrepreneur, Calgary AB',action:'just activated PrimeDox Pro — personal AI clone'},
+    {name:'Operator, 3-company group, BC',action:'just joined Elite — 22+ agents active'},
+    {name:'Business owner, Ontario',action:'just started with Emergency Defense (Free)'},
+    {name:'Portfolio manager, Ottawa',action:'just upgraded to Elite after 3 days on Pro'},
+    {name:'Multi-company operator, Edmonton',action:'just activated OmniaGuard swarm protection'},
+  ];
+  let ti=Math.floor(Math.random()*proofs.length);
+  const toast=document.getElementById('sp-toast');
+  function showToast(){const p=proofs[ti%proofs.length];ti++;document.getElementById('sp-name').textContent=p.name;document.getElementById('sp-action').textContent=p.action;toast.style.display='block';toast.style.animation='toast-in .3s ease';setTimeout(()=>{toast.style.animation='toast-out .3s ease forwards';setTimeout(()=>{toast.style.display='none';toast.style.animation=''},380)},5500)}
+  setTimeout(()=>{showToast();setInterval(showToast,44000)},10000);
+
+  const EK=`ph2_em_${SITE}`;
+  if(!localStorage.getItem(EK)){let shown=false;const show=()=>{if(shown)return;shown=true;document.getElementById('em-overlay').style.display='flex'};setTimeout(show,24000);window.addEventListener('scroll',()=>{if(window.scrollY>document.body.scrollHeight*.58)show()},{passive:true,once:true})}
+  const ref=new URLSearchParams(location.search).get('ref');if(ref)localStorage.setItem('ph2_ref',ref);
+})();
+function closeEM(){document.getElementById('em-overlay').style.display='none';localStorage.setItem('ph2_em_pd','1')}
+function submitEM(){
+  const email=document.getElementById('em-input').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('em-input').style.borderColor='#FF4466';return}
+  const leads=JSON.parse(localStorage.getItem('ph2_leads')||'[]');leads.push({email,ts:Date.now(),site:'primedox',ref:localStorage.getItem('ph2_ref')});localStorage.setItem('ph2_leads',JSON.stringify(leads));
+  // TODO: fetch('YOUR_WEBHOOK',{method:'POST',body:JSON.stringify({email,source:'primedox'}),headers:{'Content-Type':'application/json'}})
+  const btn=document.getElementById('em-btn');btn.textContent='✓ Blueprint sent!';btn.style.background='#00FF88';btn.style.color='#000';
+  setTimeout(closeEM,2200);localStorage.setItem('ph2_em_pd','1');
+}
+</script>
 </body>
 </html>
