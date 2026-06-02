@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannabis A-to-Z Glossary | CCLDR.NET</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #00FF88;
+            --gold: #FFD700;
+            --dark: #0A0A0A;
+            --card-bg: rgba(0,255,136,0.03);
+            --card-border: rgba(0,255,136,0.18);
+            --text: #e8e8e8;
+            --muted: #888;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* ── STICKY DISCLAIMER ── */
+        .disclaimer-banner {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10,10,10,0.97);
+            border-bottom: 2px solid var(--gold);
+            text-align: center;
+            padding: 8px 16px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            backdrop-filter: blur(12px);
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: rgba(10,10,10,0.92);
+            border-bottom: 1px solid rgba(0,255,136,0.12);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--green);
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            text-shadow: 0 0 18px rgba(0,255,136,0.5);
+        }
+
+        .nav-logo span { color: var(--gold); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--green); }
+        .nav-links a.active { color: var(--green); border-bottom: 1px solid var(--green); }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 70px 24px 50px;
+            text-align: center;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.07) 0%, transparent 70%);
+            border-bottom: 1px solid rgba(0,255,136,0.08);
+        }
+
+        .hero-eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: var(--green);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span { color: var(--green); }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ── ALPHA JUMP NAV ── */
+        .alpha-nav {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin: 36px 0 48px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 4px;
+            justify-content: center;
+        }
+
+        .alpha-nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--muted);
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.18s;
+            letter-spacing: 0.04em;
+        }
+
+        .alpha-nav a:hover,
+        .alpha-nav a.has-entries {
+            color: var(--green);
+            border-color: rgba(0,255,136,0.3);
+            background: rgba(0,255,136,0.06);
+        }
+
+        /* ── LETTER SECTION ── */
+        .letter-section {
+            margin-bottom: 52px;
+        }
+
+        .letter-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(0,255,136,0.15);
+        }
+
+        .letter-glyph {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--green);
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(0,255,136,0.3);
+            width: 50px;
+            flex-shrink: 0;
+        }
+
+        .letter-count {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── DEFINITION LIST ── */
+        dl {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .entry {
+            border-bottom: 1px solid rgba(0,255,136,0.05);
+            padding: 18px 0;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            align-items: baseline;
+        }
+
+        .entry:last-child { border-bottom: none; }
+
+        dt {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--green);
+            line-height: 1.4;
+        }
+
+        dt .term-alt {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        dt .tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 7px;
+            border-radius: 20px;
+            margin-top: 4px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .tag-law  { background: rgba(255,215,0,0.12); color: var(--gold); }
+        .tag-sci  { background: rgba(0,255,136,0.10); color: var(--green); }
+        .tag-prod { background: rgba(100,180,255,0.1); color: #7bc8ff; }
+        .tag-med  { background: rgba(255,120,120,0.1); color: #ff9090; }
+
+        dd {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        dd strong { color: var(--green); }
+        dd em { color: var(--muted); font-style: italic; }
+
+        /* ── BACK TO TOP ── */
+        .back-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 0.82rem;
+            text-decoration: none;
+            margin-top: 8px;
+            transition: color 0.2s;
+        }
+
+        .back-top:hover { color: var(--green); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: rgba(10,10,10,0.98);
+            border-top: 1px solid rgba(0,255,136,0.12);
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            line-height: 1.8;
+            margin-top: 60px;
+        }
+
+        footer a { color: var(--green); text-decoration: none; }
+        footer .footer-logo { color: var(--green); font-weight: 900; font-size: 1rem; margin-bottom: 8px; }
+        footer .footer-logo span { color: var(--gold); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            .entry {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .nav-links { gap: 12px; }
+            .hero { padding: 50px 16px 36px; }
+            .alpha-nav a { width: 30px; height: 30px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STICKY DISCLAIMER -->
+<div class="disclaimer-banner">
+    ⚖ NOT LEGAL REPRESENTATION — EDUCATION ONLY
+</div>
+
+<!-- NAV -->
+<nav>
+    <a href="/" class="nav-logo">CCLDR<span>.NET</span></a>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/ccldr-site/guides.html">Guides</a></li>
+        <li><a href="/ccldr-site/science.html">Science</a></li>
+        <li><a href="/ccldr-site/industry.html">Industry</a></li>
+        <li><a href="/ccldr-site/glossary.html" class="active">Glossary</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-eyebrow">Reference</div>
+    <h1>The Complete <span>Cannabis Glossary</span></h1>
+    <p class="hero-sub">Every term, defined — from ACMPR to Zero-Tolerance. Science, law, production, and culture.</p>
+</div>
+
+<div class="container">
+
+    <!-- ALPHABET JUMP NAV -->
+    <nav class="alpha-nav" id="top">
+        <a href="#A" class="has-entries">A</a>
+        <a href="#B" class="has-entries">B</a>
+        <a href="#C" class="has-entries">C</a>
+        <a href="#D" class="has-entries">D</a>
+        <a href="#E" class="has-entries">E</a>
+        <a href="#F" class="has-entries">F</a>
+        <a href="#G" class="has-entries">G</a>
+        <a href="#H" class="has-entries">H</a>
+        <a href="#I" class="has-entries">I</a>
+        <a href="#J" class="has-entries">J</a>
+        <a href="#K">K</a>
+        <a href="#L" class="has-entries">L</a>
+        <a href="#M" class="has-entries">M</a>
+        <a href="#N" class="has-entries">N</a>
+        <a href="#O" class="has-entries">O</a>
+        <a href="#P" class="has-entries">P</a>
+        <a href="#Q" class="has-entries">Q</a>
+        <a href="#R" class="has-entries">R</a>
+        <a href="#S" class="has-entries">S</a>
+        <a href="#T" class="has-entries">T</a>
+        <a href="#U">U</a>
+        <a href="#V" class="has-entries">V</a>
+        <a href="#W" class="has-entries">W</a>
+        <a href="#X">X</a>
+        <a href="#Y">Y</a>
+        <a href="#Z" class="has-entries">Z</a>
+    </nav>
+
+    <!-- ═══ A ═══ -->
+    <div class="letter-section" id="A">
+        <div class="letter-header">
+            <div class="letter-glyph">A</div>
+            <div class="letter-count">3 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>ACMPR <span class="tag tag-law">Law</span></dt>
+                <dd><em>Access to Cannabis for Medical Purposes Regulations.</em> The federal regulatory framework that governed medical cannabis in Canada from 2016 until it was replaced by the Cannabis Regulations in 2018. Established the right of patients to grow their own medicine (personal production) and to designate a grower on their behalf. Successor to the MMPR. The personal production rights established under ACMPR were upheld in <em>Allard v. Canada</em>.</dd>
+            </div>
+            <div class="entry">
+                <dt>Anandamide <span class="tag tag-sci">Science</span></dt>
+                <dd>The body's endogenous (internally produced) cannabinoid — often called the "bliss molecule." Anandamide is a naturally occurring lipid neurotransmitter that binds primarily to CB1 receptors. It is the compound THC most closely mimics. The name derives from the Sanskrit word <em>ananda</em>, meaning joy or bliss. Anandamide plays roles in mood regulation, pain, appetite, memory, and fertility.</dd>
+            </div>
+            <div class="entry">
+                <dt>Autoflowering <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis plant variety (typically <em>Cannabis ruderalis</em> genetics) that flowers based on age rather than light cycle changes. Unlike photoperiod strains, autoflowering plants do not require a shift to 12/12 light hours to initiate flowering. They typically complete the full lifecycle in 8–10 weeks from seed. Popular for home growers and northern climates with limited growing seasons. Generally lower THC content than photoperiod equivalents.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ B ═══ -->
+    <div class="letter-section" id="B">
+        <div class="letter-header">
+            <div class="letter-glyph">B</div>
+            <div class="letter-count">5 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Badder / Budder <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis concentrate with a soft, creamy, butter-like consistency — similar to cake batter or peanut butter. Produced through extraction (typically BHO or CO₂) followed by mechanical agitation (whipping) during the purging process. THC content typically 70–90%. Used primarily for dabbing. The batter-like texture results from controlled nucleation of cannabinoid crystals during the purge.</dd>
+            </div>
+            <div class="entry">
+                <dt>BHO <span class="tag tag-prod">Production</span>
+                    <span class="term-alt">Butane Hash Oil / Butane Honey Oil</span>
+                </dt>
+                <dd>A cannabis concentrate produced by passing liquid butane (a solvent) through cannabis plant material to extract cannabinoids and terpenes, then purging the butane via heat/vacuum. Produces a range of consistencies: shatter, wax, budder, pull-and-snap. <strong>Safety note:</strong> Closed-loop extraction is required for legal production — open-loop BHO production is extremely dangerous (explosion risk) and illegal in Canada outside licensed facilities.</dd>
+            </div>
+            <div class="entry">
+                <dt>Bioavailability <span class="tag tag-sci">Science</span></dt>
+                <dd>The proportion of an administered substance that reaches systemic circulation unchanged. Bioavailability varies dramatically by route of administration: inhaled cannabis (~30–50%), sublingual tincture (~12–35%), oral/edible (~6–20% due to first-pass metabolism), topical (minimal systemic absorption). Lower bioavailability means less efficient delivery per mg consumed — relevant for dosing calculations.</dd>
+            </div>
+            <div class="entry">
+                <dt>Bong
+                    <span class="term-alt">Water pipe</span>
+                </dt>
+                <dd>A smoking device that uses water filtration to cool cannabis smoke before inhalation. Typically consists of a bowl, downstem, water chamber, and mouthpiece. The water cools smoke and filters some particulates, but does not remove the majority of toxic combustion byproducts. <em>Note:</em> Vaporizers are generally considered a lower-harm alternative to combustion-based devices including bongs.</dd>
+            </div>
+            <div class="entry">
+                <dt>BENO-X <span class="tag tag-law">Law</span></dt>
+                <dd>Shorthand sometimes used in cannabis legal/regulatory discussions for Benzene, Ethylene oxide, and other harmful organic compounds subject to testing thresholds under Canadian cannabis regulations. Licensed producers must test for and meet Health Canada's maximum residue limits for a range of contaminants including heavy metals, pesticides, and microbial contaminants.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ C ═══ -->
+    <div class="letter-section" id="C">
+        <div class="letter-header">
+            <div class="letter-glyph">C</div>
+            <div class="letter-count">9 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Cannabidiol (CBD) <span class="tag tag-sci">Science</span></dt>
+                <dd>A major non-psychoactive phytocannabinoid found in cannabis. CBD does not produce intoxication — it does not bind strongly to CB1 receptors. It is an allosteric modulator of CB1 and CB2, and interacts with serotonin (5-HT1A), TRP channels, and GPR55. Evidence-backed medical applications include: childhood epilepsy syndromes (Epidiolex/Epidyolex is FDA/Health Canada approved), anxiety, and inflammation. CBD can inhibit CYP450 enzymes — important drug interaction consideration.</dd>
+            </div>
+            <div class="entry">
+                <dt>Cannabigerol (CBG) <span class="tag tag-sci">Science</span></dt>
+                <dd>Often called the "mother cannabinoid" — CBG is the precursor from which THCA, CBDA, and CBCA are biosynthesized. In mature plants, CBG content is typically &lt;1%. CBG-dominant strains have been selectively bred. Preliminary research suggests anti-inflammatory, neuroprotective, and antibacterial properties. Not psychoactive. Increasingly available in legal Canadian retail.</dd>
+            </div>
+            <div class="entry">
+                <dt>Cannabinol (CBN) <span class="tag tag-sci">Science</span></dt>
+                <dd>A mildly psychoactive cannabinoid produced by the oxidative degradation of THC. Aged or improperly stored cannabis will have higher CBN content. Often marketed for sleep due to its mild sedative properties, though evidence remains limited. CBN is a Schedule II controlled substance in some international jurisdictions. In Canada, CBN is regulated under the Cannabis Act.</dd>
+            </div>
+            <div class="entry">
+                <dt>Cannabinoid <span class="tag tag-sci">Science</span></dt>
+                <dd>A class of chemical compounds that act on cannabinoid receptors in cells. Three types: (1) <strong>Phytocannabinoids</strong> — produced by the cannabis plant (THC, CBD, CBG, CBN, etc.); (2) <strong>Endocannabinoids</strong> — produced endogenously by the body (anandamide, 2-AG); (3) <strong>Synthetic cannabinoids</strong> — laboratory-produced compounds. Over 100 distinct phytocannabinoids have been identified in cannabis.</dd>
+            </div>
+            <div class="entry">
+                <dt>Cannabis Act <span class="tag tag-law">Law</span></dt>
+                <dd>Federal legislation (S.C. 2018, c. 16) that legalized and regulated cannabis in Canada, coming into force on October 17, 2018. Replaced the Controlled Drugs and Substances Act as the primary cannabis legislation. Establishes possession limits, legal age, licensing framework, advertising restrictions, and criminal penalties. Assigns regulatory responsibility to Health Canada. Provincial legislation governs retail and distribution within each province.</dd>
+            </div>
+            <div class="entry">
+                <dt>Cannabis Use Disorder (CUD) <span class="tag tag-med">Medical</span></dt>
+                <dd>A diagnosable condition per DSM-5 characterized by problematic cannabis use leading to clinically significant impairment or distress, with at least 2 of 11 criteria met within a 12-month period. Affects approximately 9% of lifetime cannabis users; higher rates (~17%) in those who begin use in adolescence. Characterized by tolerance, withdrawal, loss of control, and continued use despite problems. Treatable via CBT, motivational interviewing, and (in development) pharmacotherapy.</dd>
+            </div>
+            <div class="entry">
+                <dt>CB1 / CB2 Receptors <span class="tag tag-sci">Science</span></dt>
+                <dd><strong>CB1</strong> receptors are found primarily in the brain and central nervous system — high concentrations in hippocampus, basal ganglia, cerebellum, and limbic system. THC binds to CB1, producing psychoactive effects. <strong>CB2</strong> receptors are predominantly in the immune system and peripheral tissues. CBD does not bind directly to either with high affinity but modulates both allosterically. Receptor density and distribution explain cannabis's effects on mood, memory, pain, and immunity.</dd>
+            </div>
+            <div class="entry">
+                <dt>Curing <span class="tag tag-prod">Production</span></dt>
+                <dd>The controlled drying and aging process following cannabis harvest. After initial drying, cannabis is placed in airtight containers (typically glass jars) and periodically "burped" (opened) to release excess moisture over 2–8+ weeks. Proper curing: converts THCA to THC (partial), allows chlorophyll to break down (smoother smoke), preserves terpene profiles, and reduces harshness. Improperly cured cannabis is harsher and degrades faster.</dd>
+            </div>
+            <div class="entry">
+                <dt>CO₂ Extraction <span class="tag tag-prod">Production</span></dt>
+                <dd>A supercritical (or subcritical) carbon dioxide extraction method used to produce cannabis concentrates and oils. CO₂ at specific temperature and pressure conditions acts as a solvent, pulling cannabinoids and terpenes from plant material. Considered a "clean" extraction method — no solvent residue. Produces a range of products from full-spectrum oil to isolated fractions. Widely used by licensed processors in Canada.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ D ═══ -->
+    <div class="letter-section" id="D">
+        <div class="letter-header">
+            <div class="letter-glyph">D</div>
+            <div class="letter-count">5 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Dabbing <span class="tag tag-prod">Production</span></dt>
+                <dd>A method of consuming cannabis concentrates (wax, shatter, rosin, budder) by applying a small amount ("dab") to a heated surface ("nail" or "banger") and inhaling the resulting vapor. Produces highly concentrated doses — THC content of concentrates is typically 60–90%. Not recommended for inexperienced users. Tolerance and dependence can develop rapidly with frequent dabbing. Equipment includes a dab rig, torch, and nail/banger.</dd>
+            </div>
+            <div class="entry">
+                <dt>Decarboxylation <span class="tag tag-sci">Science</span></dt>
+                <dd>The chemical process by which THCA (non-psychoactive) is converted to THC (psychoactive) by the removal of a carboxyl group (COOH), releasing CO₂. Occurs naturally through heat (combustion, vaporization) or slowly over time. For edibles, cannabis must be decarboxylated before infusion — typically 95–110°C for 30–45 minutes. Raw cannabis flower contains almost entirely THCA; decarboxylation is required to produce psychoactive effects.</dd>
+            </div>
+            <div class="entry">
+                <dt>Designated Grower <span class="tag tag-law">Law</span></dt>
+                <dd>Under Canada's Cannabis Regulations, a medical cannabis patient may register a designated person to produce cannabis on their behalf. The designated grower must be approved by Health Canada and is subject to production limits based on the patient's medical document. A designated grower may serve a maximum of 2 patients. They may not produce for themselves unless they are also a registered patient.</dd>
+            </div>
+            <div class="entry">
+                <dt>Dispensary</dt>
+                <dd>A retail location that sells cannabis products. In Canadian legal context, refers specifically to a provincially licensed cannabis retail store. "Dispensary" was historically used for unlicensed storefronts operating before legalization (and some operating after, outside the legal framework). Legal dispensaries in Canada must hold both a federal retailer's licence (where applicable) and a provincial retail licence. All products sold must come from provincially authorized supply chains.</dd>
+            </div>
+            <div class="entry">
+                <dt>Distillate <span class="tag tag-prod">Production</span></dt>
+                <dd>A highly refined cannabis extract produced through molecular distillation — separating cannabinoids by boiling point under vacuum. Produces near-pure THC or CBD isolate (90%+). Distillate is odourless, flavourless, and extremely potent. Used in vape cartridges, edibles, and capsules. Lacks terpenes (stripped during processing), which may affect the entourage effect. Often has terpenes re-added post-distillation for flavour and effect profile.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ E ═══ -->
+    <div class="letter-section" id="E">
+        <div class="letter-header">
+            <div class="letter-glyph">E</div>
+            <div class="letter-count">4 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Edibles <span class="tag tag-prod">Production</span></dt>
+                <dd>Food and beverage products containing cannabis. Legalized in Canada in October 2019 (Cannabis 2.0). Maximum THC per package: 10mg under federal regulations. Onset is delayed (30–120 minutes) due to digestion and first-pass metabolism in the liver — where delta-9-THC is converted to 11-hydroxy-THC, a more potent and longer-lasting metabolite. Overconsumption due to delayed onset is the most common adverse event. Start with ≤2.5mg THC for new users.</dd>
+            </div>
+            <div class="entry">
+                <dt>Endocannabinoid System (ECS) <span class="tag tag-sci">Science</span></dt>
+                <dd>The body's endogenous cannabinoid signaling network — discovered largely through research into how THC works. Consists of: (1) cannabinoid receptors (CB1, CB2, and others); (2) endocannabinoids (anandamide, 2-AG); (3) metabolic enzymes (FAAH, MAGL). The ECS is involved in regulating pain, mood, appetite, memory, immune function, sleep, and neuroprotection. Present throughout the central and peripheral nervous systems and immune tissues.</dd>
+            </div>
+            <div class="entry">
+                <dt>Entourage Effect <span class="tag tag-sci">Science</span></dt>
+                <dd>The hypothesis — with growing evidence — that cannabis compounds work synergistically when consumed together, producing greater therapeutic and experiential effects than isolated cannabinoids alone. Proposed by Raphael Mechoulam and Shimon Ben-Shabat (1998). Suggests that full-spectrum products (containing THC, CBD, terpenes, flavonoids, minor cannabinoids) may outperform isolates for many applications. Remains an active area of research; some effects are better-documented than others.</dd>
+            </div>
+            <div class="entry">
+                <dt>Extraction <span class="tag tag-prod">Production</span></dt>
+                <dd>The process of separating cannabinoids and terpenes from cannabis plant material. Methods include: solvent-based (BHO, CO₂, ethanol), solventless (rosin press, ice water hash), and mechanical (dry sift). Each method yields different consistencies, potencies, and terpene profiles. In Canada, extraction is regulated under processing licence requirements. Solvent-based extraction at home is illegal and dangerous.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ F ═══ -->
+    <div class="letter-section" id="F">
+        <div class="letter-header">
+            <div class="letter-glyph">F</div>
+            <div class="letter-count">3 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Flavonoids <span class="tag tag-sci">Science</span></dt>
+                <dd>Phytochemical compounds present in cannabis alongside cannabinoids and terpenes. Cannabis contains unique flavonoids called cannflavins — including Cannflavin A and B — which have shown anti-inflammatory properties in early research. Flavonoids contribute to the colour, taste, and aroma of cannabis and may play a role in the entourage effect. Over 20 flavonoids have been identified in cannabis.</dd>
+            </div>
+            <div class="entry">
+                <dt>Full-Spectrum <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis extract or product that retains the full range of cannabinoids, terpenes, and other compounds present in the original plant — including THC. Contrasted with <em>broad-spectrum</em> (THC removed) and <em>isolate</em> (single compound). Full-spectrum products are favoured by proponents of the entourage effect. Medical cannabis oils and many licensed Canadian products are available in full-spectrum formulations.</dd>
+            </div>
+            <div class="entry">
+                <dt>Flower (Bud) <span class="tag tag-prod">Production</span></dt>
+                <dd>The harvested and dried reproductive part of the female cannabis plant — the primary site of cannabinoid and terpene production in trichomes. Also called "bud." The most traditional and widely used form of cannabis. Consumed by smoking (combustion), vaporization, or as the starting material for extraction. Licensed producer dried flower sold in Canada must be tested and labelled with THC/CBD content per gram.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ G ═══ -->
+    <div class="letter-section" id="G">
+        <div class="letter-header">
+            <div class="letter-glyph">G</div>
+            <div class="letter-count">3 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Gram</dt>
+                <dd>The standard unit of measurement for cannabis flower. Common retail quantities in Canada: 0.5g (half gram), 1g, 3.5g (eighth of an ounce), 7g (quarter), 14g (half ounce), 28.35g (one ounce — the maximum single legal purchase in most provinces). Equivalent weight in Canada's legal possession limit: 30g of dried flower per adult in public.</dd>
+            </div>
+            <div class="entry">
+                <dt>Grinder</dt>
+                <dd>A device used to break cannabis flower into smaller, evenly-sized pieces for rolling, packing a bowl, or vaporizing. Typically 2-4 piece construction: grinding chamber with teeth, collection chamber, and kief catcher (in 3-4 piece models). Fine-ground cannabis burns/vaporizes more evenly. Kief is the trichome-rich powder that accumulates in the bottom chamber — highly concentrated in cannabinoids.</dd>
+            </div>
+            <div class="entry">
+                <dt>Grow Op
+                    <span class="term-alt">Grow Operation</span>
+                </dt>
+                <dd>An indoor or outdoor facility for cultivating cannabis plants. In the legal context, a licenced cultivation facility. In the legacy/black market context, an unlicensed cultivation facility — associated with criminal activity, property damage (mold, moisture, structural), and significant penalties under the Cannabis Act. Health Canada-licensed personal production facilities are a legitimate home growing option for registered medical patients.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ H ═══ -->
+    <div class="letter-section" id="H">
+        <div class="letter-header">
+            <div class="letter-glyph">H</div>
+            <div class="letter-count">3 entries (includes Hash)</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Hash (Hashish) <span class="tag tag-prod">Production</span></dt>
+                <dd>A concentrated cannabis product made by compressing and processing trichomes separated from the cannabis plant. One of the oldest forms of cannabis concentration, with a history spanning thousands of years. Traditional forms include finger hash, charas, and pressed kief. Modern forms include bubble hash (ice water extraction) and dry-sift hash. THC content varies widely: 20–60%+. Hash became a regulated product class under Canada's Cannabis 2.0 framework.</dd>
+            </div>
+            <div class="entry">
+                <dt>Hemp <span class="tag tag-law">Law</span></dt>
+                <dd>Cannabis sativa L. plants containing less than 0.3% THC by dry weight — the legal threshold distinguishing hemp from regulated cannabis under Canadian law. Industrial hemp has been federally regulated by Health Canada under the Industrial Hemp Regulations since 1998. Hemp is cultivated for fibre, seed (nutrition), and CBD extraction. Hemp-derived CBD products must still comply with the Cannabis Act if THC is present.</dd>
+            </div>
+            <div class="entry">
+                <dt>Hybrid <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis cultivar (strain) produced by cross-breeding indica and sativa genetic lines. The majority of modern cannabis cultivars are hybrids, as decades of selective breeding have blended the original landrace genetics. "Hybrid" is a retail descriptor indicating mixed genetic heritage — typically characterized as "balanced" effect profiles. Increasingly, chemotype (cannabinoid/terpene profile) is considered more scientifically meaningful than indica/sativa/hybrid classification.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ I ═══ -->
+    <div class="letter-section" id="I">
+        <div class="letter-header">
+            <div class="letter-glyph">I</div>
+            <div class="letter-count">4 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Indica</dt>
+                <dd>A traditional cannabis classification referring to shorter, bushier plant morphology and traditionally associated with sedating, body-heavy effects. <em>Cannabis indica</em> originated in Central Asia and the Hindu Kush region. Modern science acknowledges that "indica" and "sativa" are imperfect predictors of effect — terpene and cannabinoid profiles are more reliable. Nevertheless, "indica" remains a widely used retail and cultural classification in the Canadian market.</dd>
+            </div>
+            <div class="entry">
+                <dt>Inflorescence <span class="tag tag-prod">Production</span></dt>
+                <dd>The flowering structure of the female cannabis plant — the cluster of buds at the top of the plant and along branches. The primary site of cannabinoid and terpene biosynthesis in trichomes. "Inflorescence" is the technical/regulatory term for what consumers call "flower" or "bud." Health Canada licensing and product classifications reference inflorescence as the regulated plant part for dried flower products.</dd>
+            </div>
+            <div class="entry">
+                <dt>Isolate <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis extract containing a single purified cannabinoid — typically CBD or THC — at 99%+ purity. Produced through distillation followed by crystallization or precipitation. Isolate has no flavour, colour, or aroma. Used in pharmaceutical formulations, custom formulations, and by consumers who require precise dosing or need to avoid THC entirely. Lacks the entourage effect properties of full-spectrum products.</dd>
+            </div>
+            <div class="entry">
+                <dt>Hydroponics <span class="tag tag-prod">Production</span></dt>
+                <dd>A cultivation method in which plants grow in a nutrient-rich water solution without soil. Common hydroponic systems: DWC (Deep Water Culture), NFT (Nutrient Film Technique), ebb-and-flow, aeroponics, and coco coir (technically a soilless medium). Hydroponic cannabis typically grows faster and can achieve higher yields per square metre than soil cultivation. Widely used in commercial Canadian licensed producer facilities.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ J ═══ -->
+    <div class="letter-section" id="J">
+        <div class="letter-header">
+            <div class="letter-glyph">J</div>
+            <div class="letter-count">1 entry</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Joint</dt>
+                <dd>A hand-rolled cannabis cigarette. One of the most common methods of cannabis consumption globally. Rolled using rolling papers (hemp, rice, or wood pulp). Typically contains ground cannabis flower only (compare: <em>spliff</em>, which mixes tobacco). Machine-rolled joints sold pre-packaged are called <em>pre-rolls</em>. Combustion produces harmful byproducts including tar, benzene, and carbon monoxide. Vaporization is generally considered a lower-harm alternative.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ L ═══ -->
+    <div class="letter-section" id="L">
+        <div class="letter-header">
+            <div class="letter-glyph">L</div>
+            <div class="letter-count">3 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Landrace <span class="tag tag-prod">Production</span></dt>
+                <dd>Original, native cannabis strains that evolved naturally in specific geographic regions over centuries. Examples: Afghani (Afghanistan/Pakistan), Acapulco Gold (Mexico), Durban Poison (South Africa), Thai (Thailand), Hindu Kush (Hindu Kush mountain range). Landrace genetics formed the foundation of modern hybridized cultivars. Authentic landrace strains are rare and represent the original genetic diversity of cannabis before commercial hybridization.</dd>
+            </div>
+            <div class="entry">
+                <dt>Licensed Producer (LP) <span class="tag tag-law">Law</span></dt>
+                <dd>A corporation or individual licensed by Health Canada under the Cannabis Act to cultivate, process, or sell cannabis. LPs must hold specific licence classes for each activity. As of 2026, there are hundreds of active LPs across Canada, ranging from micro-cultivators to large-scale commercial operations. Only products from federally licensed producers may enter the provincial legal supply chain for retail sale.</dd>
+            </div>
+            <div class="entry">
+                <dt>Live Resin <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis concentrate made from fresh-frozen cannabis biomass — flash-frozen immediately after harvest (rather than dried and cured). The freezing process preserves terpenes that would otherwise degrade during drying and curing. Live resin is considered premium because of its fuller, more accurate terpene profile versus concentrates made from dried material. Typically golden in colour, with a sauce-like to sugar consistency. Premium price point in Canadian legal market.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ M ═══ -->
+    <div class="letter-section" id="M">
+        <div class="letter-header">
+            <div class="letter-glyph">M</div>
+            <div class="letter-count">4 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>MMAR <span class="tag tag-law">Law</span></dt>
+                <dd><em>Marihuana Medical Access Regulations.</em> Canada's first federal medical cannabis regulatory framework, enacted in 2001 following the Ontario Court of Appeal's decision in <em>R v Parker</em> (2000). The MMAR allowed patients to possess and, in some cases, produce cannabis for medical purposes with physician authorization. Replaced by the MMPR in 2013 and subsequently the ACMPR in 2016.</dd>
+            </div>
+            <div class="entry">
+                <dt>MMPR <span class="tag tag-law">Law</span></dt>
+                <dd><em>Marihuana for Medical Purposes Regulations.</em> Replaced the MMAR in 2013, shifting the medical cannabis system away from personal production toward a commercial licensed producer model. The MMPR was challenged in <em>Allard v. Canada</em> (2016), where the Federal Court found that eliminating personal production infringed patients' s.7 Charter rights. The ACMPR restored personal production rights. The MMPR represented the beginning of Canada's commercial cannabis industry.</dd>
+            </div>
+            <div class="entry">
+                <dt>Medical Document <span class="tag tag-med">Medical</span></dt>
+                <dd>The Canadian equivalent of a medical cannabis "prescription." Under the Cannabis Regulations, a medical document signed by an authorized healthcare practitioner (physician or nurse practitioner) sets out the patient's daily quantity of dried cannabis (grams per day) and duration of authorization. This document is registered with a licensed seller to allow purchase or personal production. It is not a prescription in the traditional pharmacological sense.</dd>
+            </div>
+            <div class="entry">
+                <dt>Myrcene <span class="tag tag-sci">Science</span></dt>
+                <dd>The most prevalent terpene found in most cannabis cultivars, contributing to the characteristic earthy, musky, herbal aroma. Also found in hops, mangoes, thyme, and lemongrass. Myrcene is thought to enhance cannabinoid absorption across the blood-brain barrier (the "mango before smoking" claim references this). Associated with sedative and muscle-relaxant effects. High myrcene content correlates with many "indica-leaning" cultivars.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ N ═══ -->
+    <div class="letter-section" id="N">
+        <div class="letter-header">
+            <div class="letter-glyph">N</div>
+            <div class="letter-count">3 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Nabilone <span class="tag tag-med">Medical</span></dt>
+                <dd>A synthetic cannabinoid (THC analogue) approved by Health Canada as a prescription drug for nausea and vomiting associated with chemotherapy. Sold under the brand name Cesamet. Unlike natural cannabis, nabilone is a Schedule III controlled substance dispensed through conventional pharmacy channels. One of the first cannabis-based pharmaceuticals approved in Canada — approved in 1981, predating the modern medical cannabis framework.</dd>
+            </div>
+            <div class="entry">
+                <dt>Nabiximols (Sativex) <span class="tag tag-med">Medical</span></dt>
+                <dd>A cannabis-based pharmaceutical spray (buccal/sublingual) containing a 1:1 ratio of THC and CBD. Approved by Health Canada for spasticity in multiple sclerosis (MS) and adjunct therapy for cancer pain. Manufactured by GW Pharmaceuticals/Jazz Pharmaceuticals. Represents a pharmaceutical-grade, standardized cannabis medicine — contrasted with the variability of plant-derived medical cannabis products. Dispensed through conventional pharmacies by prescription.</dd>
+            </div>
+            <div class="entry">
+                <dt>Nodes</dt>
+                <dd>The points along a cannabis plant stem from which branches, leaves, and eventually buds develop. The distance between nodes (internode spacing) is an indicator of plant health and genetics — close internode spacing typically indicates indica-dominant genetics; wide spacing indicates sativa. During flowering, nodes develop into bud sites. Topping and training techniques (LST, SCROG) are designed to maximize the number of productive bud sites at each node.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ O ═══ -->
+    <div class="letter-section" id="O">
+        <div class="letter-header">
+            <div class="letter-glyph">O</div>
+            <div class="letter-count">3 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Oil (Cannabis Oil) <span class="tag tag-prod">Production</span></dt>
+                <dd>A liquid cannabis extract typically suspended in a carrier oil (MCT, hemp seed, olive oil). Available as full-spectrum, broad-spectrum, or CBD isolate formulations. Consumed orally, sublingually, or used to fill capsules. Sublingual administration (under the tongue, held 60–90 seconds) achieves faster onset than oral ingestion. One of the most popular legal cannabis product formats in Canada — particularly for medical patients requiring precise dosing.</dd>
+            </div>
+            <div class="entry">
+                <dt>Ounce (oz)</dt>
+                <dd>A unit of cannabis quantity equal to 28.35 grams. The maximum amount of cannabis most adults may purchase in a single retail transaction in most Canadian provinces. Legal possession limit in public is 30g — just over one ounce. Common price benchmark: retail ounces in Canada range from ~$80 (value market) to $250+ (premium). Street slang: "zip" or "O."</dd>
+            </div>
+            <div class="entry">
+                <dt>Oral Health Canada</dt>
+                <dd>Reference to Health Canada's oral cannabis product guidelines and regulatory framework. Oral cannabis products (oils, capsules, edibles) are subject to specific packaging, labelling, and maximum THC limits under the Cannabis Regulations. The 10mg THC per package limit for edibles was a Health Canada policy decision — more conservative than some provinces initially requested. Oral products are regulated separately from inhaled and topical cannabis forms.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ P ═══ -->
+    <div class="letter-section" id="P">
+        <div class="letter-header">
+            <div class="letter-glyph">P</div>
+            <div class="letter-count">5 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Phytocannabinoids <span class="tag tag-sci">Science</span></dt>
+                <dd>Cannabinoids produced by plants — primarily (but not exclusively) <em>Cannabis sativa</em> L. The major phytocannabinoids are THC, CBD, CBG, CBC, CBN, THCV, CBDV, and THCA (the precursor acid form). More than 100 distinct phytocannabinoids have been identified. They interact with the body's endocannabinoid system, producing a range of physiological effects.</dd>
+            </div>
+            <div class="entry">
+                <dt>Plant Count <span class="tag tag-law">Law</span></dt>
+                <dd>Under Canada's Cannabis Regulations, medical cannabis patients with a valid medical document may register for a personal production licence. The permitted plant count is calculated based on daily gram authorization and growing method: typically 1 plant per 1g/day (outdoor) or 2 plants per 1g/day (indoor), with a maximum calculated from the authorization's duration. Home cultivation for recreational purposes is limited to a maximum of 4 plants per household in most provinces.</dd>
+            </div>
+            <div class="entry">
+                <dt>Potency <span class="tag tag-prod">Production</span></dt>
+                <dd>The concentration of cannabinoids (primarily THC and CBD) in a cannabis product, expressed as a percentage (% by weight) for flower and extracts, or milligrams (mg) for oils and edibles. Legal Canadian cannabis products must display potency on packaging. Potency testing is mandatory and must be conducted by accredited laboratories. THC potency in legal Canadian flower typically ranges from 14% to 28%+ for high-THC products.</dd>
+            </div>
+            <div class="entry">
+                <dt>Pre-Roll <span class="tag tag-prod">Production</span></dt>
+                <dd>Factory-manufactured rolled cannabis joints sold in single units or multi-packs. One of the most popular product formats in the Canadian legal market due to convenience. Pre-rolls may contain flower, infused flower (coated with concentrate), or a blend of flower and trim. Infused pre-rolls are significantly more potent. Weight typically ranges from 0.35g to 1g per unit. Packaging must display THC content per unit and per package.</dd>
+            </div>
+            <div class="entry">
+                <dt>Psychoactive</dt>
+                <dd>A substance that affects mental processes — mood, perception, cognition, or behaviour — by acting on the central nervous system. THC is the primary psychoactive compound in cannabis; it produces the characteristic intoxicating "high." CBD is generally considered non-psychoactive (it does not produce intoxication), though it does have psychotropic properties (anxiety reduction, mood effects). Under the Cannabis Act, cannabis is regulated as a psychoactive substance.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ Q ═══ -->
+    <div class="letter-section" id="Q">
+        <div class="letter-header">
+            <div class="letter-glyph">Q</div>
+            <div class="letter-count">1 entry</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Quarter (7g)</dt>
+                <dd>A common cannabis purchase quantity equal to 7 grams — one quarter of an ounce (28.35g). Also referred to as a "quarter" or "Q." A common retail format available in many Canadian stores. Pricing benchmark in the legal Canadian market: approximately $35–$75 for a quarter, depending on producer and quality tier. Compare: eighth (3.5g), half-ounce (14g), ounce (28g).</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ R ═══ -->
+    <div class="letter-section" id="R">
+        <div class="letter-header">
+            <div class="letter-glyph">R</div>
+            <div class="letter-count">2 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Reasonable Grounds <span class="tag tag-law">Law</span></dt>
+                <dd>In Canadian criminal law, the legal threshold required to justify arrest, detention, or search. "Reasonable grounds to believe" (full criminal standard) requires more than a hunch — objective facts that would cause a reasonable person to believe the criteria for an offence are met. "Reasonable grounds to suspect" (lower standard, for investigative detention) requires articulable suspicion based on observable facts. In cannabis law, the odour of cannabis alone may not establish reasonable grounds for a full search — this area of law continues to evolve.</dd>
+            </div>
+            <div class="entry">
+                <dt>Rosin <span class="tag tag-prod">Production</span></dt>
+                <dd>A solventless cannabis extract produced by applying heat and pressure to cannabis flower, hash, or kief — forcing trichomes to exude a resinous oil. Can be produced at home with a hair straightener or professionally with a hydraulic rosin press. Rosin retains terpene and cannabinoid profiles without solvent residue, making it a "clean" concentrate. Consistency ranges from sap to shatter-like depending on temperature and input material. Considered a premium extract category.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ S ═══ -->
+    <div class="letter-section" id="S">
+        <div class="letter-header">
+            <div class="letter-glyph">S</div>
+            <div class="letter-count">6 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Sativa</dt>
+                <dd>A traditional cannabis classification referring to taller, narrower-leafed plant morphology and traditionally associated with energizing, cerebral, uplifting effects. <em>Cannabis sativa</em> originated in equatorial regions (Southeast Asia, Central America, Africa). As with "indica," modern science suggests terpene and cannabinoid profiles are more predictive of effects than sativa/indica classification. Nevertheless, "sativa" is a widely-used retail descriptor in the Canadian market.</dd>
+            </div>
+            <div class="entry">
+                <dt>Shatter <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis concentrate with a brittle, glass-like consistency — produced through BHO extraction with minimal agitation during purging (preventing lipid crystallization that creates wax/budder). THC content: 70–90%+. Transparent amber to gold in colour. Shatters into fragments when broken (hence the name). One of the first concentrate forms popularized in North America. Used primarily for dabbing.</dd>
+            </div>
+            <div class="entry">
+                <dt>Solventless <span class="tag tag-prod">Production</span></dt>
+                <dd>Cannabis concentrates produced without chemical solvents. Methods include: ice water extraction (bubble hash), rosin press, dry sift/kief. Solventless products are valued by consumers seeking "clean" concentrates without risk of residual solvents. Generally considered premium products — more labour-intensive to produce. Includes: bubble hash, rosin, dry sift, and live rosin (rosin from fresh-frozen starting material).</dd>
+            </div>
+            <div class="entry">
+                <dt>Spliff</dt>
+                <dd>A rolled cigarette containing a mixture of cannabis and tobacco. More common in European cannabis culture than Canadian. The addition of tobacco increases nicotine dependency risk and adds tobacco-specific combustion toxins. Users who choose spliffs should be aware of the dual addiction risk. Not to be confused with a joint (cannabis only). Health Canada's harm reduction guidance generally advises against mixing cannabis with tobacco.</dd>
+            </div>
+            <div class="entry">
+                <dt>Strain / Cultivar</dt>
+                <dd>A specific genetic variety of cannabis with characteristic cannabinoid profiles, terpene profiles, morphology, and effects. Industry is moving from "strain" to "cultivar" (cultivated variety) as a more precise botanical term. Examples: Blue Dream, OG Kush, Pink Kush, Trainwreck. Strain names in the legal market must not be appealing to youth — Health Canada reviews product names as part of product authorization. Genetic stability between batches varies significantly between producers.</dd>
+            </div>
+            <div class="entry">
+                <dt>Sublingual</dt>
+                <dd>Administration under the tongue. Sublingual cannabis (oils, tinctures, dissolving strips) is absorbed through mucous membranes directly into the bloodstream, bypassing first-pass liver metabolism. This produces faster onset (15–45 min) and higher bioavailability than oral ingestion. Hold product under tongue for 60–90 seconds before swallowing for maximum absorption. A preferred medical administration route for titration and faster effect onset.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ T ═══ -->
+    <div class="letter-section" id="T">
+        <div class="letter-header">
+            <div class="letter-glyph">T</div>
+            <div class="letter-count">5 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Terpenes <span class="tag tag-sci">Science</span></dt>
+                <dd>Aromatic compounds produced by cannabis (and many other plants) in trichomes. Responsible for the distinctive smell and flavour of cannabis varieties. Over 200 terpenes have been identified in cannabis. Major terpenes: myrcene, limonene, pinene, linalool, caryophyllene, terpinolene, ocimene. Terpenes modulate cannabinoid effects and may contribute to the entourage effect. Legal Canadian products increasingly include terpene profiles on packaging and certificates of analysis (COA).</dd>
+            </div>
+            <div class="entry">
+                <dt>THC (Delta-9-Tetrahydrocannabinol) <span class="tag tag-sci">Science</span></dt>
+                <dd>The primary psychoactive cannabinoid in cannabis. A partial agonist at CB1 and CB2 receptors. THC produces: euphoria, altered time perception, increased appetite, analgesia, anti-emetic effects, and at high doses, anxiety and paranoia. Legally defined in Canada as delta-9-THC. The maximum legal blood THC level for driving is 2 ng/mL (summary offence) and 5 ng/mL (indictable). THC potency in legal Canadian flower is typically 15–30%.</dd>
+            </div>
+            <div class="entry">
+                <dt>Tincture <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis extract dissolved in alcohol (ethanol) — the traditional preparation method used historically and in herbal medicine. Under Canada's Cannabis Regulations, cannabis "extracts" including alcohol-dissolved preparations are a regulated product class. Modern cannabis tinctures are often labelled as "oil" even when alcohol-based. Applied sublingually or orally. Alcohol-solvent tinctures have faster onset when taken sublingually than oil-suspended formulations.</dd>
+            </div>
+            <div class="entry">
+                <dt>Topical <span class="tag tag-prod">Production</span></dt>
+                <dd>Cannabis products applied directly to the skin — creams, lotions, balms, transdermal patches. Topicals regulate via the endocannabinoid receptors in skin and peripheral tissues. Most topicals produce no systemic psychoactive effects (no intoxication). Transdermal patches are designed to deliver cannabinoids through the skin into systemic circulation. Used for localized pain, inflammation, and skin conditions. A regulated product class under Canada's Cannabis 2.0 framework.</dd>
+            </div>
+            <div class="entry">
+                <dt>Trichomes <span class="tag tag-sci">Science</span></dt>
+                <dd>Tiny hair-like glandular structures on cannabis flowers and leaves that produce and store cannabinoids, terpenes, and flavonoids. Visible as a frosty coating on mature cannabis buds — higher trichome density generally indicates higher potency. Three types: bulbous (smallest), capitate sessile, and capitate-stalked (most pharmacologically active). Trichome colour (clear → cloudy → amber) is used to gauge harvest timing: amber trichomes indicate THC degradation to CBN.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ V ═══ -->
+    <div class="letter-section" id="V">
+        <div class="letter-header">
+            <div class="letter-glyph">V</div>
+            <div class="letter-count">2 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Vaporizer <span class="tag tag-prod">Production</span></dt>
+                <dd>A device that heats cannabis flower or concentrate to a temperature that vaporizes cannabinoids and terpenes (160–230°C) without combustion (230°C+ required for combustion). Vaporization produces significantly fewer harmful combustion byproducts than smoking. Available in desktop form (Volcano, Arizer) and portable form (PAX, Dynavap). Dry herb vaporizers are the recommended harm reduction alternative to smoking for inhaled cannabis use.</dd>
+            </div>
+            <div class="entry">
+                <dt>Veterans Affairs Cannabis (VAC) <span class="tag tag-law">Law</span></dt>
+                <dd>Veterans Affairs Canada provides cannabis reimbursement for eligible veterans as part of their exceptional care benefits. VAC covers up to 3g/day of dried cannabis (or equivalent) — reduced from a previous 10g/day limit. Requires a medical document from a physician or nurse practitioner. Reimbursement is for products from licensed producers only. PTSD and chronic pain are among the most common qualifying conditions. VAC coverage is subject to policy review and individual approval.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ W ═══ -->
+    <div class="letter-section" id="W">
+        <div class="letter-header">
+            <div class="letter-glyph">W</div>
+            <div class="letter-count">2 entries</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Wax <span class="tag tag-prod">Production</span></dt>
+                <dd>A cannabis concentrate with an opaque, soft, wax-like consistency — similar to candle wax or lip balm. Produced from BHO through agitation during purging. THC content: 60–90%+. Easier to handle than shatter; less terpene-rich than live resin. Used primarily for dabbing. Consistency varieties include crumble (drier, honeycomb texture) and budder (creamier). Among the first concentrate types available in the Canadian legal market.</dd>
+            </div>
+            <div class="entry">
+                <dt>Whole Plant</dt>
+                <dd>A philosophy of cannabis medicine and product formulation that emphasizes using the full spectrum of compounds present in the cannabis plant — cannabinoids, terpenes, flavonoids, and other phytochemicals — rather than isolated components. Associated with the entourage effect hypothesis. "Whole plant medicine" advocates argue that isolated compounds (like CBD isolate) are less therapeutically effective than full-spectrum preparations. Contrasted with single-molecule pharmaceutical approaches (e.g., Epidiolex).</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+    <!-- ═══ Z ═══ -->
+    <div class="letter-section" id="Z">
+        <div class="letter-header">
+            <div class="letter-glyph">Z</div>
+            <div class="letter-count">1 entry</div>
+        </div>
+        <dl>
+            <div class="entry">
+                <dt>Zero-Tolerance <span class="tag tag-law">Law</span></dt>
+                <dd>A legal and workplace policy standard prohibiting any measurable amount of a substance. In Canadian law, zero-tolerance applies to cannabis and driving for: novice drivers (G1, G2, M1, M2 licence holders), commercial vehicle operators, and drivers of school buses — any detectable THC in blood or oral fluid is an offence, regardless of impairment level. In workplace contexts, zero-tolerance policies in safety-sensitive positions have been upheld by arbitrators where the policy is clear, communicated, and consistently enforced.</dd>
+            </div>
+        </dl>
+        <a href="#top" class="back-top">↑ Back to top</a>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">CCLDR<span>.NET</span></div>
+    <div>Canada's Cannabis Superhighway — Cannabis A-to-Z Reference</div>
+    <div style="margin-top:8px;">© 2026 CCLDR.NET — Derek Francisco (Doc Weedlaw) | Francisco Holdings Inc.</div>
+    <div style="margin-top:6px; color: rgba(255,215,0,0.7); font-size:0.75rem;">⚖ Educational content only. Not legal, medical, or professional advice. Definitions are for educational purposes and do not constitute legal interpretation.</div>
+</footer>
+
+</body>
+</html>
