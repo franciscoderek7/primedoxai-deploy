@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Constitutional Defense Education | CCLDR.NET</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green:#00FF88;--gold:#FFD700;--dark:#0A0A0A;--bg:#070909;
+      --card:#0C1109;--border-g:rgba(0,255,136,.18);--border-au:rgba(255,215,0,.25);
+      --text:#E0EEDC;--muted:#6A8870;--gold2:#B8860B;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 60% 40% at 15% 8%,rgba(255,215,0,.04) 0%,transparent 50%),
+        radial-gradient(ellipse 50% 50% at 88% 88%,rgba(0,255,136,.05) 0%,transparent 50%);
+      pointer-events:none;
+    }
+    @keyframes float-a{0%,100%{transform:translateY(0) translateX(0);opacity:.4}50%{transform:translateY(-18px) translateX(8px);opacity:.8}}
+    @keyframes float-b{0%,100%{transform:translateY(0) translateX(0);opacity:.3}50%{transform:translateY(12px) translateX(-12px);opacity:.7}}
+    .particle{position:fixed;border-radius:50%;background:var(--gold);pointer-events:none;z-index:0}
+    .p1{width:3px;height:3px;top:18%;left:7%;animation:float-a 6s ease-in-out infinite}
+    .p2{width:2px;height:2px;top:35%;left:93%;animation:float-b 7s ease-in-out infinite}
+    .p3{width:4px;height:4px;top:58%;left:4%;animation:float-a 8s ease-in-out infinite;animation-delay:-3s}
+    .p4{width:2px;height:2px;top:72%;left:90%;animation:float-b 5s ease-in-out infinite;animation-delay:-2s}
+    .p5{width:3px;height:3px;top:88%;left:42%;animation:float-a 9s ease-in-out infinite;animation-delay:-4s}
+
+    /* ── Sticky Gold Disclaimer ── */
+    .disclaimer-top{
+      position:sticky;top:0;z-index:300;
+      background:linear-gradient(90deg,rgba(255,215,0,.15),rgba(255,215,0,.09),rgba(255,215,0,.15));
+      border-bottom:2px solid var(--gold);
+      padding:10px 24px;text-align:center;
+      font-size:11.5px;font-weight:800;color:var(--gold);
+      letter-spacing:1.4px;text-transform:uppercase;
+    }
+
+    /* ── Nav ── */
+    nav{
+      position:sticky;top:38px;z-index:200;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+      padding:14px 40px;
+      background:rgba(7,9,9,.97);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border-g);
+    }
+    .nav-logo-row{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .nav-brand{font-size:20px;font-weight:900;line-height:1}
+    .nav-brand .g{color:var(--green)}.nav-brand .au{color:var(--gold)}
+    .nav-sub{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-top:2px}
+    .nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .nav-link{font-size:12.5px;color:var(--muted);text-decoration:none;transition:color .2s;white-space:nowrap}
+    .nav-link:hover{color:var(--green)}
+    .nav-link.active{color:var(--green)}
+    .nav-cta{
+      padding:8px 18px;background:linear-gradient(135deg,var(--green),#00CC66);
+      color:#000;border:none;border-radius:8px;font-size:12px;font-weight:700;
+      cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-block;white-space:nowrap;
+    }
+    .nav-cta:hover{opacity:.85}
+
+    /* ── Hero ── */
+    .hero{
+      position:relative;z-index:1;padding:72px 24px 44px;text-align:center;
+    }
+    .hero-content{max-width:820px;margin:0 auto}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(255,215,0,.08);border:1px solid var(--border-au);
+      color:var(--gold);font-size:11px;font-weight:700;
+      padding:6px 18px;border-radius:20px;
+      text-transform:uppercase;letter-spacing:2px;margin-bottom:28px;
+    }
+    .hero h1{
+      font-size:clamp(32px,6.5vw,68px);font-weight:900;line-height:1.05;
+      letter-spacing:-1.5px;margin-bottom:16px;color:#fff;
+    }
+    .hero h1 .g{color:var(--green)}
+    .hero h1 .au{color:var(--gold)}
+    .hero-sub{font-size:clamp(14px,2.2vw,18px);color:var(--muted);margin:0 auto;max-width:580px;line-height:1.65}
+
+    /* ── Prominent Disclaimer Box ── */
+    .hero-disclaimer{
+      max-width:860px;margin:32px auto 0;
+      background:rgba(255,215,0,.07);
+      border:2px solid var(--gold);
+      border-radius:16px;padding:28px 32px;
+      text-align:left;position:relative;z-index:1;
+    }
+    .hero-disclaimer-icon{font-size:24px;margin-bottom:10px}
+    .hero-disclaimer-title{
+      font-size:13px;font-weight:900;color:var(--gold);
+      text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;
+    }
+    .hero-disclaimer-text{font-size:13.5px;color:var(--muted);line-height:1.75}
+    .hero-disclaimer-text strong{color:var(--gold)}
+
+    /* ── Table of Contents ── */
+    .toc{
+      position:relative;z-index:1;max-width:960px;margin:0 auto;padding:40px 24px 40px;
+    }
+    .toc-inner{
+      background:rgba(12,17,9,.85);border:1px solid var(--border-g);
+      border-radius:16px;padding:28px 32px;backdrop-filter:blur(12px);
+    }
+    .toc-title{font-size:12px;color:var(--green);text-transform:uppercase;letter-spacing:3px;font-weight:700;margin-bottom:16px}
+    .toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+    .toc-item{font-size:13px;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:6px;transition:background .15s,color .15s;display:block}
+    .toc-item:hover{background:rgba(255,215,0,.07);color:var(--gold)}
+    .toc-item span{color:var(--gold);font-weight:700;margin-right:6px;font-size:11px}
+
+    /* ── Content ── */
+    .content-wrap{max-width:960px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+    .module{margin-bottom:72px}
+    .module-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border-au)}
+    .module-num{
+      width:44px;height:44px;border-radius:10px;
+      background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,215,0,.05));
+      border:1px solid var(--border-au);
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:900;color:var(--gold);flex-shrink:0;
+    }
+    .module-title{font-size:clamp(18px,3vw,26px);font-weight:900;color:#fff;letter-spacing:-.5px}
+    .module-subtitle{font-size:13px;color:var(--muted);margin-top:3px}
+
+    /* ── Charter Section Cards ── */
+    .charter-card{
+      background:rgba(0,255,136,.03);border:1px solid var(--border-g);
+      border-radius:16px;padding:0;margin-bottom:20px;
+      overflow:hidden;transition:box-shadow .2s;
+    }
+    .charter-card:hover{box-shadow:0 0 40px rgba(0,255,136,.07)}
+    .charter-card-header{
+      background:linear-gradient(90deg,rgba(0,255,136,.1),rgba(0,255,136,.04));
+      border-bottom:1px solid var(--border-g);
+      padding:18px 28px;display:flex;align-items:center;gap:16px;
+    }
+    .charter-section-num{
+      font-size:22px;font-weight:900;color:var(--green);
+      min-width:60px;font-family:'SF Mono','Fira Code',monospace;
+    }
+    .charter-section-title{font-size:16px;font-weight:800;color:#fff}
+    .charter-section-sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .charter-full-text{
+      background:rgba(255,215,0,.04);border:1px solid var(--border-au);
+      border-radius:8px;padding:14px 18px;
+      font-style:italic;font-size:13px;color:var(--muted);
+      margin:20px 28px 0;line-height:1.7;
+    }
+    .charter-full-text::before{content:'"';color:var(--gold);font-size:18px;font-style:normal;margin-right:4px}
+    .charter-full-text::after{content:'"';color:var(--gold);font-size:18px;font-style:normal;margin-left:4px}
+    .charter-body{padding:18px 28px 24px}
+    .case-cite{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(0,255,136,.06);border:1px solid var(--border-g);
+      border-radius:6px;padding:4px 12px;
+      font-size:11px;color:var(--green);font-style:italic;
+      margin:4px 4px 0 0;
+    }
+
+    /* ── General Cards ── */
+    .card{
+      background:rgba(0,255,136,.03);border:1px solid var(--border-g);
+      border-radius:16px;padding:24px 28px;backdrop-filter:blur(10px);
+      margin-bottom:16px;transition:border-color .2s;
+    }
+    .card:hover{border-color:rgba(0,255,136,.3)}
+    .card-gold{
+      background:rgba(255,215,0,.04);border:1px solid var(--border-au);
+      border-left:4px solid var(--gold);
+    }
+    .card-gold:hover{border-left-color:var(--gold);border-color:rgba(255,215,0,.4)}
+    .card-green{border-left:4px solid var(--green)}
+    .card-title{font-size:15px;font-weight:800;color:var(--green);margin-bottom:12px}
+    .card-gold .card-title{color:var(--gold)}
+    .card-body{font-size:13.5px;color:var(--muted);line-height:1.7}
+    .card-body strong{color:var(--text)}
+
+    /* ── Info lists ── */
+    .info-list{list-style:none;margin:0}
+    .info-list li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--muted);padding:8px 0;border-bottom:1px solid rgba(0,255,136,.06);line-height:1.6}
+    .info-list li:last-child{border-bottom:none}
+    .info-list li::before{content:'▸';color:var(--green);flex-shrink:0;margin-top:2px;font-size:11px}
+    .info-list li strong{color:var(--text)}
+
+    /* ── Numbered steps list ── */
+    .steps-list{list-style:none;margin:0;counter-reset:steps}
+    .steps-list li{
+      display:flex;align-items:flex-start;gap:14px;
+      font-size:13.5px;color:var(--muted);
+      padding:14px 18px;
+      border:1px solid var(--border-au);border-radius:10px;
+      margin-bottom:10px;line-height:1.6;
+      background:rgba(255,215,0,.03);
+      counter-increment:steps;
+    }
+    .steps-list li::before{
+      content:counter(steps);
+      color:#000;background:var(--gold);
+      width:26px;height:26px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:12px;font-weight:900;flex-shrink:0;margin-top:1px;
+    }
+    .steps-list li strong{color:var(--text);display:block;margin-bottom:4px}
+    .steps-list li .step-quote{
+      display:inline-block;background:rgba(0,255,136,.08);
+      border:1px solid var(--border-g);border-radius:6px;
+      padding:6px 12px;font-size:12.5px;color:var(--green);
+      font-style:italic;margin-top:8px;font-weight:600;
+    }
+
+    /* ── Timeline ── */
+    .timeline{position:relative;padding-left:32px;margin-top:8px}
+    .timeline::before{
+      content:'';position:absolute;left:10px;top:0;bottom:0;
+      width:2px;background:linear-gradient(to bottom,var(--gold),rgba(255,215,0,.1));
+    }
+    .tl-item{position:relative;margin-bottom:22px}
+    .tl-dot{
+      position:absolute;left:-26px;top:4px;
+      width:14px;height:14px;border-radius:50%;
+      background:var(--gold);border:2px solid var(--bg);
+      box-shadow:0 0 8px rgba(255,215,0,.5);
+    }
+    .tl-year{font-size:12px;font-weight:800;color:var(--gold);margin-bottom:4px;font-family:'SF Mono','Fira Code',monospace}
+    .tl-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px}
+    .tl-text{font-size:13px;color:var(--muted);line-height:1.6}
+    .tl-cite{font-size:11px;color:var(--green);font-style:italic;margin-top:4px}
+
+    /* ── Two-col ── */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:640px){.two-col{grid-template-columns:1fr}}
+
+    /* ── Pricing tiers ── */
+    .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:28px}
+    .tier-card{
+      background:rgba(12,17,9,.9);border:1px solid var(--border-g);
+      border-radius:18px;padding:28px 22px;text-align:center;
+      transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;
+    }
+    .tier-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,255,136,.07)}
+    .tier-card.featured{
+      border-color:var(--gold);
+      background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,rgba(12,17,9,.95) 60%);
+      box-shadow:0 0 40px rgba(255,215,0,.1);
+    }
+    .tier-icon{font-size:26px;margin-bottom:8px}
+    .tier-rank{font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:3px;font-weight:700;margin-bottom:4px}
+    .tier-card.featured .tier-rank{color:var(--gold)}
+    .tier-name{font-size:20px;font-weight:900;margin-bottom:4px}
+    .tier-price{font-size:36px;font-weight:900;color:var(--green);line-height:1;margin:10px 0 4px}
+    .tier-card.featured .tier-price{color:var(--gold)}
+    .tier-price sup{font-size:16px;vertical-align:super}
+    .tier-price-sub{font-size:11px;color:var(--muted);margin-bottom:14px}
+    .tier-divider{border:none;border-top:1px solid var(--border-g);margin:14px 0}
+    .tier-card.featured .tier-divider{border-color:var(--border-au)}
+    .tier-features{list-style:none;text-align:left;margin-bottom:20px;flex:1}
+    .tier-features li{font-size:12px;color:var(--muted);padding:5px 0;display:flex;gap:7px;align-items:flex-start;line-height:1.45}
+    .tier-features li::before{content:'⚖';font-size:10px;color:var(--green);flex-shrink:0;margin-top:1px}
+    .tier-card.featured .tier-features li::before{color:var(--gold)}
+    .tier-btn{
+      display:block;padding:12px;border:none;border-radius:10px;
+      font-size:13px;font-weight:800;cursor:pointer;text-align:center;
+      text-decoration:none;margin-top:auto;transition:opacity .2s;
+    }
+    .tier-btn:hover{opacity:.86}
+    .btn-g{background:linear-gradient(135deg,var(--green),#00BB66);color:#000}
+    .btn-au{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000}
+    .btn-og{background:transparent;border:1px solid var(--border-g);color:var(--green)}
+
+    /* ── Note / Alert boxes ── */
+    .note-box{
+      background:rgba(255,215,0,.05);border:1px solid var(--border-au);
+      border-left:4px solid var(--gold);border-radius:10px;
+      padding:16px 20px;margin-top:16px;
+      font-size:13px;color:var(--muted);line-height:1.65;
+    }
+    .note-box strong{color:var(--gold)}
+    .alert-box{
+      background:rgba(0,255,136,.04);border:1px solid var(--border-g);
+      border-left:4px solid var(--green);border-radius:10px;
+      padding:16px 20px;margin-top:16px;
+      font-size:13px;color:var(--muted);line-height:1.65;
+    }
+    .alert-box strong{color:var(--green)}
+
+    /* ── Divider ── */
+    .sec-divider{border:none;border-top:1px solid rgba(255,215,0,.1);margin:0 0 72px}
+
+    /* ── Footer ── */
+    footer{
+      position:relative;z-index:1;
+      border-top:1px solid var(--border-g);text-align:center;
+      padding:36px 24px;color:var(--muted);font-size:13px;
+    }
+    footer .g{color:var(--green)}
+    footer .au{color:var(--gold)}
+    .footer-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:16px}
+    .footer-links a{font-size:12px;color:var(--muted);text-decoration:none;transition:color .2s}
+    .footer-links a:hover{color:var(--green)}
+    .footer-disclaimer{font-size:11px;max-width:680px;margin:12px auto 0;line-height:1.6}
+
+    .back-top{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,215,0,.07);border:1px solid var(--border-au);
+      color:var(--gold);font-size:12px;font-weight:600;
+      padding:8px 18px;border-radius:8px;text-decoration:none;margin-top:32px;
+      transition:background .2s;
+    }
+    .back-top:hover{background:rgba(255,215,0,.12)}
+
+    @media(max-width:640px){
+      nav{padding:12px 18px;top:34px}
+      .disclaimer-top{font-size:10px;padding:8px 14px}
+      .content-wrap{padding:0 16px}
+      .toc{padding:24px 16px 32px}
+      .charter-card-header{padding:14px 18px}
+      .charter-body{padding:14px 18px 18px}
+      .charter-full-text{margin:14px 18px 0}
+      .hero-disclaimer{padding:20px 18px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="particle p1"></div>
+<div class="particle p2"></div>
+<div class="particle p3"></div>
+<div class="particle p4"></div>
+<div class="particle p5"></div>
+
+<!-- STICKY GOLD DISCLAIMER -->
+<div class="disclaimer-top" id="top">
+  ⚖ NOT LEGAL REPRESENTATION &mdash; EDUCATION ONLY &mdash; For informational and educational purposes only. Retain qualified legal counsel for your situation.
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo-row" style="text-decoration:none">
+    <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <style>@keyframes leaf-pulse{0%,100%{opacity:.8;filter:drop-shadow(0 0 3px rgba(0,255,136,.4))}50%{opacity:1;filter:drop-shadow(0 0 8px rgba(0,255,136,.8))}}</style>
+      <line x1="18" y1="4" x2="18" y2="32" stroke="#FFD700" stroke-width="1.5" opacity=".7"/>
+      <line x1="8" y1="10" x2="28" y2="10" stroke="#FFD700" stroke-width="1.5" opacity=".7"/>
+      <path d="M8 10 Q6 14 4 18 Q8 20 12 18 Q10 14 8 10Z" fill="rgba(255,215,0,.15)" stroke="#FFD700" stroke-width="1"/>
+      <path d="M28 10 Q26 14 24 18 Q28 20 32 18 Q30 14 28 10Z" fill="rgba(255,215,0,.15)" stroke="#FFD700" stroke-width="1"/>
+      <path d="M18,18 C16,14 12,12 14,10 C16,8 18,12 18,12 C18,12 20,8 22,10 C24,12 20,14 18,18Z" fill="rgba(0,255,136,.4)" stroke="#00FF88" stroke-width=".8" style="animation:leaf-pulse 3s ease-in-out infinite"/>
+      <path d="M18,22 C15,18 11,18 12,15 C13,12 17,16 18,16 C19,16 23,12 24,15 C25,18 21,18 18,22Z" fill="rgba(0,255,136,.35)" stroke="#00FF88" stroke-width=".8" style="animation:leaf-pulse 3s ease-in-out infinite;animation-delay:.5s"/>
+      <circle cx="14" cy="10" r="1.5" fill="#FFD700" opacity=".7"/>
+      <circle cx="22" cy="10" r="1.5" fill="#FFD700" opacity=".7"/>
+      <circle cx="18" cy="32" r="2" fill="#FFD700"/>
+    </svg>
+    <div>
+      <div class="nav-brand"><span class="g">CCLDR</span><span class="au">.NET</span></div>
+      <div class="nav-sub">Canada's Cannabis Superhighway</div>
+    </div>
+  </a>
+  <div class="nav-right">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="law.html" class="nav-link">Cannabis Law</a>
+    <a href="defense.html" class="nav-link active">Charter Defense</a>
+    <a href="../ccldr-payments/index.html" class="nav-cta">Enroll Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">⚖ Educational Module — Constitutional Rights</div>
+    <h1>
+      Know Your<br>
+      <span class="au">Charter</span> <span class="g">Rights</span>
+    </h1>
+    <p class="hero-sub">Constitutional defense education for cannabis cases. Understanding your rights under the Canadian Charter of Rights and Freedoms.</p>
+  </div>
+
+  <!-- LARGE GOLD DISCLAIMER BOX -->
+  <div class="hero-disclaimer">
+    <div class="hero-disclaimer-icon">⚖</div>
+    <div class="hero-disclaimer-title">Important Notice — Read Before Proceeding</div>
+    <p class="hero-disclaimer-text">
+      The information on this page is provided for <strong>educational purposes ONLY</strong>. It does not constitute legal advice, legal representation, or the establishment of a solicitor-client relationship. Constitutional law is complex and intensely case-specific — outcomes depend on facts, jurisdiction, timing, the presiding judge, and dozens of other variables no educational resource can account for.
+      <br/><br/>
+      <strong>Retain qualified legal counsel for your individual situation.</strong> CCLDR.NET provides EDUCATION about publicly available Charter jurisprudence and constitutional principles. Nothing here is, or should be construed as, legal advice. Derek Francisco (Doc Weedlaw) is an educator and researcher, not your lawyer.
+    </p>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <div class="toc-inner">
+    <div class="toc-title">Module Contents</div>
+    <div class="toc-grid">
+      <a href="#s1" class="toc-item"><span>01</span>The Canadian Charter of Rights &amp; Freedoms</a>
+      <a href="#s2" class="toc-item"><span>02</span>Charter Sections Relevant to Cannabis Cases</a>
+      <a href="#s3" class="toc-item"><span>03</span>MMAR / ACMPR History Timeline</a>
+      <a href="#s4" class="toc-item"><span>04</span>The 12-Appearance Timeline</a>
+      <a href="#s5" class="toc-item"><span>05</span>The BENO-X Framework</a>
+      <a href="#s6" class="toc-item"><span>06</span>Your Rights at Arrest — Step by Step</a>
+      <a href="#s7" class="toc-item"><span>07</span>Disclosure Rights</a>
+      <a href="#s8" class="toc-item"><span>08</span>CCLDR Education Tiers</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content-wrap">
+
+  <!-- ── SECTION 1 ── -->
+  <div class="module" id="s1">
+    <div class="module-header">
+      <div class="module-num">01</div>
+      <div>
+        <div class="module-title">The Canadian Charter of Rights and Freedoms</div>
+        <div class="module-subtitle">Enacted 1982 — Supreme law of Canada — Part I of the Constitution Act, 1982</div>
+      </div>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-title">What Is the Charter?</div>
+      <div class="card-body">
+        <p style="margin-bottom:14px">The <strong>Canadian Charter of Rights and Freedoms</strong> was entrenched as Part I of the Constitution Act, 1982. It is the supreme law of Canada — any law that is inconsistent with the Charter is, to the extent of the inconsistency, of no force or effect (s.52, Constitution Act, 1982).</p>
+        <p style="margin-bottom:14px">The Charter <strong>applies to government action</strong> — not purely private conduct. This includes legislation passed by Parliament and provincial legislatures, actions by police officers, prosecutorial decisions, and any exercise of governmental authority.</p>
+        <p>The Charter protects a range of fundamental rights and freedoms. In the cannabis context, the most relevant sections are <strong>ss. 7, 8, 9, 10(b), 12, 15, and 24</strong>. Understanding what these sections say — and how courts have interpreted them — is the foundation of constitutional literacy in this field.</p>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title">Section 1 — The Reasonable Limits Clause</div>
+        <div class="card-body">
+          Even where a Charter right is violated, the government may justify the violation under s.1 if it is a "reasonable limit prescribed by law as can be demonstrably justified in a free and democratic society." Courts apply the <em>Oakes</em> test (R v Oakes, 1986 SCC) to assess s.1 justification.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Section 52 — Constitutional Supremacy</div>
+        <div class="card-body">
+          Laws that violate the Charter and cannot be saved under s.1 may be struck down in whole or in part under s.52 of the Constitution Act, 1982. This is distinct from a remedy under s.24 — s.52 voids the law itself, not just the evidence obtained under it.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 2 ── -->
+  <div class="module" id="s2">
+    <div class="module-header">
+      <div class="module-num">02</div>
+      <div>
+        <div class="module-title">Charter Rights Relevant to Cannabis Cases</div>
+        <div class="module-subtitle">Educational overview of key sections — all interpretations are educational summaries only</div>
+      </div>
+    </div>
+
+    <!-- s.7 -->
+    <div class="charter-card">
+      <div class="charter-card-header">
+        <div class="charter-section-num">s.7</div>
+        <div>
+          <div class="charter-section-title">Life, Liberty and Security of the Person</div>
+          <div class="charter-section-sub">Fundamental justice — the right most directly engaged in cannabis prohibition challenges</div>
+        </div>
+      </div>
+      <div class="charter-full-text">
+        Everyone has the right to life, liberty and security of the person and the right not to be deprived thereof except in accordance with the principles of fundamental justice.
+      </div>
+      <div class="charter-body">
+        <ul class="info-list">
+          <li><strong>Cannabis application:</strong> Criminalizing possession of a substance with known medical or therapeutic value may deprive persons of liberty in a manner not in accord with principles of fundamental justice</li>
+          <li><strong>R v Parker (2000):</strong> Ontario Court of Appeal found the absolute prohibition on cannabis possession deprived Terrance Parker — who used cannabis to control epileptic seizures — of life and liberty in a way contrary to fundamental justice. This decision directly caused the creation of the MMAR</li>
+          <li><strong>R v Smith (2015 SCC 34):</strong> Supreme Court struck down the restriction limiting medical cannabis to dried form only. Patients had the right to access other forms (oils, edibles) for their medical condition — restricting this was a s.7 violation</li>
+          <li><strong>Key analytical questions:</strong> Is the law arbitrary (no rational connection between objective and effect)? Is it overbroad (captures more conduct than needed)? Is it grossly disproportionate (the harm to the individual far outweighs any state benefit)?</li>
+        </ul>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap">
+          <span class="case-cite">R v Parker (2000 Ont CA)</span>
+          <span class="case-cite">R v Smith [2015] SCC 34</span>
+          <span class="case-cite">Canada v Bedford [2013] SCC 72</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- s.8 -->
+    <div class="charter-card">
+      <div class="charter-card-header">
+        <div class="charter-section-num">s.8</div>
+        <div>
+          <div class="charter-section-title">Unreasonable Search and Seizure</div>
+          <div class="charter-section-sub">Privacy rights — police search authority and its limits</div>
+        </div>
+      </div>
+      <div class="charter-full-text">
+        Everyone has the right to be secure against unreasonable search or seizure.
+      </div>
+      <div class="charter-body">
+        <ul class="info-list">
+          <li><strong>Reasonable grounds:</strong> Police must generally have reasonable and probable grounds to believe an offence has been committed before searching a person or vehicle. Without grounds, a search is presumptively unreasonable</li>
+          <li><strong>Reasonable expectation of privacy (REP):</strong> The scope of s.8 protection depends on whether the subject had a reasonable expectation of privacy in the thing or place searched. The smell of cannabis from a vehicle or person has been argued as grounds for search — courts continue to grapple with this in the post-legalization context</li>
+          <li><strong>Hunter v Southam (1984 SCC):</strong> Foundational case establishing that s.8 requires prior authorization (e.g., a warrant) by an independent person capable of assessing whether reasonable grounds exist</li>
+          <li><strong>Consent to search:</strong> Must be voluntary, informed, and not the product of police authority or coercion. Saying "I don't consent" does not prevent a search if police have independent grounds — but it preserves your rights for later challenge</li>
+          <li><strong>Plain view doctrine:</strong> Items in plain view during a lawful search may be seized — but the initial intrusion must have been lawful. Police cannot create a "plain view" opportunity through an unlawful presence</li>
+          <li><strong>Digital devices:</strong> R v Fearon (2014 SCC) and R v Marakah (2017 SCC) address searches of cell phones and digital communications — these have high privacy protection</li>
+        </ul>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap">
+          <span class="case-cite">Hunter v Southam [1984] 2 SCR 145</span>
+          <span class="case-cite">R v Collins [1987] 1 SCR 265</span>
+          <span class="case-cite">R v Fearon [2014] SCC 77</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- s.9 -->
+    <div class="charter-card">
+      <div class="charter-card-header">
+        <div class="charter-section-num">s.9</div>
+        <div>
+          <div class="charter-section-title">Arbitrary Detention</div>
+          <div class="charter-section-sub">When police stop, detain or restrict your movement</div>
+        </div>
+      </div>
+      <div class="charter-full-text">
+        Everyone has the right not to be arbitrarily detained or imprisoned.
+      </div>
+      <div class="charter-body">
+        <ul class="info-list">
+          <li><strong>What is detention?</strong> You are detained when police significantly restrict your liberty — including through psychological means (e.g., police blocking your path and directing you to stop, even without physical restraint)</li>
+          <li><strong>R v Grant (2009 SCC 32):</strong> The Supreme Court established the modern framework for s.9 analysis, expanding the definition of detention and setting out how courts assess whether detention was arbitrary. "Psychological detention" is included — you do not need to be physically restrained</li>
+          <li><strong>When detention is lawful:</strong> Police may detain if they have articulable cause — a founded suspicion based on specific, objective facts. Random stops without any grounds are arbitrary</li>
+          <li><strong>Demand to identify:</strong> In Canada, you are <strong>not legally required to identify yourself</strong> to police unless you are lawfully arrested or are operating a motor vehicle. The "carding" or street checks practice has been widely challenged as arbitrary and discriminatory</li>
+          <li><strong>R v Le (2019 SCC 34):</strong> The Supreme Court found that police entering a backyard and questioning a group of young men of colour constituted arbitrary detention under s.9, finding race-based policing a relevant factor in the psychological detention analysis</li>
+        </ul>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap">
+          <span class="case-cite">R v Grant [2009] SCC 32</span>
+          <span class="case-cite">R v Le [2019] SCC 34</span>
+          <span class="case-cite">R v Mann [2004] SCC 52</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- s.10(b) -->
+    <div class="charter-card">
+      <div class="charter-card-header">
+        <div class="charter-section-num">s.10(b)</div>
+        <div>
+          <div class="charter-section-title">Right to Counsel</div>
+          <div class="charter-section-sub">The most immediately actionable right upon arrest or detention — invoke it immediately</div>
+        </div>
+      </div>
+      <div class="charter-full-text">
+        Everyone has the right on arrest or detention to retain and instruct counsel without delay and to be informed of that right.
+      </div>
+      <div class="charter-body">
+        <div style="background:rgba(0,255,136,.07);border:1px solid var(--border-g);border-radius:10px;padding:14px 18px;margin-bottom:16px">
+          <div style="font-size:12px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Say This — Immediately</div>
+          <div style="font-size:15px;color:#fff;font-weight:700;font-style:italic;">"I wish to speak to a lawyer before I answer any questions or participate in any tests."</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:8px">Then stop talking. Do not answer questions about the alleged offence. Do not provide additional information.</div>
+        </div>
+        <ul class="info-list">
+          <li><strong>Trigger:</strong> The right arises the moment you are arrested or detained — not just upon formal arrest. If you are psychologically detained under s.9 analysis, s.10(b) rights apply</li>
+          <li><strong>Police obligation:</strong> Once invoked, police must provide you with a reasonable opportunity to contact a lawyer before questioning or conducting tests (e.g., DRE evaluation). They must hold off on eliciting evidence until you have had that opportunity</li>
+          <li><strong>Duty counsel:</strong> Free legal advice is available 24 hours a day, 7 days a week through provincial Legal Aid duty counsel services. Police are required to inform you of this (R v Bartle, 1994 SCC)</li>
+          <li><strong>R v Bartle (1994 SCC):</strong> Police must inform the detainee not only of the right to counsel but of the availability of Legal Aid and free duty counsel — failure to do so may constitute a s.10(b) breach</li>
+          <li><strong>Waiver:</strong> You may waive your right to counsel, but waiver must be clear and voluntary. Continuing to answer questions after invoking the right may not amount to a valid waiver</li>
+        </ul>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap">
+          <span class="case-cite">R v Bartle [1994] 3 SCR 173</span>
+          <span class="case-cite">R v Manninen [1987] 1 SCR 1233</span>
+          <span class="case-cite">R v Sinclair [2010] SCC 35</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- s.12 -->
+    <div class="charter-card">
+      <div class="charter-card-header">
+        <div class="charter-section-num">s.12</div>
+        <div>
+          <div class="charter-section-title">Cruel and Unusual Treatment or Punishment</div>
+          <div class="charter-section-sub">Disproportionate sentences — mandatory minimums challenged</div>
+        </div>
+      </div>
+      <div class="charter-full-text">
+        Everyone has the right not to be subjected to any cruel and unusual treatment or punishment.
+      </div>
+      <div class="charter-body">
+        <ul class="info-list">
+          <li><strong>Gross disproportionality test:</strong> A sentence violates s.12 when it is so excessive as to outrage standards of decency — grossly disproportionate to what would be appropriate having regard to the offence and the offender</li>
+          <li><strong>Mandatory minimums:</strong> Several mandatory minimum sentences for drug offences have been struck down under s.12. Courts assess whether a reasonably foreseeable hypothetical application of the mandatory minimum produces a grossly disproportionate result</li>
+          <li><strong>R v Nur (2015 SCC 15):</strong> Struck down mandatory minimum sentences for firearm possession offences — established modern framework for mandatory minimum challenges applicable to drug offence minimums</li>
+          <li><strong>R v Lloyd (2016 SCC 13):</strong> Struck down mandatory minimum sentence for drug trafficking as grossly disproportionate — key authority for cannabis-related sentencing challenges</li>
+          <li><strong>Cannabis context:</strong> Historical mandatory minimum sentences for cannabis cultivation and trafficking that created disproportionate sentences relative to the gravity of the conduct have been challenged and in many cases struck down</li>
+        </ul>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap">
+          <span class="case-cite">R v Nur [2015] SCC 15</span>
+          <span class="case-cite">R v Lloyd [2016] SCC 13</span>
+          <span class="case-cite">R v Smith [1987] 1 SCR 1045</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- s.15 -->
+    <div class="charter-card">
+      <div class="charter-card-header">
+        <div class="charter-section-num">s.15</div>
+        <div>
+          <div class="charter-section-title">Equality Rights</div>
+          <div class="charter-section-sub">Discriminatory enforcement and differential impact</div>
+        </div>
+      </div>
+      <div class="charter-full-text">
+        Every individual is equal before and under the law and has the right to equal protection and equal benefit of the law without discrimination based on race, national or ethnic origin, colour, religion, sex, age or mental or physical disability.
+      </div>
+      <div class="charter-body">
+        <ul class="info-list">
+          <li><strong>Cannabis application:</strong> Documented evidence shows disproportionate enforcement of cannabis laws against Black and Indigenous Canadians — even in the post-legalization period. Differential enforcement on the basis of race may ground an equality rights argument</li>
+          <li><strong>R v Le (2019 SCC 34):</strong> While primarily a s.9 case, the SCC expressly noted the relevance of race to the assessment of whether a detention was arbitrary — police conduct toward Black youth in a predominantly Black neighbourhood was part of the factual context</li>
+          <li><strong>Systemic evidence:</strong> Courts may receive statistical evidence of differential enforcement to support equality claims. Expert evidence on anti-Black racism and policing has been admitted in Canadian courts</li>
+          <li><strong>s.15 and regulatory schemes:</strong> A law that facially applies to all but has a disparate impact on a protected group may still be challenged — the law's purpose and effects are both relevant</li>
+        </ul>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap">
+          <span class="case-cite">R v Le [2019] SCC 34</span>
+          <span class="case-cite">Kahkewistahaw First Nation v Taypotat [2015] SCC 30</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- s.24 -->
+    <div class="charter-card">
+      <div class="charter-card-header">
+        <div class="charter-section-num">s.24</div>
+        <div>
+          <div class="charter-section-title">Remedies for Charter Breach</div>
+          <div class="charter-section-sub">What happens when your Charter rights are violated</div>
+        </div>
+      </div>
+      <div class="charter-full-text">
+        Anyone whose rights or freedoms, as guaranteed by the Charter, have been infringed or denied may apply to a court of competent jurisdiction to obtain such remedy as the court considers appropriate and just in the circumstances.
+      </div>
+      <div class="charter-body">
+        <ul class="info-list">
+          <li><strong>s.24(1) — Appropriate and just remedy:</strong> Courts have broad discretion. This includes damages, stays of proceedings, and other relief. Used in the most serious cases of state misconduct</li>
+          <li><strong>s.24(2) — Exclusion of evidence:</strong> Where evidence was obtained in a manner that infringed the Charter, the court <em>may</em> exclude it if admission would bring the administration of justice into disrepute. This is the most commonly invoked remedy in search and seizure cases</li>
+          <li><strong>R v Grant (2009 SCC 32) — Three-part test for s.24(2):</strong>
+            <ol style="margin:10px 0 0 20px;font-size:13px;color:var(--muted);line-height:1.8">
+              <li>Seriousness of the Charter-infringing conduct (does admission send a message that police misconduct is condoned?)</li>
+              <li>Impact on the Charter-protected interests of the accused (how seriously was their right infringed?)</li>
+              <li>Society's interest in adjudication on the merits (how serious is the offence? how reliable is the evidence?)</li>
+            </ol>
+          </li>
+          <li><strong>Stay of proceedings:</strong> In the clearest of cases — where the state misconduct is so serious that proceeding would bring the administration of justice into disrepute — a permanent stay may be granted. This is an extraordinary remedy (R v O'Connor, 1995 SCC)</li>
+          <li><strong>Discoverability and breach:</strong> In assessing the seriousness of the breach, courts consider whether the evidence would have been discovered anyway without the Charter violation</li>
+        </ul>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap">
+          <span class="case-cite">R v Grant [2009] SCC 32</span>
+          <span class="case-cite">R v Harrison [2009] SCC 34</span>
+          <span class="case-cite">R v O'Connor [1995] 4 SCR 411</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /module s2 -->
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 3 ── -->
+  <div class="module" id="s3">
+    <div class="module-header">
+      <div class="module-num">03</div>
+      <div>
+        <div class="module-title">MMAR / ACMPR History Timeline</div>
+        <div class="module-subtitle">How constitutional litigation shaped medical cannabis access in Canada</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Constitutional Litigation — Medical Cannabis Access</div>
+      <div class="card-body" style="margin-bottom:20px">This timeline shows how Charter litigation — primarily under s.7 — directly forced the creation and evolution of Canada's medical cannabis regulatory framework. Each case represents a real person defending their rights in court. This is educational history.</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">1997–1999</div>
+          <div class="tl-title">Terrance Parker — The Beginning</div>
+          <div class="tl-text">Terrance Parker, an epileptic cannabis user, was charged with possession and cultivation. His case began a constitutional challenge to the absolute prohibition under the Narcotic Control Act and CDSA.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2000</div>
+          <div class="tl-title">R v Parker — MMAR Born</div>
+          <div class="tl-text">Ontario Court of Appeal struck down the absolute cannabis prohibition as a violation of s.7 of the Charter. The Court suspended the declaration for 12 months to allow Parliament to create a constitutional exemption — or the prohibition would be void. This directly caused the creation of the Marihuana Medical Access Regulations.</div>
+          <div class="tl-cite">R v Parker (2000) 49 OR (3d) 481 (ONCA)</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2001</div>
+          <div class="tl-title">MMAR — Marihuana Medical Access Regulations in Force</div>
+          <div class="tl-text">Health Canada implemented the MMAR as a direct constitutional remedy. The regulations created a licensing system for possession and personal production, and a system for designated growers on behalf of patients.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2003</div>
+          <div class="tl-title">R v Hitzig — MMAR Must Be Accessible</div>
+          <div class="tl-text">Ontario Court of Appeal found the MMAR's prohibition on designated growers charging for cannabis rendered the exemption constitutionally defective. Courts ordered MMAR amended to permit designated growers to charge a reasonable fee for their services.</div>
+          <div class="tl-cite">R v Hitzig (2003) 231 DLR (4th) 104 (ONCA)</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2008</div>
+          <div class="tl-title">R v Sfetkopoulos — Confirms Designated Grower Rights</div>
+          <div class="tl-text">Federal Court confirmed and elaborated on designated grower rights under the MMAR framework, reinforcing that the scheme must function as an accessible constitutional exemption.</div>
+          <div class="tl-cite">Sfetkopoulos v Canada (AG) 2008 FC 33</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2011</div>
+          <div class="tl-title">R v Mernagh — Systemic Access Failures Documented</div>
+          <div class="tl-text">Ontario Superior Court found the MMAR constitutionally defective because the scheme failed in practice to provide reasonable access to medical cannabis for patients who needed it. This decision was reversed on appeal but documented severe systemic access problems.</div>
+          <div class="tl-cite">R v Mernagh 2011 ONSC 2121</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2013</div>
+          <div class="tl-title">MMPR — Shift to Licensed Producers</div>
+          <div class="tl-text">The Marihuana for Medical Purposes Regulations replaced the MMAR. Personal production was eliminated. All medical cannabis had to be sourced from federally licensed commercial producers. This decision was immediately challenged.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2015</div>
+          <div class="tl-title">R v Smith — Dried-Only Restriction Struck Down</div>
+          <div class="tl-text">Supreme Court of Canada struck down the restriction limiting medical cannabis to dried flower only. Patients could use cannabis oil, edibles, and other forms for their medical conditions. Restricting them to dried cannabis violated s.7 liberty rights.</div>
+          <div class="tl-cite">R v Smith [2015] SCC 34</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2016</div>
+          <div class="tl-title">R v Allard — LP-Only Access Struck Down</div>
+          <div class="tl-text">Federal Court struck down the MMPR's elimination of personal production. Forcing patients to buy only from licensed producers — at higher costs, with no ability to grow their own — violated their s.7 Charter rights. Personal production was reinstated.</div>
+          <div class="tl-cite">Allard v Canada 2016 FC 236</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2016</div>
+          <div class="tl-title">ACMPR — New Regulations Restoring Personal Production</div>
+          <div class="tl-text">The Access to Cannabis for Medical Purposes Regulations replaced the MMPR, restoring the right to personal production through personal production licences (PPL) from Health Canada — a direct result of the Allard decision.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2018</div>
+          <div class="tl-title">Cannabis Act — Adult Recreational Legalization</div>
+          <div class="tl-text">Bill C-45 came into force October 17, 2018. Medical access continues under ACMPR provisions incorporated into the Cannabis Act framework. Recreational legalization coexists with the medical access regime.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">2026</div>
+          <div class="tl-title">Ongoing — Access, Potency, Taxation Challenges</div>
+          <div class="tl-text">Challenges continue regarding access barriers, 10mg THC edible limits, excise taxation structures, and differential enforcement. The constitutional conversation is not over.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 4 ── -->
+  <div class="module" id="s4">
+    <div class="module-header">
+      <div class="module-num">04</div>
+      <div>
+        <div class="module-title">The 12-Appearance Timeline</div>
+        <div class="module-subtitle">Educational overview of the Canadian criminal court process</div>
+      </div>
+    </div>
+
+    <div class="card card-gold" style="margin-bottom:20px">
+      <div class="card-title">What Is the 12-Appearance Framework?</div>
+      <div class="card-body">
+        <p style="margin-bottom:12px">The <strong>12-Appearance method</strong> is a documented educational framework for understanding and navigating the Canadian criminal court process. In a typical criminal matter, there are approximately 12 distinct court appearances or procedural stages from arrest to resolution.</p>
+        <p>Understanding what each appearance is, what happens at it, what rights apply, and what strategic opportunities exist at each stage is foundational constitutional literacy. <strong>This is education — your specific case may proceed differently.</strong></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">The 12 Appearances — Educational Overview</div>
+      <div class="table-wrap" style="margin-top:8px">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Appearance / Stage</th><th>What Happens</th><th>Key Rights</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-gold"><strong>1</strong></td>
+              <td><strong>First Appearance / Bail Hearing</strong></td>
+              <td>Charges are read. Bail is determined. Consent remands may be signed. Crown election on hybrid offences may occur</td>
+              <td>s.10(b) — counsel; s.11(e) — reasonable bail</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>2</strong></td>
+              <td><strong>Counsel Appointment / Legal Aid</strong></td>
+              <td>Accused retains or is assigned counsel through Legal Aid. Defence counsel is confirmed to the court</td>
+              <td>s.10(b) — right to retain and instruct counsel</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>3</strong></td>
+              <td><strong>Crown Election (Hybrid Offences)</strong></td>
+              <td>For hybrid offences, Crown elects to proceed summarily or by indictment. This affects available sentences and procedures</td>
+              <td>Affects s.11 trial rights</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>4</strong></td>
+              <td><strong>Set Date / Scheduling</strong></td>
+              <td>Court dates are scheduled. Timelines for disclosure, motions, and trial are established</td>
+              <td>s.11(b) — trial within reasonable time (Jordan framework)</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>5</strong></td>
+              <td><strong>Crown Disclosure Request</strong></td>
+              <td>Defence formally requests full Crown disclosure — all relevant materials in the Crown's possession</td>
+              <td>s.7 — Stinchcombe disclosure rights</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>6</strong></td>
+              <td><strong>Review Disclosure</strong></td>
+              <td>Defence reviews the disclosed materials. Missing or incomplete disclosure is identified and followed up</td>
+              <td>s.7 — ongoing disclosure obligation</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>7</strong></td>
+              <td><strong>Pre-Trial Conference</strong></td>
+              <td>Judge, Crown, and defence meet to narrow issues, identify Charter motions, consider resolution, and set trial estimates</td>
+              <td>Procedural — Jordan timeline monitoring</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>8</strong></td>
+              <td><strong>Preliminary Inquiry (if applicable)</strong></td>
+              <td>For indictable offences, the preliminary inquiry tests whether evidence is sufficient to commit to trial. Not available for all offences</td>
+              <td>s.11(a) — speedy preliminary; s.7 liberty</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>9</strong></td>
+              <td><strong>Trial Date Confirmation</strong></td>
+              <td>Court confirms the trial is proceeding. Any outstanding motions are noted. Witness lists exchanged</td>
+              <td>s.11(b) — time monitoring</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>10</strong></td>
+              <td><strong>Charter Motions / Voir Dire</strong></td>
+              <td>Charter applications are argued before trial. Evidence obtained in breach of the Charter is challenged. The see-on-see (voir dire) is a trial within a trial to determine admissibility</td>
+              <td>ss.7, 8, 9, 10(b), 24 — full Charter analysis</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>11</strong></td>
+              <td><strong>Trial</strong></td>
+              <td>The Crown must prove each element of the offence beyond a reasonable doubt. Defence raises all remaining defences. Evidence is tested by cross-examination</td>
+              <td>ss.7, 11(d) — presumption of innocence; proof beyond reasonable doubt</td>
+            </tr>
+            <tr>
+              <td class="td-gold"><strong>12</strong></td>
+              <td><strong>Sentencing (if applicable)</strong></td>
+              <td>If found guilty, a separate sentencing hearing determines the appropriate penalty. Mitigation evidence is presented. s.12 Charter arguments against disproportionate sentences may be raised</td>
+              <td>s.12 — cruel and unusual punishment; s.7 principles of fundamental justice</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <strong>Educational Framework Only:</strong> Your case may not follow this exact sequence. Some matters resolve at earlier stages. Some involve additional appearances. Preliminary inquiries are not available for summary offences. The 12-Appearance framework is a general educational model, not a guarantee of process. <strong>Full 12-Appearance analysis is available in CCLDR Professional tier.</strong> <a href="PLACEHOLDER_URL_5" style="color:var(--gold);text-decoration:none">Learn more &rarr;</a>
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 5 ── -->
+  <div class="module" id="s5">
+    <div class="module-header">
+      <div class="module-num">05</div>
+      <div>
+        <div class="module-title">The BENO-X Framework</div>
+        <div class="module-subtitle">Bad Exemption = No Offense — A constitutional analysis framework</div>
+      </div>
+    </div>
+
+    <div class="card card-gold" style="margin-bottom:20px">
+      <div class="card-title">BENO-X — Educational Introduction</div>
+      <div class="card-body">
+        <p style="margin-bottom:12px"><strong>BENO-X (Bad Exemption = No Offense)</strong> is a constitutional analysis framework developed within the CCLDR educational methodology for evaluating whether a regulatory exemption scheme is so constitutionally defective that it undermines the enforceability of the underlying prohibition.</p>
+        <p style="margin-bottom:12px">It is rooted in the foundational principles of <strong>R v Parker (2000)</strong> and <strong>Allard v Canada (2016 FC 236)</strong>, combined with the principles of fundamental justice under s.7 of the Charter.</p>
+        <p><strong>Core insight:</strong> Parker established that a criminal prohibition that contains no constitutionally adequate exemption for those with a legitimate need cannot stand. If the exemption itself is broken — inaccessible, arbitrary, discriminatory, or functionally unavailable — then the prohibition as applied to those persons may also be constitutionally defective.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Three-Part BENO-X Analysis — Educational Framework</div>
+      <ul class="info-list">
+        <li>
+          <div>
+            <strong>Part 1 — Does a regulatory exemption exist?</strong><br/>
+            <span style="font-size:13px;margin-top:4px;display:block">Identify the exemption mechanism in the regulatory scheme (e.g., ACMPR personal production licence, medical authorization, designated grower provision). Document the exemption's terms, conditions, and gatekeeping mechanisms.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Part 2 — Is the exemption constitutionally adequate?</strong><br/>
+            <span style="font-size:13px;margin-top:4px;display:block">Assess whether the exemption is accessible in practice, non-arbitrary in its criteria, functional (not illusory), and available to those who genuinely need it. Compare to how courts assessed the MMAR in Hitzig and Mernagh, and the MMPR in Allard.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Part 3 — What is the constitutional consequence?</strong><br/>
+            <span style="font-size:13px;margin-top:4px;display:block">If the exemption is constitutionally inadequate, what follows? Does the prohibition as applied to this person, with this need, in this regulatory context, violate s.7? Is there an available remedy under s.24 or s.52?</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="card card-green">
+        <div class="card-title">Foundational Cases</div>
+        <ul class="info-list">
+          <li><strong>R v Parker (2000):</strong> No constitutional exemption = prohibition cannot stand</li>
+          <li><strong>R v Hitzig (2003):</strong> Exemption must be practically accessible, not just technically available</li>
+          <li><strong>Allard v Canada (2016 FC 236):</strong> LP-only scheme struck down — personal autonomy over one's medical treatment includes growing one's own medicine</li>
+          <li><strong>R v Smith (2015 SCC 34):</strong> Restriction of form of access (dried-only) itself a constitutional violation</li>
+        </ul>
+      </div>
+      <div class="card card-gold">
+        <div class="card-title" style="color:var(--gold)">BENO-X in CCLDR Professional</div>
+        <div class="card-body">
+          <p style="margin-bottom:12px">The full BENO-X educational curriculum — including case-by-case analysis, exemption mapping, step-by-step application methodology, and historical documentation — is available in the CCLDR Professional tier.</p>
+          <a href="PLACEHOLDER_URL_5" class="tier-btn btn-au" style="display:inline-block;margin-top:8px;padding:10px 20px">CCLDR Professional &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <strong>NOT LEGAL ADVICE:</strong> The BENO-X framework is an educational tool for understanding constitutional principles rooted in Canadian jurisprudence. It is not legal advice and does not constitute a legal strategy for your specific case. Retain qualified legal counsel for your situation.
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 6 ── -->
+  <div class="module" id="s6">
+    <div class="module-header">
+      <div class="module-num">06</div>
+      <div>
+        <div class="module-title">Your Rights at Arrest — Step by Step</div>
+        <div class="module-subtitle">Educational overview of what to do if you are stopped or arrested</div>
+      </div>
+    </div>
+
+    <div class="card card-gold" style="margin-bottom:20px">
+      <div class="card-title">Before You Read This Section</div>
+      <div class="card-body">This section provides general educational information about what your legal rights are during an encounter with police. This is NOT legal advice. The best thing you can do in any police encounter is remain calm, invoke your right to counsel, and contact a qualified lawyer as soon as possible. Do not physically resist — even if you believe the detention or arrest is unlawful.</div>
+    </div>
+
+    <ol class="steps-list">
+      <li>
+        <div>
+          <strong>Stay Calm — Do Not Physically Resist</strong>
+          Even if you believe the arrest, search, or detention is unlawful — do not physically resist. Resisting arrest is itself a criminal offence. An unlawful arrest or search can be challenged in court through Charter motions. Physical resistance cannot be undone and may result in additional charges or harm.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Invoke Your Section 10(b) Right Immediately</strong>
+          As soon as you are detained or arrested, clearly and calmly state:
+          <div class="step-quote">"I wish to speak to a lawyer before I answer any questions or participate in any tests."</div>
+          Say it. Then stop talking.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Stop Talking</strong>
+          After invoking your right to counsel, say nothing further about the alleged offence. Do not explain yourself. Do not try to talk your way out of the situation. Anything you say can and will be used as evidence. Silence cannot be used against you.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Ask: "Am I Being Detained?"</strong>
+          If you are not sure whether you are free to leave, ask clearly: <div class="step-quote">"Am I being detained or am I free to go?"</div>
+          If the officer says you are not detained, you may calmly leave. If you are detained, s.9 and s.10 rights apply immediately.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Note Details Mentally</strong>
+          Observe and try to remember: officer badge numbers, patrol car numbers, the number of officers, the time, the location, any witnesses present. Write this information down as soon as possible after the encounter. This information may be critical for any future legal proceedings.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Contact Duty Counsel Immediately</strong>
+          Upon arrest, demand your right to call a lawyer. If you do not have a lawyer, duty counsel is available free of charge 24 hours a day through Legal Aid. Police are required to provide you with the opportunity to contact duty counsel before questioning.
+          <div class="step-quote">Duty Counsel — Free, 24/7, through provincial Legal Aid</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Do Not Consent to Additional Searches</strong>
+          If police attempt to search you beyond what their legal authority permits, clearly state: <div class="step-quote">"I do not consent to this search."</div>
+          Even if you cannot physically prevent the search, saying this preserves your ability to challenge the search in court as a s.8 Charter violation. Consent waives your rights.
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Do Not Answer Questions Without Legal Advice</strong>
+          Wait until you have spoken with a lawyer before answering any substantive questions. This applies to questions about the alleged offence, about other people, about your activities. Basic biographical information (name, address) may be required in limited circumstances — ask your lawyer.
+        </div>
+      </li>
+    </ol>
+
+    <div class="alert-box" style="margin-top:20px">
+      <strong>Duty Counsel Access:</strong> Every province in Canada has a Legal Aid duty counsel phone line accessible 24/7. Police are required to inform you of this service when you invoke your right to counsel. Ask for the duty counsel number if police do not provide it. Duty counsel will provide immediate, confidential legal advice at no cost.
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 7 ── -->
+  <div class="module" id="s7">
+    <div class="module-header">
+      <div class="module-num">07</div>
+      <div>
+        <div class="module-title">Disclosure Rights</div>
+        <div class="module-subtitle">Crown's obligation to disclose — your right to full information</div>
+      </div>
+    </div>
+
+    <div class="card card-green" style="margin-bottom:16px">
+      <div class="card-title">The Stinchcombe Obligation</div>
+      <div class="card-body">
+        <p style="margin-bottom:12px"><strong>R v Stinchcombe (1991 SCC)</strong> is one of the most important decisions in Canadian criminal law. The Supreme Court held that the Crown has a legal duty to disclose all relevant information in its possession to the defence — regardless of whether the Crown intends to rely on that information.</p>
+        <p>This duty is rooted in the constitutional guarantee under <strong>s.7 of the Charter</strong> — the right to make full answer and defence. Disclosure violations can result in stays of proceedings, adjournments, or exclusion of evidence.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">What Crown Must Disclose</div>
+      <ul class="info-list">
+        <li><strong>Police notes and occurrence reports</strong> — all notes made by attending officers</li>
+        <li><strong>Witness statements</strong> — all statements taken from witnesses, including those not called at trial</li>
+        <li><strong>Surveillance records</strong> — video footage, photographs, electronic surveillance</li>
+        <li><strong>Laboratory results</strong> — drug analysis certificates, toxicology reports, chain of custody documents</li>
+        <li><strong>Expert reports</strong> — any expert retained by or known to the Crown</li>
+        <li><strong>Prior criminal records</strong> of Crown witnesses being used in the prosecution</li>
+        <li><strong>Exculpatory evidence</strong> — any information tending to show innocence, even if not in Crown's possession but known to police</li>
+        <li><strong>Material not relied upon:</strong> Disclosure extends to information the Crown does not intend to use — relevance, not intent to use, is the standard</li>
+      </ul>
+    </div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title">Third-Party Disclosure</div>
+        <div class="card-body">
+          The <strong>R v O'Connor (1995 SCC)</strong> procedure governs requests for records held by third parties (e.g., medical records, counselling records). A two-stage process: first, production to the judge for review; second, determination of what, if anything, should be disclosed to defence. This procedure protects third-party privacy while preserving defence rights.
+        </div>
+      </div>
+      <div class="card card-gold">
+        <div class="card-title" style="color:var(--gold)">Incomplete Disclosure — A Charter Breach</div>
+        <div class="card-body">
+          Delayed or incomplete disclosure may constitute a violation of s.7 of the Charter (right to make full answer and defence). In serious cases, it may ground an application to stay proceedings or exclude evidence. <strong>Document all disclosure requests and responses carefully.</strong>
+          <br/><br/>
+          CCLDR provides disclosure request templates in the <strong>Warrior tier</strong>. <a href="PLACEHOLDER_URL_4" style="color:var(--gold);text-decoration:none">Learn more &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <strong>R v Jordan (2016 SCC 27):</strong> The Supreme Court established strict presumptive ceilings on trial delay — 18 months for provincial court, 30 months for superior court. Delays caused by incomplete or late disclosure can count toward the ceiling, potentially grounding a s.11(b) stay of proceedings for unreasonable delay. This is another reason disclosure management is strategically critical.
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 8 ── -->
+  <div class="module" id="s8">
+    <div class="module-header">
+      <div class="module-num">08</div>
+      <div>
+        <div class="module-title">CCLDR Education Tiers</div>
+        <div class="module-subtitle">Go deeper — constitutional literacy at every level</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;text-align:center;padding:32px">
+      <div style="font-size:13px;color:var(--muted);max-width:580px;margin:0 auto 8px;line-height:1.7">CCLDR.NET offers structured educational programs covering Charter law, the 12-Appearance framework, BENO-X analysis, disclosure strategy, and more. One-time investment. Lifetime access.</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px">Education only &mdash; not legal advice</div>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Warrior -->
+      <div class="tier-card">
+        <div class="tier-icon">🔰</div>
+        <div class="tier-rank">Rank 01</div>
+        <div class="tier-name">Warrior</div>
+        <div class="tier-price"><sup>$</sup>149</div>
+        <div class="tier-price-sub">CAD &middot; One-Time</div>
+        <hr class="tier-divider"/>
+        <ul class="tier-features">
+          <li>Charter ss.7, 8, 9, 10 overview</li>
+          <li>Know Your Rights PDF guide</li>
+          <li>Disclosure request template</li>
+          <li>Stop &amp; search procedure education</li>
+          <li>Community forum access</li>
+          <li>Lifetime updates</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_4" class="tier-btn btn-og">Enroll — $149 CAD</a>
+      </div>
+
+      <!-- Professional -->
+      <div class="tier-card">
+        <div class="tier-icon">⚔️</div>
+        <div class="tier-rank">Rank 02</div>
+        <div class="tier-name">Professional</div>
+        <div class="tier-price"><sup>$</sup>499</div>
+        <div class="tier-price-sub">CAD &middot; One-Time</div>
+        <hr class="tier-divider"/>
+        <ul class="tier-features">
+          <li>Everything in Warrior</li>
+          <li>Full BENO-X Framework course</li>
+          <li>12-Appearance method in depth</li>
+          <li>Charter ss.11, 12, 15, 24(1) deep dive</li>
+          <li>Pre-trial motions library (20+)</li>
+          <li>Private Telegram group</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_5" class="tier-btn btn-g">Enroll — $499 CAD</a>
+      </div>
+
+      <!-- Elite -->
+      <div class="tier-card featured">
+        <div class="tier-icon">🏆</div>
+        <div class="tier-rank">Rank 03</div>
+        <div class="tier-name">Elite</div>
+        <div class="tier-price"><sup>$</sup>999</div>
+        <div class="tier-price-sub">CAD &middot; One-Time</div>
+        <hr class="tier-divider"/>
+        <ul class="tier-features">
+          <li>Everything in Professional</li>
+          <li>2&times; 1-on-1 strategy sessions</li>
+          <li>Case document review</li>
+          <li>Custom motion drafting assistance</li>
+          <li>Sentencing mitigation training</li>
+          <li>Direct Doc Weedlaw access</li>
+          <li>VIP community channel</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_6" class="tier-btn btn-au">Enroll — $999 CAD</a>
+      </div>
+
+      <!-- Sovereign -->
+      <div class="tier-card">
+        <div class="tier-icon">👑</div>
+        <div class="tier-rank">Rank 04</div>
+        <div class="tier-name">Sovereign</div>
+        <div class="tier-price"><sup>$</sup>1,499</div>
+        <div class="tier-price-sub">CAD &middot; One-Time</div>
+        <hr class="tier-divider"/>
+        <ul class="tier-features">
+          <li>Everything in Elite</li>
+          <li>6&times; 1-on-1 sessions (90 min each)</li>
+          <li>Full case war-room review</li>
+          <li>Charter challenge drafting support</li>
+          <li>Appeal preparation module</li>
+          <li>All future courses included free</li>
+          <li>Priority emergency line (48-hr)</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_7" class="tier-btn btn-og">Enroll — $1,499 CAD</a>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:24px">
+      <strong>⚖ Enrollment Disclaimer:</strong> All CCLDR tiers provide educational content only. Enrollment does not create a solicitor-client relationship. Nothing in any CCLDR program constitutes legal advice. Participants are encouraged to retain qualified legal counsel for their specific legal circumstances. CCLDR.NET teaches constitutional awareness and procedural knowledge for educational purposes based on publicly available case law and Charter jurisprudence.
+    </div>
+  </div>
+
+  <div style="text-align:center;padding-bottom:72px">
+    <a href="#top" class="back-top">&#8593; Back to Top</a>
+    &nbsp;&nbsp;
+    <a href="law.html" class="back-top">&larr; Cannabis Law Module</a>
+  </div>
+
+</div><!-- /content-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="law.html">Cannabis Law</a>
+    <a href="defense.html">Charter Defense</a>
+    <a href="../ccldr-payments/index.html">Enroll</a>
+  </div>
+  <p><span class="g">CCLDR.NET</span> &mdash; Derek Francisco (Doc Weedlaw) &nbsp;|&nbsp; <span class="au">Francisco Holdings Inc.</span> &nbsp;|&nbsp; Education Only</p>
+  <p class="footer-disclaimer">NOT LEGAL REPRESENTATION &mdash; EDUCATION ONLY. All content on CCLDR.NET is provided for informational and educational purposes only. Nothing on this site constitutes legal advice or creates a solicitor-client relationship. Retain qualified legal counsel for your specific situation. &copy; 2026 CCLDR.NET</p>
+</footer>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',function(e){
+      const target=document.querySelector(this.getAttribute('href'));
+      if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'})}
+    });
+  });
+  const modules=document.querySelectorAll('.module[id]');
+  const tocItems=document.querySelectorAll('.toc-item');
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        tocItems.forEach(t=>t.style.color='');
+        const active=document.querySelector(`.toc-item[href="#${entry.target.id}"]`);
+        if(active)active.style.color='var(--gold)';
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  modules.forEach(m=>observer.observe(m));
+</script>
+</body>
+</html>

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannabis Industry Guide | CCLDR.NET</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #00FF88;
+            --gold: #FFD700;
+            --dark: #0A0A0A;
+            --card-bg: rgba(0,255,136,0.03);
+            --card-border: rgba(0,255,136,0.18);
+            --text: #e8e8e8;
+            --muted: #888;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* ── STICKY DISCLAIMER ── */
+        .disclaimer-banner {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10,10,10,0.97);
+            border-bottom: 2px solid var(--gold);
+            text-align: center;
+            padding: 8px 16px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            backdrop-filter: blur(12px);
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: rgba(10,10,10,0.92);
+            border-bottom: 1px solid rgba(0,255,136,0.12);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--green);
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            text-shadow: 0 0 18px rgba(0,255,136,0.5);
+        }
+
+        .nav-logo span { color: var(--gold); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--green); }
+        .nav-links a.active { color: var(--green); border-bottom: 1px solid var(--green); }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 70px 24px 50px;
+            text-align: center;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.07) 0%, transparent 70%);
+            border-bottom: 1px solid rgba(0,255,136,0.08);
+        }
+
+        .hero-eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: var(--green);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span { color: var(--green); }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--muted);
+            max-width: 620px;
+            margin: 0 auto 28px;
+        }
+
+        /* ── PROMINENT DISCLAIMER BOX ── */
+        .edu-disclaimer {
+            max-width: 1040px;
+            margin: 28px auto 0;
+            padding: 0 20px;
+        }
+
+        .edu-disclaimer-inner {
+            background: rgba(255,215,0,0.06);
+            border: 2px solid rgba(255,215,0,0.5);
+            border-radius: 14px;
+            padding: 20px 26px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .edu-disclaimer-inner .disc-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .edu-disclaimer-inner p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.65;
+        }
+
+        .edu-disclaimer-inner strong { color: var(--gold); }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 56px 0 40px;
+            border-bottom: 1px solid rgba(0,255,136,0.06);
+        }
+
+        .section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            color: var(--green);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .section-intro {
+            color: var(--muted);
+            font-size: 0.95rem;
+            max-width: 700px;
+            margin-bottom: 36px;
+        }
+
+        /* ── GLASS CARD ── */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0,255,136,0.4);
+            box-shadow: 0 0 24px rgba(0,255,136,0.08);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* ── TABLE ── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        thead tr { background: rgba(0,255,136,0.08); }
+
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            color: var(--green);
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--card-border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 13px 16px;
+            border-bottom: 1px solid rgba(0,255,136,0.06);
+            color: var(--text);
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(0,255,136,0.02); }
+
+        td small { color: var(--muted); display: block; font-size: 0.8rem; margin-top: 3px; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-green { background: rgba(0,255,136,0.12); color: var(--green); }
+        .badge-gold  { background: rgba(255,215,0,0.1);  color: var(--gold); }
+        .badge-red   { background: rgba(255,80,80,0.1);  color: #ff7070; }
+
+        /* ── STEP LIST ── */
+        .step-list {
+            counter-reset: steps;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .step-list li {
+            counter-increment: steps;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .step-list li::before {
+            content: counter(steps);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            min-width: 32px;
+            border-radius: 50%;
+            background: rgba(0,255,136,0.1);
+            border: 1px solid rgba(0,255,136,0.3);
+            color: var(--green);
+            font-weight: 900;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .step-list li .step-body { padding-top: 4px; }
+        .step-list li .step-body strong { color: var(--green); font-size: 0.93rem; display: block; margin-bottom: 3px; }
+        .step-list li .step-body p { font-size: 0.87rem; color: var(--muted); line-height: 1.55; }
+
+        /* ── BULLET LIST ── */
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-list li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 0.92rem;
+            color: var(--text);
+            line-height: 1.55;
+        }
+
+        .info-list li::before {
+            content: '▸';
+            color: var(--green);
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-size: 0.85rem;
+        }
+
+        .info-list li strong { color: var(--green); }
+
+        /* ── GOLD CARD ── */
+        .gold-card {
+            background: rgba(255,215,0,0.04);
+            border: 2px solid rgba(255,215,0,0.4);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .gold-card .card-title {
+            color: var(--gold);
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── WARNING BOX ── */
+        .warn-card {
+            background: rgba(255,60,60,0.04);
+            border: 2px solid rgba(255,80,80,0.4);
+            border-radius: 14px;
+            padding: 22px 26px;
+            margin-bottom: 24px;
+        }
+
+        .warn-card .wc-title {
+            color: #ff7070;
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .warn-card p { font-size: 0.87rem; color: var(--text); line-height: 1.6; }
+
+        /* ── RESOURCE LINKS ── */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .resource-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            transition: border-color 0.2s;
+        }
+
+        .resource-card:hover { border-color: rgba(0,255,136,0.4); }
+
+        .resource-card .rc-org {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+        }
+
+        .resource-card .rc-name {
+            font-size: 0.93rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .resource-card a {
+            font-size: 0.82rem;
+            color: var(--green);
+            text-decoration: none;
+        }
+
+        .resource-card a:hover { text-decoration: underline; }
+
+        /* ── CAUTIONARY NOTE ── */
+        .cautionary {
+            background: rgba(255,215,0,0.04);
+            border-left: 3px solid var(--gold);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+
+        .cautionary p { font-size: 0.87rem; color: var(--text); line-height: 1.6; }
+        .cautionary strong { color: var(--gold); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: rgba(10,10,10,0.98);
+            border-top: 1px solid rgba(0,255,136,0.12);
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
+
+        footer a { color: var(--green); text-decoration: none; }
+        footer .footer-logo { color: var(--green); font-weight: 900; font-size: 1rem; margin-bottom: 8px; }
+        footer .footer-logo span { color: var(--gold); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 680px) {
+            .nav-links { gap: 12px; }
+            .hero { padding: 50px 16px 36px; }
+            section { padding: 40px 0 28px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .resource-grid { grid-template-columns: 1fr; }
+            th, td { padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STICKY DISCLAIMER -->
+<div class="disclaimer-banner">
+    ⚖ NOT LEGAL REPRESENTATION — EDUCATION ONLY
+</div>
+
+<!-- NAV -->
+<nav>
+    <a href="/" class="nav-logo">CCLDR<span>.NET</span></a>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/ccldr-site/guides.html">Guides</a></li>
+        <li><a href="/ccldr-site/science.html">Science</a></li>
+        <li><a href="/ccldr-site/industry.html" class="active">Industry</a></li>
+        <li><a href="/ccldr-site/glossary.html">Glossary</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-eyebrow">Cannabis Industry Education</div>
+    <h1>Operating in the <span>Cannabis Industry</span></h1>
+    <p class="hero-sub">Federal licensing, compliance realities, provincial regulation, and business operations in Canada's legal cannabis sector.</p>
+</div>
+
+<!-- PROMINENT DISCLAIMER -->
+<div class="edu-disclaimer">
+    <div class="edu-disclaimer-inner">
+        <div class="disc-icon">⚖</div>
+        <p><strong>Educational Information Only.</strong> CCLDR.NET provides educational information about the cannabis industry. Licensing, compliance, and business decisions involve complex legal, regulatory, and financial factors specific to your situation. For business licensing, consult a qualified lawyer, compliance consultant, and Health Canada directly. Nothing on this page constitutes legal or business advice.</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 1: FEDERAL LICENCE CLASSES        -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="licence-classes">
+        <div class="section-label">Section 01</div>
+        <h2 class="section-title">Federal Licence Classes</h2>
+        <p class="section-intro">Health Canada issues distinct licence classes under the Cannabis Act and Cannabis Regulations. Each class has specific activities, requirements, and fees.</p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Licence Class</th>
+                        <th>Permitted Activities</th>
+                        <th>Key Requirements / Notes</th>
+                        <th>Scale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Micro-Cultivation</strong></td>
+                        <td>Cultivate cannabis from seed or cutting</td>
+                        <td>≤200m² canopy; limited security requirements; lower fees</td>
+                        <td><span class="badge badge-green">Small</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Standard Cultivation</strong></td>
+                        <td>Cultivate cannabis at scale</td>
+                        <td>&gt;200m² canopy; full GMP-like requirements; extensive security; higher annual fees</td>
+                        <td><span class="badge badge-gold">Large</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nursery</strong></td>
+                        <td>Produce and sell cannabis plants, seeds, clones</td>
+                        <td>Mother plants only; restricted to selling to other licence holders; no retail</td>
+                        <td><span class="badge badge-green">Specialty</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Micro-Processing</strong></td>
+                        <td>Limited processing activities</td>
+                        <td>Small-scale; restricted extraction volumes; lower compliance burden than standard</td>
+                        <td><span class="badge badge-green">Small</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Standard Processing</strong></td>
+                        <td>Full processing, extraction, edibles manufacturing, packaging, labelling</td>
+                        <td>Full GMP compliance; extensive SOPs; testing requirements; highest fee tier</td>
+                        <td><span class="badge badge-gold">Large</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Analytical Testing</strong></td>
+                        <td>Test cannabis for potency, contaminants, pesticides</td>
+                        <td>Independent lab; ISO 17025 accreditation expected; restricted to testing activities</td>
+                        <td><span class="badge badge-green">Specialty</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sale for Medical Purposes</strong></td>
+                        <td>Online direct-to-patient medical cannabis sales</td>
+                        <td>Must hold cultivation or processing licence; strict patient data requirements</td>
+                        <td><span class="badge badge-gold">Medical</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sale for Non-Medical Purposes</strong></td>
+                        <td>Recreational cannabis wholesale/distribution</td>
+                        <td>Provincial authorization also required; supply to provincial boards</td>
+                        <td><span class="badge badge-gold">Recreational</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Research</strong></td>
+                        <td>Research and development activities</td>
+                        <td>Approved research plan required; restricted from commercial distribution</td>
+                        <td><span class="badge badge-green">R&amp;D</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 2: APPLICATION PROCESS            -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="application">
+        <div class="section-label">Section 02</div>
+        <h2 class="section-title">Health Canada Application Process</h2>
+        <p class="section-intro">The licensing process is lengthy and document-intensive. Budget 12–18+ months from application to licence issuance for most classes.</p>
+
+        <div class="glass-card">
+            <ol class="step-list">
+                <li>
+                    <div class="step-body">
+                        <strong>Security Clearances — All Key Personnel</strong>
+                        <p>Mandatory for all individuals with significant control — owners, directors, officers, head of security. Requires Criminal Record Check, RCMP clearance, and CRA authorization. Processing times can exceed 6 months.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-body">
+                        <strong>Site Plans and Facility Design Submission</strong>
+                        <p>Detailed architectural drawings showing all rooms, access points, security features, storage areas. Must meet Cannabis Regulations physical security requirements before submission.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-body">
+                        <strong>Evidence of Site Control</strong>
+                        <p>Lease agreement or property ownership documentation for the proposed facility. Municipal zoning compliance confirmation is strongly recommended at this stage.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-body">
+                        <strong>Standard Operating Procedures (SOPs)</strong>
+                        <p>Comprehensive SOPs for all regulated activities — cultivation, harvesting, drying, packaging, destruction, security, staff training, visitor control. Health Canada reviews all SOPs.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-body">
+                        <strong>Quality Management System (QMS)</strong>
+                        <p>Documented quality system covering batch records, testing protocols, non-conformance procedures, and recall plans. Must demonstrate GMP alignment for processing licences.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-body">
+                        <strong>Application Fee Payment</strong>
+                        <p>Fees vary significantly by licence class and size: approximately $1,638 (micro) to $23,000+ (standard cultivation/processing). Annual regulatory fees apply post-licensing based on revenue.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-body">
+                        <strong>Pre-Licensing Inspection</strong>
+                        <p>Health Canada inspector visits the site to verify facility matches submitted plans, security systems are operational, and SOPs are implemented. Deficiencies must be remediated before approval.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="step-body">
+                        <strong>Licence Issuance</strong>
+                        <p>Upon successful inspection and review, Health Canada issues the licence. Typical timeline from complete application submission: 12–18+ months. Licences are subject to conditions and annual review.</p>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 3: SECURITY REQUIREMENTS          -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="security">
+        <div class="section-label">Section 03</div>
+        <h2 class="section-title">Security Requirements</h2>
+        <p class="section-intro">Physical security requirements are among the most detailed regulatory obligations. Requirements scale with licence class.</p>
+
+        <div class="card-grid">
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Perimeter:</strong> Fencing, adequate lighting, and continuous surveillance camera coverage of all access points and perimeter areas</li>
+                    <li><strong>Access Control:</strong> Restricted areas designated; personnel access logs maintained; visitor escort requirements</li>
+                    <li><strong>Intrusion Detection:</strong> Alarm systems with 24/7 professional monitoring; response protocol documented</li>
+                    <li><strong>Visitor Log:</strong> All visitors recorded including name, time in/out, purpose, and escorting employee</li>
+                </ul>
+            </div>
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Video Surveillance:</strong> Cameras covering all areas where cannabis is handled; minimum 30-day footage retention</li>
+                    <li><strong>Cannabis Storage:</strong> Locked vaults or secured storage meeting specifications; inventory reconciliation procedures</li>
+                    <li><strong>Record-Keeping:</strong> Seed-to-sale tracking using Health Canada's Cannabis Tracking System (CTS); every gram accounted for</li>
+                    <li><strong>Annual Security Review:</strong> Formal documented security review required; submit changes to Health Canada promptly</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 4: RECORD-KEEPING (CTS)           -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="record-keeping">
+        <div class="section-label">Section 04</div>
+        <h2 class="section-title">Record-Keeping &amp; the Cannabis Tracking System</h2>
+        <p class="section-intro">Health Canada's Cannabis Tracking System (CTS) is the national seed-to-sale reporting portal. Compliance is non-negotiable.</p>
+
+        <div class="card-grid">
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Reporting Portal:</strong> Health Canada's Cannabis Tracking System — web-based monthly reporting</li>
+                    <li><strong>What to Report:</strong> Inventory additions and disposals, sales and transfers, destruction events, returns</li>
+                    <li><strong>Monthly Reporting Deadline:</strong> Reports due by the 15th of the following month</li>
+                    <li><strong>Seed-to-Sale:</strong> Every gram of cannabis tracked from propagation through sale or destruction — no gaps permitted</li>
+                </ul>
+            </div>
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Destruction Protocol:</strong> Witnessed by two employees; must be rendered non-recoverable; destruction records retained</li>
+                    <li><strong>Inspection Rights:</strong> Health Canada inspectors may attend the facility at any time with reasonable notice (or without in some circumstances)</li>
+                    <li><strong>Record Retention:</strong> Most cannabis records must be retained for a minimum of 2 years; some financial records longer</li>
+                    <li><strong>Non-Compliance Consequences:</strong> Licence suspension, revocation, administrative monetary penalties — CTS discrepancies are high-risk</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 5: PROVINCIAL RETAIL LICENSING    -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="provincial-retail">
+        <div class="section-label">Section 05</div>
+        <h2 class="section-title">Provincial Retail Licensing</h2>
+        <p class="section-intro">Retail cannabis operates under provincial jurisdiction. Each province has its own licensing body, requirements, and market structure.</p>
+
+        <div class="table-wrap" style="margin-bottom:24px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Province</th>
+                        <th>Regulator</th>
+                        <th>Market Model</th>
+                        <th>Key Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ontario</strong></td>
+                        <td>AGCO (Alcohol and Gaming Commission of Ontario)</td>
+                        <td>Private retail</td>
+                        <td>$5,000 non-refundable application fee; store count caps removed; competitive market</td>
+                    </tr>
+                    <tr>
+                        <td><strong>British Columbia</strong></td>
+                        <td>BCLDB (BC Liquor Distribution Branch)</td>
+                        <td>Private + government stores</td>
+                        <td>Both private and government-operated stores; strong licensed producer direct agreements</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alberta</strong></td>
+                        <td>AGLC (Alberta Gaming, Liquor and Cannabis)</td>
+                        <td>Private retail only</td>
+                        <td>Most open market in Canada; no store count limits; largest number of stores per capita</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Quebec</strong></td>
+                        <td>SQDC (Société québécoise du cannabis)</td>
+                        <td>Government monopoly</td>
+                        <td>Only SQDC stores; no private retail; tight advertising restrictions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Manitoba</strong></td>
+                        <td>MLLCA</td>
+                        <td>Private retail</td>
+                        <td>Private retail model; LGCA oversight</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Saskatchewan</strong></td>
+                        <td>SLGA</td>
+                        <td>Private retail</td>
+                        <td>Early private retail adopter; competitive market</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="glass-card">
+            <ul class="info-list">
+                <li><strong>Age Verification Training:</strong> Mandatory for all retail employees; "Challenge 25" standard widely adopted</li>
+                <li><strong>Store Design Standards:</strong> Specific requirements for product display, signage restrictions, and preventing visual access from minors</li>
+                <li><strong>Inventory Systems:</strong> Point-of-sale and inventory tracking integration with provincial reporting</li>
+                <li><strong>Zoning:</strong> Municipal approval required; typically 150–250m exclusion zone from schools, depending on municipality</li>
+                <li><strong>Store Count:</strong> Caps removed in Ontario and BC — competitive pressures have intensified; profitability is a serious challenge</li>
+                <li><strong>Supply:</strong> Most provinces require purchase through the provincial board/distributor, not directly from LPs</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 6: BANKING CHALLENGES             -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="banking">
+        <div class="section-label">Section 06</div>
+        <h2 class="section-title">Banking &amp; Financial Challenges</h2>
+        <p class="section-intro">Cannabis is federally legal in Canada, yet banking and payment processing remain more complex than most industries.</p>
+
+        <div class="card-grid">
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Major Banks:</strong> TD, RBC, Scotiabank, BMO now serve many cannabis businesses — willingness varies by branch and local manager; credit unions often more accessible</li>
+                    <li><strong>Cash Management Risk:</strong> Some markets still operate significantly in cash — AML compliance and physical security are critical concerns</li>
+                    <li><strong>FINTRAC:</strong> Cannabis businesses are reporting entities under PCMLTFA — must file suspicious transaction reports and conduct customer due diligence</li>
+                    <li><strong>CRA:</strong> Cannabis businesses pay taxes like any business — HST/GST collected; income tax applies; CRA audits cannabis sector closely</li>
+                </ul>
+            </div>
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Payment Processing:</strong> Interac debit generally works at most retailers; Visa/Mastercard acceptance has improved but some processors still decline cannabis merchants</li>
+                    <li><strong>Section 280E equivalent:</strong> Canada does not have the US Section 280E problem — cannabis businesses can deduct ordinary business expenses from income</li>
+                    <li><strong>Business Credit:</strong> Access to credit and capital remains constrained relative to other industries — many LPs rely on equity financing</li>
+                    <li><strong>Anti-Money Laundering:</strong> Robust AML compliance program is essential — document all transactions, train staff, maintain records</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 7: INSURANCE                      -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="insurance">
+        <div class="section-label">Section 07</div>
+        <h2 class="section-title">Insurance Considerations</h2>
+        <p class="section-intro">Cannabis businesses face unique liability exposures requiring specialized insurance coverage. Standard commercial policies often exclude cannabis operations.</p>
+
+        <div class="card-grid">
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Product Liability:</strong> Essential — covers potency variations, contamination claims, mislabeling; the highest-risk exposure for producers</li>
+                    <li><strong>Commercial General Liability:</strong> Foundation coverage for premises liability, operations, and third-party property damage</li>
+                    <li><strong>Directors &amp; Officers (D&amp;O):</strong> Critical given regulatory risk — protects leadership from personal liability in regulatory actions</li>
+                    <li><strong>Crop Insurance:</strong> Available for licensed cultivators; covers crop loss from disease, pest, environmental events</li>
+                </ul>
+            </div>
+            <div class="glass-card">
+                <ul class="info-list">
+                    <li><strong>Cyber Insurance:</strong> Increasingly essential — protects patient/customer data at point-of-sale and medical cannabis platforms</li>
+                    <li><strong>Property:</strong> Specialized cannabis facility coverage — standard property policies may exclude cannabis inventory</li>
+                    <li><strong>Crime/Theft:</strong> High-value inventory theft risk; policy limits should reflect actual inventory values</li>
+                    <li><strong>Key Brokers:</strong> BFL Canada, Intact Insurance, Northbridge, and specialty MGA markets have cannabis-specific experience</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 8: EMPLOYMENT LAW                 -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="employment">
+        <div class="section-label">Section 08</div>
+        <h2 class="section-title">Employment Law</h2>
+        <p class="section-intro">Cannabis in the workplace sits at the intersection of human rights law, occupational health and safety, and employment standards. Employers must navigate carefully.</p>
+
+        <div class="glass-card">
+            <ul class="info-list">
+                <li><strong>Human Rights Act:</strong> Medical cannabis users are entitled to accommodation up to the point of undue hardship — disability protection applies to underlying condition (not the substance itself)</li>
+                <li><strong>Duty to Accommodate:</strong> Employers must engage in the accommodation process in good faith; document all steps; involve the employee in finding solutions</li>
+                <li><strong>Safety-Sensitive Positions:</strong> Zero-tolerance policies are defensible where impairment creates genuine safety risk — policy must be in writing and consistently applied</li>
+                <li><strong>Drug Testing:</strong> Pre-employment testing only where job-relatedly justified; random testing generally not permitted under Canadian law (unlike US); post-incident and reasonable-cause testing is more defensible</li>
+                <li><strong>Employee Disclosure:</strong> Employees in safety-sensitive roles must disclose medical cannabis use that could affect work performance — failure to disclose weakens accommodation claims</li>
+                <li><strong>Workplace Cannabis Policy:</strong> Every employer should have a written cannabis policy covering: medical accommodation process, impairment at work, reporting obligations, and disciplinary process</li>
+            </ul>
+        </div>
+
+        <div class="cautionary">
+            <p><strong>Cautionary Note:</strong> Canadian employment law is provincial in jurisdiction. Requirements vary between Ontario, BC, Alberta, and other provinces. Consult employment counsel in your province before implementing drug testing or accommodation policies.</p>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 9: ADVERTISING RESTRICTIONS       -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="advertising">
+        <div class="section-label">Section 09</div>
+        <h2 class="section-title">Advertising Restrictions</h2>
+        <p class="section-intro">The Cannabis Act imposes some of the most restrictive advertising rules of any legal industry in Canada. Violations carry serious penalties.</p>
+
+        <div class="card-grid">
+            <div class="warn-card" style="margin-bottom:0;">
+                <div class="wc-title">Prohibited Advertising Activities</div>
+                <ul class="info-list" style="margin-top:8px;">
+                    <li>Lifestyle advertising — any association with a lifestyle, culture, or activity</li>
+                    <li>Celebrity endorsements or use of real persons</li>
+                    <li>Appeals to youth — design, imagery, language</li>
+                    <li>Health claims — without explicit Health Canada authorization</li>
+                    <li>Testimonials or endorsements</li>
+                    <li>Social media promotional content targeting general public</li>
+                </ul>
+            </div>
+            <div class="glass-card">
+                <div style="font-size:0.85rem; color:var(--green); font-weight:700; margin-bottom:12px;">What IS Permitted</div>
+                <ul class="info-list">
+                    <li>Factual, informational content: price and product availability to adults who have confirmed their age</li>
+                    <li>Brand preference advertising in limited circumstances — adult-only channels with age-gating</li>
+                    <li>In-store display and educational material at licensed retail locations</li>
+                    <li>B2B communications to licensed dealers</li>
+                    <li>Corporate websites with age verification gates</li>
+                    <li>Packaging and labelling per regulatory specifications</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 10: INDUSTRY RESOURCES            -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="resources" style="border-bottom:none;">
+        <div class="section-label">Section 10</div>
+        <h2 class="section-title">Industry Resources</h2>
+        <p class="section-intro">Primary regulatory and industry bodies for Canadian cannabis businesses.</p>
+
+        <div class="resource-grid">
+            <div class="resource-card">
+                <div class="rc-org">Federal</div>
+                <div class="rc-name">Health Canada — Cannabis</div>
+                <a href="https://canada.ca/cannabis" target="_blank" rel="noopener">canada.ca/cannabis</a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-org">Ontario Retail</div>
+                <div class="rc-name">AGCO — Alcohol and Gaming Commission</div>
+                <a href="https://agco.ca" target="_blank" rel="noopener">agco.ca</a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-org">BC Distribution</div>
+                <div class="rc-name">BCLDB — BC Liquor Distribution Branch</div>
+                <a href="https://bcldb.com" target="_blank" rel="noopener">bcldb.com</a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-org">Industry Association</div>
+                <div class="rc-name">Cannabis Council of Canada</div>
+                <a href="https://cannabis-council.ca" target="_blank" rel="noopener">cannabis-council.ca</a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-org">Alberta Retail</div>
+                <div class="rc-name">AGLC — Alberta Gaming, Liquor &amp; Cannabis</div>
+                <a href="https://aglc.ca" target="_blank" rel="noopener">aglc.ca</a>
+            </div>
+            <div class="resource-card">
+                <div class="rc-org">Tax</div>
+                <div class="rc-name">Canada Revenue Agency</div>
+                <a href="https://canada.ca/cra" target="_blank" rel="noopener">canada.ca/cra</a>
+            </div>
+        </div>
+
+        <div class="cautionary" style="margin-top: 28px;">
+            <p><strong>CannTrust — A Cautionary Tale:</strong> CannTrust Holdings Inc. became Canada's most significant cannabis compliance failure — executives were charged with fraud after misrepresenting unlicensed grow rooms to Health Canada. The case underscores that compliance culture must start at the top. Regulatory falsification in cannabis carries criminal consequences, not just administrative penalties.</p>
+        </div>
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">CCLDR<span>.NET</span></div>
+    <div>Canada's Cannabis Superhighway — Industry &amp; Regulatory Education</div>
+    <div style="margin-top:8px;">© 2026 CCLDR.NET — Derek Francisco (Doc Weedlaw) | Francisco Holdings Inc.</div>
+    <div style="margin-top:6px; color: rgba(255,215,0,0.7); font-size:0.75rem;">⚖ Educational content only. Not legal, business, or compliance advice. Consult qualified professionals for your specific circumstances.</div>
+</footer>
+
+</body>
+</html>
