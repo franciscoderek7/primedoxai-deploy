@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Francisco Holdings — Revenue Intelligence Dashboard</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --c:#00D4FF;--c-dim:rgba(0,212,255,.1);--c-glow:rgba(0,212,255,.3);
+      --bg:#040810;--surface:#090E14;--surface2:#0E1520;
+      --border:rgba(0,212,255,.12);--border2:rgba(0,212,255,.3);
+      --text:#C8DCE8;--muted:#455870;
+      --green:#00FF88;--red:#FF3355;--gold:#FFD700;--purple:#9D4EDD;
+    }
+    body{
+      font-family:'SF Mono','Cascadia Code','Fira Code',monospace;
+      background:var(--bg);color:var(--text);min-height:100vh;
+    }
+    /* Grid scan lines */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;
+      background-image:
+        linear-gradient(rgba(0,212,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,212,255,.025) 1px,transparent 1px);
+      background-size:50px 50px;
+      animation:grid-move 80s linear infinite;pointer-events:none;
+    }
+    @keyframes grid-move{from{background-position:0 0}to{background-position:50px 50px}}
+    /* CRT scanline */
+    body::after{
+      content:'';position:fixed;inset:0;z-index:0;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);
+      pointer-events:none;
+    }
+
+    /* ── Lock screen ── */
+    #lock{
+      position:fixed;inset:0;z-index:1000;
+      display:flex;align-items:center;justify-content:center;
+      background:var(--bg);padding:24px;
+    }
+    .lock-card{
+      background:var(--surface);border:1px solid var(--border2);
+      border-radius:20px;padding:48px 40px;width:100%;max-width:440px;text-align:center;
+      box-shadow:0 0 80px rgba(0,212,255,.1),0 0 160px rgba(0,212,255,.04);
+    }
+    .lock-top-bar{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      margin-bottom:28px;
+    }
+    .lock-dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:blink 2s infinite}
+    .lock-dot:nth-child(2){background:var(--gold);animation-delay:.3s}
+    .lock-dot:nth-child(3){background:var(--green);animation-delay:.6s}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    .lock-logo{font-size:11px;color:var(--c);letter-spacing:4px;text-transform:uppercase;margin-bottom:6px}
+    .lock-title{font-size:22px;font-weight:bold;margin-bottom:6px;letter-spacing:1px}
+    .lock-sub{font-size:12px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+    .lock-label{display:block;text-align:left;font-size:10px;color:var(--c);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px}
+    .lock-input{
+      width:100%;padding:13px 16px;background:var(--bg);
+      border:1px solid var(--border);border-radius:10px;
+      color:var(--text);font-family:inherit;font-size:13px;margin-bottom:8px;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .lock-input:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 2px rgba(0,212,255,.1)}
+    .lock-hint{font-size:11px;color:var(--muted);text-align:left;margin-bottom:22px;line-height:1.6}
+    .lock-btn{
+      width:100%;padding:14px;background:var(--c);color:#000;border:none;
+      border-radius:10px;font-family:inherit;font-size:14px;font-weight:bold;
+      cursor:pointer;letter-spacing:2px;text-transform:uppercase;
+      transition:opacity .2s,box-shadow .2s;
+    }
+    .lock-btn:hover{opacity:.88;box-shadow:0 0 20px var(--c-glow)}
+    .lock-warn{
+      margin-top:18px;padding:12px;
+      background:rgba(255,51,85,.07);border:1px solid rgba(255,51,85,.2);
+      border-radius:8px;font-size:11px;color:#FF7788;line-height:1.6;
+    }
+
+    /* ── Dashboard ── */
+    #dash{display:none;position:relative;z-index:1;min-height:100vh}
+
+    /* ── Header ── */
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 28px;
+      background:rgba(4,8,16,.97);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      position:sticky;top:0;z-index:100;
+    }
+    .hdr-brand{font-size:13px;color:var(--c);letter-spacing:4px;text-transform:uppercase}
+    .hdr-sub{font-size:9px;color:var(--muted);letter-spacing:2px;margin-top:2px}
+    .hdr-right{display:flex;align-items:center;gap:12px}
+    .live-badge{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--green);letter-spacing:2px;text-transform:uppercase}
+    .live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:live-pulse 1.5s infinite}
+    @keyframes live-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+    .hdr-btn{
+      padding:6px 14px;font-family:inherit;font-size:10px;letter-spacing:1px;
+      text-transform:uppercase;border-radius:6px;cursor:pointer;
+      transition:background .2s,border-color .2s;border:1px solid;
+    }
+    .btn-refresh{background:var(--c-dim);border-color:var(--border);color:var(--c)}
+    .btn-refresh:hover{background:rgba(0,212,255,.2)}
+    .btn-logout{background:transparent;border-color:rgba(255,51,85,.3);color:var(--red)}
+    .btn-logout:hover{background:rgba(255,51,85,.08)}
+
+    /* ── Main ── */
+    main{padding:24px;max-width:1400px;margin:0 auto}
+
+    /* ── Ticker bar ── */
+    .ticker{
+      display:flex;gap:24px;overflow-x:auto;padding:10px 14px;
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:8px;margin-bottom:20px;scrollbar-width:none;white-space:nowrap;
+      font-size:11px;letter-spacing:.5px;
+    }
+    .ticker-item{display:flex;align-items:center;gap:8px;flex-shrink:0;color:var(--muted)}
+    .ticker-item .label{color:var(--c)}
+    .ticker-item .val{color:var(--text);font-weight:bold}
+
+    /* ── Status ── */
+    .status-row{
+      display:flex;align-items:center;gap:12px;padding:9px 14px;
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:8px;margin-bottom:20px;font-size:11px;color:var(--muted);
+      letter-spacing:.5px;flex-wrap:wrap;gap:8px;
+    }
+    .status-row .tag{color:var(--c)}
+    #mode-badge{font-weight:bold}
+
+    /* ── KPI grid ── */
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+    .kpi{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:12px;padding:20px 18px;position:relative;overflow:hidden;
+    }
+    .kpi::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    }
+    .kpi.c::before{background:linear-gradient(90deg,transparent,var(--c),transparent)}
+    .kpi.g::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+    .kpi.au::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+    .kpi.p::before{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+    .kpi.r::before{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+    .kpi-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+    .kpi-val{font-size:28px;font-weight:bold;line-height:1;margin-bottom:5px}
+    .kpi-val.c{color:var(--c)}.kpi-val.g{color:var(--green)}
+    .kpi-val.au{color:var(--gold)}.kpi-val.p{color:var(--purple)}.kpi-val.r{color:var(--red)}
+    .kpi-sub{font-size:10px;color:var(--muted)}
+
+    /* ── Two col ── */
+    .row2{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;margin-bottom:20px}
+    @media(max-width:900px){.row2{grid-template-columns:1fr}}
+    .row3{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:20px}
+    @media(max-width:900px){.row3{grid-template-columns:1fr}}
+
+    /* ── Panel ── */
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .panel-hdr{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 16px;border-bottom:1px solid var(--border);
+    }
+    .panel-title{font-size:10px;color:var(--c);text-transform:uppercase;letter-spacing:2px}
+    .panel-meta{font-size:10px;color:var(--muted)}
+    .panel-body{padding:14px 16px}
+
+    /* ── Product rows ── */
+    .prod-row{
+      display:flex;align-items:center;gap:12px;
+      padding:10px 0;border-bottom:1px solid rgba(0,212,255,.05);
+    }
+    .prod-row:last-child{border-bottom:none}
+    .prod-name{font-size:12px;font-weight:bold;min-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .prod-type{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+    .prod-bar-wrap{flex:1}
+    .prod-bar-bg{background:rgba(0,212,255,.06);border-radius:3px;height:3px}
+    .prod-bar-fill{height:3px;border-radius:3px;background:var(--c);transition:width .8s ease}
+    .prod-stats{text-align:right;min-width:80px}
+    .prod-amt{font-size:13px;font-weight:bold;color:var(--c)}
+    .prod-cnt{font-size:10px;color:var(--muted);margin-top:2px}
+
+    /* ── Transactions ── */
+    .txn-row{
+      display:flex;align-items:center;gap:10px;
+      padding:9px 0;border-bottom:1px solid rgba(0,212,255,.05);
+    }
+    .txn-row:last-child{border-bottom:none}
+    .txn-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .txn-dot.succeeded{background:var(--green)}.txn-dot.pending{background:var(--gold)}.txn-dot.failed{background:var(--red)}
+    .txn-info{flex:1;min-width:0}
+    .txn-desc{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .txn-time{font-size:9px;color:var(--muted);margin-top:2px}
+    .txn-amt{font-size:12px;font-weight:bold;white-space:nowrap}
+    .txn-amt.succeeded{color:var(--green)}.txn-amt.pending{color:var(--gold)}.txn-amt.failed{color:var(--red)}
+    .txn-status{
+      font-size:9px;text-transform:uppercase;letter-spacing:.5px;
+      padding:2px 8px;border-radius:8px;white-space:nowrap;
+    }
+    .txn-status.succeeded{background:rgba(0,255,136,.1);color:var(--green)}
+    .txn-status.pending{background:rgba(255,215,0,.1);color:var(--gold)}
+    .txn-status.failed{background:rgba(255,51,85,.1);color:var(--red)}
+
+    /* ── CSS Pie chart ── */
+    .pie-wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+    .pie-chart{
+      width:120px;height:120px;border-radius:50%;flex-shrink:0;
+      background:conic-gradient(
+        var(--c) 0% var(--p1),
+        var(--green) var(--p1) var(--p2),
+        var(--gold) var(--p2) var(--p3),
+        var(--purple) var(--p3) 100%
+      );
+      --p1:40%;--p2:65%;--p3:85%;
+      animation:pie-in 1s ease both;
+    }
+    @keyframes pie-in{from{transform:scale(0) rotate(-90deg)}to{transform:scale(1) rotate(0)}}
+    .pie-legend{display:flex;flex-direction:column;gap:10px}
+    .legend-item{display:flex;align-items:center;gap:8px;font-size:11px}
+    .legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+    /* ── CSS Trend ── */
+    .trend-wrap{position:relative;height:80px;overflow:hidden}
+    .trend-line{
+      position:absolute;bottom:0;left:0;right:0;
+      background:linear-gradient(180deg,rgba(0,212,255,.15) 0%,rgba(0,212,255,.02) 100%);
+      clip-path:polygon(0% 80%,5% 70%,12% 75%,20% 55%,28% 60%,35% 40%,42% 45%,50% 25%,58% 30%,65% 15%,72% 20%,80% 8%,88% 12%,95% 5%,100% 10%,100% 100%,0% 100%);
+      animation:trend-draw 1.5s ease both;
+    }
+    @keyframes trend-draw{from{clip-path:polygon(0% 100%,100% 100%,100% 100%,0% 100%)}to{clip-path:polygon(0% 80%,5% 70%,12% 75%,20% 55%,28% 60%,35% 40%,42% 45%,50% 25%,58% 30%,65% 15%,72% 20%,80% 8%,88% 12%,95% 5%,100% 10%,100% 100%,0% 100%)}}
+    .trend-line::after{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:var(--c);
+      clip-path:polygon(0% 80%,5% 70%,12% 75%,20% 55%,28% 60%,35% 40%,42% 45%,50% 25%,58% 30%,65% 15%,72% 20%,80% 8%,88% 12%,95% 5%,100% 10%,100% 12%,95% 7%,88% 14%,80% 10%,72% 22%,65% 17%,58% 32%,50% 27%,42% 47%,35% 42%,28% 62%,20% 57%,12% 77%,5% 72%,0% 82%);
+    }
+    .trend-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:6px;letter-spacing:.5px}
+
+    /* ── Balance ── */
+    .bal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .bal-item{
+      background:var(--surface2);border:1px solid var(--border);
+      border-radius:8px;padding:14px;
+    }
+    .bal-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+    .bal-val{font-size:18px;font-weight:bold;color:var(--c)}
+    .bal-cur{font-size:9px;color:var(--muted);margin-top:3px}
+
+    /* ── States ── */
+    .err{background:rgba(255,51,85,.06);border:1px solid rgba(255,51,85,.2);border-radius:8px;padding:14px;color:var(--red);font-size:11px;line-height:1.6}
+    .empty{color:var(--muted);font-size:11px;text-align:center;padding:20px}
+    .loading{color:var(--muted);font-size:11px}
+    .spin{display:inline-block;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── Footer ── */
+    footer{
+      border-top:1px solid var(--border);text-align:center;padding:18px 24px;
+      color:var(--muted);font-size:10px;letter-spacing:1px;position:relative;z-index:1;
+    }
+    footer span{color:var(--c)}
+
+    @media(max-width:640px){header{padding:12px 16px}main{padding:14px}.kpi-val{font-size:22px}}
+  </style>
+</head>
+<body>
+
+<!-- Lock screen -->
+<div id="lock">
+  <div class="lock-card">
+    <div class="lock-top-bar">
+      <div class="lock-dot"></div><div class="lock-dot"></div><div class="lock-dot"></div>
+    </div>
+    <div class="lock-logo">Francisco Holdings</div>
+    <div class="lock-title">REVENUE INTELLIGENCE</div>
+    <div class="lock-sub">Enter your Stripe key to load live data.<br>Key never leaves your browser — processed client-side only.</div>
+    <label class="lock-label">Stripe Secret Key</label>
+    <input class="lock-input" type="password" id="sk-input" placeholder="sk_test_… or sk_live_…" autocomplete="off"/>
+    <div class="lock-hint">
+      ⚠ Do not use sk_live_ on shared or public devices.<br>
+      For production: use a server-side proxy to protect your key.
+    </div>
+    <button class="lock-btn" onclick="initDash()">INITIALIZE DASHBOARD →</button>
+    <div class="lock-warn">
+      🔒 Security: Stripe secret keys grant full account access. Never embed live keys in client-side HTML. This tool is for private, secure use only.
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dash">
+  <header>
+    <div>
+      <div class="hdr-brand">Francisco Holdings</div>
+      <div class="hdr-sub">Revenue Intelligence · 22-Company Empire · Real-Time</div>
+    </div>
+    <div class="hdr-right">
+      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+      <button class="hdr-btn btn-refresh" onclick="loadAll()">↻ SYNC</button>
+      <button class="hdr-btn btn-logout" onclick="logout()">LOGOUT</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Ticker -->
+    <div class="ticker">
+      <div class="ticker-item"><span class="label">STRIPE</span><span class="val" id="t-mode">—</span></div>
+      <div class="ticker-item">|</div>
+      <div class="ticker-item"><span class="label">ACCT</span><span class="val" id="t-acct">—</span></div>
+      <div class="ticker-item">|</div>
+      <div class="ticker-item"><span class="label">SYNC</span><span class="val" id="t-sync">—</span></div>
+      <div class="ticker-item">|</div>
+      <div class="ticker-item"><span class="label">MRR</span><span class="val" id="t-mrr">—</span></div>
+      <div class="ticker-item">|</div>
+      <div class="ticker-item"><span class="label">ACTIVE SUBS</span><span class="val" id="t-subs">—</span></div>
+      <div class="ticker-item">|</div>
+      <div class="ticker-item"><span class="label">TODAY</span><span class="val" id="t-today">—</span></div>
+    </div>
+
+    <!-- Status -->
+    <div class="status-row">
+      <span class="tag">[SYS]</span>
+      <span>Updated: <span id="last-updated" style="color:var(--text)">—</span></span>
+      <span>|</span>
+      <span>Mode: <span id="mode-badge">—</span></span>
+      <span>|</span>
+      <span>Account: <span style="color:var(--text)" id="account-id">—</span></span>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi c"><div class="kpi-label">Available Balance</div><div class="kpi-val c" id="kpi-avail">—</div><div class="kpi-sub" id="kpi-avail-cur">Loading…</div></div>
+      <div class="kpi au"><div class="kpi-label">Pending Payouts</div><div class="kpi-val au" id="kpi-pend">—</div><div class="kpi-sub" id="kpi-pend-cur">Loading…</div></div>
+      <div class="kpi g"><div class="kpi-label">Revenue Today</div><div class="kpi-val g" id="kpi-today">—</div><div class="kpi-sub" id="kpi-today-sub">Loading…</div></div>
+      <div class="kpi c"><div class="kpi-label">Charges (30d)</div><div class="kpi-val c" id="kpi-charges">—</div><div class="kpi-sub" id="kpi-charges-sub">Loading…</div></div>
+      <div class="kpi p"><div class="kpi-label">Active Subscriptions</div><div class="kpi-val p" id="kpi-subs">—</div><div class="kpi-sub" id="kpi-subs-sub">Loading…</div></div>
+      <div class="kpi g"><div class="kpi-label">Customers (30d)</div><div class="kpi-val g" id="kpi-cust">—</div><div class="kpi-sub" id="kpi-cust-sub">Loading…</div></div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="row2">
+      <!-- Subs by product -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">Active Subscriptions by Product</div>
+          <div class="panel-meta" id="sub-meta">—</div>
+        </div>
+        <div class="panel-body" id="sub-panel"><div class="loading"><span class="spin">◌</span> Loading…</div></div>
+      </div>
+
+      <!-- Balance + Pie -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">Balance Breakdown</div>
+          <div class="panel-meta">Stripe Balances</div>
+        </div>
+        <div class="panel-body" id="bal-panel"><div class="loading"><span class="spin">◌</span> Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="row3">
+      <!-- Transactions -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">Recent Transactions</div>
+          <div class="panel-meta" id="txn-meta">—</div>
+        </div>
+        <div class="panel-body" id="txn-panel"><div class="loading"><span class="spin">◌</span> Loading…</div></div>
+      </div>
+
+      <!-- Trend -->
+      <div class="panel">
+        <div class="panel-hdr">
+          <div class="panel-title">Revenue Trend (30d)</div>
+          <div class="panel-meta" id="trend-meta">—</div>
+        </div>
+        <div class="panel-body">
+          <div class="trend-wrap">
+            <div class="trend-line" id="trend-line"></div>
+          </div>
+          <div class="trend-labels">
+            <span>30d ago</span><span>20d</span><span>10d</span><span>Today</span>
+          </div>
+          <div style="margin-top:16px" id="trend-stats">
+            <div class="loading"><span class="spin">◌</span> Loading trend…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 <span>Francisco Holdings Inc.</span> &nbsp;|&nbsp; 22-Company Empire &nbsp;|&nbsp; Revenue Intelligence v2.0
+  </footer>
+</div>
+
+<script>
+  let SK = '';
+
+  function logout(){
+    SK='';
+    document.getElementById('dash').style.display='none';
+    document.getElementById('lock').style.display='flex';
+    document.getElementById('sk-input').value='';
+  }
+
+  async function api(path){
+    const r=await fetch('https://api.stripe.com/v1/'+path,{headers:{'Authorization':'Bearer '+SK}});
+    if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'Stripe '+r.status)}
+    return r.json();
+  }
+
+  function fmt(amt,cur){
+    const c=(cur||'cad').toUpperCase();
+    const d=c==='JPY'?1:100;
+    return new Intl.NumberFormat('en-CA',{style:'currency',currency:c,minimumFractionDigits:0}).format(amt/d);
+  }
+
+  function fmtT(ts){
+    if(!ts)return'—';
+    return new Date(ts*1000).toLocaleString('en-CA',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+
+  const todayStart=()=>Math.floor(new Date().setHours(0,0,0,0)/1000);
+  const ago30=()=>Math.floor((Date.now()-30*864e5)/1000);
+  const ago20=()=>Math.floor((Date.now()-20*864e5)/1000);
+  const ago10=()=>Math.floor((Date.now()-10*864e5)/1000);
+
+  async function loadBalance(){
+    try{
+      const b=await api('balance');
+      const av=b.available?.[0]||{};
+      const pn=b.pending?.[0]||{};
+      document.getElementById('kpi-avail').textContent=fmt(av.amount||0,av.currency);
+      document.getElementById('kpi-avail-cur').textContent=(av.currency||'cad').toUpperCase()+' available';
+      document.getElementById('kpi-pend').textContent=fmt(pn.amount||0,pn.currency);
+      document.getElementById('kpi-pend-cur').textContent=(pn.currency||'cad').toUpperCase()+' pending';
+      // Balance panel with pie
+      let balRows='<div class="bal-grid">';
+      (b.available||[]).forEach(x=>balRows+=`<div class="bal-item"><div class="bal-label">Available</div><div class="bal-val">${fmt(x.amount,x.currency)}</div><div class="bal-cur">${x.currency.toUpperCase()}</div></div>`);
+      (b.pending||[]).forEach(x=>balRows+=`<div class="bal-item"><div class="bal-label">Pending</div><div class="bal-val" style="color:var(--gold)">${fmt(x.amount,x.currency)}</div><div class="bal-cur">${x.currency.toUpperCase()}</div></div>`);
+      balRows+='</div>';
+      document.getElementById('bal-panel').innerHTML=balRows;
+    }catch(e){
+      document.getElementById('kpi-avail').textContent='ERR';
+      document.getElementById('kpi-avail-cur').textContent=e.message;
+      document.getElementById('bal-panel').innerHTML=`<div class="err">Balance: ${e.message}</div>`;
+    }
+  }
+
+  async function loadCharges(){
+    try{
+      const [d30,today,ago20d,ago10d]=await Promise.all([
+        api(`charges?limit=100&created[gte]=${ago30()}`),
+        api(`charges?limit=100&created[gte]=${todayStart()}`),
+        api(`charges?limit=50&created[gte]=${ago20()}&created[lt]=${ago10()}`),
+        api(`charges?limit=50&created[gte]=${ago10()}`)
+      ]);
+      const succ=d30.data.filter(c=>c.status==='succeeded');
+      const total=succ.reduce((s,c)=>s+c.amount,0);
+      const cur=succ[0]?.currency||'cad';
+      document.getElementById('kpi-charges').textContent=fmt(total,cur);
+      document.getElementById('kpi-charges-sub').textContent=succ.length+' succeeded';
+      const tod=today.data.filter(c=>c.status==='succeeded');
+      const todTotal=tod.reduce((s,c)=>s+c.amount,0);
+      document.getElementById('kpi-today').textContent=fmt(todTotal,cur);
+      document.getElementById('kpi-today-sub').textContent=tod.length+' charges today';
+      document.getElementById('t-today').textContent=fmt(todTotal,cur);
+      // Trend stats
+      const mid=ago20d.data.filter(c=>c.status==='succeeded').reduce((s,c)=>s+c.amount,0);
+      const rec=ago10d.data.filter(c=>c.status==='succeeded').reduce((s,c)=>s+c.amount,0);
+      const pct=mid>0?Math.round(((rec-mid)/mid)*100):0;
+      document.getElementById('trend-meta').textContent=`${pct>0?'+':''}${pct}% vs prior 10d`;
+      document.getElementById('trend-stats').innerHTML=`
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px">
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Days 10-20</div>
+            <div style="font-size:16px;font-weight:bold;color:var(--muted)">${fmt(mid,cur)}</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px">
+            <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Last 10 Days</div>
+            <div style="font-size:16px;font-weight:bold;color:${pct>=0?'var(--green)':'var(--red)'}">${fmt(rec,cur)}</div>
+          </div>
+        </div>`;
+    }catch(e){
+      document.getElementById('kpi-charges').textContent='ERR';
+      document.getElementById('kpi-charges-sub').textContent=e.message;
+    }
+  }
+
+  async function loadTransactions(){
+    try{
+      const d=await api('charges?limit=30');
+      const charges=d.data||[];
+      document.getElementById('txn-meta').textContent=charges.length+' recent';
+      if(!charges.length){document.getElementById('txn-panel').innerHTML='<div class="empty">No transactions found.</div>';return}
+      document.getElementById('txn-panel').innerHTML=charges.map(c=>`
+        <div class="txn-row">
+          <div class="txn-dot ${c.status}"></div>
+          <div class="txn-info">
+            <div class="txn-desc" title="${c.description||c.id}">${c.description||c.billing_details?.name||c.id}</div>
+            <div class="txn-time">${fmtT(c.created)}</div>
+          </div>
+          <div class="txn-amt ${c.status}">${c.status==='failed'?'-':'+'}${fmt(c.amount,c.currency)}</div>
+          <div class="txn-status ${c.status}">${c.status}</div>
+        </div>`).join('');
+    }catch(e){document.getElementById('txn-panel').innerHTML=`<div class="err">Transactions: ${e.message}</div>`}
+  }
+
+  async function loadSubscriptions(){
+    try{
+      const d=await api('subscriptions?limit=100&status=active&expand[]=data.plan.product');
+      const subs=d.data||[];
+      document.getElementById('kpi-subs').textContent=subs.length;
+      document.getElementById('kpi-subs-sub').textContent='active subscriptions';
+      document.getElementById('sub-meta').textContent=subs.length+' active';
+      document.getElementById('t-subs').textContent=subs.length;
+      const mrr=subs.reduce((s,x)=>s+(x.plan?.amount||0),0);
+      document.getElementById('t-mrr').textContent=fmt(mrr,subs[0]?.plan?.currency||'cad')+'/mo';
+      if(!subs.length){document.getElementById('sub-panel').innerHTML='<div class="empty">No active subscriptions.</div>';return}
+      const byProd={};
+      subs.forEach(s=>{
+        const nm=s.plan?.product?.name||s.plan?.nickname||s.plan?.id||'Unknown';
+        const amt=s.plan?.amount||0;const cur=s.plan?.currency||'cad';
+        if(!byProd[nm])byProd[nm]={count:0,mrr:0,cur};
+        byProd[nm].count++;byProd[nm].mrr+=amt;
+      });
+      const entries=Object.entries(byProd).sort((a,b)=>b[1].mrr-a[1].mrr);
+      const maxMrr=entries[0]?.[1]?.mrr||1;
+      document.getElementById('sub-panel').innerHTML=entries.map(([nm,d])=>
+        `<div class="prod-row">
+          <div><div class="prod-name">${nm}</div><div class="prod-type">Subscription</div></div>
+          <div class="prod-bar-wrap"><div class="prod-bar-bg"><div class="prod-bar-fill" style="width:${Math.round(d.mrr/maxMrr*100)}%"></div></div></div>
+          <div class="prod-stats"><div class="prod-amt">${fmt(d.mrr,d.cur)}<span style="font-size:9px;color:var(--muted)">/mo</span></div><div class="prod-cnt">${d.count} sub${d.count!==1?'s':''}</div></div>
+        </div>`).join('');
+    }catch(e){
+      document.getElementById('kpi-subs').textContent='ERR';
+      document.getElementById('sub-panel').innerHTML=`<div class="err">Subscriptions: ${e.message}<br><br>Note: Some Stripe endpoints block browser CORS. Consider a server-side proxy for production.</div>`;
+    }
+  }
+
+  async function loadCustomers(){
+    try{
+      const d=await api(`customers?limit=100&created[gte]=${ago30()}`);
+      document.getElementById('kpi-cust').textContent=(d.data||[]).length;
+      document.getElementById('kpi-cust-sub').textContent='new in last 30 days';
+    }catch(e){document.getElementById('kpi-cust').textContent='ERR';document.getElementById('kpi-cust-sub').textContent=e.message}
+  }
+
+  async function loadAccount(){
+    try{
+      const acc=await api('account');
+      const isTest=SK.includes('test');
+      document.getElementById('t-acct').textContent=acc.id||'—';
+      document.getElementById('account-id').textContent=acc.id||'—';
+      document.getElementById('t-mode').textContent=isTest?'TEST MODE':'⚠ LIVE';
+      document.getElementById('t-mode').style.color=isTest?'var(--gold)':'var(--red)';
+      const mb=document.getElementById('mode-badge');
+      mb.textContent=isTest?'TEST MODE':'LIVE';
+      mb.style.color=isTest?'var(--gold)':'var(--red)';
+    }catch(e){document.getElementById('account-id').textContent=e.message}
+  }
+
+  async function loadAll(){
+    document.getElementById('t-sync').textContent='SYNCING…';
+    document.getElementById('last-updated').textContent='Syncing…';
+    await Promise.allSettled([loadAccount(),loadBalance(),loadCharges(),loadTransactions(),loadSubscriptions(),loadCustomers()]);
+    const now=new Date().toLocaleTimeString('en-CA',{hour12:false});
+    document.getElementById('last-updated').textContent=now;
+    document.getElementById('t-sync').textContent=now;
+  }
+
+  async function initDash(){
+    const k=document.getElementById('sk-input').value.trim();
+    if(!k||(!k.startsWith('sk_test_')&&!k.startsWith('sk_live_'))){
+      alert('Enter a valid Stripe secret key (sk_test_… or sk_live_…)');return;
+    }
+    SK=k;
+    document.getElementById('lock').style.display='none';
+    document.getElementById('dash').style.display='block';
+    await loadAll();
+  }
+
+  document.getElementById('sk-input').addEventListener('keydown',e=>{if(e.key==='Enter')initDash()});
+</script>
+</body>
+</html>
