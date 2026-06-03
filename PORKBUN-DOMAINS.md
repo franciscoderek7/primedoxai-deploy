@@ -11,7 +11,7 @@
 | empirehub.com | empire-hub-site/index.html | 🔴 CRITICAL |
 | primedoxai.com | primedoxai-site/index.html | 🔴 CRITICAL |
 | omniaguard.com | omniaguard-site/index.html | 🔴 CRITICAL |
-| ccldr.net | ccldr-site/index.html | 🔴 CRITICAL (check if available) |
+| ccldr.net | ccldr-site/index.html | ✅ ALREADY OWNED — 60-day ICANN lock (DNS still works, can go live NOW) |
 | franciscoholdings.com | francisco-holdings-site/index.html | 🔴 CRITICAL |
 
 ---
