@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeDox AI — The Motherboard | Francisco Holdings Inc.</title>
+<meta name="description" content="41 Companies. 392 Projected. One Brain. Zero Limits. PrimeDox AI is the flagship AI platform of Francisco Holdings Inc.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--gold:#D4AF37;--cyan:#00E5FF;--base:#0A0A0A;--surface:#111111;--surface2:#181818;
+--surface3:#1E1E1E;--text:#F0F0F0;--muted:#888;--green:#00FF88;--red:#EF4444;
+--purple:#7C3AED;--font:'Segoe UI',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--base);color:var(--text);font-family:var(--font);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;font-family:var(--font)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#111}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(10,10,10,0.85);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(212,175,55,0.2);
+  padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.nav-wordmark{font-size:1.15rem;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.5px}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{font-size:.85rem;color:var(--muted);transition:color .2s;letter-spacing:.3px;font-weight:500}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:linear-gradient(135deg,var(--gold),#B8960C);color:#000;padding:9px 20px;border-radius:6px;font-weight:700;font-size:.85rem;transition:all .2s;white-space:nowrap}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(212,175,55,0.4)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--gold);border-radius:2px;transition:all .3s}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(10,10,10,0.97);backdrop-filter:blur(20px);padding:24px;z-index:999;border-bottom:1px solid rgba(212,175,55,0.2)}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:12px 0;color:var(--text);font-size:1rem;border-bottom:1px solid rgba(255,255,255,0.05)}
+.mobile-menu .nav-cta{display:inline-block;margin-top:16px}
+
+/* HERO */
+#hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding-top:64px}
+#particleCanvas{position:absolute;inset:0;width:100%;height:100%}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:900px;padding:0 24px}
+.hero-tag{font-size:.72rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;opacity:.9}
+
+/* ANIMATED LOGO */
+.logo-anim{width:100px;height:100px;margin:0 auto 28px;position:relative;animation:logoPulse 3s ease-in-out infinite}
+@keyframes logoPulse{0%,100%{filter:drop-shadow(0 0 12px var(--gold)) drop-shadow(0 0 24px rgba(0,229,255,.3))}50%{filter:drop-shadow(0 0 24px var(--gold)) drop-shadow(0 0 48px rgba(0,229,255,.6))}}
+
+.hero-h1{font-size:clamp(52px,8vw,88px);font-weight:900;line-height:1;margin-bottom:16px;background:linear-gradient(135deg,#fff 30%,var(--gold) 60%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-2px}
+.hero-h2{font-size:clamp(1rem,2.5vw,1.35rem);color:rgba(240,240,240,0.75);margin-bottom:40px;line-height:1.55;max-width:720px;margin-left:auto;margin-right:auto}
+
+/* COUNTERS */
+.counter-row{display:flex;justify-content:center;flex-wrap:wrap;gap:32px;margin-bottom:44px}
+.counter-item{text-align:center}
+.counter-num{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.counter-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+
+/* CTA ROW */
+.cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#B8960C);color:#000;padding:14px 30px;border-radius:8px;font-weight:700;font-size:.95rem;transition:all .25s;display:inline-block}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,175,55,0.45)}
+.btn-outline-cyan{background:transparent;color:var(--cyan);padding:13px 30px;border-radius:8px;font-weight:700;font-size:.95rem;border:2px solid var(--cyan);transition:all .25s;display:inline-block}
+.btn-outline-cyan:hover{background:rgba(0,229,255,0.1);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,229,255,0.2)}
+
+/* LOADING STATUS */
+.hero-status{font-size:.8rem;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;min-height:20px;opacity:.85}
+
+/* SECTION BASE */
+section{padding:100px 24px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-tag{font-size:.7rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;opacity:.8}
+.section-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;margin-bottom:16px;line-height:1.15}
+.section-sub{color:var(--muted);font-size:1rem;max-width:600px;margin-bottom:48px;line-height:1.6}
+
+/* GLASS CARD */
+.glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:14px}
+.glass-gold{border-color:rgba(212,175,55,0.25)}
+
+/* AGENTS */
+#agents{background:var(--surface)}
+.agents-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.agent-card{padding:20px 16px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);transition:all .3s;text-align:center;position:relative;overflow:hidden}
+.agent-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent,#D4AF37)12,transparent);opacity:.04;pointer-events:none}
+.agent-card:hover{transform:translateY(-3px);border-color:rgba(212,175,55,0.3);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.agent-icon{font-size:2rem;margin-bottom:10px;display:block}
+.agent-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
+.agent-spec{font-size:.72rem;color:var(--muted);margin-bottom:12px;line-height:1.4}
+.agent-status-row{display:flex;align-items:center;justify-content:center;gap:8px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,0.6)}50%{box-shadow:0 0 0 6px rgba(0,255,136,0)}}
+.status-dot.processing{background:var(--gold);animation:pulseGold 1s ease-in-out infinite}
+@keyframes pulseGold{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,0.8)}50%{box-shadow:0 0 0 6px rgba(212,175,55,0)}}
+.badge-active{font-size:.62rem;background:rgba(0,255,136,0.15);color:var(--green);padding:3px 8px;border-radius:4px;font-weight:700;letter-spacing:1px}
+.badge-processing{font-size:.62rem;background:rgba(212,175,55,0.15);color:var(--gold);padding:3px 8px;border-radius:4px;font-weight:700;letter-spacing:1px}
+.agents-total{text-align:center;font-size:1rem;color:var(--muted)}
+.agents-total span{color:var(--cyan);font-weight:700}
+
+/* COMPANIES */
+#companies{background:var(--base)}
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px}
+.filter-btn{padding:8px 18px;border-radius:6px;font-size:.8rem;font-weight:600;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid rgba(255,255,255,0.1);transition:all .2s;letter-spacing:.3px}
+.filter-btn.active,.filter-btn:hover{background:rgba(212,175,55,0.15);color:var(--gold);border-color:rgba(212,175,55,0.4)}
+.companies-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.company-card{padding:16px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);transition:all .25s;position:relative}
+.company-card:hover{border-color:rgba(212,175,55,0.25);transform:translateY(-2px)}
+.company-card.hidden{display:none}
+.co-num{font-size:.65rem;color:var(--gold);font-weight:700;letter-spacing:1px;margin-bottom:6px;opacity:.8}
+.co-name{font-size:.88rem;font-weight:700;margin-bottom:4px;line-height:1.25}
+.co-tag{font-size:.68rem;color:var(--muted);margin-bottom:10px}
+.status-live{font-size:.62rem;background:rgba(0,255,136,0.12);color:var(--green);padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:1px}
+.status-building{font-size:.62rem;background:rgba(0,229,255,0.12);color:var(--cyan);padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:1px}
+.status-concept{font-size:.62rem;background:rgba(255,255,255,0.08);color:var(--muted);padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:1px}
+
+/* DEFENSE */
+#defense{background:var(--surface)}
+.defense-steps{display:flex;flex-direction:column;gap:16px;margin-bottom:40px}
+.defense-step{border:1px solid rgba(212,175,55,0.2);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.defense-step:hover{border-color:rgba(212,175,55,0.5)}
+.step-header{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03)}
+.step-header-left{display:flex;align-items:center;gap:14px}
+.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#B8960C);color:#000;font-weight:700;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-title{font-weight:700;font-size:1rem}
+.step-case{font-size:.75rem;color:var(--cyan);opacity:.85;margin-top:2px}
+.step-arrow{color:var(--gold);font-size:1.2rem;transition:transform .3s}
+.step-arrow.open{transform:rotate(180deg)}
+.step-body{padding:0 24px;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.step-body.open{max-height:300px;padding:16px 24px 20px}
+.step-body p{color:rgba(240,240,240,0.75);font-size:.9rem;line-height:1.65}
+
+.emergency-card{border:2px solid rgba(239,68,68,0.5);border-radius:12px;padding:28px;background:rgba(239,68,68,0.05);margin-bottom:32px}
+.emergency-heading{color:var(--red);font-size:1.1rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
+.emergency-quote{font-size:1.05rem;font-style:italic;color:var(--text);line-height:1.55;margin-bottom:10px}
+.emergency-cite{font-size:.78rem;color:var(--muted)}
+.legal-disclaimer{text-align:center;font-size:.75rem;color:var(--muted);padding:12px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;margin-bottom:32px;letter-spacing:.5px}
+
+/* LEXMIND CHAT */
+.lexmind-chat{background:rgba(0,0,0,0.3);border:1px solid rgba(212,175,55,0.2);border-radius:12px;padding:20px;max-width:520px;margin:0 auto}
+.chat-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.chat-name{font-weight:700;font-size:.9rem}
+.chat-online{font-size:.68rem;color:var(--green)}
+.chat-bubble{padding:10px 14px;border-radius:10px;font-size:.85rem;margin-bottom:10px;line-height:1.5;max-width:85%}
+.chat-bubble.ai{background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.2);color:var(--text)}
+.chat-bubble.user{background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.2);color:var(--text);margin-left:auto}
+
+/* PRICING */
+#pricing{background:var(--base)}
+.pricing-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:36px}
+.price-card{padding:28px 20px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;transition:all .3s;position:relative}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.featured{border-color:rgba(212,175,55,0.5);background:rgba(212,175,55,0.05);box-shadow:0 0 40px rgba(212,175,55,0.12)}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold),#B8960C);color:#000;font-size:.65rem;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:1.5px;white-space:nowrap}
+.price-tier{font-size:.68rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.price-name{font-size:1.05rem;font-weight:800;margin-bottom:4px}
+.price-amount{font-size:2rem;font-weight:900;color:var(--gold);margin:12px 0 4px;line-height:1}
+.price-amount span{font-size:.9rem;font-weight:400;color:var(--muted)}
+.price-jobs{font-size:.72rem;color:var(--cyan);margin-bottom:16px;font-weight:600}
+.price-features{list-style:none;flex:1;margin-bottom:20px}
+.price-features li{font-size:.8rem;color:rgba(240,240,240,0.75);padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.price-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0;margin-top:1px}
+.btn-price{display:block;text-align:center;padding:11px;border-radius:7px;font-weight:700;font-size:.85rem;transition:all .2s;margin-top:auto}
+.btn-price-gold{background:linear-gradient(135deg,var(--gold),#B8960C);color:#000}
+.btn-price-gold:hover{box-shadow:0 4px 16px rgba(212,175,55,0.4)}
+.btn-price-outline{border:1.5px solid rgba(212,175,55,0.4);color:var(--gold)}
+.btn-price-outline:hover{background:rgba(212,175,55,0.1)}
+.carbon-badge{font-size:.7rem;color:var(--green);text-align:center;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:4px}
+.payment-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;padding:20px;border:1px solid rgba(255,255,255,0.08);border-radius:10px;margin-top:8px}
+.payment-item{font-size:.85rem;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:5px}
+.payment-sep{color:rgba(255,255,255,0.15)}
+
+/* APP DOWNLOAD */
+#app-download{background:var(--surface)}
+.app-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.app-features{list-style:none;margin:28px 0 32px}
+.app-features li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:.9rem;color:rgba(240,240,240,0.8)}
+.app-features li::before{content:'';width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--cyan));flex-shrink:0}
+.app-btns{display:flex;flex-direction:column;gap:12px;max-width:260px}
+.app-btn{display:flex;align-items:center;gap:14px;padding:12px 20px;border-radius:10px;background:#111;border:1px solid rgba(255,255,255,0.12);transition:all .25s}
+.app-btn:hover{border-color:rgba(212,175,55,0.4);background:rgba(212,175,55,0.05)}
+.app-btn-icon{font-size:1.6rem;flex-shrink:0}
+.app-btn-text{display:flex;flex-direction:column}
+.app-btn-sub{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.app-btn-name{font-size:.95rem;font-weight:700}
+
+/* PHONE MOCKUP */
+.phone-mockup{width:220px;margin:0 auto;position:relative}
+.phone-shell{background:#0d0d0d;border-radius:36px;padding:16px 12px;border:2.5px solid rgba(255,255,255,0.15);box-shadow:0 30px 80px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.08);min-height:420px;position:relative;overflow:hidden}
+.phone-notch{width:80px;height:22px;background:#000;border-radius:0 0 14px 14px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;position:relative}
+.phone-cam{width:8px;height:8px;border-radius:50%;background:#1a1a1a;border:1.5px solid #333}
+.phone-screen{padding:8px}
+.phone-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.phone-logo-text{font-size:.65rem;font-weight:700;background:linear-gradient(90deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.phone-time{font-size:.6rem;color:var(--muted)}
+.phone-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.phone-stat{background:rgba(255,255,255,0.05);border-radius:8px;padding:10px 8px;text-align:center}
+.phone-stat-num{font-size:1.1rem;font-weight:800;color:var(--gold)}
+.phone-stat-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.phone-agents{margin-top:8px}
+.phone-agent-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.phone-agent-name{font-size:.6rem;color:var(--text)}
+.phone-agent-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.phone-glow{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:180px;height:80px;background:radial-gradient(ellipse,rgba(212,175,55,0.15),transparent);pointer-events:none}
+
+/* PARTNERSHIP */
+#partnership{background:var(--base)}
+.partnership-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:48px}
+.partner-card{padding:24px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);text-align:center}
+.partner-market{font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+.partner-value{font-size:1.9rem;font-weight:900;margin-bottom:6px}
+.partner-desc{font-size:.8rem;color:var(--muted);line-height:1.4}
+.partner-form{max-width:640px;margin:0 auto}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.3px}
+.form-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:11px 14px;color:var(--text);font-family:var(--font);font-size:.88rem;transition:border-color .2s;width:100%}
+.form-input:focus{outline:none;border-color:rgba(212,175,55,0.5)}
+.empire-badge{text-align:center;margin-top:28px;padding:14px;border:1px solid rgba(212,175,55,0.25);border-radius:8px;font-size:.78rem;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+
+/* CONTACT */
+#contact{background:var(--surface)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.contact-info-card{padding:32px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08)}
+.contact-info-title{font-size:1.1rem;font-weight:700;margin-bottom:24px}
+.contact-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
+.contact-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.contact-text{font-size:.88rem;line-height:1.55}
+.contact-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.contact-val{color:var(--text);font-weight:500}
+.contact-val a{color:var(--cyan)}
+.success-msg{display:none;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.3);border-radius:8px;padding:14px;color:var(--green);font-size:.88rem;margin-top:12px;text-align:center}
+.success-msg.show{display:block}
+
+/* FOOTER */
+footer{background:#050505;border-top:1px solid rgba(212,175,55,0.15);padding:64px 24px 0}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand p{color:var(--muted);font-size:.85rem;line-height:1.6;margin-top:12px;max-width:280px}
+.footer-col h4{font-size:.78rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:16px;font-weight:700}
+.footer-col a{display:block;color:var(--muted);font-size:.83rem;margin-bottom:8px;transition:color .2s}
+.footer-col a:hover{color:var(--gold)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding:24px 0;display:flex;flex-direction:column;gap:16px}
+.footer-badges{font-size:.78rem;color:var(--muted);text-align:center}
+.footer-copy{font-size:.75rem;color:rgba(136,136,136,0.7);text-align:center}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;white-space:nowrap;border-top:1px solid rgba(212,175,55,0.1);border-bottom:1px solid rgba(212,175,55,0.1);padding:10px 0;background:rgba(212,175,55,0.03);margin-bottom:0}
+.ticker{display:inline-block;animation:ticker 28s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker span{margin-right:60px;font-size:.78rem;color:var(--muted)}
+.ticker span::before{content:'◆ ';color:var(--gold)}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;max-width:320px}
+.toast{background:rgba(18,18,18,0.97);border:1px solid rgba(212,175,55,0.35);border-radius:10px;padding:14px 16px;font-size:.82rem;color:var(--text);line-height:1.4;animation:toastIn .4s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.toast-icon{color:var(--gold);margin-right:6px}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(40px)}}
+
+/* STATS BAR */
+.stats-bar{background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.12);padding:20px 32px;border-radius:10px;display:flex;flex-wrap:wrap;gap:24px;justify-content:center;margin-bottom:48px}
+.stat-item{text-align:center}
+.stat-num{font-size:1.4rem;font-weight:800;color:var(--gold)}
+.stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .pricing-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-top{grid-template-columns:1fr 1fr 1fr}
+}
+@media(max-width:900px){
+  .agents-grid{grid-template-columns:repeat(2,1fr)}
+  .companies-grid{grid-template-columns:repeat(2,1fr)}
+  .partnership-grid{grid-template-columns:repeat(2,1fr)}
+  .app-inner{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .pricing-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-top{grid-template-columns:1fr 1fr}
+  section{padding:70px 16px}
+}
+@media(max-width:540px){
+  .pricing-grid{grid-template-columns:1fr}
+  .counter-row{gap:20px}
+  .companies-grid{grid-template-columns:1fr 1fr}
+  .footer-top{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#D4AF37"/>
+          <stop offset="100%" stop-color="#00E5FF"/>
+        </linearGradient>
+      </defs>
+      <polygon points="18,2 34,18 18,34 2,18" fill="none" stroke="url(#navGrad)" stroke-width="2"/>
+      <polygon points="18,7 29,18 18,29 7,18" fill="none" stroke="url(#navGrad)" stroke-width="1" opacity="0.5"/>
+      <line x1="18" y1="2" x2="18" y2="34" stroke="url(#navGrad)" stroke-width="1" opacity="0.4"/>
+      <line x1="2" y1="18" x2="34" y2="18" stroke="url(#navGrad)" stroke-width="1" opacity="0.4"/>
+      <circle cx="18" cy="18" r="3" fill="url(#navGrad)"/>
+      <circle cx="18" cy="8" r="1.5" fill="#D4AF37" opacity="0.7"/>
+      <circle cx="28" cy="18" r="1.5" fill="#00E5FF" opacity="0.7"/>
+      <circle cx="18" cy="28" r="1.5" fill="#D4AF37" opacity="0.7"/>
+      <circle cx="8" cy="18" r="1.5" fill="#00E5FF" opacity="0.7"/>
+    </svg>
+    <span class="nav-wordmark">PrimeDox AI</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#agents">Dashboard</a></li>
+    <li><a href="#companies">Companies</a></li>
+    <li><a href="#agents">Agents</a></li>
+    <li><a href="#defense">Defense</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#pricing">Login</a></li>
+  </ul>
+  <a href="#pricing" class="btn-gold nav-cta">Deploy Your AI →</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#agents">Dashboard</a>
+  <a href="#companies">Companies</a>
+  <a href="#agents">Agents</a>
+  <a href="#defense">Defense</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#contact">Contact</a>
+  <a href="#pricing">Login</a>
+  <a href="#pricing" class="btn-gold nav-cta" style="margin-top:16px;display:inline-block">Deploy Your AI →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="particleCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-tag">The Motherboard | Francisco Holdings Inc.</div>
+
+    <!-- Animated Logo -->
+    <div class="logo-anim">
+      <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#D4AF37"/>
+            <stop offset="50%" stop-color="#00E5FF"/>
+            <stop offset="100%" stop-color="#D4AF37"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <polygon points="50,5 95,50 50,95 5,50" fill="none" stroke="url(#heroGrad)" stroke-width="2.5" filter="url(#glow)"/>
+        <polygon points="50,18 82,50 50,82 18,50" fill="none" stroke="url(#heroGrad)" stroke-width="1.5" opacity="0.6"/>
+        <polygon points="50,30 70,50 50,70 30,50" fill="rgba(212,175,55,0.08)" stroke="url(#heroGrad)" stroke-width="1" opacity="0.5"/>
+        <line x1="50" y1="5" x2="50" y2="95" stroke="url(#heroGrad)" stroke-width="1" opacity="0.35"/>
+        <line x1="5" y1="50" x2="95" y2="50" stroke="url(#heroGrad)" stroke-width="1" opacity="0.35"/>
+        <line x1="18" y1="50" x2="50" y2="18" stroke="url(#heroGrad)" stroke-width="1" opacity="0.25"/>
+        <line x1="82" y1="50" x2="50" y2="18" stroke="url(#heroGrad)" stroke-width="1" opacity="0.25"/>
+        <line x1="18" y1="50" x2="50" y2="82" stroke="url(#heroGrad)" stroke-width="1" opacity="0.25"/>
+        <line x1="82" y1="50" x2="50" y2="82" stroke="url(#heroGrad)" stroke-width="1" opacity="0.25"/>
+        <circle cx="50" cy="50" r="7" fill="url(#heroGrad)" filter="url(#glow)"/>
+        <circle cx="50" cy="5" r="3" fill="#D4AF37"/>
+        <circle cx="95" cy="50" r="3" fill="#00E5FF"/>
+        <circle cx="50" cy="95" r="3" fill="#D4AF37"/>
+        <circle cx="5" cy="50" r="3" fill="#00E5FF"/>
+        <circle cx="50" cy="18" r="2" fill="#D4AF37" opacity="0.7"/>
+        <circle cx="82" cy="50" r="2" fill="#00E5FF" opacity="0.7"/>
+        <circle cx="50" cy="82" r="2" fill="#D4AF37" opacity="0.7"/>
+        <circle cx="18" cy="50" r="2" fill="#00E5FF" opacity="0.7"/>
+      </svg>
+    </div>
+
+    <h1 class="hero-h1">PrimeDox AI</h1>
+    <h2 class="hero-h2">The Clone of Derek Francisco. The Brain of 41 Companies. The Future of Everything.</h2>
+
+    <!-- Live Counters -->
+    <div class="counter-row">
+      <div class="counter-item">
+        <div class="counter-num" id="c1" data-target="41">0</div>
+        <div class="counter-label">Companies Active</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num" id="c2" data-target="14">0</div>
+        <div class="counter-label">Agents Online</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num" id="c3" data-target="392">0</div>
+        <div class="counter-label">Projected Companies</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num" id="c4">$58B+</div>
+        <div class="counter-label">Markets Served</div>
+      </div>
+    </div>
+
+    <!-- CTA Row -->
+    <div class="cta-row">
+      <a href="#pricing" class="btn-gold">Deploy Your AI →</a>
+      <a href="#partnership" class="btn-outline-cyan">Partner With the Empire →</a>
+    </div>
+
+    <div class="hero-status" id="heroStatus">Initializing Swarm...</div>
+  </div>
+</section>
+
+<!-- AGENT STATUS PANEL -->
+<section id="agents">
+  <div class="section-inner">
+    <div class="section-tag">Live Intelligence Network</div>
+    <h2 class="section-title">14 AI Heroes Online — The PrimeDox Swarm</h2>
+    <p class="section-sub">Real-time AI agents powering the Francisco Holdings empire across every industry vertical.</p>
+
+    <div class="agents-grid" id="agentGrid">
+
+      <div class="agent-card" data-id="0" style="--accent:#0066CC">
+        <span class="agent-icon">✈️</span>
+        <div class="agent-name">AeroMind</div>
+        <div class="agent-spec">Aviation Safety & Compliance Intelligence</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-0"></div>
+          <span class="badge-active" id="badge-0">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="1" style="--accent:#00C896">
+        <span class="agent-icon">🏥</span>
+        <div class="agent-name">MediMind</div>
+        <div class="agent-spec">Healthcare Intelligence & Patient Data</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-1"></div>
+          <span class="badge-active" id="badge-1">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="2" style="--accent:#D4AF37">
+        <span class="agent-icon">💰</span>
+        <div class="agent-name">FinMind</div>
+        <div class="agent-spec">Fintech, Payments & Capital Markets</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-2"></div>
+          <span class="badge-active" id="badge-2">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="3" style="--accent:#22C55E">
+        <span class="agent-icon">⚡</span>
+        <div class="agent-name">VoltMind</div>
+        <div class="agent-spec">Energy, Renewables & Grid Optimization</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-3"></div>
+          <span class="badge-active" id="badge-3">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="4" style="--accent:#F97316">
+        <span class="agent-icon">📦</span>
+        <div class="agent-name">FlowMind</div>
+        <div class="agent-spec">Logistics, Supply Chain & Route AI</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-4"></div>
+          <span class="badge-active" id="badge-4">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="5" style="--accent:#1F4E79">
+        <span class="agent-icon">🛡️</span>
+        <div class="agent-name">ShieldMind</div>
+        <div class="agent-spec">Defense, Cybersecurity & Threat Analysis</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-5"></div>
+          <span class="badge-active" id="badge-5">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="6" style="--accent:#7C3AED">
+        <span class="agent-icon">🚀</span>
+        <div class="agent-name">OrbitMind</div>
+        <div class="agent-spec">Space Operations & Satellite Intelligence</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-6"></div>
+          <span class="badge-active" id="badge-6">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="7" style="--accent:#EF4444">
+        <span class="agent-icon">🚗</span>
+        <div class="agent-name">DriveMind</div>
+        <div class="agent-spec">Autonomous Vehicles & Transport AI</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-7"></div>
+          <span class="badge-active" id="badge-7">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="8" style="--accent:#A855F7">
+        <span class="agent-icon">⚛️</span>
+        <div class="agent-name">QubitMind</div>
+        <div class="agent-spec">Quantum Computing & Advanced Computation</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-8"></div>
+          <span class="badge-active" id="badge-8">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="9" style="--accent:#10B981">
+        <span class="agent-icon">🧬</span>
+        <div class="agent-name">GenMind</div>
+        <div class="agent-spec">Biotechnology, Genomics & Life Sciences</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-9"></div>
+          <span class="badge-active" id="badge-9">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="10" style="--accent:#FFD700">
+        <span class="agent-icon">⚖️</span>
+        <div class="agent-name">LexMind</div>
+        <div class="agent-spec">Legal, Constitutional & Regulatory AI</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-10"></div>
+          <span class="badge-active" id="badge-10">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="11" style="--accent:#00FF88">
+        <span class="agent-icon">🌿</span>
+        <div class="agent-name">CannaMind</div>
+        <div class="agent-spec">Cannabis Education & Compliance</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-11"></div>
+          <span class="badge-active" id="badge-11">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="12" style="--accent:#00D4FF">
+        <span class="agent-icon">🧹</span>
+        <div class="agent-name">SwarmMind</div>
+        <div class="agent-spec">Field Services, Cleaning & Route Optimization</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-12"></div>
+          <span class="badge-active" id="badge-12">ACTIVE</span>
+        </div>
+      </div>
+
+      <div class="agent-card" data-id="13" style="--accent:#8B5CF6">
+        <span class="agent-icon">👻</span>
+        <div class="agent-name">GhostMind</div>
+        <div class="agent-spec">Privacy, Data Removal & Sovereignty</div>
+        <div class="agent-status-row">
+          <div class="status-dot" id="dot-13"></div>
+          <span class="badge-active" id="badge-13">ACTIVE</span>
+        </div>
+      </div>
+
+    </div>
+    <p class="agents-total">Total agents online: <span id="agentCounter">14</span> / 14 — All systems nominal</p>
+  </div>
+</section>
+
+<!-- 41-COMPANY GRID -->
+<section id="companies">
+  <div class="section-inner">
+    <div class="section-tag">The Francisco Holdings Empire</div>
+    <h2 class="section-title">The 41-Company Empire Powered by PrimeDox</h2>
+    <p class="section-sub">Every company in the portfolio is connected to the Motherboard — one brain, zero limits.</p>
+
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="revenue">Revenue Titans</button>
+      <button class="filter-btn" data-filter="legal">Legal / Cannabis</button>
+      <button class="filter-btn" data-filter="security">Security</button>
+      <button class="filter-btn" data-filter="health">Health</button>
+      <button class="filter-btn" data-filter="other">Other</button>
+    </div>
+
+    <div class="companies-grid" id="companiesGrid">
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#01</div>
+        <div class="co-name">Tech Pet Cage</div>
+        <div class="co-tag">Smart pet technology solutions</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#02</div>
+        <div class="co-name">CleanSwarm</div>
+        <div class="co-tag">AI-powered cleaning operations</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#03</div>
+        <div class="co-name">CCLDR.NET</div>
+        <div class="co-tag">Cannabis constitutional rights portal</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#04</div>
+        <div class="co-name">OmniaGuard</div>
+        <div class="co-tag">Comprehensive digital security platform</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#05</div>
+        <div class="co-name">PrimeDox AI</div>
+        <div class="co-tag">The Motherboard — flagship AI platform</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#06</div>
+        <div class="co-name">Sovereignty Privacy</div>
+        <div class="co-tag">Data sovereignty & personal privacy</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#07</div>
+        <div class="co-name">Weedlaw Education</div>
+        <div class="co-tag">Cannabis law education platform</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#08</div>
+        <div class="co-name">MindShift</div>
+        <div class="co-tag">Mental health & cognitive optimization</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#09</div>
+        <div class="co-name">SupplyChain Pro</div>
+        <div class="co-tag">AI logistics & supply chain management</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#10</div>
+        <div class="co-name">Francisco Capital</div>
+        <div class="co-tag">Venture capital & investment management</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#11</div>
+        <div class="co-name">Weedlaw Publishing</div>
+        <div class="co-tag">Cannabis legal publishing & media</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#12</div>
+        <div class="co-name">CCLDR Academy</div>
+        <div class="co-tag">Constitutional cannabis rights education</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#13</div>
+        <div class="co-name">Agent Swarm Technologies</div>
+        <div class="co-tag">Multi-agent AI deployment platform</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#14</div>
+        <div class="co-name">Constitutional Defense Labs</div>
+        <div class="co-tag">BENO-X framework development & research</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#15</div>
+        <div class="co-name">Doc Weedlaw Media</div>
+        <div class="co-tag">Cannabis documentary & media production</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#16</div>
+        <div class="co-name">Francisco Ventures</div>
+        <div class="co-tag">Early-stage technology investment arm</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#17</div>
+        <div class="co-name">Sovereignty Data</div>
+        <div class="co-tag">Enterprise data sovereignty infrastructure</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#18</div>
+        <div class="co-name">CleanTech Automation</div>
+        <div class="co-tag">Automated cleaning technology systems</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#19</div>
+        <div class="co-name">AI Governance Canada</div>
+        <div class="co-tag">Canadian AI policy & governance</div>
+        <span class="status-concept">CONCEPT</span>
+      </div>
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#20</div>
+        <div class="co-name">Kent Street Holdings</div>
+        <div class="co-tag">Real estate & property development</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#21</div>
+        <div class="co-name">Lindsay Innovation Hub</div>
+        <div class="co-tag">Tech incubator, Lindsay ON</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#22</div>
+        <div class="co-name">Francisco Family Office</div>
+        <div class="co-tag">Private wealth & family office services</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#23</div>
+        <div class="co-name">Weedlaw Defense Network</div>
+        <div class="co-tag">Constitutional cannabis defense coalition</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#24</div>
+        <div class="co-name">Global Cannabis Alliance</div>
+        <div class="co-tag">International cannabis advocacy network</div>
+        <span class="status-concept">CONCEPT</span>
+      </div>
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#25</div>
+        <div class="co-name">CCC.net</div>
+        <div class="co-tag">Cannabis compliance & certification</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#26</div>
+        <div class="co-name">BENO-X Institute</div>
+        <div class="co-tag">Constitutional AI defense research</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#27</div>
+        <div class="co-name">Omnia Shield</div>
+        <div class="co-tag">Enterprise threat intelligence platform</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#28</div>
+        <div class="co-name">Aero Shield Inc.</div>
+        <div class="co-tag">Aviation security & safety systems</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="health">
+        <div class="co-num">#29</div>
+        <div class="co-name">Health Swarm Inc.</div>
+        <div class="co-tag">AI-driven healthcare network</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#30</div>
+        <div class="co-name">Fintech Swarm Inc.</div>
+        <div class="co-tag">Distributed fintech intelligence</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#31</div>
+        <div class="co-name">Energy Swarm Inc.</div>
+        <div class="co-tag">Renewable energy AI optimization</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#32</div>
+        <div class="co-name">Logistics Swarm Inc.</div>
+        <div class="co-tag">AI-powered supply chain intelligence</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="security">
+        <div class="co-num">#33</div>
+        <div class="co-name">Defense Swarm Inc.</div>
+        <div class="co-tag">Defense-grade AI security platform</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#34</div>
+        <div class="co-name">Space Swarm Inc.</div>
+        <div class="co-tag">Satellite & space operations AI</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#35</div>
+        <div class="co-name">Auto Swarm Inc.</div>
+        <div class="co-tag">Autonomous vehicle intelligence</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="other">
+        <div class="co-num">#36</div>
+        <div class="co-name">Quantum Swarm Inc.</div>
+        <div class="co-tag">Quantum computing applications</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="health">
+        <div class="co-num">#37</div>
+        <div class="co-name">Biotech Swarm Inc.</div>
+        <div class="co-tag">Biotechnology & genomics AI</div>
+        <span class="status-live">LIVE</span>
+      </div>
+
+      <div class="company-card" data-cat="health">
+        <div class="co-num">#38</div>
+        <div class="co-name">PrimeDox Health</div>
+        <div class="co-tag">AI-driven personal health intelligence</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#39</div>
+        <div class="co-name">Weedlaw Trinity</div>
+        <div class="co-tag">Three-pillar cannabis legal framework</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+      <div class="company-card" data-cat="legal">
+        <div class="co-num">#40</div>
+        <div class="co-name">Cannabis Compliance Canada</div>
+        <div class="co-tag">National cannabis regulatory compliance</div>
+        <span class="status-concept">CONCEPT</span>
+      </div>
+
+      <div class="company-card" data-cat="revenue">
+        <div class="co-num">#41</div>
+        <div class="co-name">CleanSwarm Academy</div>
+        <div class="co-tag">Professional cleaning operations training</div>
+        <span class="status-building">BUILDING</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BENO-X DEFENSE -->
+<section id="defense">
+  <div class="section-inner">
+    <div class="section-tag">Constitutional AI Defense</div>
+    <h2 class="section-title">BENO-X Framework — Constitutional Defense AI</h2>
+    <p class="section-sub">Three-step constitutional challenge framework developed through decades of Canadian case law. Powered by LexMind.</p>
+
+    <div class="defense-steps">
+
+      <div class="defense-step" onclick="toggleStep(0)">
+        <div class="step-header">
+          <div class="step-header-left">
+            <div class="step-num">1</div>
+            <div>
+              <div class="step-title">Does an Exemption Exist?</div>
+              <div class="step-case">R v Parker, 2000 — Ontario Court of Appeal</div>
+            </div>
+          </div>
+          <div class="step-arrow" id="arrow-0">▼</div>
+        </div>
+        <div class="step-body" id="body-0">
+          <p>The Parker decision established that a blanket prohibition on cannabis without a medical exemption violates s.7 of the Charter — the right to life, liberty and security of the person. LexMind analyzes whether a viable exemption pathway exists under current federal regulations, and whether that exemption covers your specific circumstances. The BENO-X module cross-references your file against Parker criteria in under 2 seconds.</p>
+        </div>
+      </div>
+
+      <div class="defense-step" onclick="toggleStep(1)">
+        <div class="step-header">
+          <div class="step-header-left">
+            <div class="step-num">2</div>
+            <div>
+              <div class="step-title">Is the Exemption Functional?</div>
+              <div class="step-case">R v Allard, 2016 FC 236 — Federal Court of Canada</div>
+            </div>
+          </div>
+          <div class="step-arrow" id="arrow-1">▼</div>
+        </div>
+        <div class="step-body" id="body-1">
+          <p>R v Allard confirmed that a technically existing exemption which is practically inaccessible or unreasonably burdensome is constitutionally defective. If Health Canada's ACMPR or comparable framework creates financial, geographic, or procedural barriers that render the exemption functionally unavailable, the prohibition remains vulnerable to Charter challenge. LexMind maps exemption access barriers against Allard criteria and generates a viability score for your jurisdiction.</p>
+        </div>
+      </div>
+
+      <div class="defense-step" onclick="toggleStep(2)">
+        <div class="step-header">
+          <div class="step-header-left">
+            <div class="step-num">3</div>
+            <div>
+              <div class="step-title">Is the Prohibition Constitutionally Sound?</div>
+              <div class="step-case">R v Smith, 2015 SCC 34 — Supreme Court of Canada</div>
+            </div>
+          </div>
+          <div class="step-arrow" id="arrow-2">▼</div>
+        </div>
+        <div class="step-body" id="body-2">
+          <p>Smith (2015) struck down the restriction limiting medical cannabis to dried form only, finding it violated s.7 of the Charter in a manner not justified under s.1. The Supreme Court affirmed that where a prohibition is overly broad and captures conduct posing no real risk of harm, it cannot be saved by pressing and substantial government objectives. The BENO-X Step 3 engine runs a Smith analysis on the specific charge, seeking overbreadth, gross disproportionality, and arbitrariness under s.7.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Emergency Card -->
+    <div class="emergency-card">
+      <div class="emergency-heading">⚠ If You Are Arrested — Say ONLY This:</div>
+      <div class="emergency-quote">"I wish to speak to a lawyer before I answer any questions."</div>
+      <div class="emergency-cite">Your right under s.10(b) of the Canadian Charter of Rights and Freedoms. Do not consent to search. Do not explain. Do not argue. Request counsel immediately and remain silent until you have spoken to a lawyer.</div>
+    </div>
+
+    <div class="legal-disclaimer">NOT LEGAL REPRESENTATION — EDUCATION ONLY | BENO-X Framework is an educational AI tool. Always consult a qualified lawyer for legal advice. | OmniaGuard Protected</div>
+
+    <!-- LexMind Chat Preview -->
+    <div class="lexmind-chat">
+      <div class="chat-header">
+        <div class="chat-avatar">⚖️</div>
+        <div>
+          <div class="chat-name">LexMind — Constitutional AI</div>
+          <div class="chat-online">● Online — BENO-X Framework Active</div>
+        </div>
+      </div>
+      <div class="chat-bubble user">I have a Parker exemption but Health Canada keeps delaying my renewal. Can this be challenged?</div>
+      <div class="chat-bubble ai">Yes. Under <strong>R v Allard (2016 FC 236)</strong>, if administrative delays render your exemption functionally inaccessible, the prohibition may be constitutionally defective. I'm running a BENO-X Step 2 viability analysis on your file now...</div>
+      <div class="chat-bubble ai">Analysis complete. Your exemption delay of 94 days exceeds the Allard functional access threshold. You have a strong Step 2 argument. Would you like me to generate a pre-charge Charter notice for your file?</div>
+      <div class="chat-bubble user">Yes please. And what about Smith — does that apply to my edibles charge?</div>
+      <div class="chat-bubble ai">Running Step 3 — <strong>R v Smith (2015 SCC 34)</strong>... Your edibles charge engages the overbreadth analysis directly. Smith struck down form-based restrictions. I am generating your full 3-step BENO-X defense package now. Download will be ready in 12 seconds.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-tag">Choose Your Tier</div>
+    <h2 class="section-title">5-Tier Access to the Motherboard</h2>
+    <p class="section-sub">Every tier funds jobs, builds the empire, and expands the swarm. Choose how deep you go.</p>
+
+    <div class="pricing-grid">
+
+      <!-- TIER 1 FREE -->
+      <div class="price-card">
+        <div class="price-tier">Tier 1</div>
+        <div class="price-name">Free</div>
+        <div class="price-amount">$0<span>/mo</span></div>
+        <div class="price-jobs">0 Jobs Supported</div>
+        <ul class="price-features">
+          <li>Basic document templates</li>
+          <li>1 AI agent connection (LexMind basic)</li>
+          <li>Community support</li>
+          <li>PrimeDox branding</li>
+          <li>BENO-X Step 1 access</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_FREE" class="btn-price btn-price-outline">Get Started Free</a>
+      </div>
+
+      <!-- TIER 2 PRO -->
+      <div class="price-card">
+        <div class="price-tier">Tier 2</div>
+        <div class="price-name">Pro Defense</div>
+        <div class="price-amount">$49<span>/mo</span></div>
+        <div class="price-jobs" style="color:var(--cyan)">Supports 3 Jobs</div>
+        <ul class="price-features">
+          <li>Unlimited document generation</li>
+          <li>AI chat with LexMind (full)</li>
+          <li>5 company connections</li>
+          <li>Emergency defense protocols</li>
+          <li>BENO-X Steps 1–2 access</li>
+          <li>Email support</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_14" class="btn-price btn-price-outline">Start Pro Defense</a>
+      </div>
+
+      <!-- TIER 3 ELITE — FEATURED -->
+      <div class="price-card featured">
+        <div class="popular-badge">MOST POPULAR</div>
+        <div class="price-tier">Tier 3</div>
+        <div class="price-name">Elite Defense</div>
+        <div class="price-amount">$199<span>/mo</span></div>
+        <div class="price-jobs" style="color:var(--green)">Supports 7 Jobs</div>
+        <ul class="price-features">
+          <li>Everything in Pro Defense</li>
+          <li>Live coaching sessions (2/mo)</li>
+          <li>24/7 emergency hotline</li>
+          <li>20 company connections</li>
+          <li>Priority support (4hr response)</li>
+          <li>Full 14 AI heroes access</li>
+          <li>Full BENO-X 3-step framework</li>
+          <li>Custom document templates</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_15" class="btn-price btn-price-gold">Start Elite Defense</a>
+      </div>
+
+      <!-- TIER 4 SOVEREIGN -->
+      <div class="price-card">
+        <div class="price-tier">Tier 4</div>
+        <div class="price-name">Sovereign</div>
+        <div class="price-amount">$999<span>/mo</span></div>
+        <div class="price-jobs" style="color:var(--gold)">Supports 22 Jobs</div>
+        <ul class="price-features">
+          <li>Full Motherboard access</li>
+          <li>Unlimited company connections</li>
+          <li>Custom AI agent training</li>
+          <li>Dedicated war room</li>
+          <li>White-label ready</li>
+          <li>API access (10K calls/mo)</li>
+          <li>Quarterly strategy session</li>
+          <li>All 41 company integrations</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_SOVEREIGN" class="btn-price btn-price-outline">Go Sovereign</a>
+      </div>
+
+      <!-- TIER 5 IMPERIUM -->
+      <div class="price-card" style="border-color:rgba(0,229,255,0.3)">
+        <div class="price-tier" style="color:var(--cyan)">Tier 5</div>
+        <div class="price-name">Imperium</div>
+        <div class="price-amount" style="color:var(--cyan)">$9,999<span>/mo</span></div>
+        <div class="price-jobs" style="color:var(--green)">Supports 85 Jobs</div>
+        <ul class="price-features">
+          <li>White-label PrimeDox platform</li>
+          <li>Franchise license rights</li>
+          <li>Full unrestricted API access</li>
+          <li>Derek Francisco direct line</li>
+          <li>Custom agent deployment</li>
+          <li>Dedicated engineering team</li>
+          <li>Revenue share agreement</li>
+          <li>Board-level AI strategy</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_IMPERIUM" class="btn-price" style="border:1.5px solid rgba(0,229,255,0.5);color:var(--cyan);text-align:center;padding:11px;border-radius:7px;font-weight:700;font-size:.85rem;display:block;transition:all .2s">Join the Imperium</a>
+        <div class="carbon-badge">🌿 Carbon Neutral 2028 Certified</div>
+      </div>
+
+    </div>
+
+    <!-- Payment Row -->
+    <div class="payment-row">
+      <span class="payment-item">💳 Stripe</span>
+      <span class="payment-sep">|</span>
+      <span class="payment-item">🅿 PayPal</span>
+      <span class="payment-sep">|</span>
+      <span class="payment-item">🍁 Interac</span>
+      <span class="payment-sep">|</span>
+      <span class="payment-item">₿ BTC</span>
+      <span class="payment-sep">|</span>
+      <span class="payment-item">Ξ ETH</span>
+    </div>
+  </div>
+</section>
+
+<!-- APP DOWNLOAD -->
+<section id="app-download">
+  <div class="section-inner">
+    <div class="section-tag">Mobile Command Center</div>
+    <h2 class="section-title">Control Your Empire From Your Pocket</h2>
+    <p class="section-sub" style="margin-bottom:0">PrimeDox AI — Available on iOS and Android. App Store + Google Play.</p>
+    <div class="app-inner" style="margin-top:48px">
+      <div>
+        <ul class="app-features">
+          <li>Push notifications for all 14 agent alerts</li>
+          <li>Biometric login — Face ID &amp; fingerprint</li>
+          <li>Offline mode with cached defense protocols</li>
+          <li>Real-time swarm sync across all 41 companies</li>
+          <li>Emergency BENO-X one-tap activation</li>
+          <li>Live agent status dashboard</li>
+        </ul>
+        <div class="app-btns">
+          <a href="#" class="app-btn">
+            <div class="app-btn-icon">🍎</div>
+            <div class="app-btn-text">
+              <span class="app-btn-sub">Download on the</span>
+              <span class="app-btn-name">App Store</span>
+            </div>
+          </a>
+          <a href="#" class="app-btn">
+            <div class="app-btn-icon">▶</div>
+            <div class="app-btn-text">
+              <span class="app-btn-sub">Get it on</span>
+              <span class="app-btn-name">Google Play</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center">
+        <div class="phone-mockup">
+          <div class="phone-shell">
+            <div class="phone-notch">
+              <div class="phone-cam"></div>
+            </div>
+            <div class="phone-screen">
+              <div class="phone-header">
+                <span class="phone-logo-text">PrimeDox AI</span>
+                <span class="phone-time">9:41 AM</span>
+              </div>
+              <div class="phone-stat-row">
+                <div class="phone-stat">
+                  <div class="phone-stat-num">41</div>
+                  <div class="phone-stat-label">Companies</div>
+                </div>
+                <div class="phone-stat">
+                  <div class="phone-stat-num">14</div>
+                  <div class="phone-stat-label">Agents</div>
+                </div>
+                <div class="phone-stat">
+                  <div class="phone-stat-num">392</div>
+                  <div class="phone-stat-label">Projected</div>
+                </div>
+                <div class="phone-stat">
+                  <div class="phone-stat-num" style="color:var(--cyan);font-size:.85rem">$58B+</div>
+                  <div class="phone-stat-label">Markets</div>
+                </div>
+              </div>
+              <div class="phone-agents">
+                <div style="font-size:.55rem;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;font-weight:700">Live Agents</div>
+                <div class="phone-agent-row"><span class="phone-agent-name">✈️ AeroMind</span><div class="phone-agent-dot"></div></div>
+                <div class="phone-agent-row"><span class="phone-agent-name">🏥 MediMind</span><div class="phone-agent-dot"></div></div>
+                <div class="phone-agent-row"><span class="phone-agent-name">💰 FinMind</span><div class="phone-agent-dot"></div></div>
+                <div class="phone-agent-row"><span class="phone-agent-name">⚡ VoltMind</span><div class="phone-agent-dot"></div></div>
+                <div class="phone-agent-row"><span class="phone-agent-name">🛡️ ShieldMind</span><div class="phone-agent-dot"></div></div>
+                <div class="phone-agent-row"><span class="phone-agent-name">⚖️ LexMind</span><div class="phone-agent-dot"></div></div>
+                <div style="text-align:center;margin-top:10px;font-size:.55rem;color:var(--muted)">+ 8 more agents active</div>
+              </div>
+            </div>
+            <div class="phone-glow"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORTUNE 500 PARTNERSHIP -->
+<section id="partnership">
+  <div class="section-inner">
+    <div class="section-tag">Enterprise & Global Partnerships</div>
+    <h2 class="section-title">PrimeDox AI — The No-Brainer Choice for Global Enterprise</h2>
+    <p class="section-sub">Four of the world's most valuable markets. One platform to rule them all.</p>
+
+    <div class="partnership-grid">
+      <div class="partner-card">
+        <div class="partner-market">Cybersecurity</div>
+        <div class="partner-value" style="color:var(--cyan)">$58B</div>
+        <div class="partner-desc">Global cybersecurity market served by OmniaGuard, ShieldMind & GhostMind. Enterprise contracts available.</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-market">Healthcare</div>
+        <div class="partner-value" style="color:var(--green)">$12.4T</div>
+        <div class="partner-desc">Total healthcare market addressable through MediMind, GenMind & PrimeDox Health AI systems.</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-market">Logistics</div>
+        <div class="partner-value" style="color:var(--gold)">$15T</div>
+        <div class="partner-desc">Global logistics and supply chain market targeted by FlowMind, Logistics Swarm & SupplyChain Pro.</div>
+      </div>
+      <div class="partner-card">
+        <div class="partner-market">Defense</div>
+        <div class="partner-value" style="color:var(--red)">$2.4T</div>
+        <div class="partner-desc">Worldwide defense spending addressable via ShieldMind, BENO-X, Aero Shield & Constitutional Defense Labs.</div>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item"><div class="stat-num">41</div><div class="stat-label">Active Companies</div></div>
+      <div class="stat-item"><div class="stat-num">14</div><div class="stat-label">AI Agents Online</div></div>
+      <div class="stat-item"><div class="stat-num">392</div><div class="stat-label">Projected Cos.</div></div>
+      <div class="stat-item"><div class="stat-num">48h</div><div class="stat-label">Avg Deploy Time</div></div>
+      <div class="stat-item"><div class="stat-num">99.9%</div><div class="stat-label">Uptime SLA</div></div>
+    </div>
+
+    <div class="partner-form glass" style="padding:36px;border-radius:16px">
+      <h3 style="font-size:1.2rem;margin-bottom:8px">Partner With the Empire</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:28px">Complete this form and a Francisco Holdings representative will contact you within 24 hours.</p>
+      <form id="partnerForm" onsubmit="submitPartnerForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" class="form-input" placeholder="John Smith" required>
+          </div>
+          <div class="form-group">
+            <label>Company *</label>
+            <input type="text" class="form-input" placeholder="Acme Corp" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Industry *</label>
+            <input type="text" class="form-input" placeholder="e.g. Healthcare, Finance, Logistics" required>
+          </div>
+          <div class="form-group">
+            <label>AI Agents Needed</label>
+            <input type="number" class="form-input" placeholder="e.g. 3" min="1">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:20px">
+          <label>Business Email *</label>
+          <input type="email" class="form-input" placeholder="you@company.com" required>
+        </div>
+        <button type="submit" class="btn-gold" style="width:100%;padding:14px;font-size:.95rem;border-radius:8px;border:none">Send Partnership Request →</button>
+        <div id="partnerSuccess" class="success-msg">Partnership request sent! We'll respond within 24 hours. Welcome to the empire.</div>
+      </form>
+    </div>
+
+    <div class="empire-badge" style="margin-top:24px">Francisco Holdings Inc. — The No-Brainer Choice for Global Enterprise</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-tag">Connect to the Motherboard</div>
+    <h2 class="section-title">Connect to the Motherboard</h2>
+    <p class="section-sub">Reach the Francisco Holdings command center directly. We respond to serious inquiries within 24 hours.</p>
+
+    <div class="contact-grid">
+      <div>
+        <form id="contactForm" onsubmit="submitContact(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" class="form-input" id="cName" placeholder="Full name" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" class="form-input" id="cEmail" placeholder="your@email.com" required>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px">
+            <label>Company / Organization</label>
+            <input type="text" class="form-input" id="cCompany" placeholder="Optional">
+          </div>
+          <div class="form-group" style="margin-bottom:14px">
+            <label>Inquiry Type *</label>
+            <select class="form-input" id="cType" required>
+              <option value="">Select inquiry type</option>
+              <option>Partnership / Enterprise</option>
+              <option>Pricing & Tiers</option>
+              <option>BENO-X Defense Framework</option>
+              <option>Agent Swarm Deployment</option>
+              <option>Media & Press</option>
+              <option>Technical Support</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:20px">
+            <label>Message *</label>
+            <textarea class="form-input" id="cMessage" rows="5" placeholder="Tell us about your project or inquiry..." required style="resize:vertical"></textarea>
+          </div>
+          <button type="submit" class="btn-gold" style="width:100%;padding:14px;font-size:.95rem;border-radius:8px;border:none">Send to the Motherboard →</button>
+          <div id="contactSuccess" class="success-msg">Message received. The Motherboard is processing your inquiry. Expect a response within 24 hours.</div>
+        </form>
+      </div>
+      <div>
+        <div class="contact-info-card">
+          <div class="contact-info-title">Francisco Holdings Command Center</div>
+
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div class="contact-text">
+              <div class="contact-label">Phone</div>
+              <div class="contact-val"><a href="tel:7053078080" style="color:var(--gold)">705-307-8080</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">✉️</div>
+            <div class="contact-text">
+              <div class="contact-label">Email</div>
+              <div class="contact-val"><a href="mailto:derek@franciscoholdings.com">derek@franciscoholdings.com</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div class="contact-text">
+              <div class="contact-label">Telegram</div>
+              <div class="contact-val"><a href="https://t.me/OmniguardSec_bot" style="color:var(--cyan)">@OmniguardSec_bot</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div class="contact-text">
+              <div class="contact-label">Headquarters</div>
+              <div class="contact-val">Kent Street West<br>Lindsay, ON K9V 2Z8<br>Canada 🍁</div>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;padding:16px;background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.15);border-radius:8px">
+            <div style="font-size:.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;font-weight:700">Partnership Inquiries</div>
+            <div style="font-size:.82rem;color:rgba(240,240,240,0.75);line-height:1.55">For Fortune 500 partnerships, enterprise licensing, and franchise opportunities:<br>
+            <a href="mailto:partnerships@franciscoholdings.com" style="color:var(--cyan)">partnerships@franciscoholdings.com</a></div>
+          </div>
+
+          <div style="margin-top:16px;padding:16px;background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.15);border-radius:8px">
+            <div style="font-size:.7rem;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;font-weight:700">Emergency Defense Line</div>
+            <div style="font-size:.82rem;color:rgba(240,240,240,0.75);line-height:1.55">Active Elite Defense subscribers have access to the 24/7 emergency BENO-X hotline. Login to your dashboard to access the emergency number.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+
+    <!-- Ticker -->
+    <div class="ticker-wrap" style="margin-bottom:48px">
+      <div class="ticker">
+        <span>AeroMind blocked 47,000 aviation safety events this quarter</span>
+        <span>MediMind analyzed 2.4 million patient records with 99.97% accuracy</span>
+        <span>FinMind processed $2.4 billion in transactions with zero fraud</span>
+        <span>GhostMind removed 147 data broker records in the last 24 hours</span>
+        <span>ShieldMind blocked 1.2 million cyber threats this month</span>
+        <span>SwarmMind optimized 847 cleaning routes saving $140K in fuel</span>
+        <span>OrbitMind avoided a potential satellite collision in LEO</span>
+        <span>LexMind generated 2,300 BENO-X defense packages this week</span>
+        <span>AeroMind blocked 47,000 aviation safety events this quarter</span>
+        <span>MediMind analyzed 2.4 million patient records with 99.97% accuracy</span>
+        <span>FinMind processed $2.4 billion in transactions with zero fraud</span>
+        <span>GhostMind removed 147 data broker records in the last 24 hours</span>
+        <span>ShieldMind blocked 1.2 million cyber threats this month</span>
+        <span>SwarmMind optimized 847 cleaning routes saving $140K in fuel</span>
+        <span>OrbitMind avoided a potential satellite collision in LEO</span>
+        <span>LexMind generated 2,300 BENO-X defense packages this week</span>
+      </div>
+    </div>
+
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <defs><linearGradient id="fGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4AF37"/><stop offset="100%" stop-color="#00E5FF"/></linearGradient></defs>
+            <polygon points="18,2 34,18 18,34 2,18" fill="none" stroke="url(#fGrad)" stroke-width="2"/>
+            <circle cx="18" cy="18" r="4" fill="url(#fGrad)"/>
+          </svg>
+          <span style="font-weight:700;font-size:1rem;background:linear-gradient(90deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">PrimeDox AI</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">The Motherboard</div>
+        <p style="font-size:.82rem;color:var(--muted);line-height:1.6;max-width:260px">41 Companies. 392 Projected. One Brain. Zero Limits. The flagship AI platform of Francisco Holdings Inc.</p>
+        <div style="margin-top:16px;font-size:.72rem;color:var(--muted)">
+          <div>📍 Kent Street West, Lindsay ON K9V 2Z8</div>
+          <div style="margin-top:4px">📞 705-307-8080</div>
+          <div style="margin-top:4px">✉️ derek@franciscoholdings.com</div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="#agents">Agent Swarm</a>
+        <a href="#defense">BENO-X Framework</a>
+        <a href="#pricing">Pricing Tiers</a>
+        <a href="#app-download">Mobile App</a>
+        <a href="#partnership">Enterprise API</a>
+        <a href="#companies">Company Directory</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Empire</h4>
+        <a href="#companies">All 41 Companies</a>
+        <a href="#">Francisco Holdings Inc.</a>
+        <a href="#">Francisco Capital</a>
+        <a href="#">Francisco Ventures</a>
+        <a href="#">Francisco Family Office</a>
+        <a href="#">Lindsay Innovation Hub</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">BENO-X Disclaimer</a>
+        <a href="#">Data Processing</a>
+        <a href="#">OmniaGuard Policy</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="tel:7053078080">705-307-8080</a>
+        <a href="mailto:derek@franciscoholdings.com">Email Derek</a>
+        <a href="mailto:partnerships@franciscoholdings.com">Partnerships</a>
+        <a href="https://t.me/OmniguardSec_bot">Telegram Bot</a>
+        <a href="#contact">Contact Form</a>
+        <a href="#pricing">Get Started</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-badges">🌿 Carbon Neutral 2028 | OmniaGuard Protected | BENO-X Framework | Francisco Holdings Inc.</div>
+      <div class="footer-copy">© 2026 PrimeDox AI. A Francisco Holdings Inc. Company. | 41 Companies. 392 Projected. One Brain. Zero Limits. | NOT LEGAL REPRESENTATION — EDUCATION ONLY</div>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ═══════════════════════════════════
+// PARTICLE CANVAS
+// ═══════════════════════════════════
+(function(){
+  const canvas = document.getElementById('particleCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], animId;
+  const COUNT = 80;
+  const COLORS = ['#D4AF37','#D4AF37','#00E5FF','#FFD700','#00E5FF'];
+  const MAX_DIST = 140;
+
+  function resize(){
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  function Particle(){
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.vx = (Math.random() - 0.5) * 0.55;
+    this.vy = (Math.random() - 0.5) * 0.55;
+    this.r = Math.random() * 2.2 + 0.8;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.alpha = Math.random() * 0.6 + 0.3;
+  }
+
+  Particle.prototype.update = function(){
+    this.x += this.vx;
+    this.y += this.vy;
+    if(this.x < 0 || this.x > W) this.vx *= -1;
+    if(this.y < 0 || this.y > H) this.vy *= -1;
+  };
+
+  function init(){
+    resize();
+    particles = [];
+    for(let i = 0; i < COUNT; i++) particles.push(new Particle());
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    // dark overlay gradient
+    const grad = ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)/1.5);
+    grad.addColorStop(0,'rgba(10,10,10,0)');
+    grad.addColorStop(1,'rgba(10,10,10,0.6)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    for(let i = 0; i < particles.length; i++){
+      const p = particles[i];
+      p.update();
+      // draw dot
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.fill();
+      // draw connecting lines
+      for(let j = i+1; j < particles.length; j++){
+        const q = particles[j];
+        const dx = p.x - q.x, dy = p.y - q.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < MAX_DIST){
+          const opacity = (1 - dist/MAX_DIST) * 0.25;
+          ctx.globalAlpha = opacity;
+          ctx.strokeStyle = p.color;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+    animId = requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', function(){
+    cancelAnimationFrame(animId);
+    init();
+    draw();
+  });
+
+  init();
+  draw();
+})();
+
+// ═══════════════════════════════════
+// HERO STATUS CYCLING
+// ═══════════════════════════════════
+(function(){
+  const msgs = [
+    'Initializing Swarm...',
+    'Connecting to Motherboard...',
+    'Syncing 41 Companies...',
+    'Loading 14 AI Heroes...',
+    'All Systems Active ✓'
+  ];
+  let idx = 0;
+  const el = document.getElementById('heroStatus');
+  function cycle(){
+    el.style.opacity = '0';
+    setTimeout(function(){
+      el.textContent = msgs[idx];
+      el.style.opacity = '1';
+      if(idx < msgs.length - 1){
+        idx++;
+        setTimeout(cycle, 1800);
+      }
+    }, 300);
+  }
+  el.style.transition = 'opacity .3s';
+  cycle();
+})();
+
+// ═══════════════════════════════════
+// COUNTER ANIMATION
+// ═══════════════════════════════════
+(function(){
+  const counters = [
+    {id:'c1', target:41, suffix:''},
+    {id:'c2', target:14, suffix:''},
+    {id:'c3', target:392, suffix:''}
+  ];
+  function animCount(el, target, suffix, duration){
+    let start = 0;
+    const step = target / (duration / 16);
+    function update(){
+      start = Math.min(start + step, target);
+      el.textContent = Math.floor(start) + suffix;
+      if(start < target) requestAnimationFrame(update);
+    }
+    update();
+  }
+  function onVisible(){
+    counters.forEach(function(c){
+      const el = document.getElementById(c.id);
+      if(el) animCount(el, c.target, c.suffix, 1800);
+    });
+  }
+  const hero = document.getElementById('hero');
+  const obs = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting){ onVisible(); obs.disconnect(); }
+  }, {threshold:0.3});
+  obs.observe(hero);
+})();
+
+// ═══════════════════════════════════
+// AGENT CARD PROCESSING SIMULATION
+// ═══════════════════════════════════
+(function(){
+  const NUM_AGENTS = 14;
+  function triggerProcessing(){
+    const idx = Math.floor(Math.random() * NUM_AGENTS);
+    const dot = document.getElementById('dot-' + idx);
+    const badge = document.getElementById('badge-' + idx);
+    if(!dot || !badge) return;
+    dot.className = 'status-dot processing';
+    badge.className = 'badge-processing';
+    badge.textContent = 'Processing task...';
+    setTimeout(function(){
+      dot.className = 'status-dot';
+      badge.className = 'badge-active';
+      badge.textContent = 'ACTIVE';
+    }, 3500);
+  }
+  setInterval(triggerProcessing, 8000);
+  setTimeout(triggerProcessing, 4000);
+})();
+
+// ═══════════════════════════════════
+// COMPANY FILTER
+// ═══════════════════════════════════
+(function(){
+  const filterBar = document.getElementById('filterBar');
+  const grid = document.getElementById('companiesGrid');
+  filterBar.addEventListener('click', function(e){
+    const btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    filterBar.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    const filter = btn.getAttribute('data-filter');
+    grid.querySelectorAll('.company-card').forEach(function(card){
+      if(filter === 'all' || card.getAttribute('data-cat') === filter){
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+})();
+
+// ═══════════════════════════════════
+// DEFENSE STEP ACCORDION
+// ═══════════════════════════════════
+function toggleStep(idx){
+  const body = document.getElementById('body-' + idx);
+  const arrow = document.getElementById('arrow-' + idx);
+  const isOpen = body.classList.contains('open');
+  // close all
+  [0,1,2].forEach(function(i){
+    document.getElementById('body-' + i).classList.remove('open');
+    document.getElementById('arrow-' + i).classList.remove('open');
+  });
+  if(!isOpen){
+    body.classList.add('open');
+    arrow.classList.add('open');
+  }
+}
+
+// ═══════════════════════════════════
+// HAMBURGER MENU
+// ═══════════════════════════════════
+(function(){
+  const ham = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', function(){
+    menu.classList.toggle('open');
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ menu.classList.remove('open'); });
+  });
+})();
+
+// ═══════════════════════════════════
+// NAV SCROLL EFFECT
+// ═══════════════════════════════════
+(function(){
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 60){
+      nav.style.background = 'rgba(5,5,5,0.97)';
+    } else {
+      nav.style.background = 'rgba(10,10,10,0.85)';
+    }
+  });
+})();
+
+// ═══════════════════════════════════
+// CONTACT FORM
+// ═══════════════════════════════════
+function submitContact(e){
+  e.preventDefault();
+  const record = {
+    name: document.getElementById('cName').value,
+    email: document.getElementById('cEmail').value,
+    company: document.getElementById('cCompany').value,
+    type: document.getElementById('cType').value,
+    message: document.getElementById('cMessage').value,
+    timestamp: new Date().toISOString()
+  };
+  try{
+    const existing = JSON.parse(localStorage.getItem('primedox_contacts') || '[]');
+    existing.push(record);
+    localStorage.setItem('primedox_contacts', JSON.stringify(existing));
+  } catch(err){}
+  document.getElementById('contactSuccess').classList.add('show');
+  document.getElementById('contactForm').reset();
+  setTimeout(function(){
+    document.getElementById('contactSuccess').classList.remove('show');
+  }, 6000);
+}
+
+// ═══════════════════════════════════
+// PARTNER FORM
+// ═══════════════════════════════════
+function submitPartnerForm(e){
+  e.preventDefault();
+  document.getElementById('partnerSuccess').classList.add('show');
+  document.getElementById('partnerForm').reset();
+  setTimeout(function(){
+    document.getElementById('partnerSuccess').classList.remove('show');
+  }, 7000);
+}
+
+// ═══════════════════════════════════
+// SOCIAL PROOF TOASTS
+// ═══════════════════════════════════
+(function(){
+  const toasts = [
+    'Fortune 500 aviation firm deployed AeroMind in 48 hours — zero integration issues.',
+    'CCLDR student just accessed LexMind Emergency Defense Protocol — BENO-X Step 2 activated.',
+    'SwarmMind just optimized 847 cleaning routes across the GTA — $140K saved.',
+    'OrbitMind just avoided a satellite collision in low Earth orbit — all systems nominal.',
+    'New Sovereign tier subscriber onboarded — 22 jobs supported.',
+    'GhostMind removed 147 data broker records for a new Elite Defense member.',
+    'ShieldMind blocked 1.2M threats in the last 30 days — OmniaGuard Protected.',
+    'FinMind processed $2.4B in transactions — zero fraud events detected.'
+  ];
+  let tIdx = 0;
+  const container = document.getElementById('toastContainer');
+
+  function showToast(){
+    const msg = toasts[tIdx % toasts.length];
+    tIdx++;
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = '<span class="toast-icon">◆</span>' + msg;
+    container.appendChild(toast);
+    setTimeout(function(){
+      toast.style.animation = 'toastOut .4s ease forwards';
+      setTimeout(function(){ toast.remove(); }, 400);
+    }, 7000);
+  }
+
+  setTimeout(function(){
+    showToast();
+    setInterval(showToast, 45000);
+  }, 10000);
+})();
+
+// ═══════════════════════════════════
+// AGENT COUNTER ANIMATED
+// ═══════════════════════════════════
+(function(){
+  const el = document.getElementById('agentCounter');
+  const obs = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting){
+      let n = 0;
+      const iv = setInterval(function(){
+        n++;
+        el.textContent = n;
+        if(n >= 14) clearInterval(iv);
+      }, 100);
+      obs.disconnect();
+    }
+  },{threshold:0.3});
+  const sec = document.getElementById('agents');
+  if(sec) obs.observe(sec);
+})();
+</script>
+</body>
+</html>
