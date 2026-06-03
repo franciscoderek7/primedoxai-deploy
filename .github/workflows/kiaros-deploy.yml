@@ -1,0 +1,90 @@
+name: Kiaros Empire — Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages:    write
+  id-token: write
+
+concurrency:
+  group:      pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy Kiaros Sites
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate critical files
+        run: |
+          echo "── Kiaros Empire Site Validation ──"
+          SITES=(
+            "kiaros-site/index.html"
+            "ccldr-site/index.html"
+            "omniaguard-site/index.html"
+            "cleantech-automation-site/index.html"
+            "francisco-holdings-site/index.html"
+            "tech-pet-cage-site/index.html"
+          )
+          ALL_OK=true
+          for f in "${SITES[@]}"; do
+            if [ -f "$f" ]; then
+              LINES=$(wc -l < "$f")
+              echo "  ✓ $f  ($LINES lines)"
+            else
+              echo "  ✗ MISSING: $f"
+              ALL_OK=false
+            fi
+          done
+          if [ "$ALL_OK" = false ]; then
+            echo "WARNING: Some site files missing — deploying anyway"
+          fi
+          echo ""
+          echo "  Domain manifest:"
+          if [ -f "domains.json" ]; then
+            python3 -c "
+          import json, sys
+          d = json.load(open('domains.json'))
+          for c in d.get('companies', []):
+              print(f'  {c[\"status\"]:18} {c[\"name\"]}  {c.get(\"primary_domain\", c[\"domains\"][0])}')
+          " 2>/dev/null || cat domains.json
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Post-deploy summary
+        run: |
+          echo ""
+          echo "🚀 Kiaros Empire deployed"
+          echo "   Primary:  https://kiaros.dev"
+          echo "   Archive:  https://franciscoderek7.github.io/kiaros-deploy/"
+          echo "   Pages:    ${{ steps.deployment.outputs.page_url }}"
+          echo ""
+          echo "   Sites live:"
+          echo "   ├── kiaros-site/         → kiaros.dev"
+          echo "   ├── ccldr-site/          → ccldr.net"
+          echo "   ├── omniaguard-site/     → omniaguard.com"
+          echo "   ├── cleantech-automation-site/ → cleanswarm.com"
+          echo "   ├── francisco-holdings-site/   → franciscoholdingsinc.com"
+          echo "   └── tech-pet-cage-site/        → techpetcage.com"
