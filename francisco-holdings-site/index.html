@@ -686,32 +686,64 @@ h1, h2, h3, .serif {
 
 .tier-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
   margin-bottom: 56px;
+  align-items: start;
 }
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
+  .tier-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
   .tier-grid { grid-template-columns: 1fr; }
 }
 
 .tier-card {
-  background: var(--card);
-  border: 1px solid var(--gold-border);
-  border-radius: 3px;
-  padding: 36px 28px;
+  background: rgba(12,10,22,0.92);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 4px;
+  padding: 32px 24px;
   text-align: center;
+  position: relative;
   transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
 }
 .tier-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(201,168,76,0.5);
-  box-shadow: 0 20px 60px rgba(201,168,76,0.08);
+  transform: translateY(-5px);
+  border-color: rgba(201,168,76,0.6);
+  box-shadow: 0 20px 60px rgba(201,168,76,0.10);
 }
 .tier-card.featured {
-  border-color: rgba(201,168,76,0.5);
-  background: rgba(201,168,76,0.04);
+  border-color: rgba(201,168,76,0.7);
+  background: linear-gradient(160deg, rgba(201,168,76,0.07) 0%, rgba(12,10,22,0.97) 60%);
+  box-shadow: 0 0 50px rgba(201,168,76,0.12);
+  padding-top: 52px;
 }
 
+.tier-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--bg);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.tier-number {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
 .tier-label {
   font-size: 10px;
   letter-spacing: 3px;
@@ -721,20 +753,78 @@ h1, h2, h3, .serif {
 }
 .tier-name {
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 22px;
+  font-size: 20px;
   color: var(--gold);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .tier-amount {
   font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.tier-who {
+  font-size: 12px;
   color: var(--muted);
-  margin-bottom: 24px;
+  font-style: italic;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 .tier-divider {
   height: 1px;
   background: var(--gold-border);
-  margin: 0 auto 24px;
+  margin: 0 auto 20px;
   width: 40px;
+}
+.tier-features {
+  list-style: none;
+  text-align: left;
+  margin-bottom: 28px;
+  flex: 1;
+}
+.tier-features li {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 8px;
+  padding-left: 18px;
+  position: relative;
+}
+.tier-features li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  opacity: 0.6;
+  font-size: 11px;
+}
+.tier-cta {
+  display: block;
+  background: transparent;
+  border: 1px solid rgba(201,168,76,0.35);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 2px;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  margin-top: auto;
+  cursor: pointer;
+}
+.tier-cta:hover {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--gold);
+}
+.tier-card.featured .tier-cta {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+}
+.tier-card.featured .tier-cta:hover {
+  background: var(--gold-light);
 }
 
 .investor-cta {
@@ -759,6 +849,14 @@ h1, h2, h3, .serif {
   text-decoration: none;
 }
 .investor-cta a:hover { text-decoration: underline; }
+.investor-cta .confidential-note {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.55;
+  margin-top: 10px;
+}
 
 /* ─── SECTION 6: PORTFOLIO FULL ─── */
 #portfolio {
@@ -1376,26 +1474,65 @@ footer {
     </div>
 
     <div class="tier-grid">
+      <!-- Tier 1: Advisory Partner -->
       <div class="tier-card fade-up delay-1">
-        <div class="tier-label">Entry Tier</div>
-        <div class="tier-name">Strategic Partner</div>
+        <div class="tier-number">Tier 01</div>
+        <div class="tier-name">Advisory Partner</div>
         <div class="tier-amount">From $50,000</div>
+        <div class="tier-who">Early believers, angels &amp; advisors</div>
         <div class="tier-divider"></div>
-        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Access to portfolio reporting, quarterly investor calls, and co-marketing opportunities across the Francisco Holdings network.</p>
+        <ul class="tier-features">
+          <li>Portfolio reporting &amp; quarterly investor calls</li>
+          <li>Co-marketing across Francisco Holdings network</li>
+          <li>Advisory board consideration</li>
+        </ul>
+        <a class="tier-cta" href="mailto:franciscoderek7@gmail.com?subject=Advisory%20Partner%20Partnership%20Inquiry">Begin the Conversation</a>
       </div>
+
+      <!-- Tier 2: Strategic Partner (RECOMMENDED / Featured) -->
       <div class="tier-card featured fade-up delay-2">
-        <div class="tier-label">Growth Tier</div>
-        <div class="tier-name">Empire Partner</div>
+        <div class="tier-badge">Recommended</div>
+        <div class="tier-number">Tier 02</div>
+        <div class="tier-name">Strategic Partner</div>
         <div class="tier-amount">From $250,000</div>
+        <div class="tier-who">Strategic operators &amp; family offices</div>
         <div class="tier-divider"></div>
-        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Priority deployment slots, board observer rights, revenue-share structuring, and white-label licensing across selected portfolio companies.</p>
+        <ul class="tier-features">
+          <li>Priority deployment slots &amp; board observer rights</li>
+          <li>Revenue-share structuring &amp; white-label licensing</li>
+          <li>Direct access to Telus-tier enterprise pipeline</li>
+        </ul>
+        <a class="tier-cta" href="mailto:franciscoderek7@gmail.com?subject=Strategic%20Partner%20Partnership%20Inquiry">Begin the Conversation</a>
       </div>
+
+      <!-- Tier 3: Sovereign Partner -->
       <div class="tier-card fade-up delay-3">
-        <div class="tier-label">Pinnacle Tier</div>
-        <div class="tier-name">Dynasty Partner</div>
-        <div class="tier-amount">$1M+ — Custom Structure</div>
+        <div class="tier-number">Tier 03</div>
+        <div class="tier-name">Sovereign Partner</div>
+        <div class="tier-amount">From $1,000,000</div>
+        <div class="tier-who">Institutional, VC &amp; sovereign wealth</div>
         <div class="tier-divider"></div>
-        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Bespoke partnership architecture — equity positions, co-founder arrangements, and direct participation in Telus-tier enterprise deals.</p>
+        <ul class="tier-features">
+          <li>Equity positions &amp; co-founder arrangements</li>
+          <li>Full portfolio visibility &amp; governance rights</li>
+          <li>Sovereign AI expansion co-investment rights</li>
+        </ul>
+        <a class="tier-cta" href="mailto:franciscoderek7@gmail.com?subject=Sovereign%20Partner%20Partnership%20Inquiry">Begin the Conversation</a>
+      </div>
+
+      <!-- Tier 4: Dynasty Partner -->
+      <div class="tier-card fade-up delay-4">
+        <div class="tier-number">Tier 04</div>
+        <div class="tier-name">Dynasty Partner</div>
+        <div class="tier-amount">Custom Structure</div>
+        <div class="tier-who">Ultra-high-net-worth, government &amp; sovereign funds</div>
+        <div class="tier-divider"></div>
+        <ul class="tier-features">
+          <li>Bespoke partnership architecture, fully negotiated</li>
+          <li>Government &amp; sovereign fund co-investment terms</li>
+          <li>Direct participation in all Telus-tier enterprise deals</li>
+        </ul>
+        <a class="tier-cta" href="mailto:franciscoderek7@gmail.com?subject=Dynasty%20Partner%20Partnership%20Inquiry">Begin the Conversation</a>
       </div>
     </div>
 
@@ -1406,6 +1543,7 @@ footer {
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a href="tel:7053078080">705-307-8080</a>
       </div>
+      <p class="confidential-note">All inquiries handled with strict confidentiality.</p>
     </div>
   </div>
 </section>
