@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Canadian Cannabis Law | CCLDR.NET</title>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green:#00FF88;--gold:#FFD700;--dark:#0A0A0A;--bg:#070909;
+      --card:#0C1109;--border-g:rgba(0,255,136,.18);--border-au:rgba(255,215,0,.25);
+      --text:#E0EEDC;--muted:#6A8870;--gold2:#B8860B;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;
+      background:
+        radial-gradient(ellipse 60% 40% at 10% 10%,rgba(0,255,136,.05) 0%,transparent 50%),
+        radial-gradient(ellipse 50% 50% at 90% 85%,rgba(255,215,0,.04) 0%,transparent 50%);
+      pointer-events:none;
+    }
+    @keyframes float-a{0%,100%{transform:translateY(0) translateX(0);opacity:.4}50%{transform:translateY(-18px) translateX(8px);opacity:.8}}
+    @keyframes float-b{0%,100%{transform:translateY(0) translateX(0);opacity:.3}50%{transform:translateY(12px) translateX(-12px);opacity:.7}}
+    .particle{position:fixed;border-radius:50%;background:var(--gold);pointer-events:none;z-index:0}
+    .p1{width:3px;height:3px;top:15%;left:8%;animation:float-a 6s ease-in-out infinite}
+    .p2{width:2px;height:2px;top:30%;left:92%;animation:float-b 7s ease-in-out infinite}
+    .p3{width:4px;height:4px;top:60%;left:5%;animation:float-a 8s ease-in-out infinite;animation-delay:-3s}
+    .p4{width:2px;height:2px;top:75%;left:88%;animation:float-b 5s ease-in-out infinite;animation-delay:-2s}
+    .p5{width:3px;height:3px;top:85%;left:40%;animation:float-a 9s ease-in-out infinite;animation-delay:-4s}
+
+    /* ── Sticky Gold Disclaimer ── */
+    .disclaimer-top{
+      position:sticky;top:0;z-index:300;
+      background:linear-gradient(90deg,rgba(255,215,0,.15),rgba(255,215,0,.09),rgba(255,215,0,.15));
+      border-bottom:2px solid var(--gold);
+      padding:10px 24px;text-align:center;
+      font-size:11.5px;font-weight:800;color:var(--gold);
+      letter-spacing:1.4px;text-transform:uppercase;
+    }
+
+    /* ── Nav ── */
+    nav{
+      position:sticky;top:38px;z-index:200;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+      padding:14px 40px;
+      background:rgba(7,9,9,.97);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border-g);
+    }
+    .nav-logo-row{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .nav-brand{font-size:20px;font-weight:900;line-height:1}
+    .nav-brand .g{color:var(--green)}.nav-brand .au{color:var(--gold)}
+    .nav-sub{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-top:2px}
+    .nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .nav-link{font-size:12.5px;color:var(--muted);text-decoration:none;transition:color .2s;white-space:nowrap}
+    .nav-link:hover{color:var(--green)}
+    .nav-link.active{color:var(--green)}
+    .nav-cta{
+      padding:8px 18px;background:linear-gradient(135deg,var(--green),#00CC66);
+      color:#000;border:none;border-radius:8px;font-size:12px;font-weight:700;
+      cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-block;white-space:nowrap;
+    }
+    .nav-cta:hover{opacity:.85}
+
+    /* ── Hero ── */
+    .hero{
+      position:relative;z-index:1;padding:72px 24px 52px;text-align:center;
+    }
+    .hero-content{max-width:820px;margin:0 auto}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(0,255,136,.08);border:1px solid var(--border-g);
+      color:var(--green);font-size:11px;font-weight:700;
+      padding:6px 18px;border-radius:20px;
+      text-transform:uppercase;letter-spacing:2px;margin-bottom:28px;
+    }
+    .hero h1{
+      font-size:clamp(32px,6.5vw,68px);font-weight:900;line-height:1.05;
+      letter-spacing:-1.5px;margin-bottom:16px;color:#fff;
+    }
+    .hero h1 .g{color:var(--green)}
+    .hero h1 .au{color:var(--gold)}
+    .hero-sub{font-size:clamp(14px,2.2vw,18px);color:var(--muted);margin:0 auto 32px;max-width:580px;line-height:1.65}
+    .hero-meta{
+      display:inline-flex;align-items:center;gap:12px;
+      background:rgba(255,215,0,.06);border:1px solid var(--border-au);
+      border-radius:12px;padding:14px 24px;font-size:13px;color:var(--muted);
+    }
+    .hero-meta strong{color:var(--gold)}
+
+    /* ── Table of Contents ── */
+    .toc{
+      position:relative;z-index:1;max-width:900px;margin:0 auto 0;padding:0 24px 48px;
+    }
+    .toc-inner{
+      background:rgba(12,17,9,.85);border:1px solid var(--border-g);
+      border-radius:16px;padding:28px 32px;backdrop-filter:blur(12px);
+    }
+    .toc-title{font-size:12px;color:var(--green);text-transform:uppercase;letter-spacing:3px;font-weight:700;margin-bottom:16px}
+    .toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+    .toc-item{font-size:13px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px;transition:background .15s,color .15s;display:block}
+    .toc-item:hover{background:rgba(0,255,136,.06);color:var(--green)}
+    .toc-item span{color:var(--green);font-weight:700;margin-right:6px;font-size:11px}
+
+    /* ── Sections ── */
+    .content-wrap{max-width:960px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+    .module{margin-bottom:72px}
+    .module-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border-g)}
+    .module-num{
+      width:44px;height:44px;border-radius:10px;
+      background:linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,255,136,.05));
+      border:1px solid var(--border-g);
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:900;color:var(--green);flex-shrink:0;
+    }
+    .module-title{font-size:clamp(18px,3vw,26px);font-weight:900;color:#fff;letter-spacing:-.5px}
+    .module-subtitle{font-size:13px;color:var(--muted);margin-top:3px}
+
+    /* ── Cards ── */
+    .card{
+      background:rgba(0,255,136,.03);border:1px solid var(--border-g);
+      border-radius:16px;padding:24px 28px;backdrop-filter:blur(10px);
+      margin-bottom:16px;transition:border-color .2s;
+    }
+    .card:hover{border-color:rgba(0,255,136,.35)}
+    .card-gold{
+      background:rgba(255,215,0,.04);border:1px solid var(--border-au);
+      border-left:4px solid var(--gold);
+    }
+    .card-green{
+      border-left:4px solid var(--green);
+    }
+    .card-title{font-size:15px;font-weight:800;color:var(--green);margin-bottom:10px}
+    .card-gold .card-title{color:var(--gold)}
+    .card-body{font-size:13.5px;color:var(--muted);line-height:1.7}
+    .card-body strong{color:var(--text)}
+    .card-body a{color:var(--green);text-decoration:none}
+
+    /* ── Info list ── */
+    .info-list{list-style:none;margin:0}
+    .info-list li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--muted);padding:8px 0;border-bottom:1px solid rgba(0,255,136,.06);line-height:1.6}
+    .info-list li:last-child{border-bottom:none}
+    .info-list li::before{content:'▸';color:var(--green);flex-shrink:0;margin-top:2px;font-size:11px}
+    .info-list li strong{color:var(--text)}
+
+    /* ── Tables ── */
+    .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border-g);margin-top:4px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    thead tr{background:rgba(0,255,136,.08)}
+    th{
+      padding:13px 16px;text-align:left;font-weight:700;font-size:11px;
+      text-transform:uppercase;letter-spacing:1px;color:var(--green);
+      border-bottom:1px solid var(--border-g);white-space:nowrap;
+    }
+    td{padding:12px 16px;color:var(--muted);border-bottom:1px solid rgba(0,255,136,.05);vertical-align:top;line-height:1.5}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(0,255,136,.03);color:var(--text)}
+    td strong{color:var(--text)}
+    .td-green{color:var(--green)!important;font-weight:600}
+    .td-gold{color:var(--gold)!important;font-weight:600}
+    .td-red{color:#FF6688!important;font-weight:700}
+    .td-warn{color:#FFB347!important;font-weight:600}
+
+    /* ── Warning / note boxes ── */
+    .note-box{
+      background:rgba(255,215,0,.05);border:1px solid var(--border-au);
+      border-left:4px solid var(--gold);border-radius:10px;
+      padding:16px 20px;margin-top:16px;
+      font-size:13px;color:var(--muted);line-height:1.65;
+    }
+    .note-box strong{color:var(--gold)}
+    .alert-box{
+      background:rgba(255,68,85,.06);border:1px solid rgba(255,68,85,.25);
+      border-left:4px solid #FF4455;border-radius:10px;
+      padding:16px 20px;margin-top:16px;
+      font-size:13px;color:var(--muted);line-height:1.65;
+    }
+    .alert-box strong{color:#FF7788}
+
+    /* ── Two-col grid ── */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:640px){.two-col{grid-template-columns:1fr}}
+
+    /* ── Divider ── */
+    .sec-divider{border:none;border-top:1px solid var(--border-g);margin:0 0 72px}
+
+    /* ── Footer ── */
+    footer{
+      position:relative;z-index:1;
+      border-top:1px solid var(--border-g);text-align:center;
+      padding:36px 24px;color:var(--muted);font-size:13px;
+    }
+    footer .g{color:var(--green)}
+    footer .au{color:var(--gold)}
+    .footer-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:16px}
+    .footer-links a{font-size:12px;color:var(--muted);text-decoration:none;transition:color .2s}
+    .footer-links a:hover{color:var(--green)}
+    .footer-disclaimer{font-size:11px;max-width:680px;margin:12px auto 0;line-height:1.6}
+
+    /* ── Back to top ── */
+    .back-top{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(0,255,136,.08);border:1px solid var(--border-g);
+      color:var(--green);font-size:12px;font-weight:600;
+      padding:8px 18px;border-radius:8px;text-decoration:none;margin-top:32px;
+      transition:background .2s;
+    }
+    .back-top:hover{background:rgba(0,255,136,.14)}
+
+    @media(max-width:640px){
+      nav{padding:12px 18px;top:34px}
+      .disclaimer-top{font-size:10px;padding:8px 14px}
+      .content-wrap{padding:0 16px}
+      .toc{padding:0 16px 36px}
+      .module-header{flex-direction:column;align-items:flex-start;gap:10px}
+      th,td{padding:10px 12px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="particle p1"></div>
+<div class="particle p2"></div>
+<div class="particle p3"></div>
+<div class="particle p4"></div>
+<div class="particle p5"></div>
+
+<!-- STICKY GOLD DISCLAIMER -->
+<div class="disclaimer-top" id="top">
+  ⚖ NOT LEGAL REPRESENTATION &mdash; EDUCATION ONLY &mdash; For informational and educational purposes only. Retain qualified legal counsel for your situation.
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo-row" style="text-decoration:none">
+    <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <style>@keyframes leaf-pulse{0%,100%{opacity:.8;filter:drop-shadow(0 0 3px rgba(0,255,136,.4))}50%{opacity:1;filter:drop-shadow(0 0 8px rgba(0,255,136,.8))}}</style>
+      <line x1="18" y1="4" x2="18" y2="32" stroke="#FFD700" stroke-width="1.5" opacity=".7"/>
+      <line x1="8" y1="10" x2="28" y2="10" stroke="#FFD700" stroke-width="1.5" opacity=".7"/>
+      <path d="M8 10 Q6 14 4 18 Q8 20 12 18 Q10 14 8 10Z" fill="rgba(255,215,0,.15)" stroke="#FFD700" stroke-width="1"/>
+      <path d="M28 10 Q26 14 24 18 Q28 20 32 18 Q30 14 28 10Z" fill="rgba(255,215,0,.15)" stroke="#FFD700" stroke-width="1"/>
+      <path d="M18,18 C16,14 12,12 14,10 C16,8 18,12 18,12 C18,12 20,8 22,10 C24,12 20,14 18,18Z" fill="rgba(0,255,136,.4)" stroke="#00FF88" stroke-width=".8" style="animation:leaf-pulse 3s ease-in-out infinite"/>
+      <path d="M18,22 C15,18 11,18 12,15 C13,12 17,16 18,16 C19,16 23,12 24,15 C25,18 21,18 18,22Z" fill="rgba(0,255,136,.35)" stroke="#00FF88" stroke-width=".8" style="animation:leaf-pulse 3s ease-in-out infinite;animation-delay:.5s"/>
+      <circle cx="14" cy="10" r="1.5" fill="#FFD700" opacity=".7"/>
+      <circle cx="22" cy="10" r="1.5" fill="#FFD700" opacity=".7"/>
+      <circle cx="18" cy="32" r="2" fill="#FFD700"/>
+    </svg>
+    <div>
+      <div class="nav-brand"><span class="g">CCLDR</span><span class="au">.NET</span></div>
+      <div class="nav-sub">Canada's Cannabis Superhighway</div>
+    </div>
+  </a>
+  <div class="nav-right">
+    <a href="../index.html" class="nav-link">Home</a>
+    <a href="law.html" class="nav-link active">Cannabis Law</a>
+    <a href="defense.html" class="nav-link">Charter Defense</a>
+    <a href="../ccldr-payments/index.html" class="nav-cta">Enroll Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">⚖ Educational Module — Canadian Law</div>
+    <h1>
+      The Canadian<br>
+      <span class="g">Cannabis</span> <span class="au">Legal Framework</span>
+    </h1>
+    <p class="hero-sub">Know the rules before they apply to you. A comprehensive educational overview of the Cannabis Act, possession limits, provincial regulations, impaired driving, and your rights.</p>
+    <div class="hero-meta">
+      <strong>Bill C-45</strong>
+      <span style="color:var(--border-g)">|</span>
+      <span>In force October 17, 2018</span>
+      <span style="color:var(--border-g)">|</span>
+      <span>Federal + Provincial Framework</span>
+    </div>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <div class="toc-inner">
+    <div class="toc-title">Module Contents</div>
+    <div class="toc-grid">
+      <a href="#s1" class="toc-item"><span>01</span>The Cannabis Act (Bill C-45)</a>
+      <a href="#s2" class="toc-item"><span>02</span>Possession Limits — Federal</a>
+      <a href="#s3" class="toc-item"><span>03</span>Home Cultivation Rules</a>
+      <a href="#s4" class="toc-item"><span>04</span>Province-by-Province Matrix</a>
+      <a href="#s5" class="toc-item"><span>05</span>Medical vs Recreational</a>
+      <a href="#s6" class="toc-item"><span>06</span>Driving Impairment (Bill C-46)</a>
+      <a href="#s7" class="toc-item"><span>07</span>Workplace Policies</a>
+      <a href="#s8" class="toc-item"><span>08</span>Public Consumption Rules</a>
+      <a href="#s9" class="toc-item"><span>09</span>Travel Restrictions</a>
+      <a href="#s10" class="toc-item"><span>10</span>Recent Legal Developments 2025–2026</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content-wrap">
+
+  <!-- ── SECTION 1 ── -->
+  <div class="module" id="s1">
+    <div class="module-header">
+      <div class="module-num">01</div>
+      <div>
+        <div class="module-title">The Cannabis Act (Bill C-45)</div>
+        <div class="module-subtitle">Federal framework — in force October 17, 2018</div>
+      </div>
+    </div>
+
+    <div class="card card-green">
+      <div class="card-title">Overview &amp; Purpose</div>
+      <div class="card-body">
+        <p style="margin-bottom:12px">The <strong>Cannabis Act (S.C. 2018, c. 16)</strong> came into force on October 17, 2018, making Canada the second country in the world to federally legalize adult recreational cannabis. It creates a federal framework while expressly allowing provinces and territories to add their own restrictions and regulations — but not to relax federal minimums.</p>
+        <p style="margin-bottom:10px">The stated purposes of the Act are threefold:</p>
+        <ul class="info-list" style="margin-top:8px">
+          <li><strong>Protect youth</strong> — prevent access and use by minors, marketing restrictions</li>
+          <li><strong>Deter criminal activity</strong> — displace illegal market through regulated legal access</li>
+          <li><strong>Provide legal access</strong> — allow adults to obtain cannabis from regulated, safe sources</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Key Federal Provisions</div>
+      <ul class="info-list">
+        <li><strong>Adults 18+</strong> (federally) may legally possess, use, and purchase cannabis from authorized retailers — provinces may set higher minimum ages</li>
+        <li><strong>Home cultivation:</strong> Up to <strong>4 plants per household</strong> — this is per residence, NOT per person</li>
+        <li><strong>Sharing:</strong> Adults may give (not sell) up to <strong>30 grams</strong> of dried cannabis to another adult — no payment permitted</li>
+        <li><strong>Public possession:</strong> Up to 30 grams of dried cannabis (or equivalent) in a public place</li>
+        <li><strong>Public consumption:</strong> Generally permitted where tobacco smoking is permitted, subject to provincial and municipal restrictions</li>
+        <li><strong>Licensed producers:</strong> Cannabis for sale must originate from Health Canada-licensed producers and authorized retailers</li>
+        <li><strong>Edibles, extracts, topicals:</strong> Permitted for sale beginning October 2019 under regulations (10mg THC per unit limit for edibles)</li>
+      </ul>
+    </div>
+
+    <div class="note-box">
+      <strong>Educational Note:</strong> The Cannabis Act sets the floor — provinces can (and do) impose stricter rules. For example, Quebec raised the minimum age to 21. Always verify current provincial law in your jurisdiction. CCLDR.NET provides education, not legal advice.
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 2 ── -->
+  <div class="module" id="s2">
+    <div class="module-header">
+      <div class="module-num">02</div>
+      <div>
+        <div class="module-title">Possession Limits — Federal</div>
+        <div class="module-subtitle">Public possession thresholds under the Cannabis Act</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Federal Public Possession Limits</div>
+      <div class="card-body" style="margin-bottom:16px">These limits apply to public spaces. Possession at home is not subject to the same strict weight caps, though large quantities may still attract legal scrutiny.</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Cannabis Form</th>
+              <th>Public Limit</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Dried cannabis</strong></td><td class="td-green">30 g</td><td>The base reference unit — all others are equivalents</td></tr>
+            <tr><td><strong>Fresh cannabis</strong></td><td class="td-green">150 g</td><td>5× dried weight ratio used for equivalency</td></tr>
+            <tr><td><strong>Cannabis oil</strong></td><td class="td-green">70 g</td><td>Equivalent to 30 g dried under regulations</td></tr>
+            <tr><td><strong>Solids (edibles)</strong></td><td class="td-green">450 g</td><td>15× dried ratio — cookies, capsules, etc.</td></tr>
+            <tr><td><strong>Concentrates / extract (solid)</strong></td><td class="td-green">7.5 g</td><td>0.25× dried ratio — shatter, wax, rosin</td></tr>
+            <tr><td><strong>Concentrates / extract (liquid)</strong></td><td class="td-green">7.5 g</td><td>Same ratio as solid concentrate</td></tr>
+            <tr><td><strong>Seeds</strong></td><td class="td-green">Max 5 per plant equivalent</td><td>For home cultivation (up to 4 plants per household)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="alert-box">
+      <strong>Important:</strong> Exceeding public possession limits is a criminal offence under the Cannabis Act. Possessing large quantities — particularly amounts that exceed personal use thresholds — can result in a presumption of trafficking. Trafficking cannabis carries significantly more serious penalties, including imprisonment.
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Penalty Overview (Simplified)</div>
+      <ul class="info-list">
+        <li><strong>Simple possession (under limits):</strong> Legal for adults</li>
+        <li><strong>Simple possession (over limits):</strong> Summary offence — fines or up to 5 years less a day imprisonment</li>
+        <li><strong>Distribution without authorization:</strong> Hybrid offence — up to 14 years imprisonment</li>
+        <li><strong>Selling to a minor:</strong> Hybrid offence — up to 14 years (aggravating factor)</li>
+        <li><strong>Importing/exporting:</strong> Indictable — up to 14 years</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 3 ── -->
+  <div class="module" id="s3">
+    <div class="module-header">
+      <div class="module-num">03</div>
+      <div>
+        <div class="module-title">Home Cultivation Rules</div>
+        <div class="module-subtitle">Growing your own — federal rules and provincial overrides</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card card-green">
+        <div class="card-title">Federal Rule</div>
+        <div class="card-body">
+          <p>The Cannabis Act permits adults to cultivate <strong>up to 4 cannabis plants per household</strong> from legally obtained seed or seedling (from an authorized retailer or licensed producer).</p>
+          <br/>
+          <p><strong>Per Household — NOT Per Person:</strong> A residence with 4 adults still has a maximum of 4 total plants, not 4 per person.</p>
+        </div>
+      </div>
+      <div class="card card-gold">
+        <div class="card-title" style="color:var(--gold)">Provincial Bans</div>
+        <div class="card-body">
+          <p><strong>Quebec and Manitoba</strong> have enacted provincial legislation banning home cultivation entirely. These bans have been upheld by courts.</p>
+          <br/>
+          <p>If you reside in Quebec or Manitoba, home cultivation is <span style="color:#FF6688;font-weight:700">illegal</span> regardless of the federal rule.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Additional Restrictions to Know</div>
+      <ul class="info-list">
+        <li>Plants must be grown from <strong>legally obtained seed or seedling</strong> (from authorized retailers) — not from the black market</li>
+        <li><strong>Height restrictions</strong> — some municipalities have bylaws limiting plant height or visibility from public spaces</li>
+        <li><strong>Landlord and strata rules</strong> — rental agreements and strata (condo) bylaws may prohibit growing. Provincial residential tenancy law interacts here. A landlord may be able to prohibit growing in a lease</li>
+        <li><strong>Selling seeds or plants</strong> is illegal unless you hold a Health Canada licence — gifts of seed to adults within limits may be permissible, but commercial activity is not</li>
+        <li><strong>Youth access</strong> — plants must be secured and not accessible to minors; failure to do so is an offence</li>
+        <li><strong>Safety concerns</strong> — electrical and fire hazards from indoor grows may affect insurance coverage and give landlords grounds for action</li>
+      </ul>
+    </div>
+
+    <div class="note-box">
+      <strong>BC, Alberta, Ontario, Saskatchewan, Nova Scotia, New Brunswick, PEI, NL, NWT, Yukon, Nunavut:</strong> 4 plants per household permitted under federal rules (absent stricter municipal bylaws).
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 4 ── -->
+  <div class="module" id="s4">
+    <div class="module-header">
+      <div class="module-num">04</div>
+      <div>
+        <div class="module-title">Province-by-Province Matrix</div>
+        <div class="module-subtitle">Minimum age, retail model, home grow, and public consumption by province and territory</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0">
+      <div class="table-wrap" style="border:none;border-radius:16px">
+        <table>
+          <thead>
+            <tr>
+              <th>Province / Territory</th>
+              <th>Min Age</th>
+              <th>Retail Model</th>
+              <th>Home Grow</th>
+              <th>Public Consumption</th>
+              <th>Notable Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>British Columbia</strong></td>
+              <td class="td-warn">19</td>
+              <td>BCLDB + Private retailers</td>
+              <td class="td-green">4 plants</td>
+              <td>Not in enclosed public spaces; varies by municipality</td>
+              <td>Cannabis welcome centres in some municipalities; robust private retail network</td>
+            </tr>
+            <tr>
+              <td><strong>Alberta</strong></td>
+              <td class="td-green">18</td>
+              <td>Private retail only (AGLC licensed)</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted</td>
+              <td>Lowest minimum age in Canada (18, matching federal floor); fully privatized retail</td>
+            </tr>
+            <tr>
+              <td><strong>Ontario</strong></td>
+              <td class="td-warn">19</td>
+              <td>OCS online + private retail (expanded)</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted; not near schools</td>
+              <td>Private retail expanded significantly post-2021; among highest number of retail locations</td>
+            </tr>
+            <tr>
+              <td><strong>Quebec</strong></td>
+              <td class="td-red">21</td>
+              <td>SAQ — Soci&eacute;t&eacute; Qu&eacute;b&eacute;coise du Cannabis (SQDC)</td>
+              <td class="td-red">BANNED</td>
+              <td>Designated outdoor areas only; prohibited in many public spaces</td>
+              <td>Strictest province; home grow ban upheld in court; age raised from 18 to 21 in 2020</td>
+            </tr>
+            <tr>
+              <td><strong>Manitoba</strong></td>
+              <td class="td-warn">19</td>
+              <td>Private retail (MBL licensed)</td>
+              <td class="td-red">BANNED</td>
+              <td>Designated areas; prohibited in most public spaces</td>
+              <td>Home grow ban enacted and upheld; provincial ban on consumption in many spaces</td>
+            </tr>
+            <tr>
+              <td><strong>Saskatchewan</strong></td>
+              <td class="td-warn">19</td>
+              <td>Private retail (SLGA licensed)</td>
+              <td class="td-green">4 plants</td>
+              <td>Not in vehicles, not near schools or playgrounds</td>
+              <td>Fully private retail model; municipalities may add restrictions</td>
+            </tr>
+            <tr>
+              <td><strong>Nova Scotia</strong></td>
+              <td class="td-warn">19</td>
+              <td>NSLC (government-run)</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted; not on school property</td>
+              <td>Government monopoly retail; online delivery available</td>
+            </tr>
+            <tr>
+              <td><strong>New Brunswick</strong></td>
+              <td class="td-warn">19</td>
+              <td>Cannabis NB (government-run)</td>
+              <td class="td-green">4 plants</td>
+              <td>Designated outdoor areas; prohibited in vehicles and near schools</td>
+              <td>Government retail model with select private partnerships</td>
+            </tr>
+            <tr>
+              <td><strong>Prince Edward Island</strong></td>
+              <td class="td-warn">19</td>
+              <td>PEILCC (government-run)</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted</td>
+              <td>Small market; government retail; limited storefront locations</td>
+            </tr>
+            <tr>
+              <td><strong>Newfoundland &amp; Labrador</strong></td>
+              <td class="td-warn">19</td>
+              <td>NLC + private retailers</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted; not near schools</td>
+              <td>Mixed retail model; NLC initially sole retailer, private licences expanded</td>
+            </tr>
+            <tr>
+              <td><strong>Northwest Territories</strong></td>
+              <td class="td-warn">19</td>
+              <td>NWTLC (government-run)</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted</td>
+              <td>Remote access challenges; online ordering prevalent</td>
+            </tr>
+            <tr>
+              <td><strong>Yukon</strong></td>
+              <td class="td-warn">19</td>
+              <td>Yukon Liquor Corporation + private</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted; not near schools</td>
+              <td>Both government and private retail; relatively permissive framework</td>
+            </tr>
+            <tr>
+              <td><strong>Nunavut</strong></td>
+              <td class="td-warn">19</td>
+              <td>Mail order / online only (no physical stores)</td>
+              <td class="td-green">4 plants</td>
+              <td>Where tobacco smoking is permitted</td>
+              <td>No physical retail; access via mail-order from authorized retailers only; unique logistics challenges</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <strong>Always verify current rules:</strong> Provincial cannabis regulations evolve. Retail licensing, consumption zones, and local bylaws change frequently. This table reflects the educational understanding as of 2026. Consult your provincial regulator and qualified legal counsel for current requirements.
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 5 ── -->
+  <div class="module" id="s5">
+    <div class="module-header">
+      <div class="module-num">05</div>
+      <div>
+        <div class="module-title">Medical vs. Recreational Cannabis</div>
+        <div class="module-subtitle">Two distinct frameworks with significantly different rules</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Recreational Framework</div>
+        <ul class="info-list">
+          <li>Governed by the <strong>Cannabis Act</strong> and provincial retail regulations</li>
+          <li>Maximum public possession: <strong>30 g dried</strong> (or equivalent)</li>
+          <li>Maximum home grow: <strong>4 plants per household</strong> (where permitted)</li>
+          <li>Purchase from <strong>authorized provincial retailers</strong> only</li>
+          <li>No provincial or federal health coverage for costs</li>
+          <li>Consumption subject to <strong>provincial and municipal rules</strong></li>
+          <li>Edibles capped at <strong>10mg THC per unit</strong> under regulations</li>
+        </ul>
+      </div>
+      <div class="card card-gold">
+        <div class="card-title" style="color:var(--gold)">Medical Framework (ACMPR)</div>
+        <ul class="info-list">
+          <li>Governed by the <strong>ACMPR</strong> (Access to Cannabis for Medical Purposes Regulations) under the Cannabis Act</li>
+          <li>Medical document (authorization) from a licensed healthcare practitioner required</li>
+          <li>Possession limit: <strong>up to 150 g</strong> (30&times; daily authorized amount, or as specified)</li>
+          <li>Personal production licence from <strong>Health Canada</strong> for growing more plants</li>
+          <li>Can receive cannabis directly from <strong>Licensed Producers</strong> by mail</li>
+          <li><strong>Some insurance coverage</strong> available (private plans, Veterans Affairs Canada)</li>
+          <li>Not exempt from <strong>impairment laws</strong> while driving</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Key Distinctions at a Glance</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Factor</th><th>Recreational</th><th>Medical (ACMPR)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Possession limit</td><td>30 g dried (public)</td><td class="td-green">Up to 150 g or per authorization</td></tr>
+            <tr><td>Plants at home</td><td>4 per household (where legal)</td><td class="td-green">More plants permitted (PPL from Health Canada)</td></tr>
+            <tr><td>Purchase channel</td><td>Provincial retailers</td><td>Licensed Producers directly (mail)</td></tr>
+            <tr><td>Cost coverage</td><td>None</td><td class="td-green">Some insurance / VAC coverage</td></tr>
+            <tr><td>Healthcare involvement</td><td>Not required</td><td>Medical authorization required</td></tr>
+            <tr><td>Driving impairment rules</td><td>Full application</td><td>Full application — no exemption</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 6 ── -->
+  <div class="module" id="s6">
+    <div class="module-header">
+      <div class="module-num">06</div>
+      <div>
+        <div class="module-title">Driving Impairment (Bill C-46)</div>
+        <div class="module-subtitle">The most serious legal risk for cannabis users — know this thoroughly</div>
+      </div>
+    </div>
+
+    <div class="alert-box" style="margin-bottom:20px">
+      <strong>Critical Section:</strong> Impaired driving by cannabis is treated as seriously as alcohol impairment in Canada. Bill C-46 amended the Criminal Code to create specific THC blood concentration offences. The consequences can include a criminal record, licence suspension, fines, and imprisonment. <strong>Do not drive after consuming cannabis.</strong>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Criminal Code Blood THC Limits (Per Se Offences)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Blood THC Level</th><th>Offence Type</th><th>Maximum Penalty</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>2–5 ng/mL blood THC</strong></td>
+              <td class="td-warn">Summary offence (new offence created by C-46)</td>
+              <td>Maximum fine: $1,000 (first offence)</td>
+            </tr>
+            <tr>
+              <td><strong>5+ ng/mL blood THC</strong></td>
+              <td class="td-red">Hybrid offence</td>
+              <td>Fine on summary conviction or up to 10 years imprisonment on indictment</td>
+            </tr>
+            <tr>
+              <td><strong>Any THC + 50+ mg/100mL blood alcohol</strong></td>
+              <td class="td-red">Hybrid offence (combined)</td>
+              <td>Same as 5+ ng/mL THC standalone</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Police Powers — Roadside Detection</div>
+      <ul class="info-list">
+        <li><strong>Oral Fluid Screening Device (OFSD):</strong> Police may administer a roadside saliva swab if they have reasonable suspicion of impaired driving. Detects recent cannabis use — can show positive for THC days after consumption even without impairment</li>
+        <li><strong>Drug Recognition Expert (DRE) evaluation:</strong> If the officer suspects drug impairment, they may demand a DRE evaluation at the police station — a standardized 12-step evaluation protocol</li>
+        <li><strong>Blood sample demand:</strong> Following DRE evaluation, police may demand a blood sample for laboratory analysis of exact ng/mL THC levels</li>
+        <li><strong>Refusal:</strong> Refusing to comply with a lawful demand for OFSD, DRE, or blood sample is itself a criminal offence</li>
+      </ul>
+    </div>
+
+    <div class="card card-gold" style="margin-top:16px">
+      <div class="card-title" style="color:var(--gold)">Critical Legal Nuance — Education Only</div>
+      <ul class="info-list">
+        <li><strong>ng/mL &ne; impairment:</strong> Blood THC concentration does not directly correspond to functional impairment. Tolerance varies enormously between individuals. Heavy, regular users may have detectable blood THC levels well after any impairment has passed</li>
+        <li><strong>Medical cannabis patients:</strong> Have NO exemption from impaired driving laws. A medical authorization does not permit driving while impaired</li>
+        <li><strong>Oral swab timing:</strong> Saliva swab tests can detect THC use from hours to days prior. A positive roadside swab does not legally prove impairment — blood testing is the per se standard</li>
+        <li><strong>Legal challenge history:</strong> The 2–5 ng/mL offence level has been criticized scientifically as not reliably correlating with impairment for regular cannabis users. Charter challenges to these provisions are ongoing</li>
+      </ul>
+    </div>
+
+    <div class="alert-box" style="margin-top:16px;font-size:14px;text-align:center">
+      <strong>"Do not drive after consuming cannabis."</strong><br/>
+      <span style="font-size:12px">This is the single clearest, safest, and most legally protective approach.</span>
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 7 ── -->
+  <div class="module" id="s7">
+    <div class="module-header">
+      <div class="module-num">07</div>
+      <div>
+        <div class="module-title">Workplace Cannabis Policies</div>
+        <div class="module-subtitle">Your rights and obligations as an employee</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card card-green">
+        <div class="card-title">Safety-Sensitive Environments</div>
+        <div class="card-body">
+          <p>Industries including <strong>oil &amp; gas, mining, aviation, transportation, construction, and nuclear</strong> commonly maintain zero-tolerance or strict fitness-for-duty policies. These are generally upheld by courts given the safety implications.</p>
+          <br/>
+          <p>Workers in these sectors face heightened obligations and employers have broader rights to test and restrict use.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Human Rights Obligations</div>
+        <div class="card-body">
+          <p>The <strong>Canadian Human Rights Act</strong> and provincial equivalents impose a <strong>duty to accommodate</strong> employees with a medical cannabis need up to the point of undue hardship.</p>
+          <br/>
+          <p>Employees cannot be terminated solely because they use medical cannabis — employers must attempt accommodation before dismissal.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Key Legal Principles</div>
+      <ul class="info-list">
+        <li><strong>Stewart v Elk Valley Coal (SCC 2017):</strong> The Supreme Court upheld an employer's right to require employees to disclose addictions and substance dependencies before a safety incident occurs. Disclosure obligations in safety-sensitive roles are enforceable</li>
+        <li><strong>Duty to accommodate:</strong> Employers must explore accommodations for medical cannabis users — modified duties, schedule changes, monitoring — before taking adverse employment action</li>
+        <li><strong>Random drug testing:</strong> Generally NOT permitted in Canada outside demonstrably safety-sensitive work environments with a demonstrated workplace drug problem. This differs significantly from US law</li>
+        <li><strong>Post-incident testing:</strong> May be permitted in safety-sensitive environments following a workplace incident or near-miss, where there is reasonable cause to suspect impairment</li>
+        <li><strong>Pre-employment testing:</strong> Legal in some jurisdictions and sectors; employer must still consider accommodation obligations if a positive result is returned</li>
+        <li><strong>Employee obligation — not to be impaired at work:</strong> Regardless of medical authorization, an employee has an obligation not to be impaired while performing their duties</li>
+      </ul>
+    </div>
+
+    <div class="note-box">
+      <strong>Educational Note:</strong> Workplace cannabis law sits at the intersection of labour law, human rights law, and occupational health and safety legislation. It is highly fact-specific. If you face workplace discipline related to cannabis use, retain qualified employment counsel promptly.
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 8 ── -->
+  <div class="module" id="s8">
+    <div class="module-header">
+      <div class="module-num">08</div>
+      <div>
+        <div class="module-title">Public Consumption Rules</div>
+        <div class="module-subtitle">Where you can — and cannot — legally consume cannabis</div>
+      </div>
+    </div>
+
+    <div class="card card-green">
+      <div class="card-title">General Rule</div>
+      <div class="card-body">
+        <p>Under most provincial frameworks, cannabis consumption is <strong>generally permitted in the same places where tobacco smoking is permitted</strong> — subject to provincial and municipal modification. This is the baseline, not a guarantee.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">Common Prohibition Zones</div>
+      <ul class="info-list">
+        <li><strong>Schools, playgrounds, daycares:</strong> Prohibited within 20 metres (distances vary by province) — near-universal restriction across all jurisdictions</li>
+        <li><strong>In vehicles:</strong> Consuming or having open cannabis in a vehicle is prohibited — even if parked with the engine off. Being in a vehicle with open cannabis can expose you to impaired driving investigation</li>
+        <li><strong>Enclosed public spaces:</strong> Generally prohibited in all enclosed public buildings, workplaces, shopping centres</li>
+        <li><strong>Federal lands:</strong> National parks, federal buildings, airports — federal and CBSA rules apply</li>
+        <li><strong>Patios and restaurant premises:</strong> Varies significantly by province and municipality</li>
+        <li><strong>Hospital grounds, healthcare facilities:</strong> Prohibited</li>
+        <li><strong>Near children's facilities:</strong> Recreation centres, arenas, sports fields — typically restricted</li>
+      </ul>
+    </div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="card card-green">
+        <div class="card-title">Consumption Lounges</div>
+        <div class="card-body">
+          Ontario and BC have both moved toward permitting licensed cannabis consumption lounges. These are indoor spaces licensed specifically for on-site cannabis consumption — similar to a bar but for cannabis. Still limited in number as of 2026, with regulatory frameworks continuing to evolve.
+        </div>
+      </div>
+      <div class="card card-gold">
+        <div class="card-title" style="color:var(--gold)">Quebec — Strictest Restrictions</div>
+        <div class="card-body">
+          Quebec only permits cannabis consumption in designated outdoor areas. Consumption is prohibited in most public spaces, near any place frequented by minors, near any healthcare or social services building, and anywhere tobacco is prohibited. The rules are among the most restrictive in Canada.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 9 ── -->
+  <div class="module" id="s9">
+    <div class="module-header">
+      <div class="module-num">09</div>
+      <div>
+        <div class="module-title">Travel Restrictions</div>
+        <div class="module-subtitle">Domestic and international travel — critical rules every Canadian should know</div>
+      </div>
+    </div>
+
+    <div class="card card-green">
+      <div class="card-title">Domestic Air Travel (Within Canada)</div>
+      <ul class="info-list">
+        <li>Federally regulated airports and flights fall under federal Cannabis Act rules</li>
+        <li>Adults may carry <strong>up to 30 grams</strong> in carry-on or checked baggage for domestic flights</li>
+        <li>CATSA (screening) is focused on security threats, not cannabis detection — but if cannabis is found, it is referred to local law enforcement</li>
+        <li>Passengers arriving in a province with stricter rules (e.g., Quebec) remain subject to provincial law upon arrival</li>
+        <li>Consumption onboard aircraft is <strong>prohibited</strong></li>
+      </ul>
+    </div>
+
+    <div class="alert-box" style="margin-top:16px">
+      <strong>ABSOLUTE PROHIBITION — US Border &amp; International Travel:</strong>
+      <ul class="info-list" style="margin-top:12px">
+        <li>Crossing the Canadian border with cannabis — in any direction — is a <strong>federal criminal offence under both Canadian and US law</strong></li>
+        <li>Cannabis remains a <strong>Schedule I controlled substance</strong> under US federal law regardless of state-level legalization</li>
+        <li>Admitting to cannabis use at the US border — even historical use, even for medical purposes — <strong>can result in a lifetime inadmissibility determination</strong> (permanent ban from entering the United States)</li>
+        <li>US border officers are federal officers operating under federal law — Canadian provincial or federal legalization provides zero protection</li>
+        <li>International travel: Cannabis is illegal in the vast majority of countries. Penalties in some jurisdictions include lengthy imprisonment. <strong>Never travel internationally with cannabis.</strong></li>
+        <li>Cruise ships departing Canadian ports are subject to the law of whatever country they enter — including US federal law</li>
+      </ul>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <strong>US Border Advice:</strong> You are under no legal obligation to answer questions about past drug use at the US border, but refusing to answer can result in denial of entry. This is a complex area — consult an immigration lawyer before attempting border crossings if you have any cannabis-related history.
+    </div>
+  </div>
+
+  <hr class="sec-divider"/>
+
+  <!-- ── SECTION 10 ── -->
+  <div class="module" id="s10">
+    <div class="module-header">
+      <div class="module-num">10</div>
+      <div>
+        <div class="module-title">Recent Legal Developments (2025–2026)</div>
+        <div class="module-subtitle">The legal landscape continues to evolve</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Criminal Records — Pardons and Expungement</div>
+      <ul class="info-list">
+        <li><strong>Criminal Records Act amendments:</strong> Simplified expedited pardon (record suspension) process for simple possession offences that would now be legal under the Cannabis Act</li>
+        <li>The <strong>Expungement of Historically Unjust Convictions Act</strong> applies to certain simple possession convictions — application process through the Parole Board of Canada</li>
+        <li>Pardons do not erase a record entirely but seal it from most background checks — expungement is a higher standard that destroys the record</li>
+        <li>As of 2026, advocacy continues for automatic expungement rather than requiring individual applications</li>
+      </ul>
+    </div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title">THC Limits in Edibles</div>
+        <div class="card-body">
+          The 10mg THC per unit / 10mg per package limit for edibles remains a contentious regulatory issue. Industry and consumer advocates continue to push for increases, citing that the limit is lower than most comparable US state frameworks and drives consumers to unregulated products. Regulatory review is ongoing.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Reclassification &amp; Taxation Debates</div>
+        <div class="card-body">
+          Federal cannabis excise tax frameworks continue to face criticism for supporting black market competition by making legal cannabis comparatively expensive. Discussions around tax reduction and regulatory streamlining are ongoing in several provinces. Watch for regulatory updates from Health Canada and provincial regulators.
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-gold" style="margin-top:16px">
+      <div class="card-title" style="color:var(--gold)">Charter Challenges — Ongoing (Educational Overview)</div>
+      <ul class="info-list">
+        <li>Challenges to the 2–5 ng/mL THC per se driving offence continue on grounds that the limit does not reliably correlate with impairment for regular and medical cannabis users</li>
+        <li>ACMPR access and personal production licence challenges persist — access issues for remote and lower-income patients remain unresolved</li>
+        <li>Equity concerns: Evidence continues to show disproportionate enforcement of cannabis laws against Indigenous and racialized communities even post-legalization</li>
+        <li>Potency cap and packaging restriction challenges by industry ongoing in Federal Court</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ENROLLMENT CTA -->
+  <div class="card card-gold" style="margin-bottom:72px;text-align:center;padding:40px 32px">
+    <div style="font-size:28px;margin-bottom:12px">⚖</div>
+    <div style="font-size:20px;font-weight:900;color:var(--gold);margin-bottom:10px">Want to Go Deeper?</div>
+    <p style="font-size:14px;color:var(--muted);max-width:520px;margin:0 auto 24px;line-height:1.65">CCLDR.NET offers professional education tiers covering Charter rights analysis, the 12-Appearance framework, BENO-X constitutional analysis, disclosure strategy, and more.</p>
+    <a href="../ccldr-payments/index.html" class="nav-cta" style="font-size:14px;padding:14px 32px">Explore CCLDR Education Tiers &rarr;</a>
+    <div style="margin-top:16px;font-size:11px;color:var(--muted)">Education only &mdash; not legal advice &mdash; retain qualified legal counsel for your situation</div>
+  </div>
+
+  <div style="text-align:center;padding-bottom:72px">
+    <a href="#top" class="back-top">&#8593; Back to Top</a>
+    &nbsp;&nbsp;
+    <a href="defense.html" class="back-top">Charter Defense Module &rarr;</a>
+  </div>
+
+</div><!-- /content-wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="../index.html">Home</a>
+    <a href="law.html">Cannabis Law</a>
+    <a href="defense.html">Charter Defense</a>
+    <a href="../ccldr-payments/index.html">Enroll</a>
+  </div>
+  <p><span class="g">CCLDR.NET</span> &mdash; Derek Francisco (Doc Weedlaw) &nbsp;|&nbsp; <span class="au">Tech Pet Cage</span> &nbsp;|&nbsp; Education Only</p>
+  <p class="footer-disclaimer">NOT LEGAL REPRESENTATION &mdash; EDUCATION ONLY. All content on CCLDR.NET is provided for informational and educational purposes only. Nothing on this site constitutes legal advice or creates a solicitor-client relationship. Retain qualified legal counsel for your specific situation. &copy; 2026 CCLDR.NET</p>
+</footer>
+
+<script>
+  // Smooth scroll for toc links
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',function(e){
+      const target=document.querySelector(this.getAttribute('href'));
+      if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'})}
+    });
+  });
+  // Highlight active toc item on scroll
+  const modules=document.querySelectorAll('.module[id]');
+  const tocItems=document.querySelectorAll('.toc-item');
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        tocItems.forEach(t=>t.style.color='');
+        const active=document.querySelector(`.toc-item[href="#${entry.target.id}"]`);
+        if(active)active.style.color='var(--green)';
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  modules.forEach(m=>observer.observe(m));
+</script>
+</body>
+</html>

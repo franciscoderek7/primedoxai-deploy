@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannabis Consumption Guides | CCLDR.NET</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #00FF88;
+            --gold: #FFD700;
+            --dark: #0A0A0A;
+            --card-bg: rgba(0,255,136,0.03);
+            --card-border: rgba(0,255,136,0.18);
+            --text: #e8e8e8;
+            --muted: #888;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* ── STICKY DISCLAIMER ── */
+        .disclaimer-banner {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10,10,10,0.97);
+            border-bottom: 2px solid var(--gold);
+            text-align: center;
+            padding: 8px 16px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            backdrop-filter: blur(12px);
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: rgba(10,10,10,0.92);
+            border-bottom: 1px solid rgba(0,255,136,0.12);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--green);
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            text-shadow: 0 0 18px rgba(0,255,136,0.5);
+        }
+
+        .nav-logo span { color: var(--gold); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--green); }
+        .nav-links a.active { color: var(--green); border-bottom: 1px solid var(--green); }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 70px 24px 50px;
+            text-align: center;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.07) 0%, transparent 70%);
+            border-bottom: 1px solid rgba(0,255,136,0.08);
+        }
+
+        .hero-eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: var(--green);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span { color: var(--green); }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--muted);
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 56px 0 40px;
+            border-bottom: 1px solid rgba(0,255,136,0.06);
+        }
+
+        .section-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            color: var(--green);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .section-intro {
+            color: var(--muted);
+            font-size: 0.95rem;
+            max-width: 700px;
+            margin-bottom: 36px;
+        }
+
+        /* ── GLASS CARD ── */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0,255,136,0.4);
+            box-shadow: 0 0 24px rgba(0,255,136,0.08);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* ── CHECKLIST ── */
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .checklist li::before {
+            content: '';
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            border: 2px solid var(--green);
+            border-radius: 4px;
+            margin-top: 2px;
+            background: rgba(0,255,136,0.08);
+        }
+
+        .checklist li.checked::before {
+            background: var(--green);
+            content: '✓';
+            color: #0A0A0A;
+            font-weight: 900;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── SUBSECTION HEADING ── */
+        .sub-heading {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--green);
+            margin: 24px 0 12px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── GOLD CARD ── */
+        .gold-card {
+            background: rgba(255,215,0,0.05);
+            border: 2px solid var(--gold);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .gold-card .card-title {
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            letter-spacing: 0.04em;
+        }
+
+        .gold-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .gold-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.93rem;
+            color: var(--text);
+            line-height: 1.55;
+        }
+
+        .gold-list li::before {
+            content: '★';
+            color: var(--gold);
+            font-size: 0.75rem;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ── WARNING BOX ── */
+        .warning-box {
+            background: rgba(255,60,60,0.05);
+            border: 2px solid rgba(255,80,80,0.55);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 28px;
+        }
+
+        .warning-box .warn-title {
+            color: #ff6b6b;
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── INTERACTIONS TABLE ── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        thead tr {
+            background: rgba(0,255,136,0.08);
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            color: var(--green);
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--card-border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 13px 16px;
+            border-bottom: 1px solid rgba(0,255,136,0.06);
+            color: var(--text);
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        tr:hover td { background: rgba(0,255,136,0.02); }
+
+        .risk-high { color: #ff6b6b; font-weight: 700; }
+        .risk-mod  { color: var(--gold); font-weight: 700; }
+        .risk-low  { color: #aaa; font-weight: 600; }
+
+        /* ── RED CARDS GRID ── */
+        .red-card {
+            background: rgba(255,60,60,0.04);
+            border: 1px solid rgba(255,80,80,0.3);
+            border-radius: 12px;
+            padding: 20px 22px;
+        }
+
+        .red-card .rc-title {
+            font-size: 0.93rem;
+            font-weight: 800;
+            color: #ff7070;
+            margin-bottom: 8px;
+        }
+
+        .red-card p {
+            font-size: 0.87rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* ── STORAGE GRID ── */
+        .storage-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 16px;
+            border-radius: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+        }
+
+        .storage-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .storage-item strong {
+            display: block;
+            color: var(--green);
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .storage-item p {
+            font-size: 0.84rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* ── CUD SECTION ── */
+        .cud-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 600px) { .cud-grid { grid-template-columns: 1fr; } }
+
+        .indicator-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .indicator-list li {
+            font-size: 0.9rem;
+            color: var(--text);
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .indicator-list li::before {
+            content: '–';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .resource-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+
+        .resource-list li {
+            font-size: 0.9rem;
+            color: var(--text);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .resource-list li::before {
+            content: '→';
+            color: var(--green);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .resource-list a {
+            color: var(--green);
+            text-decoration: none;
+        }
+
+        .resource-list a:hover { text-decoration: underline; }
+
+        /* ── GREENOUT BOX ── */
+        .greenout-box {
+            background: rgba(0,255,136,0.04);
+            border: 1px solid rgba(0,255,136,0.25);
+            border-radius: 12px;
+            padding: 22px 26px;
+            margin-top: 24px;
+        }
+
+        .greenout-box .go-title {
+            color: var(--green);
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .greenout-box ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .greenout-box ul li {
+            font-size: 0.9rem;
+            color: var(--text);
+            padding-left: 18px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .greenout-box ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--green);
+        }
+
+        /* ── DOSING PILLS ── */
+        .dosing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .dosing-pill {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            text-align: center;
+        }
+
+        .dosing-pill .dp-label {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .dosing-pill .dp-time {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .dosing-pill .dp-note {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: rgba(10,10,10,0.98);
+            border-top: 1px solid rgba(0,255,136,0.12);
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            line-height: 1.8;
+        }
+
+        footer a { color: var(--green); text-decoration: none; }
+        footer .footer-logo { color: var(--green); font-weight: 900; font-size: 1rem; margin-bottom: 8px; }
+        footer .footer-logo span { color: var(--gold); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 680px) {
+            .nav-links { gap: 12px; }
+            .hero { padding: 50px 16px 36px; }
+            section { padding: 40px 0 28px; }
+            .card-grid { grid-template-columns: 1fr; }
+            th, td { padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- STICKY DISCLAIMER -->
+<div class="disclaimer-banner">
+    ⚖ NOT LEGAL REPRESENTATION — EDUCATION ONLY
+</div>
+
+<!-- NAV -->
+<nav>
+    <a href="/" class="nav-logo">CCLDR<span>.NET</span></a>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/ccldr-site/guides.html" class="active">Guides</a></li>
+        <li><a href="/ccldr-site/science.html">Science</a></li>
+        <li><a href="/ccldr-site/industry.html">Industry</a></li>
+        <li><a href="/ccldr-site/glossary.html">Glossary</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-eyebrow">Harm Reduction Education</div>
+    <h1>Safe, <span>Informed</span> Cannabis Use</h1>
+    <p class="hero-sub">Harm reduction education for all experience levels — from first-time users to experienced consumers. Evidence-based, honest, and judgment-free.</p>
+</div>
+
+<div class="container">
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 1: FIRST-TIME USER GUIDE          -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="first-time">
+        <div class="section-label">Section 01</div>
+        <h2 class="section-title">First-Time User Guide</h2>
+        <p class="section-intro">Going in prepared makes all the difference. Follow this checklist before, during, and after your first experience.</p>
+
+        <div class="card-grid">
+
+            <div class="glass-card">
+                <div class="sub-heading">Before You Start</div>
+                <ul class="checklist">
+                    <li>Choose a safe, comfortable, familiar setting — your home is ideal</li>
+                    <li>Have a trusted, sober friend present for your first experience</li>
+                    <li>Do not mix with alcohol</li>
+                    <li>Clear your schedule for 4–6 hours</li>
+                    <li>Have water and snacks available</li>
+                    <li>Know where you are and how to get help if needed</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <div class="sub-heading">Choosing Your First Product</div>
+                <ul class="checklist">
+                    <li>Start with CBD-dominant or balanced (CBD:THC 1:1 or higher CBD)</li>
+                    <li>Avoid concentrates, high-THC extracts, or edibles for your first experience</li>
+                    <li>Dried flower / vaporizer: easiest to titrate (control dosage)</li>
+                    <li style="color: #ff9090;">Edibles: NOT recommended for first time — onset delay causes overconsumption</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="sub-heading" style="margin-top: 32px;">Starting Your Session</div>
+        <div class="glass-card">
+            <p style="font-size:0.95rem; margin-bottom:16px;">Take <strong style="color:var(--green);">1–2 small puffs / drops / mg</strong> — then <strong style="color:var(--gold);">WAIT 15 minutes</strong> before assessing. Do not redose early.</p>
+            <div class="dosing-grid">
+                <div class="dosing-pill">
+                    <div class="dp-label">Inhaled — Onset</div>
+                    <div class="dp-time">1–5 min</div>
+                    <div class="dp-note">Peak at 20–30 min</div>
+                </div>
+                <div class="dosing-pill">
+                    <div class="dp-label">Edibles — Onset</div>
+                    <div class="dp-time">30–120 min</div>
+                    <div class="dp-note">DO NOT redose early</div>
+                </div>
+                <div class="dosing-pill">
+                    <div class="dp-label">Sublingual — Onset</div>
+                    <div class="dp-time">15–45 min</div>
+                    <div class="dp-note">Under the tongue</div>
+                </div>
+                <div class="dosing-pill">
+                    <div class="dp-label">Duration (typical)</div>
+                    <div class="dp-time">2–4 hrs</div>
+                    <div class="dp-note">Edibles up to 6–8 hrs</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="greenout-box" style="margin-top: 28px;">
+            <div class="go-title">If It Goes Wrong — "Greening Out"</div>
+            <ul>
+                <li>Stay calm — no one has ever died from a cannabis overdose</li>
+                <li>Lie down in recovery position if nauseous</li>
+                <li>Cold water, deep breathing — CBD can reduce THC effects</li>
+                <li>Call a trusted friend, not 911 (unless medical emergency — e.g. heart condition, loss of consciousness)</li>
+                <li>Remind yourself: "The high will pass" — effects typically subside within 2–4 hours</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 2: HARM REDUCTION                 -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="harm-reduction">
+        <div class="section-label">Section 02</div>
+        <h2 class="section-title">Harm Reduction Principles</h2>
+        <p class="section-intro">Universal principles supported by public health evidence. Apply these regardless of your experience level.</p>
+
+        <div class="gold-card">
+            <div class="card-title">⚕ Core Harm Reduction Principles</div>
+            <ul class="gold-list">
+                <li><strong>Start low, go slow</strong> — this is the universal principle across all methods and products</li>
+                <li><strong>Know your source:</strong> legal market only — no pesticides, tested for potency and contaminants</li>
+                <li><strong>Frequency matters:</strong> daily use develops tolerance and dependence faster than occasional use</li>
+                <li><strong>Mental health monitoring:</strong> if you notice increased anxiety, paranoia, or low mood — stop and reassess</li>
+                <li><strong>Set and Setting:</strong> your environment and mindset significantly affect your experience</li>
+                <li><strong>Storage:</strong> keep away from children and pets — locked box in a dark, cool location</li>
+                <li><strong>Don't drive:</strong> impairment can last 4–6 hours after smoking, longer with edibles</li>
+                <li><strong>Tolerance breaks:</strong> periodic abstinence resets sensitivity and reduces dependence risk</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 3: DRUG INTERACTIONS              -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="interactions">
+        <div class="section-label">Section 03</div>
+        <h2 class="section-title">Drug Interactions</h2>
+        <p class="section-intro">Cannabis interacts with many common medications. This is not a complete list — always consult your pharmacist.</p>
+
+        <div class="warning-box">
+            <div class="warn-title">⚠ CRITICAL — Tell Your Doctor and Pharmacist</div>
+            <p style="font-size:0.93rem; color:var(--text); line-height:1.6;">ALWAYS tell your doctor and pharmacist about cannabis use. Many interactions are dose-dependent and may require medication adjustments. Failure to disclose can result in serious adverse events.</p>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Drug / Drug Class</th>
+                        <th>Cannabis Interaction</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Alcohol</strong></td>
+                        <td>Additive CNS depression, significantly increased impairment, increased risk of adverse reaction</td>
+                        <td><span class="risk-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Benzodiazepines</strong><br><small style="color:var(--muted);">Ativan, Xanax, Valium</small></td>
+                        <td>Additive sedation and CNS depression; respiratory risk at high doses</td>
+                        <td><span class="risk-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Opioids</strong><br><small style="color:var(--muted);">oxycodone, fentanyl, morphine</small></td>
+                        <td>Additive CNS and respiratory depression — but may reduce opioid dose needed (evidence mixed)</td>
+                        <td><span class="risk-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Warfarin</strong><br><small style="color:var(--muted);">blood thinner</small></td>
+                        <td>CBD inhibits CYP2C9 enzyme — increases INR, elevated bleeding risk</td>
+                        <td><span class="risk-high">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>SSRIs</strong><br><small style="color:var(--muted);">Prozac, Zoloft, Cipralex</small></td>
+                        <td>Possible serotonin syndrome at high CBD doses; THC may worsen anxiety in some</td>
+                        <td><span class="risk-mod">MODERATE</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Clobazam (Onfi)</strong></td>
+                        <td>CBD significantly increases active metabolite (norclobazam) — dose adjustment required</td>
+                        <td><span class="risk-mod">MODERATE</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lithium</strong></td>
+                        <td>THC may alter lithium levels; increased risk of lithium toxicity</td>
+                        <td><span class="risk-mod">MODERATE</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Metformin</strong></td>
+                        <td>Possible blood sugar effects; cannabis may affect glycemic control</td>
+                        <td><span class="risk-low">LOW–MODERATE</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stimulants</strong><br><small style="color:var(--muted);">Adderall, Ritalin</small></td>
+                        <td>THC may increase anxiety and heart rate; counterproductive in ADHD</td>
+                        <td><span class="risk-mod">MODERATE</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size:0.8rem; color:var(--muted); margin-top:14px; font-style:italic;">This table is educational only. Drug interactions are complex and individual. Always consult a licensed pharmacist or physician before combining cannabis with any medication.</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 4: WHEN NOT TO USE               -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="when-not-to-use">
+        <div class="section-label">Section 04</div>
+        <h2 class="section-title">When Not to Use Cannabis</h2>
+        <p class="section-intro">Evidence-based contraindications. These are not moral judgments — they are health risk categories.</p>
+
+        <div class="card-grid">
+            <div class="red-card">
+                <div class="rc-title">⚠ Pregnancy</div>
+                <p>THC crosses the placental barrier and blood-brain barrier. Evidence links prenatal cannabis exposure to fetal neurodevelopmental effects. No safe dose has been established.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ Breastfeeding</div>
+                <p>THC is excreted in breast milk and may accumulate in infant tissues. Infants have immature metabolic systems. Avoid during breastfeeding.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ Under Age 25</div>
+                <p>The developing brain (maturation completes ~age 25) is more vulnerable to cannabis effects, particularly high-THC products. Risk of lasting cognitive effects is higher.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ Psychosis / Schizophrenia History</div>
+                <p>Personal or family history of psychosis or schizophrenia represents significant risk amplification. High-THC cannabis can precipitate or worsen psychotic episodes.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ Severe Cardiovascular Disease</div>
+                <p>THC elevates heart rate (tachycardia). Can trigger cardiac events in those with existing heart conditions. Consult your cardiologist before any use.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ Before Driving</div>
+                <p>Legal impairment limit (2 ng/mL blood THC) can be reached with recreational doses. Impairment lasts longer than subjective "high." Do not drive for 4–6+ hours after use.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ Operating Heavy Machinery</div>
+                <p>Impaired reaction time, coordination, and judgment pose serious safety risks in any operating-machinery context, regardless of tolerance level.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ With Alcohol</div>
+                <p>Synergistic (multiplied, not merely additive) impairment. "Cross-fading" significantly increases risk of adverse reactions, nausea, and impairment beyond expectations.</p>
+            </div>
+            <div class="red-card">
+                <div class="rc-title">⚠ Unknown Mental Health Conditions</div>
+                <p>First episodes of psychosis are sometimes cannabis-precipitated. If you have never been assessed for a mental health condition and have risk factors, proceed with extreme caution or abstain.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 5: RESPONSIBLE STORAGE           -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="storage">
+        <div class="section-label">Section 05</div>
+        <h2 class="section-title">Responsible Storage</h2>
+        <p class="section-intro">Proper storage protects potency, prevents accidental exposure, and is required by law in many contexts.</p>
+
+        <div class="card-grid">
+            <div class="storage-item">
+                <div class="storage-icon">🔒</div>
+                <div>
+                    <strong>Lock Box or Safe</strong>
+                    <p>Strongly recommended; required where children are present. Childproof locks are a legal requirement for commercial cannabis packaging in Canada.</p>
+                </div>
+            </div>
+            <div class="storage-item">
+                <div class="storage-icon">🌡</div>
+                <div>
+                    <strong>Temperature &amp; Humidity</strong>
+                    <p>Optimal: 15–20°C, low humidity (55–62% RH). Heat degrades cannabinoids; moisture promotes mold. Avoid direct sunlight.</p>
+                </div>
+            </div>
+            <div class="storage-item">
+                <div class="storage-icon">🌑</div>
+                <div>
+                    <strong>Light Exposure</strong>
+                    <p>UV light degrades THC and terpenes faster than any other factor. Store in opaque, airtight containers in dark locations.</p>
+                </div>
+            </div>
+            <div class="storage-item">
+                <div class="storage-icon">🐕</div>
+                <div>
+                    <strong>Pets — Serious Risk</strong>
+                    <p>Dogs are especially attracted to cannabis edibles. Cannabis toxicity in pets is serious — causes lethargy, vomiting, tremors. Contact your vet immediately if exposure is suspected.</p>
+                </div>
+            </div>
+            <div class="storage-item">
+                <div class="storage-icon">🗑</div>
+                <div>
+                    <strong>Disposal</strong>
+                    <p>Follow local municipality guidelines for cannabis disposal. Do not flush — cannabis compounds can affect aquatic environments. Mix with undesirable material (coffee grounds) and bag.</p>
+                </div>
+            </div>
+            <div class="storage-item">
+                <div class="storage-icon">📦</div>
+                <div>
+                    <strong>Original Packaging</strong>
+                    <p>Keep cannabis in its original legal packaging when possible — it includes potency information, batch numbers, and is child-resistant by regulation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- SECTION 6: CANNABIS USE DISORDER         -->
+    <!-- ══════════════════════════════════════════ -->
+    <section id="cud" style="border-bottom: none;">
+        <div class="section-label">Section 06</div>
+        <h2 class="section-title">Recognizing Problematic Use</h2>
+        <p class="section-intro">Cannabis Use Disorder (CUD) is real, diagnosable, and treatable. Recognizing the signs is the first step — without judgment.</p>
+
+        <div class="cud-grid">
+            <div class="glass-card">
+                <div class="sub-heading">DSM-5 Indicators</div>
+                <p style="font-size:0.82rem; color:var(--muted); margin-bottom:14px;">Clinically significant impairment with 2+ of the following in a 12-month period:</p>
+                <ul class="indicator-list">
+                    <li>Using more than intended; difficulty cutting down</li>
+                    <li>Craving; spending significant time obtaining, using, or recovering</li>
+                    <li>Continued use despite relationship or work problems</li>
+                    <li>Giving up important activities to use</li>
+                    <li>Tolerance — needing more for the same effect</li>
+                    <li>Withdrawal: irritability, insomnia, anxiety, decreased appetite</li>
+                    <li>Using in physically hazardous situations</li>
+                    <li>Continued use despite worsening physical or mental health</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <div class="sub-heading">Getting Help — Resources</div>
+                <ul class="resource-list">
+                    <li><strong>CAMH</strong> — Centre for Addiction and Mental Health<br><a href="https://camh.ca" target="_blank" rel="noopener">camh.ca</a></li>
+                    <li><strong>Addictions Helpline (Ontario)</strong><br><a href="tel:18665312600">1-866-531-2600</a> — free, confidential, 24/7</li>
+                    <li><strong>Cannabis Anonymous</strong><br><a href="https://cannabisanonymous.org" target="_blank" rel="noopener">cannabisanonymous.org</a></li>
+                    <li><strong>Your Family Doctor</strong> — can refer to addiction medicine specialists and CBT programs</li>
+                    <li><strong>ConnexOntario</strong><br><a href="https://connexontario.ca" target="_blank" rel="noopener">connexontario.ca</a> — mental health &amp; addiction services finder</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="gold-card" style="margin-top: 28px;">
+            <div class="card-title">A Note on Judgment</div>
+            <p style="font-size:0.93rem; color:var(--text); line-height:1.7;">Cannabis dependence exists on a spectrum and affects a minority of users — approximately 9% of people who ever try cannabis, rising to ~17% of those who start in adolescence (NIDA). If you or someone you know is struggling, seeking help is a sign of self-awareness, not weakness. Addiction is a medical condition, not a moral failing.</p>
+        </div>
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">CCLDR<span>.NET</span></div>
+    <div>Canada's Cannabis Superhighway — Harm Reduction &amp; Legal Education</div>
+    <div style="margin-top:8px;">© 2026 CCLDR.NET — Derek Francisco (Doc Weedlaw)</div>
+    <div style="margin-top:6px; color: rgba(255,215,0,0.7); font-size:0.75rem;">⚖ This page is educational only and does not constitute legal, medical, or professional advice. Always consult licensed professionals for your specific situation.</div>
+</footer>
+
+</body>
+</html>

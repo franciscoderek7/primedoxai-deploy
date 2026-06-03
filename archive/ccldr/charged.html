@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Charged with Cannabis? — CCLDR.NET | Know Your Rights</title>
+  <meta name="description" content="Charged with a cannabis offence in Canada? Know your Charter rights before your first court date. Constitutional defense education from CCLDR.NET."/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #00FF88;
+      --gold: #FFD700;
+      --red: #ff4d4d;
+      --dark: #050a05;
+      --dark2: #090f09;
+      --card-bg: rgba(10,18,10,0.8);
+      --card-border: rgba(0,255,136,0.12);
+      --text: #e0f0e0;
+      --text-dim: #7a9a7a;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--dark); color: var(--text); font-family: system-ui,-apple-system,sans-serif; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5,10,5,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-weight: 900; font-size: 1.1rem; color: var(--green); }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a { font-size: 0.88rem; color: var(--text-dim); font-weight: 600; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links .nav-cta { color: var(--green); border: 1px solid var(--green); padding: 6px 14px; border-radius: 6px; }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+
+    /* DISCLAIMER */
+    #disclaimer-banner {
+      background: rgba(255,215,0,0.08);
+      border-bottom: 1px solid rgba(255,215,0,0.2);
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 0.78rem;
+      color: var(--gold);
+    }
+
+    /* HERO */
+    #hero {
+      padding: 80px 20px 60px;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,77,77,0.06), transparent);
+    }
+    .hero-alert {
+      display: inline-block;
+      background: rgba(255,77,77,0.12);
+      border: 1px solid rgba(255,77,77,0.3);
+      color: var(--red);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    h1 span { color: var(--red); }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 640px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--red);
+      color: #fff;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: #e03030; transform: translateY(-2px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--green);
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: 1px solid var(--green);
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: rgba(0,255,136,0.07); }
+
+    /* SECTION */
+    section { padding: 72px 20px; }
+    .section-title { font-size: clamp(1.6rem,3vw,2.2rem); font-weight: 900; color: #fff; margin-bottom: 12px; }
+    .section-title span { color: var(--green); }
+    .section-sub { color: var(--text-dim); max-width: 600px; margin-bottom: 48px; }
+
+    /* STEPS */
+    .steps-grid { display: grid; gap: 20px; }
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 28px 28px 28px 80px;
+      position: relative;
+    }
+    .step-card.urgent { border-color: rgba(255,77,77,0.3); }
+    .step-num-big {
+      position: absolute;
+      left: 20px; top: 50%;
+      transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-card h3 { color: #fff; font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+    .step-card p { color: var(--text-dim); font-size: 0.88rem; line-height: 1.65; }
+    .step-card strong { color: var(--green); }
+
+    /* CHARTER RIGHTS */
+    .rights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .right-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .right-section { color: var(--gold); font-size: 0.78rem; font-weight: 900; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .right-title { color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .right-desc { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
+
+    /* DEFENSES */
+    .defense-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .defense-card {
+      background: rgba(0,255,136,0.03);
+      border: 1px solid rgba(0,255,136,0.15);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .defense-card h3 { color: var(--green); font-size: 0.95rem; font-weight: 800; margin-bottom: 10px; }
+    .defense-card p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.65; }
+    .defense-case { font-size: 0.75rem; color: var(--gold); margin-top: 8px; font-style: italic; }
+
+    /* URGENCY */
+    .urgency-box {
+      background: rgba(255,77,77,0.06);
+      border: 2px solid rgba(255,77,77,0.25);
+      border-radius: 16px;
+      padding: 36px;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .urgency-box h2 { color: var(--red); font-size: 1.5rem; font-weight: 900; margin-bottom: 12px; }
+    .urgency-box p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; }
+
+    /* PRICING HIGHLIGHT */
+    .enroll-card {
+      background: var(--card-bg);
+      border: 2px solid var(--green);
+      border-radius: 16px;
+      padding: 36px 28px;
+      text-align: center;
+      max-width: 420px;
+    }
+    .enroll-card .price { font-size: 2.6rem; font-weight: 900; color: var(--green); }
+    .enroll-card .price span { font-size: 1rem; color: var(--text-dim); }
+    .enroll-card h3 { color: #fff; font-size: 1.2rem; font-weight: 700; margin: 8px 0 16px; }
+    .enroll-btn {
+      display: block;
+      background: var(--green);
+      color: #000;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+    .enroll-btn:hover { background: #00cc6e; }
+    .enroll-features { list-style: none; margin: 16px 0; text-align: left; }
+    .enroll-features li { font-size: 0.85rem; color: var(--text-dim); padding: 5px 0; }
+    .enroll-features li::before { content: '✓ '; color: var(--green); font-weight: 700; }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark2);
+      border-top: 1px solid var(--card-border);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .footer-disclaimer {
+      background: rgba(255,215,0,0.04);
+      border: 1px solid rgba(255,215,0,0.12);
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+      max-width: 760px;
+      margin: 0 auto 24px;
+    }
+    .footer-disclaimer strong { color: var(--gold); }
+    .footer-copy { font-size: 0.8rem; color: var(--text-dim); }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+    .footer-links a { color: var(--text-dim); font-size: 0.85rem; }
+    .footer-links a:hover { color: var(--green); }
+
+    @media (max-width: 600px) {
+      .step-card { padding: 24px 20px 24px 74px; }
+      .urgency-box { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="disclaimer-banner" role="alert">
+  ⚠️ NOT LEGAL ADVICE — EDUCATION ONLY. Always retain qualified legal counsel licensed in your jurisdiction.
+</div>
+
+<nav role="navigation" aria-label="Main navigation">
+  <a href="index.html" class="nav-logo">CCLDR.NET</a>
+  <ul class="nav-links">
+    <li><a href="index.html#caselaw">Case Law</a></li>
+    <li><a href="index.html#emergency">Rights Card</a></li>
+    <li><a href="documents.html">Documents</a></li>
+    <li><a href="index.html#pricing" class="nav-cta">Get Educated →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-alert">⚡ Cannabis Charge — Education Resource</div>
+    <h1>Charged with <span>Cannabis</span>?<br/>Defend Yourself.</h1>
+    <p class="hero-sub">
+      Before you say a word to police. Before you walk into court. Before you accept anything.
+      Know exactly what your Canadian Charter rights are — and what constitutional defenses may apply to your situation.
+    </p>
+    <div class="hero-ctas">
+      <a href="#first-steps" class="btn-primary">⚡ What to Do Right Now →</a>
+      <a href="#charter-rights" class="btn-secondary">Know Your Charter Rights →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FIRST STEPS -->
+<section id="first-steps">
+  <div class="container">
+    <h2 class="section-title">First <span>Steps — Right Now</span></h2>
+    <p class="section-sub">If you've just been charged or arrested, the next hours matter enormously. Here's what every Canadian should do.</p>
+    <div class="steps-grid">
+      <div class="step-card urgent">
+        <div class="step-num-big">1</div>
+        <h3>Say Nothing — Exercise Your Right to Silence</h3>
+        <p>Under <strong>s.7 of the Canadian Charter</strong>, you have the right to remain silent. You are not required to answer police questions (beyond basic identification in some circumstances). Say clearly: <em>"I am exercising my right to remain silent."</em> Then stop talking.</p>
+      </div>
+      <div class="step-card urgent">
+        <div class="step-num-big">2</div>
+        <h3>Ask for a Lawyer — Immediately</h3>
+        <p>Under <strong>s.10(b) of the Charter</strong>, you have the right to retain and instruct counsel without delay. Say: <em>"I wish to speak to a lawyer."</em> Police must stop questioning you and give you a reasonable opportunity to contact counsel. Do not waive this right.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num-big">3</div>
+        <h3>Do Not Consent to Any Search</h3>
+        <p>Under <strong>s.8 of the Charter</strong>, you are protected from unreasonable search and seizure. If asked to consent to a search, say clearly: <em>"I do not consent to this search."</em> Do not physically resist — just state non-consent. This preserves your Charter argument even if the search proceeds.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num-big">4</div>
+        <h3>Document Everything You Can Remember</h3>
+        <p>As soon as safely possible, write down: officer badge numbers, names, patrol car number, exact time and location, what was said, what was searched, what was seized, and any witnesses present. This documentation is critical for any future disclosure review or Charter application.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num-big">5</div>
+        <h3>Request Full Disclosure Immediately</h3>
+        <p>You have an absolute right to full Crown disclosure — police reports, notes, video, toxicology, lab certificates, informant tips used for warrants, everything. <strong>Do not plead guilty without reviewing disclosure.</strong> Many cannabis charges cannot survive full Charter scrutiny of the investigative process.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num-big">6</div>
+        <h3>Educate Yourself Before Your First Court Date</h3>
+        <p>The CCLDR education curriculum walks you through Charter rights, constitutional defense frameworks, how to read disclosure, how pre-trial motions work, and the landmark case law that shapes every cannabis prosecution in Canada. <strong>Knowledge changes outcomes.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHARTER RIGHTS -->
+<section id="charter-rights" style="background:linear-gradient(180deg,transparent,rgba(0,255,136,0.015),transparent);">
+  <div class="container">
+    <h2 class="section-title">Your <span>Charter Rights</span></h2>
+    <p class="section-sub">These are the constitutional protections every Canadian has when facing a cannabis charge. Understanding them is your first defense.</p>
+    <div class="rights-grid">
+      <div class="right-card">
+        <div class="right-section">Charter s.7</div>
+        <div class="right-title">Life, Liberty &amp; Security of the Person</div>
+        <div class="right-desc">The state cannot deprive you of liberty except in accordance with the principles of fundamental justice. Denial of access to medical cannabis has been found to violate s.7 (Parker 2000, Smith 2015).</div>
+      </div>
+      <div class="right-card">
+        <div class="right-section">Charter s.8</div>
+        <div class="right-title">Unreasonable Search &amp; Seizure</div>
+        <div class="right-desc">You have a reasonable expectation of privacy. Searches without valid warrants, or warrants obtained on insufficient grounds, can be challenged. Evidence obtained in breach of s.8 may be excluded under s.24(2).</div>
+      </div>
+      <div class="right-card">
+        <div class="right-section">Charter s.9</div>
+        <div class="right-title">Arbitrary Detention</div>
+        <div class="right-desc">You cannot be detained without reasonable grounds. Random stops, pretextual detentions, and prolonged investigative detentions without reasonable and probable grounds violate s.9.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-section">Charter s.10(b)</div>
+        <div class="right-title">Right to Retain Counsel</div>
+        <div class="right-desc">Upon detention or arrest, you have the right to be informed of your right to retain and instruct counsel without delay. Police must facilitate access to counsel before questioning you.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-section">Charter s.11(d)</div>
+        <div class="right-title">Presumption of Innocence</div>
+        <div class="right-desc">You are presumed innocent until proven guilty beyond a reasonable doubt. The Crown bears the burden of proving every element of the offence. You are not required to prove anything.</div>
+      </div>
+      <div class="right-card">
+        <div class="right-section">Charter s.24</div>
+        <div class="right-title">Charter Remedies</div>
+        <div class="right-desc">Where your Charter rights have been violated, a court may exclude evidence (s.24(2)), stay the proceedings, or grant other appropriate remedies. Charter breaches are not academic — they have real consequences for your case.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONSTITUTIONAL DEFENSES EDUCATION -->
+<section id="defenses">
+  <div class="container">
+    <h2 class="section-title">Constitutional Defense <span>Education</span></h2>
+    <p class="section-sub">These are the educational frameworks CCLDR teaches — based on landmark Canadian case law. For any specific defense strategy, retain qualified counsel.</p>
+    <div class="defense-grid">
+      <div class="defense-card">
+        <h3>Medical Necessity / BENO-X Framework</h3>
+        <p>If you possessed cannabis for legitimate medical purposes and the government's exemption framework was constitutionally defective at the time, the BENO-X principle (Bad Exemption = No Offense) may apply. A flawed access regime cannot support a valid prosecution.</p>
+        <div class="defense-case">Parker (2000 OCA) · Hitzig (2003) · Smith (2015 SCC 34) · Allard (2016 FC 236)</div>
+      </div>
+      <div class="defense-card">
+        <h3>Section 8 — Search Charter Application</h3>
+        <p>If police searched you, your vehicle, or your home without proper grounds or a valid warrant, a s.8 Charter application can seek exclusion of all evidence obtained from that search under s.24(2). Without the evidence, the prosecution often cannot proceed.</p>
+        <div class="defense-case">R v Grant (2009 SCC) · R v Collins (1987 SCC) · R v Tessling (2004 SCC)</div>
+      </div>
+      <div class="defense-card">
+        <h3>Arbitrary Detention — Section 9</h3>
+        <p>If the traffic stop, investigative detention, or arrest that led to the cannabis discovery was arbitrary — lacking reasonable and probable grounds — the entire investigation may be tainted. Evidence flowing from an arbitrary detention is subject to exclusion.</p>
+        <div class="defense-case">R v Mann (2004 SCC) · R v Clayton (2007 SCC)</div>
+      </div>
+      <div class="defense-card">
+        <h3>Right to Counsel Breach — Section 10(b)</h3>
+        <p>If police failed to properly inform you of your right to counsel, or proceeded to question you before you had a reasonable opportunity to speak with a lawyer, your s.10(b) right was violated. Statements obtained in breach of s.10(b) are routinely excluded.</p>
+        <div class="defense-case">R v Sinclair (2010 SCC) · R v Bartle (1994 SCC)</div>
+      </div>
+      <div class="defense-card">
+        <h3>Disclosure Deficiency</h3>
+        <p>The Crown must disclose all relevant material — including police notes, analyst certificates, informant tips used for warrants, and surveillance records. Failure to produce complete disclosure can result in stays of proceedings or exclusion of evidence.</p>
+        <div class="defense-case">R v Stinchcombe (1991 SCC) · R v McNeil (2009 SCC)</div>
+      </div>
+      <div class="defense-card">
+        <h3>Entrapment</h3>
+        <p>If police provided you with an opportunity to commit the offence without reasonable suspicion that you were already engaged in criminal activity, or went beyond providing an opportunity to actually inducing the offence, an entrapment argument may result in a stay of proceedings.</p>
+        <div class="defense-case">R v Mack (1988 SCC) · R v Ahmad (2020 SCC)</div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--text-dim);font-size:0.78rem;margin-top:32px;">
+      All defense frameworks presented here are for <strong style="color:var(--gold);">educational purposes only</strong>. Whether any defense applies to your specific facts is a question for qualified legal counsel. CCLDR does not provide legal advice or representation.
+    </p>
+  </div>
+</section>
+
+<!-- URGENCY / ENROLL -->
+<section id="enroll" style="background:linear-gradient(180deg,transparent,rgba(0,255,136,0.015),transparent);">
+  <div class="container">
+    <div class="urgency-box" style="margin-bottom:60px;">
+      <h2>Time Is Not On Your Side</h2>
+      <p>Your first court appearance sets the tone for everything that follows. Defendants who show up educated — who understand their rights, have reviewed their disclosure, and know what questions to ask — consistently achieve better outcomes than those who don't. CCLDR exists to give you that education before you need it.</p>
+      <a href="index.html#pricing" class="btn-primary" style="display:inline-block;">Start Learning Today →</a>
+    </div>
+    <div style="display:flex;gap:32px;flex-wrap:wrap;justify-content:center;align-items:flex-start;">
+      <div class="enroll-card">
+        <div class="price">$149<span> CAD</span></div>
+        <h3>Warrior — Foundation</h3>
+        <ul class="enroll-features">
+          <li>Complete Charter rights overview</li>
+          <li>Cannabis arrest protocol guide</li>
+          <li>Disclosure request templates</li>
+          <li>Case law summaries library</li>
+          <li>Emergency rights card (printable)</li>
+          <li>Student community access</li>
+        </ul>
+        <button class="enroll-btn" onclick="window.location.href='PASTE_STRIPE_LINK_HERE_CCLDR_WARRIOR_M'">Enroll — Warrior $149</button>
+      </div>
+      <div class="enroll-card" style="border-color:var(--gold);box-shadow:0 0 30px rgba(255,215,0,0.12);">
+        <div style="position:relative;">
+          <div style="position:absolute;top:-48px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:0.7rem;font-weight:900;padding:4px 14px;border-radius:20px;white-space:nowrap;">⭐ CHARGED? START HERE</div>
+        </div>
+        <div class="price" style="color:var(--gold);">$499<span> CAD</span></div>
+        <h3>Professional — Advanced</h3>
+        <ul class="enroll-features">
+          <li>Everything in Warrior</li>
+          <li>BENO-X Framework (full course)</li>
+          <li>12-Appearance Methodology</li>
+          <li>Pre-trial motion education library</li>
+          <li>Disclosure strategy deep-dives</li>
+          <li>Case law annotation workshop</li>
+          <li>Priority community support</li>
+        </ul>
+        <button class="enroll-btn" style="background:var(--gold);" onclick="window.location.href='PASTE_STRIPE_LINK_HERE_CCLDR_PROFESSIONAL_M'">Enroll — Professional $499</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERAC NOTE -->
+<section style="padding:40px 20px;text-align:center;">
+  <div class="container">
+    <p style="color:var(--text-dim);font-size:0.88rem;">
+      Prefer Interac e-Transfer? Send to <strong style="color:var(--green);">franciscoderek7@gmail.com</strong> with your name and tier in the message. You'll receive your access link within 24 hours.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-disclaimer">
+      <strong>⚖ IMPORTANT DISCLAIMER:</strong> CCLDR.NET and all content on this page, including Charter rights summaries, case law education, and defense framework descriptions, is provided for informational and educational purposes ONLY. Nothing on this website constitutes legal advice, legal representation, or a solicitor-client relationship. Derek Francisco (Doc Weedlaw) is not a lawyer or licensed legal professional. Always retain qualified legal counsel licensed to practice in your jurisdiction before making any legal decisions or taking any legal action.
+    </div>
+    <div class="footer-copy">© 2026 CCLDR.NET — Derek Francisco (Doc Weedlaw) | Education Only — Not Legal Advice</div>
+    <div class="footer-links">
+      <a href="index.html">← Back to CCLDR.NET</a>
+      <a href="index.html#caselaw">Case Law Library</a>
+      <a href="documents.html">Document Templates</a>
+      <a href="index.html#pricing">All Education Tiers</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
