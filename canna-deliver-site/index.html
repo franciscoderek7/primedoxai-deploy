@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CannaDeliver — Cannabis. Groceries. Everything. 15 Minutes.</title>
+<meta name="description" content="AI-powered drone delivery for cannabis, groceries, food, and pharmacy. 15-minute delivery by drone. AGCO licensed. Cannabis Act compliant.">
+<style>
+  :root {
+    --green: #00C851;
+    --blue: #00AAFF;
+    --bg: #080C0A;
+    --bg2: #0D1410;
+    --bg3: #111A14;
+    --text: #E8F5E9;
+    --muted: #7A9B7E;
+    --card: #0F1A12;
+    --border: #1A3020;
+    --green-dim: rgba(0,200,81,0.15);
+    --blue-dim: rgba(0,170,255,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── AGE GATE ─── */
+  #age-gate {
+    position: fixed;
+    inset: 0;
+    background: rgba(8,12,10,0.97);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  #age-gate.hidden { display: none; }
+  .age-gate-box {
+    background: var(--card);
+    border: 2px solid var(--green);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 0 60px rgba(0,200,81,0.3);
+  }
+  .age-gate-box .gate-logo {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--green);
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+  .age-gate-box .gate-logo span { color: var(--blue); }
+  .age-gate-box p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  .age-gate-box h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .age-gate-box .gate-sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .gate-btns { display: flex; gap: 1rem; justify-content: center; }
+  .gate-yes {
+    background: var(--green);
+    color: #000;
+    border: none;
+    padding: 0.85rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .gate-yes:hover { background: #00e85a; transform: scale(1.04); }
+  .gate-no {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.85rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .gate-no:hover { border-color: var(--muted); color: var(--text); }
+  .age-gate-legal {
+    margin-top: 1.5rem;
+    font-size: 0.72rem;
+    color: #4a6b4e;
+    line-height: 1.5;
+  }
+
+  /* ─── STICKY NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8,12,10,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--green);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 1.75rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta {
+    background: var(--green);
+    color: #000;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: #00e85a; }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    overflow: hidden;
+  }
+  #particle-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 900px; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--green-dim);
+    border: 1px solid rgba(0,200,81,0.4);
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 1.25rem;
+  }
+  h1 .g { color: var(--green); }
+  h1 .b { color: var(--blue); }
+  .hero-sub {
+    font-size: clamp(1rem, 2.2vw, 1.3rem);
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    font-weight: 500;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+  .btn-primary {
+    background: var(--green);
+    color: #000;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 800;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-primary:hover { background: #00e85a; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,200,81,0.35); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--blue);
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid var(--blue);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-secondary:hover { background: var(--blue-dim); transform: translateY(-2px); }
+
+  /* ─── DRONE SVG ANIMATION ─── */
+  .hero-drone-wrap {
+    margin: 2rem auto 1rem;
+    position: relative;
+    width: 200px;
+    height: 120px;
+  }
+  .drone-float {
+    animation: droneFloat 3s ease-in-out infinite;
+    display: block;
+    margin: 0 auto;
+  }
+  @keyframes droneFloat {
+    0%, 100% { transform: translateY(0px) rotate(-1deg); }
+    50% { transform: translateY(-18px) rotate(1deg); }
+  }
+  .drone-shadow {
+    width: 80px;
+    height: 12px;
+    background: radial-gradient(ellipse, rgba(0,200,81,0.3) 0%, transparent 70%);
+    margin: 0 auto;
+    animation: shadowPulse 3s ease-in-out infinite;
+    border-radius: 50%;
+  }
+  @keyframes shadowPulse {
+    0%, 100% { transform: scaleX(1); opacity: 0.5; }
+    50% { transform: scaleX(0.6); opacity: 0.2; }
+  }
+  .propeller-spin {
+    transform-origin: center;
+    animation: propSpin 0.3s linear infinite;
+  }
+  @keyframes propSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .propeller-spin-r {
+    transform-origin: center;
+    animation: propSpinR 0.3s linear infinite;
+  }
+  @keyframes propSpinR {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  /* ─── COUNTDOWN TIMER ─── */
+  .countdown-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 1rem;
+  }
+  .countdown-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 0.75rem;
+    font-weight: 700;
+  }
+  .countdown-digits {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+    text-shadow: 0 0 20px rgba(0,200,81,0.5);
+  }
+  .countdown-sep {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--green);
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* CSS-only countdown using animation-delay tricks */
+  .cd-min { animation: countMin 900s linear infinite; }
+  .cd-sec-tens { animation: countSecTens 60s steps(6, start) infinite; }
+  .cd-sec-ones { animation: countSecOnes 10s steps(10, start) infinite; }
+
+  /* ─── LIVE COUNTERS ─── */
+  .stats-bar {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--green);
+    display: block;
+    line-height: 1;
+  }
+  .stat-num.blue { color: var(--blue); }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-top: 0.2rem;
+    display: block;
+  }
+
+  /* ─── SECTION SCAFFOLD ─── */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: var(--green-dim);
+    border: 1px solid rgba(0,200,81,0.3);
+    padding: 0.3rem 0.85rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+  .section-tag.blue-tag {
+    color: var(--blue);
+    background: var(--blue-dim);
+    border-color: rgba(0,170,255,0.3);
+  }
+  h2 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+  h2 .g { color: var(--green); }
+  h2 .b { color: var(--blue); }
+  .section-desc {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
+
+  /* ─── HOW IT WORKS ─── */
+  #how-it-works { background: var(--bg2); }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .step-card:hover { border-color: var(--green); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,200,81,0.1); }
+  .step-num {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--green);
+    opacity: 0.2;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .step-title { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text); }
+  .step-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+  /* ─── FLEET ─── */
+  #fleet { background: var(--bg); }
+  .fleet-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 4rem;
+  }
+  .fleet-drone-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .fleet-drone-display::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(0,200,81,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .fleet-drone-display .drone-float { width: 160px; }
+  .fleet-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+  .spec-chip {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    text-align: center;
+  }
+  .spec-chip .spec-val {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--green);
+    display: block;
+  }
+  .spec-chip .spec-key {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .fleet-info h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .fleet-info p { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+  .fleet-badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+  .fleet-badge {
+    background: var(--blue-dim);
+    border: 1px solid rgba(0,170,255,0.3);
+    color: var(--blue);
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .drone-types-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .drone-type-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    transition: all 0.3s;
+  }
+  .drone-type-card:hover { border-color: var(--blue); box-shadow: 0 8px 30px rgba(0,170,255,0.1); }
+  .drone-type-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--blue);
+    margin-bottom: 0.35rem;
+  }
+  .drone-type-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .drone-type-stat { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
+  .drone-type-stat:last-child { border-bottom: none; }
+  .drone-type-stat span:first-child { color: var(--muted); }
+  .drone-type-stat span:last-child { color: var(--text); font-weight: 700; }
+
+  /* ─── CATEGORIES ─── */
+  #categories { background: var(--bg2); }
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .cat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s;
+  }
+  .cat-card:hover { transform: translateY(-4px); }
+  .cat-card.cannabis:hover { border-color: var(--green); box-shadow: 0 8px 30px rgba(0,200,81,0.12); }
+  .cat-card.grocery:hover { border-color: #8BC34A; box-shadow: 0 8px 30px rgba(139,195,74,0.12); }
+  .cat-card.restaurant:hover { border-color: #FF7043; box-shadow: 0 8px 30px rgba(255,112,67,0.12); }
+  .cat-card.pharmacy:hover { border-color: var(--blue); box-shadow: 0 8px 30px rgba(0,170,255,0.12); }
+  .cat-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .cat-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .cat-card.cannabis .cat-title { color: var(--green); }
+  .cat-card.grocery .cat-title { color: #8BC34A; }
+  .cat-card.restaurant .cat-title { color: #FF7043; }
+  .cat-card.pharmacy .cat-title { color: var(--blue); }
+  .cat-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.55; }
+  .cat-pill {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .cat-card.cannabis .cat-pill { background: var(--green-dim); color: var(--green); }
+  .cat-card.pharmacy .cat-pill { background: var(--blue-dim); color: var(--blue); }
+
+  /* ─── PRICING / DELIVERY TIERS ─── */
+  #pricing { background: var(--bg); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+  .price-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2.25rem 1.75rem;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .price-card.featured {
+    border-color: var(--green);
+    box-shadow: 0 0 40px rgba(0,200,81,0.15);
+  }
+  .price-card:hover { transform: translateY(-4px); }
+  .price-card .feat-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: 900;
+    padding: 0.2rem 0.85rem;
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .price-tier-name { font-size: 1rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .price-amount {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .price-amount span { font-size: 1rem; color: var(--muted); font-weight: 500; }
+  .price-note { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .price-feats { list-style: none; margin-bottom: 1.5rem; }
+  .price-feats li {
+    font-size: 0.88rem;
+    color: var(--muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .price-feats li:last-child { border-bottom: none; }
+  .price-feats li::before { content: '✓'; color: var(--green); font-weight: 900; flex-shrink: 0; }
+  .price-feats li.blue-feat::before { color: var(--blue); }
+
+  /* ─── B2B PRICING ─── */
+  .b2b-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .b2b-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    transition: all 0.3s;
+  }
+  .b2b-card:hover { border-color: var(--blue); box-shadow: 0 0 40px rgba(0,170,255,0.12); transform: translateY(-4px); }
+  .b2b-card.enterprise { border-color: rgba(0,170,255,0.4); }
+  .b2b-tier { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.5rem; }
+  .b2b-name { font-size: 1.4rem; font-weight: 900; color: var(--text); margin-bottom: 0.25rem; }
+  .b2b-price { font-size: 2.5rem; font-weight: 900; color: var(--blue); line-height: 1; }
+  .b2b-price span { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
+  .b2b-jobs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--blue-dim);
+    border: 1px solid rgba(0,170,255,0.25);
+    color: var(--blue);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin: 0.75rem 0 1.25rem;
+  }
+  .b2b-feats { list-style: none; margin-bottom: 2rem; }
+  .b2b-feats li {
+    font-size: 0.88rem;
+    color: var(--muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .b2b-feats li:last-child { border-bottom: none; }
+  .b2b-feats li::before { content: '→'; color: var(--blue); flex-shrink: 0; }
+  .interac-note {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 1rem;
+  }
+  .interac-note strong { color: var(--text); }
+
+  /* ─── COMPLIANCE ─── */
+  #compliance { background: var(--bg2); }
+  .compliance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .compliance-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: border-color 0.3s;
+  }
+  .compliance-card:hover { border-color: var(--green); }
+  .compliance-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .compliance-title { font-size: 0.95rem; font-weight: 800; color: var(--text); margin-bottom: 0.4rem; }
+  .compliance-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+  .compliance-disclaimer {
+    background: var(--card);
+    border: 1px solid rgba(0,200,81,0.2);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .compliance-disclaimer strong { color: var(--green); }
+  .compliance-disclaimer a { color: var(--green); text-decoration: none; }
+
+  /* ─── ENVIRONMENT ─── */
+  #environment { background: var(--bg); }
+  .env-hero {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .carbon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, rgba(0,200,81,0.15), rgba(0,200,81,0.05));
+    border: 2px solid var(--green);
+    border-radius: 100px;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--green);
+    margin: 1.5rem auto;
+    letter-spacing: 0.02em;
+    box-shadow: 0 0 30px rgba(0,200,81,0.2);
+  }
+  .env-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+  .env-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .env-card:hover { border-color: var(--green); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,200,81,0.1); }
+  .env-emoji { font-size: 2.25rem; margin-bottom: 0.75rem; }
+  .env-title { font-size: 0.95rem; font-weight: 800; color: var(--green); margin-bottom: 0.4rem; }
+  .env-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .ahead-badge {
+    display: inline-block;
+    background: var(--green-dim);
+    border: 1px solid rgba(0,200,81,0.3);
+    color: var(--green);
+    padding: 0.35rem 1rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-top: 0.75rem;
+  }
+
+  /* ─── INTEGRATION BADGES ─── */
+  #integrations { background: var(--bg2); padding: 3rem 2rem; }
+  .integrations-inner { max-width: 1100px; margin: 0 auto; }
+  .int-label {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+  .int-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+  .int-badge {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .int-badge:hover { border-color: var(--green); color: var(--text); }
+  .int-badge .int-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .int-badge .int-dot.green { background: var(--green); }
+  .int-badge .int-dot.blue { background: var(--blue); }
+
+  /* ─── PARTNERSHIP FORM ─── */
+  #partnership { background: var(--bg); }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(0,200,81,0.12);
+  }
+  .form-group select option { background: var(--bg); }
+  .form-submit-row {
+    margin-top: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .contact-info {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .contact-info a { color: var(--green); text-decoration: none; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem 2rem;
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+  }
+  .footer-brand .foot-logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+  }
+  .footer-brand .foot-logo span { color: var(--blue); }
+  .footer-brand p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+  .footer-col h4 {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.5rem; }
+  .footer-col ul li a {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--green); }
+  .footer-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .foot-badge {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .foot-badge.green { color: var(--green); border-color: rgba(0,200,81,0.3); background: var(--green-dim); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-copy { font-size: 0.78rem; color: var(--muted); }
+  .footer-copy a { color: var(--muted); text-decoration: none; }
+  .footer-legal {
+    font-size: 0.7rem;
+    color: #3a5040;
+    max-width: 500px;
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  /* ─── UTILITY ─── */
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: var(--green);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+  }
+  .divider.blue { background: var(--blue); }
+  .green-glow { text-shadow: 0 0 20px rgba(0,200,81,0.4); }
+  .blue-glow { text-shadow: 0 0 20px rgba(0,170,255,0.4); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .fleet-hero { grid-template-columns: 1fr; gap: 2rem; }
+    .drone-types-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .b2b-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-legal { text-align: left; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1 / -1; }
+    section { padding: 3.5rem 1.25rem; }
+    .stats-bar { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── AGE GATE ─── -->
+<div id="age-gate">
+  <div class="age-gate-box">
+    <div class="gate-logo">Canna<span>Deliver</span></div>
+    <p>Company #45 — Francisco Holdings Inc.</p>
+    <h2>Are you 19+ years of age?</h2>
+    <p class="gate-sub">This site contains cannabis product information. You must be of legal age in your jurisdiction to proceed.</p>
+    <div class="gate-btns">
+      <button class="gate-yes" onclick="document.getElementById('age-gate').classList.add('hidden')">YES — I am 19+</button>
+      <button class="gate-no" onclick="window.location.href='https://ccldr.net'">NO — Exit</button>
+    </div>
+    <p class="age-gate-legal">By entering, you confirm you are of legal cannabis purchasing age in your province or territory. CannaDeliver operates under the Cannabis Act (Canada) and AGCO regulations. This is not a sale portal — for education visit CCLDR.net.</p>
+  </div>
+</div>
+
+<!-- ─── STICKY NAV ─── -->
+<nav>
+  <a href="#hero" class="nav-logo">Canna<span>Deliver</span></a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#fleet">Fleet</a></li>
+    <li><a href="#compliance">Compliance</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#partnership">Partner</a></li>
+  </ul>
+  <a href="#partnership" class="nav-cta">Partner With Us</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <canvas id="particle-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Now Delivering — Canada Wide
+    </div>
+    <h1>15-Minute Delivery.<br><span class="g">By Drone.</span> For <span class="b">Everything.</span></h1>
+    <p class="hero-sub">Cannabis. Groceries. Meals. Pharmacy. One AI-optimized fleet. One app. Delivered in minutes — not hours.</p>
+
+    <!-- DRONE SVG -->
+    <div class="hero-drone-wrap">
+      <svg class="drone-float" width="180" height="80" viewBox="0 0 180 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Propellers Left -->
+        <g class="propeller-spin" style="transform-origin: 30px 20px;">
+          <ellipse cx="30" cy="20" rx="28" ry="5" fill="rgba(0,200,81,0.15)" stroke="#00C851" stroke-width="1.5"/>
+        </g>
+        <g class="propeller-spin-r" style="transform-origin: 150px 20px;">
+          <ellipse cx="150" cy="20" rx="28" ry="5" fill="rgba(0,170,255,0.15)" stroke="#00AAFF" stroke-width="1.5"/>
+        </g>
+        <!-- Arms -->
+        <line x1="30" y1="20" x2="75" y2="42" stroke="#1A3020" stroke-width="4" stroke-linecap="round"/>
+        <line x1="150" y1="20" x2="105" y2="42" stroke="#1A3020" stroke-width="4" stroke-linecap="round"/>
+        <!-- Motor hubs -->
+        <circle cx="30" cy="20" r="7" fill="#0D1A10" stroke="#00C851" stroke-width="1.5"/>
+        <circle cx="150" cy="20" r="7" fill="#0D1A10" stroke="#00AAFF" stroke-width="1.5"/>
+        <!-- Body -->
+        <rect x="60" y="34" width="60" height="26" rx="8" fill="#0F1A12" stroke="#00C851" stroke-width="1.5"/>
+        <!-- Body accent line -->
+        <line x1="70" y1="47" x2="110" y2="47" stroke="#00C851" stroke-width="1" opacity="0.5"/>
+        <!-- LED front -->
+        <circle cx="118" cy="47" r="3" fill="#00C851" opacity="0.9"/>
+        <!-- Cargo pod -->
+        <rect x="72" y="60" width="36" height="14" rx="5" fill="#0D1A10" stroke="#00AAFF" stroke-width="1"/>
+        <!-- Cargo lines -->
+        <line x1="72" y1="67" x2="108" y2="67" stroke="#00AAFF" stroke-width="0.75" opacity="0.4"/>
+        <!-- Camera dot -->
+        <circle cx="90" cy="37" r="2.5" fill="#00AAFF" opacity="0.8"/>
+        <!-- Rear LED -->
+        <circle cx="62" cy="47" r="2.5" fill="#FF4444" opacity="0.7"/>
+      </svg>
+      <div class="drone-shadow"></div>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div class="countdown-wrap" style="margin-bottom: 2rem;">
+      <span class="countdown-label">Est. Delivery In</span>
+      <span class="countdown-digits" id="cd-min">15</span>
+      <span class="countdown-sep">:</span>
+      <span class="countdown-digits" id="cd-sec">00</span>
+    </div>
+
+    <div class="hero-btns">
+      <a href="#pricing" class="btn-primary">&#9889; Order Now</a>
+      <a href="#fleet" class="btn-secondary">&#9992; View Fleet</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LIVE COUNTERS ─── -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num" id="deliveries-counter">847</span>
+    <span class="stat-label">Deliveries Today</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num blue" id="time-counter">11</span>
+    <span class="stat-label">Avg Delivery (min)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" id="stores-counter">23</span>
+    <span class="stat-label">Partner Stores</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num blue" id="fleet-counter">47</span>
+    <span class="stat-label">Fleet Size</span>
+  </div>
+</div>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section id="how-it-works">
+  <div class="section-inner">
+    <span class="section-tag">Process</span>
+    <div class="divider"></div>
+    <h2>From Tap to <span class="g">Door</span> in 5 Steps</h2>
+    <p class="section-desc">The most intelligent delivery network ever built for cannabis and essentials. AI does the routing — you do the relaxing.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">&#128241;</div>
+        <div class="step-title">Order</div>
+        <div class="step-desc">Browse cannabis, groceries, meals, or pharmacy via the app. AI recommends based on your history.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">&#9989;</div>
+        <div class="step-title">Verify</div>
+        <div class="step-desc">Age-gated instantly. MMAR patients upload Rx once. AGCO-compliant ID scan for recreational cannabis.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">&#9889;</div>
+        <div class="step-title">Dispatch</div>
+        <div class="step-desc">AI assigns the optimal vehicle or drone. Route calculated in milliseconds. Hub proximity optimized.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">&#127757;</div>
+        <div class="step-title">Track</div>
+        <div class="step-desc">Real-time GPS map. Drone altitude live feed. Estimated arrival accurate to 45-second windows.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">05</div>
+        <div class="step-icon">&#127381;</div>
+        <div class="step-title">Delivered</div>
+        <div class="step-desc">Biometric door confirm. Digital signature. Temperature-monitored for food. Tracked chain-of-custody for cannabis.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DRONE FLEET ─── -->
+<section id="fleet">
+  <div class="section-inner">
+    <span class="section-tag blue-tag">The Fleet</span>
+    <div class="divider blue"></div>
+    <h2>Built to <span class="b">Fly Fast.</span> Built to <span class="g">Last.</span></h2>
+    <p class="section-desc">Every drone in our fleet is solar-charged, collision-aware, and manufactured from recycled electronics. The sky is greener now.</p>
+
+    <div class="fleet-hero">
+      <div class="fleet-drone-display">
+        <svg class="drone-float" width="200" height="90" viewBox="0 0 200 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g class="propeller-spin" style="transform-origin: 25px 22px;">
+            <ellipse cx="25" cy="22" rx="23" ry="5" fill="rgba(0,200,81,0.2)" stroke="#00C851" stroke-width="2"/>
+          </g>
+          <g class="propeller-spin-r" style="transform-origin: 175px 22px;">
+            <ellipse cx="175" cy="22" rx="23" ry="5" fill="rgba(0,170,255,0.2)" stroke="#00AAFF" stroke-width="2"/>
+          </g>
+          <!-- Secondary propellers -->
+          <g class="propeller-spin-r" style="transform-origin: 25px 22px;">
+            <ellipse cx="25" cy="22" rx="5" ry="22" fill="rgba(0,200,81,0.08)" stroke="rgba(0,200,81,0.4)" stroke-width="1"/>
+          </g>
+          <g class="propeller-spin" style="transform-origin: 175px 22px;">
+            <ellipse cx="175" cy="22" rx="5" ry="22" fill="rgba(0,170,255,0.08)" stroke="rgba(0,170,255,0.4)" stroke-width="1"/>
+          </g>
+          <line x1="25" y1="22" x2="80" y2="46" stroke="#1E3820" stroke-width="5" stroke-linecap="round"/>
+          <line x1="175" y1="22" x2="120" y2="46" stroke="#1E3820" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="25" cy="22" r="8" fill="#0D1A10" stroke="#00C851" stroke-width="2"/>
+          <circle cx="175" cy="22" r="8" fill="#0D1A10" stroke="#00AAFF" stroke-width="2"/>
+          <rect x="65" y="36" width="70" height="30" rx="9" fill="#0F1A12" stroke="#00C851" stroke-width="2"/>
+          <rect x="65" y="36" width="25" height="30" rx="9" fill="#0D1810" stroke="#00C851" stroke-width="2"/>
+          <circle cx="135" cy="51" r="4" fill="#00C851" opacity="0.9"/>
+          <circle cx="67" cy="51" r="3" fill="#FF4444" opacity="0.7"/>
+          <rect x="80" y="66" width="40" height="16" rx="6" fill="#0D1A10" stroke="#00AAFF" stroke-width="1.5"/>
+          <line x1="80" y1="74" x2="120" y2="74" stroke="#00AAFF" stroke-width="0.75" opacity="0.5"/>
+          <circle cx="100" cy="39" r="3" fill="#00AAFF" opacity="0.85"/>
+          <!-- Solar panel markings -->
+          <rect x="73" y="41" width="8" height="4" rx="1" fill="rgba(0,200,81,0.3)"/>
+          <rect x="83" y="41" width="8" height="4" rx="1" fill="rgba(0,200,81,0.3)"/>
+          <rect x="93" y="41" width="8" height="4" rx="1" fill="rgba(0,200,81,0.3)"/>
+        </svg>
+        <div class="drone-shadow"></div>
+        <div class="fleet-specs">
+          <div class="spec-chip">
+            <span class="spec-val">5kg</span>
+            <span class="spec-key">Max Payload</span>
+          </div>
+          <div class="spec-chip">
+            <span class="spec-val">10km</span>
+            <span class="spec-key">Range</span>
+          </div>
+          <div class="spec-chip">
+            <span class="spec-val">15min</span>
+            <span class="spec-key">Delivery</span>
+          </div>
+          <div class="spec-chip">
+            <span class="spec-val">Solar</span>
+            <span class="spec-key">Charging</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="fleet-info">
+        <h3>AI-Optimized. Solar-Powered. Zero Excuses.</h3>
+        <p>Every CannaDeliver drone is assembled from recycled consumer electronics — giving discarded tech a second life as a precision delivery instrument. Our fleet carries goods, not carbon.</p>
+        <p>AeroShield AI collision avoidance monitors every flight path in real time. No human intervention required for standard routes — the system reroutes around obstacles, weather, and restricted airspace automatically.</p>
+        <p>Solar charging hubs are deployed across partner locations, powered by sunlight, operating 24/7 with minimal grid draw.</p>
+        <div class="fleet-badge-row">
+          <span class="fleet-badge">&#128737; AeroShield AI</span>
+          <span class="fleet-badge">&#9728; Solar Charging</span>
+          <span class="fleet-badge">&#9851; Recycled Build</span>
+          <span class="fleet-badge">&#127757; FAA/TC Ready</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="drone-types-grid">
+      <div class="drone-type-card">
+        <div class="drone-type-name">&#9889; Scout</div>
+        <div class="drone-type-sub">15-Minute Express Tier</div>
+        <div class="drone-type-stat"><span>Payload</span><span>2kg</span></div>
+        <div class="drone-type-stat"><span>Speed</span><span>65 km/h</span></div>
+        <div class="drone-type-stat"><span>Range</span><span>8km</span></div>
+        <div class="drone-type-stat"><span>Use</span><span>Cannabis, Small Orders</span></div>
+        <div class="drone-type-stat"><span>Charge</span><span>Solar Hub — 22min</span></div>
+        <div class="drone-type-stat"><span>AeroShield</span><span>Gen 3</span></div>
+      </div>
+      <div class="drone-type-card">
+        <div class="drone-type-name">&#128666; Carrier</div>
+        <div class="drone-type-sub">Standard Delivery Tier</div>
+        <div class="drone-type-stat"><span>Payload</span><span>5kg</span></div>
+        <div class="drone-type-stat"><span>Speed</span><span>50 km/h</span></div>
+        <div class="drone-type-stat"><span>Range</span><span>10km</span></div>
+        <div class="drone-type-stat"><span>Use</span><span>Groceries, Mixed Orders</span></div>
+        <div class="drone-type-stat"><span>Charge</span><span>Solar Hub — 35min</span></div>
+        <div class="drone-type-stat"><span>AeroShield</span><span>Gen 3</span></div>
+      </div>
+      <div class="drone-type-card">
+        <div class="drone-type-name">&#128230; Heavy</div>
+        <div class="drone-type-sub">Bulk Grocery Tier</div>
+        <div class="drone-type-stat"><span>Payload</span><span>10kg</span></div>
+        <div class="drone-type-stat"><span>Speed</span><span>38 km/h</span></div>
+        <div class="drone-type-stat"><span>Range</span><span>7km</span></div>
+        <div class="drone-type-stat"><span>Use</span><span>Bulk Grocery, Pharmacy</span></div>
+        <div class="drone-type-stat"><span>Charge</span><span>Solar Hub — 55min</span></div>
+        <div class="drone-type-stat"><span>AeroShield</span><span>Gen 3 Pro</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CATEGORIES ─── -->
+<section id="categories">
+  <div class="section-inner">
+    <span class="section-tag">What We Deliver</span>
+    <div class="divider"></div>
+    <h2>One Fleet. <span class="g">Every Category.</span></h2>
+    <p class="section-desc">Cannabis to cannabis, groceries to kitchens, meals to tables, prescriptions to patients — all through the same AI-routed network.</p>
+    <div class="categories-grid">
+      <div class="cat-card cannabis">
+        <div class="cat-icon">&#127807;</div>
+        <div class="cat-title">Cannabis</div>
+        <div class="cat-desc">Medical MMAR patients receive prescription-verified, tracked deliveries. Recreational customers complete age and ID verification at checkout. AGCO licensed from first mile to last.</div>
+        <div><span class="cat-pill">MMAR + Recreational</span></div>
+      </div>
+      <div class="cat-card grocery">
+        <div class="cat-icon">&#128722;</div>
+        <div class="cat-title">Groceries</div>
+        <div class="cat-desc">Partner local stores bring fresh produce, pantry staples, and same-day essentials to your door. AI selects the closest hub partner for fastest delivery. Biodegradable packaging standard.</div>
+      </div>
+      <div class="cat-card restaurant">
+        <div class="cat-icon">&#127829;</div>
+        <div class="cat-title">Restaurants & Meals</div>
+        <div class="cat-desc">Hot food routed by AI for optimal temperature on arrival. Partner restaurants gain zero-commission first deliveries. Our drones maintain thermal integrity throughout flight.</div>
+      </div>
+      <div class="cat-card pharmacy">
+        <div class="cat-icon">&#128138;</div>
+        <div class="cat-title">Pharmacy</div>
+        <div class="cat-desc">Delivered through the PharmaSwarm network. Prescription-verified. Tamper-evident packaging. Real-time chain-of-custody tracking for regulated medications. Same-day dispensing available.</div>
+        <div><span class="cat-pill">PharmaSwarm Network</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ─── -->
+<section id="pricing">
+  <div class="section-inner">
+    <span class="section-tag">Consumer Pricing</span>
+    <div class="divider"></div>
+    <h2>Delivery <span class="g">Your Way</span></h2>
+    <p class="section-desc">Three delivery tiers built for every schedule. No subscriptions. No surprises. Pay the fee — the order is yours.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier-name">Standard</div>
+        <div class="price-amount">$5<span>/delivery</span></div>
+        <div class="price-note">Ground vehicle • 2-hour window</div>
+        <ul class="price-feats">
+          <li>Ground fleet delivery</li>
+          <li>2-hour delivery window</li>
+          <li>All product categories</li>
+          <li>Real-time tracking</li>
+          <li>Biometric door confirm</li>
+        </ul>
+        <a href="#" class="btn-primary" style="width:100%; justify-content:center;">Order — Fee at Checkout</a>
+        <div class="interac-note" style="margin-top:0.75rem;">
+          <strong>Interac:</strong> franciscoderek7@gmail.com — Memo: CannaDeliver Standard
+        </div>
+      </div>
+      <div class="price-card featured">
+        <div class="feat-badge">Most Popular</div>
+        <div class="price-tier-name">Express</div>
+        <div class="price-amount">$15<span>/delivery</span></div>
+        <div class="price-note">Priority routing • 30 minutes</div>
+        <ul class="price-feats">
+          <li>Priority AI routing</li>
+          <li>30-minute delivery guarantee</li>
+          <li>All product categories</li>
+          <li>Dedicated courier assignment</li>
+          <li>Live GPS feed</li>
+          <li class="blue-feat">Temperature-monitored packaging</li>
+        </ul>
+        <a href="#" class="btn-primary" style="width:100%; justify-content:center;">Order — Fee at Checkout</a>
+        <div class="interac-note" style="margin-top:0.75rem;">
+          <strong>Interac:</strong> franciscoderek7@gmail.com — Memo: CannaDeliver Express
+        </div>
+      </div>
+      <div class="price-card">
+        <div class="price-tier-name">Drone Express</div>
+        <div class="price-amount">$25<span>/delivery</span></div>
+        <div class="price-note">Drone delivery • 15 minutes • Where legal</div>
+        <ul class="price-feats">
+          <li class="blue-feat">Drone dispatch (where authorized)</li>
+          <li>15-minute sky delivery</li>
+          <li>AeroShield AI safety coverage</li>
+          <li>Cannabis + Grocery eligible</li>
+          <li>Solar-charged fleet</li>
+          <li class="blue-feat">Real-time altitude + GPS tracking</li>
+        </ul>
+        <a href="#" class="btn-primary" style="width:100%; justify-content:center; background:var(--blue); color:#000;">Order — Fee at Checkout</a>
+        <div class="interac-note" style="margin-top:0.75rem;">
+          <strong>Interac:</strong> franciscoderek7@gmail.com — Memo: CannaDeliver Drone
+        </div>
+      </div>
+    </div>
+
+    <!-- B2B PRICING -->
+    <span class="section-tag blue-tag" style="margin-top: 1rem; display:inline-block;">Business Pricing</span>
+    <div class="divider blue"></div>
+    <h2>Grow <span class="b">With the Fleet</span></h2>
+    <p class="section-desc">Power your retail operation or franchise a full delivery hub. Two paths to ownership in the fastest-growing delivery network in Canada.</p>
+    <div class="b2b-grid">
+      <div class="b2b-card">
+        <div class="b2b-tier">Retailer Plan</div>
+        <div class="b2b-name">Single Location</div>
+        <div class="b2b-price">$499<span>/mo per location</span></div>
+        <div><span class="b2b-jobs">&#128188; 5 Jobs Created per Location</span></div>
+        <ul class="b2b-feats">
+          <li>AI route optimization dashboard</li>
+          <li>Real-time delivery analytics</li>
+          <li>Scheduled dispatch windows</li>
+          <li>Integration with POS systems</li>
+          <li>Compliance documentation package</li>
+          <li>Cannabis Act + AGCO toolset included</li>
+          <li>PrimeDox AI backend access</li>
+        </ul>
+        <a href="PASTE_STRIPE_LINK_HERE_CANNADELIVIER_RETAILER" class="btn-primary" style="width:100%; justify-content:center;">Start Retailer Plan</a>
+        <div class="interac-note">
+          <strong>Interac e-Transfer:</strong> franciscoderek7@gmail.com<br>
+          Memo: <strong>CannaDeliver Retailer + [Business Name]</strong>
+        </div>
+      </div>
+      <div class="b2b-card enterprise">
+        <div class="b2b-tier">Franchise Plan</div>
+        <div class="b2b-name">Full Territory</div>
+        <div class="b2b-price">$2,499<span>/mo</span></div>
+        <div><span class="b2b-jobs">&#128188; 28 Jobs Created per Territory</span></div>
+        <ul class="b2b-feats">
+          <li>Territorial delivery license</li>
+          <li>Full drone hub setup + deployment</li>
+          <li>Operator training program (certified)</li>
+          <li>Branded fleet assets included</li>
+          <li>All Retailer Plan features</li>
+          <li>Dedicated franchise support manager</li>
+          <li>Revenue share on partner deliveries</li>
+          <li>AeroShield integration + monitoring</li>
+        </ul>
+        <a href="PASTE_STRIPE_LINK_HERE_CANNADELIVIER_FRANCHISE" class="btn-primary" style="width:100%; justify-content:center; background:var(--blue); color:#000;">Start Franchise Plan</a>
+        <div class="interac-note">
+          <strong>Interac e-Transfer:</strong> franciscoderek7@gmail.com<br>
+          Memo: <strong>CannaDeliver Franchise + [Territory]</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── COMPLIANCE ─── -->
+<section id="compliance">
+  <div class="section-inner">
+    <span class="section-tag">Compliance & Safety</span>
+    <div class="divider"></div>
+    <h2>Licensed. <span class="g">Regulated.</span> Trusted.</h2>
+    <p class="section-desc">Cannabis delivery is a privilege, not a loophole. CannaDeliver meets or exceeds every applicable federal, provincial, and municipal standard.</p>
+    <div class="compliance-grid">
+      <div class="compliance-card">
+        <div class="compliance-icon">&#127881;</div>
+        <div class="compliance-title">AGCO Licensed Delivery Partner</div>
+        <div class="compliance-desc">Authorized under the Alcohol and Gaming Commission of Ontario as a compliant cannabis delivery service. License maintained, renewed, and audited annually.</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">&#128214;</div>
+        <div class="compliance-title">Cannabis Act (Canada) Compliant</div>
+        <div class="compliance-desc">Full adherence to the Cannabis Act and its regulations. Chain of custody tracked from licensed retailer to verified recipient. No exceptions.</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">&#127968;</div>
+        <div class="compliance-title">Municipal Bylaw Compliant</div>
+        <div class="compliance-desc">Delivery zones mapped and approved per municipal regulations. Drone flight corridors pre-approved with Transport Canada. All no-fly zones respected automatically.</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">&#128065;</div>
+        <div class="compliance-title">Age Verification at Door</div>
+        <div class="compliance-desc">Biometric face match + Government-issued ID scan required at delivery. Dual-factor verification for cannabis. Refusal and return protocol enforced automatically for all failed checks.</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">&#128137;</div>
+        <div class="compliance-title">MMAR Patient Delivery</div>
+        <div class="compliance-desc">Medical patients registered under the Marihuana for Medical Purposes Regulations receive prescription-verified, fully tracked deliveries. All MMAR documentation validated before dispatch.</div>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-icon">&#128274;</div>
+        <div class="compliance-title">Privacy — OmniaGuard Protected</div>
+        <div class="compliance-desc">All delivery data, patient records, and transaction history is encrypted end-to-end by OmniaGuard. PIPEDA compliant. Zero third-party data sharing. Your data does not leave the network.</div>
+      </div>
+    </div>
+    <div class="compliance-disclaimer">
+      <strong>LEGAL NOTICE:</strong> The compliance information presented on this page is provided for regulatory education purposes only. It does not constitute legal advice and should not be relied upon as a substitute for professional legal counsel. CannaDeliver operates in strict accordance with applicable federal and provincial law. For cannabis regulatory compliance education and resources, visit <a href="https://ccldr.net" target="_blank">CCLDR.net</a>. <strong>NOT LEGAL REPRESENTATION.</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ENVIRONMENT ─── -->
+<section id="environment">
+  <div class="section-inner">
+    <div class="env-hero">
+      <span class="section-tag">Environmental Mandate</span>
+      <div class="divider" style="margin: 1rem auto;"></div>
+      <h2>Carbon-<span class="g">Negative</span> Delivery.<br>The World's First.</h2>
+      <p class="section-desc" style="margin: 0 auto 1rem;">Every CannaDeliver order removes more carbon than it creates. This is not a commitment. It is the current reality.</p>
+      <div class="carbon-badge">&#127807; Carbon Neutral 2026 — Ahead of Empire 2028 Target</div>
+    </div>
+    <div class="env-grid">
+      <div class="env-card">
+        <div class="env-emoji">&#9851;</div>
+        <div class="env-title">Recycled Electronics Fleet</div>
+        <div class="env-desc">Every drone is assembled from recovered consumer electronics. Discarded circuit boards, motors, and chassis become precision delivery instruments. Manufacturing waste: near zero.</div>
+        <div class="ahead-badge">Zero New Plastic Policy</div>
+      </div>
+      <div class="env-card">
+        <div class="env-emoji">&#9728;</div>
+        <div class="env-title">100% Solar Charging</div>
+        <div class="env-desc">All hub charging stations draw exclusively from solar arrays. No grid dependency for fleet operations. Excess capacity feeds back to partner location infrastructure.</div>
+        <div class="ahead-badge">Grid-Independent Hubs</div>
+      </div>
+      <div class="env-card">
+        <div class="env-emoji">&#127807;</div>
+        <div class="env-title">Biodegradable Packaging Only</div>
+        <div class="env-desc">All delivery packaging — thermal liners, bags, pods — is certified compostable or biodegradable. Single-use plastic is categorically banned from the CannaDeliver supply chain.</div>
+        <div class="ahead-badge">Plastic-Free Supply Chain</div>
+      </div>
+      <div class="env-card">
+        <div class="env-emoji">&#127795;</div>
+        <div class="env-title">1 Tree Per 100 Deliveries</div>
+        <div class="env-desc">For every 100 deliveries completed, one tree is planted through our reforestation partners. At current delivery volume, this translates to over 3,000 trees planted annually.</div>
+        <div class="ahead-badge">~3,000 Trees / Year (Current)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INTEGRATION BADGES ─── -->
+<section id="integrations">
+  <div class="integrations-inner">
+    <p class="int-label">Powered by the Francisco Holdings Technology Stack</p>
+    <div class="int-badges">
+      <div class="int-badge">
+        <span class="int-dot green"></span>
+        Powered by PrimeDox AI
+      </div>
+      <div class="int-badge">
+        <span class="int-dot green"></span>
+        Protected by OmniaGuard
+      </div>
+      <div class="int-badge">
+        <span class="int-dot blue"></span>
+        Flight Safety: Aero Shield
+      </div>
+      <div class="int-badge">
+        <span class="int-dot blue"></span>
+        Pharmacy: PharmaSwarm
+      </div>
+      <div class="int-badge">
+        <span class="int-dot green"></span>
+        Patient Education: CCLDR.net
+      </div>
+      <div class="int-badge" style="color: var(--green); border-color: rgba(0,200,81,0.3);">
+        &#127807; Carbon Neutral 2026
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PARTNERSHIP FORM ─── -->
+<section id="partnership">
+  <div class="section-inner">
+    <span class="section-tag">Partner With Us</span>
+    <div class="divider"></div>
+    <h2>Become a <span class="g">CannaDeliver</span> Partner</h2>
+    <p class="section-desc">Whether you're a licensed cannabis retailer, restaurant, grocer, pharmacy, or franchise investor — the fleet is ready. Join the network.</p>
+
+    <form action="mailto:partners@cannadeliverteam.com" method="post" enctype="text/plain">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="biz-name">Business Name *</label>
+          <input type="text" id="biz-name" name="business_name" placeholder="Your business name" required>
+        </div>
+        <div class="form-group">
+          <label for="biz-type">Business Type *</label>
+          <select id="biz-type" name="business_type" required>
+            <option value="" disabled selected>Select type...</option>
+            <option value="Licensed Cannabis Retailer">Licensed Cannabis Retailer</option>
+            <option value="Restaurant">Restaurant</option>
+            <option value="Grocery Store">Grocery Store</option>
+            <option value="Pharmacy">Pharmacy</option>
+            <option value="Franchise Investor">Franchise Investor</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contact-email">Email Address *</label>
+          <input type="email" id="contact-email" name="email" placeholder="business@domain.com" required>
+        </div>
+        <div class="form-group">
+          <label for="contact-phone">Phone Number</label>
+          <input type="tel" id="contact-phone" name="phone" placeholder="705-000-0000">
+        </div>
+        <div class="form-group">
+          <label for="contact-city">City / Region *</label>
+          <input type="text" id="contact-city" name="city" placeholder="e.g. Lindsay, ON" required>
+        </div>
+        <div class="form-group">
+          <label for="order-vol">Monthly Order Volume</label>
+          <select id="order-vol" name="monthly_volume">
+            <option value="" disabled selected>Estimated volume...</option>
+            <option value="under-100">Under 100 orders/mo</option>
+            <option value="100-500">100–500 orders/mo</option>
+            <option value="500-1000">500–1,000 orders/mo</option>
+            <option value="1000-5000">1,000–5,000 orders/mo</option>
+            <option value="5000+">5,000+ orders/mo</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="partner-msg">Message (Optional)</label>
+          <textarea id="partner-msg" name="message" rows="4" placeholder="Tell us about your business and how you'd like to partner..."></textarea>
+        </div>
+      </div>
+      <div class="form-submit-row">
+        <button type="submit" class="btn-primary">&#128231; Submit Partnership Inquiry</button>
+        <div class="contact-info">
+          <strong style="color:var(--text);">Direct Contact:</strong><br>
+          <a href="mailto:partners@cannadeliverteam.com">partners@cannadeliverteam.com</a><br>
+          <a href="tel:7053078080">705-307-8080</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="foot-logo">Canna<span>Deliver</span></div>
+        <p>Cannabis. Groceries. Everything. 15 Minutes.<br>AI-powered drone delivery for everything you need — compliant, fast, and carbon-negative.</p>
+        <div class="footer-badges">
+          <span class="foot-badge green">&#127807; Carbon Neutral 2026</span>
+          <span class="foot-badge">AGCO Licensed</span>
+          <span class="foot-badge">Cannabis Act Compliant</span>
+          <span class="foot-badge">OmniaGuard Protected</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#categories">Cannabis Delivery</a></li>
+          <li><a href="#categories">Grocery Delivery</a></li>
+          <li><a href="#categories">Restaurant Delivery</a></li>
+          <li><a href="#categories">Pharmacy Delivery</a></li>
+          <li><a href="#fleet">Drone Fleet</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#pricing">Consumer Pricing</a></li>
+          <li><a href="#pricing">Retailer Plan</a></li>
+          <li><a href="#pricing">Franchise Plan</a></li>
+          <li><a href="#compliance">Compliance</a></li>
+          <li><a href="#partnership">Partner With Us</a></li>
+          <li><a href="https://ccldr.net" target="_blank">CCLDR.net</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        &copy; 2026 CannaDeliver. A <a href="#">Francisco Holdings Inc.</a> Company. — Company #45<br>
+        <span style="font-size:0.7rem; color:#3a5040;">Partners: PrimeDox AI &bull; OmniaGuard &bull; Aero Shield &bull; PharmaSwarm &bull; CCLDR.net &bull; &#127807; Carbon Neutral 2026</span>
+      </div>
+      <div class="footer-legal">
+        Cannabis is regulated. Delivery is subject to applicable provincial and federal law. Age verification required. MMAR patients must maintain valid authorization. CannaDeliver does not provide legal advice. For cannabis law resources visit CCLDR.net. Drone delivery operates only in approved Transport Canada airspace corridors. &copy; 2026 All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── PARTICLE CANVAS ───
+  (function() {
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const COUNT = 50;
+
+    function resize() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < COUNT; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 2.5 + 0.5,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          alpha: Math.random() * 0.5 + 0.1,
+          color: Math.random() > 0.5 ? '#00C851' : '#00AAFF'
+        });
+      }
+    }
+
+    function drawFrame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      });
+      requestAnimationFrame(drawFrame);
+    }
+
+    resize();
+    initParticles();
+    drawFrame();
+    window.addEventListener('resize', () => { resize(); initParticles(); });
+  })();
+
+  // ─── COUNTDOWN TIMER (CSS-anim-style via JS, counts 15:00 → 00:00, loops) ───
+  (function() {
+    const minEl = document.getElementById('cd-min');
+    const secEl = document.getElementById('cd-sec');
+    let total = 15 * 60; // 15 minutes in seconds
+
+    function update() {
+      if (total <= 0) total = 15 * 60;
+      const m = Math.floor(total / 60);
+      const s = total % 60;
+      minEl.textContent = String(m).padStart(2, '0');
+      secEl.textContent = String(s).padStart(2, '0');
+      total--;
+    }
+
+    update();
+    setInterval(update, 1000);
+  })();
+
+  // ─── LIVE COUNTER ANIMATION ───
+  (function() {
+    function animateCount(el, start, end, duration) {
+      let startTime = null;
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        const progress = Math.min((ts - startTime) / duration, 1);
+        el.textContent = Math.floor(progress * (end - start) + start);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          animateCount(document.getElementById('deliveries-counter'), 0, 847, 2000);
+          animateCount(document.getElementById('time-counter'), 0, 11, 1500);
+          animateCount(document.getElementById('stores-counter'), 0, 23, 1800);
+          animateCount(document.getElementById('fleet-counter'), 0, 47, 2000);
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsBar = document.querySelector('.stats-bar');
+    if (statsBar) observer.observe(statsBar);
+  })();
+</script>
+</body>
+</html>

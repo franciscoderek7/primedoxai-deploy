@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CleanSwarm — The AI-powered SaaS platform that helps cleaning businesses eliminate admin, get paid faster, and run more jobs profitably." />
+  <title>CleanSwarm — Stop Losing $2,400/Mo to Admin Work</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0D1117;
+      --bg2:       #161B22;
+      --bg3:       #1C2330;
+      --green:     #00C851;
+      --green-dk:  #009E40;
+      --green-glo: rgba(0,200,81,0.15);
+      --text:      #E6EDF3;
+      --muted:     #8B949E;
+      --border:    #30363D;
+      --radius:    12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h1 { font-size: clamp(2rem, 6vw, 3.6rem); font-weight: 800; line-height: 1.15; }
+    h2 { font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 700; line-height: 1.2; }
+    h3 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); font-weight: 700; }
+    p  { color: var(--muted); }
+
+    /* ── LAYOUT ── */
+    .section { padding: 80px 20px; }
+    .section--dark  { background: var(--bg); }
+    .section--mid   { background: var(--bg2); }
+    .section--light { background: var(--bg3); }
+    .container { max-width: 1080px; margin: 0 auto; }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block;
+      background: var(--green-glo);
+      color: var(--green);
+      border: 1px solid var(--green);
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    /* ── HERO ── */
+    .hero { text-align: center; padding: 100px 20px 80px; background: var(--bg); }
+    .hero h1 { color: var(--text); margin-bottom: 24px; }
+    .hero h1 span { color: var(--green); }
+    .hero .sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      max-width: 680px;
+      margin: 0 auto 40px;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--green);
+      color: #000;
+      font-weight: 800;
+      font-size: 1.1rem;
+      padding: 16px 40px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .hero-cta:hover { background: var(--green-dk); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 60px;
+      height: 4px;
+      background: var(--green);
+      border-radius: 2px;
+      margin: 0 auto 32px;
+    }
+    .divider--left { margin: 0 0 32px; }
+
+    /* ── PAIN CARDS ── */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .pain-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-left: 4px solid #E53E3E;
+      border-radius: var(--radius);
+      padding: 28px 24px;
+    }
+    .pain-card .icon { font-size: 2rem; margin-bottom: 12px; }
+    .pain-card h3 { color: #FC8181; margin-bottom: 8px; }
+    .pain-card p { font-size: 0.95rem; }
+
+    /* ── SECTION HEADER ── */
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header h2 { margin-bottom: 16px; }
+    .section-header p { max-width: 620px; margin: 0 auto; font-size: 1.05rem; }
+
+    /* ── FEATURE GRID ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+    .feature-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-color: var(--green); }
+    .feature-card .feat-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .feature-card h3 { color: var(--green); margin-bottom: 6px; }
+    .feature-card .feat-label { font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+    .feature-card p { font-size: 0.95rem; }
+
+    /* ── ROI BOX ── */
+    .roi-box {
+      background: var(--bg);
+      border: 2px solid var(--green);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .roi-box h3 {
+      color: var(--green);
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .roi-list { list-style: none; margin-bottom: 28px; }
+    .roi-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 1rem;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .roi-list li:last-child { border-bottom: none; }
+    .roi-list .check { color: var(--green); font-weight: 800; flex-shrink: 0; }
+    .roi-total {
+      background: var(--green-glo);
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      padding: 20px 24px;
+      text-align: center;
+    }
+    .roi-total .amount { font-size: 2rem; font-weight: 800; color: var(--green); }
+    .roi-total .label { font-size: 0.9rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .pricing-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .pricing-card--popular {
+      border: 2px solid var(--green);
+      background: var(--bg3);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #000;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 5px 16px;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .plan-name { font-size: 1rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .plan-price { font-size: 3rem; font-weight: 800; color: var(--text); line-height: 1; margin-bottom: 4px; }
+    .plan-price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .plan-jobs { font-size: 0.85rem; color: var(--green); font-weight: 700; margin-bottom: 24px; }
+    .plan-features { list-style: none; margin-bottom: 32px; flex: 1; }
+    .plan-features li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-features li:last-child { border-bottom: none; }
+    .plan-features .ck { color: var(--green); font-weight: 800; }
+    .btn-pay {
+      display: block;
+      width: 100%;
+      background: var(--green);
+      color: #000;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 16px;
+      border-radius: var(--radius);
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-pay:hover { background: var(--green-dk); }
+
+    /* ── INTERAC BOX ── */
+    .interac-box {
+      background: var(--bg);
+      border: 2px solid var(--green);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      max-width: 780px;
+      margin: 0 auto 32px;
+    }
+    .interac-box h3 {
+      font-size: 1.4rem;
+      color: var(--green);
+      margin-bottom: 24px;
+    }
+    .interac-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .interac-row:last-of-type { border-bottom: none; }
+    .interac-row .icon-cell { font-size: 1.25rem; flex-shrink: 0; line-height: 1.4; }
+    .interac-row strong { color: var(--green); }
+    .interac-activation {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: var(--green-glo);
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .call-derek {
+      text-align: center;
+      margin: 24px auto 0;
+      font-size: 1.15rem;
+      color: var(--text);
+    }
+    .call-derek a { color: var(--green); font-weight: 800; text-decoration: none; }
+    .call-derek a:hover { text-decoration: underline; }
+
+    /* ── PER-JOB NOTE ── */
+    .perjob-note {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      max-width: 780px;
+      margin: 0 auto 56px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .perjob-note strong { color: var(--text); }
+
+    /* ── TRUST ── */
+    .trust-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 48px;
+    }
+    .trust-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .trust-item strong { color: var(--text); display: block; font-size: 0.95rem; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 32px 20px;
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .footer a { color: var(--green); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero { padding: 60px 16px 56px; }
+      .section { padding: 60px 16px; }
+      .roi-box, .interac-box { padding: 28px 20px; }
+      .pricing-card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 1 · THE PROBLEM
+════════════════════════════════════════════════ -->
+
+<section class="hero">
+  <div class="container">
+    <div class="badge">CleanSwarm · Built for Cleaning Businesses</div>
+    <h1>Your Cleaning Business Loses<br><span>$2,400/Month</span> to Admin.<br>CleanSwarm Gets It Back.</h1>
+    <p class="sub">Scheduling conflicts. Missed jobs. Unpaid invoices. Most cleaning businesses bleed cash on problems a $399/mo platform can permanently fix — starting today.</p>
+    <a href="#pricing" class="hero-cta">See Pricing — Fix It Now</a>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="badge">The Problem</div>
+      <h2>Three Leaks Draining Your Business</h2>
+      <p>If you run a cleaning company without purpose-built software, you are leaving thousands on the table every single month.</p>
+    </div>
+
+    <div class="pain-grid">
+
+      <div class="pain-card">
+        <div class="icon">📅</div>
+        <h3>Scheduling Chaos</h3>
+        <p>Double bookings, no-shows, phone tag, manual rescheduling — every conflict costs you a job and a client relationship. There's no reason to tolerate it in 2026.</p>
+      </div>
+
+      <div class="pain-card">
+        <div class="icon">💸</div>
+        <h3>Missed Invoices</h3>
+        <p>Cash flow gaps. Chasing payments via text. Forgetting to bill. Late invoices are late payments — and late payments kill small businesses quietly.</p>
+      </div>
+
+      <div class="pain-card">
+        <div class="icon">📉</div>
+        <h3>Zero Visibility</h3>
+        <p>You don't know which clients are profitable, which routes waste fuel, or which cleaners are most efficient. Flying blind isn't running a business — it's hoping.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 2 · THE SOLUTION
+════════════════════════════════════════════════ -->
+
+<section class="section section--mid" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="badge">The Solution</div>
+      <h2>CleanSwarm Replaces<br>the Chaos With a System</h2>
+      <p>Six core modules. One platform. Everything a growing cleaning business needs to run, scale, and profit.</p>
+    </div>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <span class="feat-icon">🤖</span>
+        <div class="feat-label">Module 01</div>
+        <h3>AI Job Routing</h3>
+        <p>Right cleaner. Right location. Every time. CleanSwarm's AI matches jobs to cleaners based on skill, proximity, and schedule — zero guesswork.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feat-icon">🗓️</span>
+        <div class="feat-label">Module 02</div>
+        <h3>Auto-Scheduling</h3>
+        <p>Drag-and-drop dispatch, automated client reminders, and zero unnecessary calls. Your schedule fills itself and your clients always know what's happening.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feat-icon">🧾</span>
+        <div class="feat-label">Module 03</div>
+        <h3>Invoice Automation</h3>
+        <p>Send invoice the moment the job completes. Get paid faster. No chasing. No forgetting. Automatic reminders handle the follow-up while you run the next job.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feat-icon">🗺️</span>
+        <div class="feat-label">Module 04</div>
+        <h3>Route Optimization</h3>
+        <p>AI cuts drive time by 34%. That's more jobs per day, less fuel burned, and cleaners who arrive on time instead of stressed. The math pays for itself.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feat-icon">📱</span>
+        <div class="feat-label">Module 05</div>
+        <h3>Client Portal</h3>
+        <p>Clients book online, track their cleaner live, and rate service after completion. No more "when are they coming?" texts eating your afternoon.</p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feat-icon">📊</span>
+        <div class="feat-label">Module 06</div>
+        <h3>Analytics Dashboard</h3>
+        <p>Which clients are most profitable? Which routes waste money? CleanSwarm knows — and it tells you in plain language, not spreadsheets you'll never open.</p>
+      </div>
+
+    </div>
+
+    <!-- ROI MATH -->
+    <div class="roi-box">
+      <h3>The ROI Math — By the Numbers</h3>
+      <ul class="roi-list">
+        <li>
+          <span class="check">✓</span>
+          <span>34% less drive time = <strong>$420/mo saved in fuel</strong></span>
+        </li>
+        <li>
+          <span class="check">✓</span>
+          <span>2 extra jobs/week = <strong>$800–$1,600/mo in new revenue</strong></span>
+        </li>
+        <li>
+          <span class="check">✓</span>
+          <span>3 hours/week less admin = <strong>$150/mo in owner time back</strong></span>
+        </li>
+      </ul>
+      <div class="roi-total">
+        <div class="amount">$1,370 – $2,170/mo</div>
+        <div class="label">average CleanSwarm customer return on a <strong style="color:var(--text)">$399 investment</strong></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE 3 · PRICING + ACTION
+════════════════════════════════════════════════ -->
+
+<section class="section section--dark" id="pricing">
+  <div class="container">
+
+    <div class="section-header">
+      <div class="badge">Pricing — Pay Now, Start Today</div>
+      <h2>Simple Pricing.<br>No Long-Term Contracts.</h2>
+      <p>Month-to-month. Cancel any time. Most customers pay for the platform in the first week. All prices in Canadian dollars.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- STARTER -->
+      <div class="pricing-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$399<span>/mo CAD</span></div>
+        <div class="plan-jobs">Jobs Supported: Up to 4 Cleaners</div>
+        <ul class="plan-features">
+          <li><span class="ck">✓</span> Up to 500 jobs/month</li>
+          <li><span class="ck">✓</span> AI job routing</li>
+          <li><span class="ck">✓</span> Auto-invoicing</li>
+          <li><span class="ck">✓</span> Client portal</li>
+          <li><span class="ck">✓</span> Email support</li>
+        </ul>
+        <a href="PASTE_STRIPE_LINK_HERE_CLEANSWARM_STARTER" target="_blank" class="btn-pay">PAY NOW — STARTER</a>
+      </div>
+
+      <!-- GROWTH — MOST POPULAR -->
+      <div class="pricing-card pricing-card--popular">
+        <div class="popular-badge">⭐ Most Popular</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price">$999<span>/mo CAD</span></div>
+        <div class="plan-jobs">Jobs Supported: Up to 11 Cleaners</div>
+        <ul class="plan-features">
+          <li><span class="ck">✓</span> Up to 2,000 jobs/month</li>
+          <li><span class="ck">✓</span> Everything in Starter</li>
+          <li><span class="ck">✓</span> Priority dispatch</li>
+          <li><span class="ck">✓</span> Carbon tracking</li>
+          <li><span class="ck">✓</span> Phone support</li>
+        </ul>
+        <a href="PASTE_STRIPE_LINK_HERE_CLEANSWARM_GROWTH" target="_blank" class="btn-pay">PAY NOW — GROWTH</a>
+      </div>
+
+      <!-- SCALE -->
+      <div class="pricing-card">
+        <div class="plan-name">Scale</div>
+        <div class="plan-price">$2,499<span>/mo CAD</span></div>
+        <div class="plan-jobs">Jobs Supported: 28+ Cleaners / Unlimited</div>
+        <ul class="plan-features">
+          <li><span class="ck">✓</span> Unlimited jobs</li>
+          <li><span class="ck">✓</span> White-label dashboard</li>
+          <li><span class="ck">✓</span> Custom AI agents</li>
+          <li><span class="ck">✓</span> Full API access</li>
+          <li><span class="ck">✓</span> Dedicated account manager</li>
+        </ul>
+        <a href="PASTE_STRIPE_LINK_HERE_CLEANSWARM_SCALE" target="_blank" class="btn-pay">PAY NOW — SCALE</a>
+      </div>
+
+    </div>
+
+    <!-- INTERAC BOX -->
+    <div class="interac-box">
+      <h3>Pay Instantly via Interac e-Transfer</h3>
+
+      <div class="interac-row">
+        <span class="icon-cell">📧</span>
+        <span>Send to: <strong>franciscoderek7@gmail.com</strong></span>
+      </div>
+      <div class="interac-row">
+        <span class="icon-cell">📝</span>
+        <span>Reference: <strong>[Your Name] + CleanSwarm + [Starter / Growth / Scale]</strong></span>
+      </div>
+      <div class="interac-row">
+        <span class="icon-cell">✅</span>
+        <span>Account activated within <strong>4 hours of confirmation</strong></span>
+      </div>
+
+      <div class="interac-activation">
+        <strong>How it works:</strong> Send your e-Transfer, reply to Derek's confirmation text with your business email, and CleanSwarm activates your account — same business day.
+      </div>
+    </div>
+
+    <div class="call-derek">
+      Or call Derek directly: <a href="tel:7053078080">705-307-8080</a>
+    </div>
+
+    <!-- PER-JOB NOTE -->
+    <div class="perjob-note" style="margin-top:32px;">
+      <strong>Per-job billing available:</strong> Starter $0.65/job &nbsp;|&nbsp; Growth $0.45/job &nbsp;|&nbsp; Scale $0.35/job — billed monthly, pay to the same Interac address above.
+    </div>
+
+    <!-- TRUST BADGES -->
+    <div class="section-header" style="margin-bottom:24px;">
+      <div class="divider"></div>
+    </div>
+
+    <div class="trust-grid">
+      <div class="trust-item">
+        <strong>🛡️ OmniaGuard</strong>
+        Protected by Enterprise Security
+      </div>
+      <div class="trust-item">
+        <strong>🏢 Francisco Holdings Inc.</strong>
+        A Francisco Holdings Company
+      </div>
+      <div class="trust-item">
+        <strong>⚡ PrimeDox AI</strong>
+        Powered by PrimeDox AI
+      </div>
+      <div class="trust-item">
+        <strong>🌿 Carbon Neutral 2028</strong>
+        Committed to Net Zero
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+
+<footer class="footer">
+  <div class="container">
+    <p>© 2026 CleanSwarm. A <strong>Francisco Holdings Inc.</strong> Company. &nbsp;|&nbsp; <a href="tel:7053078080">705-307-8080</a> &nbsp;|&nbsp; <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></p>
+    <p style="margin-top:8px;">All prices in Canadian dollars. Month-to-month. No lock-in contracts.</p>
+  </div>
+</footer>
+
+</body>
+</html>

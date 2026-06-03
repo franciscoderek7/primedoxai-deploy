@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constitutional Defense Labs — Canada's Constitutional Education Resource</title>
+<meta name="description" content="Canada's most comprehensive constitutional education resource for the self-represented. Research library, motion templates, case law analytics, and paralegal certification.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0A;
+    --bg2: #111111;
+    --bg3: #181818;
+    --accent: #00FF88;
+    --gold: #FFD700;
+    --text: #E8E8E8;
+    --muted: #888888;
+    --border: #2A2A2A;
+    --card: #141414;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* DISCLAIMER BAR */
+  .disclaimer-bar {
+    background: var(--gold);
+    color: #0A0A0A;
+    text-align: center;
+    padding: 10px 20px;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  /* NAV */
+  nav {
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    position: sticky;
+    top: 41px;
+    z-index: 999;
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.75rem;
+    color: #0A0A0A;
+  }
+
+  .nav-logo-text {
+    color: var(--text);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .nav-logo-sub {
+    color: var(--muted);
+    font-size: 0.7rem;
+    display: block;
+    font-weight: 400;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #0A0A0A !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+  }
+
+  .nav-cta:hover { background: #00dd77 !important; }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    display: block;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 5% 100px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.08) 0%, transparent 65%),
+                radial-gradient(ellipse at 80% 80%, rgba(255,215,0,0.05) 0%, transparent 55%),
+                var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.3);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.08;
+    margin-bottom: 24px;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-tagline {
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0A0A0A;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: #00dd77; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 60px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat { text-align: center; }
+
+  .hero-stat-num {
+    display: block;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--accent);
+  }
+
+  .hero-stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  /* SECTIONS */
+  section { padding: 90px 5%; }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 600px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* ABOUT */
+  .about {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .about-visual {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-visual::before {
+    content: 'S';
+    position: absolute;
+    top: -20px;
+    right: 24px;
+    font-size: 8rem;
+    color: rgba(0,255,136,0.04);
+    font-weight: 900;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .about-pillar {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about-pillar:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .about-pillar-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .about-pillar h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  .about-pillar p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* SERVICES */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 24px;
+  }
+
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .service-card:hover { border-color: rgba(0,255,136,0.3); transform: translateY(-4px); }
+  .service-card:hover::after { transform: scaleX(1); }
+
+  .service-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(0,255,136,0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .service-card h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .service-card p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .service-tag {
+    display: inline-block;
+    background: rgba(0,255,136,0.08);
+    border: 1px solid rgba(0,255,136,0.2);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* RESEARCH LIBRARY */
+  .library-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .case-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: all 0.3s;
+  }
+
+  .case-card:hover { border-color: rgba(255,215,0,0.3); }
+
+  .case-citation {
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .case-card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .case-card .case-year {
+    display: inline-block;
+    background: rgba(255,215,0,0.1);
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+  }
+
+  .case-card p {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 18px;
+  }
+
+  .case-principles {
+    list-style: none;
+    margin-bottom: 16px;
+  }
+
+  .case-principles li {
+    font-size: 0.83rem;
+    color: var(--text);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .case-principles li:last-child { border-bottom: none; }
+
+  .case-principles li::before {
+    content: '→';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .case-charter {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .library-cta {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px;
+    text-align: center;
+  }
+
+  .library-cta h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .library-cta p {
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+  }
+
+  /* TEAM */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+  }
+
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .team-card:hover { border-color: rgba(0,255,136,0.3); transform: translateY(-3px); }
+
+  .team-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #0A0A0A;
+  }
+
+  .avatar-lead { background: var(--accent); }
+  .avatar-2 { background: var(--gold); }
+  .avatar-3 { background: #7B97FF; }
+
+  .team-card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .team-role {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .team-card p {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .team-credentials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .credential-badge {
+    background: rgba(0,255,136,0.08);
+    border: 1px solid rgba(0,255,136,0.15);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+  }
+
+  /* PARTNER CTA */
+  .partner-box {
+    background: var(--card);
+    border: 1px solid rgba(0,255,136,0.2);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .partner-box h3 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--accent);
+  }
+
+  .partner-box p {
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .contact-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-info-item:last-child { border-bottom: none; }
+
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .contact-info-item h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .contact-info-item a, .contact-info-item span {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .contact-info-item a:hover { color: var(--accent); }
+
+  .contact-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px;
+  }
+
+  .contact-form h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 24px;
+  }
+
+  .form-group { margin-bottom: 18px; }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+
+  .form-group textarea { resize: vertical; min-height: 100px; }
+
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #0A0A0A;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+
+  .form-submit:hover { background: #00dd77; }
+
+  /* FOOTER */
+  footer {
+    background: #050505;
+    border-top: 1px solid var(--border);
+    padding: 50px 5% 30px;
+  }
+
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+
+  .footer-brand p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 14px;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col ul li { margin-bottom: 10px; }
+
+  .footer-col ul li a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s;
+  }
+
+  .footer-col ul li a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-bottom p { font-size: 0.83rem; color: var(--muted); }
+
+  .footer-disclaimer {
+    font-size: 0.78rem;
+    color: #555;
+    text-align: center;
+    max-width: 1200px;
+    margin: 16px auto 0;
+    line-height: 1.6;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+  }
+
+  @media (max-width: 600px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+    section { padding: 60px 5%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER BAR -->
+<div class="disclaimer-bar">
+  &#9888; NOT LEGAL REPRESENTATION &mdash; EDUCATION AND RESEARCH ONLY &#9888;
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">CDL</div>
+    <div class="nav-logo-text">
+      Constitutional Defense Labs
+      <span class="nav-logo-sub">Canadian Constitutional Research</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#library">Library</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div style="position:relative;z-index:1;max-width:900px;margin:0 auto;">
+    <div class="hero-badge">Canada's Constitutional Education Resource</div>
+    <h1>Where <span>Constitutional</span><br>Defense Begins</h1>
+    <p class="hero-tagline">Canada's most comprehensive constitutional education resource for the self-represented. Research library, case law analytics, and certified paralegal training programs.</p>
+    <div class="hero-actions">
+      <a href="#library" class="btn-primary">Explore the Library</a>
+      <a href="#services" class="btn-secondary">View Services</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">3,200+</span>
+        <span class="hero-stat-label">Case Citations</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">480+</span>
+        <span class="hero-stat-label">Motion Templates</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">12</span>
+        <span class="hero-stat-label">Charter Sections Covered</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">1,800+</span>
+        <span class="hero-stat-label">Research Members</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Research-Driven. Education-Focused. Rights-Forward.</h2>
+        <p class="section-desc">Constitutional Defense Labs is a Canadian research and education institution dedicated to making constitutional knowledge accessible to every Canadian. We do not provide legal advice &mdash; we provide the tools, resources, and education to understand your rights.</p>
+        <p style="color:var(--muted);font-size:0.93rem;line-height:1.75;margin-bottom:28px;">Founded on the principle that constitutional literacy is a civic necessity, we aggregate, analyze, and present Canadian constitutional law in formats that self-represented litigants, law students, paralegals, and curious citizens can actually use.</p>
+        <a href="#services" class="btn-primary">Explore Our Services</a>
+      </div>
+      <div class="about-visual">
+        <div class="about-pillar">
+          <div class="about-pillar-icon">&#128218;</div>
+          <div>
+            <h4>Verified Research</h4>
+            <p>Every case citation and constitutional principle is drawn from official Canadian court records and government publications.</p>
+          </div>
+        </div>
+        <div class="about-pillar">
+          <div class="about-pillar-icon">&#127979;</div>
+          <div>
+            <h4>Education First</h4>
+            <p>We are an education lab, not a law firm. Our materials inform and educate &mdash; they never constitute legal advice or representation.</p>
+          </div>
+        </div>
+        <div class="about-pillar">
+          <div class="about-pillar-icon">&#128203;</div>
+          <div>
+            <h4>Accessible Formats</h4>
+            <p>Plain-language summaries, annotated templates, and structured learning paths for every level of constitutional literacy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="background:var(--bg);">
+  <div class="container">
+    <div class="section-label">Our Services</div>
+    <h2 class="section-title">Comprehensive Constitutional Education Tools</h2>
+    <p class="section-desc">Four core service pillars designed to equip self-represented Canadians with the knowledge to navigate constitutional law.</p>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">&#128218;</div>
+        <h3>Constitutional Research Library</h3>
+        <p>Access thousands of curated case summaries, Charter analyses, and constitutional precedents. Organized by right, section, and jurisdictional context for rapid research.</p>
+        <span class="service-tag">3,200+ Cases</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128196;</div>
+        <h3>Motion Template Database</h3>
+        <p>Download annotated motion templates for common constitutional applications &mdash; s.8 search challenges, s.9 arbitrary detention, s.10(b) right to counsel, and more.</p>
+        <span class="service-tag">480+ Templates</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#128202;</div>
+        <h3>Case Law Analytics</h3>
+        <p>Our analytics engine tracks case outcomes, judicial reasoning patterns, and Charter application trends across Canadian jurisdictions. Understand the landscape before your hearing.</p>
+        <span class="service-tag">Real-Time Data</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">&#127891;</div>
+        <h3>Paralegal Certification Programs</h3>
+        <p>Structured learning programs for aspiring paralegals covering constitutional law fundamentals, Charter applications, and motion drafting. Certification upon completion.</p>
+        <span class="service-tag">Accredited Programs</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH LIBRARY PREVIEW -->
+<section id="library" style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="library-header">
+      <div>
+        <div class="section-label">Research Library</div>
+        <h2 class="section-title">Featured Case Law</h2>
+        <p style="color:var(--muted);font-size:1.05rem;line-height:1.75;">Landmark Canadian constitutional cases every self-represented litigant should know.</p>
+      </div>
+      <a href="#contact" class="btn-secondary" style="flex-shrink:0;white-space:nowrap;">Access Full Library &rarr;</a>
+    </div>
+    <div class="case-grid">
+
+      <div class="case-card">
+        <div class="case-citation">R v Parker &mdash; 2000 CanLII 5762 (ON CA)</div>
+        <h3>R v Parker</h3>
+        <span class="case-year">2000 &mdash; Ontario Court of Appeal</span>
+        <p>A foundational ruling on medical necessity and the constitutionality of cannabis prohibition. The court struck down the criminal prohibition as unconstitutional in the absence of a medical exemption, establishing that s.7 of the Charter protects access to necessary medical treatment.</p>
+        <ul class="case-principles">
+          <li>Section 7 right to life and security of the person engaged by criminal prohibition</li>
+          <li>Medical necessity as a constitutional consideration under the Charter</li>
+          <li>Prohibition struck as unconstitutional without medical access framework</li>
+          <li>Established foundation for subsequent medical cannabis regulation in Canada</li>
+        </ul>
+        <span class="case-charter">Charter: s.7 &mdash; Life, Liberty &amp; Security of the Person</span>
+      </div>
+
+      <div class="case-card">
+        <div class="case-citation">R v Smith &mdash; 2015 SCC 34</div>
+        <h3>R v Smith</h3>
+        <span class="case-year">2015 &mdash; Supreme Court of Canada</span>
+        <p>The Supreme Court unanimously struck down Health Canada's restriction limiting medical cannabis to dried form only. The Court held the prohibition on non-dried forms violated s.7 by forcing patients to choose between their liberty and their health.</p>
+        <ul class="case-principles">
+          <li>Unconstitutional to restrict medical cannabis to a single consumption method</li>
+          <li>Liberty and security cannot be arbitrarily constrained by regulatory design</li>
+          <li>Health Canada's regime found grossly disproportionate to its objective</li>
+          <li>Expanded the medical access framework to all cannabis forms</li>
+        </ul>
+        <span class="case-charter">Charter: s.7 &mdash; Liberty &amp; Security of the Person</span>
+      </div>
+
+      <div class="case-card">
+        <div class="case-citation">R v Grant &mdash; 2009 SCC 32</div>
+        <h3>R v Grant</h3>
+        <span class="case-year">2009 &mdash; Supreme Court of Canada</span>
+        <p>The Supreme Court reformulated the test for excluding evidence obtained through Charter breaches under s.24(2). The Grant test replaced the Collins framework and established a three-step balancing analysis that remains the standard today.</p>
+        <ul class="case-principles">
+          <li>Established the modern s.24(2) three-part evidence exclusion test</li>
+          <li>Seriousness of state Charter-infringing conduct is primary consideration</li>
+          <li>Impact on the accused's Charter-protected interests weighs heavily</li>
+          <li>Society's interest in adjudication on merits is balancing factor</li>
+        </ul>
+        <span class="case-charter">Charter: s.9, s.10(b), s.24(2) &mdash; Evidence Exclusion</span>
+      </div>
+
+    </div>
+    <div class="library-cta">
+      <h3>Access the Full Research Library</h3>
+      <p>Our complete library contains 3,200+ Canadian constitutional cases with annotations, Charter section mapping, and research notes. Members receive unlimited access plus motion template downloads.</p>
+      <a href="#contact" class="btn-primary">Become a Research Member</a>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team" style="background:var(--bg);">
+  <div class="container">
+    <div class="section-label">Our Team</div>
+    <h2 class="section-title">Research Associates</h2>
+    <p class="section-desc">A dedicated team of constitutional researchers and educators committed to making Canadian law accessible to all.</p>
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-avatar avatar-lead">DF</div>
+        <h3>Derek Francisco</h3>
+        <div class="team-role">Director of Research</div>
+        <p>Constitutional law researcher and educator with extensive experience in Canadian Charter jurisprudence. Specializes in s.7 through s.15 Charter rights, judicial review, and self-represented litigant education programs.</p>
+        <div class="team-credentials">
+          <span class="credential-badge">Charter Specialist</span>
+          <span class="credential-badge">Legal Education</span>
+          <span class="credential-badge">SRL Advocacy</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar avatar-2">MR</div>
+        <h3>Michelle Rourke</h3>
+        <div class="team-role">Senior Research Associate</div>
+        <p>Focuses on criminal procedure and evidence law with a specialty in Charter s.8 unreasonable search and seizure jurisprudence. Author of CDL's search and seizure motion template series used by over 400 members.</p>
+        <div class="team-credentials">
+          <span class="credential-badge">Criminal Procedure</span>
+          <span class="credential-badge">s.8 Charter</span>
+          <span class="credential-badge">Motion Drafting</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar avatar-3">TN</div>
+        <h3>Thomas Nguyen</h3>
+        <div class="team-role">Research Associate &mdash; Analytics</div>
+        <p>Leads CDL's case law analytics division, tracking judicial reasoning trends across Canadian superior courts. Developed CDL's Charter section outcome-mapping methodology and jurisdiction comparison tools.</p>
+        <div class="team-credentials">
+          <span class="credential-badge">Legal Analytics</span>
+          <span class="credential-badge">Jurisprudence</span>
+          <span class="credential-badge">Data Research</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER CTA -->
+<section style="background:radial-gradient(ellipse at 50% 50%, rgba(0,255,136,0.07) 0%, transparent 70%), var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center;">
+  <div class="container">
+    <div class="section-label">Partnership Network</div>
+    <h2 class="section-title">Partner with CCLDR.NET</h2>
+    <p class="section-desc" style="margin:0 auto 36px;">Constitutional Defense Labs is a proud educational partner of CCLDR.NET &mdash; Canada's national cannabis legal defense resource network.</p>
+    <div class="partner-box">
+      <h3>CCLDR.NET &mdash; Canadian Cannabis Legal Defense Resource</h3>
+      <p>Our primary referral partner for Canadians navigating cannabis-related constitutional matters. CCLDR.NET provides access to our full research library, paralegal referral network, and emergency defense documentation &mdash; fully aligned with CDL's research and education standards.</p>
+      <a href="https://ccldr.net" class="btn-primary" target="_blank" rel="noopener">
+        Visit CCLDR.NET &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background:var(--bg);">
+  <div class="container">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">Get in Touch</h2>
+    <div class="contact-grid">
+      <div>
+        <p style="color:var(--muted);font-size:0.95rem;line-height:1.75;margin-bottom:36px;">Have a research inquiry, membership question, or partnership proposal? Our team is happy to help. <strong style="color:var(--gold);">We do not provide legal advice.</strong> For specific legal matters, please consult a licensed lawyer or paralegal.</p>
+        <div class="contact-info-item">
+          <div class="contact-icon">&#9993;</div>
+          <div>
+            <h4>Research Inquiries</h4>
+            <a href="mailto:research@constitutionaldefenselabs.ca">research@constitutionaldefenselabs.ca</a>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">&#127988;</div>
+          <div>
+            <h4>Jurisdiction</h4>
+            <span>Canada &mdash; Serving All Provinces &amp; Territories</span>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">&#128279;</div>
+          <div>
+            <h4>Partner Network</h4>
+            <a href="https://ccldr.net" target="_blank" rel="noopener">CCLDR.NET &mdash; Primary Research Partner</a>
+          </div>
+        </div>
+        <div style="background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.2);border-radius:10px;padding:20px;margin-top:8px;">
+          <p style="font-size:0.83rem;color:var(--gold);font-weight:700;margin-bottom:6px;">IMPORTANT DISCLAIMER</p>
+          <p style="font-size:0.82rem;color:var(--muted);line-height:1.65;">Constitutional Defense Labs provides educational resources only. Nothing on this website constitutes legal advice, legal representation, or a solicitor-client relationship. Always consult a licensed legal professional for advice specific to your situation.</p>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h3>Research Membership Inquiry</h3>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>Inquiry Type</label>
+          <select>
+            <option>Research Library Access</option>
+            <option>Motion Template Database</option>
+            <option>Paralegal Certification</option>
+            <option>Case Law Analytics</option>
+            <option>Partnership / Referral</option>
+            <option>General Research Question</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Describe your research needs or inquiry..."></textarea>
+        </div>
+        <button class="form-submit">Send Research Inquiry</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div class="nav-logo-icon">CDL</div>
+        <div class="nav-logo-text">Constitutional Defense Labs</div>
+      </div>
+      <p>Canada's most comprehensive constitutional education and research resource for self-represented litigants, law students, and paralegals nationwide.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Research Library</a></li>
+        <li><a href="#services">Motion Templates</a></li>
+        <li><a href="#services">Case Analytics</a></li>
+        <li><a href="#services">Paralegal Programs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#library">Case Law Library</a></li>
+        <li><a href="#">Charter Guide</a></li>
+        <li><a href="#">SRL Handbook</a></li>
+        <li><a href="https://ccldr.net" target="_blank" rel="noopener">CCLDR.NET</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:research@constitutionaldefenselabs.ca">Email Us</a></li>
+        <li><a href="#team">Our Team</a></li>
+        <li><a href="#contact">Membership</a></li>
+        <li><a href="#about">About CDL</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Constitutional Defense Labs. A Francisco Holdings Inc. Company.</p>
+    <p style="font-size:0.78rem;color:#444;">Educational and research purposes only. Not legal advice.</p>
+  </div>
+  <p class="footer-disclaimer">DISCLAIMER: Constitutional Defense Labs provides educational resources and research materials only. Nothing on this website constitutes legal advice, legal representation, or creates a solicitor-client relationship. For legal advice specific to your situation, please consult a licensed lawyer or paralegal in your jurisdiction. All case summaries are for educational reference only.</p>
+</footer>
+
+</body>
+</html>

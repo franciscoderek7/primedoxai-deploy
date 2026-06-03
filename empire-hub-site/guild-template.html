@@ -1,0 +1,1438 @@
+<!-- EMPIRE HUB GUILD TEMPLATE v1
+     To create a new guild: edit GUILD_CONFIG at top of <script>
+     Change: name, tagline, company, hero, heroEmoji, heroSpecialty, colors, memberCount, stripeLink, contactEmail
+     Do NOT edit: structural HTML, CSS variables, JS functions
+     Deploy: copy file, edit config, push to GitHub Pages
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Guild — Empire Hub</title>
+  <meta name="description" id="page-meta" content="A specialized guild on Empire Hub, powered by PrimeDox AI." />
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES — overridden by JS from GUILD_CONFIG
+    ============================================================ */
+    :root {
+      --guild-primary:   #00D4FF;
+      --guild-secondary: #0A2A4A;
+      --guild-accent:    #00FF88;
+      --bg-base:         #070B14;
+      --bg-card:         rgba(255,255,255,0.04);
+      --bg-card-hover:   rgba(255,255,255,0.08);
+      --border-subtle:   rgba(255,255,255,0.07);
+      --text-primary:    #F0F4FF;
+      --text-secondary:  #8899BB;
+      --text-muted:      #4A5A7A;
+      --nav-height:      64px;
+      --radius-sm:       6px;
+      --radius-md:       12px;
+      --radius-lg:       18px;
+      --transition:      0.22s ease;
+      --font:            system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { color: var(--guild-primary); text-decoration: none; transition: opacity var(--transition); }
+    a:hover { opacity: 0.8; }
+    img { display: block; max-width: 100%; }
+    button { font-family: var(--font); cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* ============================================================
+       UTILITY
+    ============================================================ */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.08);
+      color: var(--text-secondary);
+    }
+    .tag--accent {
+      background: color-mix(in srgb, var(--guild-primary) 15%, transparent);
+      color: var(--guild-primary);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      border-radius: 10px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: var(--guild-primary);
+      color: #000;
+    }
+    .badge--zero { background: var(--bg-card); color: var(--text-muted); }
+    .glass {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .glass--guild-border { border-color: color-mix(in srgb, var(--guild-primary) 30%, transparent); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+    .btn--primary {
+      background: var(--guild-primary);
+      color: #000;
+    }
+    .btn--primary:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px color-mix(in srgb, var(--guild-primary) 40%, transparent);
+    }
+    .btn--outline {
+      background: transparent;
+      border: 1.5px solid var(--guild-primary);
+      color: var(--guild-primary);
+    }
+    .btn--outline:hover {
+      background: color-mix(in srgb, var(--guild-primary) 12%, transparent);
+    }
+    .btn--ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    .btn--ghost:hover { color: var(--text-primary); background: var(--bg-card-hover); border-radius: var(--radius-sm); }
+
+    /* ============================================================
+       TOAST NOTIFICATION
+    ============================================================ */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      z-index: 9999;
+      background: var(--guild-secondary);
+      border: 1px solid color-mix(in srgb, var(--guild-primary) 50%, transparent);
+      border-radius: var(--radius-md);
+      padding: 14px 24px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    #toast .toast-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--guild-accent);
+      animation: pulse-dot 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    /* ============================================================
+       NAV — STICKY
+    ============================================================ */
+    #nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      height: var(--nav-height);
+      background: rgba(7,11,20,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    /* Guild color accent strip at bottom of nav */
+    #nav::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--guild-primary), var(--guild-accent), transparent);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: var(--nav-height);
+      gap: 16px;
+    }
+    .nav-left { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: 0.04em;
+    }
+    .nav-logo .logo-icon {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--guild-primary), var(--guild-accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #000;
+    }
+    .nav-divider {
+      width: 1px; height: 22px;
+      background: var(--border-subtle);
+    }
+    .nav-guild-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--guild-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+    .nav-center { flex: 1; display: flex; justify-content: center; }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+    }
+    .nav-links a {
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+    .nav-links a:hover { color: var(--text-primary); background: var(--bg-card-hover); }
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .member-count-nav {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .member-count-nav .count { color: var(--guild-accent); font-weight: 700; }
+    .member-count-nav .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--guild-accent);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    #hero {
+      position: relative;
+      padding: 100px 0 80px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .hero-glow {
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center,
+        color-mix(in srgb, var(--guild-primary) 18%, transparent) 0%,
+        transparent 70%);
+      pointer-events: none;
+      animation: glow-breathe 4s ease-in-out infinite;
+    }
+    @keyframes glow-breathe {
+      0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+      50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+    }
+    .hero-label {
+      margin-bottom: 18px;
+    }
+    .hero-title {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+    .hero-title span { color: var(--guild-primary); }
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 0 auto 48px;
+    }
+
+    /* AI Moderator Card */
+    .ai-mod-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 32px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 56px;
+      text-align: left;
+    }
+    .ai-mod-avatar {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--guild-primary), var(--guild-accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.9rem;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .ai-mod-avatar::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; right: -3px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--guild-accent);
+      border: 2px solid var(--bg-base);
+    }
+    .ai-mod-info { flex: 1; }
+    .ai-mod-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .ai-mod-name span { color: var(--guild-primary); }
+    .ai-mod-specialty {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .ai-mod-status {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--guild-accent);
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* Hero Stats */
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-value {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900;
+      color: var(--guild-primary);
+      display: block;
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       SECTION COMMON
+    ============================================================ */
+    section { padding: 72px 0; }
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-header h2 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .section-header h2 span { color: var(--guild-primary); }
+    .section-header p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       LIVE ACTIVITY FEED
+    ============================================================ */
+    #feed { background: rgba(255,255,255,0.015); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+    .feed-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .feed-sidebar { position: sticky; top: calc(var(--nav-height) + 24px); }
+    .feed-sidebar-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .online-list { display: flex; flex-direction: column; gap: 10px; }
+    .online-user {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .online-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: color-mix(in srgb, var(--guild-primary) 20%, transparent);
+      border: 1.5px solid color-mix(in srgb, var(--guild-primary) 40%, transparent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+    }
+    .online-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--guild-accent);
+      margin-left: auto; flex-shrink: 0;
+    }
+
+    /* Feed Posts */
+    .feed-posts { display: flex; flex-direction: column; gap: 14px; max-height: 560px; overflow: hidden; }
+    .feed-post {
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid color-mix(in srgb, var(--guild-primary) 18%, transparent);
+      background: var(--bg-card);
+      backdrop-filter: blur(8px);
+      display: flex; flex-direction: column; gap: 10px;
+      animation: slide-in 0.45s cubic-bezier(0.16,1,0.3,1);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .feed-post:hover {
+      border-color: color-mix(in srgb, var(--guild-primary) 40%, transparent);
+      background: var(--bg-card-hover);
+    }
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .feed-post-header {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .post-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: color-mix(in srgb, var(--guild-primary) 25%, transparent);
+      border: 1.5px solid color-mix(in srgb, var(--guild-primary) 50%, transparent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .post-meta { flex: 1; }
+    .post-author { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); }
+    .post-time { font-size: 0.74rem; color: var(--text-muted); }
+    .post-content { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; }
+    .post-actions {
+      display: flex; gap: 8px; align-items: center;
+    }
+
+    /* ============================================================
+       CHANNELS
+    ============================================================ */
+    #channels { background: rgba(255,255,255,0.01); }
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .channel-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .channel-item:hover {
+      background: var(--bg-card-hover);
+      border-color: color-mix(in srgb, var(--guild-primary) 40%, transparent);
+      transform: translateY(-2px);
+    }
+    .channel-left { display: flex; align-items: center; gap: 10px; }
+    .channel-hash { font-size: 1rem; font-weight: 900; color: var(--guild-primary); width: 16px; flex-shrink: 0; }
+    .channel-name { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); }
+    .channel-desc { font-size: 0.73rem; color: var(--text-muted); }
+
+    /* ============================================================
+       FEATURES GRID
+    ============================================================ */
+    #features { border-top: 1px solid var(--border-subtle); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--guild-primary), var(--guild-accent));
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .feature-card:hover { border-color: color-mix(in srgb, var(--guild-primary) 30%, transparent); transform: translateY(-3px); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: color-mix(in srgb, var(--guild-primary) 15%, transparent);
+      border: 1px solid color-mix(in srgb, var(--guild-primary) 25%, transparent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+    .feature-title { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .feature-desc { font-size: 0.86rem; color: var(--text-secondary); line-height: 1.55; }
+    .feature-tag { margin-top: 14px; }
+
+    /* ============================================================
+       PRICING
+    ============================================================ */
+    #pricing { background: rgba(255,255,255,0.015); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      padding: 28px 24px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+      position: relative;
+      transition: all var(--transition);
+    }
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card--featured {
+      border-color: var(--guild-primary);
+      background: color-mix(in srgb, var(--guild-primary) 6%, var(--bg-card));
+    }
+    .pricing-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      padding: 3px 14px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: var(--guild-primary);
+      color: #000;
+    }
+    .pricing-tier {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .pricing-price {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .pricing-price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
+    .pricing-desc { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 20px; }
+    .pricing-features {
+      display: flex; flex-direction: column; gap: 8px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .pricing-features li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 0.83rem; color: var(--text-secondary);
+    }
+    .pricing-features li .check { color: var(--guild-accent); font-weight: 700; flex-shrink: 0; }
+
+    /* ============================================================
+       INTERAC SECTION
+    ============================================================ */
+    #interac {
+      border-top: 1px solid var(--border-subtle);
+      padding: 64px 0;
+    }
+    .interac-card {
+      max-width: 620px; margin: 0 auto;
+      padding: 36px 40px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      border: 1.5px solid color-mix(in srgb, var(--guild-primary) 30%, transparent);
+    }
+    .interac-logo {
+      font-size: 2rem; margin-bottom: 14px;
+    }
+    .interac-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+    .interac-email {
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--guild-primary);
+      margin-bottom: 10px;
+    }
+    .interac-note {
+      font-size: 0.84rem; color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .interac-ref {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      display: inline-block;
+      margin-top: 8px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ============================================================
+       JOIN FORM
+    ============================================================ */
+    #join {
+      border-top: 1px solid var(--border-subtle);
+      padding: 80px 0;
+    }
+    .join-card {
+      max-width: 560px; margin: 0 auto;
+      padding: 40px 36px;
+      border-radius: var(--radius-lg);
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 7px;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid var(--border-subtle);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--guild-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--guild-primary) 15%, transparent);
+    }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      background: var(--guild-primary);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .form-submit:hover {
+      filter: brightness(1.12);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px color-mix(in srgb, var(--guild-primary) 40%, transparent);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    #footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 40px 0;
+      background: rgba(255,255,255,0.01);
+    }
+    .footer-inner {
+      display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+    }
+    .footer-copyright {
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    .footer-moderator {
+      font-size: 0.78rem; color: var(--text-muted);
+    }
+    .footer-moderator span { color: var(--guild-primary); font-weight: 700; }
+    .footer-green {
+      font-size: 0.75rem; color: var(--text-muted);
+    }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+    .footer-links a { font-size: 0.8rem; color: var(--text-muted); }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* ============================================================
+       MOBILE RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-guild-name { max-width: 140px; font-size: 0.8rem; }
+      .member-count-nav { display: none; }
+      .feed-layout { grid-template-columns: 1fr; }
+      .feed-sidebar { display: none; }
+      .ai-mod-card { flex-direction: column; text-align: center; padding: 20px; }
+      .hero-stats { gap: 28px; }
+      .join-card, .interac-card { padding: 28px 20px; }
+      #hero { padding: 64px 0 56px; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .btn--primary.nav-join { padding: 8px 14px; font-size: 0.82rem; }
+      .nav-logo .logo-text { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOAST -->
+  <div id="toast" role="status" aria-live="polite">
+    <div class="toast-dot"></div>
+    <span id="toast-text"></span>
+  </div>
+
+  <!-- ============================================================
+       NAV
+  ============================================================ -->
+  <nav id="nav" role="navigation" aria-label="Guild navigation">
+    <div class="container nav-inner">
+      <!-- Left: Empire Hub logo + guild name -->
+      <div class="nav-left">
+        <a href="../index.html" class="nav-logo" title="Back to Empire Hub">
+          <div class="logo-icon">E</div>
+          <span class="logo-text">Empire Hub</span>
+        </a>
+        <div class="nav-divider" aria-hidden="true"></div>
+        <span class="nav-guild-name" id="nav-guild-name">Guild</span>
+      </div>
+
+      <!-- Center: nav links -->
+      <div class="nav-center">
+        <nav class="nav-links" aria-label="Page sections">
+          <a href="#feed">Feed</a>
+          <a href="#channels">Channels</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#join">Join</a>
+        </nav>
+      </div>
+
+      <!-- Right: member count + CTA -->
+      <div class="nav-right">
+        <div class="member-count-nav" aria-label="Live member count">
+          <div class="live-dot" aria-hidden="true"></div>
+          <span class="count" id="nav-member-count">0</span>
+          <span>members</span>
+        </div>
+        <a href="#join" class="btn btn--primary nav-join">Join Guild</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section id="hero" aria-labelledby="hero-title">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container">
+      <div class="hero-label">
+        <span class="tag tag--accent" id="hero-company-tag">Guild</span>
+      </div>
+      <h1 class="hero-title" id="hero-title">
+        <span id="hero-guild-name">Guild Name</span>
+      </h1>
+      <p class="hero-tagline" id="hero-tagline">Guild tagline goes here.</p>
+
+      <!-- AI Moderator Card -->
+      <div class="ai-mod-card glass glass--guild-border" role="region" aria-label="AI Moderator">
+        <div class="ai-mod-avatar" id="hero-emoji" aria-hidden="true">🤖</div>
+        <div class="ai-mod-info">
+          <div class="ai-mod-name">
+            <span id="hero-name">AI Moderator</span> — Your AI Moderator
+          </div>
+          <div class="ai-mod-specialty" id="hero-specialty">Specialty loading...</div>
+          <div class="ai-mod-status">
+            <span aria-hidden="true">●</span>
+            Always online. Zero wait.
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats" role="group" aria-label="Guild statistics">
+        <div class="stat-item">
+          <span class="stat-value" id="stat-members" data-target="0">0</span>
+          <span class="stat-label">Members</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="stat-posts" data-target="0">0</span>
+          <span class="stat-label">Posts</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="stat-channels" data-target="0">0</span>
+          <span class="stat-label">Channels</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LIVE ACTIVITY FEED
+  ============================================================ -->
+  <section id="feed" aria-labelledby="feed-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="feed-heading">Live <span>Activity Feed</span></h2>
+        <p>Real-time guild activity, moderated and surfaced by your AI moderator.</p>
+      </div>
+      <div class="feed-layout">
+        <!-- Sidebar: online users -->
+        <aside class="feed-sidebar" aria-label="Online members">
+          <div class="feed-sidebar-title">Online Now</div>
+          <ul class="online-list" id="online-list">
+            <li class="online-user">
+              <div class="online-avatar" aria-hidden="true">🛡️</div>
+              <span id="sidebar-hero-name">AI Mod</span>
+              <div class="online-dot" aria-label="Online" title="Online"></div>
+            </li>
+            <li class="online-user"><div class="online-avatar" aria-hidden="true">🧑‍💻</div><span>DataSentinel</span><div class="online-dot"></div></li>
+            <li class="online-user"><div class="online-avatar" aria-hidden="true">🔬</div><span>NexusOperator</span><div class="online-dot"></div></li>
+            <li class="online-user"><div class="online-avatar" aria-hidden="true">⚡</div><span>Vortex_Dev</span><div class="online-dot"></div></li>
+            <li class="online-user"><div class="online-avatar" aria-hidden="true">🌐</div><span>GridGuardian</span><div class="online-dot"></div></li>
+            <li class="online-user"><div class="online-avatar" aria-hidden="true">🔐</div><span>CipherCore</span><div class="online-dot"></div></li>
+          </ul>
+        </aside>
+
+        <!-- Feed posts -->
+        <div class="feed-posts" id="feed-posts" aria-live="polite" aria-label="Live post feed">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GUILD CHANNELS
+  ============================================================ -->
+  <section id="channels" aria-labelledby="channels-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="channels-heading">Guild <span>Channels</span></h2>
+        <p>Organized discussion spaces for every topic your guild cares about.</p>
+      </div>
+      <div class="channels-grid" id="channels-grid" role="list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FEATURES
+  ============================================================ -->
+  <section id="features" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="features-heading">Guild <span>Features</span></h2>
+        <p>Everything your professional community needs, built in — no integrations required.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🤖</div>
+          <div class="feature-title">AI-Moderated Discussions</div>
+          <div class="feature-desc">Your guild AI moderator maintains quality, surfaces insights, and keeps conversations on track — automatically, around the clock.</div>
+          <div class="feature-tag"><span class="tag tag--accent">Included</span></div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📚</div>
+          <div class="feature-title">Resource Library</div>
+          <div class="feature-desc">Upload reports, templates, and guides. The AI moderator indexes and retrieves them on demand for any member.</div>
+          <div class="feature-tag"><span class="tag tag--accent">Included</span></div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">🎙️</div>
+          <div class="feature-title">Live Events</div>
+          <div class="feature-desc">Schedule webinars, AMAs, and workshops directly in the guild. Members get automated reminders and summaries post-event.</div>
+          <div class="feature-tag"><span class="tag tag--accent">Included</span></div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">💼</div>
+          <div class="feature-title" id="feature-job-title">Job Board</div>
+          <div class="feature-desc" id="feature-job-desc">Post and discover roles within the guild's industry network. AI-matched listings surface the most relevant opportunities first.</div>
+          <div class="feature-tag"><span class="tag tag--accent">Included</span></div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" id="feature-ai-icon" aria-hidden="true">🤖</div>
+          <div class="feature-title" id="feature-ai-title">Direct AI Support</div>
+          <div class="feature-desc" id="feature-ai-desc">Message your AI moderator directly for research, summaries, or guidance — available 24/7 with domain expertise built in.</div>
+          <div class="feature-tag"><span class="tag tag--accent">All Members</span></div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">📊</div>
+          <div class="feature-title">Guild Analytics</div>
+          <div class="feature-desc">Track engagement, trending topics, and growth metrics with a real-time dashboard available to Pro and Sovereign tier members.</div>
+          <div class="feature-tag"><span class="tag">Pro / Sovereign</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRICING
+  ============================================================ -->
+  <section id="pricing" aria-labelledby="pricing-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="pricing-heading">Simple <span>Pricing</span></h2>
+        <p>Access this guild under any Empire Hub plan. Upgrade to unlock all 10 guilds.</p>
+      </div>
+      <div class="pricing-grid">
+
+        <!-- Free -->
+        <div class="pricing-card">
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">$0</div>
+          <div class="pricing-desc">Get started with one guild at no cost.</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> 1 Guild access</li>
+            <li><span class="check">✓</span> Read-only resource library</li>
+            <li><span class="check">✓</span> Community feed</li>
+            <li><span class="check">✓</span> AI moderator responses</li>
+          </ul>
+          <a href="#join" class="btn btn--outline" style="width:100%; justify-content:center;">Join Free</a>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-tier">Pro</div>
+          <div class="pricing-price">$29<span>/mo</span></div>
+          <div class="pricing-desc">Full access to every guild on Empire Hub.</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> All 10 Guilds</li>
+            <li><span class="check">✓</span> Unlimited resource uploads</li>
+            <li><span class="check">✓</span> Priority AI responses</li>
+            <li><span class="check">✓</span> Event hosting</li>
+            <li><span class="check">✓</span> Guild analytics dashboard</li>
+          </ul>
+          <a id="pro-stripe-link" href="PASTE_STRIPE_LINK_HERE_EMPIREHUB_PRO" class="btn btn--primary" style="width:100%; justify-content:center;" target="_blank" rel="noopener">Subscribe — Pro</a>
+        </div>
+
+        <!-- Sovereign -->
+        <div class="pricing-card">
+          <div class="pricing-tier">Sovereign</div>
+          <div class="pricing-price">$199<span>/mo</span></div>
+          <div class="pricing-desc">Full platform access — every product, every guild.</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Everything in Pro</li>
+            <li><span class="check">✓</span> All Francisco Holdings platforms</li>
+            <li><span class="check">✓</span> White-label AI moderator</li>
+            <li><span class="check">✓</span> Dedicated account manager</li>
+            <li><span class="check">✓</span> Custom guild creation</li>
+          </ul>
+          <a id="sovereign-stripe-link" href="PASTE_STRIPE_LINK_HERE_EMPIREHUB_SOVEREIGN" class="btn btn--outline" style="width:100%; justify-content:center;" target="_blank" rel="noopener">Subscribe — Sovereign</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       INTERAC
+  ============================================================ -->
+  <section id="interac" aria-labelledby="interac-heading">
+    <div class="container">
+      <div class="interac-card glass glass--guild-border">
+        <div class="interac-logo" aria-hidden="true">🏦</div>
+        <h2 class="interac-title" id="interac-heading">Pay via Interac e-Transfer</h2>
+        <div class="interac-email">franciscoderek7@gmail.com</div>
+        <p class="interac-note">Send payment to the email above via your bank's Interac e-Transfer feature.</p>
+        <p class="interac-note">Use the reference format below so we can match your payment:</p>
+        <div class="interac-ref" id="interac-ref-example">
+          [Your Name] + Empire Hub + [Free / Pro / Sovereign]
+        </div>
+        <p class="interac-note" style="margin-top:14px; font-size:0.76rem;">
+          Access is provisioned within 24 hours of confirmed payment. Questions? Email us at <a id="contact-email-interac" href="mailto:guild@omniaguard.com">guild@omniaguard.com</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       JOIN FORM
+  ============================================================ -->
+  <section id="join" aria-labelledby="join-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="join-heading">Join the <span id="join-guild-name">Guild</span></h2>
+        <p>Submit your application and our AI moderator will follow up within 24 hours.</p>
+      </div>
+      <div class="join-card glass glass--guild-border">
+        <form id="join-form" aria-label="Guild join application">
+          <div class="form-group">
+            <label class="form-label" for="field-name">Full Name</label>
+            <input class="form-input" type="text" id="field-name" name="name" placeholder="Your full name" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="field-email">Email Address</label>
+            <input class="form-input" type="email" id="field-email" name="email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="field-reason">Reason for Joining</label>
+            <textarea class="form-textarea" id="field-reason" name="reason" placeholder="Tell us about your background and what you hope to get from this guild..." required></textarea>
+          </div>
+          <button type="submit" class="form-submit">
+            Submit Application →
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-copyright" id="footer-copyright">
+          © 2026 Guild Name. A Francisco Holdings Inc. Guild on Empire Hub.
+        </div>
+        <div class="footer-moderator">
+          Moderated by <span id="footer-hero-name">AI Moderator</span> — PrimeDox AI Agent
+        </div>
+        <div class="footer-green" aria-label="Carbon neutrality commitment">
+          🌿 Carbon Neutral 2028
+        </div>
+        <nav class="footer-links" aria-label="Footer links">
+          <a href="../index.html">Empire Hub Home</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#join">Join</a>
+          <a id="footer-contact-link" href="mailto:guild@omniaguard.com" id="footer-email">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       SCRIPT
+  ============================================================ -->
+  <script>
+    /* ============================================================
+       GUILD CONFIG — EDIT THIS BLOCK TO SKIN A NEW GUILD
+       ============================================================
+       HOW TO DEPLOY A NEW GUILD:
+         1. Copy this file
+         2. Edit GUILD_CONFIG below (10 fields)
+         3. Update stripeLink and contactEmail
+         4. Push to GitHub Pages
+         Done — new guild is live.
+    ============================================================ */
+    const GUILD_CONFIG = {
+      name:            "CyberGuard Guild",
+      tagline:         "Fortress-level cybersecurity community",
+      company:         "OmniaGuard",
+      hero:            "ShieldMind",
+      heroEmoji:       "🛡️",
+      heroSpecialty:   "Cyber Threat Intelligence",
+      primaryColor:    "#00D4FF",
+      secondaryColor:  "#0A2A4A",
+      accentColor:     "#00FF88",
+      memberCount:     "2,847",
+      postCount:       "14,293",
+      channelCount:    "12",
+      stripeLink:      "PASTE_STRIPE_LINK_HERE_GUILD_CYBERGUARD",
+      contactEmail:    "guild@omniaguard.com",
+      phone:           "705-307-8080",
+      docWeedlawBrand: false   // set true only for LegalDefense Guild
+    };
+    /* ============================================================
+       END CONFIG — DO NOT EDIT BELOW THIS LINE
+    ============================================================ */
+
+    /* ---- Utility ---- */
+    const $ = (sel, ctx) => (ctx || document).querySelector(sel);
+    const $$ = (sel, ctx) => [...(ctx || document).querySelectorAll(sel)];
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    const setHref = (id, val) => { const el = document.getElementById(id); if (el) el.href = val; };
+
+    /* ---- Apply CSS variables from config ---- */
+    function applyCSSVars() {
+      const root = document.documentElement;
+      root.style.setProperty('--guild-primary',   GUILD_CONFIG.primaryColor);
+      root.style.setProperty('--guild-secondary', GUILD_CONFIG.secondaryColor);
+      root.style.setProperty('--guild-accent',    GUILD_CONFIG.accentColor);
+    }
+
+    /* ---- Inject text content ---- */
+    function injectContent() {
+      // <title> and <meta>
+      document.title = `${GUILD_CONFIG.name} — Empire Hub`;
+      const metaEl = document.getElementById('page-meta');
+      if (metaEl) metaEl.setAttribute('content', `${GUILD_CONFIG.name}: ${GUILD_CONFIG.tagline}. Powered by PrimeDox AI on Empire Hub.`);
+
+      // Nav
+      setText('nav-guild-name',     GUILD_CONFIG.name);
+      setText('nav-member-count',   GUILD_CONFIG.memberCount);
+
+      // Hero
+      setText('hero-company-tag',   GUILD_CONFIG.company);
+      setText('hero-guild-name',    GUILD_CONFIG.name);
+      setText('hero-tagline',       GUILD_CONFIG.tagline);
+      setText('hero-name',          GUILD_CONFIG.hero);
+      setText('hero-specialty',     GUILD_CONFIG.heroSpecialty);
+
+      const heroEmojiEl = document.getElementById('hero-emoji');
+      if (heroEmojiEl) heroEmojiEl.textContent = GUILD_CONFIG.heroEmoji;
+
+      // Sidebar hero name
+      setText('sidebar-hero-name',  GUILD_CONFIG.hero);
+
+      // Features
+      setText('feature-job-title',  `Job Board — ${GUILD_CONFIG.company}`);
+      setText('feature-job-desc',   `Discover and post roles within the ${GUILD_CONFIG.company} network. AI-matched listings surface the most relevant opportunities first.`);
+      setText('feature-ai-icon',    GUILD_CONFIG.heroEmoji);
+      setText('feature-ai-title',   `Direct ${GUILD_CONFIG.hero} Support`);
+      setText('feature-ai-desc',    `Message ${GUILD_CONFIG.hero} directly for research, threat analysis, or guidance — available 24/7 with deep ${GUILD_CONFIG.heroSpecialty} expertise.`);
+
+      // Interac
+      const contactEmailInterac = document.getElementById('contact-email-interac');
+      if (contactEmailInterac) {
+        contactEmailInterac.textContent = GUILD_CONFIG.contactEmail;
+        contactEmailInterac.href = `mailto:${GUILD_CONFIG.contactEmail}`;
+      }
+
+      // Join
+      setText('join-guild-name', GUILD_CONFIG.name);
+
+      // Footer
+      setText('footer-copyright', `© 2026 ${GUILD_CONFIG.name}. A Francisco Holdings Inc. Guild on Empire Hub.`);
+      setText('footer-hero-name', GUILD_CONFIG.hero);
+      setHref('footer-contact-link', `mailto:${GUILD_CONFIG.contactEmail}`);
+
+      // Stripe links
+      const proLink = document.getElementById('pro-stripe-link');
+      if (proLink) proLink.href = 'PASTE_STRIPE_LINK_HERE_EMPIREHUB_PRO';
+
+      const sovLink = document.getElementById('sovereign-stripe-link');
+      if (sovLink) sovLink.href = 'PASTE_STRIPE_LINK_HERE_EMPIREHUB_SOVEREIGN';
+    }
+
+    /* ---- Stat counter animation ---- */
+    function parseCount(str) {
+      // handles "2,847" or "14,293" or "12"
+      return parseInt(str.replace(/,/g, ''), 10) || 0;
+    }
+    function formatCount(n) {
+      return n.toLocaleString('en-CA');
+    }
+    function animateCounter(el, target, duration) {
+      const start = performance.now();
+      const from = 0;
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        const current = Math.round(from + (target - from) * ease);
+        el.textContent = formatCount(current);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = formatCount(target);
+      }
+      requestAnimationFrame(step);
+    }
+    function setupCounters() {
+      const membersEl  = document.getElementById('stat-members');
+      const postsEl    = document.getElementById('stat-posts');
+      const channelsEl = document.getElementById('stat-channels');
+
+      const targets = {
+        members:  parseCount(GUILD_CONFIG.memberCount),
+        posts:    parseCount(GUILD_CONFIG.postCount),
+        channels: parseCount(GUILD_CONFIG.channelCount)
+      };
+
+      let animated = false;
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !animated) {
+          animated = true;
+          animateCounter(membersEl,  targets.members,  1600);
+          animateCounter(postsEl,    targets.posts,    2000);
+          animateCounter(channelsEl, targets.channels,  900);
+          observer.disconnect();
+        }
+      }, { threshold: 0.3 });
+
+      const heroSection = document.getElementById('hero');
+      if (heroSection) observer.observe(heroSection);
+    }
+
+    /* ---- Feed simulation ---- */
+    const FEED_POSTS_TEMPLATE = [
+      {
+        emoji: () => GUILD_CONFIG.heroEmoji,
+        author: () => GUILD_CONFIG.hero,
+        isAI: true,
+        content: () => `Threat briefing: ${GUILD_CONFIG.memberCount} data points analyzed — ${GUILD_CONFIG.heroSpecialty} scan complete. No critical alerts at this time.`
+      },
+      {
+        emoji: () => "👤",
+        author: () => "New Member",
+        isAI: false,
+        content: () => "New member joined: [Redacted for privacy] — Welcome to the guild!"
+      },
+      {
+        emoji: () => "📄",
+        author: () => "ResourceBot",
+        isAI: false,
+        content: () => `Document uploaded: Q2 ${GUILD_CONFIG.company} Report — ${GUILD_CONFIG.name}`
+      },
+      {
+        emoji: () => "📅",
+        author: () => "EventsDesk",
+        isAI: false,
+        content: () => `Event announced: Live ${GUILD_CONFIG.heroSpecialty} Simulation — June 15, 2026. Register in #events.`
+      },
+      {
+        emoji: () => "💼",
+        author: () => "JobsBoard",
+        isAI: false,
+        content: () => `Job posted: Senior ${GUILD_CONFIG.company} Analyst — $95K–$140K. View details in #jobs.`
+      }
+    ];
+
+    function timeAgo(ms) {
+      const secs = Math.round(ms / 1000);
+      if (secs < 60) return `${secs}s ago`;
+      const mins = Math.round(secs / 60);
+      if (mins < 60) return `${mins}m ago`;
+      return `${Math.round(mins / 60)}h ago`;
+    }
+
+    let feedIndex = 0;
+    const feedTimestamps = {};
+    let feedPostCount = 0;
+    const MAX_FEED_POSTS = 20;
+
+    function createPostEl(template, timestamp) {
+      const li = document.createElement('article');
+      li.className = 'feed-post glass--guild-border';
+      li.setAttribute('role', 'article');
+
+      const postId = `post-${feedPostCount++}`;
+      li.id = postId;
+      feedTimestamps[postId] = timestamp;
+
+      const isAI = template.isAI();
+
+      li.innerHTML = `
+        <div class="feed-post-header">
+          <div class="post-avatar" aria-hidden="true">${template.emoji()}</div>
+          <div class="post-meta">
+            <div class="post-author">${template.author()}${isAI ? ' <span class="tag tag--accent" style="font-size:0.65rem;margin-left:4px;">AI</span>' : ''}</div>
+            <div class="post-time" data-ts="${timestamp}">just now</div>
+          </div>
+        </div>
+        <div class="post-content">${template.content()}</div>
+        <div class="post-actions">
+          <button class="btn btn--ghost" aria-label="Like post">👍 Like</button>
+          <button class="btn btn--ghost" aria-label="Reply to post">💬 Reply</button>
+        </div>
+      `;
+      return li;
+    }
+
+    function addFeedPost() {
+      const container = document.getElementById('feed-posts');
+      if (!container) return;
+
+      const template = {
+        emoji:   FEED_POSTS_TEMPLATE[feedIndex].emoji,
+        author:  FEED_POSTS_TEMPLATE[feedIndex].author,
+        isAI:    () => FEED_POSTS_TEMPLATE[feedIndex].isAI,
+        content: FEED_POSTS_TEMPLATE[feedIndex].content
+      };
+      feedIndex = (feedIndex + 1) % FEED_POSTS_TEMPLATE.length;
+
+      const ts = Date.now();
+      const postEl = createPostEl(template, ts);
+      container.insertBefore(postEl, container.firstChild);
+
+      // Trim to max
+      while (container.children.length > MAX_FEED_POSTS) {
+        container.removeChild(container.lastChild);
+      }
+    }
+
+    function initFeed() {
+      // Seed with all 5 posts immediately
+      for (let i = 0; i < FEED_POSTS_TEMPLATE.length; i++) {
+        addFeedPost();
+      }
+      // Then cycle every 5 seconds
+      setInterval(addFeedPost, 5000);
+
+      // Update timestamps every 30s
+      setInterval(() => {
+        $$('.post-time[data-ts]').forEach(el => {
+          const ts = parseInt(el.dataset.ts, 10);
+          el.textContent = timeAgo(Date.now() - ts);
+        });
+      }, 30000);
+    }
+
+    /* ---- Channels ---- */
+    const CHANNELS_DATA = [
+      { name: 'general',       desc: 'Open community chat' },
+      { name: 'announcements', desc: 'Guild-wide updates' },
+      { name: 'ai-moderator',  desc: null, isAI: true },
+      { name: 'resources',     desc: 'Docs, guides, templates' },
+      { name: 'jobs',          desc: 'Career opportunities' },
+      { name: 'events',        desc: 'Webinars & workshops' },
+      { name: 'support',       desc: 'Get help fast' },
+      { name: 'off-topic',     desc: 'Everything else' }
+    ];
+
+    function randomUnread() {
+      return Math.floor(Math.random() * 13); // 0–12
+    }
+
+    function renderChannels() {
+      const grid = document.getElementById('channels-grid');
+      if (!grid) return;
+
+      CHANNELS_DATA.forEach(ch => {
+        const desc    = ch.isAI ? GUILD_CONFIG.hero : ch.desc;
+        const unread  = randomUnread();
+        const badgeCls = unread === 0 ? 'badge badge--zero' : 'badge';
+
+        const li = document.createElement('div');
+        li.className = 'channel-item';
+        li.setAttribute('role', 'listitem');
+        li.setAttribute('tabindex', '0');
+        li.setAttribute('aria-label', `#${ch.name} channel${unread > 0 ? `, ${unread} unread messages` : ''}`);
+
+        li.innerHTML = `
+          <div class="channel-left">
+            <span class="channel-hash" aria-hidden="true">#</span>
+            <div>
+              <div class="channel-name">${ch.name}</div>
+              ${desc ? `<div class="channel-desc">${desc}</div>` : ''}
+            </div>
+          </div>
+          <span class="${badgeCls}" aria-label="${unread} unread">${unread}</span>
+        `;
+
+        // Keyboard accessibility
+        li.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') li.click();
+        });
+
+        grid.appendChild(li);
+      });
+    }
+
+    /* ---- Toast ---- */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const text  = document.getElementById('toast-text');
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 5000);
+    }
+
+    /* ---- Join form ---- */
+    function initJoinForm() {
+      const form = document.getElementById('join-form');
+      if (!form) return;
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const name   = form.elements['name'].value.trim();
+        const email  = form.elements['email'].value.trim();
+        const reason = form.elements['reason'].value.trim();
+
+        const subject = encodeURIComponent(`Guild Application — ${GUILD_CONFIG.name}`);
+        const body    = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\n\nReason for Joining:\n${reason}\n\n---\nSent from: ${GUILD_CONFIG.name} join form`
+        );
+        window.location.href = `mailto:${GUILD_CONFIG.contactEmail}?subject=${subject}&body=${body}`;
+      });
+    }
+
+    /* ---- Initialise ---- */
+    document.addEventListener('DOMContentLoaded', () => {
+      applyCSSVars();
+      injectContent();
+      setupCounters();
+      initFeed();
+      renderChannels();
+      initJoinForm();
+
+      // Toast on load
+      setTimeout(() => {
+        showToast(`${GUILD_CONFIG.name} — Powered by PrimeDox AI | ${GUILD_CONFIG.hero} online`);
+      }, 800);
+    });
+  </script>
+</body>
+</html>

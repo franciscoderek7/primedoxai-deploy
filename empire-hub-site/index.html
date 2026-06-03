@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Empire Hub — 41 Companies. One Platform. Infinite Reach.</title>
+  <meta name="description" content="Empire Hub is the unified communication and commerce platform powering all 41 Francisco Holdings Inc. companies. Real-time chat, video, AI support, payments, and more — one login, infinite reach." />
+  <meta name="robots" content="index, follow" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #070B14;
+      --bg2: #0D1526;
+      --bg3: #111D35;
+      --gold: #FFD700;
+      --gold-dim: #C9A800;
+      --blue: #00D4FF;
+      --blue-dim: #009FBF;
+      --white: #FFFFFF;
+      --muted: #8A9BBE;
+      --border: rgba(255,215,0,0.15);
+      --border-blue: rgba(0,212,255,0.2);
+      --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --radius: 12px;
+      --glow-gold: 0 0 24px rgba(255,215,0,0.3);
+      --glow-blue: 0 0 24px rgba(0,212,255,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 9999;
+      background: var(--bg3);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: var(--glow-gold);
+      opacity: 0;
+      transform: translateX(120%);
+      transition: all 0.4s ease;
+      max-width: 320px;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    #toast .toast-close {
+      margin-left: 14px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    #toast .toast-close:hover { opacity: 1; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      background: rgba(7,11,20,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-wordmark {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-wordmark span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .btn-nav {
+      background: var(--gold);
+      color: var(--bg) !important;
+      font-weight: 700 !important;
+      padding: 8px 20px;
+      border-radius: 8px;
+      transition: background 0.2s, box-shadow 0.2s !important;
+    }
+    .btn-nav:hover {
+      background: #FFE44D !important;
+      box-shadow: var(--glow-gold) !important;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+      overflow: hidden;
+    }
+
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-badge {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid var(--border-blue);
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: pulse-dot 1.8s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .hero-headline {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(2.4rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      max-width: 900px;
+    }
+    .hero-headline .gold { color: var(--gold); }
+    .hero-headline .blue { color: var(--blue); }
+
+    .hero-sub {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: var(--muted);
+      max-width: 620px;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    .hero-ctas {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 64px;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg);
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 14px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: #FFE44D;
+      box-shadow: var(--glow-gold);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 14px 32px;
+      border-radius: 10px;
+      border: 1.5px solid var(--blue);
+      text-decoration: none;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-secondary:hover {
+      background: rgba(0,212,255,0.08);
+      box-shadow: var(--glow-blue);
+      transform: translateY(-2px);
+    }
+
+    /* COUNTERS */
+    .hero-counters {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(13,21,38,0.7);
+      backdrop-filter: blur(12px);
+      max-width: 680px;
+      width: 100%;
+    }
+
+    .counter-item {
+      flex: 1 1 160px;
+      padding: 28px 20px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .counter-item:last-child { border-right: none; }
+
+    .counter-value {
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+      display: block;
+    }
+    .counter-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 96px 24px; }
+
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+
+    .section-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .section-title .gold { color: var(--gold); }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 56px;
+    }
+
+    /* ── FEATURES ── */
+    #features { background: var(--bg2); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .feature-card:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-4px);
+      box-shadow: var(--glow-gold);
+    }
+
+    .feature-icon {
+      font-size: 1.9rem;
+      margin-bottom: 14px;
+      display: block;
+      line-height: 1;
+    }
+
+    .feature-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--white);
+    }
+
+    .feature-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── GUILDS ── */
+    #guilds { background: var(--bg); }
+
+    .guilds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .guild-card {
+      background: var(--bg2);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      border: 1px solid transparent;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .guild-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .guild-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .guild-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .guild-name {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .guild-companies {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .guild-ai {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .guild-stats {
+      display: flex;
+      gap: 18px;
+      margin-top: 4px;
+    }
+
+    .guild-stat {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .guild-stat span {
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .btn-guild {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1.5px solid currentColor;
+      align-self: flex-start;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .btn-guild:hover { opacity: 0.8; }
+
+    /* ── PRICING ── */
+    #pricing { background: var(--bg2); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pricing-card.featured {
+      border-color: var(--gold);
+      box-shadow: var(--glow-gold);
+    }
+    .pricing-card:hover { transform: translateY(-4px); }
+
+    .pricing-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .pricing-tier {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .pricing-name {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .pricing-amount {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--gold);
+      letter-spacing: -0.03em;
+    }
+    .pricing-period {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .pricing-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      flex: 1;
+    }
+    .pricing-features li {
+      font-size: 0.87rem;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--gold);
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .btn-pricing {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 10px;
+    }
+    .btn-pricing:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+    }
+    .btn-pricing-free {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      color: var(--white);
+    }
+    .btn-pricing-pro {
+      background: var(--gold);
+      color: var(--bg);
+      box-shadow: var(--glow-gold);
+    }
+    .btn-pricing-sov {
+      background: var(--blue);
+      color: var(--bg);
+      box-shadow: var(--glow-blue);
+    }
+
+    /* ── POWERED BY ── */
+    #powered { background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .powered-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px 32px;
+    }
+
+    .powered-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s;
+    }
+    .powered-badge:hover { border-color: var(--gold-dim); color: var(--white); }
+    .powered-badge .badge-icon { font-size: 1.1rem; }
+
+    /* ── INTERAC ── */
+    #interac { background: var(--bg2); }
+
+    .interac-box {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--bg3);
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      padding: 40px 36px;
+      box-shadow: var(--glow-gold);
+      text-align: center;
+    }
+
+    .interac-logo {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .interac-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .interac-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .interac-email {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+      padding: 14px 24px;
+      background: rgba(0,212,255,0.06);
+      border: 1px solid var(--border-blue);
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    .interac-steps {
+      list-style: none;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .interac-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.87rem;
+      color: var(--muted);
+    }
+    .interac-steps li .step-num {
+      width: 22px;
+      height: 22px;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 0.7rem;
+      font-weight: 900;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .interac-note {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--gold-dim);
+      font-weight: 600;
+    }
+
+    /* ── JOIN FORM ── */
+    #join { background: var(--bg); }
+
+    .form-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-col { display: flex; flex-direction: column; gap: 6px; }
+    .form-full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input, select, textarea {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 0.9rem;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+    }
+    select { cursor: pointer; }
+    select option { background: var(--bg3); }
+    select[multiple] { height: 160px; }
+    textarea { resize: vertical; min-height: 110px; }
+
+    .btn-submit {
+      background: var(--gold);
+      color: var(--bg);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.03em;
+    }
+    .btn-submit:hover {
+      background: #FFE44D;
+      box-shadow: var(--glow-gold);
+    }
+
+    .form-contact {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .form-contact a {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .form-contact a:hover { text-decoration: underline; }
+    .form-contact strong { color: var(--white); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px 28px;
+      text-align: center;
+    }
+
+    .footer-inner { max-width: 960px; margin: 0 auto; }
+
+    .footer-wordmark {
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .footer-wordmark span { color: var(--gold); }
+
+    .footer-tagline {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .footer-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+    }
+    .footer-badge.green { border-color: rgba(34,197,94,0.3); color: #4ADE80; }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      line-height: 1.8;
+    }
+    .footer-copy a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .footer-copy a:hover { color: var(--white); }
+
+    /* ── UTILITY ── */
+    .text-center { text-align: center; }
+    .divider { height: 1px; background: var(--border); margin: 20px 0; }
+    .mt-8 { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-32 { margin-top: 32px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .hero-headline { font-size: 2.2rem; }
+      .counter-item { flex-basis: 140px; }
+      section { padding: 72px 16px; }
+      .form-wrap { padding: 32px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .interac-box { padding: 28px 20px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeUp 0.7s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.22s; }
+    .delay-3 { animation-delay: 0.36s; }
+    .delay-4 { animation-delay: 0.5s; }
+    .delay-5 { animation-delay: 0.65s; }
+
+    /* Gradient accents */
+    .gradient-line {
+      display: block;
+      height: 3px;
+      width: 60px;
+      background: linear-gradient(90deg, var(--gold), var(--blue));
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     TOAST NOTIFICATION
+══════════════════════════════════════════════ -->
+<div id="toast">
+  ⚠ Empire Hub — Test Mode | Stripe integration pending
+  <span class="toast-close" onclick="dismissToast()">✕</span>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     STICKY NAVIGATION
+══════════════════════════════════════════════ -->
+<nav>
+  <a href="#hero" class="nav-wordmark">Empire<span>Hub</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#guilds">Guilds</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#join">Join</a></li>
+    <li><a href="#join" class="btn-nav">Enter the Hub</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO SECTION
+══════════════════════════════════════════════ -->
+<section id="hero">
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="hero-badge fade-in">Live Platform — All 41 Companies Active</div>
+
+  <h1 class="hero-headline fade-in delay-1">
+    One Platform.<br/>
+    <span class="gold">41 Companies.</span><br/>
+    <span class="blue">14 AI Heroes.</span>
+  </h1>
+
+  <p class="hero-sub fade-in delay-2">
+    Empire Hub unifies the entire Francisco Holdings Inc. empire — real-time communication, commerce, AI support, video, documentation, and more. One login. Infinite reach.
+  </p>
+
+  <div class="hero-ctas fade-in delay-3">
+    <a href="#join" class="btn-primary">Enter the Hub &rarr;</a>
+    <a href="#guilds" class="btn-secondary">Explore Guilds</a>
+  </div>
+
+  <div class="hero-counters fade-in delay-4">
+    <div class="counter-item">
+      <span class="counter-value" id="cnt-companies">0</span>
+      <span class="counter-label">Companies</span>
+    </div>
+    <div class="counter-item">
+      <span class="counter-value" id="cnt-guilds">0</span>
+      <span class="counter-label">Guilds</span>
+    </div>
+    <div class="counter-item">
+      <span class="counter-value" id="cnt-heroes">0</span>
+      <span class="counter-label">AI Heroes</span>
+    </div>
+    <div class="counter-item">
+      <span class="counter-value" id="cnt-markets">$0B</span>
+      <span class="counter-label">Markets Served</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURES SECTION
+══════════════════════════════════════════════ -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-tag">Platform Capabilities</div>
+    <span class="gradient-line"></span>
+    <h2 class="section-title">Everything your empire <span class="gold">needs to operate.</span></h2>
+    <p class="section-desc">Ten integrated capabilities — built from the ground up for multi-company, cross-guild operations at scale.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">💬</span>
+        <div class="feature-name">Real-Time Chat</div>
+        <div class="feature-desc">Channels for every company, direct messages, thread replies. Powered by end-to-end encrypted infrastructure.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📹</span>
+        <div class="feature-name">Video Platform</div>
+        <div class="feature-desc">Live streams, recorded sessions, AI-transcribed content archived and searchable across the empire.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📡</span>
+        <div class="feature-name">Social Feed</div>
+        <div class="feature-desc">Empire news, company updates, industry intelligence — curated and delivered to every member in real time.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🤖</span>
+        <div class="feature-name">AI Support</div>
+        <div class="feature-desc">14 Heroes answer questions 24/7 — zero wait time, zero queues. Routed by Guild and topic automatically.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📚</span>
+        <div class="feature-name">Documentation</div>
+        <div class="feature-desc">Every policy, procedure, product manual — indexed, searchable, and version-controlled across all 41 companies.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💳</span>
+        <div class="feature-name">Payments</div>
+        <div class="feature-desc">Stripe, Interac, PayPal, Crypto — all in one unified checkout. Multi-currency, multi-tier, fully audited.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💼</span>
+        <div class="feature-name">Job Board</div>
+        <div class="feature-desc">Live openings across all 41 companies. Apply, track, and onboard — directly within the Hub.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎟</span>
+        <div class="feature-name">Events System</div>
+        <div class="feature-desc">Virtual and in-person events, ticketed or free, with integrated RSVP, reminders, and recording links.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📱</span>
+        <div class="feature-name">Mobile Apps</div>
+        <div class="feature-desc">iOS and Android native apps with push notifications, offline access, and biometric authentication.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📊</span>
+        <div class="feature-name">Analytics</div>
+        <div class="feature-desc">Empire-wide metrics dashboard, real-time. Track engagement, revenue, support, and growth across every entity.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     GUILDS SECTION
+══════════════════════════════════════════════ -->
+<section id="guilds">
+  <div class="section-inner">
+    <div class="section-tag">Specialized Guilds</div>
+    <span class="gradient-line"></span>
+    <h2 class="section-title">10 Guilds. One <span class="gold">Unified Empire.</span></h2>
+    <p class="section-desc">Each Guild is a dedicated sector hub — moderated by dedicated AI intelligence, purpose-built for that industry domain.</p>
+
+    <div class="guilds-grid">
+
+      <!-- 1. CyberGuard -->
+      <div class="guild-card" style="border-color: rgba(0,212,255,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#00D4FF;"></div>
+          <div class="guild-name" style="color:#00D4FF;">CyberGuard Guild</div>
+        </div>
+        <div class="guild-companies">OmniaGuard</div>
+        <div class="guild-ai" style="color:#00D4FF;">AI Moderator: ShieldMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>1</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Cybersecurity intelligence, threat monitoring, and protective AI deployed across the full Francisco Holdings network.</p>
+        <a href="#join" class="btn-guild" style="color:#00D4FF;border-color:#00D4FF;">Join Guild</a>
+      </div>
+
+      <!-- 2. HealthSwarm -->
+      <div class="guild-card" style="border-color: rgba(34,197,94,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#22C55E;"></div>
+          <div class="guild-name" style="color:#22C55E;">HealthSwarm Guild</div>
+        </div>
+        <div class="guild-companies">Health Swarm</div>
+        <div class="guild-ai" style="color:#22C55E;">AI Moderator: MediMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>1</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Healthcare intelligence, medical AI solutions, and wellness technology infrastructure for enterprise and clinical environments.</p>
+        <a href="#join" class="btn-guild" style="color:#22C55E;border-color:#22C55E;">Join Guild</a>
+      </div>
+
+      <!-- 3. LegalDefense -->
+      <div class="guild-card" style="border-color: rgba(255,215,0,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#FFD700;"></div>
+          <div class="guild-name" style="color:#FFD700;">LegalDefense Guild</div>
+        </div>
+        <div class="guild-companies">CCLDR / Weedlaw Defense Network</div>
+        <div class="guild-ai" style="color:#FFD700;">AI Moderators: LexMind + CannaMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>2+</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Cannabis law compliance, constitutional defense, regulatory strategy, and Doc Weedlaw-era legal doctrine — unified under AI-guided counsel.</p>
+        <a href="#join" class="btn-guild" style="color:#FFD700;border-color:#FFD700;">Join Guild</a>
+      </div>
+
+      <!-- 4. CleanOps -->
+      <div class="guild-card" style="border-color: rgba(52,211,153,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#34D399;"></div>
+          <div class="guild-name" style="color:#34D399;">CleanOps Guild</div>
+        </div>
+        <div class="guild-companies">CleanSwarm</div>
+        <div class="guild-ai" style="color:#34D399;">AI Moderator: SwarmMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>1</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Facility operations, commercial cleaning intelligence, workforce coordination, and hygiene-standard compliance systems.</p>
+        <a href="#join" class="btn-guild" style="color:#34D399;border-color:#34D399;">Join Guild</a>
+      </div>
+
+      <!-- 5. FinancePro -->
+      <div class="guild-card" style="border-color: rgba(99,102,241,0.4);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#818CF8;"></div>
+          <div class="guild-name" style="color:#818CF8;">FinancePro Guild</div>
+        </div>
+        <div class="guild-companies">Fintech Swarm · Francisco Holdings · Francisco Ventures</div>
+        <div class="guild-ai" style="color:#818CF8;">AI Moderator: FinMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>3</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Capital markets intelligence, fintech product strategy, venture portfolio tracking, and enterprise financial governance.</p>
+        <a href="#join" class="btn-guild" style="color:#818CF8;border-color:#818CF8;">Join Guild</a>
+      </div>
+
+      <!-- 6. AeroDefense -->
+      <div class="guild-card" style="border-color: rgba(251,146,60,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#FB923C;"></div>
+          <div class="guild-name" style="color:#FB923C;">AeroDefense Guild</div>
+        </div>
+        <div class="guild-companies">Aero Shield · Defense Swarm</div>
+        <div class="guild-ai" style="color:#FB923C;">AI Moderators: AeroMind + ShieldMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>2</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Aerospace innovation, defense technology procurement, secure systems integration, and mission-critical AI deployment.</p>
+        <a href="#join" class="btn-guild" style="color:#FB923C;border-color:#FB923C;">Join Guild</a>
+      </div>
+
+      <!-- 7. QuantumBio -->
+      <div class="guild-card" style="border-color: rgba(168,85,247,0.4);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#A855F7;"></div>
+          <div class="guild-name" style="color:#A855F7;">QuantumBio Guild</div>
+        </div>
+        <div class="guild-companies">Quantum Swarm · Biotech Swarm · Space Swarm</div>
+        <div class="guild-ai" style="color:#A855F7;">AI Moderators: QubitMind + GenMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>3</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Quantum computing research, biotechnology development, space systems engineering, and deep-science commercialization.</p>
+        <a href="#join" class="btn-guild" style="color:#A855F7;border-color:#A855F7;">Join Guild</a>
+      </div>
+
+      <!-- 8. AutoLogistics -->
+      <div class="guild-card" style="border-color: rgba(20,184,166,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#14B8A6;"></div>
+          <div class="guild-name" style="color:#14B8A6;">AutoLogistics Guild</div>
+        </div>
+        <div class="guild-companies">Auto Swarm · Logistics Swarm</div>
+        <div class="guild-ai" style="color:#14B8A6;">AI Moderators: DriveMind + FlowMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>2</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Automotive intelligence, supply chain optimization, last-mile logistics coordination, and fleet management AI.</p>
+        <a href="#join" class="btn-guild" style="color:#14B8A6;border-color:#14B8A6;">Join Guild</a>
+      </div>
+
+      <!-- 9. EnergyGreen -->
+      <div class="guild-card" style="border-color: rgba(132,204,22,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#84CC16;"></div>
+          <div class="guild-name" style="color:#84CC16;">EnergyGreen Guild</div>
+        </div>
+        <div class="guild-companies">Energy Swarm · CleanTech Automation</div>
+        <div class="guild-ai" style="color:#84CC16;">AI Moderator: VoltMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>2</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Renewable energy systems, clean technology automation, carbon reduction strategy, and sustainable infrastructure deployment.</p>
+        <a href="#join" class="btn-guild" style="color:#84CC16;border-color:#84CC16;">Join Guild</a>
+      </div>
+
+      <!-- 10. DataSov -->
+      <div class="guild-card" style="border-color: rgba(239,68,68,0.3);">
+        <div class="guild-header">
+          <div class="guild-dot" style="background:#EF4444;"></div>
+          <div class="guild-name" style="color:#EF4444;">DataSov Guild</div>
+        </div>
+        <div class="guild-companies">Sovereignty Data · AI Governance Canada</div>
+        <div class="guild-ai" style="color:#EF4444;">AI Moderator: GhostMind</div>
+        <div class="guild-stats">
+          <div class="guild-stat">Companies: <span>2</span></div>
+          <div class="guild-stat">Members: <span>—</span></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted);line-height:1.5;">Data sovereignty policy, AI governance frameworks, privacy-preserving infrastructure, and regulatory compliance intelligence.</p>
+        <a href="#join" class="btn-guild" style="color:#EF4444;border-color:#EF4444;">Join Guild</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PRICING SECTION
+══════════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-tag text-center">Membership Tiers</div>
+    <span class="gradient-line" style="margin:0 auto 20px;"></span>
+    <h2 class="section-title text-center">Choose your level of <span class="gold">access.</span></h2>
+    <p class="section-desc text-center" style="margin:0 auto 56px;">Transparent pricing. Cancel anytime. Every tier includes access to the AI Heroes network and encrypted communications.</p>
+
+    <div class="pricing-grid">
+
+      <!-- Free -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Starter</div>
+        <div class="pricing-name">Empire Free</div>
+        <div class="pricing-price">
+          <span class="pricing-amount">$0</span>
+          <span class="pricing-period">/ forever</span>
+        </div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>1 Guild access</li>
+          <li>Basic real-time chat</li>
+          <li>AI Support (limited queries)</li>
+          <li>Social feed read access</li>
+          <li>Job board browsing</li>
+          <li>Mobile app access</li>
+        </ul>
+        <a href="#join" class="btn-pricing btn-pricing-free">Get Started Free</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-tier">Professional</div>
+        <div class="pricing-name">Empire Pro</div>
+        <div class="pricing-price">
+          <span class="pricing-amount">$29</span>
+          <span class="pricing-period">/ month</span>
+        </div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>All 10 Guilds — full access</li>
+          <li>Unlimited real-time chat + threads</li>
+          <li>Video platform — live + recorded</li>
+          <li>Job board — apply to all 41 companies</li>
+          <li>Events — virtual + in-person</li>
+          <li>AI Support — unlimited queries</li>
+          <li>Documentation vault access</li>
+          <li>Push notifications — iOS + Android</li>
+        </ul>
+        <a href="PASTE_STRIPE_LINK_HERE_EMPIREHUB_PRO" class="btn-pricing btn-pricing-pro">Subscribe — $29/mo</a>
+      </div>
+
+      <!-- Sovereign -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Enterprise</div>
+        <div class="pricing-name">Empire Sovereign</div>
+        <div class="pricing-price">
+          <span class="pricing-amount">$199</span>
+          <span class="pricing-period">/ month</span>
+        </div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>Everything in Empire Pro</li>
+          <li>Empire-wide analytics dashboard</li>
+          <li>White-label deployment</li>
+          <li>Full API access — all endpoints</li>
+          <li>Priority AI Hero routing</li>
+          <li>Dedicated account support</li>
+          <li>Custom Guild creation</li>
+          <li>SLA-backed uptime guarantee</li>
+        </ul>
+        <a href="PASTE_STRIPE_LINK_HERE_EMPIREHUB_SOVEREIGN" class="btn-pricing btn-pricing-sov">Subscribe — $199/mo</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     POWERED BY SECTION
+══════════════════════════════════════════════ -->
+<section id="powered" style="padding:56px 24px;">
+  <div class="section-inner">
+    <div class="section-tag text-center" style="margin-bottom:32px;">Infrastructure & Certification</div>
+    <div class="powered-row">
+      <div class="powered-badge">
+        <span class="badge-icon">⚡</span>
+        Powered by PrimeDox AI
+      </div>
+      <div class="powered-badge">
+        <span class="badge-icon">🛡</span>
+        Protected by OmniaGuard
+      </div>
+      <div class="powered-badge">
+        <span class="badge-icon">🔒</span>
+        Secured by BENO-X Framework
+      </div>
+      <div class="powered-badge">
+        <span class="badge-icon">🏛</span>
+        A Francisco Holdings Inc. Platform
+      </div>
+      <div class="powered-badge" style="border-color:rgba(34,197,94,0.3);color:#4ADE80;">
+        <span class="badge-icon">🌿</span>
+        Carbon Neutral 2028
+      </div>
+      <div class="powered-badge">
+        <span class="badge-icon">👥</span>
+        Jobs Supported: 5,000+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     INTERAC PAYMENT SECTION
+══════════════════════════════════════════════ -->
+<section id="interac">
+  <div class="section-inner">
+    <div class="section-tag text-center">Alternative Payment</div>
+    <span class="gradient-line" style="margin:0 auto 40px;"></span>
+    <div class="interac-box">
+      <div class="interac-logo">🏦</div>
+      <div class="interac-title">Pay via Interac e-Transfer</div>
+      <p class="interac-desc">Canadian members can pay directly via Interac e-Transfer for instant manual activation. Access granted within 4 hours of confirmed receipt.</p>
+
+      <div class="interac-email">franciscoderek7@gmail.com</div>
+
+      <ul class="interac-steps">
+        <li>
+          <span class="step-num">1</span>
+          <span>Open your bank's Interac e-Transfer portal and send to the address above.</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>In the <strong>Reference / Message</strong> field, enter: <strong>[Your Name] + Empire Hub + [Tier]</strong></span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>Send the exact amount matching your chosen tier (Free: $0 | Pro: $29 CAD | Sovereign: $199 CAD).</span>
+        </li>
+        <li>
+          <span class="step-num">4</span>
+          <span>Email confirmation of your transfer to <strong>hub@franciscoholdings.com</strong> for faster processing.</span>
+        </li>
+      </ul>
+
+      <p class="interac-note">⏱ Manual activation within 4 hours of confirmed Interac receipt. Business hours: Mon–Fri 8AM–8PM EST.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     JOIN / CONTACT FORM
+══════════════════════════════════════════════ -->
+<section id="join">
+  <div class="section-inner">
+    <div class="section-tag text-center">Join the Empire</div>
+    <span class="gradient-line" style="margin:0 auto 12px;"></span>
+    <h2 class="section-title text-center" style="margin-bottom:12px;">Request <span class="gold">Access.</span></h2>
+    <p class="section-desc text-center" style="margin:0 auto 40px;">Complete the form below and our team will reach out within one business day to onboard your account across the guilds you need.</p>
+
+    <div class="form-wrap">
+      <form action="mailto:hub@franciscoholdings.com" method="get" enctype="text/plain">
+        <div class="form-row" style="margin-bottom:16px;">
+          <div class="form-col">
+            <label for="f-name">Full Name *</label>
+            <input type="text" id="f-name" name="name" placeholder="Jane Smith" required />
+          </div>
+          <div class="form-col">
+            <label for="f-email">Email Address *</label>
+            <input type="email" id="f-email" name="email" placeholder="jane@company.com" required />
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-bottom:16px;">
+          <div class="form-col">
+            <label for="f-company">Company / Organization</label>
+            <input type="text" id="f-company" name="company" placeholder="Acme Corp" />
+          </div>
+          <div class="form-col">
+            <label for="f-tier">Desired Tier</label>
+            <select id="f-tier" name="tier">
+              <option value="">Select a tier...</option>
+              <option value="Empire Free">Empire Free — $0</option>
+              <option value="Empire Pro">Empire Pro — $29/mo</option>
+              <option value="Empire Sovereign">Empire Sovereign — $199/mo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-bottom:16px;">
+          <div class="form-col form-full">
+            <label for="f-guilds">Guild Interest (select all that apply)</label>
+            <select id="f-guilds" name="guilds" multiple>
+              <option value="CyberGuard Guild">CyberGuard Guild — Cybersecurity (OmniaGuard)</option>
+              <option value="HealthSwarm Guild">HealthSwarm Guild — Healthcare (Health Swarm)</option>
+              <option value="LegalDefense Guild">LegalDefense Guild — Legal &amp; Cannabis (CCLDR / Weedlaw)</option>
+              <option value="CleanOps Guild">CleanOps Guild — Facility Operations (CleanSwarm)</option>
+              <option value="FinancePro Guild">FinancePro Guild — Finance &amp; Ventures</option>
+              <option value="AeroDefense Guild">AeroDefense Guild — Aerospace &amp; Defense</option>
+              <option value="QuantumBio Guild">QuantumBio Guild — Quantum / Biotech / Space</option>
+              <option value="AutoLogistics Guild">AutoLogistics Guild — Auto &amp; Logistics</option>
+              <option value="EnergyGreen Guild">EnergyGreen Guild — Energy &amp; CleanTech</option>
+              <option value="DataSov Guild">DataSov Guild — Data Sovereignty &amp; AI Governance</option>
+            </select>
+            <span style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Hold Ctrl / Cmd to select multiple guilds</span>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-bottom:24px;">
+          <div class="form-col form-full">
+            <label for="f-msg">Message</label>
+            <textarea id="f-msg" name="message" placeholder="Tell us about your use case, your organization, or any questions you have about Empire Hub..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit Access Request &rarr;</button>
+      </form>
+
+      <div class="divider mt-32"></div>
+
+      <div class="form-contact">
+        <p>Prefer to reach us directly?</p>
+        <p class="mt-8">
+          Email: <a href="mailto:hub@franciscoholdings.com">hub@franciscoholdings.com</a>
+          &nbsp;|&nbsp;
+          <strong>Or call: 705-307-8080</strong>
+        </p>
+        <p class="mt-8" style="font-size:0.78rem;color:var(--muted);">Response time: within 1 business day. Enterprise inquiries: same-day escalation available.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">Empire<span>Hub</span></div>
+    <div class="footer-tagline">41 Companies. One Platform. Infinite Reach.</div>
+
+    <div class="footer-badges">
+      <div class="footer-badge">⚡ Powered by PrimeDox AI</div>
+      <div class="footer-badge">🛡 Protected by OmniaGuard</div>
+      <div class="footer-badge">🔒 Secured by BENO-X Framework</div>
+      <div class="footer-badge green">🌿 Carbon Neutral 2028</div>
+    </div>
+
+    <div class="footer-copy">
+      <p>© 2026 Empire Hub. A Francisco Holdings Inc. Platform. | Powered by PrimeDox AI | Protected by OmniaGuard</p>
+      <p style="margin-top:8px;">
+        <a href="#features">Features</a> &nbsp;·&nbsp;
+        <a href="#guilds">Guilds</a> &nbsp;·&nbsp;
+        <a href="#pricing">Pricing</a> &nbsp;·&nbsp;
+        <a href="#interac">Interac</a> &nbsp;·&nbsp;
+        <a href="#join">Contact</a>
+      </p>
+      <p style="margin-top:8px;">🌿 Carbon Neutral 2028 &nbsp;|&nbsp; Jobs Supported: 5,000+</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════ -->
+<script>
+  /* ── TOAST ── */
+  (function() {
+    var toast = document.getElementById('toast');
+    setTimeout(function() {
+      toast.classList.add('show');
+    }, 900);
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 7000);
+  })();
+
+  function dismissToast() {
+    document.getElementById('toast').classList.remove('show');
+  }
+
+  /* ── PARTICLE CANVAS ── */
+  (function() {
+    var canvas = document.getElementById('particle-canvas');
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var W, H;
+
+    function resize() {
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function randomColor() {
+      return Math.random() > 0.5 ? 'rgba(255,215,0,' : 'rgba(0,212,255,';
+    }
+
+    for (var i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random(),
+        y: Math.random(),
+        r: Math.random() * 2 + 0.8,
+        vx: (Math.random() - 0.5) * 0.0003,
+        vy: (Math.random() - 0.5) * 0.0003,
+        color: randomColor(),
+        alpha: Math.random() * 0.5 + 0.2,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      var time = Date.now() / 1000;
+
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = 1;
+        if (p.x > 1) p.x = 0;
+        if (p.y < 0) p.y = 1;
+        if (p.y > 1) p.y = 0;
+
+        var alpha = p.alpha * (0.6 + 0.4 * Math.sin(time * 1.2 + p.pulse));
+        ctx.beginPath();
+        ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color + alpha + ')';
+        ctx.fill();
+      }
+
+      /* Draw connecting lines between nearby particles */
+      for (var i = 0; i < particles.length; i++) {
+        for (var j = i + 1; j < particles.length; j++) {
+          var dx = (particles[i].x - particles[j].x) * W;
+          var dy = (particles[i].y - particles[j].y) * H;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 90) {
+            var lineAlpha = (1 - dist / 90) * 0.12;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x * W, particles[i].y * H);
+            ctx.lineTo(particles[j].x * W, particles[j].y * H);
+            ctx.strokeStyle = 'rgba(255,215,0,' + lineAlpha + ')';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ── COUNTER ANIMATION ── */
+  (function() {
+    var counters = [
+      { id: 'cnt-companies', target: 41, suffix: '' },
+      { id: 'cnt-guilds', target: 10, suffix: '' },
+      { id: 'cnt-heroes', target: 14, suffix: '' },
+      { id: 'cnt-markets', target: 58, suffix: 'B', prefix: '$' }
+    ];
+
+    function animateCounter(el, target, suffix, prefix) {
+      var start = 0;
+      var duration = 1800;
+      var startTime = null;
+      prefix = prefix || '';
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var value = Math.floor(eased * target);
+        el.textContent = prefix + value + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = prefix + target + suffix;
+      }
+      requestAnimationFrame(step);
+    }
+
+    function startCounters() {
+      counters.forEach(function(c) {
+        var el = document.getElementById(c.id);
+        if (el) animateCounter(el, c.target, c.suffix || '', c.prefix || '');
+      });
+    }
+
+    /* Observe hero section */
+    var hero = document.getElementById('hero');
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          setTimeout(startCounters, 400);
+          obs.disconnect();
+        }
+      }, { threshold: 0.3 });
+      obs.observe(hero);
+    } else {
+      setTimeout(startCounters, 800);
+    }
+  })();
+
+  /* ── INTERSECTION FADE-IN ── */
+  (function() {
+    if (!('IntersectionObserver' in window)) return;
+    var els = document.querySelectorAll('.feature-card, .guild-card, .pricing-card, .powered-badge');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    els.forEach(function(el) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      observer.observe(el);
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constitutional AI Framework | Francisco Holdings Inc.</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #050510;
+    --bg-card:    #080818;
+    --bg-card2:   #0C0C22;
+    --gold:       #C9A227;
+    --gold-dim:   rgba(201,162,39,0.18);
+    --gold-line:  rgba(201,162,39,0.35);
+    --blue:       #1A3A5C;
+    --blue-light: #2155A0;
+    --blue-dim:   rgba(26,58,92,0.45);
+    --white:      #F0F2F5;
+    --muted:      #8899AA;
+    --danger:     #C0392B;
+    --danger-bg:  rgba(192,57,43,0.12);
+    --border:     rgba(201,162,39,0.20);
+    --border-blue:rgba(26,58,92,0.70);
+    --radius:     6px;
+    --radius-lg:  10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    line-height: 1.65;
+    overflow-x: hidden;
+    font-size: 16px;
+  }
+
+  /* ─── DISCLAIMER BANNER ─── */
+  .disclaimer-banner {
+    background: var(--danger-bg);
+    border-bottom: 2px solid var(--danger);
+    padding: 12px 24px;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #E8C8C5;
+    position: relative;
+    z-index: 1100;
+  }
+  .disclaimer-banner strong {
+    color: #FF9090;
+    text-transform: uppercase;
+  }
+
+  /* ─── STICKY NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(5,5,16,0.96);
+    border-bottom: 1px solid var(--gold-line);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .nav-brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .nav-brand .corp {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .nav-brand .div {
+    font-size: 0.72rem;
+    letter-spacing: 0.10em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  section { padding: 80px 0; }
+  section:nth-of-type(even) { background: rgba(26,58,92,0.04); }
+
+  /* ─── SECTION LABELS ─── */
+  .section-label {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    border: 1px solid var(--gold-line);
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    background: var(--gold-dim);
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .section-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 680px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--gold-line);
+    position: relative;
+    overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 900px 500px at 60% 40%, rgba(26,58,92,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 400px at 20% 80%, rgba(201,162,39,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow .pipe {
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+  }
+  .hero-eyebrow span {
+    font-size: 0.70rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .hero-headline {
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+  .hero-headline em {
+    font-style: normal;
+    color: var(--gold);
+  }
+  .hero-subhead {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--muted);
+    max-width: 720px;
+    line-height: 1.75;
+    margin-bottom: 40px;
+  }
+  .hero-subhead strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+  .hero-badges {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 3px;
+  }
+  .badge-gold {
+    background: var(--gold-dim);
+    color: var(--gold);
+    border: 1px solid var(--gold-line);
+  }
+  .badge-blue {
+    background: var(--blue-dim);
+    color: #7BAADD;
+    border: 1px solid var(--border-blue);
+  }
+  .badge-warn {
+    background: rgba(201,162,39,0.08);
+    color: #C9A227;
+    border: 1px solid rgba(201,162,39,0.25);
+    font-size: 0.62rem;
+  }
+
+  /* ─── FRAMEWORK CARDS ─── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 680px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .compare-table { font-size: 0.82rem; }
+  }
+
+  .fw-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    position: relative;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .fw-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+  .fw-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--blue-light) 100%);
+  }
+
+  .card-charter {
+    display: inline-block;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+  }
+  .card-product {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .card-tagline {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.6;
+    border-left: 3px solid var(--blue-light);
+    padding-left: 14px;
+    font-style: italic;
+  }
+  .card-desc {
+    font-size: 0.93rem;
+    color: #A0B4C8;
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+  .card-desc strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .fn-list {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+  .fn-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    line-height: 1.5;
+  }
+  .fn-list li:last-child { border-bottom: none; }
+  .fn-list li::before {
+    content: '▸';
+    color: var(--gold);
+    font-size: 0.75rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .card-cases {
+    background: rgba(26,58,92,0.25);
+    border: 1px solid var(--border-blue);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 0.80rem;
+    color: #7BAADD;
+    margin-bottom: 18px;
+  }
+  .card-cases .case-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .card-cases .case-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .case-pill {
+    background: rgba(33,85,160,0.25);
+    border: 1px solid rgba(33,85,160,0.45);
+    border-radius: 3px;
+    padding: 2px 9px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .card-badge {
+    margin-top: 4px;
+  }
+
+  .edu-notice {
+    background: var(--danger-bg);
+    border: 1px solid rgba(192,57,43,0.35);
+    border-radius: var(--radius);
+    padding: 8px 14px;
+    font-size: 0.72rem;
+    color: #E8AAAA;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-top: 16px;
+  }
+
+  /* ─── QUOTE CALLOUT ─── */
+  .quote-callout {
+    border-left: 4px solid var(--gold);
+    padding: 16px 20px;
+    background: rgba(201,162,39,0.05);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 16px 0;
+    font-size: 0.92rem;
+    color: #D4C080;
+    font-style: italic;
+    line-height: 1.65;
+  }
+
+  /* ─── FLOWCHART ─── */
+  .flowchart {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin: 32px 0;
+    padding: 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .flow-step {
+    flex: 1 1 120px;
+    background: var(--bg-card2);
+    border: 1px solid var(--border-blue);
+    border-radius: var(--radius);
+    padding: 14px 12px;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.4;
+    min-width: 110px;
+  }
+  .flow-step .step-num {
+    display: block;
+    font-size: 0.60rem;
+    color: var(--gold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .flow-arrow {
+    color: var(--gold);
+    font-size: 1.3rem;
+    padding: 0 6px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  @media (max-width: 900px) {
+    .flowchart { flex-direction: column; gap: 6px; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+  }
+  .compare-table thead tr {
+    background: linear-gradient(90deg, rgba(26,58,92,0.6) 0%, rgba(201,162,39,0.10) 100%);
+    border-bottom: 2px solid var(--gold-line);
+  }
+  .compare-table th {
+    padding: 18px 24px;
+    text-align: left;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--gold);
+  }
+  .compare-table th:first-child { color: var(--muted); }
+  .compare-table td {
+    padding: 16px 24px;
+    font-size: 0.92rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--white);
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .compare-table td:last-child {
+    color: #A8CFA8;
+    font-weight: 500;
+  }
+  .compare-table tr:hover td { background: rgba(201,162,39,0.03); }
+
+  .compare-intro {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 760px;
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+  .compare-intro em {
+    color: var(--white);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ─── CHARTER MAP ─── */
+  .charter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 16px;
+  }
+  .charter-tile {
+    background: var(--bg-card);
+    border: 1px solid var(--border-blue);
+    border-radius: var(--radius-lg);
+    padding: 22px 18px;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .charter-tile:hover {
+    border-color: var(--gold);
+    background: var(--bg-card2);
+  }
+  .charter-tile .section-num {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .charter-tile .section-right {
+    font-size: 0.70rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .charter-tile .product-link {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #7BAADD;
+    background: var(--blue-dim);
+    border: 1px solid var(--border-blue);
+    border-radius: 3px;
+    padding: 3px 9px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── ENTERPRISE CARDS ─── */
+  .enterprise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .ent-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-blue);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    transition: border-color 0.22s;
+  }
+  .ent-card:hover { border-color: var(--gold); }
+  .ent-card .ent-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 12px;
+    opacity: 0.55;
+  }
+  .ent-card p {
+    font-size: 0.95rem;
+    color: var(--white);
+    line-height: 1.65;
+    font-weight: 500;
+  }
+  .ent-card p span {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ─── CONTACT ─── */
+  #contact {
+    border-top: 1px solid var(--gold-line);
+  }
+  .contact-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  .contact-box h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .contact-box p {
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 400px;
+    line-height: 1.65;
+  }
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: right;
+  }
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .contact-item .contact-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .contact-item a {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .contact-item a:hover { color: var(--white); }
+  .contact-item span {
+    color: var(--white);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #020208;
+    border-top: 1px solid var(--gold-line);
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  .footer-top {
+    max-width: 1200px;
+    margin: 0 auto 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-brand .corp-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: 0.04em;
+  }
+  .footer-brand .corp-div {
+    font-size: 0.70rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 3px;
+  }
+  .footer-brand .corp-arch {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  .footer-disclaimer {
+    max-width: 900px;
+    margin: 0 auto 20px;
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.75;
+    text-align: center;
+  }
+  .footer-disclaimer strong {
+    color: #AA7777;
+  }
+
+  .footer-copy {
+    font-size: 0.70rem;
+    letter-spacing: 0.08em;
+    color: #444466;
+    text-transform: uppercase;
+  }
+  .footer-copy strong {
+    color: #CC3333;
+  }
+
+  /* ─── DIVIDER ─── */
+  .rule {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 0;
+  }
+
+  /* ─── STAT ROW ─── */
+  .stat-row {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(201,162,39,0.12);
+  }
+  .stat-block {
+    flex: 1 1 160px;
+  }
+  .stat-block .stat-val {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .stat-block .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .stat-block .stat-sub {
+    font-size: 0.80rem;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ─── SCROLL FADE-IN ─── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     DISCLAIMER BANNER
+══════════════════════════════════════════════ -->
+<div class="disclaimer-banner" role="alert">
+  <strong>Educational Framework Notice:</strong>
+  This page presents an educational framework. Nothing here constitutes legal advice.
+  All Canadian Charter references are educational.
+  <strong>NOT LEGAL REPRESENTATION.</strong>
+  Consult a licensed attorney for all legal matters.
+</div>
+
+<!-- ══════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════ -->
+<nav aria-label="Primary navigation">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <span class="corp">Francisco Holdings Inc.</span>
+      <span class="div">Constitutional AI Division</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#framework">Framework</a></li>
+      <li><a href="#charter-map">Charter Map</a></li>
+      <li><a href="#competitive">Competitive Moat</a></li>
+      <li><a href="#enterprise">Enterprise</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <div class="pipe"></div>
+      <span>Francisco Holdings Inc. &mdash; Constitutional AI Division</span>
+    </div>
+
+    <h1 class="hero-headline">
+      Constitutional AI<br>
+      <em>by Design</em>
+    </h1>
+
+    <p class="hero-subhead">
+      <strong>While others face privacy investigations, Francisco Holdings builds AI that respects constitutional rights from the ground up.</strong>
+      Every component engineered to the Canadian Charter of Rights and Freedoms — not retrofitted, not reactive. By design.
+    </p>
+
+    <div class="hero-badges">
+      <span class="badge badge-gold">Canadian Charter Aligned</span>
+      <span class="badge badge-blue">22+ Years Precedent</span>
+      <span class="badge badge-blue">45-Company Distributed Architecture</span>
+      <span class="badge badge-warn">Educational Framework &mdash; Not Legal Advice</span>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-block">
+        <div class="stat-val">6</div>
+        <div class="stat-label">Framework Components</div>
+        <div class="stat-sub">Each mapped to a Charter section</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">45</div>
+        <div class="stat-label">Distributed Companies</div>
+        <div class="stat-sub">No single point of failure</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">22+</div>
+        <div class="stat-label">Years of Precedent</div>
+        <div class="stat-sub">Parker (2000) through present</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">s.2–24</div>
+        <div class="stat-label">Charter Coverage</div>
+        <div class="stat-sub">From expression to remedy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FRAMEWORK COMPONENTS
+══════════════════════════════════════════════ -->
+<section id="framework">
+  <div class="container">
+    <span class="section-label">The Framework</span>
+    <h2 class="section-title">Six Constitutional Components</h2>
+    <p class="section-sub">
+      Each product in the Francisco Holdings Constitutional AI stack is purpose-built to operationalize a specific provision of the Canadian Charter of Rights and Freedoms. This is not compliance. This is architecture.
+    </p>
+
+    <div class="cards-grid">
+
+      <!-- CARD 1: OmniaGuard -->
+      <div class="fw-card fade-up">
+        <span class="card-charter">Charter s.8 &mdash; Search &amp; Seizure Protection</span>
+        <div class="card-product">OmniaGuard</div>
+        <p class="card-tagline">
+          "Section 8 of the Canadian Charter protects against unreasonable search and seizure. OmniaGuard operationalizes this right in AI systems."
+        </p>
+        <p class="card-desc">
+          Every data access event is cryptographically anchored. Unauthorized collection attempts are blocked at the architectural level — before they reach any AI agent. OmniaGuard does not rely on policy documents or opt-out mechanisms. It enforces the constitutional standard by default.
+        </p>
+        <ul class="fn-list">
+          <li>Logs every data access attempt with cryptographic proof</li>
+          <li>Blocks unauthorized data collection by AI agents at the system level</li>
+          <li>Creates admissible evidence trail for legal action</li>
+          <li>Alerts on constitutional threshold violations in real time</li>
+        </ul>
+        <div class="card-badge">
+          <span class="badge badge-gold">First Constitutional AI Security Layer</span>
+        </div>
+      </div>
+
+      <!-- CARD 2: BENO-X -->
+      <div class="fw-card fade-up">
+        <span class="card-charter">Charter s.7 (Life, Liberty, Security) + s.11 (Defense)</span>
+        <div class="card-product">BENO-X Framework</div>
+        <p class="card-tagline">
+          "Section 7 protects the right to life, liberty, and security of the person. BENO-X encodes this right into automated procedural defense."
+        </p>
+        <p class="card-desc">
+          <strong>Bad Exemption = No Offense.</strong> If the regulatory exemption framework is constitutionally invalid, the underlying conduct cannot constitute an offense. BENO-X codifies this principle into an automated procedural layer — for educational purposes.
+        </p>
+        <div class="card-cases">
+          <span class="case-label">Educational Case References</span>
+          <div class="case-list">
+            <span class="case-pill">Parker (2000 OCA)</span>
+            <span class="case-pill">Smith (2015 SCC 34)</span>
+            <span class="case-pill">Allard (2016 FC 236)</span>
+          </div>
+        </div>
+        <div class="edu-notice">Education Only &mdash; Not Legal Advice &mdash; Not Legal Representation</div>
+      </div>
+
+      <!-- CARD 3: 12-Appearance Sovereignty -->
+      <div class="fw-card fade-up">
+        <span class="card-charter">Charter s.15 (Equality) + s.24 (Remedy)</span>
+        <div class="card-product">12-Appearance Sovereignty</div>
+        <p class="card-tagline">
+          "Section 15 guarantees equal benefit of the law. The 12-Appearance Method ensures every citizen has access to the same procedural knowledge."
+        </p>
+        <p class="card-desc">
+          Procedural inequality is a systemic problem. Citizens who cannot afford representation are structurally disadvantaged in proceedings where knowledge of process is itself the tool. The 12-Appearance Method codifies procedural sovereignty as an educational resource, not a legal service.
+        </p>
+        <ul class="fn-list">
+          <li>Procedural sovereignty through documented appearance methodology</li>
+          <li>Equal access to constitutional defense knowledge — for self-education</li>
+          <li>Self-representation education framework (not legal advice)</li>
+        </ul>
+        <div class="edu-notice">Education, Not Representation &mdash; Consult a Licensed Attorney for Legal Matters</div>
+      </div>
+
+      <!-- CARD 4: Agent PrimeDox -->
+      <div class="fw-card fade-up">
+        <span class="card-charter">Charter s.2 &mdash; Thought, Belief, Expression</span>
+        <div class="card-product">Agent PrimeDox</div>
+        <p class="card-tagline">
+          "Section 2 protects fundamental freedoms including freedom of thought, belief, opinion, and expression. PrimeDox AI is an extension of constitutionally protected expression."
+        </p>
+        <div class="quote-callout">
+          "An AI persona that expresses constitutional rights is an extension of the self. My AI, my rights."
+        </div>
+        <p class="card-desc">
+          PrimeDox encodes rights-aware response generation into its core model. Expression is not a feature toggle. It is the constitutional foundation upon which the agent operates.
+        </p>
+        <ul class="fn-list">
+          <li>Automated constitutional expression layer</li>
+          <li>Constitutional knowledge codification at inference time</li>
+          <li>Rights-aware response generation and output audit trail</li>
+        </ul>
+        <div class="card-badge">
+          <span class="badge badge-blue">Constitutional Expression Architecture</span>
+        </div>
+      </div>
+
+      <!-- CARD 5: Distributed Architecture -->
+      <div class="fw-card fade-up">
+        <span class="card-charter">Structural Sovereignty &mdash; 45-Company Architecture</span>
+        <div class="card-product">Distributed Sovereignty Architecture</div>
+        <p class="card-tagline">
+          "No single point of failure. No single point of attack. Constitutional rights distributed across a 45-company architecture."
+        </p>
+        <p class="card-desc">
+          Centralization is vulnerability — legal, technical, and constitutional. Francisco Holdings' 45-entity distributed architecture eliminates single-point seizure exposure while maintaining coordinated operational capability.
+        </p>
+        <ul class="fn-list">
+          <li>Each company operates as an independent, sovereign entity</li>
+          <li>No data centralization eliminates single-point seizure exposure</li>
+          <li>Redundancy architecture provides resilience against institutional pressure</li>
+          <li>Coordinated governance without centralized data exposure</li>
+        </ul>
+        <div class="quote-callout">
+          "The empire is the constitution made structural."
+        </div>
+        <div class="card-badge">
+          <span class="badge badge-gold">Distributed Constitutional Architecture</span>
+        </div>
+      </div>
+
+      <!-- CARD 6: Data Breach Response Chain -->
+      <div class="fw-card fade-up" style="grid-column: 1 / -1;">
+        <span class="card-charter">The Constitutional Stack &mdash; Full Breach Response Chain</span>
+        <div class="card-product">Data Breach Response Chain</div>
+        <p class="card-tagline">
+          "A constitutional breach response is not a policy document. It is a pre-encoded procedural sequence activated automatically at the moment of detection."
+        </p>
+        <p class="card-desc">
+          The Constitutional Stack connects every Francisco Holdings product into a single, end-to-end breach response protocol. From first detection through Charter remedy — each step is documented, admissible, and legally coherent.
+        </p>
+
+        <div class="flowchart" role="img" aria-label="Constitutional breach response flowchart">
+          <div class="flow-step">
+            <span class="step-num">Step 1</span>
+            Breach<br>Detected
+          </div>
+          <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+          <div class="flow-step">
+            <span class="step-num">Step 2</span>
+            OmniaGuard<br>Creates Evidence
+          </div>
+          <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+          <div class="flow-step">
+            <span class="step-num">Step 3</span>
+            12-Appearance<br>Procedure Activated
+          </div>
+          <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+          <div class="flow-step">
+            <span class="step-num">Step 4</span>
+            BENO-X<br>Defense Applied
+          </div>
+          <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+          <div class="flow-step">
+            <span class="step-num">Step 5</span>
+            22+ Years<br>Precedent Cited
+          </div>
+          <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+          <div class="flow-step">
+            <span class="step-num">Step 6</span>
+            Charter Remedy<br>Sought
+          </div>
+          <div class="flow-arrow" aria-hidden="true">&#8594;</div>
+          <div class="flow-step" style="border-color: var(--gold-line); background: rgba(201,162,39,0.08);">
+            <span class="step-num" style="color: var(--gold);">Step 7</span>
+            Damages<br>Calculated
+          </div>
+        </div>
+
+        <div class="edu-notice">All procedural references are educational. For legal action, consult a licensed attorney.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     COMPETITIVE MOAT
+══════════════════════════════════════════════ -->
+<section id="competitive">
+  <div class="container">
+    <span class="section-label">Competitive Positioning</span>
+    <h2 class="section-title">Privacy by Design. Liberty by Design. Sovereignty by Design.</h2>
+
+    <p class="compare-intro">
+      While <em>OpenAI faces EU investigations</em>, <em>Meta pays GDPR fines</em>, and <em>Amazon faces FTC scrutiny</em> — Francisco Holdings AI is built on the same constitutional principles that protect every Canadian citizen. Compliance is not our strategy. The constitution is our architecture.
+    </p>
+
+    <div class="compare-wrap fade-up">
+      <table class="compare-table" aria-label="Competitive comparison: Big Tech AI versus Francisco Holdings AI">
+        <thead>
+          <tr>
+            <th scope="col">Dimension</th>
+            <th scope="col">Big Tech AI</th>
+            <th scope="col">Francisco Holdings AI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Privacy Approach</td>
+            <td>Privacy as afterthought — retrofitted compliance</td>
+            <td>Privacy by Charter design — architectural, not policy</td>
+          </tr>
+          <tr>
+            <td>Regulatory Posture</td>
+            <td>Government investigations, reactive remediation</td>
+            <td>Constitutional compliance built into system design</td>
+          </tr>
+          <tr>
+            <td>Jurisdiction</td>
+            <td>US jurisdiction — foreign data sovereignty exposure</td>
+            <td>Canadian sovereignty — Charter-native architecture</td>
+          </tr>
+          <tr>
+            <td>Data Architecture</td>
+            <td>Centralized data silos — single seizure point</td>
+            <td>45-company distributed architecture — no seizure point</td>
+          </tr>
+          <tr>
+            <td>Compliance Model</td>
+            <td>Reactive compliance after violation</td>
+            <td>Proactive rights protection before any exposure</td>
+          </tr>
+          <tr>
+            <td>Legal Foundation</td>
+            <td>Terms of service — no enforceable legal framework</td>
+            <td>22+ years of Canadian constitutional precedent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CHARTER MAP
+══════════════════════════════════════════════ -->
+<section id="charter-map">
+  <div class="container">
+    <span class="section-label">Charter Coverage Map</span>
+    <h2 class="section-title">The Charter Operationalized</h2>
+    <p class="section-sub">
+      Every Charter section in the Francisco Holdings framework has a corresponding product that operationalizes it in software. This is not metaphor. This is engineering.
+    </p>
+
+    <div class="charter-grid fade-up">
+      <div class="charter-tile">
+        <div class="section-num">s.2</div>
+        <div class="section-right">Fundamental Freedoms<br>(Thought, Belief, Expression)</div>
+        <span class="product-link">PrimeDox AI</span>
+      </div>
+      <div class="charter-tile">
+        <div class="section-num">s.7</div>
+        <div class="section-right">Life, Liberty &amp; Security of Person</div>
+        <span class="product-link">BENO-X Framework</span>
+      </div>
+      <div class="charter-tile">
+        <div class="section-num">s.8</div>
+        <div class="section-right">Search &amp; Seizure Protection</div>
+        <span class="product-link">OmniaGuard</span>
+      </div>
+      <div class="charter-tile">
+        <div class="section-num">s.11</div>
+        <div class="section-right">Rights on Being Charged (Defense)</div>
+        <span class="product-link">BENO-X + LexMind</span>
+      </div>
+      <div class="charter-tile">
+        <div class="section-num">s.15</div>
+        <div class="section-right">Equality Rights — Equal Benefit of Law</div>
+        <span class="product-link">12-Appearance Method</span>
+      </div>
+      <div class="charter-tile">
+        <div class="section-num">s.24</div>
+        <div class="section-right">Enforcement &amp; Charter Remedy</div>
+        <span class="product-link">Full Constitutional Stack</span>
+      </div>
+    </div>
+
+    <p style="margin-top: 28px; font-size: 0.78rem; color: var(--muted); text-align: center; letter-spacing: 0.04em;">
+      All Charter references are educational. Nothing on this page constitutes legal advice. Consult a licensed attorney for all legal matters.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     ENTERPRISE
+══════════════════════════════════════════════ -->
+<section id="enterprise">
+  <div class="container">
+    <span class="section-label">Enterprise Value Proposition</span>
+    <h2 class="section-title">What This Means for Your Organization</h2>
+    <p class="section-sub">
+      The Francisco Constitutional AI Framework is not a compliance checkbox. It is a structural competitive advantage for organizations operating in Canadian jurisdiction or serving Canadian citizens.
+    </p>
+
+    <div class="enterprise-grid fade-up">
+      <div class="ent-card">
+        <div class="ent-num">01</div>
+        <p>
+          <span>Zero regulatory exposure</span> — built to Canadian constitutional standards from day one. Not retrofitted. Not patched. Original architecture aligned to the Charter.
+        </p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-num">02</div>
+        <p>
+          <span>Evidence-ready</span> — every AI action is logged, cryptographically anchored, admissible, and auditable. OmniaGuard produces the evidentiary chain before you need it.
+        </p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-num">03</div>
+        <p>
+          <span>PIPEDA native</span> — not retrofitted compliance. The Personal Information Protection and Electronic Documents Act is a design constraint, not an afterthought.
+        </p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-num">04</div>
+        <p>
+          <span>Government contract eligible</span> — sovereign Canadian AI stack. No foreign data exposure. No US jurisdiction risk. Charter-compliant by architecture.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CONTACT
+══════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <span class="section-label">Inquiries</span>
+    <div class="contact-box fade-up">
+      <div>
+        <h2>Connect with the Division</h2>
+        <p>
+          For enterprise licensing inquiries, institutional partnership discussions, or press requests regarding the Francisco Constitutional AI Framework — reach the Constitutional AI Division directly.
+        </p>
+        <p style="margin-top: 12px; font-size: 0.80rem; color: #664444;">
+          For legal matters, consult a licensed attorney. Francisco Holdings does not provide legal advice or representation.
+        </p>
+      </div>
+      <div class="contact-details">
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <a href="mailto:derek@franciscoholdings.com">derek@franciscoholdings.com</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Phone</span>
+          <span>705-307-8080</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Division</span>
+          <span style="color: var(--muted); font-size: 0.82rem;">Constitutional AI Division<br>Francisco Holdings Inc.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="corp-name">Francisco Holdings Inc.</div>
+      <div class="corp-div">Constitutional AI Division</div>
+      <div class="corp-arch">Architect &amp; CEO: Derek Francisco</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#framework">Framework</a></li>
+      <li><a href="#charter-map">Charter Map</a></li>
+      <li><a href="#competitive">Competitive Moat</a></li>
+      <li><a href="#enterprise">Enterprise</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <p class="footer-disclaimer">
+    The Francisco Constitutional AI Framework is an educational and technological framework.
+    Nothing on this page constitutes <strong>legal advice or legal representation</strong>.
+    All Canadian Charter of Rights and Freedoms references are educational in nature.
+    The BENO-X Framework is an educational legal framework, not legal advice.
+    Consult a licensed attorney for all legal matters.
+  </p>
+
+  <p class="footer-copy">
+    &copy; 2026 Francisco Holdings Inc. &nbsp;|&nbsp; Constitutional AI Division
+    &nbsp;|&nbsp; <strong>NOT LEGAL REPRESENTATION &mdash; EDUCATION ONLY</strong>
+  </p>
+</footer>
+
+<!-- ══════════════════════════════════════════════
+     INTERSECTION OBSERVER — FADE IN
+══════════════════════════════════════════════ -->
+<script>
+  (function () {
+    'use strict';
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-up').forEach(function (el) {
+      obs.observe(el);
+    });
+  })();
+</script>
+
+</body>
+</html>

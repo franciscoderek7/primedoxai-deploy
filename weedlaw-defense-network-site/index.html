@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weedlaw Defense Network — Cannabis Rights Education &amp; Paralegal Referrals</title>
+<meta name="description" content="Connecting cannabis-charged Canadians with educational resources and paralegal referrals. Learn your Charter rights, get educated on your defense options.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0A;
+    --bg2: #111111;
+    --bg3: #181818;
+    --accent: #00FF88;
+    --gold: #FFD700;
+    --text: #E8E8E8;
+    --muted: #888888;
+    --border: #2A2A2A;
+    --card: #141414;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* DISCLAIMER BAR */
+  .disclaimer-bar {
+    background: var(--gold);
+    color: #0A0A0A;
+    text-align: center;
+    padding: 10px 20px;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  /* NAV */
+  nav {
+    background: rgba(10,10,10,0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    position: sticky;
+    top: 41px;
+    z-index: 999;
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.75rem;
+    color: #0A0A0A;
+  }
+
+  .nav-logo-text {
+    color: var(--text);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .nav-logo-sub {
+    color: var(--muted);
+    font-size: 0.7rem;
+    display: block;
+    font-weight: 400;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #0A0A0A !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 700 !important;
+  }
+
+  .nav-cta:hover { background: #00dd77 !important; }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    display: block;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 5% 100px;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(0,255,136,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 80%, rgba(255,215,0,0.06) 0%, transparent 50%),
+      var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.3);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4.4rem);
+    font-weight: 900;
+    line-height: 1.08;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 span { color: var(--accent); }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+
+  .hero-tagline {
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0A0A0A;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: #00dd77; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-gold {
+    background: var(--gold);
+    color: #0A0A0A;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-gold:hover { background: #ffc300; transform: translateY(-1px); }
+
+  /* STATS */
+  .stats-bar {
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 5%;
+  }
+
+  .stats-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+
+  .stat-item {}
+
+  .stat-num {
+    display: block;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .stat-label strong {
+    display: block;
+    color: var(--text);
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+  }
+
+  /* SECTIONS */
+  section { padding: 90px 5%; }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 600px;
+    line-height: 1.75;
+    margin-bottom: 48px;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* HOW IT WORKS */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    position: relative;
+  }
+
+  .steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: calc(16.66% + 20px);
+    right: calc(16.66% + 20px);
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+    opacity: 0.3;
+  }
+
+  .step-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px 28px;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .step-card:hover { border-color: rgba(0,255,136,0.4); transform: translateY(-4px); }
+
+  .step-number {
+    width: 64px;
+    height: 64px;
+    background: var(--accent);
+    color: #0A0A0A;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin: 0 auto 24px;
+  }
+
+  .step-card:nth-child(2) .step-number { background: var(--gold); }
+  .step-card:nth-child(3) .step-number { background: linear-gradient(135deg, var(--accent), #00ccff); }
+
+  .step-card h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .step-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* RESOURCE CARDS */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .resource-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .resource-card:hover { border-color: rgba(0,255,136,0.3); transform: translateY(-3px); }
+
+  .resource-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .resource-card h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .resource-card p {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  .resource-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* CHARTER CARD */
+  .charter-card {
+    background: linear-gradient(135deg, rgba(0,255,136,0.05) 0%, rgba(255,215,0,0.05) 100%);
+    border: 2px solid rgba(255,215,0,0.25);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .charter-card h3 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--gold);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .charter-card .card-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-bottom: 32px;
+  }
+
+  .charter-rights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .charter-right {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .charter-section {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .charter-right h4 {
+    font-size: 0.88rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .charter-right p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .charter-card .card-note {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #555;
+    font-style: italic;
+  }
+
+  /* PARALEGAL FORM */
+  .form-section {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .form-section h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .form-section .form-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .form-group { margin-bottom: 18px; }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus { border-color: var(--accent); }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #0A0A0A;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+    margin-top: 4px;
+  }
+
+  .form-submit:hover { background: #00dd77; }
+
+  .form-disclaimer {
+    font-size: 0.78rem;
+    color: #555;
+    text-align: center;
+    margin-top: 14px;
+    line-height: 1.55;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #050505;
+    border-top: 1px solid var(--border);
+    padding: 50px 5% 30px;
+  }
+
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+
+  .footer-brand p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 14px;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+
+  .footer-col ul li a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: color 0.2s;
+  }
+
+  .footer-col ul li a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-bottom p { font-size: 0.83rem; color: var(--muted); }
+
+  .footer-disclaimer-text {
+    font-size: 0.78rem;
+    color: #555;
+    text-align: center;
+    max-width: 1200px;
+    margin: 16px auto 0;
+    line-height: 1.6;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .steps-grid::before { display: none; }
+    .charter-rights { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .stats-inner { grid-template-columns: 1fr; gap: 32px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    section { padding: 60px 5%; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .form-section { padding: 32px 24px; }
+    .charter-card { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER BAR -->
+<div class="disclaimer-bar">
+  &#9888; NOT LEGAL REPRESENTATION &mdash; EDUCATION AND REFERRAL NETWORK ONLY &#9888;
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">WDN</div>
+    <div class="nav-logo-text">
+      Weedlaw Defense Network
+      <span class="nav-logo-sub">Cannabis Rights Education &amp; Referral</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#charter">Charter Rights</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#network">Network</a></li>
+    <li><a href="#join" class="nav-cta">Join Network</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div style="position:relative;z-index:1;max-width:860px;margin:0 auto;">
+    <div class="hero-badge">Canada's Cannabis Rights Education Network</div>
+    <h1>You Have <em>Rights.</em><br>Let's <span>Educate</span> You on Them.</h1>
+    <p class="hero-tagline">The Weedlaw Defense Network connects cannabis-charged Canadians with constitutional education resources and qualified paralegal referrals. Knowledge is your strongest tool.</p>
+    <div class="hero-actions">
+      <a href="#how-it-works" class="btn-primary">Learn How It Works</a>
+      <a href="#charter" class="btn-gold">Know Your Charter Rights</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-num" data-target="2400" id="stat-members">0</span>
+      <div class="stat-label">
+        <strong>Network Members</strong>
+        Canadians educated and empowered through our network
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-target="47" id="stat-covered">0</span>
+      <div class="stat-label">
+        <strong>Provinces &amp; Territories Covered</strong>
+        Nationwide educational and referral coverage
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-target="89" id="stat-confidence">0</span>
+      <div class="stat-label">
+        <strong>% Felt More Confident</strong>
+        Members who felt more prepared after using our resources
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-label">The Process</div>
+    <h2 class="section-title">How the Network Works</h2>
+    <p class="section-desc">Three steps from confusion to confidence. We're with you at every stage of the education process.</p>
+    <div class="steps-grid">
+
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Learn Your Charter Rights</h3>
+        <p>Access our comprehensive Charter education library. Understand exactly what constitutional protections apply to your situation &mdash; from s.7 life and liberty to s.10(b) right to counsel. Knowledge is the foundation of any defense.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Get Your Defense Education</h3>
+        <p>Work through our structured defense education modules covering search and seizure law, detention rights, disclosure obligations, and evidence exclusion under s.24(2). Understand the legal landscape before entering a courtroom.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Connect with a Paralegal</h3>
+        <p>Once educated, we refer you to our vetted network of experienced paralegals who practice criminal defense across Canadian jurisdictions. They can represent you in Provincial Court proceedings where permitted.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CHARTER RIGHTS CARD -->
+<section id="charter" style="background:var(--bg);">
+  <div class="container">
+    <div class="section-label" style="text-align:center;">Emergency Defense Card</div>
+    <h2 class="section-title" style="text-align:center;">Know These Rights. Always.</h2>
+    <p class="section-desc" style="margin:0 auto 40px;text-align:center;">If you've been stopped, searched, or charged in relation to cannabis, these Charter protections are fundamental. Screenshot this card.</p>
+    <div class="charter-card">
+      <h3>Canadian Charter of Rights — Cannabis Defense Essentials</h3>
+      <p class="card-sub">These constitutional rights apply to every Canadian in every interaction with police.</p>
+      <div class="charter-rights">
+        <div class="charter-right">
+          <span class="charter-section">s.7</span>
+          <h4>Life, Liberty &amp; Security</h4>
+          <p>The right not to be deprived of liberty except in accordance with the principles of fundamental justice. Basis of most constitutional cannabis challenges.</p>
+        </div>
+        <div class="charter-right">
+          <span class="charter-section">s.8</span>
+          <h4>Unreasonable Search &amp; Seizure</h4>
+          <p>Everyone has the right to be secure against unreasonable search and seizure. Police must have lawful authority and reasonable grounds before searching you or your property.</p>
+        </div>
+        <div class="charter-right">
+          <span class="charter-section">s.10(b)</span>
+          <h4>Right to Retain Counsel</h4>
+          <p>Upon arrest or detention, you have the right to retain and instruct counsel without delay. Say clearly: "I want to speak with a lawyer." Then remain silent until you do.</p>
+        </div>
+      </div>
+      <p class="card-note">This card is for educational purposes only and does not constitute legal advice. Always consult a lawyer or paralegal for advice specific to your situation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources" style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-label">Educational Resources</div>
+    <h2 class="section-title">Tools for Your Defense Education</h2>
+    <p class="section-desc">Access our partner resources and educational materials designed to prepare you for the legal process.</p>
+    <div class="resource-grid">
+
+      <a href="https://ccldr.net" class="resource-card" target="_blank" rel="noopener">
+        <span class="resource-icon">&#128279;</span>
+        <h3>CCLDR.NET &mdash; Defense Resource Hub</h3>
+        <p>Canada's comprehensive cannabis legal defense resource. Motion templates, case law library, paralegal certification, and the full Charter education suite in one place.</p>
+        <div class="resource-link">Visit CCLDR.NET &rarr;</div>
+      </a>
+
+      <div class="resource-card">
+        <span class="resource-icon">&#128196;</span>
+        <h3>Charter Motion Education Library</h3>
+        <p>Learn how constitutional motions work &mdash; from drafting the Notice of Application to arguing the Voir Dire. Understand the process your paralegal will navigate on your behalf.</p>
+        <div class="resource-link">Access Library &rarr;</div>
+      </a>
+
+      <div class="resource-card">
+        <span class="resource-icon">&#128202;</span>
+        <h3>Case Outcome Analytics</h3>
+        <p>Review anonymized case data showing how courts have ruled on cannabis-related Charter applications across Canadian jurisdictions. See which arguments succeed and why.</p>
+        <div class="resource-link">View Analytics &rarr;</div>
+      </div>
+
+      <div class="resource-card">
+        <span class="resource-icon">&#127911;</span>
+        <h3>Defense Education Podcast</h3>
+        <p>Weekly episodes breaking down recent court decisions, explaining Charter concepts in plain English, and interviewing paralegals and legal educators from across Canada.</p>
+        <div class="resource-link">Listen Now &rarr;</div>
+      </div>
+
+      <div class="resource-card">
+        <span class="resource-icon">&#128218;</span>
+        <h3>Self-Represented Litigant Guide</h3>
+        <p>A step-by-step educational guide for Canadians who cannot afford or choose not to hire legal representation. Court procedure, filing requirements, and courtroom conduct.</p>
+        <div class="resource-link">Download Guide &rarr;</div>
+      </div>
+
+      <div class="resource-card">
+        <span class="resource-icon">&#128101;</span>
+        <h3>Paralegal Referral Network</h3>
+        <p>Access our vetted directory of paralegals who practice cannabis defense across Canada. Referrals based on your province, charge type, and scheduled court date.</p>
+        <div class="resource-link">Find a Paralegal &rarr;</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NETWORK JOIN FORM -->
+<section id="join" style="background:var(--bg);border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-label" style="text-align:center;">Paralegal Network</div>
+    <h2 class="section-title" style="text-align:center;">Join the Network</h2>
+    <p class="section-desc" style="margin:0 auto 40px;text-align:center;">Enter your email to access our defense education resources and receive a paralegal referral in your area. No legal advice &mdash; education and referral only.</p>
+    <div class="form-section" id="network">
+      <h3>Get Network Access</h3>
+      <p class="form-note">Join 2,400+ Canadians who've used our education resources to better understand their constitutional rights.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="First name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Province / Territory</label>
+        <select>
+          <option value="">Select your province or territory</option>
+          <option>Alberta</option>
+          <option>British Columbia</option>
+          <option>Manitoba</option>
+          <option>New Brunswick</option>
+          <option>Newfoundland and Labrador</option>
+          <option>Northwest Territories</option>
+          <option>Nova Scotia</option>
+          <option>Nunavut</option>
+          <option>Ontario</option>
+          <option>Prince Edward Island</option>
+          <option>Quebec</option>
+          <option>Saskatchewan</option>
+          <option>Yukon</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Situation Type</label>
+        <select>
+          <option>General Education &mdash; No Active Charge</option>
+          <option>Active Cannabis Charge &mdash; Need Paralegal Referral</option>
+          <option>Awaiting Sentencing</option>
+          <option>Appeal / Post-Conviction</option>
+          <option>I am a Paralegal Seeking Partnership</option>
+        </select>
+      </div>
+      <button class="form-submit">Join the Defense Network</button>
+      <p class="form-disclaimer">By joining, you agree that this network provides education and referral services only. Nothing provided constitutes legal advice. You will not receive legal representation by joining this network. For legal advice, consult a licensed lawyer or paralegal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div class="nav-logo-icon">WDN</div>
+        <div class="nav-logo-text">Weedlaw Defense Network</div>
+      </div>
+      <p>Connecting cannabis-charged Canadians with constitutional education resources and qualified paralegal referrals nationwide.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Network</h4>
+      <ul>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#join">Join Network</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="#charter">Charter Card</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://ccldr.net" target="_blank" rel="noopener">CCLDR.NET</a></li>
+        <li><a href="#">Motion Library</a></li>
+        <li><a href="#">Case Analytics</a></li>
+        <li><a href="#">SRL Guide</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:network@weedlawdefense.ca">network@weedlawdefense.ca</a></li>
+        <li><a href="#join">Join Network</a></li>
+        <li><a href="#">Partner With Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Weedlaw Defense Network. A Francisco Holdings Inc. Company.</p>
+    <p style="font-size:0.78rem;color:#444;">Education and referral only. Not legal advice.</p>
+  </div>
+  <p class="footer-disclaimer-text">DISCLAIMER: The Weedlaw Defense Network provides educational resources and paralegal referral services only. Nothing on this website constitutes legal advice, legal representation, or creates a solicitor-client relationship. Referrals are educational connections only. Always consult a licensed lawyer or paralegal for legal advice specific to your situation.</p>
+</footer>
+
+<script>
+// Animated counters
+(function() {
+  var counters = [
+    { el: document.getElementById('stat-members'), target: 2400, suffix: '+' },
+    { el: document.getElementById('stat-covered'), target: 47, suffix: '' },
+    { el: document.getElementById('stat-confidence'), target: 89, suffix: '%' }
+  ];
+
+  var animated = false;
+
+  function animateCounters() {
+    if (animated) return;
+    animated = true;
+    counters.forEach(function(counter) {
+      var start = 0;
+      var duration = 1800;
+      var startTime = null;
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = Math.floor(eased * counter.target);
+        counter.el.textContent = current.toLocaleString() + counter.suffix;
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          counter.el.textContent = counter.target.toLocaleString() + counter.suffix;
+        }
+      }
+
+      requestAnimationFrame(step);
+    });
+  }
+
+  // Trigger on scroll into view
+  var statsBar = document.querySelector('.stats-bar');
+  if (statsBar) {
+    var observer = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) {
+        animateCounters();
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(statsBar);
+  } else {
+    animateCounters();
+  }
+})();
+</script>
+
+</body>
+</html>

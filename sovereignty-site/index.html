@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Sovereignty Privacy — Remove your personal data from 147+ data brokers. Reclaim your digital identity today.">
+<title>Sovereignty Privacy — Reclaim Your Digital Identity</title>
+<style>
+  :root {
+    --purple: #9B59B6;
+    --purple-dark: #7D3C98;
+    --purple-light: #C39BD3;
+    --gold: #FFD700;
+    --dark: #0A080C;
+    --dark2: #120F15;
+    --dark3: #1C1720;
+    --card-bg: rgba(155,89,182,0.05);
+    --card-border: rgba(155,89,182,0.2);
+    --text: #E8E0EE;
+    --text-muted: #A89BB5;
+    --green-ok: #27AE60;
+    --red-alert: #E74C3C;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a { color: var(--purple-light); text-decoration: none; }
+  a:hover { color: var(--gold); }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+  }
+  .btn-primary {
+    background: var(--purple);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--purple-dark); color: #fff; transform: translateY(-2px); }
+  .btn-gold {
+    background: var(--gold);
+    color: #0A080C;
+  }
+  .btn-gold:hover { background: #e6c200; color: #0A080C; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--purple-light);
+    border: 2px solid var(--purple);
+  }
+  .btn-outline:hover { background: var(--purple); color: #fff; }
+  .section { padding: 80px 0; }
+  .section-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 40px;
+    max-width: 620px;
+  }
+  .gold-text { color: var(--gold); }
+  .purple-text { color: var(--purple); }
+
+  /* === URGENCY BAR === */
+  #urgency-bar {
+    background: var(--purple);
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+  }
+  #urgency-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: shimmer 3s infinite;
+  }
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+  #urgency-bar a {
+    color: var(--gold);
+    text-decoration: underline;
+    margin-left: 8px;
+  }
+
+  /* === NAV === */
+  #main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background: rgba(10,8,12,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 0 20px;
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 16px;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .nav-logo svg {
+    filter: drop-shadow(0 0 8px var(--purple));
+    animation: glow-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { filter: drop-shadow(0 0 6px var(--purple)); }
+    50% { filter: drop-shadow(0 0 18px var(--purple)) drop-shadow(0 0 30px rgba(155,89,182,0.5)); }
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--purple-light); }
+  .nav-cta { font-size: 0.85rem !important; padding: 10px 18px !important; }
+  #nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px;
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--dark2); padding: 20px; gap: 16px; border-bottom: 1px solid var(--card-border); }
+    .nav-links.open { display: flex; }
+    #nav-toggle { display: block; }
+  }
+
+  /* === HERO === */
+  #hero {
+    padding: 100px 20px 80px;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(155,89,182,0.18) 0%, transparent 70%);
+  }
+  #hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 40%, var(--purple-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  #hero p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0 auto 40px;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .stat-item {
+    padding: 24px 16px;
+    background: var(--card-bg);
+    border-right: 1px solid var(--card-border);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number { font-size: 1.6rem; font-weight: 900; color: var(--gold); display: block; }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+  /* === EXPOSURE CHECK === */
+  #exposure-check {
+    padding: 80px 20px;
+    background: var(--dark2);
+  }
+  .exposure-inner { max-width: 780px; margin: 0 auto; text-align: center; }
+  .exposure-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+    margin: 32px 0;
+    background: var(--dark3);
+    padding: 24px;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+  }
+  @media (max-width: 600px) { .exposure-form { grid-template-columns: 1fr; } }
+  .exposure-form input {
+    background: rgba(155,89,182,0.08);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .exposure-form input:focus { border-color: var(--purple); }
+  .exposure-form input::placeholder { color: var(--text-muted); }
+  .simulation-note {
+    display: inline-block;
+    background: rgba(255,215,0,0.08);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  #exposure-result { display: none; margin-top: 32px; text-align: left; }
+  .broker-profile-card {
+    background: var(--dark3);
+    border: 1px solid var(--red-alert);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(231,76,60,0.15);
+  }
+  .broker-profile-header {
+    background: var(--red-alert);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .broker-profile-header span { font-size: 0.82rem; opacity: 0.9; }
+  .broker-profile-header .live-badge {
+    background: #fff;
+    color: var(--red-alert);
+    font-weight: 800;
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  .profile-body { padding: 24px; }
+  .profile-name { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+  .profile-meta { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; }
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 500px) { .profile-grid { grid-template-columns: 1fr; } }
+  .profile-field {
+    background: rgba(231,76,60,0.06);
+    border: 1px solid rgba(231,76,60,0.15);
+    border-radius: 6px;
+    padding: 12px;
+  }
+  .field-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px; }
+  .field-value { font-size: 0.9rem; color: var(--text); font-weight: 500; }
+  .field-value.redacted { filter: blur(5px); user-select: none; cursor: default; }
+  .field-value.redacted:hover { filter: blur(0); }
+  .field-available { color: var(--red-alert); font-weight: 700; }
+  .found-on {
+    background: rgba(155,89,182,0.08);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+  .found-on strong { color: var(--purple-light); }
+  .exposure-warning {
+    background: rgba(231,76,60,0.08);
+    border-left: 4px solid var(--red-alert);
+    padding: 16px 20px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 20px;
+    font-size: 0.95rem;
+  }
+  .cta-after-exposure { text-align: center; margin-top: 28px; }
+
+  /* === HOW IT WORKS === */
+  #how-it-works {
+    padding: 80px 20px;
+    background: var(--dark);
+  }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .step-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 32px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .step-card:hover { transform: translateY(-4px); border-color: var(--purple); }
+  .step-number {
+    font-size: 3rem;
+    font-weight: 900;
+    color: rgba(155,89,182,0.2);
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    line-height: 1;
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 16px; }
+  .step-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 10px; color: var(--purple-light); }
+  .step-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+  .timeline-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-top: 48px;
+    flex-wrap: wrap;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .tl-item {
+    flex: 1;
+    min-width: 180px;
+    padding: 20px 16px;
+    background: var(--card-bg);
+    border-right: 1px solid var(--card-border);
+    text-align: center;
+  }
+  .tl-item:last-child { border-right: none; }
+  .tl-time { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+  .tl-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+  /* === BROKER LIST === */
+  #brokers {
+    padding: 80px 20px;
+    background: var(--dark2);
+  }
+  .broker-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .broker-chip {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .broker-chip:hover { border-color: var(--purple); color: var(--purple-light); }
+  .more-brokers {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  /* === CCLDR CROSSSELL === */
+  #ccldr-crosssell {
+    padding: 80px 20px;
+    background: var(--dark);
+  }
+  .gold-card {
+    background: linear-gradient(135deg, rgba(255,215,0,0.06), rgba(155,89,182,0.06));
+    border: 2px solid rgba(255,215,0,0.4);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255,215,0,0.06);
+  }
+  .gold-card h2 { color: var(--gold); margin-bottom: 16px; }
+  .gold-card p { color: var(--text-muted); max-width: 580px; margin: 0 auto 24px; }
+  .discount-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #0A080C;
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 8px 20px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  /* === PARALEGAL === */
+  #paralegal {
+    padding: 80px 20px;
+    background: var(--dark2);
+  }
+  .paralegal-inner { max-width: 820px; margin: 0 auto; }
+  .paralegal-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 24px 0;
+  }
+  @media (max-width: 540px) { .paralegal-list { grid-template-columns: 1fr; } }
+  .paralegal-list li {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 14px 18px 14px 42px;
+    position: relative;
+    font-size: 0.92rem;
+  }
+  .paralegal-list li::before {
+    content: '⚖️';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .paralegal-note {
+    background: rgba(155,89,182,0.06);
+    border-left: 3px solid var(--purple);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-top: 20px;
+  }
+
+  /* === PRICING === */
+  #pricing {
+    padding: 80px 20px;
+    background: var(--dark);
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .pricing-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 36px 28px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .pricing-card:hover { transform: translateY(-4px); border-color: var(--purple); }
+  .pricing-card.popular {
+    border-color: var(--purple);
+    box-shadow: 0 0 30px rgba(155,89,182,0.2);
+  }
+  .pricing-card.elite {
+    border-color: rgba(255,215,0,0.5);
+    box-shadow: 0 0 30px rgba(255,215,0,0.08);
+  }
+  .popular-badge, .elite-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 5px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .popular-badge { background: var(--purple); color: #fff; }
+  .elite-badge { background: var(--gold); color: #0A080C; }
+  .plan-name { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+  .plan-price { font-size: 2.4rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .plan-price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
+  .plan-features {
+    list-style: none;
+    margin: 24px 0;
+    flex: 1;
+  }
+  .plan-features li {
+    padding: 7px 0 7px 24px;
+    position: relative;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid rgba(155,89,182,0.08);
+  }
+  .plan-features li::before { content: '✓'; position: absolute; left: 0; color: var(--purple); font-weight: 700; }
+  .plan-btn { width: 100%; margin-top: auto; }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--dark2);
+    border-top: 1px solid var(--card-border);
+    padding: 48px 20px 32px;
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+  }
+  @media (max-width: 640px) { .footer-inner { grid-template-columns: 1fr; } }
+  .footer-brand .nav-logo { margin-bottom: 12px; }
+  .footer-brand p { font-size: 0.85rem; color: var(--text-muted); max-width: 320px; }
+  .footer-col h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 14px; }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 8px; }
+  .footer-col a { font-size: 0.88rem; color: var(--text-muted); }
+  .footer-col a:hover { color: var(--purple-light); }
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 32px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 12px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .not-legal {
+    background: rgba(155,89,182,0.1);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+  }
+
+  /* === MODAL === */
+  #email-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.75);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #email-modal.open { display: flex; }
+  .modal-box {
+    background: var(--dark2);
+    border: 1px solid var(--purple);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 520px;
+    width: 100%;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(155,89,182,0.3);
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-lead-badge {
+    display: inline-block;
+    background: rgba(255,215,0,0.12);
+    border: 1px solid rgba(255,215,0,0.4);
+    color: var(--gold);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .modal-box h2 { font-size: 1.4rem; margin-bottom: 12px; }
+  .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+  .modal-form { display: flex; flex-direction: column; gap: 12px; }
+  .modal-form input {
+    background: rgba(155,89,182,0.08);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    outline: none;
+  }
+  .modal-form input:focus { border-color: var(--purple); }
+  .modal-privacy { font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; }
+
+  /* === TOASTS === */
+  #toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 8000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .toast {
+    background: var(--dark3);
+    border: 1px solid var(--card-border);
+    border-left: 4px solid var(--purple);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.85rem;
+    max-width: 320px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    animation: toast-in 0.4s ease;
+    color: var(--text);
+  }
+  .toast strong { color: var(--purple-light); }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes toast-out {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-20px); }
+  }
+
+  /* === MISC HELPERS === */
+  .text-center { text-align: center; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .mt-32 { margin-top: 32px; }
+  .highlight-red { color: var(--red-alert); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- ===== URGENCY BAR ===== -->
+<div id="urgency-bar">
+  🔒 Your data is being sold right now. <strong>147 data brokers</strong> have your information. Start your removal today.
+  <a href="#exposure-check">Check My Exposure →</a>
+</div>
+
+<!-- ===== STICKY NAV ===== -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <!-- Eye-slash SVG (privacy symbol) with purple glow animation -->
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Sovereignty Privacy logo">
+        <ellipse cx="16" cy="16" rx="13" ry="8" stroke="#9B59B6" stroke-width="2"/>
+        <circle cx="16" cy="16" r="4" fill="#9B59B6"/>
+        <circle cx="16" cy="16" r="2" fill="#0A080C"/>
+        <line x1="6" y1="6" x2="26" y2="26" stroke="#9B59B6" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="5" y1="7" x2="7" y2="5" stroke="#0A080C" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="25" y1="27" x2="27" y2="25" stroke="#0A080C" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Sovereignty Privacy
+    </a>
+    <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#exposure-check">Exposure Check</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#brokers">Brokers</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#exposure-check" class="btn btn-primary nav-cta">Check Your Exposure →</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="container">
+    <h1>Reclaim Your Digital Identity</h1>
+    <p>Data brokers are selling your name, address, phone number, relatives, income estimate, and criminal history to anyone who'll pay. Sovereignty Privacy removes it.</p>
+    <div class="hero-ctas">
+      <a href="#exposure-check" class="btn btn-primary" style="font-size:1rem; padding:16px 32px;">Check My Exposure (Free) →</a>
+      <a href="#pricing" class="btn btn-outline" style="font-size:1rem; padding:16px 32px;">Start Removal Now →</a>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-number">147+</span>
+        <div class="stat-label">Data Brokers Targeted</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">340M</span>
+        <div class="stat-label">Americans &amp; Canadians Exposed</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">94%</span>
+        <div class="stat-label">Removal Success Rate</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">72hr</span>
+        <div class="stat-label">First Results</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPOSURE CHECK / SIMULATION ===== -->
+<section id="exposure-check">
+  <div class="exposure-inner">
+    <div class="section-title text-center">See What Data Brokers Know About You</div>
+    <p class="section-sub text-center" style="margin: 0 auto 24px;">This is a simulation — we don't actually search. This shows what a typical profile looks like on data broker sites right now.</p>
+    <div class="simulation-note">⚠️ Simulation Only — For illustration purposes. No real search is performed.</div>
+    <form class="exposure-form" id="exposure-form" onsubmit="runExposureCheck(event)">
+      <input type="text" id="ef-first" placeholder="First Name" required autocomplete="off">
+      <input type="text" id="ef-last" placeholder="Last Name" required autocomplete="off">
+      <input type="text" id="ef-city" placeholder="City" required autocomplete="off">
+      <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Check Exposure →</button>
+    </form>
+    <div id="exposure-result">
+      <div class="broker-profile-card">
+        <div class="broker-profile-header">
+          <div>
+            <strong>⚠️ PUBLIC PROFILE FOUND</strong>
+            <span style="display:block; font-size:0.78rem; margin-top:2px;">Retrieved from data broker network</span>
+          </div>
+          <div class="live-badge">LIVE DATA</div>
+        </div>
+        <div class="profile-body">
+          <div class="profile-name" id="res-name">—</div>
+          <div class="profile-meta" id="res-meta">—</div>
+          <div class="profile-grid">
+            <div class="profile-field">
+              <div class="field-label">Current Address</div>
+              <div class="field-value" id="res-address">—</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Age &amp; Est. Income</div>
+              <div class="field-value" id="res-age">—</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Previous Addresses</div>
+              <div class="field-value" id="res-prev">—</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Phone Numbers</div>
+              <div class="field-value redacted" id="res-phones" title="Hover to reveal">(4XX) 5XX-XXXX &amp; 2 more</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Email Addresses</div>
+              <div class="field-value redacted" id="res-emails" title="Hover to reveal">j****@gmail.com &amp; 2 more</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Relatives Listed</div>
+              <div class="field-value" id="res-relatives">—</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Associates</div>
+              <div class="field-value" id="res-assoc">—</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Social Profiles</div>
+              <div class="field-value">Facebook, Instagram, LinkedIn, Twitter/X, TikTok, Pinterest</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Criminal Background</div>
+              <div class="field-value field-available">⚠ Available for Purchase</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Financial Records</div>
+              <div class="field-value field-available">⚠ Credit Indicators: Available</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Employer</div>
+              <div class="field-value field-available">⚠ Field: Available</div>
+            </div>
+            <div class="profile-field">
+              <div class="field-label">Voting Records</div>
+              <div class="field-value field-available">⚠ Party Affiliation: Available</div>
+            </div>
+          </div>
+          <div class="found-on">
+            <strong>Found on:</strong> Spokeo, Whitepages, BeenVerified, Intelius, MyLife, PeopleFinder, TruthFinder, Radaris, FamilyTreeNow, InstantCheckmate
+            <strong>... and 137 more brokers.</strong>
+          </div>
+          <div class="exposure-warning">
+            <strong class="highlight-red">This is why Sovereignty Privacy exists.</strong> Every piece of this information is available right now to anyone willing to pay $1–$30. Employers, landlords, ex-partners, stalkers, scammers, and identity thieves all use these sites.
+          </div>
+          <div class="cta-after-exposure" style="margin-top:24px;">
+            <a href="#pricing" class="btn btn-primary" style="font-size:1rem; padding:14px 30px;">Start My Removal →</a>
+            <div style="margin-top:12px; font-size:0.8rem; color:var(--text-muted);">Remove yourself from all 147+ brokers. First results in 72 hours.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section id="how-it-works" class="section">
+  <div class="container text-center">
+    <div class="section-title">How Sovereignty Privacy Works</div>
+    <p class="section-sub" style="margin: 0 auto 0;">We handle every step — you don't have to send a single email or fill out a single form.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-number">1</span>
+        <div class="step-icon">🔍</div>
+        <div class="step-title">We Scan</div>
+        <p class="step-desc">We identify your profiles across 147+ data broker databases — including the ones you've never heard of. Every platform. Every profile.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-number">2</span>
+        <div class="step-icon">📤</div>
+        <div class="step-title">We Request Removal</div>
+        <p class="step-desc">Automated and manual opt-out requests are sent to every broker on your behalf. We follow their processes — and escalate when they don't comply.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-number">3</span>
+        <div class="step-icon">✅</div>
+        <div class="step-title">We Verify</div>
+        <p class="step-desc">We confirm each removal is live. Non-compliant brokers receive follow-up requests. We document everything and escalate to regulatory channels when needed.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-number">4</span>
+        <div class="step-icon">🛡️</div>
+        <div class="step-title">We Monitor</div>
+        <p class="step-desc">Data brokers re-add profiles from public records every 30–90 days. We monitor continuously and remove your data every time it reappears.</p>
+      </div>
+    </div>
+    <div class="timeline-bar">
+      <div class="tl-item">
+        <div class="tl-time">72 Hours</div>
+        <div class="tl-desc">First results visible</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">30–45 Days</div>
+        <div class="tl-desc">Full initial removal complete</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Ongoing</div>
+        <div class="tl-desc">Continuous monitoring &amp; re-removal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DATA BROKER LIST ===== -->
+<section id="brokers">
+  <div class="container">
+    <div class="section-title text-center">The 147+ Brokers We Target</div>
+    <p class="section-sub text-center" style="margin: 0 auto 0;">Every one of these platforms has your information. We remove it from all of them.</p>
+    <div class="broker-grid" id="broker-grid">
+      <!-- chips injected by JS -->
+    </div>
+    <div class="more-brokers text-center" style="margin-top:24px;">
+      <span style="background:var(--card-bg); border:1px solid var(--card-border); border-radius:20px; padding:8px 20px; font-weight:700; color:var(--purple-light);">...and 123 more data brokers</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CCLDR CROSSSELL ===== -->
+<section id="ccldr-crosssell" class="section">
+  <div class="container">
+    <div class="gold-card">
+      <div class="discount-badge">🛡 Exclusive Partnership</div>
+      <h2 class="section-title">Sovereignty Privacy + CCLDR.NET = Complete Defense</h2>
+      <p>Your privacy removal removes your exposure from data brokers. <strong style="color:var(--text);">CCLDR.NET</strong> education teaches you your Charter rights if that exposure leads to legal action. Two layers. One strategy.</p>
+      <p style="color:var(--gold); font-weight:700; font-size:1.05rem;">Sovereignty Privacy clients get 15% off CCLDR education tiers.</p>
+      <a href="https://ccldr.net" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:8px;">Visit CCLDR.NET →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PARALEGAL PARTNER NETWORK ===== -->
+<section id="paralegal">
+  <div class="paralegal-inner container">
+    <div class="section-title">Paralegal Partner Network</div>
+    <p style="color:var(--text-muted); margin-bottom:24px; max-width:640px;">For Canadians facing reputation-damaging records, Sovereignty Privacy works with a network of paralegal partners to assist with:</p>
+    <ul class="paralegal-list">
+      <li>Criminal record suspension applications</li>
+      <li>Background check dispute processes</li>
+      <li>Defamation documentation</li>
+      <li>Platform removal requests (Google, social media)</li>
+    </ul>
+    <div class="paralegal-note">
+      Partner network referrals available at <strong>Professional tier and above</strong>. Paralegal services are separate from Sovereignty Privacy subscriptions and are arranged directly between clients and partner firms.
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section id="pricing" class="section">
+  <div class="container text-center">
+    <div class="section-title">Choose Your Protection Level</div>
+    <p class="section-sub" style="margin: 0 auto 0;">Start removing your data today. Cancel anytime. First results in 72 hours.</p>
+    <div class="pricing-grid">
+      <!-- Basic -->
+      <div class="pricing-card">
+        <div class="plan-name">Basic</div>
+        <div class="plan-price">$49<span>/mo</span></div>
+        <ul class="plan-features" style="margin-top:20px;">
+          <li>50 broker removals</li>
+          <li>Monthly monitoring</li>
+          <li>Email progress report</li>
+          <li>Opt-out documentation</li>
+          <li>Dashboard access</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_16" class="btn btn-outline plan-btn">Start Basic →</a>
+      </div>
+      <!-- Professional -->
+      <div class="pricing-card popular">
+        <div class="popular-badge">★ MOST POPULAR</div>
+        <div class="plan-name" style="color:var(--purple-light);">Professional</div>
+        <div class="plan-price">$149<span>/mo</span></div>
+        <ul class="plan-features" style="margin-top:20px;">
+          <li>147+ broker removals</li>
+          <li>Bi-weekly monitoring</li>
+          <li>Paralegal partner referrals</li>
+          <li>Priority removal queue</li>
+          <li>Reputation monitoring</li>
+          <li>Bi-weekly progress report</li>
+          <li>Google results alerts</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_17" class="btn btn-primary plan-btn">Start Professional →</a>
+      </div>
+      <!-- Elite -->
+      <div class="pricing-card elite">
+        <div class="elite-badge">🏆 COMPLETE SHIELD</div>
+        <div class="plan-name" style="color:var(--gold);">Elite</div>
+        <div class="plan-price" style="color:var(--gold);">$299<span>/mo</span></div>
+        <ul class="plan-features" style="margin-top:20px;">
+          <li>Everything in Professional</li>
+          <li>15% CCLDR discount included</li>
+          <li>Dedicated removal agent</li>
+          <li>Social media monitoring</li>
+          <li>Google results management</li>
+          <li>Quarterly reputation report</li>
+          <li>1 paralegal consultation/quarter</li>
+          <li>24-hour priority support</li>
+        </ul>
+        <a href="PLACEHOLDER_URL_18" class="btn btn-gold plan-btn">Start Elite →</a>
+      </div>
+    </div>
+    <p style="margin-top:24px; font-size:0.82rem; color:var(--text-muted);">All plans include a 7-day money-back guarantee. No contracts. Cancel anytime.</p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="contact">
+  <div class="footer-inner container">
+    <div class="footer-brand">
+      <div class="nav-logo" style="display:inline-flex; margin-bottom:12px;">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <ellipse cx="16" cy="16" rx="13" ry="8" stroke="#9B59B6" stroke-width="2"/>
+          <circle cx="16" cy="16" r="4" fill="#9B59B6"/>
+          <circle cx="16" cy="16" r="2" fill="#0A080C"/>
+          <line x1="6" y1="6" x2="26" y2="26" stroke="#9B59B6" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span style="margin-left:8px; font-size:0.95rem;">Sovereignty Privacy</span>
+      </div>
+      <p>Data broker removal and digital privacy protection for Americans and Canadians. By Francisco Holdings Inc.</p>
+      <p style="margin-top:12px; font-size:0.78rem;">Contact: <a href="mailto:privacy@sovereigntyprivacy.com">privacy@sovereigntyprivacy.com</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#exposure-check">Exposure Check</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#brokers">Broker List</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#paralegal">Paralegal Network</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="https://ccldr.net" target="_blank" rel="noopener">CCLDR.NET Partner</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom container">
+    <div>© 2026 Sovereignty Privacy by Francisco Holdings Inc. | All rights reserved.</div>
+    <div class="not-legal">⚠️ Not legal advice. Privacy removal is not a guarantee of complete data erasure from all sources.</div>
+  </div>
+</footer>
+
+<!-- ===== EMAIL CAPTURE MODAL ===== -->
+<div id="email-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <div class="modal-lead-badge">Free Download</div>
+    <h2 id="modal-title">The 10 Most Dangerous Data Brokers</h2>
+    <p>And How to Remove Yourself Right Now — a free guide from Sovereignty Privacy. Enter your email and we'll send it immediately.</p>
+    <form class="modal-form" onsubmit="submitModal(event)">
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email Address" required>
+      <button type="submit" class="btn btn-primary">Send Me the Free Guide →</button>
+    </form>
+    <div class="modal-privacy">🔒 Zero spam. Unsubscribe anytime. Your email is never shared or sold.</div>
+  </div>
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div id="toast-container" aria-live="polite"></div>
+
+<script>
+  // ===== NAV TOGGLE =====
+  document.getElementById('nav-toggle').addEventListener('click', function() {
+    document.getElementById('nav-links').classList.toggle('open');
+  });
+
+  // ===== EXPOSURE CHECK SIMULATION =====
+  const prevCities = [
+    ['Hamilton, ON', 'Mississauga, ON'],
+    ['Surrey, BC', 'Burnaby, BC'],
+    ['Laval, QC', 'Longueuil, QC'],
+    ['Scarborough, ON', 'North York, ON'],
+    ['Red Deer, AB', 'Lethbridge, AB'],
+    ['Regina, SK', 'Moose Jaw, SK'],
+    ['Dartmouth, NS', 'Truro, NS'],
+    ['Brampton, ON', 'Oakville, ON'],
+  ];
+  const relatives = [
+    ['M. {last}','Patricia {last}','Robert {last}'],
+    ['James {last}','Carol {last}','David {last}'],
+    ['Linda {last}','Michael {last}','Barbara {last}'],
+    ['William {last}','Susan {last}','Richard {last}'],
+  ];
+  const associates = [
+    ['T. Morrison','K. Patel','D. Okafor','S. Nguyen'],
+    ['L. Hernandez','A. Singh','B. Tremblay','C. Kowalski'],
+    ['R. MacLeod','F. Santos','J. Williams','N. Ahmed'],
+  ];
+
+  function runExposureCheck(e) {
+    e.preventDefault();
+    const first = document.getElementById('ef-first').value.trim();
+    const last = document.getElementById('ef-last').value.trim();
+    const city = document.getElementById('ef-city').value.trim();
+    const fullName = first + ' ' + last;
+
+    const ri = Math.floor(Math.random() * relatives.length);
+    const ai = Math.floor(Math.random() * associates.length);
+    const ci = Math.floor(Math.random() * prevCities.length);
+    const age = (30 + Math.floor(Math.random() * 18)).toString().replace(/(\d)/, '$1X');
+    const incLow = (50 + Math.floor(Math.random() * 3) * 10) + ',000';
+    const incHigh = (parseInt(incLow) + 20000).toLocaleString();
+    const streetTypes = ['Ave — street number redacted', 'Blvd — street number redacted', 'Dr — street number redacted', 'Cres — street number redacted'];
+    const streetType = streetTypes[Math.floor(Math.random() * streetTypes.length)];
+
+    document.getElementById('res-name').textContent = fullName.toUpperCase();
+    document.getElementById('res-meta').textContent = city + ' | Profile last updated: ' + new Date().toLocaleDateString('en-CA');
+    document.getElementById('res-address').textContent = city + ' — ' + streetType;
+    document.getElementById('res-age').textContent = 'Age: ' + age + ' | Est. Income: $' + incLow + '–$' + incHigh;
+    document.getElementById('res-prev').textContent = prevCities[ci].join(', ');
+
+    const relFilled = relatives[ri].map(r => r.replace('{last}', last));
+    document.getElementById('res-relatives').textContent = relFilled.join(', ');
+    document.getElementById('res-assoc').textContent = associates[ai].join(', ');
+
+    const emailFirst = first.charAt(0).toLowerCase();
+    document.getElementById('res-emails').textContent =
+      emailFirst + '****@gmail.com, ' + emailFirst + '****@hotmail.com, ' + emailFirst + '****@yahoo.com';
+
+    const result = document.getElementById('exposure-result');
+    result.style.display = 'block';
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ===== BROKER CHIPS =====
+  const brokers = [
+    'Spokeo','Whitepages','BeenVerified','Intelius','MyLife','PeopleFinder','TruthFinder',
+    'Radaris','FamilyTreeNow','InstantCheckmate','ZabaSearch','PeopleLookup','Pipl','AnyWho',
+    'Addresses.com','Ancestry','USSearch','PublicRecords.online','ArrestFacts','BackgroundAlert',
+    'CheckPeople','CourtRecords','CrimeReports','Dataveria'
+  ];
+  const grid = document.getElementById('broker-grid');
+  brokers.forEach(b => {
+    const chip = document.createElement('span');
+    chip.className = 'broker-chip';
+    chip.textContent = b;
+    grid.appendChild(chip);
+  });
+
+  // ===== EMAIL MODAL =====
+  let modalShown = false;
+  function showModal() {
+    if (!modalShown) {
+      modalShown = true;
+      document.getElementById('email-modal').classList.add('open');
+    }
+  }
+  function closeModal() {
+    document.getElementById('email-modal').classList.remove('open');
+  }
+  function submitModal(e) {
+    e.preventDefault();
+    closeModal();
+    showToast('Guide sent! Check your inbox.', 3000);
+  }
+  // 25 second trigger
+  setTimeout(showModal, 25000);
+  // 65% scroll trigger
+  window.addEventListener('scroll', function() {
+    const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    if (scrolled >= 0.65) showModal();
+  }, { passive: true });
+
+  // ===== TOASTS =====
+  const toastMessages = [
+    "<strong>Marcus from Toronto:</strong> 'Removed from 89 brokers in 14 days'",
+    "<strong>Professional in BC:</strong> 'Found my home address on 34 sites. All removed.'",
+    "<strong>Small business owner:</strong> 'A background check for a client deal was showing wrong info. Fixed.'",
+    "<strong>Keisha from Ottawa:</strong> 'My ex could look up my address. That's gone now.'",
+    "<strong>David from Calgary:</strong> 'Signed up Monday. First removals confirmed Wednesday.'"
+  ];
+  let toastIndex = 0;
+  function showToast(msg, duration) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = msg;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'toast-out 0.4s ease forwards';
+      setTimeout(() => toast.remove(), 400);
+    }, duration || 5000);
+  }
+  function cycleToasts() {
+    showToast(toastMessages[toastIndex % toastMessages.length]);
+    toastIndex++;
+    setTimeout(cycleToasts, 18000);
+  }
+  setTimeout(cycleToasts, 8000);
+
+  // ===== CLOSE MODAL ON BACKDROP =====
+  document.getElementById('email-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+</body>
+</html>
