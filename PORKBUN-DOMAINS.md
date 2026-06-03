@@ -1,18 +1,30 @@
 # PORKBUN DOMAIN LIST — FRANCISCO HOLDINGS EMPIRE
 # Register at: porkbun.com | Account: franciscoderek7@gmail.com
-# Priority: High-value first. All .com unless noted.
+# Last updated: 2026-06-03 (confirmed from Porkbun dashboard screenshot)
 
 ---
 
-## TIER 1 — MISSION CRITICAL (Register NOW — $10–$15/yr each)
+## ✅ CONFIRMED OWNED (Verified in Porkbun dashboard June 3, 2026)
+
+| Domain | Status | Shield | Maps To |
+|---|---|---|---|
+| omniaguard.com | ✅ ACTIVE | 🔒 HTTPS | omniaguard-site/index.html |
+| omniaguard.io | ✅ ACTIVE | — | (redirect to .com) |
+| omniaguard.pro | ✅ ACTIVE | — | (redirect to .com) |
+| omniaguard.tech | ✅ ACTIVE | 🔒 HTTPS | (redirect to .com) |
+| franciscoholdingsinc.com | ✅ ACTIVE | 🥇 GOLD | francisco-holdings-site/index.html |
+| franciscoholdingsinc.ca | ✅ ACTIVE | — | (redirect to .com) |
+| ccldr.net | ✅ ACTIVE | — | ccldr-site/index.html |
+
+---
+
+## TIER 1 — STILL NEEDED (Register ASAP — $10–$15/yr each)
 
 | Domain | Maps To | Priority |
 |---|---|---|
 | empirehub.com | empire-hub-site/index.html | 🔴 CRITICAL |
 | primedoxai.com | primedoxai-site/index.html | 🔴 CRITICAL |
-| omniaguard.com | omniaguard-site/index.html | 🔴 CRITICAL |
-| ccldr.net | ccldr-site/index.html | ✅ ALREADY OWNED — 60-day ICANN lock (DNS still works, can go live NOW) |
-| franciscoholdings.com | francisco-holdings-site/index.html | 🔴 CRITICAL |
+| franciscoholdings.com | francisco-holdings-site/index.html | 🟡 Nice-to-have (.com now owned as franciscoholdingsinc.com) |
 
 ---
 
