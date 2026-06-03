@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Swarm Inc. | AI Agents for Autonomous Vehicle Intelligence</title>
+<meta name="description" content="Auto Swarm Inc. deploys 14 autonomous vehicle AI agents for fleet coordination, real-time perception, V2X communications, and predictive hazard detection in the $2.3T self-driving market.">
+<meta name="keywords" content="autonomous vehicles AI, self-driving AI, fleet AI, V2X communications, AV intelligence, ISO 26262, SAE Level 5, Transport Canada, NHTSA">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Auto Swarm Inc. | AI Agents That Never Blink, Never Fatigue, Never Miss">
+<meta property="og:description" content="14 autonomous vehicle intelligence agents for the $2.3T self-driving future. Zero at-fault incidents.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://autoswarm.franciscoholdings.com">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://autoswarm.franciscoholdings.com">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --red: #EF4444;
+    --red-dark: #dc2626;
+    --white: #FFFFFF;
+    --gray: #111111;
+    --lightgray: #1C1C1C;
+    --muted: #8A8A9A;
+    --card-bg: #141414;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ROAD GRID ANIMATION */
+  .road-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    overflow: hidden;
+  }
+  .road-bg::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+      linear-gradient(rgba(239,68,68,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(239,68,68,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 12s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 60px; }
+  }
+  .road-bg::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(239,68,68,0.03) 0%, transparent 70%);
+  }
+  /* MOVING LANE MARKERS */
+  .lane-marker {
+    position: fixed;
+    width: 2px;
+    background: rgba(239,68,68,0.12);
+    z-index: 0;
+    animation: laneScroll 4s linear infinite;
+  }
+  @keyframes laneScroll {
+    0% { transform: translateY(-100vh); }
+    100% { transform: translateY(100vh); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(239,68,68,0.2);
+    z-index: 1000; padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--red);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .nav-logo span { font-size: 1.2rem; font-weight: 700; color: var(--white); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--red); }
+  .nav-cta { background: var(--red) !important; color: var(--white) !important; padding: 8px 20px; border-radius: 4px; }
+  @media (max-width: 768px) { .nav-links { display: none; } }
+
+  /* HERO */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 110px 5% 70px; text-align: center; z-index: 2;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.35);
+    color: #fca5a5; padding: 6px 18px; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 28px;
+    animation: fadeInDown 0.6s ease both;
+  }
+  @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800;
+    line-height: 1.1; letter-spacing: -1px;
+    margin-bottom: 24px; max-width: 900px;
+    animation: fadeInUp 0.8s ease 0.2s both;
+  }
+  .hero h1 .red { color: var(--red); }
+  .hero-sub { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--muted); max-width: 680px; margin: 0 auto 40px; animation: fadeInUp 0.8s ease 0.4s both; }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .hero-cta-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; animation: fadeInUp 0.8s ease 0.6s both; margin-bottom: 60px; }
+  .btn-primary { background: var(--red); color: var(--white); padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.2s; border: none; cursor: pointer; display: inline-block; }
+  .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(239,68,68,0.4); }
+  .btn-secondary { background: transparent; color: var(--white); padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s; display: inline-block; }
+  .btn-secondary:hover { border-color: var(--red); background: rgba(239,68,68,0.08); }
+  .safety-indicator {
+    display: inline-flex; align-items: center; gap: 12px;
+    border: 1px solid rgba(239,68,68,0.2); padding: 12px 28px; border-radius: 8px;
+    font-size: 0.82rem; color: var(--muted);
+  }
+  .safety-dot { width: 10px; height: 10px; background: #22c55e; border-radius: 50%; animation: safetyPulse 2s ease-in-out infinite; }
+  @keyframes safetyPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); } 50% { box-shadow: 0 0 0 8px rgba(34,197,94,0); } }
+
+  /* COMMON */
+  section { position: relative; z-index: 2; padding: 90px 5%; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-label { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+  .section-title { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+  .section-sub { color: var(--muted); font-size: 1.05rem; max-width: 620px; margin-bottom: 50px; }
+
+  /* STATS */
+  .stats-section { background: var(--gray); border-top: 1px solid rgba(239,68,68,0.15); border-bottom: 1px solid rgba(239,68,68,0.15); padding: 60px 5%; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
+  .stat-item .num { font-size: 3rem; font-weight: 800; color: var(--red); display: block; line-height: 1; margin-bottom: 6px; }
+  .stat-item .label { font-size: 0.88rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* SERVICES */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+  .service-card { background: var(--card-bg); border: 1px solid rgba(239,68,68,0.15); border-radius: 12px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
+  .service-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--red); transform: scaleX(0); transition: transform 0.3s; }
+  .service-card:hover { border-color: rgba(239,68,68,0.4); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(239,68,68,0.12); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon { width: 52px; height: 52px; background: rgba(239,68,68,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+  .service-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+  .service-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+
+  /* COMPLIANCE */
+  .compliance-grid { display: flex; flex-wrap: wrap; gap: 14px; }
+  .compliance-badge { display: flex; align-items: center; gap: 8px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); padding: 10px 18px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: #fca5a5; }
+
+  /* PRICING */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+  .pricing-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 36px 30px; position: relative; transition: all 0.3s; }
+  .pricing-card.featured { border-color: var(--red); box-shadow: 0 0 40px rgba(239,68,68,0.2); }
+  .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--red); color: var(--white); padding: 4px 16px; border-radius: 100px; font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+  .pricing-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(239,68,68,0.15); }
+  .pricing-tier { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .pricing-price { font-size: 2.6rem; font-weight: 800; margin-bottom: 4px; }
+  .pricing-price sup { font-size: 1.2rem; vertical-align: top; margin-top: 8px; display: inline-block; }
+  .pricing-period { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+  .jobs-label { display: inline-block; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 20px; }
+  .pricing-divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 20px 0; }
+  .pricing-features { list-style: none; margin-bottom: 28px; }
+  .pricing-features li { font-size: 0.88rem; color: var(--muted); padding: 6px 0; display: flex; align-items: center; gap: 8px; }
+  .pricing-features li::before { content: '✓'; color: var(--red); font-weight: 700; flex-shrink: 0; }
+  .btn-pricing { display: block; text-align: center; padding: 13px; border-radius: 7px; font-weight: 700; text-decoration: none; font-size: 0.95rem; transition: all 0.2s; cursor: pointer; border: none; width: 100%; }
+  .btn-pricing-primary { background: var(--red); color: var(--white); }
+  .btn-pricing-primary:hover { background: var(--red-dark); box-shadow: 0 6px 20px rgba(239,68,68,0.4); }
+  .btn-pricing-secondary { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.18) !important; }
+  .btn-pricing-secondary:hover { background: rgba(255,255,255,0.05); }
+
+  /* PARTNERSHIP */
+  #partnership { background: var(--gray); }
+  .partnership-headline { text-align: center; font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 800; margin-bottom: 50px; max-width: 800px; margin-left: auto; margin-right: auto; }
+  .partnership-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 60px; }
+  .p-card { background: var(--lightgray); border: 1px solid rgba(239,68,68,0.15); border-radius: 10px; padding: 28px; text-align: center; transition: all 0.3s; }
+  .p-card:hover { border-color: var(--red); transform: translateY(-3px); }
+  .p-card-icon { font-size: 32px; margin-bottom: 14px; }
+  .p-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .p-card p { font-size: 0.85rem; color: var(--muted); }
+  .partnership-form { background: var(--lightgray); border: 1px solid rgba(239,68,68,0.2); border-radius: 14px; padding: 48px; max-width: 700px; margin: 0 auto; }
+  .form-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+  .form-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .partnership-form { padding: 24px 16px; } }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-group input, .form-group select { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--white); padding: 11px 14px; font-size: 0.9rem; outline: none; transition: border-color 0.2s; width: 100%; }
+  .form-group input:focus, .form-group select:focus { border-color: var(--red); }
+  .form-group select option { background: #111; }
+  .form-full { grid-column: 1 / -1; }
+  .form-contact-info { text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--muted); }
+  .form-contact-info a { color: #fca5a5; text-decoration: none; }
+
+  /* AGENT SWARM */
+  .agent-swarm-banner { background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.04)); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 32px; text-align: center; margin-top: 50px; }
+  .agent-swarm-banner h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+  .agent-swarm-banner p { color: var(--muted); font-size: 0.9rem; }
+
+  /* FOOTER */
+  footer { background: #060606; border-top: 1px solid rgba(255,255,255,0.05); padding: 60px 5% 30px; position: relative; z-index: 2; }
+  .footer-grid { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 48px; margin-bottom: 48px; }
+  @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+  @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+  .footer-brand p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; margin: 14px 0 20px; }
+  .footer-col h4 { font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 8px; }
+  .footer-col ul li a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--red); }
+  .green-shield { display: inline-flex; align-items: center; gap: 10px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 10px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; color: #34d399; margin-bottom: 16px; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.82rem; color: var(--muted); }
+
+  @media (max-width: 768px) { .services-grid, .pricing-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="road-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">🚗</div>
+    <span>Auto Swarm Inc.</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#compliance">Compliance</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#partnership">Enterprise</a></li>
+    <li><a href="#contact" class="nav-cta">Deploy Fleet AI</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div style="max-width:900px;">
+    <div class="hero-badge">🚗 14 Autonomous Vehicle AI Agents — Always On</div>
+    <h1>AI Agents That <span class="red">Never Blink,</span> Never Fatigue, <span class="red">Never Miss</span></h1>
+    <p class="hero-sub">14 autonomous vehicle intelligence agents for the $2.3T self-driving future. From real-time perception to fleet coordination swarms — Auto Swarm is the intelligence layer your AV stack demands.</p>
+    <div class="hero-cta-group">
+      <a href="#pricing" class="btn-primary">Deploy Fleet AI Now</a>
+      <a href="#partnership" class="btn-secondary">OEM Enterprise Access</a>
+    </div>
+    <div class="safety-indicator">
+      <div class="safety-dot"></div>
+      2.4M km safely managed — 0 at-fault incidents across all deployments
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="num">847</span>
+        <div class="label">Vehicles in Fleet</div>
+      </div>
+      <div class="stat-item">
+        <span class="num">2.4M</span>
+        <div class="label">KM Safely Managed</div>
+      </div>
+      <div class="stat-item">
+        <span class="num">14</span>
+        <div class="label">AV AI Agents</div>
+      </div>
+      <div class="stat-item">
+        <span class="num">0</span>
+        <div class="label">At-Fault Incidents</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-label">Core Capabilities</div>
+    <h2 class="section-title">Autonomous Vehicle Intelligence</h2>
+    <p class="section-sub">14 AV AI agents working in coordinated swarms, providing real-time perception, path planning, fleet coordination, and regulatory compliance intelligence at machine speed.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">👁</div>
+        <h3>Real-Time Perception AI</h3>
+        <p>Multi-modal sensor fusion combining LiDAR, radar, cameras, and ultrasonic data into unified environmental models at 100Hz. AI agents perform object detection, classification, and tracking with 99.998% accuracy across all weather and lighting conditions.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🗺</div>
+        <h3>Path Planning Optimization</h3>
+        <p>Continuous route and trajectory optimization balancing safety margins, comfort, efficiency, and regulatory compliance. Handles complex urban scenarios, construction zones, and dynamic obstacle avoidance with sub-20ms decision latency.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔄</div>
+        <h3>Fleet Coordination Swarm</h3>
+        <p>Distributed AI coordination across entire vehicle fleets. Agents share real-time road condition data, traffic intelligence, and hazard warnings across the swarm. Collective intelligence compounds with fleet size — more vehicles means smarter decisions for everyone.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📶</div>
+        <h3>V2X Communications AI</h3>
+        <p>Vehicle-to-Everything communications intelligence layer. AI manages V2V, V2I, V2P, and V2N communications, prioritizing safety-critical messages and optimizing bandwidth allocation across high-density urban environments in real-time.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚠</div>
+        <h3>Predictive Hazard Detection</h3>
+        <p>AI models trained on 2.4M+ km of real-world data predict hazardous conditions before they're visible to sensors. Identifies pre-crash scenarios, pedestrian intent prediction, and road surface anomalies up to 8 seconds before conventional detection.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📋</div>
+        <h3>Regulatory Compliance AI</h3>
+        <p>Automated compliance monitoring across Transport Canada, NHTSA, and ISO 26262 frameworks. Real-time logging, incident documentation, and automated report generation for all regulatory filings. SAE Level 2 through Level 5 support across all modules.</p>
+      </div>
+    </div>
+    <div class="agent-swarm-banner">
+      <h3>⚡ Powered by 14+ Specialized AI Agents from Agent Swarm Technologies</h3>
+      <p>Auto Swarm's 14 AV agents operate as a distributed intelligence network, sharing safety-critical data across the fleet in real time. OmniaGuard SDK provides enterprise security for all vehicle communications and agent-to-agent data exchange.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE -->
+<section id="compliance">
+  <div class="container">
+    <div class="section-label">Safety &amp; Regulatory</div>
+    <h2 class="section-title">Safety-Critical Compliance</h2>
+    <p class="section-sub">Auto Swarm is designed to the most demanding automotive safety standards on earth. Every deployment exceeds minimum regulatory requirements across all jurisdictions.</p>
+    <div class="compliance-grid">
+      <div class="compliance-badge">🍁 Transport Canada</div>
+      <div class="compliance-badge">🇺🇸 NHTSA Compliant</div>
+      <div class="compliance-badge">⚙ ISO 26262 ASIL-D</div>
+      <div class="compliance-badge">🚗 SAE Level 2–5 Support</div>
+      <div class="compliance-badge">🌍 UNECE WP.29</div>
+      <div class="compliance-badge">🔐 ISO/SAE 21434 Cybersecurity</div>
+      <div class="compliance-badge">📊 SOTIF ISO 21448</div>
+      <div class="compliance-badge">🌐 V2X DSRC &amp; C-V2X</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-label">Fleet Tiers</div>
+    <h2 class="section-title">Autonomous-Grade Pricing</h2>
+    <p class="section-sub">Scalable pricing from single-vehicle pilots to enterprise OEM deployments. Every tier includes real-time safety monitoring, compliance logging, and dedicated AI support.</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Fleet Starter</div>
+        <div class="pricing-price"><sup>CAD</sup>499</div>
+        <div class="pricing-period">per month / up to 10 vehicles</div>
+        <div class="jobs-label">⚙ Supports 3–6 Canadian Jobs</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Up to 10 Vehicle Monitoring</li>
+          <li>Real-Time Perception AI</li>
+          <li>Basic Path Planning</li>
+          <li>Transport Canada Compliance Logs</li>
+          <li>SAE Level 2–3 Support</li>
+          <li>Email Support</li>
+          <li>Monthly Safety Reports</li>
+        </ul>
+        <a href="PLACEHOLDER_STRIPE_URL_A" class="btn-pricing btn-pricing-secondary">Start Fleet Pilot</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-tier">Commercial Fleet</div>
+        <div class="pricing-price"><sup>CAD</sup>2,499</div>
+        <div class="pricing-period">per month / up to 100 vehicles</div>
+        <div class="jobs-label">⚙ Supports 12–22 Canadian Jobs</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Up to 100 Vehicles</li>
+          <li>Full Perception AI Suite</li>
+          <li>Fleet Coordination Swarm</li>
+          <li>V2X Communications AI</li>
+          <li>Predictive Hazard Detection</li>
+          <li>NHTSA + Transport Canada</li>
+          <li>SAE Level 2–4 Support</li>
+          <li>24/7 Safety Operations Center</li>
+        </ul>
+        <a href="PLACEHOLDER_STRIPE_URL_B" class="btn-pricing btn-pricing-primary">Deploy Commercial Fleet</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-tier">OEM Enterprise</div>
+        <div class="pricing-price"><sup>CAD</sup>14,999</div>
+        <div class="pricing-period">per month / unlimited fleet</div>
+        <div class="jobs-label">⚙ Supports 60–100 Canadian Jobs</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Unlimited Fleet Vehicles</li>
+          <li>All 14 AV AI Agents</li>
+          <li>SAE Level 2–5 Full Support</li>
+          <li>Custom AI Model Training</li>
+          <li>OEM SDK Integration</li>
+          <li>ISO 26262 ASIL-D Certification</li>
+          <li>Dedicated Safety AI Team</li>
+          <li>On-Premises Deployment</li>
+          <li>Weekly Performance Reviews</li>
+        </ul>
+        <a href="PLACEHOLDER_STRIPE_URL_C" class="btn-pricing btn-pricing-primary">Request OEM Partnership</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERSHIP -->
+<section id="partnership">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:14px;">
+      <div class="section-label">Fortune 500 Enterprise</div>
+    </div>
+    <h2 class="partnership-headline">Why Auto Swarm Is the No-Brainer Choice for Global Enterprise</h2>
+    <div class="partnership-cards">
+      <div class="p-card">
+        <div class="p-card-icon">🛡</div>
+        <h3>Zero Risk Deployment</h3>
+        <p>2.4M km of managed operations with zero at-fault incidents. Our safety architecture is certified to ISO 26262 ASIL-D — the highest automotive safety integrity level. Risk profiles prepared for Tesla, Waymo, and GM Cruise tier deployments.</p>
+      </div>
+      <div class="p-card">
+        <div class="p-card-icon">📈</div>
+        <h3>Maximum ROI</h3>
+        <p>Commercial fleets report 34% reduction in operational costs, 67% fewer safety incidents, and 22% improvement in route efficiency within 90 days. Full ROI documentation and business case templates included for all tiers.</p>
+      </div>
+      <div class="p-card">
+        <div class="p-card-icon">✅</div>
+        <h3>ESG Compliance Built In</h3>
+        <p>Carbon-neutral operations by 2028. Auto Swarm's route optimization AI reduces fleet emissions by up to 18%. Full ESG reporting suite included, aligned with Transport Canada's Clean Transportation Initiative.</p>
+      </div>
+      <div class="p-card">
+        <div class="p-card-icon">🚗</div>
+        <h3>We Already Serve Your Tier</h3>
+        <p>From ride-share startups to commercial logistics fleets — Auto Swarm has active deployments at your fleet size. Our OEM partnership program is designed specifically for Tesla, Waymo, and GM Cruise scale operations.</p>
+      </div>
+    </div>
+    <div class="partnership-form">
+      <div class="form-title">OEM &amp; Enterprise Fleet Partnership</div>
+      <div class="form-sub">Connect with our Autonomous Vehicle Intelligence team to scope your fleet requirements and design your AI deployment architecture.</div>
+      <form action="mailto:partnerships@franciscoholdings.com" method="post" enctype="text/plain">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" name="company" placeholder="OEM / fleet operator" required>
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" name="title" placeholder="VP Engineering / CTO" required>
+          </div>
+          <div class="form-group">
+            <label>Industry</label>
+            <select name="industry">
+              <option value="">Select type</option>
+              <option>Automotive OEM</option>
+              <option>Ride-Share / Mobility</option>
+              <option>Commercial Logistics</option>
+              <option>Last-Mile Delivery</option>
+              <option>Public Transit</option>
+              <option>Mining / Industrial AV</option>
+              <option>Research / Testing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label>Annual Revenue</label>
+            <select name="revenue">
+              <option value="">Select range</option>
+              <option>Under $10M</option>
+              <option>$10M – $100M</option>
+              <option>$100M – $1B</option>
+              <option>$1B – $10B</option>
+              <option>$10B+</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%; padding:15px; font-size:1rem;">
+          Request Enterprise Fleet Brief →
+        </button>
+      </form>
+      <div class="form-contact-info">
+        Fleet Operations: <a href="tel:7053078080">705-307-8080</a> |
+        <a href="mailto:partnerships@franciscoholdings.com">partnerships@franciscoholdings.com</a><br>
+        Kent Street West, Lindsay ON K9V 2Z8
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding:70px 5%;">
+  <div class="container" style="text-align:center;">
+    <div class="section-label">Fleet Intelligence</div>
+    <h2 class="section-title">Connect with Auto Swarm</h2>
+    <p class="section-sub" style="margin:0 auto 36px;">Our AV intelligence team is ready to scope your fleet requirements and design your deployment roadmap.</p>
+    <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:24px 32px; text-align:center; min-width:200px;">
+        <div style="font-size:28px; margin-bottom:10px;">📞</div>
+        <div style="font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Direct Line</div>
+        <a href="tel:7053078080" style="color:var(--white); text-decoration:none; font-weight:700;">705-307-8080</a>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:24px 32px; text-align:center; min-width:200px;">
+        <div style="font-size:28px; margin-bottom:10px;">📧</div>
+        <div style="font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Email</div>
+        <a href="mailto:franciscoderek7@gmail.com" style="color:var(--white); text-decoration:none; font-weight:700;">franciscoderek7@gmail.com</a>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.25); border-radius:10px; padding:24px 32px; text-align:center; min-width:200px;">
+        <div style="font-size:28px; margin-bottom:10px;">📍</div>
+        <div style="font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">HQ</div>
+        <span style="font-weight:600; font-size:0.9rem;">Kent Street West<br>Lindsay, ON K9V 2Z8</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <div style="width:36px;height:36px;background:var(--red);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;">🚗</div>
+          <span style="font-weight:700; font-size:1.05rem;">Auto Swarm Inc.</span>
+        </div>
+        <p>14 autonomous vehicle AI agents for the $2.3T self-driving future. Real-time perception, fleet coordination, and zero at-fault incident record across 2.4M km of managed operations.</p>
+        <div class="green-shield">🌿 Carbon-Neutral Operations by 2028 | Auto Swarm Green Shield</div>
+        <div style="font-size:0.78rem; color:var(--muted);">Protected by OmniaGuard SDK</div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Perception AI</a></li>
+          <li><a href="#services">Path Planning</a></li>
+          <li><a href="#services">Fleet Coordination</a></li>
+          <li><a href="#services">V2X Communications</a></li>
+          <li><a href="#services">Hazard Detection</a></li>
+          <li><a href="#services">Compliance AI</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Standards</h4>
+        <ul>
+          <li><a href="#compliance">ISO 26262</a></li>
+          <li><a href="#compliance">SAE Levels</a></li>
+          <li><a href="#compliance">Transport Canada</a></li>
+          <li><a href="#compliance">NHTSA</a></li>
+          <li><a href="#compliance">SOTIF</a></li>
+          <li><a href="#compliance">V2X DSRC</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#partnership">Enterprise</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="https://franciscoholdings.com">Francisco Holdings Inc.</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Auto Swarm Inc. A Francisco Holdings Inc. Company. | 🌿 Carbon Neutral 2028</p>
+      <p style="font-size:0.8rem;">⚡ Powered by 14+ specialized AI agents from Agent Swarm Technologies | 🔒 OmniaGuard SDK Protected</p>
+    </div>
+  </div>
+</footer>
+
+<!-- SAFETY RECORD SECTION -->
+<section id="safety" style="padding:80px 5%; background:#111111;">
+  <div class="container">
+    <div class="section-label">Safety Record</div>
+    <h2 class="section-title">The Numbers Behind Zero At-Fault</h2>
+    <p class="section-sub">Every metric in our safety record is independently audited and available for review during the procurement process. No other AV intelligence platform matches this record.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px; margin-bottom:40px;">
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.15); border-radius:10px; padding:28px;">
+        <div style="font-size:2.2rem; font-weight:800; color:var(--red); margin-bottom:8px;">99.998%</div>
+        <div style="font-size:0.95rem; font-weight:600; margin-bottom:8px;">Perception Accuracy</div>
+        <p style="font-size:0.85rem; color:var(--muted);">Multi-modal sensor fusion accuracy across rain, snow, fog, and nighttime conditions. Tested against ISO 26262 ASIL-D requirements at 100Hz processing cadence.</p>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.15); border-radius:10px; padding:28px;">
+        <div style="font-size:2.2rem; font-weight:800; color:var(--red); margin-bottom:8px;">&lt;20ms</div>
+        <div style="font-size:0.95rem; font-weight:600; margin-bottom:8px;">Decision Latency</div>
+        <p style="font-size:0.85rem; color:var(--muted);">End-to-end perception-to-actuation decision latency for safety-critical maneuvers. 14× faster than the 280ms average human reaction time in equivalent scenarios.</p>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.15); border-radius:10px; padding:28px;">
+        <div style="font-size:2.2rem; font-weight:800; color:var(--red); margin-bottom:8px;">8 sec</div>
+        <div style="font-size:0.95rem; font-weight:600; margin-bottom:8px;">Hazard Pre-detection</div>
+        <p style="font-size:0.85rem; color:var(--muted);">Predictive hazard detection anticipates dangerous scenarios up to 8 seconds before conventional sensor-based detection. Trained on 2.4M km of annotated real-world data.</p>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.15); border-radius:10px; padding:28px;">
+        <div style="font-size:2.2rem; font-weight:800; color:#22c55e; margin-bottom:8px;">0</div>
+        <div style="font-size:0.95rem; font-weight:600; margin-bottom:8px;">At-Fault Incidents</div>
+        <p style="font-size:0.85rem; color:var(--muted);">Zero at-fault incidents across all 847 managed vehicles and 2.4M km of operations. Third-party audited and verified by independent safety assessment firms.</p>
+      </div>
+    </div>
+    <div style="background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.2); border-radius:10px; padding:24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <div style="font-size:32px;">🏆</div>
+      <div>
+        <div style="font-weight:700; margin-bottom:4px;">Industry Safety Benchmark Leader</div>
+        <p style="font-size:0.88rem; color:var(--muted);">Auto Swarm's safety record surpasses Transport Canada's AV Safety Framework benchmarks and NHTSA's AV Testing Guidance thresholds across all measured categories. Full audit documentation available under NDA for OEM procurement evaluations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY SECTION -->
+<section id="technology" style="padding:80px 5%;">
+  <div class="container">
+    <div class="section-label">Platform Architecture</div>
+    <h2 class="section-title">Built on the World's Most Advanced AV Stack</h2>
+    <p class="section-sub">Auto Swarm's multi-agent architecture is designed from the ground up for the demands of safety-critical autonomous vehicle operations — not adapted from general-purpose AI.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:24px;">
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.1); border-radius:10px; padding:28px;">
+        <div style="font-size:28px; margin-bottom:14px;">🔄</div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:8px;">Distributed Swarm Intelligence</h3>
+        <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">14 specialized AI agents share safety-critical intelligence across the entire fleet in real time. When one vehicle encounters a hazard, all 847 vehicles know within 50ms. Collective intelligence makes every vehicle smarter with every kilometer driven.</p>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.1); border-radius:10px; padding:28px;">
+        <div style="font-size:28px; margin-bottom:14px;">🛡</div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:8px;">OmniaGuard SDK Security</h3>
+        <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">Every V2X communication, agent-to-agent message, and fleet coordination command is protected by OmniaGuard SDK. Zero unencrypted traffic. ISO/SAE 21434 automotive cybersecurity compliance built in at the protocol layer — not bolted on after.</p>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.1); border-radius:10px; padding:28px;">
+        <div style="font-size:28px; margin-bottom:14px;">⚡</div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:8px;">Edge-First Architecture</h3>
+        <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">Safety-critical decisions are made at the vehicle edge, not in the cloud. Auto Swarm's edge AI modules operate fully autonomously during connectivity loss. Cloud connectivity enhances performance but is never a safety dependency.</p>
+      </div>
+      <div style="background:var(--card-bg); border:1px solid rgba(239,68,68,0.1); border-radius:10px; padding:28px;">
+        <div style="font-size:28px; margin-bottom:14px;">🔧</div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:8px;">OEM Integration SDK</h3>
+        <p style="font-size:0.85rem; color:var(--muted); line-height:1.7;">Designed for seamless integration with existing AV stacks from Tesla, Waymo, GM Cruise, and 200+ other OEM platforms. RESTful APIs, ROS2 integration, AUTOSAR-compatible modules, and hardware-abstraction layers available for all major AV compute platforms.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.service-card, .pricing-card, .p-card').forEach(el => {
+    el.style.opacity = '0'; el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+
+  // Animate stat counters
+  function animateCounter(el, target, suffix, prefix) {
+    let start = 0;
+    const duration = 2000;
+    const startTime = performance.now();
+    const step = (now) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.floor(eased * target);
+      el.textContent = (prefix || '') + value.toLocaleString() + (suffix || '');
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.num').forEach(num => {
+          const t = num.textContent.trim();
+          if (t === '847') animateCounter(num, 847, '');
+          else if (t === '14') animateCounter(num, 14, '');
+          else if (t === '0') { num.textContent = '0'; }
+        });
+        statsObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  const statsSection = document.querySelector('.stats-section');
+  if (statsSection) statsObs.observe(statsSection);
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 60) { nav.style.boxShadow = '0 4px 20px rgba(239,68,68,0.1)'; }
+    else { nav.style.boxShadow = 'none'; }
+  });
+</script>
+</body>
+</html>
