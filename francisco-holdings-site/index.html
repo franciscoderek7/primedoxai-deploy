@@ -3,842 +3,1438 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Francisco Holdings Inc. | Building the Future</title>
+<title>Francisco Holdings Inc. | Architect of the Future</title>
+<meta name="description" content="Parent company of 22+ AI, legal, and sovereign technology ventures. Built over 22 years. Expanding globally.">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --gold: #FFD700;
-    --cyan: #00D4FF;
-    --dark: #050508;
-    --card: #0A0A0E;
-    --card2: #0F0F16;
-    --border: rgba(255,215,0,0.15);
-    --text: #E8E8F0;
-    --muted: #888899;
-  }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* PARTICLE CANVAS */
-  #particle-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-    pointer-events: none;
-  }
+:root {
+  --bg: #090918;
+  --gold: #c9a84c;
+  --gold-light: #e2c579;
+  --gold-dim: rgba(201,168,76,0.15);
+  --gold-border: rgba(201,168,76,0.2);
+  --pink: #e8a0b8;
+  --mint: #9dd4be;
+  --text: #f5f0e8;
+  --muted: #8a8a9a;
+  --card: rgba(255,255,255,0.03);
+  --card-border: rgba(201,168,76,0.2);
+  --border-subtle: rgba(255,255,255,0.06);
+}
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-    background: rgba(5,5,8,0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-  }
-  .fh-logo {
-    width: 40px; height: 40px;
-    background: var(--gold);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 15px;
-    color: #000;
-    flex-shrink: 0;
-  }
-  .nav-brand-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-    white-space: nowrap;
-  }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 28px;
-    list-style: none;
-  }
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold); }
-  .nav-cta {
-    background: var(--gold);
-    color: #000 !important;
-    padding: 8px 20px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 13px !important;
-    text-decoration: none;
-    transition: opacity 0.2s;
-    white-space: nowrap;
-  }
-  .nav-cta:hover { opacity: 0.85; color: #000 !important; }
-  .nav-mobile-menu { display: none; background: none; border: none; color: var(--text); cursor: pointer; font-size: 24px; }
+html { scroll-behavior: smooth; }
 
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .nav-links.open {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: 64px; left: 0; right: 0;
-      background: rgba(5,5,8,0.98);
-      padding: 20px 24px;
-      gap: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-mobile-menu { display: block; }
-    .nav-brand-name { display: none; }
-  }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
 
-  /* SECTIONS */
-  section { position: relative; z-index: 1; }
+/* ─── TYPOGRAPHY ─── */
+h1, h2, h3, .serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 120px 24px 80px;
-    position: relative;
-  }
-  .hero-content { max-width: 900px; }
-  .hero-eyebrow {
-    display: inline-block;
-    background: rgba(255,215,0,0.12);
-    border: 1px solid rgba(255,215,0,0.3);
-    color: var(--gold);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 6px 16px;
-    border-radius: 20px;
-    margin-bottom: 24px;
-  }
-  .hero h1 {
-    font-size: clamp(42px, 8vw, 90px);
-    font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -2px;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #FFFFFF 0%, var(--gold) 50%, var(--cyan) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero-sub {
-    font-size: clamp(18px, 3vw, 26px);
-    color: var(--muted);
-    margin-bottom: 40px;
-    font-weight: 300;
-  }
-  .counter-display {
-    font-size: clamp(20px, 4vw, 32px);
-    font-weight: 800;
-    color: var(--text);
-    margin-bottom: 48px;
-    padding: 20px 32px;
-    background: rgba(255,215,0,0.06);
-    border: 1px solid rgba(255,215,0,0.2);
-    border-radius: 12px;
-    display: inline-block;
-  }
-  .counter-display .counter-num {
-    color: var(--gold);
-    font-size: 1.3em;
-  }
-  .hero-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 48px;
-  }
-  .stat-pill {
-    background: rgba(0,212,255,0.08);
-    border: 1px solid rgba(0,212,255,0.2);
-    color: var(--cyan);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-  .hero-ctas {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .btn-primary {
-    background: var(--gold);
-    color: #000;
-    padding: 14px 32px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: transform 0.2s, opacity 0.2s;
-    display: inline-block;
-  }
-  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
-  .btn-secondary {
-    background: transparent;
-    color: var(--text);
-    padding: 14px 32px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.2);
-    transition: border-color 0.2s, transform 0.2s;
-    display: inline-block;
-  }
-  .btn-secondary:hover { border-color: var(--gold); transform: translateY(-2px); color: var(--gold); }
+/* ─── NAV ─── */
+#nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9000;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  transition: background 0.5s ease, border-color 0.5s ease, backdrop-filter 0.5s ease;
+  border-bottom: 1px solid transparent;
+}
+#nav.scrolled {
+  background: rgba(9,9,24,0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom-color: var(--gold-border);
+}
 
-  /* SECTION HEADERS */
-  .section-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 100px 24px;
-  }
-  .section-header {
-    text-align: center;
-    margin-bottom: 60px;
-  }
-  .section-tag {
-    display: inline-block;
-    color: var(--gold);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .section-header h2 {
-    font-size: clamp(32px, 5vw, 56px);
-    font-weight: 800;
-    letter-spacing: -1px;
-    margin-bottom: 16px;
-  }
-  .section-header p {
-    color: var(--muted);
-    font-size: 18px;
-    max-width: 720px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
+.nav-logo {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
 
-  /* PORTFOLIO GRID */
-  .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
-  @media (max-width: 1100px) { .portfolio-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 768px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .portfolio-grid { grid-template-columns: 1fr; } }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
 
-  .company-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    position: relative;
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    cursor: default;
-  }
-  .company-card:hover {
-    border-color: rgba(255,215,0,0.5);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(255,215,0,0.1);
-  }
-  .card-num {
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    width: 28px;
-    height: 28px;
-    background: var(--gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 900;
-    color: #000;
-    flex-shrink: 0;
-  }
-  .card-body { padding-top: 36px; }
-  .card-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
-    line-height: 1.3;
-  }
-  .card-desc {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-  .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .card-tag {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--cyan);
-    background: rgba(0,212,255,0.1);
-    border: 1px solid rgba(0,212,255,0.2);
-    padding: 3px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .status-badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .status-live { background: rgba(0,200,80,0.15); color: #00C850; border: 1px solid rgba(0,200,80,0.3); }
-  .status-building { background: rgba(0,212,255,0.12); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
-  .status-concept { background: rgba(255,215,0,0.1); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
+.nav-invest {
+  border: 1px solid var(--gold-border);
+  color: var(--gold) !important;
+  padding: 9px 22px;
+  border-radius: 2px;
+  transition: background 0.3s, color 0.3s !important;
+}
+.nav-invest:hover {
+  background: var(--gold) !important;
+  color: var(--bg) !important;
+  border-color: var(--gold) !important;
+}
 
-  /* LEADERSHIP */
-  .leadership-section { background: rgba(255,215,0,0.02); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .leader-card {
-    max-width: 680px;
-    margin: 0 auto;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 48px;
-    text-align: center;
-    transition: border-color 0.3s;
-  }
-  .leader-card:hover { border-color: rgba(255,215,0,0.4); }
-  .leader-avatar {
-    width: 100px;
-    height: 100px;
-    background: rgba(255,215,0,0.1);
-    border: 3px solid var(--gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--gold);
-    margin: 0 auto 24px;
-    letter-spacing: 1px;
-  }
-  .leader-name {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 6px;
-  }
-  .leader-title {
-    color: var(--gold);
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
-  .leader-bio {
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.8;
-    margin-bottom: 24px;
-  }
-  .leader-tags {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .leader-tag {
-    background: rgba(255,215,0,0.08);
-    border: 1px solid rgba(255,215,0,0.2);
-    color: var(--gold);
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-  }
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.3s, opacity 0.3s;
+}
 
-  /* INVESTMENT */
-  .partner-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 60px;
-  }
-  @media (max-width: 768px) { .partner-grid { grid-template-columns: 1fr; } }
-  .partner-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
-    transition: border-color 0.3s, transform 0.2s;
-  }
-  .partner-card:hover { border-color: rgba(255,215,0,0.4); transform: translateY(-3px); }
-  .partner-icon {
-    width: 48px; height: 48px;
-    background: rgba(255,215,0,0.1);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    margin-bottom: 16px;
-  }
-  .partner-card h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--text);
-  }
-  .partner-card p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+.nav-mobile-panel {
+  display: none;
+  position: absolute;
+  top: 72px; left: 0; right: 0;
+  background: rgba(9,9,24,0.98);
+  border-bottom: 1px solid var(--gold-border);
+  padding: 24px 40px;
+  flex-direction: column;
+  gap: 20px;
+}
+.nav-mobile-panel.open { display: flex; }
+.nav-mobile-panel a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-mobile-panel a:hover { color: var(--gold); }
 
-  /* CONTACT FORM */
-  .contact-form {
-    max-width: 680px;
-    margin: 0 auto;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 48px;
-  }
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-  .form-group {
-    margin-bottom: 20px;
-  }
-  .form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--text);
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: inherit;
-    transition: border-color 0.2s;
-    outline: none;
-  }
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus { border-color: var(--gold); }
-  .form-group select option { background: #0A0A0E; color: var(--text); }
-  .form-group textarea { resize: vertical; min-height: 120px; }
-  .form-submit {
-    width: 100%;
-    background: var(--gold);
-    color: #000;
-    border: none;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
-    font-family: inherit;
-  }
-  .form-submit:hover { opacity: 0.9; transform: translateY(-1px); }
-  .form-success {
-    display: none;
-    text-align: center;
-    padding: 32px;
-    color: #00C850;
-    font-size: 18px;
-    font-weight: 600;
-  }
+@media (max-width: 900px) {
+  #nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+}
 
-  /* FOOTER */
-  footer {
-    background: rgba(5,5,8,0.98);
-    border-top: 1px solid var(--border);
-    padding: 60px 24px 32px;
-    position: relative;
-    z-index: 1;
-  }
-  .footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 48px;
-    margin-bottom: 48px;
-  }
-  @media (max-width: 768px) { .footer-top { grid-template-columns: 1fr; gap: 32px; } }
-  .footer-brand h3 {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text);
-    margin-bottom: 12px;
-  }
-  .footer-brand p { color: var(--muted); font-size: 14px; line-height: 1.7; }
-  .footer-col h4 {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--gold);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 16px;
-  }
-  .footer-col ul { list-style: none; }
-  .footer-col ul li { margin-bottom: 10px; }
-  .footer-col ul li a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s;
-  }
-  .footer-col ul li a:hover { color: var(--gold); }
-  .footer-bottom {
-    border-top: 1px solid var(--border);
-    padding-top: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .footer-bottom p { color: var(--muted); font-size: 13px; }
-  .footer-bottom a { color: var(--muted); text-decoration: none; }
-  .footer-bottom a:hover { color: var(--gold); }
+/* ─── HERO ─── */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
 
-  /* DIVIDER */
-  .gradient-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), var(--cyan), transparent);
-    opacity: 0.3;
-    margin: 0;
-  }
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
 
-  /* SCROLL FADE IN */
-  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
+.hero-parallax-bg {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 70%, rgba(157,212,190,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(232,160,184,0.03) 0%, transparent 60%);
+  z-index: 0;
+  will-change: transform;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 880px;
+  padding: 120px 32px 80px;
+}
+
+.hero-overline {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--mint);
+  font-weight: 600;
+  margin-bottom: 28px;
+}
+
+.hero-h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(48px, 8vw, 88px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -1px;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--gold-light) 40%, var(--text) 80%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 6s ease-in-out infinite;
+}
+@keyframes goldShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: var(--muted);
+  max-width: 640px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 64px;
+}
+
+.btn-gold {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 14px 36px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background 0.3s, transform 0.4s ease;
+}
+.btn-gold:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  display: inline-block;
+  background: transparent;
+  color: var(--text);
+  padding: 13px 36px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  border: 1px solid rgba(245,240,232,0.25);
+  transition: border-color 0.3s, color 0.3s, transform 0.4s ease;
+}
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.hero-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+  opacity: 0.5;
+}
+.hero-scroll-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.hero-scroll-chevron {
+  width: 20px;
+  height: 20px;
+  border-right: 1.5px solid var(--gold);
+  border-bottom: 1.5px solid var(--gold);
+  transform: rotate(45deg);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.5; }
+  50% { transform: rotate(45deg) translateY(6px); opacity: 1; }
+}
+
+/* ─── SHARED SECTION LAYOUT ─── */
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 40px;
+}
+@media (max-width: 768px) {
+  .section-inner { padding: 72px 24px; }
+}
+
+.section-overline {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+  max-width: 680px;
+}
+
+.gold-rule {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 24px 0;
+  opacity: 0.5;
+}
+
+/* ─── FADE-IN ANIMATION ─── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-up.delay-1 { transition-delay: 0.1s; }
+.fade-up.delay-2 { transition-delay: 0.2s; }
+.fade-up.delay-3 { transition-delay: 0.3s; }
+.fade-up.delay-4 { transition-delay: 0.4s; }
+.fade-up.delay-5 { transition-delay: 0.5s; }
+
+/* ─── SECTION 3: DYNASTY ─── */
+#dynasty {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 56px 0;
+}
+@media (max-width: 700px) {
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+.stat-item {
+  background: var(--bg);
+  padding: 36px 24px;
+  text-align: center;
+}
+.stat-number {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(36px, 4vw, 52px);
+  color: var(--gold);
+  font-weight: 400;
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.stat-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── COMPANY CARDS ─── */
+.division-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 48px 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+@media (max-width: 1100px) { .companies-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .companies-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .companies-grid { grid-template-columns: 1fr; } }
+
+.co-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 3px;
+  padding: 20px 18px;
+  cursor: default;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.co-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+
+/* Division color variants */
+.co-card.security  { border-color: rgba(0,210,220,0.25); }
+.co-card.security:hover  { border-color: rgba(0,210,220,0.6); box-shadow: 0 16px 48px rgba(0,210,220,0.1); }
+
+.co-card.platform  { border-color: rgba(201,168,76,0.3); }
+.co-card.platform:hover  { border-color: rgba(201,168,76,0.7); box-shadow: 0 16px 48px rgba(201,168,76,0.12); }
+
+.co-card.legal     { border-color: rgba(232,160,184,0.3); }
+.co-card.legal:hover     { border-color: rgba(232,160,184,0.7); box-shadow: 0 16px 48px rgba(232,160,184,0.1); }
+
+.co-card.saas      { border-color: rgba(157,212,190,0.3); }
+.co-card.saas:hover      { border-color: rgba(157,212,190,0.7); box-shadow: 0 16px 48px rgba(157,212,190,0.1); }
+
+.co-card.cannabis  { border-color: rgba(100,200,100,0.3); }
+.co-card.cannabis:hover  { border-color: rgba(100,200,100,0.7); box-shadow: 0 16px 48px rgba(100,200,100,0.1); }
+
+.co-card.infra     { border-color: rgba(160,120,220,0.3); }
+.co-card.infra:hover     { border-color: rgba(160,120,220,0.7); box-shadow: 0 16px 48px rgba(160,120,220,0.1); }
+
+.co-card.frontier  { border-color: rgba(220,80,80,0.3); }
+.co-card.frontier:hover  { border-color: rgba(220,80,80,0.7); box-shadow: 0 16px 48px rgba(220,80,80,0.1); }
+
+.co-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+.co-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+}
+.co-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  flex: 1;
+}
+.co-link {
+  font-size: 11px;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: 1px;
+  font-weight: 600;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.co-link:hover { opacity: 1; }
+
+/* ─── SECTION 4: FOUNDER ─── */
+#founder {
+  background: linear-gradient(180deg, var(--bg) 0%, #0d0d1e 100%);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.founder-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .founder-layout { grid-template-columns: 1fr; gap: 48px; }
+  .founder-avatar-wrap { display: flex; justify-content: center; }
+}
+
+.founder-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: rgba(201,168,76,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 52px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  position: relative;
+}
+.founder-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-border);
+}
+
+.founder-overline {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--mint);
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.founder-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 400;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.founder-tagline {
+  font-size: 16px;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.founder-bio {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.founder-achievements {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+@media (max-width: 700px) {
+  .founder-achievements { grid-template-columns: 1fr; }
+}
+
+.achievement-card {
+  background: var(--card);
+  border: 1px solid var(--gold-border);
+  border-radius: 3px;
+  padding: 20px 16px;
+}
+.achievement-card .ach-emoji {
+  font-size: 22px;
+  margin-bottom: 10px;
+  display: block;
+}
+.achievement-card h4 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.achievement-card p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.disclaimer-badge {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 14px;
+  border-radius: 2px;
+}
+
+/* ─── SECTION 5: INVESTORS ─── */
+#investors {
+  background: linear-gradient(135deg, #0d0d1e 0%, #0f0d1a 50%, #090918 100%);
+  border-top: 1px solid var(--gold-border);
+  border-bottom: 1px solid var(--gold-border);
+  position: relative;
+  overflow: hidden;
+}
+#investors::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.investor-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.projection-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 48px;
+  font-size: 15px;
+}
+.projection-table thead tr {
+  border-bottom: 1px solid var(--gold-border);
+}
+.projection-table th {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 24px 16px 0;
+  text-align: left;
+  font-weight: 600;
+}
+.projection-table td {
+  padding: 18px 24px 18px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--muted);
+}
+.projection-table td:first-child {
+  color: var(--gold);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 16px;
+}
+.projection-table td:last-child {
+  font-size: 13px;
+}
+.arr-val {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  color: var(--text) !important;
+  font-weight: 400;
+}
+
+.telus-callout {
+  background: rgba(201,168,76,0.04);
+  border: 1px solid var(--gold-border);
+  border-radius: 3px;
+  padding: 32px 40px;
+  text-align: center;
+  margin-bottom: 64px;
+}
+.telus-callout .tc-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--mint);
+  margin-bottom: 12px;
+  display: block;
+}
+.telus-callout .tc-headline {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(24px, 3vw, 36px);
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.telus-callout .tc-sub {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 56px;
+}
+@media (max-width: 768px) {
+  .tier-grid { grid-template-columns: 1fr; }
+}
+
+.tier-card {
+  background: var(--card);
+  border: 1px solid var(--gold-border);
+  border-radius: 3px;
+  padding: 36px 28px;
+  text-align: center;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.tier-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201,168,76,0.5);
+  box-shadow: 0 20px 60px rgba(201,168,76,0.08);
+}
+.tier-card.featured {
+  border-color: rgba(201,168,76,0.5);
+  background: rgba(201,168,76,0.04);
+}
+
+.tier-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.tier-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.tier-amount {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.tier-divider {
+  height: 1px;
+  background: var(--gold-border);
+  margin: 0 auto 24px;
+  width: 40px;
+}
+
+.investor-cta {
+  text-align: center;
+  padding: 40px;
+  background: var(--card);
+  border: 1px solid var(--gold-border);
+  border-radius: 3px;
+}
+.investor-cta p {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.investor-cta .contact-line {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 18px;
+  color: var(--text);
+}
+.investor-cta a {
+  color: var(--gold);
+  text-decoration: none;
+}
+.investor-cta a:hover { text-decoration: underline; }
+
+/* ─── SECTION 6: PORTFOLIO FULL ─── */
+#portfolio {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 48px;
+}
+.filter-btn {
+  background: var(--card);
+  border: 1px solid var(--border-subtle);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: rgba(201,168,76,0.08);
+  border-color: var(--gold-border);
+  color: var(--gold);
+}
+
+.co-card.hidden {
+  display: none;
+}
+
+/* ─── BACK TO TOP ─── */
+#back-top {
+  position: fixed;
+  bottom: 36px;
+  right: 36px;
+  width: 44px;
+  height: 44px;
+  background: rgba(9,9,24,0.92);
+  border: 1px solid var(--gold-border);
+  border-radius: 2px;
+  color: var(--gold);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s, transform 0.4s;
+  z-index: 8000;
+  text-decoration: none;
+}
+#back-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+#back-top:hover {
+  background: rgba(201,168,76,0.12);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: #06060f;
+  border-top: 1px solid var(--gold-border);
+  padding: 72px 40px 36px;
+}
+@media (max-width: 768px) {
+  footer { padding: 56px 24px 28px; }
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr;
+  gap: 56px;
+  margin-bottom: 56px;
+}
+@media (max-width: 900px) {
+  .footer-top-row { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width: 600px) {
+  .footer-top-row { grid-template-columns: 1fr; gap: 36px; }
+}
+
+.footer-logo {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 24px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.footer-brand-desc {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 12px;
+}
+.footer-social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--gold-border);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 7px 14px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: color 0.3s, border-color 0.3s;
+}
+.footer-social-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.footer-col-title {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 12px; }
+.footer-col ul li a,
+.footer-col ul li span {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+  display: block;
+}
+.footer-col ul li a:hover { color: var(--gold); }
+
+.footer-bottom-rule {
+  height: 1px;
+  background: var(--border-subtle);
+  margin-bottom: 28px;
+}
+
+.footer-bottom-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-bottom-left p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.footer-disclaimer {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.5;
+  text-align: right;
+}
+@media (max-width: 600px) {
+  .footer-disclaimer { text-align: left; }
+}
+
+/* ─── HORIZONTAL RULE DIVIDER ─── */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-border), transparent);
+  margin: 0;
+}
+
+/* ─── COUNTERS ─── */
+.counter-val { display: inline-block; }
 </style>
 </head>
 <body>
 
-<canvas id="particle-canvas"></canvas>
+<!-- BACK TO TOP -->
+<a href="#" id="back-top" aria-label="Back to top">&#8593;</a>
 
 <!-- NAV -->
-<nav>
-  <a class="nav-brand" href="#">
-    <div class="fh-logo">FH</div>
-    <span class="nav-brand-name">Francisco Holdings Inc.</span>
-  </a>
-  <button class="nav-mobile-menu" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+<nav id="nav">
+  <a class="nav-logo" href="#">FHInc</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   <ul class="nav-links">
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#leadership">Leadership</a></li>
-    <li><a href="#investment">Investment</a></li>
+    <li><a href="#dynasty">Empire</a></li>
+    <li><a href="#founder">Founder</a></li>
+    <li><a href="#investors">Investors</a></li>
+    <li><a href="#portfolio">Companies</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#contact" class="nav-cta">Partner With Us</a></li>
+    <li><a href="#investors" class="nav-invest">Invest Now</a></li>
   </ul>
+  <div class="nav-mobile-panel" id="mobile-panel">
+    <a href="#dynasty" onclick="closeMobile()">Empire</a>
+    <a href="#founder" onclick="closeMobile()">Founder</a>
+    <a href="#investors" onclick="closeMobile()">Investors</a>
+    <a href="#portfolio" onclick="closeMobile()">Companies</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+    <a href="#investors" onclick="closeMobile()" style="color:var(--gold);">Invest Now</a>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-parallax-bg" id="parallax-bg"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Lindsay, Ontario &rarr; Canada &rarr; Global Enterprise</div>
-    <h1>Francisco Holdings Inc.</h1>
-    <p class="hero-sub">41 Companies. $58B+ Markets. One Partnership. Zero Regret.</p>
-    <p style="font-size:16px;color:rgba(255,215,0,0.8);margin:-8px 0 20px;font-style:italic;">"If you're Fortune 500, you already need what we built. We just built it first."</p>
-    <div class="counter-display">
-      <span class="counter-num" id="company-counter">0</span> Companies. <span id="market-counter" style="color:var(--gold)">$0</span>B+ Markets. Zero Regret.
-    </div>
-    <div class="hero-stats">
-      <span class="stat-pill">$58B+ TAM Across 10 Markets</span>
-      <span class="stat-pill">10 Trillion-Dollar Verticals</span>
-      <span class="stat-pill">41 Operating Companies</span>
-      <span class="stat-pill">🌿 Carbon Neutral 2028</span>
-    </div>
+    <span class="hero-overline">Francisco Holdings Inc.</span>
+    <h1 class="hero-h1">Architect of the Future.</h1>
+    <p class="hero-subtitle">Parent company of 22+ AI, legal, and sovereign technology ventures. Built over 22 years. Expanding globally.</p>
     <div class="hero-ctas">
-      <a href="#partnership" class="btn-primary">Partner With the Empire &rarr;</a>
-      <a href="#portfolio" class="btn-secondary">Explore 41 Companies &rarr;</a>
+      <a href="#dynasty" class="btn-gold">Explore the Empire</a>
+      <a href="#investors" class="btn-ghost">Investor Relations</a>
+    </div>
+    <div class="hero-scroll">
+      <span class="hero-scroll-label">Scroll</span>
+      <div class="hero-scroll-chevron"></div>
     </div>
   </div>
 </section>
 
-<div class="gradient-divider"></div>
+<div class="gold-divider"></div>
 
-<!-- PORTFOLIO -->
+<!-- SECTION 3: DYNASTY -->
+<section id="dynasty">
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-overline">The Dynasty</span>
+      <h2 class="section-title">22 Companies. One Vision.</h2>
+      <div class="gold-rule"></div>
+      <p class="section-desc">Francisco Holdings Inc. has quietly built one of Canada's most ambitious AI and technology portfolios — vertically integrated across AI security, legal defense, healthcare, cannabis sovereignty, and infrastructure.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-item fade-up delay-1">
+        <span class="stat-number"><span class="counter-val" data-target="22" data-suffix="+">0</span></span>
+        <span class="stat-label">Companies</span>
+      </div>
+      <div class="stat-item fade-up delay-2">
+        <span class="stat-number">$<span class="counter-val" data-target="1.96" data-suffix="B" data-decimal="true">0</span></span>
+        <span class="stat-label">Projected Impact</span>
+      </div>
+      <div class="stat-item fade-up delay-3">
+        <span class="stat-number"><span class="counter-val" data-target="22">0</span></span>
+        <span class="stat-label">Years Building</span>
+      </div>
+      <div class="stat-item fade-up delay-4">
+        <span class="stat-number"><span class="counter-val" data-target="45">0</span></span>
+        <span class="stat-label">AI Agents Deployed</span>
+      </div>
+    </div>
+
+    <!-- AI SECURITY -->
+    <div class="division-label fade-up">&#128737;&#65039; &nbsp;AI Security</div>
+    <div class="companies-grid" id="grid-security">
+      <div class="co-card security fade-up delay-1">
+        <span class="co-emoji">&#128737;&#65039;</span>
+        <div class="co-name">OmniaGuard</div>
+        <div class="co-desc">Enterprise AI security stack — zero prompt-injection guarantee for Fortune 500 deployments.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card security fade-up delay-2">
+        <span class="co-emoji">&#128737;&#65039;</span>
+        <div class="co-name">OmniaShield</div>
+        <div class="co-desc">Real-time AI threat detection and constitutional data boundary enforcement.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+    </div>
+
+    <!-- AI PLATFORM -->
+    <div class="division-label fade-up">&#129302; &nbsp;AI Platform</div>
+    <div class="companies-grid" id="grid-platform">
+      <div class="co-card platform fade-up delay-1">
+        <span class="co-emoji">&#129302;</span>
+        <div class="co-name">PrimeDox AI</div>
+        <div class="co-desc">Sovereign digital twin platform — AI document intelligence for individuals and enterprises.</div>
+        <a class="co-link" href="https://primedoxai.com" target="_blank">Visit &rarr;</a>
+      </div>
+      <div class="co-card platform fade-up delay-2">
+        <span class="co-emoji">&#9889;</span>
+        <div class="co-name">WizeBlitz</div>
+        <div class="co-desc">Rapid AI deployment framework — intelligent automation for SMB and enterprise clients.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card platform fade-up delay-3">
+        <span class="co-emoji">&#127959;</span>
+        <div class="co-name">Agent Swarm Tech</div>
+        <div class="co-desc">Multi-agent orchestration SDK — deploy swarms of specialized AI agents in 48 hours.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card platform fade-up delay-4">
+        <span class="co-emoji">&#9883;&#65039;</span>
+        <div class="co-name">Quantum Swarm</div>
+        <div class="co-desc">Quantum-assisted AI reasoning — post-classical computing intelligence layer.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card platform fade-up delay-5">
+        <span class="co-emoji">&#127757;</span>
+        <div class="co-name">Space Swarm</div>
+        <div class="co-desc">Space operations intelligence — AI agents for satellite telemetry and orbital logistics.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+    </div>
+
+    <!-- LEGAL DEFENSE -->
+    <div class="division-label fade-up">&#9878;&#65039; &nbsp;Legal Defense</div>
+    <div class="companies-grid" id="grid-legal">
+      <div class="co-card legal fade-up delay-1">
+        <span class="co-emoji">&#9878;&#65039;</span>
+        <div class="co-name">CCLDR</div>
+        <div class="co-desc">Canadian constitutional cannabis legal defense and rights education platform.</div>
+        <a class="co-link" href="https://ccldr.net" target="_blank">Visit &rarr;</a>
+      </div>
+      <div class="co-card legal fade-up delay-2">
+        <span class="co-emoji">&#128218;</span>
+        <div class="co-name">LexMind</div>
+        <div class="co-desc">AI-powered legal document analysis — Charter-mapped precedent intelligence.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card legal fade-up delay-3">
+        <span class="co-emoji">&#127981;</span>
+        <div class="co-name">BENO-X Institute</div>
+        <div class="co-desc">Research and education body for the BENO-X constitutional framework.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card legal fade-up delay-4">
+        <span class="co-emoji">&#9868;</span>
+        <div class="co-name">Constitutional Defense Labs</div>
+        <div class="co-desc">Applied constitutional AI research — s.2, s.7, s.8, s.11, s.15, s.24 mapping.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card legal fade-up delay-5">
+        <span class="co-emoji">&#9878;</span>
+        <div class="co-name">Weedlaw Trinity</div>
+        <div class="co-desc">Three-pillar cannabis rights framework: education, defense, and sovereignty.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+    </div>
+
+    <!-- SAAS -->
+    <div class="division-label fade-up">&#129529; &nbsp;SaaS</div>
+    <div class="companies-grid" id="grid-saas">
+      <div class="co-card saas fade-up delay-1">
+        <span class="co-emoji">&#129529;</span>
+        <div class="co-name">CleanSwarm</div>
+        <div class="co-desc">AI dispatch and operations platform for commercial cleaning enterprises.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card saas fade-up delay-2">
+        <span class="co-emoji">&#128138;</span>
+        <div class="co-name">PharmaSwarm</div>
+        <div class="co-desc">Pharmaceutical compliance and inventory AI for regulated dispensaries.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card saas fade-up delay-3">
+        <span class="co-emoji">&#128138;</span>
+        <div class="co-name">MedSwarm</div>
+        <div class="co-desc">Medical practice AI — patient flow, documentation, and compliance automation.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card saas fade-up delay-4">
+        <span class="co-emoji">&#128231;</span>
+        <div class="co-name">PrimeDox Email</div>
+        <div class="co-desc">Sovereign encrypted email intelligence — AI-assisted communication platform.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card saas fade-up delay-5">
+        <span class="co-emoji">&#10084;&#65039;</span>
+        <div class="co-name">HealthSwarm</div>
+        <div class="co-desc">Population health intelligence — AI monitoring and predictive wellness platform.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card saas fade-up delay-1">
+        <span class="co-emoji">&#128181;</span>
+        <div class="co-name">FintechSwarm</div>
+        <div class="co-desc">Financial services AI — compliance, fraud detection, and payments intelligence.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card saas fade-up delay-2">
+        <span class="co-emoji">&#128666;</span>
+        <div class="co-name">LogisticsSwarm</div>
+        <div class="co-desc">Supply chain and last-mile delivery AI — real-time route and cost optimization.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+    </div>
+
+    <!-- CANNABIS -->
+    <div class="division-label fade-up">&#127807; &nbsp;Cannabis Sovereignty</div>
+    <div class="companies-grid" id="grid-cannabis">
+      <div class="co-card cannabis fade-up delay-1">
+        <span class="co-emoji">&#127807;</span>
+        <div class="co-name">CannaDeliver</div>
+        <div class="co-desc">Licensed cannabis delivery and compliance logistics platform for Canada.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card cannabis fade-up delay-2">
+        <span class="co-emoji">&#127807;</span>
+        <div class="co-name">Cannabis Compliance Canada</div>
+        <div class="co-desc">Regulatory compliance AI for licensed producers and retailers across Canada.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card cannabis fade-up delay-3">
+        <span class="co-emoji">&#127909;</span>
+        <div class="co-name">Doc Weedlaw Media</div>
+        <div class="co-desc">Education media empire — YouTube, podcast, and publishing under Doc Weedlaw.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card cannabis fade-up delay-4">
+        <span class="co-emoji">&#128737;</span>
+        <div class="co-name">Weedlaw Defense Network</div>
+        <div class="co-desc">National network for cannabis rights defense, education, and sovereignty advocacy.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card cannabis fade-up delay-5">
+        <span class="co-emoji">&#127757;</span>
+        <div class="co-name">Global Cannabis Alliance</div>
+        <div class="co-desc">International cannabis sovereignty coalition — policy, trade, and constitutional frameworks.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+    </div>
+
+    <!-- INFRASTRUCTURE -->
+    <div class="division-label fade-up">&#127963;&#65039; &nbsp;Infrastructure</div>
+    <div class="companies-grid" id="grid-infra">
+      <div class="co-card infra fade-up delay-1">
+        <span class="co-emoji">&#127963;&#65039;</span>
+        <div class="co-name">Francisco Holdings Inc.</div>
+        <div class="co-desc">The parent holding company — governance, capital allocation, and portfolio strategy.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card infra fade-up delay-2">
+        <span class="co-emoji">&#128421;</span>
+        <div class="co-name">Tech Pet Cage</div>
+        <div class="co-desc">Registered Ontario operating company — technology services and repair contracts.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card infra fade-up delay-3">
+        <span class="co-emoji">&#127981;</span>
+        <div class="co-name">Empire Hub</div>
+        <div class="co-desc">Co-working and innovation hub for Francisco Holdings portfolio companies.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card infra fade-up delay-4">
+        <span class="co-emoji">&#128202;</span>
+        <div class="co-name">Sovereignty Data Systems</div>
+        <div class="co-desc">Canadian sovereign cloud and data infrastructure — privacy-first enterprise hosting.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card infra fade-up delay-5">
+        <span class="co-emoji">&#127981;</span>
+        <div class="co-name">AI Governance Canada</div>
+        <div class="co-desc">National AI policy and governance advisory body — Charter-aligned AI regulation framework.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+    </div>
+
+    <!-- FRONTIER -->
+    <div class="division-label fade-up">&#128640; &nbsp;Frontier / Defense</div>
+    <div class="companies-grid" id="grid-frontier">
+      <div class="co-card frontier fade-up delay-1">
+        <span class="co-emoji">&#9992;&#65039;</span>
+        <div class="co-name">AeroShield</div>
+        <div class="co-desc">Aviation safety AI — real-time threat assessment for commercial and defense aviation.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card frontier fade-up delay-2">
+        <span class="co-emoji">&#128737;</span>
+        <div class="co-name">DefenseSwarm</div>
+        <div class="co-desc">National security AI — multi-agent intelligence for government and defense procurement.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card frontier fade-up delay-3">
+        <span class="co-emoji">&#129504;</span>
+        <div class="co-name">AeroMind</div>
+        <div class="co-desc">Cognitive AI co-pilot systems for unmanned aerial vehicles and autonomous flight.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card frontier fade-up delay-4">
+        <span class="co-emoji">&#128664;</span>
+        <div class="co-name">AutoSwarm</div>
+        <div class="co-desc">Autonomous vehicle AI swarm — multi-agent coordination for self-driving fleets.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card frontier fade-up delay-5">
+        <span class="co-emoji">&#9889;</span>
+        <div class="co-name">EnergySwarm</div>
+        <div class="co-desc">Renewable energy optimization AI — grid intelligence and carbon-neutral transition systems.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+      <div class="co-card frontier fade-up delay-1">
+        <span class="co-emoji">&#129516;</span>
+        <div class="co-name">BioTech Swarm</div>
+        <div class="co-desc">Biotechnology AI — genomics, drug discovery, and biodefense intelligence platforms.</div>
+        <a class="co-link" href="#">Visit &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- SECTION 4: FOUNDER -->
+<section id="founder">
+  <div class="section-inner">
+    <div class="founder-layout">
+      <div class="founder-avatar-wrap fade-up">
+        <div class="founder-avatar">DF</div>
+      </div>
+      <div class="fade-up delay-2">
+        <span class="founder-overline">Founder &amp; CEO</span>
+        <h2 class="founder-name">Doc Weedlaw</h2>
+        <p class="founder-tagline">"22+ years building constitutional frameworks. 200+ procedural victories. Creator of the BENO-X Framework."</p>
+        <div class="gold-rule"></div>
+        <p class="founder-bio">Starting from a single courtroom and 22 years of self-represented litigation, Doc Weedlaw encoded a lifetime of Canadian constitutional expertise into AI systems that now serve individuals, businesses, and enterprises across Canada.</p>
+
+        <div class="founder-achievements">
+          <div class="achievement-card fade-up delay-1">
+            <span class="ach-emoji">&#128220;</span>
+            <h4>BENO-X Framework</h4>
+            <p>Bad Exemption = No Offense. 22+ years of Canadian constitutional precedent, encoded into AI.</p>
+          </div>
+          <div class="achievement-card fade-up delay-2">
+            <span class="ach-emoji">&#9878;&#65039;</span>
+            <h4>12-Appearance Method</h4>
+            <p>Documented procedural sovereignty. Equal access to justice through knowledge.</p>
+          </div>
+          <div class="achievement-card fade-up delay-3">
+            <span class="ach-emoji">&#128737;</span>
+            <h4>Constitutional AI</h4>
+            <p>First AI architecture in Canada mapped to Charter sections s.2, s.7, s.8, s.11, s.15, s.24.</p>
+          </div>
+        </div>
+
+        <span class="disclaimer-badge">Not Legal Representation &mdash; Education Only</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- SECTION 5: INVESTORS -->
+<section id="investors">
+  <div class="section-inner">
+    <div class="investor-header fade-up">
+      <span class="section-overline">Join the Dynasty</span>
+      <h2 class="section-title">The Opportunity</h2>
+      <div class="gold-rule" style="margin:20px auto;"></div>
+      <p class="section-desc" style="margin:0 auto;text-align:center;">Revenue projections built on contracted clients, documented partnerships, and 22 years of operational precedent.</p>
+    </div>
+
+    <table class="projection-table fade-up">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>ARR Projection</th>
+          <th>Milestone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Year 1</td>
+          <td class="arr-val">$696,000</td>
+          <td>CleanSwarm 50 clients at base tier</td>
+        </tr>
+        <tr>
+          <td>Year 2</td>
+          <td class="arr-val">$4.2M</td>
+          <td>+ OmniaGuard + PrimeDox AI enterprise tier</td>
+        </tr>
+        <tr>
+          <td>Year 3</td>
+          <td class="arr-val">$42M</td>
+          <td>+ Telus royalties begin + SaaS portfolio scaling</td>
+        </tr>
+        <tr>
+          <td>Year 4</td>
+          <td class="arr-val">$400M+</td>
+          <td>Telus deal maturity + sovereign AI expansion</td>
+        </tr>
+        <tr>
+          <td>Year 5</td>
+          <td class="arr-val">$1B+</td>
+          <td>Global expansion across 6 divisions</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="telus-callout fade-up">
+      <span class="tc-label">Strategic Partnership</span>
+      <div class="tc-headline">Telus / Kudos Partnership &mdash; $1.96B Estimated Annual Impact</div>
+      <p class="tc-sub">Documented telecommunications and AI infrastructure partnership with projected annual economic impact of $1.96 billion upon full deployment.</p>
+    </div>
+
+    <div class="tier-grid">
+      <div class="tier-card fade-up delay-1">
+        <div class="tier-label">Entry Tier</div>
+        <div class="tier-name">Strategic Partner</div>
+        <div class="tier-amount">From $50,000</div>
+        <div class="tier-divider"></div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Access to portfolio reporting, quarterly investor calls, and co-marketing opportunities across the Francisco Holdings network.</p>
+      </div>
+      <div class="tier-card featured fade-up delay-2">
+        <div class="tier-label">Growth Tier</div>
+        <div class="tier-name">Empire Partner</div>
+        <div class="tier-amount">From $250,000</div>
+        <div class="tier-divider"></div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Priority deployment slots, board observer rights, revenue-share structuring, and white-label licensing across selected portfolio companies.</p>
+      </div>
+      <div class="tier-card fade-up delay-3">
+        <div class="tier-label">Pinnacle Tier</div>
+        <div class="tier-name">Dynasty Partner</div>
+        <div class="tier-amount">$1M+ — Custom Structure</div>
+        <div class="tier-divider"></div>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;">Bespoke partnership architecture — equity positions, co-founder arrangements, and direct participation in Telus-tier enterprise deals.</p>
+      </div>
+    </div>
+
+    <div class="investor-cta fade-up" id="contact">
+      <p>Begin the conversation</p>
+      <div class="contact-line">
+        <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="tel:7053078080">705-307-8080</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- SECTION 6: PORTFOLIO FULL -->
 <section id="portfolio">
-  <div class="section-wrap">
-    <div class="section-header fade-in">
-      <div class="section-tag">The Empire</div>
-      <h2>The Portfolio</h2>
-      <p>41 operating companies across 10 trillion-dollar markets — cybersecurity, aviation, healthcare, fintech, energy, logistics, defense, space, autonomous vehicles, quantum computing, and biotechnology. Built from Lindsay, Ontario. Designed for global enterprise.</p>
+  <div class="section-inner">
+    <div class="fade-up">
+      <span class="section-overline">The Portfolio</span>
+      <h2 class="section-title">Every Company. One Empire.</h2>
+      <div class="gold-rule"></div>
+      <p class="section-desc">The complete Francisco Holdings portfolio — filter by division.</p>
     </div>
 
-    <div class="portfolio-grid" id="portfolio-grid">
-      <!-- Cards rendered by JS -->
-    </div>
-  </div>
-</section>
-
-<div class="gradient-divider"></div>
-
-<!-- LEADERSHIP -->
-<section id="leadership" class="leadership-section">
-  <div class="section-wrap">
-    <div class="section-header fade-in">
-      <div class="section-tag">Who We Are</div>
-      <h2>Leadership</h2>
-    </div>
-    <div class="leader-card fade-in">
-      <div class="leader-avatar">DF</div>
-      <div class="leader-name">Derek Francisco</div>
-      <div class="leader-title">CEO &amp; Founder</div>
-      <p class="leader-bio">Serial entrepreneur, constitutional researcher, and technology builder. Founder of Tech Pet Cage (registered Ontario business), creator of CCLDR.NET, CleanSwarm, OmniaGuard, and PrimeDox AI. Building a 41-company empire spanning 10 trillion-dollar global markets from Lindsay, Ontario — designed for Fortune 500 partnership, built for generational impact.</p>
-      <div class="leader-tags">
-        <span class="leader-tag">Serial Founder</span>
-        <span class="leader-tag">Doc Weedlaw</span>
-        <span class="leader-tag">Lindsay, Ontario</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="gradient-divider"></div>
-
-<!-- FORTUNE 500 PARTNERSHIP SECTION -->
-<section id="partnership" style="background:linear-gradient(135deg,#050508 0%,#0A0A12 100%);border-top:1px solid rgba(255,215,0,0.2);border-bottom:1px solid rgba(255,215,0,0.2);">
-  <div class="section-wrap">
-    <div class="section-header fade-in">
-      <div class="section-tag">Fortune 500 Partnership</div>
-      <h2>Why Partner With Francisco Holdings?</h2>
-      <p style="font-size:18px;color:rgba(255,215,0,0.9);font-weight:600;">"Fortune 500 companies choose Francisco Holdings. Here's why it's a no-brainer."</p>
+    <div class="filter-bar fade-up" style="margin-top:40px;">
+      <button class="filter-btn active" data-filter="all">All Companies</button>
+      <button class="filter-btn" data-filter="security">AI Security</button>
+      <button class="filter-btn" data-filter="platform">AI Platform</button>
+      <button class="filter-btn" data-filter="legal">Legal Defense</button>
+      <button class="filter-btn" data-filter="saas">SaaS</button>
+      <button class="filter-btn" data-filter="cannabis">Cannabis</button>
+      <button class="filter-btn" data-filter="infra">Infrastructure</button>
+      <button class="filter-btn" data-filter="frontier">Frontier</button>
     </div>
 
-    <!-- 4 VALUE CARDS -->
-    <div class="partner-grid" style="margin-bottom:40px;">
-      <div class="partner-card fade-in" style="border-color:rgba(0,212,255,0.2);background:rgba(0,212,255,0.03);">
-        <div class="partner-icon" style="color:#00D4FF;">&#128737;</div>
-        <h3 style="color:#00D4FF;">Zero Risk Deployment</h3>
-        <ul style="list-style:none;margin-top:10px;">
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; 48-hour integration into existing infrastructure</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; Agent Swarm SDK — plug and play</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; OmniaGuard security — zero prompt injection guarantee</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;">&#10003; No downtime. No retraining. No disruption.</li>
-        </ul>
-      </div>
-      <div class="partner-card fade-in" style="border-color:rgba(255,215,0,0.25);background:rgba(255,215,0,0.02);">
-        <div class="partner-icon">&#128200;</div>
-        <h3>Maximum ROI from Day One</h3>
-        <ul style="list-style:none;margin-top:10px;">
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; Revenue-share models available</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; Co-branded deployment options</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; White-label SDK for enterprise resale</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;">&#10003; Your ROI starts month one, not year two</li>
-        </ul>
-      </div>
-      <div class="partner-card fade-in" style="border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.02);">
-        <div class="partner-icon" style="color:#22C55E;">&#127807;</div>
-        <h3 style="color:#22C55E;">ESG Compliance Built In</h3>
-        <ul style="list-style:none;margin-top:10px;">
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; Carbon-neutral operations by 2028</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; Every deployment creates 5+ local jobs</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; Quarterly economic impact reports with your brand</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;">&#10003; Your sustainability goals met automatically</li>
-        </ul>
-      </div>
-      <div class="partner-card fade-in">
-        <div class="partner-icon">&#127758;</div>
-        <h3>We Already Serve Your Tier</h3>
-        <ul style="list-style:none;margin-top:10px;">
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; 41 companies across 10 trillion-dollar markets</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; Aviation, healthcare, fintech, energy, defense, space</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">&#10003; BENO-X legal framework eliminates regulatory risk</li>
-          <li style="font-size:13px;color:#888899;padding:5px 0;">&#10003; One partnership. Zero limits. Zero regret.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- SOCIAL PROOF BAR -->
-    <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:10px;padding:16px 24px;text-align:center;margin-bottom:40px;font-size:13px;color:rgba(255,215,0,0.7);line-height:2;">
-      Trusted by enterprise across <strong style="color:#FFD700;">$58B cybersecurity</strong> | <strong style="color:#FFD700;">$12.4T healthcare</strong> | <strong style="color:#FFD700;">$2.04T renewables</strong> | <strong style="color:#FFD700;">$15T logistics</strong> | <strong style="color:#FFD700;">$2.4T defense</strong>
-    </div>
-
-    <!-- PARTNERSHIP CTA FORM -->
-    <div style="background:rgba(10,10,14,0.8);border:1px solid rgba(255,215,0,0.25);border-radius:14px;padding:36px;max-width:700px;margin:0 auto;" class="fade-in">
-      <h3 style="font-size:20px;font-weight:800;margin-bottom:8px;text-align:center;">Schedule Your 15-Minute Partnership Call</h3>
-      <p style="font-size:13px;color:#888899;text-align:center;margin-bottom:28px;">Derek Francisco reviews every Fortune 500 inquiry personally. Response within 24 hours.</p>
-      <form id="partnership-form" onsubmit="handlePartnerSubmit(event)">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="pname">Name</label>
-            <input type="text" id="pname" placeholder="Your full name" required>
-          </div>
-          <div class="form-group">
-            <label for="pcompany">Company</label>
-            <input type="text" id="pcompany" placeholder="Company name" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="ptitle">Title / Role</label>
-            <input type="text" id="ptitle" placeholder="CEO, CTO, VP Engineering...">
-          </div>
-          <div class="form-group">
-            <label for="pindustry">Industry</label>
-            <select id="pindustry">
-              <option value="">Select industry...</option>
-              <option>Aviation / Aerospace</option>
-              <option>Healthcare / Pharma</option>
-              <option>Financial Services</option>
-              <option>Energy / Utilities</option>
-              <option>Logistics / Supply Chain</option>
-              <option>Defense / Government</option>
-              <option>Space / Satellite</option>
-              <option>Automotive / AV</option>
-              <option>Quantum / Deep Tech</option>
-              <option>Biotechnology</option>
-              <option>Cybersecurity</option>
-              <option>Other</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="prevenue">Annual Revenue</label>
-            <select id="prevenue">
-              <option value="">Select range...</option>
-              <option>Under $1M</option>
-              <option>$1M – $10M</option>
-              <option>$10M – $100M</option>
-              <option>$100M – $1B</option>
-              <option>$1B+ (Fortune 500)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="pemail">Email</label>
-            <input type="email" id="pemail" placeholder="your@company.com" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="pinterest">Partnership Interest</label>
-          <textarea id="pinterest" style="min-height:80px;" placeholder="Which Francisco Holdings companies interest you? What problem are you trying to solve?"></textarea>
-        </div>
-        <button type="submit" class="form-submit" style="width:100%;background:var(--gold);color:#000;">Schedule Partnership Call &rarr;</button>
-        <p style="font-size:12px;color:#555;text-align:center;margin-top:10px;">Or call directly: <strong style="color:var(--gold);">705-307-8080</strong> | <a href="mailto:partnerships@franciscoholdings.com" style="color:var(--gold);">partnerships@franciscoholdings.com</a></p>
-      </form>
-      <div id="partner-success" style="display:none;text-align:center;padding:20px;">
-        <p style="color:var(--gold);font-weight:700;font-size:16px;">&#10003; Partnership inquiry received.</p>
-        <p style="color:#888899;font-size:13px;">Derek will contact you within 24 hours. A no-brainer partnership awaits.</p>
-      </div>
-      <div style="text-align:center;margin-top:20px;">
-        <span style="display:inline-block;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:6px;padding:8px 20px;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0.5px;">&#127942; FRANCISCO HOLDINGS INC. — THE NO-BRAINER CHOICE FOR GLOBAL ENTERPRISE</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="gradient-divider"></div>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-wrap">
-    <div class="section-header fade-in">
-      <div class="section-tag">Get In Touch</div>
-      <h2>Submit an Inquiry</h2>
-      <p>Derek reviews every partnership inquiry personally. Expect a response within 48 hours.</p>
-    </div>
-
-    <div class="contact-form fade-in">
-      <form id="contact-form" onsubmit="handleFormSubmit(event)">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="fname">Name</label>
-            <input type="text" id="fname" name="name" placeholder="Your full name" required>
-          </div>
-          <div class="form-group">
-            <label for="femail">Email</label>
-            <input type="email" id="femail" name="email" placeholder="your@email.com" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="forg">Organization</label>
-          <input type="text" id="forg" name="organization" placeholder="Company or organization name">
-        </div>
-        <div class="form-group">
-          <label for="ftype">Partnership Type</label>
-          <select id="ftype" name="type" required>
-            <option value="" disabled selected>Select partnership type</option>
-            <option value="strategic">Strategic Partner</option>
-            <option value="capital">Capital Partner</option>
-            <option value="operating">Operating Partner</option>
-            <option value="media">Media / Press</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="fmsg">Message</label>
-          <textarea id="fmsg" name="message" placeholder="Tell us about your interest and what you bring to the table..." required></textarea>
-        </div>
-        <button type="submit" class="form-submit">Submit Inquiry &rarr;</button>
-      </form>
-      <div class="form-success" id="form-success">
-        &#10003; Thank you — Derek will respond within 48 hours.
-      </div>
+    <div class="companies-grid" id="portfolio-grid" style="margin-top:8px;">
+      <!-- Rendered by JS -->
     </div>
   </div>
 </section>
@@ -846,221 +1442,285 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <h3>Francisco Holdings Inc.</h3>
-        <p>Building a 41-company empire from Lindsay, Ontario. Spanning aviation, healthcare, fintech, energy, logistics, defense, space, autonomous vehicles, quantum computing, and biotechnology. 🌿 Carbon Neutral 2028.</p>
+    <div class="footer-top-row">
+      <div>
+        <span class="footer-logo">FHInc</span>
+        <p class="footer-brand-desc">Francisco Holdings Inc. — parent company of 22+ AI, legal, and sovereign technology ventures. Built over 22 years in Lindsay, Ontario. Expanding globally.</p>
+        <div class="footer-social">
+          <a class="footer-social-btn" href="https://t.me/OmniguardSec_bot" target="_blank">
+            &#9992; Telegram
+          </a>
+          <a class="footer-social-btn" href="mailto:franciscoderek7@gmail.com">
+            &#9993; Email
+          </a>
+        </div>
       </div>
+
       <div class="footer-col">
-        <h4>Portfolio</h4>
+        <div class="footer-col-title">Portfolio</div>
         <ul>
-          <li><a href="#">CleanSwarm</a></li>
-          <li><a href="#">CCLDR.NET</a></li>
+          <li><a href="https://ccldr.net" target="_blank">CCLDR.net</a></li>
           <li><a href="#">OmniaGuard</a></li>
           <li><a href="#">PrimeDox AI</a></li>
-          <li><a href="#">Sovereignty Privacy</a></li>
-          <li><a href="#">MindShift</a></li>
+          <li><a href="#">CleanSwarm</a></li>
+          <li><a href="#">BENO-X Institute</a></li>
+          <li><a href="#">Agent Swarm Tech</a></li>
         </ul>
       </div>
+
       <div class="footer-col">
-        <h4>Company</h4>
+        <div class="footer-col-title">Contact</div>
         <ul>
-          <li><a href="#portfolio">Portfolio</a></li>
-          <li><a href="#leadership">Leadership</a></li>
-          <li><a href="#investment">Investment</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#">Privacy Policy</a></li>
+          <li><span>Derek Francisco, CEO</span></li>
+          <li><a href="tel:7053078080">705-307-8080</a></li>
+          <li><a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></li>
+          <li><span>Kent Street West</span></li>
+          <li><span>Lindsay, Ontario K9V 2Z8</span></li>
+          <li><a href="https://franciscoholdingsinc.com">franciscoholdingsinc.com</a></li>
+          <li><a href="https://franciscoholdingsinc.ca">franciscoholdingsinc.ca</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 Francisco Holdings Inc. All Rights Reserved. | 🌿 Carbon Neutral 2028</p>
-      <p>Derek Francisco, CEO | 705-307-8080 | Lindsay, Ontario K9V 2Z8</p>
-      <a href="#">Privacy Policy</a>
+
+    <div class="footer-bottom-rule"></div>
+
+    <div class="footer-bottom-row">
+      <div class="footer-bottom-left">
+        <p>&copy; 2026 Francisco Holdings Inc. | Registered in Ontario, Canada</p>
+        <p>Tech Pet Cage &mdash; Registered Ontario Business | Derek Francisco, CEO</p>
+      </div>
+      <div class="footer-disclaimer">
+        Not Legal Representation &mdash; Education Only
+      </div>
     </div>
   </div>
 </footer>
 
 <script>
-// PARTICLE SYSTEM
+// ─── NAV SCROLL STATE ───
 (function() {
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
+  var nav = document.getElementById('nav');
+  function updateNav() {
+    if (window.scrollY > 40) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+})();
+
+// ─── HAMBURGER ───
+var hamburger = document.getElementById('hamburger');
+var mobilePanel = document.getElementById('mobile-panel');
+hamburger.addEventListener('click', function() {
+  mobilePanel.classList.toggle('open');
+});
+function closeMobile() {
+  mobilePanel.classList.remove('open');
+}
+
+// ─── BACK TO TOP ───
+(function() {
+  var btn = document.getElementById('back-top');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  }, { passive: true });
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+// ─── PARALLAX HERO ───
+(function() {
+  var bg = document.getElementById('parallax-bg');
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    bg.style.transform = 'translateY(' + (y * 0.2) + 'px)';
+  }, { passive: true });
+})();
+
+// ─── HERO PARTICLES ───
+(function() {
+  var canvas = document.getElementById('hero-canvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, particles = [];
 
   function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
   }
   resize();
   window.addEventListener('resize', resize);
 
+  var colors = ['201,168,76', '232,160,184', '157,212,190'];
+
   function Particle() {
+    this.reset();
+  }
+  Particle.prototype.reset = function() {
     this.x = Math.random() * W;
     this.y = Math.random() * H;
-    this.vx = (Math.random() - 0.5) * 0.6;
-    this.vy = (Math.random() - 0.5) * 0.6;
-    this.r = Math.random() * 2 + 1;
-    this.color = Math.random() > 0.5 ? '#FFD700' : '#00D4FF';
-  }
+    this.r = Math.random() * 1.5 + 0.5;
+    this.vx = (Math.random() - 0.5) * 0.25;
+    this.vy = (Math.random() - 0.5) * 0.25;
+    this.alpha = Math.random() * 0.25 + 0.05;
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+    this.life = 0;
+    this.maxLife = Math.random() * 300 + 200;
+  };
   Particle.prototype.update = function() {
     this.x += this.vx;
     this.y += this.vy;
-    if (this.x < 0 || this.x > W) this.vx *= -1;
-    if (this.y < 0 || this.y > H) this.vy *= -1;
+    this.life++;
+    if (this.x < 0) this.x = W;
+    if (this.x > W) this.x = 0;
+    if (this.y < 0) this.y = H;
+    if (this.y > H) this.y = 0;
   };
 
-  for (let i = 0; i < 60; i++) particles.push(new Particle());
+  for (var i = 0; i < 40; i++) particles.push(new Particle());
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      const p = particles[i];
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.update();
+      var lifeAlpha = Math.sin((p.life / p.maxLife) * Math.PI);
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = 'rgba(' + p.color + ',' + (p.alpha * lifeAlpha) + ')';
       ctx.fill();
-      for (let j = i + 1; j < particles.length; j++) {
-        const q = particles[j];
-        const dx = p.x - q.x, dy = p.y - q.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 120) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = p.color;
-          ctx.globalAlpha = (1 - dist/120) * 0.25;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-        }
-      }
+      if (p.life >= p.maxLife) p.reset();
     }
-    ctx.globalAlpha = 1;
     requestAnimationFrame(draw);
   }
   draw();
 })();
 
-// COMPANY COUNTER
-(function() {
-  const el = document.getElementById('company-counter');
-  const target = 41;
-  const duration = 2000;
-  const startTime = performance.now();
-  function step(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(eased * target);
-    if (progress < 1) requestAnimationFrame(step);
-    else el.textContent = target;
-  }
-  requestAnimationFrame(step);
-})();
-
-// MARKET COUNTER
-(function() {
-  var el = document.getElementById('market-counter');
-  if (!el) return;
-  var target = 58;
-  var duration = 2400;
-  var startTime = performance.now();
-  function step(now) {
-    var elapsed = now - startTime;
-    var progress = Math.min(elapsed / duration, 1);
-    var eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = '$' + Math.floor(eased * target);
-    if (progress < 1) requestAnimationFrame(step);
-    else el.textContent = '$' + target;
-  }
-  requestAnimationFrame(step);
-})();
-
-// PORTFOLIO CARDS
-const companies = [
-  { n:1,  name:"Tech Pet Cage",               desc:"Registered Ontario operating company",          tag:"Operations",       status:"LIVE" },
-  { n:2,  name:"CleanSwarm",                  desc:"AI dispatch for cleaning enterprises",           tag:"Field Service SaaS",status:"LIVE" },
-  { n:3,  name:"CCLDR.NET",                   desc:"Canadian constitutional cannabis education",     tag:"Legal Education",  status:"LIVE" },
-  { n:4,  name:"OmniaGuard",                  desc:"Enterprise AI security stack",                  tag:"Cybersecurity",    status:"LIVE" },
-  { n:5,  name:"PrimeDox AI",                 desc:"Sovereign digital twin system",                 tag:"AI Platform",      status:"LIVE" },
-  { n:6,  name:"Sovereignty Privacy",         desc:"Digital identity removal service",              tag:"Privacy Tech",     status:"LIVE" },
-  { n:7,  name:"Weedlaw Education",           desc:"Doc Weedlaw course platform",                   tag:"EdTech",           status:"BUILDING" },
-  { n:8,  name:"MindShift",                   desc:"Neuroplasticity executive coaching",            tag:"Health & Wellness",status:"LIVE" },
-  { n:9,  name:"SupplyChain Pro",             desc:"B2B supply chain optimization",                 tag:"Logistics",        status:"BUILDING" },
-  { n:10, name:"Francisco Capital",           desc:"Investment arm for founder funding",            tag:"Capital",          status:"CONCEPT" },
-  { n:11, name:"Weedlaw Publishing",          desc:"Books, courses, print media",                   tag:"Publishing",       status:"BUILDING" },
-  { n:12, name:"CCLDR Insurance",             desc:"Cannabis-specific business coverage",           tag:"Insurance",        status:"CONCEPT" },
-  { n:13, name:"Agent Marketplace",           desc:"AI agent licensing platform",                   tag:"AI Commerce",      status:"CONCEPT" },
-  { n:14, name:"Constitutional AI",           desc:"Charter-trained AI system",                     tag:"AI/Legal",         status:"CONCEPT" },
-  { n:15, name:"CleanSwarm Franchise",        desc:"White-label licensing program",                 tag:"Franchise",        status:"BUILDING" },
-  { n:16, name:"OmniaGuard Federal",          desc:"Government AI security contracts",              tag:"GovTech",          status:"CONCEPT" },
-  { n:17, name:"PrimeDox Health",             desc:"Medical AI & MMAR compliance",                  tag:"HealthTech",       status:"CONCEPT" },
-  { n:18, name:"Kawartha Digital",            desc:"Local digital services, Lindsay ON",            tag:"Digital Services", status:"BUILDING" },
-  { n:19, name:"Doc Weedlaw Media",           desc:"YouTube, podcast, personal brand",              tag:"Media",            status:"BUILDING" },
-  { n:20, name:"Francisco Holdings Properties",desc:"Real estate holding vehicle",                 tag:"Real Estate",      status:"CONCEPT" },
-  { n:21, name:"Sovereign Paralegal",         desc:"Legal document preparation",                   tag:"Legal Services",   status:"CONCEPT" },
-  { n:22, name:"CleanSwarm Academy",          desc:"Training for cleaning industry",                tag:"Education",        status:"CONCEPT" },
-  { n:23, name:"OmniaGuard Certified",        desc:"AI security certification body",               tag:"Certification",    status:"CONCEPT" },
-  { n:24, name:"BENO-X Legal Tech",           desc:"Constitutional analysis tools",                 tag:"LegalTech",        status:"CONCEPT" },
-  { n:25, name:"Francisco HR",                desc:"HR & compliance for small companies",           tag:"HR Services",      status:"CONCEPT" },
-  { n:26, name:"Charter Shield",              desc:"Emergency legal document generation",           tag:"Legal Tech",       status:"CONCEPT" },
-  { n:27, name:"PrimeDox B2B",               desc:"Enterprise digital twin licensing",             tag:"Enterprise AI",    status:"CONCEPT" },
-  { n:28, name:"Kawartha Cannabis",           desc:"Regional cannabis consulting",                  tag:"Cannabis",         status:"CONCEPT" },
-  { n:29, name:"Francisco Logistics",         desc:"Last-mile delivery for Kawartha",              tag:"Logistics",        status:"CONCEPT" },
-  { n:30, name:"TPC Repairs Pro",             desc:"Commercial tech repair contracts",              tag:"B2B Services",     status:"BUILDING" },
-  { n:31, name:"Sovereign AI Corp",           desc:"Parent AI holding entity",                     tag:"Holding",          status:"BUILDING" },
-  // NEW 10 REVENUE TITANS
-  { n:32, name:"Aero Shield Inc.",            desc:"Aviation safety AI — $2.04T market",           tag:"Aviation",         status:"LIVE" },
-  { n:33, name:"Health Swarm Inc.",           desc:"Healthcare intelligence AI — $12.4T market",   tag:"HealthTech",       status:"LIVE" },
-  { n:34, name:"Fintech Swarm Inc.",          desc:"Digital payments AI — $485B market",           tag:"Fintech",          status:"LIVE" },
-  { n:35, name:"Energy Swarm Inc.",           desc:"Renewables optimization — $2.04T market",      tag:"CleanEnergy",      status:"LIVE" },
-  { n:36, name:"Logistics Swarm Inc.",        desc:"Supply chain AI — $15T+ market",               tag:"Logistics",        status:"LIVE" },
-  { n:37, name:"Defense Swarm Inc.",          desc:"National security AI — $2.4T market",          tag:"Defense",          status:"LIVE" },
-  { n:38, name:"Space Swarm Inc.",            desc:"Space operations AI — $1T market",             tag:"Space",            status:"LIVE" },
-  { n:39, name:"Auto Swarm Inc.",             desc:"Autonomous vehicle AI — $2.3T market",         tag:"AutoTech",         status:"LIVE" },
-  { n:40, name:"Quantum Swarm Inc.",          desc:"Quantum computing AI — $50B market",           tag:"Quantum",          status:"LIVE" },
-  { n:41, name:"Biotech Swarm Inc.",          desc:"Biotechnology AI — $5.67T market",             tag:"Biotech",          status:"LIVE" },
-];
-
-const grid = document.getElementById('portfolio-grid');
-companies.forEach(function(c) {
-  const statusClass = c.status === 'LIVE' ? 'status-live' : c.status === 'BUILDING' ? 'status-building' : 'status-concept';
-  const card = document.createElement('div');
-  card.className = 'company-card fade-in';
-  card.innerHTML = `
-    <div class="card-num">${c.n}</div>
-    <div class="card-body">
-      <div class="card-name">${c.name}</div>
-      <div class="card-desc">${c.desc}</div>
-      <div class="card-footer">
-        <span class="card-tag">${c.tag}</span>
-        <span class="status-badge ${statusClass}">${c.status}</span>
-      </div>
-    </div>`;
-  grid.appendChild(card);
-});
-
-// SCROLL FADE
-const observer = new IntersectionObserver(function(entries) {
+// ─── INTERSECTION OBSERVER — FADE UP ───
+var fadeObserver = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
-    if (e.isIntersecting) { e.target.classList.add('visible'); }
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      fadeObserver.unobserve(e.target);
+    }
   });
 }, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(function(el) { observer.observe(el); });
 
-// FORM SUBMIT
-function handleFormSubmit(e) {
-  e.preventDefault();
-  document.getElementById('contact-form').style.display = 'none';
-  document.getElementById('form-success').style.display = 'block';
+document.querySelectorAll('.fade-up').forEach(function(el) {
+  fadeObserver.observe(el);
+});
+
+// ─── ANIMATED COUNTERS ───
+var counterObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var el = e.target;
+      var target = parseFloat(el.dataset.target);
+      var suffix = el.dataset.suffix || '';
+      var isDecimal = el.dataset.decimal === 'true';
+      var duration = 1600;
+      var startTime = null;
+
+      function step(now) {
+        if (!startTime) startTime = now;
+        var progress = Math.min((now - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var val = eased * target;
+        el.textContent = isDecimal ? val.toFixed(2) : Math.floor(val);
+        el.textContent += suffix;
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = (isDecimal ? target.toFixed(2) : target) + suffix;
+      }
+      requestAnimationFrame(step);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.counter-val').forEach(function(el) {
+  counterObserver.observe(el);
+});
+
+// ─── PORTFOLIO FILTER ───
+var allCompanies = [
+  // Security
+  { div:'security', emoji:'&#128737;&#65039;', name:'OmniaGuard', desc:'Enterprise AI security stack — zero prompt-injection guarantee for Fortune 500 deployments.', link:'#' },
+  { div:'security', emoji:'&#128737;&#65039;', name:'OmniaShield', desc:'Real-time AI threat detection and constitutional data boundary enforcement.', link:'#' },
+  // Platform
+  { div:'platform', emoji:'&#129302;', name:'PrimeDox AI', desc:'Sovereign digital twin platform — AI document intelligence for individuals and enterprises.', link:'https://primedoxai.com' },
+  { div:'platform', emoji:'&#9889;', name:'WizeBlitz', desc:'Rapid AI deployment framework — intelligent automation for SMB and enterprise clients.', link:'#' },
+  { div:'platform', emoji:'&#127959;', name:'Agent Swarm Tech', desc:'Multi-agent orchestration SDK — deploy swarms of specialized AI agents in 48 hours.', link:'#' },
+  { div:'platform', emoji:'&#9883;&#65039;', name:'Quantum Swarm', desc:'Quantum-assisted AI reasoning — post-classical computing intelligence layer.', link:'#' },
+  { div:'platform', emoji:'&#127757;', name:'Space Swarm', desc:'Space operations intelligence — AI agents for satellite telemetry and orbital logistics.', link:'#' },
+  // Legal
+  { div:'legal', emoji:'&#9878;&#65039;', name:'CCLDR', desc:'Canadian constitutional cannabis legal defense and rights education platform.', link:'https://ccldr.net' },
+  { div:'legal', emoji:'&#128218;', name:'LexMind', desc:'AI-powered legal document analysis — Charter-mapped precedent intelligence.', link:'#' },
+  { div:'legal', emoji:'&#127981;', name:'BENO-X Institute', desc:'Research and education body for the BENO-X constitutional framework.', link:'#' },
+  { div:'legal', emoji:'&#9868;', name:'Constitutional Defense Labs', desc:'Applied constitutional AI research — s.2, s.7, s.8, s.11, s.15, s.24 mapping.', link:'#' },
+  { div:'legal', emoji:'&#9878;', name:'Weedlaw Trinity', desc:'Three-pillar cannabis rights framework: education, defense, and sovereignty.', link:'#' },
+  // SaaS
+  { div:'saas', emoji:'&#129529;', name:'CleanSwarm', desc:'AI dispatch and operations platform for commercial cleaning enterprises.', link:'#' },
+  { div:'saas', emoji:'&#128138;', name:'PharmaSwarm', desc:'Pharmaceutical compliance and inventory AI for regulated dispensaries.', link:'#' },
+  { div:'saas', emoji:'&#128138;', name:'MedSwarm', desc:'Medical practice AI — patient flow, documentation, and compliance automation.', link:'#' },
+  { div:'saas', emoji:'&#128231;', name:'PrimeDox Email', desc:'Sovereign encrypted email intelligence — AI-assisted communication platform.', link:'#' },
+  { div:'saas', emoji:'&#10084;&#65039;', name:'HealthSwarm', desc:'Population health intelligence — AI monitoring and predictive wellness platform.', link:'#' },
+  { div:'saas', emoji:'&#128181;', name:'FintechSwarm', desc:'Financial services AI — compliance, fraud detection, and payments intelligence.', link:'#' },
+  { div:'saas', emoji:'&#128666;', name:'LogisticsSwarm', desc:'Supply chain and last-mile delivery AI — real-time route and cost optimization.', link:'#' },
+  // Cannabis
+  { div:'cannabis', emoji:'&#127807;', name:'CannaDeliver', desc:'Licensed cannabis delivery and compliance logistics platform for Canada.', link:'#' },
+  { div:'cannabis', emoji:'&#127807;', name:'Cannabis Compliance Canada', desc:'Regulatory compliance AI for licensed producers and retailers across Canada.', link:'#' },
+  { div:'cannabis', emoji:'&#127909;', name:'Doc Weedlaw Media', desc:'Education media empire — YouTube, podcast, and publishing under Doc Weedlaw.', link:'#' },
+  { div:'cannabis', emoji:'&#128737;', name:'Weedlaw Defense Network', desc:'National network for cannabis rights defense, education, and sovereignty advocacy.', link:'#' },
+  { div:'cannabis', emoji:'&#127757;', name:'Global Cannabis Alliance', desc:'International cannabis sovereignty coalition — policy, trade, and constitutional frameworks.', link:'#' },
+  // Infrastructure
+  { div:'infra', emoji:'&#127963;&#65039;', name:'Francisco Holdings Inc.', desc:'The parent holding company — governance, capital allocation, and portfolio strategy.', link:'#' },
+  { div:'infra', emoji:'&#128421;', name:'Tech Pet Cage', desc:'Registered Ontario operating company — technology services and repair contracts.', link:'#' },
+  { div:'infra', emoji:'&#127981;', name:'Empire Hub', desc:'Co-working and innovation hub for Francisco Holdings portfolio companies.', link:'#' },
+  { div:'infra', emoji:'&#128202;', name:'Sovereignty Data Systems', desc:'Canadian sovereign cloud and data infrastructure — privacy-first enterprise hosting.', link:'#' },
+  { div:'infra', emoji:'&#127981;', name:'AI Governance Canada', desc:'National AI policy and governance advisory body — Charter-aligned AI regulation framework.', link:'#' },
+  // Frontier
+  { div:'frontier', emoji:'&#9992;&#65039;', name:'AeroShield', desc:'Aviation safety AI — real-time threat assessment for commercial and defense aviation.', link:'#' },
+  { div:'frontier', emoji:'&#128737;', name:'DefenseSwarm', desc:'National security AI — multi-agent intelligence for government and defense procurement.', link:'#' },
+  { div:'frontier', emoji:'&#129504;', name:'AeroMind', desc:'Cognitive AI co-pilot systems for unmanned aerial vehicles and autonomous flight.', link:'#' },
+  { div:'frontier', emoji:'&#128664;', name:'AutoSwarm', desc:'Autonomous vehicle AI swarm — multi-agent coordination for self-driving fleets.', link:'#' },
+  { div:'frontier', emoji:'&#9889;', name:'EnergySwarm', desc:'Renewable energy optimization AI — grid intelligence and carbon-neutral transition systems.', link:'#' },
+  { div:'frontier', emoji:'&#129516;', name:'BioTech Swarm', desc:'Biotechnology AI — genomics, drug discovery, and biodefense intelligence platforms.', link:'#' },
+];
+
+var portfolioGrid = document.getElementById('portfolio-grid');
+
+function renderPortfolio(filter) {
+  portfolioGrid.innerHTML = '';
+  var filtered = filter === 'all' ? allCompanies : allCompanies.filter(function(c) { return c.div === filter; });
+  filtered.forEach(function(c, i) {
+    var card = document.createElement('div');
+    card.className = 'co-card ' + c.div + ' fade-up';
+    card.style.transitionDelay = (i % 4) * 0.05 + 's';
+    card.innerHTML = '<span class="co-emoji">' + c.emoji + '</span>' +
+      '<div class="co-name">' + c.name + '</div>' +
+      '<div class="co-desc">' + c.desc + '</div>' +
+      '<a class="co-link" href="' + c.link + '"' + (c.link !== '#' ? ' target="_blank"' : '') + '>Visit &rarr;</a>';
+    portfolioGrid.appendChild(card);
+    setTimeout(function() {
+      fadeObserver.observe(card);
+    }, 10);
+  });
 }
-function handlePartnerSubmit(e) {
-  e.preventDefault();
-  document.getElementById('partnership-form').style.display = 'none';
-  document.getElementById('partner-success').style.display = 'block';
-}
+
+renderPortfolio('all');
+
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderPortfolio(btn.dataset.filter);
+  });
+});
 </script>
 </body>
 </html>
