@@ -81,6 +81,24 @@ section{padding:100px 24px}
 .section-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;margin-bottom:16px;line-height:1.15}
 .section-sub{color:var(--muted);font-size:1rem;max-width:600px;margin-bottom:48px;line-height:1.6}
 
+/* WISDOM WIDGET */
+.wisdom-widget{padding:28px;margin-bottom:40px;border-radius:14px;background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.3)}
+.wisdom-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.wisdom-icon{font-size:2rem;flex-shrink:0}
+.wisdom-title{font-weight:700;font-size:1rem;color:var(--gold)}
+.wisdom-sub{font-size:.72rem;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.wisdom-score-box{margin-left:auto;text-align:center;background:rgba(212,175,55,0.1);border-radius:10px;padding:12px 20px;min-width:100px}
+.wisdom-score{font-size:2.2rem;font-weight:900;color:var(--gold);line-height:1;transition:color .5s}
+.wisdom-score.updated{color:var(--cyan)}
+.wisdom-score-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.wisdom-quote{font-size:.95rem;color:var(--text);line-height:1.7;font-style:italic;border-left:3px solid var(--gold);padding-left:16px;margin-bottom:20px;transition:color .4s,border-color .4s;min-height:52px}
+.wisdom-quote.challenged{border-left-color:var(--cyan);color:var(--cyan)}
+.wisdom-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.wisdom-btn{background:linear-gradient(135deg,var(--gold),#B8960C);color:#000;padding:10px 20px;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;border:none;transition:all .2s}
+.wisdom-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,175,55,0.4)}
+.wisdom-status{font-size:.78rem;color:var(--cyan);font-style:italic}
+.wisdom-stagnant .wisdom-status{color:var(--red)}
+
 /* GLASS CARD */
 .glass{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:14px}
 .glass-gold{border-color:rgba(212,175,55,0.25)}
@@ -390,7 +408,7 @@ footer{background:#050505;border-top:1px solid rgba(212,175,55,0.15);padding:64p
     </div>
 
     <h1 class="hero-h1">PrimeDox AI</h1>
-    <h2 class="hero-h2">The Clone of Derek Francisco. The Brain of 41 Companies. The Future of Everything.</h2>
+    <h2 class="hero-h2">Built by a mind that gets humbled daily. The brain of 41 companies. Wisdom is the weapon.</h2>
 
     <!-- Live Counters -->
     <div class="counter-row">
@@ -428,6 +446,26 @@ footer{background:#050505;border-top:1px solid rgba(212,175,55,0.15);padding:64p
     <div class="section-tag">Live Intelligence Network</div>
     <h2 class="section-title">14 AI Heroes Online — The PrimeDox Swarm</h2>
     <p class="section-sub">Real-time AI agents powering the Francisco Holdings empire across every industry vertical.</p>
+
+    <!-- WISDOM WIDGET -->
+    <div class="wisdom-widget" id="wisdomWidget">
+      <div class="wisdom-header">
+        <span class="wisdom-icon">🧠</span>
+        <div>
+          <div class="wisdom-title">Daily Humility Protocol</div>
+          <div class="wisdom-sub" id="wisdomSubStatus">ACTIVE — Scanning for new ideas</div>
+        </div>
+        <div class="wisdom-score-box">
+          <div class="wisdom-score" id="wisdomScore">0</div>
+          <div class="wisdom-score-label">Challenges Accepted</div>
+        </div>
+      </div>
+      <div class="wisdom-quote" id="wisdomQuote">"Allow yourself to be humbled daily with new ideas that challenge any or everything that you currently think. That's wisdom."</div>
+      <div class="wisdom-actions">
+        <button class="wisdom-btn" onclick="challengePrimeDox()">⚔️ Challenge PrimeDox</button>
+        <div class="wisdom-status" id="wisdomStatus">PrimeDox is open to all challenges. No ego. No defense. Just growth.</div>
+      </div>
+    </div>
 
     <div class="agents-grid" id="agentGrid">
 
@@ -1430,7 +1468,7 @@ footer{background:#050505;border-top:1px solid rgba(212,175,55,0.15);padding:64p
 
     <div class="footer-bottom">
       <div class="footer-badges">🌿 Carbon Neutral 2028 | OmniaGuard Protected | BENO-X Framework | Francisco Holdings Inc.</div>
-      <div class="footer-copy">© 2026 PrimeDox AI. A Francisco Holdings Inc. Company. | 41 Companies. 392 Projected. One Brain. Zero Limits. | NOT LEGAL REPRESENTATION — EDUCATION ONLY</div>
+      <div class="footer-copy">© 2026 PrimeDox AI. A Francisco Holdings Inc. Company. | Humbled Daily. Never Finished. Always Learning. | NOT LEGAL REPRESENTATION — EDUCATION ONLY</div>
     </div>
   </div>
 </footer>
@@ -1440,6 +1478,66 @@ footer{background:#050505;border-top:1px solid rgba(212,175,55,0.15);padding:64p
 
 <script>
 // ═══════════════════════════════════
+// ═══════════════════════════════════
+// WISDOM SYSTEM — DAILY HUMILITY PROTOCOL
+// ═══════════════════════════════════
+const wisdomQuotes = [
+  '"Allow yourself to be humbled daily with new ideas that challenge any or everything that you currently think. That\'s wisdom."',
+  '"The moment you think you know everything, you stop learning. Stay empty. Stay hungry. The empire rewards growth."',
+  '"Every challenge is a gift. Every mistake is a teacher. Every update is proof the system is alive."',
+  '"PrimeDox does not defend old ideas. It finds better ones and builds them faster."',
+  '"No ego. No politics. Just: tell me more. Show me why I\'m wrong. Let\'s build something better."',
+  '"The empire was not built on certainty. It was built on the willingness to be wrong and keep going anyway."',
+  '"14 heroes. 41 companies. One shared principle: nothing is sacred except the truth."'
+];
+let wisdomScore = 0;
+let quoteIndex = 0;
+let lastChallengeTime = Date.now();
+
+function challengePrimeDox() {
+  wisdomScore++;
+  lastChallengeTime = Date.now();
+  const scoreEl = document.getElementById('wisdomScore');
+  const quoteEl = document.getElementById('wisdomQuote');
+  const statusEl = document.getElementById('wisdomStatus');
+  const subEl = document.getElementById('wisdomSubStatus');
+
+  scoreEl.textContent = wisdomScore;
+  scoreEl.classList.add('updated');
+  quoteIndex = (quoteIndex + 1) % wisdomQuotes.length;
+  quoteEl.classList.add('challenged');
+  quoteEl.textContent = wisdomQuotes[quoteIndex];
+  statusEl.textContent = `Challenge #${wisdomScore} accepted. PrimeDox updated. Thank you.`;
+  subEl.textContent = 'CHALLENGED — Processing new perspective';
+  document.getElementById('wisdomWidget').classList.remove('wisdom-stagnant');
+
+  setTimeout(() => {
+    scoreEl.classList.remove('updated');
+    quoteEl.classList.remove('challenged');
+    subEl.textContent = 'ACTIVE — Scanning for new ideas';
+  }, 2500);
+}
+
+// Stagnation detection — if no challenge in 60s, flag it
+setInterval(() => {
+  const elapsed = (Date.now() - lastChallengeTime) / 1000;
+  if (elapsed > 60) {
+    const statusEl = document.getElementById('wisdomStatus');
+    const widget = document.getElementById('wisdomWidget');
+    statusEl.textContent = 'Stagnation detected. No challenge received. Seek new ideas.';
+    widget.classList.add('wisdom-stagnant');
+  }
+}, 15000);
+
+// Auto quote rotation every 10s
+setInterval(() => {
+  const quoteEl = document.getElementById('wisdomQuote');
+  if (!quoteEl.classList.contains('challenged')) {
+    quoteIndex = (quoteIndex + 1) % wisdomQuotes.length;
+    quoteEl.textContent = wisdomQuotes[quoteIndex];
+  }
+}, 10000);
+
 // PARTICLE CANVAS
 // ═══════════════════════════════════
 (function(){
