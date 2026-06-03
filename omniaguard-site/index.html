@@ -143,6 +143,19 @@ nav.scrolled{box-shadow:0 4px 30px rgba(0,212,255,0.08);}
 .swarm-wrap{max-width:900px;margin:0 auto;text-align:center;}
 #swarm-canvas{display:block;margin:0 auto;border-radius:16px;border:1px solid var(--border);background:rgba(10,10,20,0.8);}
 
+/* ===== BILLING TOGGLE ===== */
+.billing-toggle-wrap{display:flex;align-items:center;justify-content:center;gap:16px;margin:0 auto 36px;max-width:400px;}
+.billing-label{font-size:15px;font-weight:600;color:var(--gray);transition:color .2s;}
+.billing-label.active{color:var(--white);}
+.billing-switch{position:relative;width:54px;height:28px;flex-shrink:0;}
+.billing-switch input{opacity:0;width:0;height:0;position:absolute;}
+.billing-slider{position:absolute;inset:0;background:var(--gray2);border-radius:28px;cursor:pointer;border:1px solid var(--border);transition:background .3s;}
+.billing-slider::before{content:'';position:absolute;left:4px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:var(--gray);border-radius:50%;transition:transform .3s,background .3s;}
+.billing-switch input:checked + .billing-slider{background:rgba(0,212,255,0.15);border-color:var(--cyan);}
+.billing-switch input:checked + .billing-slider::before{transform:translate(26px,-50%);background:var(--cyan);box-shadow:0 0 10px rgba(0,212,255,0.5);}
+.billing-annual-badge{background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.4);color:var(--gold);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;}
+.save-badge{display:inline-block;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:var(--gold);font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;margin-bottom:10px;letter-spacing:.3px;}
+
 /* ===== PRICING ===== */
 #pricing{padding:80px 0;background:var(--bg2);}
 .pricing-calc-wrap{background:var(--bg3);border:1px solid var(--border-gold);border-radius:16px;padding:32px;max-width:720px;margin:0 auto 48px;text-align:center;}
@@ -526,6 +539,17 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
       <p>From startup deployments to Fortune 500 infrastructure — OmniaGuard scales with you.</p>
     </div>
 
+    <!-- BILLING TOGGLE -->
+    <div class="billing-toggle-wrap fade-in">
+      <span class="billing-label active" id="billing-label-monthly">Monthly</span>
+      <label class="billing-switch" aria-label="Toggle annual billing">
+        <input type="checkbox" id="billing-toggle">
+        <span class="billing-slider"></span>
+      </label>
+      <span class="billing-label" id="billing-label-annual">Annual</span>
+      <span class="billing-annual-badge">2 Months Free</span>
+    </div>
+
     <!-- PRICING CALCULATOR -->
     <div class="pricing-calc-wrap fade-in">
       <h3>Agent Count Estimator</h3>
@@ -545,8 +569,9 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
     <div class="pricing-grid">
       <!-- Sentinel -->
       <div class="pricing-card fade-in" data-tilt>
+        <div class="save-badge" id="save-sentinel" style="display:none;">Save $988</div>
         <div class="tier-name">Sentinel</div>
-        <div class="tier-price">$499<span>/mo</span></div>
+        <div class="tier-price" id="price-sentinel">$499<span>/mo</span></div>
         <p class="tier-desc">Enterprise AI security for individuals, families, and small shops. Covers up to 5 devices.</p>
         <ul class="tier-features">
           <li data-tip="Phones, tablets, laptops — every device in your household or micro-business.">1–5 devices protected</li>
@@ -556,12 +581,13 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
           <li data-tip="Cloud-hosted dashboard with threat map, logs, and live device status.">OmniaGuard dashboard</li>
         </ul>
         <div class="jobs-badge">🏠 Individuals &amp; families</div>
-        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SENTINEL" class="btn-tier">Get Sentinel &nbsp;→</a>
+        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SENTINEL" class="btn-tier" id="cta-sentinel">🛡️ DEPLOY SHIELD →</a>
       </div>
       <!-- Guardian -->
       <div class="pricing-card fade-in" data-tilt>
+        <div class="save-badge" id="save-guardian" style="display:none;">Save $4,998</div>
         <div class="tier-name">Guardian</div>
-        <div class="tier-price">$2,499<span>/mo</span></div>
+        <div class="tier-price" id="price-guardian">$2,499<span>/mo</span></div>
         <p class="tier-desc">AI security for small businesses and startups deploying their first agent swarm.</p>
         <ul class="tier-features">
           <li data-tip="Covers every AI agent in a lean startup deployment.">5–20 agents protected</li>
@@ -572,12 +598,14 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
           <li data-tip="Contractually guaranteed — breach triggers immediate remediation at no cost.">Zero-breach guarantee</li>
         </ul>
         <div class="jobs-badge">🚀 Small businesses &amp; startups</div>
-        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_GUARDIAN" class="btn-tier">Get Guardian &nbsp;→</a>
+        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_GUARDIAN" class="btn-tier" id="cta-guardian">🛡️ DEPLOY SHIELD →</a>
       </div>
       <!-- Warden -->
-      <div class="pricing-card fade-in" data-tilt>
+      <div class="pricing-card featured fade-in" data-tilt>
+        <div class="pop-badge">★ RECOMMENDED</div>
+        <div class="save-badge" id="save-warden" style="display:none;">Save $10,000</div>
         <div class="tier-name">Warden</div>
-        <div class="tier-price">$5,000<span>/mo</span></div>
+        <div class="tier-price" id="price-warden">$5,000<span>/mo</span></div>
         <p class="tier-desc">Mid-market AI security for growing companies scaling their agent infrastructure.</p>
         <ul class="tier-features">
           <li data-tip="Ideal for companies expanding AI beyond their core product team.">20–50 agents protected</li>
@@ -588,7 +616,7 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
           <li data-tip="Contractual guarantee backed by $2M liability coverage per incident.">$2M breach liability coverage</li>
         </ul>
         <div class="jobs-badge">📈 Growing companies</div>
-        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_WARDEN" class="btn-tier">Get Warden &nbsp;→</a>
+        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_WARDEN" class="btn-tier btn-tier-gold" id="cta-warden">⚔️ DEPLOY SHIELD →</a>
       </div>
     </div>
 
@@ -596,8 +624,9 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
     <div class="pricing-grid" style="margin-top:0">
       <!-- Protector -->
       <div class="pricing-card fade-in" data-tilt>
+        <div class="save-badge" id="save-protector" style="display:none;">Save $20,000</div>
         <div class="tier-name">Protector</div>
-        <div class="tier-price">$10,000<span>/mo</span></div>
+        <div class="tier-price" id="price-protector">$10,000<span>/mo</span></div>
         <p class="tier-desc">Enterprise security for large organizations and regional corporations with complex AI deployments.</p>
         <ul class="tier-features">
           <li data-tip="Full enterprise AI fleet — no per-agent overage fees.">50–100 agents protected</li>
@@ -608,12 +637,13 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
           <li data-tip="Contractual guarantee backed by $5M liability coverage per incident.">$5M breach liability coverage</li>
         </ul>
         <div class="jobs-badge">🏢 Large enterprises</div>
-        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_PROTECTOR" class="btn-tier">Get Protector &nbsp;→</a>
+        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_PROTECTOR" class="btn-tier" id="cta-protector">⚔️ DEPLOY SHIELD →</a>
       </div>
       <!-- Archon -->
       <div class="pricing-card fade-in" data-tilt>
+        <div class="save-badge" id="save-archon" style="display:none;">Save $30,000</div>
         <div class="tier-name">Archon</div>
-        <div class="tier-price">$15,000<span>/mo</span></div>
+        <div class="tier-price" id="price-archon">$15,000<span>/mo</span></div>
         <p class="tier-desc">National enterprise and critical infrastructure. ITAR-ready. The choice of regulated industries at scale.</p>
         <ul class="tier-features">
           <li data-tip="Protect every AI system across national operations.">100–250 agents protected</li>
@@ -624,13 +654,14 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
           <li data-tip="5-minute guaranteed incident response, contractually backed.">5-min incident response SLA</li>
         </ul>
         <div class="jobs-badge">🏛️ National enterprises &amp; critical infra</div>
-        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_ARCHON" class="btn-tier">Get Archon &nbsp;→</a>
+        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_ARCHON" class="btn-tier" id="cta-archon">📋 REQUEST BRIEFING →</a>
       </div>
       <!-- Sovereign (featured) -->
       <div class="pricing-card featured fade-in" data-tilt>
         <div class="pop-badge">Fortune 500</div>
+        <div class="save-badge" id="save-sovereign" style="display:none;">Save $50,000</div>
         <div class="tier-name">Sovereign</div>
-        <div class="tier-price">$25,000<span>/mo</span></div>
+        <div class="tier-price" id="price-sovereign">$25,000<span>/mo</span></div>
         <p class="tier-desc">Global Fortune 500 and government-grade AI security. White-label option available. The pinnacle of AI defense.</p>
         <ul class="tier-features">
           <li data-tip="Protect every AI system across global operations.">250–500 agents protected</li>
@@ -641,7 +672,7 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
           <li data-tip="2-minute guaranteed incident response backed by $10M liability coverage.">2-min SLA · $10M coverage</li>
         </ul>
         <div class="jobs-badge">🌍 Fortune 500 &amp; governments</div>
-        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SOVEREIGN" class="btn-tier btn-tier-gold">Activate Sovereign &nbsp;→</a>
+        <a href="PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SOVEREIGN" class="btn-tier btn-tier-gold" id="cta-sovereign">📋 REQUEST BRIEFING →</a>
       </div>
     </div>
 
@@ -652,7 +683,7 @@ footer{background:var(--bg3);border-top:1px solid var(--border);padding:48px 0 2
         <div class="tier-price" style="font-size:28px;margin:8px 0">Contact Us</div>
         <p class="tier-desc" style="margin-bottom:20px">Military, intelligence agencies, and ultra-critical infrastructure. Unlimited agents. Custom architecture. On-premise available. Classified-grade encryption. 24/7 direct hotline.</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <a href="tel:7053078080" class="btn-tier" style="width:auto;padding:12px 24px;border-color:rgba(255,68,68,0.5);color:#ff6b6b">📞 705-307-8080</a>
+          <a href="tel:7053078080" class="btn-tier" style="width:auto;padding:12px 24px;border-color:rgba(255,68,68,0.5);color:#ff6b6b">📞 CONTACT OPS →</a>
           <a href="mailto:derek@franciscoholdings.com" class="btn-tier" style="width:auto;padding:12px 24px;border-color:rgba(255,68,68,0.5);color:#ff6b6b">✉️ derek@franciscoholdings.com</a>
         </div>
       </div>
@@ -1600,6 +1631,111 @@ setTimeout(function(){
 setInterval(function(){
   showToast(toastMessages[toastIdx++ % toastMessages.length]);
 }, 45000);
+
+/* ── BILLING TOGGLE ── */
+var billingToggle = document.getElementById('billing-toggle');
+var billingLabelMonthly = document.getElementById('billing-label-monthly');
+var billingLabelAnnual = document.getElementById('billing-label-annual');
+
+var monthlyData = {
+  sentinel:  { price: '$499',    suffix: '/mo', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SENTINEL' },
+  guardian:  { price: '$2,499',  suffix: '/mo', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_GUARDIAN' },
+  warden:    { price: '$5,000',  suffix: '/mo', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_WARDEN' },
+  protector: { price: '$10,000', suffix: '/mo', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_PROTECTOR' },
+  archon:    { price: '$15,000', suffix: '/mo', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_ARCHON' },
+  sovereign: { price: '$25,000', suffix: '/mo', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SOVEREIGN' }
+};
+
+var annualData = {
+  sentinel:  { price: '$4,990',   suffix: '/yr', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SENTINEL_A' },
+  guardian:  { price: '$24,990',  suffix: '/yr', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_GUARDIAN_A' },
+  warden:    { price: '$50,000',  suffix: '/yr', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_WARDEN_A' },
+  protector: { price: '$100,000', suffix: '/yr', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_PROTECTOR_A' },
+  archon:    { price: '$150,000', suffix: '/yr', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_ARCHON_A' },
+  sovereign: { price: '$250,000', suffix: '/yr', link: 'PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SOVEREIGN_A' }
+};
+
+var calcTierAnnualPrices = [
+  {max:5,        price:'$4,990',   label:'Sentinel — 1 to 5 devices'},
+  {max:20,       price:'$24,990',  label:'Guardian — 5 to 20 agents'},
+  {max:50,       price:'$50,000',  label:'Warden — 20 to 50 agents'},
+  {max:100,      price:'$100,000', label:'Protector — 50 to 100 agents'},
+  {max:250,      price:'$150,000', label:'Archon — 100 to 250 agents'},
+  {max:500,      price:'$250,000', label:'Sovereign — 250 to 500 agents'},
+  {max:Infinity, price:'Contact Us', label:'Custom — Unlimited (Military / Intelligence)'}
+];
+
+function applyBilling(isAnnual){
+  var tiers = ['sentinel','guardian','warden','protector','archon','sovereign'];
+  var dataset = isAnnual ? annualData : monthlyData;
+
+  tiers.forEach(function(key){
+    var priceEl = document.getElementById('price-' + key);
+    var saveEl  = document.getElementById('save-' + key);
+    var ctaEl   = document.getElementById('cta-' + key);
+    if(priceEl){
+      priceEl.innerHTML = dataset[key].price + '<span>' + dataset[key].suffix + '</span>';
+    }
+    if(saveEl){
+      saveEl.style.display = isAnnual ? 'inline-block' : 'none';
+    }
+    if(ctaEl){
+      ctaEl.href = dataset[key].link;
+    }
+  });
+
+  // Update billing labels
+  if(billingLabelMonthly){
+    billingLabelMonthly.classList.toggle('active', !isAnnual);
+  }
+  if(billingLabelAnnual){
+    billingLabelAnnual.classList.toggle('active', isAnnual);
+  }
+
+  // Update pricing calculator suffix
+  if(calcPriceEl){
+    var suffix = isAnnual ? '/yr' : '/mo';
+    var calcTiers = isAnnual ? calcTierAnnualPrices : pricingTiers;
+    var val = sliderEl ? parseInt(sliderEl.value) : 10;
+    var tier = calcTiers[calcTiers.length - 1];
+    for(var i = 0; i < calcTiers.length; i++){
+      if(val <= calcTiers[i].max){ tier = calcTiers[i]; break; }
+    }
+    if(tier.price === 'Contact Us'){
+      calcPriceEl.innerHTML = 'Contact Us';
+    } else {
+      calcPriceEl.innerHTML = tier.price + '<span>' + suffix + '</span>';
+    }
+    if(calcTierEl) calcTierEl.textContent = tier.label;
+  }
+}
+
+if(billingToggle){
+  billingToggle.addEventListener('change', function(){
+    applyBilling(this.checked);
+  });
+}
+
+// Patch the slider updateCalc to respect billing state
+var _origUpdateCalc = updateCalc;
+updateCalc = function(){
+  if(billingToggle && billingToggle.checked){
+    var val = parseInt(sliderEl.value);
+    sliderValEl.textContent = val;
+    var tier = calcTierAnnualPrices[calcTierAnnualPrices.length - 1];
+    for(var i = 0; i < calcTierAnnualPrices.length; i++){
+      if(val <= calcTierAnnualPrices[i].max){ tier = calcTierAnnualPrices[i]; break; }
+    }
+    if(tier.price === 'Contact Us'){
+      calcPriceEl.innerHTML = 'Contact Us';
+    } else {
+      calcPriceEl.innerHTML = tier.price + '<span>/yr</span>';
+    }
+    calcTierEl.textContent = tier.label;
+  } else {
+    _origUpdateCalc();
+  }
+};
 
 /* ── SMOOTH SCROLL NAV LINKS ── */
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
