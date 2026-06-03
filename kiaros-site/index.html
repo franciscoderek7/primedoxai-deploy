@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kiaros — AI precision, exactly when you need it. Document intelligence, autonomous workflows, and AI-powered decision support for professionals and enterprises.">
+<title>Kiaros — AI Intelligence at the Right Moment</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:       #07080f;
+  --bg-card:  #0e1018;
+  --bg-card2: #151825;
+  --border:   rgba(255,255,255,.07);
+  --border-hi:rgba(255,255,255,.14);
+  --indigo:   #6366f1;
+  --indigo-hi:#818cf8;
+  --purple:   #a855f7;
+  --gold:     #f59e0b;
+  --white:    #f1f5f9;
+  --muted:    #8892a4;
+  --red:      #ef4444;
+  --green:    #10b981;
+  --font:     system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --r:        10px;
+  --r-lg:     16px;
+  --r-xl:     24px;
+  --sh-indigo:0 0 0 1px rgba(99,102,241,.4),0 8px 32px rgba(99,102,241,.25);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--white);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none}
+
+/* ── Ambient glow ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 10%,rgba(99,102,241,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 60% at 85% 80%,rgba(168,85,247,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 50%,rgba(99,102,241,.03) 0%,transparent 70%);
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(7,8,15,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 clamp(16px,4vw,56px);
+  display:flex;align-items:center;gap:24px;height:64px;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;margin-right:auto;
+  font-size:1.2rem;font-weight:900;letter-spacing:-.5px;
+}
+.logo-mark{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--indigo),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:900;color:#fff;flex-shrink:0;
+}
+.nav-word{color:var(--white)}
+.nav-word span{color:var(--indigo-hi)}
+nav a.nav-link{font-size:.85rem;color:var(--muted);transition:color .2s;white-space:nowrap}
+nav a.nav-link:hover{color:var(--white)}
+.nav-cta{
+  background:linear-gradient(135deg,var(--indigo),var(--purple));
+  color:#fff;padding:8px 20px;border-radius:8px;
+  font-size:.85rem;font-weight:700;transition:opacity .2s,transform .15s;
+}
+.nav-cta:hover{opacity:.9;transform:translateY(-1px)}
+.nav-mob{display:none;background:none;color:var(--white);font-size:1.3rem;padding:4px}
+@media(max-width:800px){
+  .nav-links{display:none;position:fixed;top:64px;left:0;right:0;flex-direction:column;
+    background:rgba(7,8,15,.98);border-bottom:1px solid var(--border);padding:20px 24px;gap:16px}
+  .nav-links.open{display:flex}
+  .nav-mob{display:block}
+}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  padding:clamp(80px,12vw,140px) clamp(16px,4vw,56px) clamp(60px,8vw,100px);
+  text-align:center;max-width:1000px;margin:0 auto;
+}
+.hero-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);
+  color:var(--indigo-hi);border-radius:100px;padding:6px 18px;
+  font-size:.8rem;font-weight:600;letter-spacing:.5px;margin-bottom:32px;
+}
+.hero-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.hero h1{
+  font-size:clamp(2.5rem,7vw,5.2rem);font-weight:900;
+  line-height:1.07;letter-spacing:-2px;margin-bottom:24px;
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--indigo-hi) 0%,var(--purple) 40%,var(--white) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero h1 .plain{color:var(--white)}
+.hero-sub{
+  font-size:clamp(1.05rem,2.5vw,1.25rem);color:var(--muted);
+  max-width:620px;margin:0 auto 44px;line-height:1.7;
+}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+.btn-hero{
+  background:linear-gradient(135deg,var(--indigo),var(--purple));
+  color:#fff;padding:15px 32px;border-radius:10px;
+  font-size:1rem;font-weight:700;
+  box-shadow:0 4px 24px rgba(99,102,241,.4);transition:all .2s;
+}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(99,102,241,.55)}
+.btn-ghost{
+  border:1.5px solid var(--border-hi);color:var(--white);
+  padding:14px 30px;border-radius:10px;font-size:1rem;font-weight:600;transition:all .2s;
+}
+.btn-ghost:hover{border-color:var(--indigo);color:var(--indigo-hi)}
+.hero-proof{
+  display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;
+  padding-top:36px;border-top:1px solid var(--border);
+}
+.hero-proof-item{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+.hero-proof-item .num{font-size:1.3rem;font-weight:800;color:var(--indigo-hi)}
+
+/* ── UTILS ── */
+.section{padding:clamp(72px,10vw,120px) clamp(16px,4vw,56px);position:relative;z-index:1}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-header{margin-bottom:56px}
+.section-header.center{text-align:center}
+.section-label{display:inline-block;font-size:.73rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--indigo-hi);margin-bottom:12px}
+.section-title{font-size:clamp(1.7rem,3.8vw,2.6rem);font-weight:800;letter-spacing:-.5px;margin-bottom:14px}
+.section-sub{color:var(--muted);font-size:1.02rem;max-width:580px;line-height:1.7}
+.section-sub.center{margin:0 auto}
+.center{text-align:center}
+.text-indigo{color:var(--indigo-hi)}
+.text-gold{color:var(--gold)}
+.text-muted{color:var(--muted)}
+.mt-3{margin-top:12px}
+.mt-5{margin-top:20px}
+.mt-8{margin-top:32px}
+
+/* ── FEATURES GRID ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.feature-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:28px;
+  transition:border-color .25s,transform .2s;
+}
+.feature-card:hover{border-color:rgba(99,102,241,.35);transform:translateY(-3px)}
+.feature-icon{
+  width:44px;height:44px;border-radius:10px;
+  background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;margin-bottom:16px;
+}
+.feature-card h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.feature-card p{font-size:.88rem;color:var(--muted);line-height:1.6}
+.feature-card .f-tag{
+  display:inline-block;margin-top:14px;
+  font-size:.73rem;font-weight:700;color:var(--indigo-hi);
+  background:rgba(99,102,241,.1);border-radius:4px;padding:3px 10px;
+}
+
+/* ── HOW IT WORKS ── */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px;counter-reset:step}
+.how-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:28px;
+  position:relative;overflow:hidden;counter-increment:step;
+}
+.how-card::before{
+  content:counter(step);
+  position:absolute;top:-12px;right:16px;
+  font-size:5rem;font-weight:900;line-height:1;
+  color:rgba(99,102,241,.07);
+}
+.how-step{font-size:.73rem;font-weight:700;color:var(--indigo-hi);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.how-card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px}
+.how-card p{font-size:.88rem;color:var(--muted);line-height:1.6}
+
+/* ── PRICING ── */
+.pricing-section{background:linear-gradient(180deg,var(--bg) 0%,#060710 100%)}
+.billing-row{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:44px}
+.billing-row label{font-size:.9rem;color:var(--muted);cursor:pointer;user-select:none}
+.toggle-pill{position:relative;width:52px;height:28px;background:#1a1f2e;border-radius:100px;cursor:pointer;transition:background .2s}
+.toggle-pill.on{background:var(--indigo)}
+.toggle-knob{position:absolute;top:4px;left:4px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.toggle-pill.on .toggle-knob{transform:translateX(24px)}
+.save-chip{background:var(--gold);color:#000;font-size:.7rem;font-weight:800;border-radius:4px;padding:3px 9px;letter-spacing:.5px}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;align-items:start}
+.p-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:30px;
+  transition:transform .2s;position:relative;overflow:hidden;
+}
+.p-card:hover{transform:translateY(-4px)}
+.p-card.featured{
+  background:linear-gradient(160deg,#0f1126,#0a0d1a);
+  border-color:rgba(99,102,241,.5);
+  box-shadow:var(--sh-indigo);
+}
+.p-badge{
+  position:absolute;top:0;right:20px;
+  background:linear-gradient(135deg,var(--indigo),var(--purple));
+  color:#fff;font-size:.67rem;font-weight:800;letter-spacing:1px;
+  padding:5px 12px;border-radius:0 0 8px 8px;
+}
+.p-name{font-size:1rem;font-weight:800;margin-bottom:4px}
+.p-tagline{font-size:.82rem;color:var(--muted);margin-bottom:22px;line-height:1.4}
+.p-price{font-size:2.6rem;font-weight:900;letter-spacing:-1.5px;margin-bottom:4px}
+.p-card.featured .p-price{color:var(--indigo-hi)}
+.p-period{font-size:.88rem;color:var(--muted)}
+.p-savings{
+  display:inline-block;
+  background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);
+  color:var(--gold);font-size:.73rem;font-weight:700;
+  border-radius:4px;padding:3px 9px;margin:10px 0 20px;
+}
+.p-savings.hidden{display:none}
+.p-features{list-style:none;margin-bottom:26px}
+.p-features li{
+  font-size:.84rem;color:var(--muted);padding:7px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:9px;
+}
+.p-features li:last-child{border-bottom:none}
+.p-features li::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.p-features li.dim{opacity:.45}
+.p-features li.dim::before{content:"—";color:var(--muted)}
+.p-features li.star{color:var(--white);font-weight:600}
+.p-features li.star::before{content:"★";color:var(--indigo-hi)}
+.p-btn{
+  display:block;width:100%;padding:13px;border-radius:9px;
+  font-size:.92rem;font-weight:700;text-align:center;transition:all .2s;
+}
+.p-btn-default{background:transparent;border:1.5px solid var(--border-hi);color:var(--white)}
+.p-btn-default:hover{border-color:var(--indigo);color:var(--indigo-hi)}
+.p-btn-featured{background:linear-gradient(135deg,var(--indigo),var(--purple));color:#fff;border:none}
+.p-btn-featured:hover{opacity:.9;transform:translateY(-1px)}
+.p-btn-gold{background:transparent;border:1.5px solid rgba(245,158,11,.5);color:var(--gold)}
+.p-btn-gold:hover{background:rgba(245,158,11,.08)}
+.p-btn-sov{background:linear-gradient(135deg,var(--gold),#d97706);color:#000;border:none}
+.p-btn-sov:hover{opacity:.9}
+.pricing-footer{text-align:center;margin-top:24px;font-size:.8rem;color:var(--muted)}
+.pricing-footer a{color:var(--indigo-hi);text-decoration:underline}
+
+/* ── COMPARE TABLE ── */
+.compare-wrap{overflow-x:auto}
+.compare-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.compare-table th{
+  padding:12px 16px;text-align:left;font-size:.73rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;color:var(--muted);
+  border-bottom:1px solid var(--border);
+}
+.compare-table th.feat-col{color:var(--white)}
+.compare-table td{padding:11px 16px;border-bottom:1px solid var(--border);color:var(--muted)}
+.compare-table td:first-child{color:var(--white);font-weight:500}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table .check{color:var(--green);font-weight:700}
+.compare-table .dash{color:#2a2f3a}
+.compare-table .partial{color:var(--gold);font-weight:600;font-size:.8rem}
+.compare-table tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ── TESTIMONIALS ── */
+.t-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.t-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:26px}
+.t-stars{color:var(--gold);font-size:.9rem;margin-bottom:12px;letter-spacing:2px}
+.t-text{font-size:.9rem;color:var(--muted);line-height:1.7;font-style:italic;margin-bottom:16px}
+.t-attr{font-size:.78rem;font-weight:700;color:var(--muted)}
+.t-attr .name{color:var(--white)}
+
+/* ── FAQ ── */
+.faq-wrap{max-width:760px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+.faq-q{font-size:.97rem;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-icon{width:26px;height:26px;flex-shrink:0;background:var(--bg-card2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--indigo-hi);transition:transform .25s}
+.faq-a{font-size:.88rem;color:var(--muted);line-height:1.7;padding-top:12px;display:none}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-item.open .faq-a{display:block}
+
+/* ── CTA BANNER ── */
+.cta-banner{
+  background:linear-gradient(135deg,rgba(99,102,241,.15) 0%,rgba(168,85,247,.1) 100%);
+  border:1px solid rgba(99,102,241,.25);border-radius:var(--r-xl);
+  padding:clamp(40px,6vw,72px);text-align:center;
+}
+.cta-banner h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;letter-spacing:-.5px;margin-bottom:14px}
+.cta-banner p{color:var(--muted);font-size:1.05rem;max-width:540px;margin:0 auto 32px;line-height:1.7}
+
+/* ── FOOTER ── */
+footer{background:#050610;border-top:1px solid var(--border);padding:48px clamp(16px,4vw,56px) 28px;position:relative;z-index:1}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:36px;max-width:1200px;margin:0 auto 40px}
+.footer-brand h4{font-size:1.05rem;font-weight:900;margin-bottom:8px}
+.footer-brand h4 span{color:var(--indigo-hi)}
+.footer-brand p{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:220px}
+.footer-col h5{font-size:.78rem;font-weight:700;color:var(--white);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.footer-col a{display:block;font-size:.83rem;color:var(--muted);margin-bottom:9px;transition:color .2s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{max-width:1200px;margin:0 auto;border-top:1px solid var(--border);padding-top:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.78rem;color:var(--muted)}
+.footer-bottom a{color:var(--indigo-hi)}
+
+@media(max-width:640px){
+  .pricing-grid,.features-grid,.how-grid{grid-template-columns:1fr}
+  .hero-proof{gap:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="logo-mark">K</div>
+    <span class="nav-word">Kiaros<span>.dev</span></span>
+  </div>
+  <button class="nav-mob" onclick="document.getElementById('navlinks').classList.toggle('open')" aria-label="Menu">☰</button>
+  <div class="nav-links" id="navlinks">
+    <a href="#features" class="nav-link">Features</a>
+    <a href="#how" class="nav-link">How It Works</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="mailto:franciscoderek7@gmail.com" class="nav-link">Contact</a>
+    <a href="#pricing" class="nav-cta">Start Free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-chip"><div class="dot"></div> Now live — Kiaros Intelligence Platform</div>
+  <h1>
+    <span class="grad">AI precision.</span><br>
+    <span class="plain">Exactly when you need it.</span>
+  </h1>
+  <p class="hero-sub">
+    Kiaros delivers AI-powered document intelligence, autonomous workflows,
+    and decision support — tuned to the exact moment your business needs it most.
+  </p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-hero">Start Free — No Card Required</a>
+    <a href="#how" class="btn-ghost">See How It Works →</a>
+  </div>
+  <div class="hero-proof">
+    <div class="hero-proof-item"><span class="num">10x</span> faster document processing</div>
+    <div class="hero-proof-item"><span class="num">99.9%</span> uptime SLA</div>
+    <div class="hero-proof-item"><span class="num">SOC 2</span> compliant</div>
+    <div class="hero-proof-item"><span class="num">Canada-first</span> data residency</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-inner">
+    <div class="section-header center">
+      <div class="section-label">Capabilities</div>
+      <h2 class="section-title">Everything You Need. Nothing You Don't.</h2>
+      <p class="section-sub center">Kiaros is purpose-built for professionals who need AI that acts at exactly the right moment — not AI that floods you with noise.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Instant Document Intelligence</h3>
+        <p>Upload any document — contracts, reports, research, filings. Kiaros extracts, summarizes, and cross-references in seconds. No manual review required.</p>
+        <span class="f-tag">All Plans</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Autonomous Workflows</h3>
+        <p>Define once. Kiaros runs it forever. Trigger document processing, alerts, summaries, and reports automatically when conditions are met.</p>
+        <span class="f-tag">Professional+</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Deep Research Engine</h3>
+        <p>Multi-source research with adversarial verification. Kiaros doesn't just find answers — it checks them against competing sources and flags uncertainty.</p>
+        <span class="f-tag">Professional+</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Enterprise Security</h3>
+        <p>End-to-end encryption, Canada-first data residency, SOC 2 Type II compliance, role-based access control, and full audit logs. Security is not an add-on.</p>
+        <span class="f-tag">Enterprise+</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>API & Integrations</h3>
+        <p>REST API with SDKs for Python, JavaScript, and Go. Native integrations with Slack, Notion, Google Workspace, Microsoft 365, and Zapier.</p>
+        <span class="f-tag">Enterprise+</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Decision Intelligence</h3>
+        <p>Kiaros doesn't just surface data — it builds structured decision briefs with supporting evidence, confidence scores, and recommended next actions.</p>
+        <span class="f-tag">Sovereign</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how" style="background:rgba(99,102,241,.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section-inner">
+    <div class="section-header center">
+      <div class="section-label">Process</div>
+      <h2 class="section-title">Up and Running in 3 Minutes</h2>
+      <p class="section-sub center">No setup calls. No onboarding decks. Connect, configure, and get your first AI output before your next meeting.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-step">Step 01</div>
+        <h3>Connect your documents</h3>
+        <p>Upload files, connect cloud storage (Drive, Dropbox, SharePoint), or pipe in via API. Kiaros ingests PDFs, Word, Excel, emails, and raw text.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">Step 02</div>
+        <h3>Define what matters</h3>
+        <p>Tell Kiaros what you're looking for — in plain language. Extract clauses, find risks, summarize meetings, build reports. Natural language, no coding.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">Step 03</div>
+        <h3>Kiaros does the work</h3>
+        <p>Get structured outputs: summaries, extractions, comparisons, briefs. Delivered to your dashboard, Slack, email, or API endpoint. Automatically.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-step">Step 04</div>
+        <h3>Automate the rest</h3>
+        <p>Set triggers. Schedule reports. Build approval flows. Kiaros learns your workflow and gets smarter every cycle without any re-training from you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-header center">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-sub center">Start free. Scale to sovereign. Every plan includes Canada-first data residency and SOC 2 compliance.</p>
+    </div>
+
+    <div class="billing-row">
+      <label onclick="toggleBilling()">Monthly</label>
+      <div class="toggle-pill" id="kiaros-toggle" onclick="toggleBilling()"><div class="toggle-knob"></div></div>
+      <label onclick="toggleBilling()">Annual</label>
+      <span class="save-chip">SAVE 2 MONTHS</span>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- SPARK -->
+      <div class="p-card">
+        <div class="p-name">Spark</div>
+        <div class="p-tagline">Individual professionals — start immediately</div>
+        <div class="p-price" id="price-spark">$0</div>
+        <div class="p-period" id="period-spark">Free forever</div>
+        <div class="p-savings hidden" id="savings-spark">—</div>
+        <ul class="p-features">
+          <li class="star">50 document pages/month</li>
+          <li class="star">5 AI queries/day</li>
+          <li class="star">Basic document extraction</li>
+          <li>PDF, Word, text upload</li>
+          <li>7-day document history</li>
+          <li>Community support</li>
+          <li class="dim">Autonomous workflows</li>
+          <li class="dim">API access</li>
+          <li class="dim">Priority processing</li>
+        </ul>
+        <a id="btn-spark" href="PASTE_STRIPE_LINK_HERE_KIAROS_SPARK" class="p-btn p-btn-default">Start Free →</a>
+      </div>
+
+      <!-- PROFESSIONAL — FEATURED -->
+      <div class="p-card featured">
+        <div class="p-badge">MOST POPULAR</div>
+        <div class="p-name text-indigo">Professional</div>
+        <div class="p-tagline">Teams that move fast — full AI capability</div>
+        <div class="p-price" id="price-professional">$79</div>
+        <div class="p-period" id="period-professional">/month per seat</div>
+        <div class="p-savings hidden" id="savings-professional">Save $158/yr per seat</div>
+        <ul class="p-features">
+          <li class="star">✦ Everything in Spark</li>
+          <li class="star">Unlimited document pages</li>
+          <li class="star">Unlimited AI queries</li>
+          <li class="star">Autonomous workflow builder</li>
+          <li class="star">Deep research engine</li>
+          <li class="star">REST API access (10K calls/mo)</li>
+          <li class="star">Slack + Notion + Google integrations</li>
+          <li>30-day document history</li>
+          <li>Priority processing</li>
+          <li>Email support (24h)</li>
+        </ul>
+        <a id="btn-professional" href="PASTE_STRIPE_LINK_HERE_KIAROS_PRO_M" class="p-btn p-btn-featured">Get Professional →</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="p-card" style="border-color:rgba(245,158,11,.25)">
+        <div class="p-name text-gold">Enterprise</div>
+        <div class="p-tagline">Organizations — security, compliance, control</div>
+        <div class="p-price text-gold" id="price-enterprise">$249</div>
+        <div class="p-period" id="period-enterprise">/month per seat</div>
+        <div class="p-savings hidden" id="savings-enterprise">Save $498/yr per seat</div>
+        <ul class="p-features">
+          <li class="star">✦ Everything in Professional</li>
+          <li class="star">SOC 2 Type II compliance docs</li>
+          <li class="star">Canada-first data residency guaranteed</li>
+          <li class="star">SSO / SAML / SCIM provisioning</li>
+          <li class="star">Role-based access control</li>
+          <li class="star">Full audit logs + compliance exports</li>
+          <li class="star">Unlimited API calls</li>
+          <li>99.9% SLA with credits</li>
+          <li>Dedicated Slack support channel</li>
+          <li>Custom contract + invoicing</li>
+        </ul>
+        <a id="btn-enterprise" href="PASTE_STRIPE_LINK_HERE_KIAROS_ENT_M" class="p-btn p-btn-gold">Get Enterprise →</a>
+      </div>
+
+      <!-- SOVEREIGN -->
+      <div class="p-card" style="border-color:rgba(245,158,11,.4)">
+        <div class="p-name" style="background:linear-gradient(90deg,#f59e0b,#d97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Sovereign</div>
+        <div class="p-tagline">Unlimited everything — white-glove service</div>
+        <div class="p-price" style="background:linear-gradient(90deg,#f59e0b,#d97706);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" id="price-sovereign">$999</div>
+        <div class="p-period" id="period-sovereign">/month flat rate</div>
+        <div class="p-savings hidden" id="savings-sovereign">Save $1,998/yr</div>
+        <ul class="p-features">
+          <li class="star">✦ Everything in Enterprise</li>
+          <li class="star">Unlimited seats</li>
+          <li class="star">Custom AI model fine-tuning</li>
+          <li class="star">White-label deployment option</li>
+          <li class="star">Custom integrations built for you</li>
+          <li class="star">Monthly executive briefings</li>
+          <li class="star">Dedicated customer success manager</li>
+          <li>On-premise deployment option</li>
+          <li>24/7 priority support line</li>
+          <li>First access to new Kiaros features</li>
+        </ul>
+        <a id="btn-sovereign" href="PASTE_STRIPE_LINK_HERE_KIAROS_SOV_M" class="p-btn p-btn-sov">Get Sovereign →</a>
+      </div>
+    </div>
+
+    <div class="pricing-footer">
+      All prices in CAD · Cancel anytime · Interac e-Transfer: <span style="color:var(--indigo-hi)">franciscoderek7@gmail.com</span> · <a href="mailto:franciscoderek7@gmail.com">Volume pricing?</a>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE TABLE -->
+<section class="section" style="padding-top:0">
+  <div class="section-inner">
+    <div class="section-header center">
+      <div class="section-label">Compare Plans</div>
+      <h2 class="section-title">What's Included</h2>
+    </div>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="feat-col">Feature</th>
+            <th>Spark</th>
+            <th style="color:var(--indigo-hi)">Professional</th>
+            <th style="color:var(--gold)">Enterprise</th>
+            <th style="color:var(--gold)">Sovereign</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Document pages/month</td><td>50</td><td style="color:var(--white)">Unlimited</td><td style="color:var(--white)">Unlimited</td><td style="color:var(--white)">Unlimited</td></tr>
+          <tr><td>AI queries/day</td><td>5</td><td style="color:var(--white)">Unlimited</td><td style="color:var(--white)">Unlimited</td><td style="color:var(--white)">Unlimited</td></tr>
+          <tr><td>Autonomous workflows</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>REST API access</td><td class="dash">—</td><td class="partial">10K calls/mo</td><td class="check">Unlimited</td><td class="check">Unlimited</td></tr>
+          <tr><td>Deep research engine</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>SSO / SAML</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Audit logs</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Canada-first data residency</td><td class="check">✓</td><td class="check">✓</td><td class="check">Guaranteed</td><td class="check">Guaranteed</td></tr>
+          <tr><td>Custom model fine-tuning</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+          <tr><td>White-label deployment</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+          <tr><td>Support</td><td>Community</td><td>Email 24h</td><td>Dedicated Slack</td><td style="color:var(--white)">24/7 Priority</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section-inner">
+    <div class="section-header center">
+      <div class="section-label">Early Access</div>
+      <h2 class="section-title">What People Are Saying</h2>
+    </div>
+    <div class="t-grid">
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"Kiaros cut our contract review time from 3 hours to 12 minutes. The deep research engine surfaced a risk our legal team missed. We're not going back."</p>
+        <div class="t-attr"><span class="name">General Counsel</span> — Professional Plan, Toronto</div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The autonomous workflows are the killer feature. I defined my due diligence process once and Kiaros runs it on every new deal automatically. It's like having a full-time analyst."</p>
+        <div class="t-attr"><span class="name">Managing Director</span> — Enterprise Plan, Vancouver</div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"Canada-first data residency was non-negotiable for our compliance team. Kiaros was the only AI platform that could guarantee it. The Sovereign tier paid for itself in month one."</p>
+        <div class="t-attr"><span class="name">CTO</span> — Sovereign Plan, Ottawa</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-inner">
+    <div class="section-header center">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Common Questions</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="faq-item open">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is Kiaros? <div class="faq-icon">+</div></div>
+        <div class="faq-a">Kiaros is an AI intelligence platform built for professionals and enterprises. It processes documents, runs autonomous research workflows, and delivers structured decision support — at exactly the right moment. The name comes from the Greek concept of "kairos" — the perfect, opportune moment for decisive action.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Where is my data stored? <div class="faq-icon">+</div></div>
+        <div class="faq-a">All Kiaros data is stored in Canadian data centers by default. Enterprise and Sovereign plans include a contractual guarantee of Canada-first data residency. We do not use your documents to train AI models.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime? <div class="faq-icon">+</div></div>
+        <div class="faq-a">Yes. Monthly plans can be cancelled anytime with no penalty. Annual plans provide 2 months free (10 months billed) and can be cancelled before renewal. Your data is exportable at any time.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there a free trial for paid plans? <div class="faq-icon">+</div></div>
+        <div class="faq-a">The Spark plan is free forever and gives you a real feel for Kiaros. Paid plans include a 14-day money-back guarantee — no questions asked. You can also use Interac e-Transfer (franciscoderek7@gmail.com) if Stripe isn't preferred.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happened to PrimeDox? <div class="faq-icon">+</div></div>
+        <div class="faq-a">PrimeDox has rebranded to Kiaros. All existing PrimeDox users have been migrated automatically with no change to their plans, features, or pricing. Kiaros represents an expanded capability set and a stronger brand identity. Your account, data, and workflows are all preserved.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="section-inner">
+    <div class="cta-banner">
+      <h2>Ready for AI that works<br><span class="text-indigo">at the right moment?</span></h2>
+      <p>Start with Spark — free forever. Upgrade when you're ready. No credit card required.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a href="#pricing" class="btn-hero">Start Free on Spark →</a>
+        <a href="mailto:franciscoderek7@gmail.com" class="btn-ghost">Talk to Sales →</a>
+      </div>
+      <p class="mt-8 text-muted" style="font-size:.82rem">Questions? <a href="mailto:franciscoderek7@gmail.com" style="color:var(--indigo-hi)">franciscoderek7@gmail.com</a> · Interac e-Transfer accepted</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h4>Kiaros<span>.dev</span></h4>
+      <p>AI intelligence platform for professionals and enterprises who can't afford to act at the wrong moment.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Product</h5>
+      <a href="#features">Features</a>
+      <a href="#how">How It Works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#pricing">API Docs</a>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="../francisco-holdings-site/index.html">Francisco Holdings</a>
+      <a href="mailto:franciscoderek7@gmail.com">Contact</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h5>Empire</h5>
+      <a href="../omniaguard-site/index.html">OmniaGuard</a>
+      <a href="../cleantech-automation-site/index.html">CleanSwarm</a>
+      <a href="../ccldr-site/index.html">CCLDR.NET</a>
+      <a href="../tech-pet-cage-site/index.html">Tech Pet Cage</a>
+    </div>
+    <div class="footer-col">
+      <h5>Domains</h5>
+      <a href="https://kiaros.dev">kiaros.dev</a>
+      <a href="https://kiaros.app">kiaros.app</a>
+      <a href="https://kiaros.pro">kiaros.pro</a>
+      <a href="https://kiaros.ai">kiaros.ai</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Kiaros. A Francisco Holdings Inc. Company. · <span style="color:var(--indigo-hi)">Formerly PrimeDox</span></div>
+    <div>Operated by <a href="../tech-pet-cage-site/index.html">Tech Pet Cage</a> · <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></div>
+  </div>
+</footer>
+
+<script>
+var isAnnual=false;
+var plans={
+  spark:        {m:'$0',   a:'$0',    ms:'Free forever', as:'Free forever',
+                 ml:'PASTE_STRIPE_LINK_HERE_KIAROS_SPARK',      al:'PASTE_STRIPE_LINK_HERE_KIAROS_SPARK'},
+  professional: {m:'$79',  a:'$790',  ms:'/month per seat',  as:'/yr per seat',
+                 save:'Save $158/yr per seat',
+                 ml:'PASTE_STRIPE_LINK_HERE_KIAROS_PRO_M',      al:'PASTE_STRIPE_LINK_HERE_KIAROS_PRO_A'},
+  enterprise:   {m:'$249', a:'$2,490',ms:'/month per seat',  as:'/yr per seat',
+                 save:'Save $498/yr per seat',
+                 ml:'PASTE_STRIPE_LINK_HERE_KIAROS_ENT_M',      al:'PASTE_STRIPE_LINK_HERE_KIAROS_ENT_A'},
+  sovereign:    {m:'$999', a:'$9,990',ms:'/month flat rate', as:'/yr flat rate',
+                 save:'Save $1,998/yr',
+                 ml:'PASTE_STRIPE_LINK_HERE_KIAROS_SOV_M',      al:'PASTE_STRIPE_LINK_HERE_KIAROS_SOV_A'},
+};
+function toggleBilling(){
+  isAnnual=!isAnnual;
+  var pill=document.getElementById('kiaros-toggle');
+  if(pill) pill.classList.toggle('on',isAnnual);
+  Object.keys(plans).forEach(function(t){
+    var p=plans[t];
+    var pe=document.getElementById('price-'+t);
+    var pr=document.getElementById('period-'+t);
+    var sv=document.getElementById('savings-'+t);
+    var bn=document.getElementById('btn-'+t);
+    if(pe) pe.textContent=isAnnual?p.a:p.m;
+    if(pr) pr.textContent=isAnnual?p.as:p.ms;
+    if(sv && p.save){sv.textContent=p.save;sv.classList.toggle('hidden',!isAnnual);}
+    if(bn) bn.href=isAnnual?p.al:p.ml;
+  });
+}
+document.querySelectorAll('#navlinks a').forEach(function(a){
+  a.addEventListener('click',function(){document.getElementById('navlinks').classList.remove('open');});
+});
+document.querySelectorAll('.faq-q').forEach(function(q){
+  q.addEventListener('click',function(){this.parentElement.classList.toggle('open');});
+});
+</script>
+</body>
+</html>
