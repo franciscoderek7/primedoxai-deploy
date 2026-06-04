@@ -36,14 +36,14 @@
 | PrimeDox AI | AI Persona | LIVE | primedoxai-deploy | 2026-06-04 |
 | Kiaros | AI Consulting | LIVE | kiaros.ai | 2026-06-03 |
 | CleanSwarm | Cleaning SaaS | LIVE | cleanswarm.ca | 2026-06-01 |
-| space-swarm-site | Space Ops AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
-| auto-swarm-site | AV Intelligence | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
-| quantum-swarm-site | Quantum AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
-| biotech-swarm-site | Drug Discovery AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
-| health-swarm-site | Clinical AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
-| fintech-swarm-site | Payment AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
-| energy-swarm-site | Renewables AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
-| logistics-swarm-site | Supply Chain AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| space-swarm-site | Space Ops AI | LIVE | GitHub Pages | 2026-06-03 |
+| auto-swarm-site | AV Intelligence | LIVE | GitHub Pages | 2026-06-03 |
+| quantum-swarm-site | Quantum AI | LIVE | GitHub Pages | 2026-06-03 |
+| biotech-swarm-site | Drug Discovery AI | LIVE | GitHub Pages | 2026-06-03 |
+| health-swarm-site | Clinical AI | LIVE | GitHub Pages | 2026-06-03 |
+| fintech-swarm-site | Payment AI | LIVE | GitHub Pages | 2026-06-03 |
+| energy-swarm-site | Renewables AI | LIVE | GitHub Pages | 2026-06-03 |
+| logistics-swarm-site | Supply Chain AI | LIVE | GitHub Pages | 2026-06-03 |
 
 ---
 
