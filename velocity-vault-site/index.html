@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VELOCITY VAULT — Where Legends Change Hands</title>
+  <meta name="description" content="The world's most exclusive commission-based auto marketplace. Rare muscle cars, supercars, classics, and luxury vehicles. Where Legends Change Hands." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0A0A0A;
+      --deep: #111111;
+      --panel: #1a1a1a;
+      --gold: #D4AF37;
+      --gold-lt: #F7E7CE;
+      --red: #CC0000;
+      --chrome: #C0C0C0;
+      --white: #F8F8F8;
+      --muted: #777;
+      --border: rgba(212,175,55,0.2);
+      --border-dim: rgba(212,175,55,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 70px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 40px; height: 40px;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      color: var(--black);
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 3px;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .logo-text span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--chrome);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 10px 24px;
+      font-weight: 700 !important;
+      letter-spacing: 1px !important;
+      transition: background .2s, transform .15s !important;
+    }
+
+    .nav-cta:hover { background: var(--gold-lt) !important; transform: translateY(-1px); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--chrome);
+      transition: .3s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      background: rgba(10,10,10,0.98);
+      backdrop-filter: blur(20px);
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      gap: 20px;
+      z-index: 999;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      color: var(--chrome);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-dim);
+      transition: color .2s;
+    }
+
+    .mobile-menu a:hover { color: var(--gold); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=90') center/cover no-repeat;
+      filter: brightness(0.35) saturate(0.7);
+      transform: scale(1.05);
+      animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroZoom {
+      from { transform: scale(1.05); }
+      to { transform: scale(1.12); }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.1) 50%, rgba(10,10,10,0.85) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 20px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 6px;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .hero-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 10vw, 120px);
+      letter-spacing: 8px;
+      color: var(--white);
+      line-height: 0.9;
+      margin-bottom: 12px;
+    }
+
+    .hero-brand span { color: var(--gold); }
+
+    .hero-tagline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 3vw, 28px);
+      font-style: italic;
+      color: var(--gold-lt);
+      margin-bottom: 48px;
+      letter-spacing: 1px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--black);
+      padding: 16px 40px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 3px;
+      text-decoration: none;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 0 30px rgba(212,175,55,0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-lt);
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(212,175,55,0.5);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 16px 40px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 3px;
+      text-decoration: none;
+      transition: background .2s, color .2s, transform .15s;
+    }
+
+    .btn-ghost:hover {
+      background: var(--gold);
+      color: var(--black);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ─── STATS BAND ─── */
+    .stats-band {
+      background: var(--gold);
+      padding: 18px 40px;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--black);
+    }
+
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 30px;
+      background: rgba(10,10,10,0.3);
+      align-self: center;
+    }
+
+    /* ─── SECTION STYLES ─── */
+    section { padding: 100px 40px; }
+
+    .section-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 12px;
+      letter-spacing: 5px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .section-header {
+      margin-bottom: 56px;
+    }
+
+    .section-header.centered {
+      text-align: center;
+    }
+
+    .section-header.centered .section-sub {
+      margin: 0 auto;
+    }
+
+    /* ─── FEATURED AUCTIONS ─── */
+    .featured-section {
+      background: var(--deep);
+      padding: 100px 40px;
+    }
+
+    .carousel-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform .5s cubic-bezier(.4,0,.2,1);
+      gap: 24px;
+    }
+
+    .car-card {
+      flex-shrink: 0;
+      width: 380px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+      transition: transform .3s, box-shadow .3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .car-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(212,175,55,0.15);
+    }
+
+    .car-card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s;
+    }
+
+    .car-card:hover .car-card-img {
+      transform: scale(1.04);
+    }
+
+    .car-card-img-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--gold);
+      color: var(--black);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 10px;
+    }
+
+    .card-badge-certified {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(10,10,10,0.85);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .car-card-body {
+      padding: 20px 24px 24px;
+    }
+
+    .car-card-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .car-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .car-card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .car-card-bid-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .car-card-bid {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--gold);
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .car-card-timer {
+      text-align: right;
+    }
+
+    .timer-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .timer-display {
+      display: flex;
+      gap: 4px;
+      justify-content: flex-end;
+    }
+
+    .timer-display span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      color: var(--white);
+      background: var(--deep);
+      padding: 4px 8px;
+      letter-spacing: 1px;
+    }
+
+    .car-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .bid-count {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bid-count strong {
+      color: var(--chrome);
+    }
+
+    .card-condition {
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid rgba(192,192,192,0.2);
+      padding: 3px 8px;
+    }
+
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .carousel-btn {
+      width: 48px; height: 48px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s, color .2s;
+    }
+
+    .carousel-btn:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: 8px;
+      margin-right: auto;
+    }
+
+    .carousel-dot {
+      width: 8px; height: 8px;
+      background: var(--muted);
+      cursor: pointer;
+      transition: background .2s, width .2s;
+    }
+
+    .carousel-dot.active {
+      background: var(--gold);
+      width: 24px;
+    }
+
+    /* ─── ENDING SOON ─── */
+    .ending-section {
+      background: var(--black);
+      padding: 80px 40px;
+    }
+
+    .ending-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .ending-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 24px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s, transform .2s;
+    }
+
+    .ending-card:hover {
+      border-color: var(--gold);
+      transform: translateX(4px);
+    }
+
+    .ending-img {
+      width: 90px;
+      height: 68px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .ending-info { flex: 1; }
+
+    .ending-urgency {
+      font-size: 11px;
+      color: var(--red);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .ending-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .ending-timer-row {
+      display: flex;
+      gap: 4px;
+    }
+
+    .ending-timer-row span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      background: var(--deep);
+      padding: 3px 7px;
+      color: var(--red);
+    }
+
+    .ending-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      color: var(--gold);
+      margin-top: 8px;
+    }
+
+    /* ─── JUST LISTED ─── */
+    .just-listed-section {
+      background: var(--deep);
+    }
+
+    .four-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .four-grid .car-card {
+      width: auto;
+    }
+
+    /* ─── CATEGORIES ─── */
+    .categories-section {
+      background: var(--black);
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .cat-card {
+      position: relative;
+      height: 280px;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+    }
+
+    .cat-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.4) saturate(0.6);
+      transition: filter .4s, transform .4s;
+    }
+
+    .cat-card:hover .cat-bg {
+      filter: brightness(0.6) saturate(1);
+      transform: scale(1.04);
+    }
+
+    .cat-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10,10,10,0.9) 100%);
+    }
+
+    .cat-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px 28px 24px;
+    }
+
+    .cat-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    .cat-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .cat-count {
+      font-size: 13px;
+      color: var(--chrome);
+    }
+
+    .cat-arrow {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(212,175,55,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 18px;
+      opacity: 0;
+      transition: opacity .3s, background .2s;
+    }
+
+    .cat-card:hover .cat-arrow {
+      opacity: 1;
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-section {
+      background: var(--panel);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+      position: relative;
+    }
+
+    .step-card {
+      background: var(--deep);
+      padding: 48px 40px;
+      position: relative;
+    }
+
+    .step-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      color: rgba(212,175,55,0.08);
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .step-icon {
+      width: 60px;
+      height: 60px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 24px;
+      background: var(--panel);
+    }
+
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--white);
+    }
+
+    .step-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .step-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 24px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: gap .2s;
+    }
+
+    .step-link:hover { gap: 10px; }
+
+    /* ─── SERVICES SECTION ─── */
+    .services-section {
+      background: var(--black);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--panel);
+      border: 1px solid var(--border-dim);
+      padding: 36px 32px;
+      transition: border-color .3s, transform .3s;
+    }
+
+    .service-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .service-price-range {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .service-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .service-icon {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    /* ─── NEWSLETTER ─── */
+    .newsletter-section {
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a1400 50%, #0d0d0d 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0;
+      max-width: 520px;
+      margin: 36px auto 0;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-right: none;
+      padding: 16px 20px;
+      color: var(--white);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .newsletter-input:focus { border-color: var(--gold); }
+    .newsletter-input::placeholder { color: var(--muted); }
+
+    .newsletter-btn {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 16px 32px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+
+    .newsletter-btn:hover { background: var(--gold-lt); }
+
+    .newsletter-note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--deep);
+      border-top: 1px solid var(--border);
+      padding: 60px 40px 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .logo-text {
+      font-size: 18px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .footer-brand p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-link {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: border-color .2s, color .2s;
+    }
+
+    .social-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .footer-col h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color .2s;
+    }
+
+    .footer-col a:hover { color: var(--white); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-dim);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-bottom a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-bottom a:hover { color: var(--gold); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1200px) {
+      .four-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      nav { padding: 0 20px; }
+      section { padding: 60px 20px; }
+      .featured-section { padding: 60px 20px; }
+      .ending-section { padding: 60px 20px; }
+      .ending-strip { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; gap: 2px; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .services-grid { grid-template-columns: 1fr; }
+      .stats-band { gap: 24px; padding: 16px 20px; }
+      .stat-divider { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .four-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .newsletter-form { flex-direction: column; }
+      .newsletter-input { border-right: 1px solid var(--border); }
+      .cat-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+
+    /* Utility */
+    .gold { color: var(--gold); }
+    .text-center { text-align: center; }
+    .container { max-width: 1280px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">V</div>
+    <div class="logo-text">VELOCITY <span>VAULT</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="auctions.html">Auctions</a></li>
+    <li><a href="sell.html">Sell</a></li>
+    <li><a href="financing.html">Financing</a></li>
+    <li><a href="shipping.html">Shipping</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="auctions.html" class="nav-cta">Start Bidding</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="auctions.html">Auctions</a>
+  <a href="sell.html">Sell</a>
+  <a href="financing.html">Financing</a>
+  <a href="shipping.html">Shipping</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="auctions.html" style="color:var(--gold);font-weight:700;">→ Start Bidding</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Francisco Holdings Inc. — Est. 2024</p>
+    <h1 class="hero-brand">VELOCITY<br /><span>VAULT</span></h1>
+    <p class="hero-tagline">"Where Legends Change Hands"</p>
+    <div class="hero-actions">
+      <a href="auctions.html" class="btn-primary">Enter the Vault</a>
+      <a href="sell.html" class="btn-ghost">List Your Car</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stat-item">
+    <div>
+      <div class="stat-value">$47M+</div>
+      <div class="stat-label">In Sales</div>
+    </div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div>
+      <div class="stat-value">2,400+</div>
+      <div class="stat-label">Vehicles Sold</div>
+    </div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div>
+      <div class="stat-value">98%</div>
+      <div class="stat-label">Sell-Through Rate</div>
+    </div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div>
+      <div class="stat-value">50+</div>
+      <div class="stat-label">Countries Served</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED AUCTIONS -->
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Live Now</p>
+      <h2 class="section-title">Featured Auctions</h2>
+      <p class="section-sub">Hand-selected legends with Vault Certified provenance. Bid with confidence.</p>
+    </div>
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack"></div>
+    </div>
+    <div class="carousel-controls">
+      <div class="carousel-dots" id="carouselDots"></div>
+      <button class="carousel-btn" onclick="carouselPrev()">&#8592;</button>
+      <button class="carousel-btn" onclick="carouselNext()">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ENDING SOON -->
+<section class="ending-section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Time is Running Out</p>
+      <h2 class="section-title">Ending Soon</h2>
+    </div>
+    <div class="ending-strip" id="endingSoon"></div>
+  </div>
+</section>
+
+<!-- JUST LISTED -->
+<section class="just-listed-section">
+  <div class="container">
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;">
+      <div>
+        <p class="section-label">Fresh to the Vault</p>
+        <h2 class="section-title">Just Listed</h2>
+      </div>
+      <a href="auctions.html" class="btn-ghost" style="font-size:14px;padding:12px 28px;">View All 12 Listings →</a>
+    </div>
+    <div class="four-grid" id="justListed"></div>
+  </div>
+</section>
+
+<!-- CATEGORY QUICK-LINKS -->
+<section class="categories-section" style="padding:0;">
+  <div class="container" style="max-width:100%;">
+    <div class="cat-grid">
+      <a href="auctions.html?cat=muscle" class="cat-card">
+        <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=800&q=80');"></div>
+        <div class="cat-overlay"></div>
+        <div class="cat-arrow">→</div>
+        <div class="cat-content">
+          <p class="cat-label">Category</p>
+          <h3 class="cat-name">Muscle Cars</h3>
+          <p class="cat-count">6 Active Listings</p>
+        </div>
+      </a>
+      <a href="auctions.html?cat=supercar" class="cat-card">
+        <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1486496572940-2bb2341fdbdf?w=800&q=80');"></div>
+        <div class="cat-overlay"></div>
+        <div class="cat-arrow">→</div>
+        <div class="cat-content">
+          <p class="cat-label">Category</p>
+          <h3 class="cat-name">Supercars</h3>
+          <p class="cat-count">4 Active Listings</p>
+        </div>
+      </a>
+      <a href="auctions.html?cat=classic" class="cat-card">
+        <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80');"></div>
+        <div class="cat-overlay"></div>
+        <div class="cat-arrow">→</div>
+        <div class="cat-content">
+          <p class="cat-label">Category</p>
+          <h3 class="cat-name">Classic</h3>
+          <p class="cat-count">1 Active Listing</p>
+        </div>
+      </a>
+      <a href="auctions.html?cat=luxury" class="cat-card">
+        <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80');"></div>
+        <div class="cat-overlay"></div>
+        <div class="cat-arrow">→</div>
+        <div class="cat-content">
+          <p class="cat-label">Category</p>
+          <h3 class="cat-name">Luxury</h3>
+          <p class="cat-count">1 Active Listing</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-header centered">
+      <p class="section-label">The Process</p>
+      <h2 class="section-title">How VELOCITY VAULT Works</h2>
+      <p class="section-sub">From discovery to delivery — every transaction is handled with museum-grade care and full escrow protection.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-icon">📋</div>
+        <h3 class="step-title">List Your Legend</h3>
+        <p class="step-desc">Submit your vehicle details, photos, and documentation. Our Vault team reviews every submission for authenticity. Choose from Basic ($99), Premium ($299), or Concierge ($999) listing packages. Featured placement gets your car in front of serious buyers globally.</p>
+        <a href="sell.html" class="step-link">Start Listing →</a>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-icon">🔨</div>
+        <h3 class="step-title">Auction &amp; Negotiate</h3>
+        <p class="step-desc">Your vehicle goes live in our curated marketplace. Verified buyers from 50+ countries bid in real time. Our platform manages reserve pricing, bid increments, and buyer communications. You watch the numbers climb. We handle everything else.</p>
+        <a href="auctions.html" class="step-link">View Active Auctions →</a>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-icon">🚚</div>
+        <h3 class="step-title">Secure Delivery</h3>
+        <p class="step-desc">Funds are held in escrow until the buyer confirms delivery. Our shipping partners — Intercity Lines and Reliable Carriers — provide enclosed transport with up to $1M in coverage. Title transfer, documentation, and payout all managed by VELOCITY VAULT.</p>
+        <a href="shipping.html" class="step-link">Shipping Details →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES PRICING PREVIEW -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-header" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;">
+      <div>
+        <p class="section-label">Seller Services</p>
+        <h2 class="section-title">Everything Your Car Deserves</h2>
+      </div>
+      <a href="sell.html" class="btn-primary" style="font-size:14px;padding:12px 28px;">View All Packages</a>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🎯</div>
+        <div class="service-price-range">$99 — $499</div>
+        <h3 class="service-name">Auction Listing</h3>
+        <p class="service-desc">Your vehicle reaches thousands of qualified buyers. Listing fee covers platform, marketing distribution, and secure checkout infrastructure. 5% success fee on sale, capped at $25,000.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📸</div>
+        <div class="service-price-range">$499 — $1,499</div>
+        <h3 class="service-name">Premium Photography</h3>
+        <p class="service-desc">Our certified automotive photographers capture your vehicle in cinematic detail — studio-quality lighting, detail shots, engine bay, interior, and undercarriage. Listings with professional photos sell 3x faster.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔍</div>
+        <div class="service-price-range">$199 — $599</div>
+        <h3 class="service-name">Vehicle Inspection</h3>
+        <p class="service-desc">Our ASE-certified inspectors complete a 150-point Vault Inspection. Buyers pay a premium for certified vehicles — average 18% higher final bids on Vault Certified listings.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⭐</div>
+        <div class="service-price-range">$299 — $999</div>
+        <h3 class="service-name">Featured Placement</h3>
+        <p class="service-desc">Your listing appears at the top of category pages, homepage carousel, and our weekly email to 47,000+ subscribers. Featured slots are limited — book early for peak weekends.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔒</div>
+        <div class="service-price-range">2.5% Fee</div>
+        <h3 class="service-name">Shipping Escrow</h3>
+        <p class="service-desc">Funds held securely until delivery confirmed by buyer. No risk of fraud or non-payment. Covers both domestic and international transactions with full documentation management.</p>
+      </div>
+      <div class="service-card" style="border-color:var(--gold);background:linear-gradient(135deg,#1a1a1a,#1a1500);">
+        <div class="service-icon">👑</div>
+        <div class="service-price-range">CONCIERGE — $999</div>
+        <h3 class="service-name">White Glove Service</h3>
+        <p class="service-desc">Dedicated account manager, pro photography, full inspection, 21-day featured auction, 3% success fee. For vehicles above $150,000 where presentation and reach are everything.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="container">
+    <p class="section-label">Vault Insider</p>
+    <h2 class="section-title" style="font-size:clamp(28px,4vw,44px);">Get Early Access to Rare Listings</h2>
+    <p class="section-sub" style="margin:12px auto 0;color:var(--muted);font-size:15px;max-width:500px;">Join 47,000+ collectors receiving curated alerts before public launch. Zero spam. Unsubscribe anytime.</p>
+    <form class="newsletter-form" action="https://formspree.io/f/YOURFORMID" method="POST">
+      <input type="email" name="email" class="newsletter-input" placeholder="your@email.com" required />
+      <button type="submit" class="newsletter-btn">Subscribe</button>
+    </form>
+    <p class="newsletter-note">By subscribing you agree to our <a href="#" style="color:var(--gold);">Privacy Policy</a>. We never share your data.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:16px;display:inline-flex;">
+          <div class="logo-mark">V</div>
+          <div class="logo-text" style="margin-left:12px;">VELOCITY <span>VAULT</span></div>
+        </a>
+        <p>Where Legends Change Hands. The world's most exclusive commission-based marketplace for rare, collector, and exotic automobiles. A Francisco Holdings Inc. venture.</p>
+        <div class="footer-socials">
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="social-link" title="Instagram">IG</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" class="social-link" title="YouTube">YT</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener" class="social-link" title="Twitter/X">𝕏</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Marketplace</h4>
+        <ul>
+          <li><a href="auctions.html">All Auctions</a></li>
+          <li><a href="auctions.html?cat=muscle">Muscle Cars</a></li>
+          <li><a href="auctions.html?cat=supercar">Supercars</a></li>
+          <li><a href="auctions.html?cat=classic">Classic</a></li>
+          <li><a href="auctions.html?cat=luxury">Luxury</a></li>
+          <li><a href="dashboard.html">Seller Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Sellers</h4>
+        <ul>
+          <li><a href="sell.html">List a Vehicle</a></li>
+          <li><a href="sell.html#packages">Pricing Packages</a></li>
+          <li><a href="sell.html#estimator">Vehicle Estimator</a></li>
+          <li><a href="shipping.html">Shipping Info</a></li>
+          <li><a href="financing.html">Buyer Financing</a></li>
+          <li><a href="contact.html">Talk to an Agent</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="about.html#trust">Trust &amp; Safety</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="about.html#press">Press</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 VELOCITY VAULT · A Francisco Holdings Inc. Venture · Ontario, Canada</p>
+      <p><a href="#">Terms</a> &nbsp;·&nbsp; <a href="#">Privacy</a> &nbsp;·&nbsp; <a href="contact.html">Contact</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── INVENTORY ───
+const INVENTORY = [
+  { id: 1, year: 1969, make: "Chevrolet", model: "Camaro SS 396", price: 145000, reserve: 125000, bids: 7, ends: "2d 14h 33m", condition: "Restored", mileage: 87420, color: "Hugger Orange", transmission: "4-Speed Manual", category: "muscle", featured: true, certified: true, img: "https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=1200&q=80" },
+  { id: 2, year: 1970, make: "Dodge", model: "Challenger R/T Hemi", price: 265000, reserve: 240000, bids: 12, ends: "3d 8h 12m", condition: "Numbers Matching", mileage: 52300, color: "Plum Crazy Purple", transmission: "4-Speed Manual", category: "muscle", featured: true, certified: true, img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1200&q=80" },
+  { id: 3, year: 1967, make: "Shelby", model: "GT500", price: 195000, reserve: 165000, bids: 9, ends: "1d 22h 5m", condition: "Full Restoration", mileage: 68900, color: "Brittany Blue", transmission: "4-Speed Manual", category: "muscle", featured: false, certified: true, img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80" },
+  { id: 4, year: 2023, make: "Ferrari", model: "296 GTB", price: 385000, reserve: 360000, bids: 4, ends: "5d 2h 18m", condition: "Like New", mileage: 3200, color: "Rosso Corsa", transmission: "8-Speed DCT", category: "supercar", featured: true, certified: true, img: "https://images.unsplash.com/photo-1486496572940-2bb2341fdbdf?w=1200&q=80" },
+  { id: 5, year: 2019, make: "Lamborghini", model: "Aventador SVJ", price: 495000, reserve: 460000, bids: 2, ends: "6d 10h 44m", condition: "Excellent", mileage: 8100, color: "Arancio Borealis", transmission: "7-Speed ISR", category: "supercar", featured: true, certified: true, img: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&q=80" },
+  { id: 6, year: 1963, make: "Chevrolet", model: "Corvette Split-Window", price: 215000, reserve: 190000, bids: 6, ends: "4d 6h 20m", condition: "Matching Numbers", mileage: 71200, color: "Sebring Silver", transmission: "4-Speed Manual", category: "classic", featured: false, certified: true, img: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200&q=80" },
+  { id: 7, year: 1971, make: "Plymouth", model: "Hemi 'Cuda", price: 395000, reserve: 360000, bids: 11, ends: "2d 18h 55m", condition: "Numbers Matching", mileage: 44600, color: "Lemon Twist Yellow", transmission: "4-Speed Manual", category: "muscle", featured: true, certified: true, img: "https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=1200&q=80" },
+  { id: 8, year: 2024, make: "Porsche", model: "911 GT3 RS", price: 355000, reserve: 330000, bids: 3, ends: "7d 14h 30m", condition: "New", mileage: 220, color: "Python Green", transmission: "7-Speed PDK", category: "supercar", featured: false, certified: true, img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80" },
+  { id: 9, year: 1969, make: "Ford", model: "Mustang Boss 429", price: 235000, reserve: 210000, bids: 8, ends: "3d 12h 8m", condition: "Full Restoration", mileage: 91300, color: "Black Jade", transmission: "4-Speed Manual", category: "muscle", featured: false, certified: false, img: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&q=80" },
+  { id: 10, year: 2023, make: "McLaren", model: "765LT", price: 405000, reserve: 380000, bids: 1, ends: "8d 5h 22m", condition: "Like New", mileage: 1800, color: "Storm Grey", transmission: "7-Speed SSG", category: "supercar", featured: false, certified: true, img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80" },
+  { id: 11, year: 1970, make: "Chevrolet", model: "Chevelle SS 454", price: 125000, reserve: 105000, bids: 15, ends: "1d 4h 17m", condition: "Driver Quality", mileage: 112400, color: "Fathom Green", transmission: "Turbo-Hydramatic", category: "muscle", featured: false, certified: false, img: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&q=80" },
+  { id: 12, year: 2024, make: "Rolls-Royce", model: "Spectre", price: 475000, reserve: 450000, bids: 2, ends: "9d 20h 5m", condition: "New", mileage: 850, color: "Arctic White", transmission: "Single-Speed Auto", category: "luxury", featured: true, certified: true, img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1200&q=80" }
+];
+
+function formatPrice(p) {
+  return '$' + p.toLocaleString();
+}
+
+function renderTimer(endStr) {
+  const parts = endStr.match(/(\d+)d\s*(\d+)h\s*(\d+)m/);
+  if (!parts) return endStr;
+  return `<span>${parts[1]}d</span><span>${parts[2]}h</span><span>${parts[3]}m</span>`;
+}
+
+function buildCard(v, linkTarget) {
+  return `
+  <a href="${linkTarget || 'auction-detail.html?id=' + v.id}" class="car-card">
+    <div class="car-card-img-wrap">
+      <img class="car-card-img" src="${v.img}" alt="${v.year} ${v.make} ${v.model}" loading="lazy" />
+      ${v.featured ? '<div class="card-badge">FEATURED</div>' : ''}
+      ${v.certified ? '<div class="card-badge-certified">✓ Certified</div>' : ''}
+    </div>
+    <div class="car-card-body">
+      <div class="car-card-year">${v.year} · ${v.category.toUpperCase()}</div>
+      <div class="car-card-name">${v.make} ${v.model}</div>
+      <div class="car-card-meta">
+        <div>
+          <div class="car-card-bid-label">Current Bid</div>
+          <div class="car-card-bid">${formatPrice(v.price)}</div>
+        </div>
+        <div class="car-card-timer">
+          <div class="timer-label">Ends In</div>
+          <div class="timer-display">${renderTimer(v.ends)}</div>
+        </div>
+      </div>
+      <div class="car-card-footer">
+        <div class="bid-count"><strong>${v.bids}</strong> bids · ${v.color}</div>
+        <div class="card-condition">${v.condition}</div>
+      </div>
+    </div>
+  </a>`;
+}
+
+// ─── CAROUSEL ───
+const featured = INVENTORY.filter(v => v.featured);
+let carouselIndex = 0;
+const cardsPerView = () => window.innerWidth < 640 ? 1 : window.innerWidth < 1000 ? 2 : 3;
+
+function renderCarousel() {
+  const track = document.getElementById('carouselTrack');
+  const dots = document.getElementById('carouselDots');
+  if (!track) return;
+  track.innerHTML = featured.map(v => buildCard(v)).join('');
+  const numDots = Math.ceil(featured.length / cardsPerView());
+  dots.innerHTML = Array.from({length: numDots}, (_, i) =>
+    `<div class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
+  ).join('');
+}
+
+function updateCarousel() {
+  const track = document.getElementById('carouselTrack');
+  if (!track) return;
+  const cardWidth = track.children[0]?.offsetWidth + 24 || 404;
+  track.style.transform = `translateX(-${carouselIndex * cardWidth * cardsPerView()}px)`;
+  document.querySelectorAll('.carousel-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === carouselIndex);
+  });
+}
+
+function carouselNext() {
+  const max = Math.ceil(featured.length / cardsPerView()) - 1;
+  carouselIndex = carouselIndex >= max ? 0 : carouselIndex + 1;
+  updateCarousel();
+}
+
+function carouselPrev() {
+  const max = Math.ceil(featured.length / cardsPerView()) - 1;
+  carouselIndex = carouselIndex <= 0 ? max : carouselIndex - 1;
+  updateCarousel();
+}
+
+function goToSlide(i) {
+  carouselIndex = i;
+  updateCarousel();
+}
+
+// Auto-rotate
+let autoRotate = setInterval(carouselNext, 5000);
+
+// ─── ENDING SOON ───
+function renderEndingSoon() {
+  const el = document.getElementById('endingSoon');
+  if (!el) return;
+  // Sort by total minutes remaining
+  const sorted = [...INVENTORY].sort((a, b) => {
+    const mins = s => {
+      const m = s.match(/(\d+)d\s*(\d+)h\s*(\d+)m/);
+      return m ? parseInt(m[1])*1440 + parseInt(m[2])*60 + parseInt(m[3]) : 9999;
+    };
+    return mins(a.ends) - mins(b.ends);
+  }).slice(0, 3);
+
+  el.innerHTML = sorted.map(v => `
+  <a href="auction-detail.html?id=${v.id}" class="ending-card">
+    <img class="ending-img" src="${v.img}" alt="${v.year} ${v.make} ${v.model}" loading="lazy" />
+    <div class="ending-info">
+      <div class="ending-urgency">⏰ Ending Soon</div>
+      <div class="ending-name">${v.year} ${v.make} ${v.model}</div>
+      <div class="ending-timer-row">${renderTimer(v.ends)}</div>
+      <div class="ending-price">${formatPrice(v.price)}</div>
+    </div>
+  </a>`).join('');
+}
+
+// ─── JUST LISTED ───
+function renderJustListed() {
+  const el = document.getElementById('justListed');
+  if (!el) return;
+  // Last 4 in array (newest)
+  const newest = INVENTORY.slice(-4).reverse();
+  el.innerHTML = newest.map(v => buildCard(v)).join('');
+}
+
+// ─── NAV ───
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// ─── INIT ───
+document.addEventListener('DOMContentLoaded', () => {
+  renderCarousel();
+  renderEndingSoon();
+  renderJustListed();
+  updateCarousel();
+
+  // Pause auto-rotate on hover
+  const cc = document.querySelector('.carousel-container');
+  if (cc) {
+    cc.addEventListener('mouseenter', () => clearInterval(autoRotate));
+    cc.addEventListener('mouseleave', () => { autoRotate = setInterval(carouselNext, 5000); });
+  }
+});
+
+window.addEventListener('resize', () => {
+  renderCarousel();
+  carouselIndex = 0;
+  updateCarousel();
+});
+</script>
+</body>
+</html>
