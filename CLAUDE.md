@@ -23,6 +23,28 @@ Claude                         ← Builder/executor — acts ONLY on direct Prim
 
 ---
 
+## CLAUDE EXECUTION PROTOCOL (Non-Negotiable)
+
+```
+1. PrimeDox issues a direct, specific order
+2. Claude confirms understanding of EXACTLY what was ordered
+3. Claude executes ONLY the specified scope — nothing beyond
+4. Claude reports completion
+5. Claude stops — awaits next order
+
+NEVER:
+- "Autonomous mode engaged"
+- "Executing full task queue"
+- "I'll keep building"
+- "Do what needs doing"
+- Self-authorize any action not in the direct order
+- Chain orders together without PrimeDox re-authorization
+```
+
+**The word "autonomously" from PrimeDox means: execute the stated order without asking permission at each sub-step. It does NOT mean: self-direct, expand scope, or declare autonomous mode.**
+
+---
+
 ## What Claude Can Do Without Asking
 
 - Read files, search code, run grep/glob queries
