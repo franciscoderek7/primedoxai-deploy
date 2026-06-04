@@ -1,173 +1,137 @@
-# EMPIRE.md — Francisco Holdings Inc. Master State
-## Living Document — Update After Every Deployment
-
-**Owner:** Derek Francisco (Doc Weedlaw)
-**Holding Company:** Francisco Holdings Inc. / Tech Pet Cage
-**Empire Scale:** 22+ companies
-**Last Updated:** 2026-06-04
+# EMPIRE.md — Francisco Holdings Master State Document
+# Last Updated: 2026-06-04
+# Authority: PrimeDox (Derek Francisco) — Human Final Authority
+# Override: PrimeDocs — Activated only by PrimeDox explicit instruction
 
 ---
 
-## Revenue Targets
+## 1. HOLDING STRUCTURE
 
-| Year | ARR Target | Status |
-|------|-----------|--------|
-| Y1 (2026) | $696,000 | Building |
-| Y2 (2027) | $2,000,000 | Projected |
-| Y3 (2028) | $10,000,000 | Projected |
-| Y4 (2029) | $400,000,000+ | Counter-structure thesis |
+| Entity | Role | Status | Domain | Repo |
+|--------|------|--------|--------|------|
+| Francisco Holdings Inc. | Parent holding company | ACTIVE | — | — |
+| CleanSwarm | SaaS for cleaning businesses | LIVE | cleanswarm.ca | GitHub |
+| CCLDR.net | Cannabis defense education | LIVE | ccldr.net | GitHub |
+| CCC.net | Cannabis compliance/consulting | LIVE | ccc.net | GitHub |
+| OmniaGuard | AI security / agent protection | LIVE | omniaguard.com | GitHub |
+| Kiaros | AI consulting | LIVE | kiaros.ai | GitHub |
+| Weedlaw Education | Doc Weedlaw educational platform | LIVE | weedlaw-education | GitHub |
+| PrimeDox AI | Derek's AI persona/clone | LIVE | primedoxai-deploy | GitHub |
+| Tech Pack Cage | Registered business (Stripe acct) | ACTIVE | — | — |
+| SoulStack.ai | AI infrastructure layer | PENDING | soulstack.ai | PENDING |
+| [RESERVED] 11 additional entities | TBD | PLANNED | — | — |
+
+**Target: 22 companies by Year 1, 392 by Year 4**
 
 ---
 
-## Site Registry
+## 2. SITE DEPLOYMENT TRACKER
 
-### LIVE — Deployed
+| Site | Market | Status | URL | Last Deploy |
+|------|--------|--------|-----|-------------|
+| OmniaGuard | AI Security | LIVE | omniaguard.com | 2026-06-04 |
+| CCLDR.net | Cannabis Education | LIVE | ccldr.net | 2026-04-15 |
+| CCC.net | Cannabis Compliance | LIVE | ccc.net | 2026-04-15 |
+| Weedlaw Education | Doc Weedlaw Platform | LIVE | weedlaw-education | 2026-05-31 |
+| PrimeDox AI | AI Persona | LIVE | primedoxai-deploy | 2026-06-04 |
+| Kiaros | AI Consulting | LIVE | kiaros.ai | 2026-06-03 |
+| CleanSwarm | Cleaning SaaS | LIVE | cleanswarm.ca | 2026-06-01 |
+| space-swarm-site | Space Ops AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| auto-swarm-site | AV Intelligence | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| quantum-swarm-site | Quantum AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| biotech-swarm-site | Drug Discovery AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| health-swarm-site | Clinical AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| fintech-swarm-site | Payment AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| energy-swarm-site | Renewables AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
+| logistics-swarm-site | Supply Chain AI | BUILT — PENDING DEPLOY | GitHub Pages | 2026-06-03 |
 
-| Site | Domain | Repo | Stack | Status |
-|------|--------|------|-------|--------|
-| OmniaGuard | omniaguard.com | franciscoderek7/omniaguard | GitHub Pages | ✅ LIVE |
-| CCLDR | ccldr.net | TBD | GitHub Pages | ⚠️ DNS pending |
+---
 
-### IN BUILD
+## 3. REVENUE TARGETS
 
-| Site | Domain | Repo | Stack | Status |
-|------|--------|------|-------|--------|
-| Kiaros | kiaros.com | primedoxai-deploy/kiaros-site | GitHub Pages | 🔨 Building |
-| SoulStack | soulstack.ai | TBD | TBD | 📋 Domain not yet registered |
-
-### PLANNED
-
-| Site | Domain | Status |
+| Year | Target | Status |
 |------|--------|--------|
-| Francisco Holdings | franciscoholdings.com | Planned |
-| Doc Weedlaw Media | docweedlaw.com | Planned |
-| Weedlaw Education | weedlaweducation.com | Planned |
+| Year 1 | $696K ARR | IN PROGRESS |
+| Year 2 | $4.2M ARR | PLANNED |
+| Year 3 | $42M ARR | PLANNED |
+| Year 4 | $400M+ ARR | PLANNED |
 
 ---
 
-## OmniaGuard — Current State
+## 4. WALLET / PAYMENT PLACEHOLDERS
 
-**URL:** https://omniaguard.com
-**Repo:** franciscoderek7/omniaguard (main branch → GitHub Pages)
-**Source:** primedoxai-deploy/omniaguard-site/
-
-### Pages Deployed (9)
-
-| Page | File | Status |
-|------|------|--------|
-| Homepage | index.html | ✅ Live |
-| Pricing | pricing.html | ✅ Live |
-| VPN | vpn.html | ✅ Live |
-| Intelligence Brief | intelligence.html | ✅ Live |
-| Ecosystem | ecosystem.html | ✅ Live |
-| Investor Pitch | investor.html | ✅ Live |
-| About | about.html | ✅ Live |
-| Contact | contact.html | ✅ Live |
-| App Dashboard | app/index.html | ✅ Live |
-| Payment Success | payment-success.html | ✅ Live |
-| Payment Cancel | payment-cancel.html | ✅ Live |
-
-### Payment Status
-
-| Tier | Price | Method | Status |
-|------|-------|--------|--------|
-| Sentinel | $499/mo | Stripe | ⚠️ Mailto fallback — needs buy.stripe.com URL |
-| Guardian | $2,499/mo | Stripe | ⚠️ Mailto fallback — needs buy.stripe.com URL |
-| Warden | $5,000/mo | Stripe | ⚠️ Mailto fallback — needs buy.stripe.com URL |
-| Protector | $10,000/mo | Stripe | ⚠️ Mailto fallback — needs buy.stripe.com URL |
-| Archon | $15,000/mo | Briefing Modal | ✅ Working |
-| Sovereign | $25,000/mo | Briefing Modal | ✅ Working |
-| Custom | Contact | Telegram + Email | ✅ Working |
-| Bitcoin (BTC) | Any | Crypto | ⚠️ Needs real wallet address |
-| Monero (XMR) | Any | Crypto | ⚠️ Needs real wallet address |
-
-### Stripe Integration
-
-- **Publishable Key:** `pk_live_51TG0cIASsTLq...` (set in index.html)
-- **DEPLOY_TOKEN:** Set as GitHub Actions secret ✅
-- **Stripe Payment Links needed:**
-  - [ ] Sentinel $499/mo CAD → `buy.stripe.com/???`
-  - [ ] Guardian $2,499/mo CAD → `buy.stripe.com/???`
-  - [ ] Warden $5,000/mo CAD → `buy.stripe.com/???`
-  - [ ] Protector $10,000/mo CAD → `buy.stripe.com/???`
-
-### Crypto Wallets Needed
-
-- [ ] BTC address → replace in index.html, pricing.html, vpn.html
-- [ ] XMR address → replace in index.html, pricing.html, vpn.html
+| Item | Cost | Status | Priority |
+|------|------|--------|----------|
+| SoulStack.ai domain (Cloudflare) | ~$80 CAD/yr | PENDING | HIGH |
+| Stripe Payment Link — Sentinel $499/mo | $0 (create in dashboard) | PENDING | CRITICAL |
+| Stripe Payment Link — Guardian $2,499/mo | $0 (create in dashboard) | PENDING | CRITICAL |
+| Stripe Payment Link — Warden $5,000/mo | $0 (create in dashboard) | PENDING | CRITICAL |
+| Stripe Payment Link — Protector $10,000/mo | $0 (create in dashboard) | PENDING | CRITICAL |
+| BTC wallet address | — | PENDING | HIGH |
+| XMR wallet address | — | PENDING | HIGH |
+| Additional .ai domains (TBD) | Variable | PENDING | MEDIUM |
+| Supabase billing | ~$45/mo | PENDING | MEDIUM |
+| GitHub Pro/Teams | $0 (free tier) | ACTIVE | LOW |
 
 ---
 
-## Domain Registry
+## 5. PENDING ACTIONS QUEUE
 
-| Domain | Registrar | Status | Points To |
-|--------|-----------|--------|-----------|
-| omniaguard.com | Porkbun | ✅ Live | GitHub Pages (franciscoderek7/omniaguard) |
-| ccldr.net | Porkbun | ⚠️ DNS pending | TBD |
-| soulstack.ai | — | ❌ NOT REGISTERED | Register at Cloudflare — $80/yr |
-| ghostforge.ai | — | Available | Optional |
-| nexself.ai | — | Available | Optional |
-
----
-
-## Pending Actions Queue
-
-### CRITICAL (Revenue-Blocking)
-
-- [ ] **Stripe Payment Links** — create 4 recurring links in dashboard.stripe.com, paste URLs to Claude
-- [ ] **BTC wallet address** — provide real address to replace placeholder
-- [ ] **XMR wallet address** — provide real address to replace placeholder
-
-### HIGH PRIORITY
-
-- [ ] **Register soulstack.ai** — Cloudflare, $80/yr — available now
-- [ ] **GitHub Pages config on omniaguard** — verify custom domain + HTTPS enforced
-- [ ] **Porkbun DNS for ccldr.net** — run `python3 setup/dns_only.py ccldr.net` locally with PORKBUN_SECRET_KEY
-- [ ] **Kiaros site rebuild** — needs Cyan #00D4FF + Black + Gold, 3 tiers: Core (free) / Pro ($49/mo) / Enterprise ($199/mo)
-
-### PLANNED
-
-- [ ] **SoulStack site** — build after domain registered
-- [ ] **Francisco Holdings site** — holding company presence
-- [ ] **Telegram bot @OmniguardSec_bot** — configure to respond to crypto payment confirmations
-- [ ] **Stripe webhooks** — requires backend (not possible on static GitHub Pages — needs serverless function)
+| # | Action | Assigned To | Due | Status |
+|---|--------|-------------|-----|--------|
+| 1 | ~~Fix OmniaGuard spelling on omniaguard.com~~ | Claude | DONE | ✅ COMPLETE |
+| 2 | Stripe Payment Links (4 tiers) | Derek → Claude | ASAP | IN PROGRESS — awaiting URLs |
+| 3 | BTC + XMR wallet addresses on site | Derek → Claude | ASAP | PENDING — awaiting addresses |
+| 4 | SoulStack.ai domain registration | Derek | When funded | PENDING |
+| 5 | Deploy 8 swarm sites from PR#2 | Claude | 2026-06-04 | PENDING — checking PR#2 |
+| 6 | FOI requests (6 provincial + medical + CRU + Ombudsman) | Derek | ASAP | PENDING |
+| 7 | BDC investor contact follow-up | Derek | 2026-06-05 | PENDING |
+| 8 | Kiaros site rebuild (Cyan #00D4FF + Black + Gold) | Claude | TBD | PENDING |
+| 9 | Porkbun DNS for ccldr.net | Derek (local) | TBD | PENDING |
+| 10 | GitHub Pages config — omniaguard custom domain + HTTPS | Derek (browser) | ASAP | PENDING |
 
 ---
 
-## Tech Stack Reference
-
-| Component | Technology |
-|-----------|-----------|
-| Hosting | GitHub Pages (static) |
-| Deploy pipeline | GitHub Actions (`deploy-omniaguard.yml`) |
-| DNS | Porkbun API |
-| Payments | Stripe Payment Links (static) + crypto mailto fallback |
-| Domain repo | franciscoderek7/primedoxai-deploy |
-| Deploy token | DEPLOY_TOKEN secret in primedoxai-deploy repo settings |
-
----
-
-## Authority Chain
+## 6. AUTHORITY CHAIN
 
 ```
-PrimeDox (Derek Francisco)  — ABSOLUTE
-PrimeDocs                   — Override/backup
-SoulStack                   — Observer/watchdog
-OmniaGuard                  — Security layer
-Claude                      — Builder/executor
+PrimeDox (Derek Francisco)     — HUMAN FINAL AUTHORITY — absolute
+    ↓
+PrimeDocs                      — Override/backup AI — activated by PrimeDox only
+    ↓
+SoulStack                      — Observer layer — watches empire, flags, reports up
+    ↓
+OmniaGuard                     — Security layer — guards all sites + agents
+    ↓
+Claude                         — Builder/executor — acts on direct PrimeDox order only
 ```
 
 ---
 
-## Security Rules (Permanent)
+## 7. SECURITY RULES (PERMANENT)
 
 1. NEVER commit Stripe secret keys (`sk_live_` or `sk_test_`)
 2. NEVER hardcode Porkbun Secret Key — use `os.environ.get()`
-3. NEVER expose personal info on OmniaGuard, Kiaros, or SoulStack sites
+3. NEVER expose personal info (phone/address/email) on OmniaGuard, Kiaros, SoulStack
 4. ZERO cannabis bleed on AI/tech sites
-5. ZERO AI tech disclosure on cannabis sites
+5. ZERO AI tech disclosure on cannabis/legal sites
 6. OmniaGuard spelling: O-M-N-I-A-G-U-A-R-D — zero tolerance for variants
+7. Derek Francisco INVISIBLE on: OmniaGuard, Kiaros, SoulStack
+8. Derek Francisco VISIBLE on: CCLDR, Doc Weedlaw, Francisco Holdings
 
 ---
 
-*This document is the source of truth for the Francisco Holdings empire. Update it after every deployment, domain registration, payment integration, or architecture change.*
+## 8. STRIPE INTEGRATION STATUS
+
+- **Publishable Key:** `pk_live_51TG0cIASsTLq...` — set in omniaguard/index.html ✅
+- **DEPLOY_TOKEN:** Set as GitHub Actions secret ✅
+- **Payment Links needed (create at dashboard.stripe.com → Payment Links):**
+  - [ ] Sentinel — $499/mo CAD recurring → paste `buy.stripe.com/xxx` to Claude
+  - [ ] Guardian — $2,499/mo CAD recurring → paste `buy.stripe.com/xxx` to Claude
+  - [ ] Warden — $5,000/mo CAD recurring → paste `buy.stripe.com/xxx` to Claude
+  - [ ] Protector — $10,000/mo CAD recurring → paste `buy.stripe.com/xxx` to Claude
+
+---
+
+*Update this document after every deployment, domain registration, payment integration, or architecture change.*
+*Source of truth for the Francisco Holdings empire.*
