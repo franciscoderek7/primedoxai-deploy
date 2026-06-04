@@ -1,0 +1,93 @@
+name: Deploy OmniaGuard to omniaguard.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'omniaguard-site/**'
+  workflow_dispatch:   # allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify OmniaGuard spelling (zero tolerance)
+        run: |
+          ERRORS=$(grep -rn "OmniGuard\|OMNIGUARD\|Omni Guard\|OMNI GUARD" omniaguard-site/ --include="*.html" | wc -l)
+          echo "Spelling errors found: $ERRORS"
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "FAIL: Wrong OmniaGuard spelling detected"
+            grep -rn "OmniGuard\|OMNIGUARD\|Omni Guard" omniaguard-site/ --include="*.html"
+            exit 1
+          fi
+          echo "PASS: OmniaGuard spelling correct on all pages"
+
+      - name: Verify no personal info leaked
+        run: |
+          LEAKS=$(grep -rn "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8" omniaguard-site/ --include="*.html" | wc -l)
+          if [ "$LEAKS" -gt 0 ]; then
+            echo "FAIL: Personal info found in source"
+            grep -rn "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8" omniaguard-site/ --include="*.html"
+            exit 1
+          fi
+          echo "PASS: Zero personal info in source"
+
+      - name: Clone omniaguard repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/omniaguard.git /tmp/omniaguard
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cp omniaguard-site/index.html        /tmp/omniaguard/index.html
+          cp omniaguard-site/pricing.html      /tmp/omniaguard/pricing.html
+          cp omniaguard-site/vpn.html          /tmp/omniaguard/vpn.html
+          cp omniaguard-site/intelligence.html /tmp/omniaguard/intelligence.html
+          cp omniaguard-site/ecosystem.html    /tmp/omniaguard/ecosystem.html
+          cp omniaguard-site/investor.html     /tmp/omniaguard/investor.html
+          cp omniaguard-site/about.html        /tmp/omniaguard/about.html
+          cp omniaguard-site/contact.html      /tmp/omniaguard/contact.html
+          mkdir -p /tmp/omniaguard/app
+          cp omniaguard-site/app/index.html    /tmp/omniaguard/app/index.html
+          echo "omniaguard.com" > /tmp/omniaguard/CNAME
+          echo "All files copied"
+
+      - name: Commit and push to omniaguard repo
+        run: |
+          cd /tmp/omniaguard
+          git config user.email "deploy@omniaguard.com"
+          git config user.name "OmniaGuard Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          Pages: index, pricing, vpn, intelligence, ecosystem, investor, about, contact, app
+          CNAME: omniaguard.com
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/omniaguard — live in ~2 minutes"
+
+      - name: Verify CNAME in deployed repo
+        run: |
+          cat /tmp/omniaguard/CNAME
+          echo "GitHub Pages will serve omniaguard.com from this repo"
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "================================================"
+          echo "  OMNIAGUARD DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/omniaguard (main)"
+          echo "  CNAME: omniaguard.com"
+          echo "  Pages: 9"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo ""
+          echo "  Check: https://omniaguard.com"
+          echo "  DNS check: https://dnschecker.org/#A/omniaguard.com"
+          echo "================================================"
