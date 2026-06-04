@@ -59,6 +59,8 @@ REQUIRED_FILES=(
   "$SOURCE_DIR/intelligence.html"
   "$SOURCE_DIR/ecosystem.html"
   "$SOURCE_DIR/investor.html"
+  "$SOURCE_DIR/about.html"
+  "$SOURCE_DIR/contact.html"
   "$SOURCE_DIR/app/index.html"
 )
 for f in "${REQUIRED_FILES[@]}"; do
@@ -89,6 +91,8 @@ cp "$SOURCE_DIR/vpn.html"          "$WORK_DIR/vpn.html"
 cp "$SOURCE_DIR/intelligence.html" "$WORK_DIR/intelligence.html"
 cp "$SOURCE_DIR/ecosystem.html"    "$WORK_DIR/ecosystem.html"
 cp "$SOURCE_DIR/investor.html"     "$WORK_DIR/investor.html"
+cp "$SOURCE_DIR/about.html"        "$WORK_DIR/about.html"
+cp "$SOURCE_DIR/contact.html"      "$WORK_DIR/contact.html"
 mkdir -p "$WORK_DIR/app"
 cp "$SOURCE_DIR/app/index.html"    "$WORK_DIR/app/index.html"
 
@@ -98,7 +102,7 @@ ok "CNAME created: $DOMAIN"
 
 info "Committing..."
 cd "$WORK_DIR"
-git add -A
+git add index.html pricing.html vpn.html intelligence.html ecosystem.html investor.html about.html contact.html app/index.html CNAME
 git diff --cached --stat
 git commit -m "deploy: full OmniaGuard suite — OmniaGuard spelling correct, all pages live
 
