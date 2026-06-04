@@ -38,14 +38,18 @@ echo "  Cloning franciscoderek7/omniaguard..."
 git clone --depth 1 "$REPO_URL" "$WORK_DIR"
 
 echo "  Copying fixed files..."
-cp "$SOURCE_DIR/index.html"         "$WORK_DIR/index.html"
-cp "$SOURCE_DIR/pricing.html"       "$WORK_DIR/pricing.html"
+cp "$SOURCE_DIR/index.html"            "$WORK_DIR/index.html"
+cp "$SOURCE_DIR/pricing.html"          "$WORK_DIR/pricing.html"
+cp "$SOURCE_DIR/vpn.html"              "$WORK_DIR/vpn.html"
+cp "$SOURCE_DIR/intelligence.html"     "$WORK_DIR/intelligence.html"
+cp "$SOURCE_DIR/ecosystem.html"        "$WORK_DIR/ecosystem.html"
+cp "$SOURCE_DIR/investor.html"         "$WORK_DIR/investor.html"
 mkdir -p "$WORK_DIR/app"
-cp "$SOURCE_DIR/app/index.html"     "$WORK_DIR/app/index.html"
+cp "$SOURCE_DIR/app/index.html"        "$WORK_DIR/app/index.html"
 
 echo "  Staging and committing..."
 cd "$WORK_DIR"
-git add index.html pricing.html app/index.html
+git add index.html pricing.html vpn.html intelligence.html ecosystem.html investor.html app/index.html
 git diff --cached --stat
 
 git commit -m "fix: OMNIAGUARD spelling + Stripe mailto fallback on all 7 tiers
