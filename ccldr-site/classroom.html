@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cannabis Law Classroom — CCLDR Virtual Courthouse | Legal Education</title>
+<meta name="description" content="Master your cannabis rights with CCLDR's interactive law classroom. Charter rights, search and seizure, arrest rights, and more. Warrior+ tier access.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--deep:#0d0d0d;--card:#141414;--card2:#181818;--gold:#c9a227;--gold-light:#e0b840;--green:#27ae60;--green-dark:#1e8449;--white:#f5f5f5;--muted:#888;--border:#2a2a2a;--blue:#6495ED;--purple:#9370DB}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+.ch-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 40% 0%,rgba(201,162,39,.07) 0%,var(--black) 60%)}
+.ch-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(201,162,39,.025) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(201,162,39,.025) 60px)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.97);border-bottom:1px solid var(--gold);padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.nav-links a{font-size:12px;color:var(--muted);transition:color .2s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;transition:background .2s;white-space:nowrap}
+.nav-cta:hover{background:var(--gold-light)}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(10,10,10,.99);border-bottom:1px solid var(--gold);padding:16px 40px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:12px 0;border-bottom:1px solid var(--border);font-size:15px}
+
+/* HERO */
+.page-hero{position:relative;z-index:1;text-align:center;padding:100px 40px 56px}
+.hero-icon{font-size:64px;margin-bottom:20px;filter:drop-shadow(0 0 18px rgba(201,162,39,.35))}
+.tier-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.3);border-radius:2px;padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.tier-badge::before{content:'';width:6px;height:6px;border-radius:50%;animation:blink 2s infinite}
+.tier-badge.tb-green::before{background:var(--green)}
+.tier-badge.tb-gold::before{background:var(--gold)}
+.tier-badge.tb-locked::before{background:var(--muted)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.page-title{font-family:'Cinzel',serif;font-size:clamp(32px,5vw,60px);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:14px}
+.page-title .gold{color:var(--gold)}
+.page-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:600px;margin:0 auto 32px}
+.hero-tier-row{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:2px;padding:10px 24px;font-size:13px;color:var(--muted)}
+#hero-tier-label{font-weight:700;font-size:14px}
+
+/* LOCKED BANNER */
+.locked-banner{position:relative;z-index:1;max-width:900px;margin:0 auto 48px;padding:0 40px}
+.locked-box{background:rgba(201,162,39,.06);border:1px solid rgba(201,162,39,.3);border-radius:4px;padding:36px 40px;text-align:center}
+.lb-icon{font-size:48px;margin-bottom:12px}
+.lb-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:10px}
+.lb-sub{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto}
+.lb-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.lb-btn{display:inline-block;padding:12px 28px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .2s;cursor:pointer}
+.lb-btn-warrior{background:var(--gold);color:#000}
+.lb-btn-warrior:hover{background:var(--gold-light)}
+.lb-btn-pro{background:transparent;border:1px solid var(--blue);color:var(--blue)}
+.lb-btn-pro:hover{background:rgba(100,149,237,.1)}
+
+/* MODULES GRID */
+.modules-section{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px 80px}
+.section-label{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.module-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:28px 24px;position:relative;transition:border-color .25s,transform .2s,box-shadow .25s;display:flex;flex-direction:column;gap:0}
+.module-card:not(.module-locked):hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 10px 36px rgba(0,0,0,.4)}
+.module-card.module-locked{opacity:.72}
+.module-num{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.module-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:10px;line-height:1.3}
+.module-tier-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:10px;margin-bottom:12px}
+.mtb-free{background:rgba(39,174,96,.12);color:var(--green);border:1px solid rgba(39,174,96,.25)}
+.mtb-warrior{background:rgba(201,162,39,.1);color:var(--gold);border:1px solid rgba(201,162,39,.25)}
+.mtb-professional{background:rgba(100,149,237,.1);color:var(--blue);border:1px solid rgba(100,149,237,.25)}
+.mtb-elite{background:rgba(147,112,219,.1);color:var(--purple);border:1px solid rgba(147,112,219,.25)}
+.module-meta{display:flex;gap:16px;font-size:11px;color:var(--muted);margin-bottom:14px}
+.module-desc{font-size:12px;color:rgba(245,245,245,.65);line-height:1.65;margin-bottom:20px;flex:1}
+.module-progress-wrap{margin-bottom:16px}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px}
+.progress-bar-bg{background:rgba(255,255,255,.06);border-radius:10px;height:5px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:10px;transition:width .6s ease}
+.module-btn{display:block;width:100%;padding:10px;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;border:none;cursor:pointer;transition:all .2s;margin-top:auto}
+.mbtn-active{background:var(--green);color:#000}
+.mbtn-active:hover{background:var(--green-dark)}
+.mbtn-locked{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.mbtn-locked:hover{background:rgba(201,162,39,.08)}
+.lock-corner{position:absolute;top:14px;right:14px;font-size:15px;color:var(--muted)}
+
+/* LESSON INLINE */
+.lesson-content{display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:20px}
+.lesson-content.open{display:block}
+.lesson-heading{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:12px}
+.lesson-body{font-size:13px;color:rgba(245,245,245,.8);line-height:1.75;margin-bottom:16px}
+.lesson-body p{margin-bottom:10px}
+.lesson-body strong{color:var(--white)}
+.quiz-box{background:rgba(201,162,39,.05);border:1px solid rgba(201,162,39,.2);border-radius:4px;padding:20px}
+.quiz-question{font-size:13px;font-weight:600;color:var(--white);margin-bottom:14px}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:2px;padding:10px 14px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .2s;text-align:left}
+.quiz-opt:hover{border-color:var(--gold);color:var(--white)}
+.quiz-opt.correct{background:rgba(39,174,96,.12);border-color:var(--green);color:var(--green)}
+.quiz-opt.incorrect{background:rgba(255,80,80,.08);border-color:#e05050;color:#e05050}
+.quiz-feedback{display:none;margin-top:12px;font-size:12px;line-height:1.6;padding:10px 14px;border-radius:2px}
+.quiz-feedback.show{display:block}
+.quiz-feedback.good{background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.25);color:var(--green)}
+.quiz-feedback.bad{background:rgba(255,80,80,.07);border:1px solid rgba(255,80,80,.2);color:#e05050}
+
+/* PROGRESS TRACKER */
+.tracker-section{position:relative;z-index:1;background:rgba(20,20,20,.85);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 40px}
+.tracker-inner{max-width:1000px;margin:0 auto}
+.tracker-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:40px}
+.tracker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:36px}
+.tracker-stat{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:28px 24px;text-align:center}
+.ts-value{font-family:'Cinzel',serif;font-size:40px;font-weight:900;color:var(--gold);margin-bottom:6px}
+.ts-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.overall-progress-wrap{max-width:600px;margin:0 auto;text-align:center}
+.op-label{font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase}
+.op-bar-bg{background:rgba(255,255,255,.06);border-radius:10px;height:10px;overflow:hidden;margin-bottom:10px}
+.op-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:10px;transition:width .8s ease}
+.op-pct{font-family:'Cinzel',serif;font-size:26px;font-weight:900;color:var(--white)}
+
+/* QUICK REFERENCE CARDS */
+.qrc-section{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:60px 40px}
+.qrc-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:32px}
+.qrc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.qrc-card{background:var(--card);border:1px solid var(--gold);border-radius:4px;padding:28px 24px}
+.qrc-card-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.qrc-citation{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.qrc-points{list-style:none;display:flex;flex-direction:column;gap:8px}
+.qrc-points li{font-size:12px;color:rgba(245,245,245,.75);line-height:1.6;padding-left:14px;position:relative}
+.qrc-points li::before{content:'›';position:absolute;left:0;color:var(--gold);font-weight:700}
+
+/* UPGRADE MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--gold);border-radius:4px;padding:48px;max-width:460px;width:90%;text-align:center;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer}
+.modal-close:hover{color:var(--white)}
+.modal-icon{font-size:52px;margin-bottom:14px}
+.modal-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.modal-tiers{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.mti{display:block;padding:13px 20px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .2s;text-decoration:none}
+.mti-warrior{background:rgba(201,162,39,.1);border:1px solid var(--gold);color:var(--gold)}
+.mti-warrior:hover{background:rgba(201,162,39,.2)}
+.mti-pro{background:rgba(100,149,237,.1);border:1px solid var(--blue);color:var(--blue)}
+.mti-pro:hover{background:rgba(100,149,237,.2)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:rgba(10,10,10,.98);border-top:1px solid var(--border);padding:40px;text-align:center}
+.footer-ccldr{font-family:'Cinzel',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
+.footer-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.footer-links a{font-size:12px;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{margin-top:24px;font-size:11px;color:rgba(136,136,136,.4)}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.modules-grid{grid-template-columns:repeat(2,1fr)}.qrc-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.modules-grid{grid-template-columns:1fr}.qrc-grid{grid-template-columns:1fr}.tracker-grid{grid-template-columns:1fr}.page-hero{padding:80px 20px 40px}.modules-section{padding:0 20px 60px}.qrc-section{padding:40px 20px}.tracker-section{padding:40px 20px}.locked-banner{padding:0 20px}}
+@media(max-width:640px){nav{padding:0 20px}.nav-links,.nav-cta{display:none}.hamburger{display:block}}
+</style>
+</head>
+<body>
+<div class="ch-bg" aria-hidden="true"></div>
+
+<nav>
+  <div class="nav-brand">
+    <div>
+      <div class="nav-logo">CCLDR</div>
+      <div class="nav-sub">Virtual Courthouse</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="clerks-office.html">Clerk's Office</a>
+    <a href="library.html">Library</a>
+    <a href="classroom.html" class="active">Classroom</a>
+    <a href="boardroom.html">Boardroom</a>
+    <a href="judges-chambers.html">Judge's Chambers</a>
+    <a href="records-room.html">Records Room</a>
+  </div>
+  <a href="mailto:info@ccldr.net?subject=Warrior%20Tier%20Signup" class="nav-cta">Upgrade Access</a>
+  <button class="hamburger" onclick="document.getElementById('nmob').classList.toggle('open')">☰</button>
+</nav>
+<div class="nav-mobile" id="nmob">
+  <a href="lobby.html">Lobby</a>
+  <a href="courtroom.html">Courtroom</a>
+  <a href="clerks-office.html">Clerk's Office</a>
+  <a href="library.html">Library</a>
+  <a href="classroom.html">Classroom</a>
+  <a href="boardroom.html">Boardroom</a>
+  <a href="judges-chambers.html">Judge's Chambers</a>
+  <a href="records-room.html">Records Room</a>
+  <a href="mailto:info@ccldr.net?subject=Warrior%20Tier%20Signup">Upgrade Access</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-icon">🎓</div>
+  <div class="tier-badge tb-gold" id="hero-tier-badge">Warrior+ Access Required</div>
+  <h1 class="page-title">Cannabis Law <span class="gold">Classroom</span></h1>
+  <p class="page-sub">Master Your Rights — Learn the Law That Protects You. Interactive modules built on real Canadian constitutional law.</p>
+  <div class="hero-tier-row">Current Tier: <span id="hero-tier-label" style="color:var(--gold);margin-left:8px">Loading...</span>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="mailto:info@ccldr.net?subject=Tier%20Upgrade" style="color:var(--green);font-weight:700">Upgrade →</a></div>
+</section>
+
+<!-- LOCKED BANNER — shown only for free tier -->
+<div class="locked-banner" id="locked-banner" style="display:none">
+  <div class="locked-box">
+    <div class="lb-icon">🔒</div>
+    <div class="lb-title">Unlock the Classroom</div>
+    <p class="lb-sub">The CCLDR Cannabis Law Classroom is available to Warrior tier and above. Charter Rights 101 (Module 1) is free for all visitors. Upgrade to access all six modules, progress tracking, and the full course library.</p>
+    <div class="lb-btns">
+      <a href="mailto:info@ccldr.net?subject=Warrior%20Tier%20Signup" class="lb-btn lb-btn-warrior">Join Warrior — $149/mo</a>
+      <a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup" class="lb-btn lb-btn-pro">Professional — $499/mo</a>
+    </div>
+  </div>
+</div>
+
+<!-- COURSE MODULES -->
+<div class="modules-section">
+  <div class="section-label">
+    <span>Course Modules</span>
+    <span id="modules-access-note" style="font-size:10px;color:var(--muted);letter-spacing:1px"></span>
+  </div>
+  <div class="modules-grid">
+
+    <!-- MODULE 1 — FREE -->
+    <div class="module-card" id="mod-card-1">
+      <div class="module-num">Module 01</div>
+      <div class="module-title">Charter Rights 101</div>
+      <span class="module-tier-badge mtb-free">Free — All Visitors</span>
+      <div class="module-meta">
+        <span>📖 4 Lessons</span>
+        <span>⏱ ~45 min</span>
+      </div>
+      <div class="module-desc">Foundation of your constitutional rights under the Canadian Charter of Rights and Freedoms. Covers ss.7, 8, 10(b), and the s.24(2) exclusion remedy. No legal experience required.</div>
+      <div class="module-progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="prog-label-1">0%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar-1" style="width:0%"></div></div>
+      </div>
+      <button class="module-btn mbtn-active" onclick="startModule(1)">Start Module</button>
+      <div class="lesson-content" id="lesson-1">
+        <div class="lesson-heading">Lesson 1: Section 7 — Life, Liberty, and Security of the Person</div>
+        <div class="lesson-body">
+          <p><strong>What s.7 Says:</strong> "Everyone has the right to life, liberty and security of the person and the right not to be deprived thereof except in accordance with the principles of fundamental justice."</p>
+          <p><strong>Why It Matters to You:</strong> Section 7 is the backbone of cannabis Charter challenges. In <em>R. v. Parker</em> (2000), the Ontario Court of Appeal struck down the possession prohibition as a violation of s.7 — the first time a court found that denying medical cannabis access violated a person's constitutional right to health and security. If the state threatens your life or health through a law, that law must comply with fundamental justice.</p>
+          <p><strong>Fundamental Justice:</strong> The Supreme Court has defined principles of fundamental justice to include: laws must not be arbitrary, laws must not be overbroad, and laws must not have grossly disproportionate effects. These three principles are your tools when challenging cannabis law.</p>
+          <p><strong>Invoking s.7:</strong> At your hearing, your lawyer or you (self-represented) can argue: "Your Honour, the Crown's position deprives my client of liberty through arrest and prosecution. That deprivation must accord with the principles of fundamental justice — specifically, the law as applied here is overbroad and grossly disproportionate." That framing opens the constitutional door.</p>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-question">Quiz: Which of the following is NOT recognized as a principle of fundamental justice under s.7?</div>
+          <div class="quiz-options" id="quiz-1">
+            <button class="quiz-opt" onclick="answerQuiz(1, this, false)">A. Laws must not be arbitrary</button>
+            <button class="quiz-opt" onclick="answerQuiz(1, this, false)">B. Laws must not be overbroad</button>
+            <button class="quiz-opt" onclick="answerQuiz(1, this, true)">C. Laws must guarantee a positive outcome for the accused</button>
+            <button class="quiz-opt" onclick="answerQuiz(1, this, false)">D. Laws must not have grossly disproportionate effects</button>
+          </div>
+          <div class="quiz-feedback" id="qfeedback-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2 — WARRIOR -->
+    <div class="module-card" id="mod-card-2">
+      <div class="lock-corner" id="lock-2">🔒</div>
+      <div class="module-num">Module 02</div>
+      <div class="module-title">Search &amp; Seizure Law</div>
+      <span class="module-tier-badge mtb-warrior">Warrior+</span>
+      <div class="module-meta">
+        <span>📖 5 Lessons</span>
+        <span>⏱ ~60 min</span>
+      </div>
+      <div class="module-desc">The <em>R. v. Grant</em> three-part test, reasonable expectation of privacy in the home and vehicle, warrantless search grounds, and how to challenge unlawful searches at voir dire.</div>
+      <div class="module-progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="prog-label-2">0%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar-2" style="width:0%"></div></div>
+      </div>
+      <button class="module-btn" id="mod-btn-2" onclick="startModule(2)">Start Module</button>
+    </div>
+
+    <!-- MODULE 3 — WARRIOR -->
+    <div class="module-card" id="mod-card-3">
+      <div class="lock-corner" id="lock-3">🔒</div>
+      <div class="module-num">Module 03</div>
+      <div class="module-title">Your Rights at Arrest</div>
+      <span class="module-tier-badge mtb-warrior">Warrior+</span>
+      <div class="module-meta">
+        <span>📖 4 Lessons</span>
+        <span>⏱ ~50 min</span>
+      </div>
+      <div class="module-desc">Right to counsel under s.10(b), right to silence, how to invoke s.10(b) properly, what police can and cannot do after invocation, and why what you say at arrest matters in court.</div>
+      <div class="module-progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="prog-label-3">0%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar-3" style="width:0%"></div></div>
+      </div>
+      <button class="module-btn" id="mod-btn-3" onclick="startModule(3)">Start Module</button>
+    </div>
+
+    <!-- MODULE 4 — PROFESSIONAL -->
+    <div class="module-card" id="mod-card-4">
+      <div class="lock-corner" id="lock-4">🔒</div>
+      <div class="module-num">Module 04</div>
+      <div class="module-title">Building Your Case</div>
+      <span class="module-tier-badge mtb-professional">Professional+</span>
+      <div class="module-meta">
+        <span>📖 6 Lessons</span>
+        <span>⏱ ~75 min</span>
+      </div>
+      <div class="module-desc">Evidence gathering methodology, disclosure requests under <em>R. v. Stinchcombe</em>, organizing your defence, voir dire preparation, and cross-examination strategy for police witnesses.</div>
+      <div class="module-progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="prog-label-4">0%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar-4" style="width:0%"></div></div>
+      </div>
+      <button class="module-btn" id="mod-btn-4" onclick="startModule(4)">Start Module</button>
+    </div>
+
+    <!-- MODULE 5 — PROFESSIONAL -->
+    <div class="module-card" id="mod-card-5">
+      <div class="lock-corner" id="lock-5">🔒</div>
+      <div class="module-num">Module 05</div>
+      <div class="module-title">Ontario Court Procedure</div>
+      <span class="module-tier-badge mtb-professional">Professional+</span>
+      <div class="module-meta">
+        <span>📖 5 Lessons</span>
+        <span>⏱ ~65 min</span>
+      </div>
+      <div class="module-desc">Superior Court vs. Ontario Court of Justice jurisdiction, how to navigate appeals, self-represented litigant tips, appearance protocol, and how to read a court docket like a lawyer.</div>
+      <div class="module-progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="prog-label-5">0%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar-5" style="width:0%"></div></div>
+      </div>
+      <button class="module-btn" id="mod-btn-5" onclick="startModule(5)">Start Module</button>
+    </div>
+
+    <!-- MODULE 6 — ELITE -->
+    <div class="module-card" id="mod-card-6">
+      <div class="lock-corner" id="lock-6">🔒</div>
+      <div class="module-num">Module 06</div>
+      <div class="module-title">Advanced Cannabis Law</div>
+      <span class="module-tier-badge mtb-elite">Elite+</span>
+      <div class="module-meta">
+        <span>📖 7 Lessons</span>
+        <span>⏱ ~90 min</span>
+      </div>
+      <div class="module-desc">Full Cannabis Act regulatory framework, medical access regimes (ACMPR/CTFP), personal cultivation rights post-<em>Allard</em>, constitutional challenges to ss.12(3)(b.1) and 12(6)(c), and international law comparisons.</div>
+      <div class="module-progress-wrap">
+        <div class="progress-label"><span>Progress</span><span id="prog-label-6">0%</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar-6" style="width:0%"></div></div>
+      </div>
+      <button class="module-btn" id="mod-btn-6" onclick="startModule(6)">Start Module</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROGRESS TRACKER -->
+<div class="tracker-section">
+  <div class="tracker-inner">
+    <div class="tracker-title">Your Learning Progress</div>
+    <div class="tracker-grid">
+      <div class="tracker-stat">
+        <div class="ts-value" id="stat-overall">0%</div>
+        <div class="ts-label">Overall Completion</div>
+      </div>
+      <div class="tracker-stat">
+        <div class="ts-value" id="stat-lessons">0</div>
+        <div class="ts-label">Lessons Completed</div>
+      </div>
+      <div class="tracker-stat">
+        <div class="ts-value" id="stat-time">0h</div>
+        <div class="ts-label">Time Invested</div>
+      </div>
+    </div>
+    <div class="overall-progress-wrap">
+      <div class="op-label">Overall Course Progress</div>
+      <div class="op-bar-bg"><div class="op-bar-fill" id="overall-bar" style="width:0%"></div></div>
+      <div class="op-pct" id="overall-pct">0%</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE CARDS — always visible -->
+<div class="qrc-section">
+  <div class="qrc-title">Quick Reference — Know These Cold</div>
+  <div class="qrc-grid">
+
+    <div class="qrc-card">
+      <div class="qrc-card-title">Charter s.8 — Search &amp; Seizure</div>
+      <div class="qrc-citation">Canadian Charter of Rights and Freedoms, 1982</div>
+      <ul class="qrc-points">
+        <li>"Everyone has the right to be secure against unreasonable search or seizure."</li>
+        <li>Police must have reasonable and probable grounds before searching you, your home, or your vehicle.</li>
+        <li>A warrant is required in most circumstances — warrantless searches are presumptively unreasonable.</li>
+        <li>Reasonable expectation of privacy (REP) is the threshold question — established in <em>Hunter v. Southam</em> (1984).</li>
+        <li>Evidence from an unreasonable search can be excluded under s.24(2).</li>
+      </ul>
+    </div>
+
+    <div class="qrc-card">
+      <div class="qrc-card-title">Charter s.10(b) — Right to Counsel</div>
+      <div class="qrc-citation">Canadian Charter of Rights and Freedoms, 1982</div>
+      <ul class="qrc-points">
+        <li>On arrest or detention, you have the right to retain and instruct counsel without delay.</li>
+        <li>Police must inform you of this right (informational component) and facilitate it (implementational component).</li>
+        <li>Once invoked: all questioning must stop until you have spoken with a lawyer.</li>
+        <li>You have the right to Legal Aid duty counsel — available 24/7 at no cost.</li>
+        <li>Say clearly: "I want to speak to a lawyer" — then say nothing else.</li>
+      </ul>
+    </div>
+
+    <div class="qrc-card">
+      <div class="qrc-card-title">R. v. Grant — The 3-Part Exclusion Test</div>
+      <div class="qrc-citation">2009 SCC 32 — Supreme Court of Canada</div>
+      <ul class="qrc-points">
+        <li><strong>Step 1:</strong> Seriousness of the Charter-infringing conduct — was it deliberate or egregious?</li>
+        <li><strong>Step 2:</strong> Impact on the accused's Charter-protected interests — how serious was the breach?</li>
+        <li><strong>Step 3:</strong> Society's interest in adjudication on the merits — would exclusion bring the justice system into disrepute?</li>
+        <li>Courts balance all three factors holistically — there is no automatic exclusion rule.</li>
+        <li>The more serious the breach, the stronger the case for exclusion under s.24(2).</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- UPGRADE MODAL -->
+<div class="modal-overlay" id="upgrade-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-icon">🔒</div>
+    <div class="modal-title" id="modal-title">Upgrade Required</div>
+    <p class="modal-sub" id="modal-sub">This module requires a higher tier to access. Upgrade to unlock all course content.</p>
+    <div class="modal-tiers">
+      <a href="mailto:info@ccldr.net?subject=Warrior%20Tier%20Signup" class="mti mti-warrior">Warrior — $149/mo · Modules 1–3</a>
+      <a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup" class="mti mti-pro">Professional — $499/mo · Modules 1–5</a>
+    </div>
+    <div style="font-size:11px;color:var(--muted)">Questions? <a href="mailto:info@ccldr.net" style="color:var(--gold)">info@ccldr.net</a></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-ccldr">CCLDR.NET</div>
+  <div class="footer-sub">Cannabis Legal Defense &amp; Education Resources · Doc WeedLaw · Virtual Courthouse</div>
+  <div class="footer-links">
+    <a href="https://ccldr.net">ccldr.net</a>
+    <a href="lobby.html">Courthouse Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="library.html">Library</a>
+    <a href="classroom.html">Classroom</a>
+    <a href="judges-chambers.html">Judge's Chambers</a>
+    <a href="mailto:info@ccldr.net">Contact</a>
+    <a href="pricing.html">Pricing</a>
+  </div>
+  <div class="footer-bottom">© 2026 CCLDR.NET | Doc WeedLaw | <a href="https://ccldr.net" style="color:rgba(136,136,136,.5)">ccldr.net</a> · A Francisco Holdings Inc. Venture · All information is educational — not legal advice</div>
+</footer>
+
+<script>
+// ---- TIER DEFINITIONS ----
+const TIER_ORDER = ['free','warrior','professional','elite','sovereign'];
+const TIER_LABELS = {free:'Free',warrior:'Warrior',professional:'Professional',elite:'Elite',sovereign:'Sovereign'};
+const MODULE_REQ = {1:'free',2:'warrior',3:'warrior',4:'professional',5:'professional',6:'elite'};
+const MODULE_LESSONS = {1:4,2:5,3:4,4:6,5:5,6:7};
+const MODULE_MINS = {1:45,2:60,3:50,4:75,5:65,6:90};
+
+function tierRank(t){ return TIER_ORDER.indexOf(t||'free'); }
+
+function checkTier(){
+  const tier = localStorage.getItem('ccldr_tier') || 'free';
+  const rank = tierRank(tier);
+
+  // Hero badge
+  const badge = document.getElementById('hero-tier-badge');
+  const label = document.getElementById('hero-tier-label');
+  label.textContent = TIER_LABELS[tier] || 'Free';
+  if(rank >= 1){ badge.textContent = 'Classroom Access: ' + TIER_LABELS[tier]; badge.classList.remove('tb-locked'); badge.classList.add('tb-green'); }
+  else { badge.textContent = 'Warrior+ Access Required'; badge.classList.add('tb-locked'); }
+
+  // Locked banner
+  document.getElementById('locked-banner').style.display = (rank < 1) ? 'block' : 'none';
+
+  // Modules
+  for(let i=1;i<=6;i++){
+    const req = tierRank(MODULE_REQ[i]);
+    const card = document.getElementById('mod-card-'+i);
+    const btn = document.getElementById('mod-btn-'+i) || card.querySelector('.module-btn');
+    const lock = document.getElementById('lock-'+i);
+    const prog = parseFloat(localStorage.getItem('ccldr_progress_mod'+i)||0);
+
+    // Update progress bars
+    document.getElementById('prog-bar-'+i).style.width = prog+'%';
+    document.getElementById('prog-label-'+i).textContent = Math.round(prog)+'%';
+
+    if(rank >= req){
+      card.classList.remove('module-locked');
+      if(lock) lock.style.display='none';
+      btn.className='module-btn mbtn-active';
+      if(prog > 0) btn.textContent = prog >= 100 ? 'Review Module' : 'Continue';
+      else btn.textContent = 'Start Module';
+    } else {
+      card.classList.add('module-locked');
+      if(lock) lock.style.display='block';
+      btn.className='module-btn mbtn-locked';
+      btn.textContent = 'Unlock — ' + TIER_LABELS[MODULE_REQ[i]] + '+';
+    }
+  }
+
+  calcOverallProgress(rank);
+}
+
+function startModule(id){
+  const tier = localStorage.getItem('ccldr_tier') || 'free';
+  const rank = tierRank(tier);
+  const req = tierRank(MODULE_REQ[id]);
+
+  if(rank < req){
+    const titles = {2:'Search & Seizure Law',3:'Your Rights at Arrest',4:'Building Your Case',5:'Ontario Court Procedure',6:'Advanced Cannabis Law'};
+    document.getElementById('modal-title').textContent = 'Unlock: ' + (titles[id]||'Module '+id);
+    document.getElementById('modal-sub').textContent = 'This module requires ' + TIER_LABELS[MODULE_REQ[id]] + ' tier or above. Upgrade your access to continue learning.';
+    document.getElementById('upgrade-modal').classList.add('open');
+    return;
+  }
+
+  // Module 1 — show inline lesson
+  if(id === 1){
+    const lc = document.getElementById('lesson-1');
+    const btn = document.getElementById('mod-card-1').querySelector('.module-btn');
+    if(lc.classList.contains('open')){
+      lc.classList.remove('open');
+      btn.textContent = 'Start Module';
+    } else {
+      lc.classList.add('open');
+      btn.textContent = 'Close Lesson';
+      updateProgress(1, 25);
+    }
+    return;
+  }
+
+  // Other modules — show coming soon inline
+  const card = document.getElementById('mod-card-'+id);
+  let existing = card.querySelector('.lesson-content');
+  if(existing){ existing.classList.toggle('open'); return; }
+  const div = document.createElement('div');
+  div.className='lesson-content open';
+  div.innerHTML='<div class="lesson-heading">Module '+id+' — Content Loading</div><div class="lesson-body"><p>Full lesson content for this module is being prepared. Check back soon — each lesson includes reading, examples from real Canadian cases, and a quiz.</p></div>';
+  card.appendChild(div);
+}
+
+function updateProgress(moduleId, percent){
+  const current = parseFloat(localStorage.getItem('ccldr_progress_mod'+moduleId)||0);
+  const newVal = Math.max(current, percent);
+  localStorage.setItem('ccldr_progress_mod'+moduleId, newVal);
+  document.getElementById('prog-bar-'+moduleId).style.width = newVal+'%';
+  document.getElementById('prog-label-'+moduleId).textContent = Math.round(newVal)+'%';
+  const tier = localStorage.getItem('ccldr_tier') || 'free';
+  calcOverallProgress(tierRank(tier));
+}
+
+function calcOverallProgress(rank){
+  let total=0, count=0, lessonsComplete=0, minsTotal=0;
+  for(let i=1;i<=6;i++){
+    if(tierRank(MODULE_REQ[i]) <= rank){
+      const p = parseFloat(localStorage.getItem('ccldr_progress_mod'+i)||0);
+      total += p; count++;
+      if(p >= 100){ lessonsComplete += MODULE_LESSONS[i]; minsTotal += MODULE_MINS[i]; }
+      else if(p > 0){ lessonsComplete += Math.floor(MODULE_LESSONS[i]*(p/100)); minsTotal += Math.floor(MODULE_MINS[i]*(p/100)); }
+    }
+  }
+  const overall = count > 0 ? Math.round(total/count) : 0;
+  document.getElementById('stat-overall').textContent = overall+'%';
+  document.getElementById('stat-lessons').textContent = lessonsComplete;
+  const hrs = minsTotal >= 60 ? (minsTotal/60).toFixed(1)+'h' : minsTotal+'m';
+  document.getElementById('stat-time').textContent = hrs || '0h';
+  document.getElementById('overall-bar').style.width = overall+'%';
+  document.getElementById('overall-pct').textContent = overall+'%';
+}
+
+function answerQuiz(quizId, btn, isCorrect){
+  const container = document.getElementById('quiz-'+quizId);
+  const opts = container.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  const fb = document.getElementById('qfeedback-'+quizId);
+  if(isCorrect){
+    btn.classList.add('correct');
+    fb.className='quiz-feedback show good';
+    fb.textContent='Correct. s.7 protects against state deprivation of life, liberty, and security — it does not guarantee outcomes. The principles of fundamental justice impose limits on how the state can deprive you, not a guarantee of any particular result.';
+    updateProgress(1, 50);
+  } else {
+    btn.classList.add('incorrect');
+    // Highlight correct
+    opts.forEach(o => { if(o.getAttribute('onclick').includes('true')) o.classList.add('correct'); });
+    fb.className='quiz-feedback show bad';
+    fb.textContent='Not quite. Options A, B, and D are all recognized principles of fundamental justice under s.7. Section 7 imposes constraints on the state, not guarantees for the accused.';
+  }
+}
+
+function closeModal(){
+  document.getElementById('upgrade-modal').classList.remove('open');
+}
+document.getElementById('upgrade-modal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+// Initialize
+checkTier();
+</script>
+</body>
+</html>
