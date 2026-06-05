@@ -130,8 +130,108 @@ Claude                         — Builder/executor — acts on direct PrimeDox 
   - [ ] Guardian — $2,499/mo CAD recurring → paste `buy.stripe.com/xxx` to Claude
   - [ ] Warden — $5,000/mo CAD recurring → paste `buy.stripe.com/xxx` to Claude
   - [ ] Protector — $10,000/mo CAD recurring → paste `buy.stripe.com/xxx` to Claude
+  - [ ] CCLDR Warrior — $149/mo → paste to Claude
+  - [ ] CCLDR Professional — $499/mo → paste to Claude
+  - [ ] CCLDR Elite — $999/mo → paste to Claude
+  - [ ] CCLDR Sovereign — $1,499/mo → paste to Claude
+  - [ ] CCC Grow — $99/mo → paste to Claude
+  - [ ] CCC Harvest — $299/mo → paste to Claude
+  - [ ] CCC Empire — $999/mo → paste to Claude
+  - [ ] CleanSwarm Worker — $500/mo → paste to Claude
 
 ---
 
-*Update this document after every deployment, domain registration, payment integration, or architecture change.*
-*Source of truth for the Francisco Holdings empire.*
+## 9. JUNE 5, 2026 BUILD SESSION — COMPLETED
+
+### CCLDR Virtual Courthouse (ALL 8 ROOMS BUILT ✅)
+| File | Room | Tier Required | Status |
+|------|------|--------------|--------|
+| lobby.html | Hub/Navigation | Free | ✅ Committed |
+| courtroom.html | Active Cases | Free | ✅ Committed |
+| practice-courtroom.html | AI Trial Simulator | Free (3 trials) | ✅ Committed |
+| library.html | Case Law Library | Free | ✅ Committed |
+| clerks-office.html | Filing Guide | Free | ✅ Committed |
+| classroom.html | Course Modules | Warrior+ | ✅ Committed |
+| judges-chambers.html | AI Justices | Professional+ | ✅ Committed |
+| boardroom.html | Case Strategy | Professional+ | ✅ Committed |
+| records-room.html | Document Templates | Elite+ | ✅ Committed |
+
+### CCLDR Francisco Protocol (ALL 5 SITES BUILT ✅)
+| File | Description | Status |
+|------|-------------|--------|
+| constitution.html | 7-Article WeedLaw Constitution | ✅ Committed |
+| justices.html | 7 AI Justices + Deliberation Simulator | ✅ Committed |
+| blockchain-court.html | Docket Explorer + Hash Verifier | ✅ Committed |
+| dao.html | People's Jury + JUSTICE Token System | ✅ Committed |
+| treaty.html | Global Cannabis Treaty + Country Tracker | ✅ Committed |
+
+### OmniaGuard Robot Fix (LIVE ✅)
+- Hero: robot-350.jpg (silver, 60vh, centered floating) — DEPLOYED
+- Defense Force: text moved BELOW images — zero overlay — DEPLOYED
+- "INJECTION" → "INTERCEPTION" in agent card branding — DEPLOYED
+- Push: franciscoderek7/omniaguard main branch ✅
+
+### CleanSwarm v2.0 Rebuild
+| File | Status |
+|------|--------|
+| index.html | ✅ Rebuilt |
+| workers.html | ✅ Built |
+| customers.html | ✅ Built |
+| pricing.html | ✅ Built |
+
+### CCC v2.0 Rebuild
+| File | Status |
+|------|--------|
+| index.html | ✅ Rebuilt — 22 AI agents, 4 Farm Stacks |
+| about.html | 🔄 Building |
+| pricing.html | 🔄 Building |
+| contact.html | 🔄 Building |
+| weddings.html | 🔄 Building |
+| church.html | 🔄 Building |
+
+### Email Signatures
+- 9 business signatures with copy-to-clipboard — ✅ Committed
+- File: email-signatures/signatures.html
+
+### OmniaGuard PWA
+| File | Status |
+|------|--------|
+| manifest.json | 🔄 Building |
+| service-worker.js | 🔄 Building |
+| app.js | 🔄 Building |
+| threat-dashboard.html | 🔄 Building |
+| primedox-portal.html | 🔄 Building |
+| install-guide.html | 🔄 Building |
+| offline.html | 🔄 Building |
+| security-sdk-roadmap.html | 🔄 Building |
+
+---
+
+## 10. ACTIVE LEGAL CASES — TRACK URGENTLY
+
+| Case | Amount | Status | Next Date | Priority |
+|------|--------|--------|-----------|---------|
+| Francisco v. AG Canada | $35,000,000 | Active investigation | TBD | 🟡 HIGH |
+| Francisco v. Denby | $3,300,000 | Default judgment + New claim | **JUNE 17, 2026** | 🔴 CRITICAL |
+
+**Court docs filled:** statement-of-claim.txt, sheriff-instruction-letter.txt, form-31A.txt, certificate-pending-litigation.txt, writ-seizure-sale.txt
+**Still needed:** Defendant names, specific facts, lawyer review before June 17
+
+---
+
+## 11. DOMAINS TO REGISTER (Derek Action Required)
+
+| Domain | Business | Registrar | Est. Cost/Year |
+|--------|---------|----------|----------------|
+| cleanswarm.ca | CleanSwarm | Porkbun | ~$15 CAD |
+| canadiancannabisconsulting.com | CCC | Porkbun | ~$12 USD |
+| zprimedoxai.com | ZPrimeDoxAI | Porkbun | ~$12 USD |
+| franciscoholdings.com | FHI | Porkbun | ~$12 USD |
+| soulstack.ai | SoulStack | Cloudflare | ~$80 USD |
+| techpetcage.com | TechPetCage | Porkbun | ~$12 USD |
+| vaultvelocityauto.com | VaultVelocityAuto | Porkbun | ~$12 USD |
+
+---
+
+*Updated: 2026-06-05 | Session: Francisco Revenue Sprint | Builder: Claude*
+*Source of truth for the Francisco Holdings empire. Update after every deployment.*
