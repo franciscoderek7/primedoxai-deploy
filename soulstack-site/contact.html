@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact & Waitlist — SoulStack.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--black:#000;--deep:#050508;--panel:#0a0a12;--cyan:#00D4FF;--red:#CC0000;--white:#F4F8FF;--muted:#7a8aaa;--border:rgba(0,212,255,0.1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(0,212,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.025) 1px,transparent 1px);background-size:60px 60px;opacity:.5}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.bm{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),rgba(0,212,255,.4));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px;color:#000}
+.bn{font-size:18px;font-weight:700;color:var(--white)}.bn span{color:var(--cyan)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(244,248,255,.6);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+.nav-cta{background:var(--cyan);color:#000;padding:10px 22px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase}
+.hamburger{display:none;background:none;border:none;color:var(--white);font-size:24px;cursor:pointer}
+.nm{display:none;flex-direction:column;padding:16px 24px;background:rgba(0,0,0,.98);border-top:1px solid var(--border)}
+.nm.open{display:flex}
+.nm a{color:var(--white);padding:14px 0;text-decoration:none;border-bottom:1px solid var(--border);font-size:16px}
+.nm-cta{background:var(--cyan)!important;color:#000!important;border:none!important;text-align:center;border-radius:4px;margin-top:12px;font-weight:700;padding:14px!important}
+@media(max-width:900px){.nav-links,.nav-cta{display:none}.hamburger{display:block}.nav-inner{padding:0 24px}}
+
+.page-hero{position:relative;z-index:1;padding:160px 80px 80px;text-align:center;max-width:900px;margin:0 auto}
+.stag{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:12px}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,6vw,72px);font-weight:900;line-height:1.05;margin-bottom:16px}
+.page-hero h1 em{color:var(--cyan);font-style:italic}
+.page-hero p{font-size:17px;color:var(--muted);line-height:1.7;max-width:560px;margin:0 auto}
+@media(max-width:768px){.page-hero{padding:120px 24px 60px}}
+
+.contact-wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 80px 100px;display:grid;grid-template-columns:1fr 1fr;gap:60px}
+@media(max-width:900px){.contact-wrap{grid-template-columns:1fr;padding:0 24px 60px}}
+
+/* FORM */
+.form-box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:48px;position:relative;overflow:hidden}
+.form-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--red))}
+.form-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:8px}
+.form-sub{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.5}
+.ff{margin-bottom:20px}
+.fl{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(244,248,255,.55);margin-bottom:8px}
+.fi,.fs,.ft{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);padding:13px 16px;border-radius:6px;font-size:14px;color:var(--white);font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;appearance:none}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--cyan)}
+.fi::placeholder,.ft::placeholder{color:var(--muted)}
+.ft{resize:vertical;min-height:100px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:500px){.fr{grid-template-columns:1fr}}
+.btn-sub{background:var(--cyan);color:#000;border:none;padding:16px 32px;border-radius:6px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;width:100%;transition:background .2s}
+.btn-sub:hover{background:#00AACC}
+.fn{font-size:12px;color:var(--muted);margin-top:12px;text-align:center;line-height:1.5}
+
+/* SIDEBAR */
+.contact-info .stag{margin-bottom:20px}
+.contact-info h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:16px}
+.contact-info p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:32px}
+.channel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:16px;transition:border-color .3s}
+.channel:hover{border-color:rgba(0,212,255,.3)}
+.ch-icon{font-size:24px;margin-bottom:10px}
+.ch-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+.ch-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.ch-link{color:var(--cyan);font-size:13px;font-weight:600;text-decoration:none}
+.wl-count{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:24px;text-align:center;margin-top:20px}
+.wlc-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--cyan);line-height:1}
+.wlc-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.wlc-sub{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+
+footer{position:relative;z-index:1;background:var(--deep);border-top:1px solid var(--border);padding:48px 80px 28px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;max-width:1300px;margin:0 auto 32px}
+.fh{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+.fa{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:9px}.fa:hover{color:var(--white)}
+.fb{display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:20px;font-size:12px;color:rgba(244,248,255,.2);max-width:1300px;margin:0 auto}
+@media(max-width:768px){footer{padding:40px 24px 24px}.fg{grid-template-columns:1fr 1fr}.fb{flex-direction:column;gap:8px;text-align:center}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><div class="bm">SS</div><span class="bn">Soul<span>Stack</span>.ai</span></a>
+    <ul class="nav-links"><li><a href="how-it-works.html">How It Works</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="about.html">About</a></li><li><a href="demo.html">Demo</a></li><li><a href="contact.html" class="active">Contact</a></li></ul>
+    <a href="pricing.html" class="nav-cta">Upload Now</a>
+    <button class="hamburger" onclick="document.getElementById('nm-mob').classList.toggle('open')">☰</button>
+  </div>
+  <div class="nm" id="nm-mob"><a href="how-it-works.html">How It Works</a><a href="pricing.html">Pricing</a><a href="about.html">About</a><a href="demo.html">Demo</a><a href="contact.html">Contact</a><a href="pricing.html" class="nm-cta">Upload Now</a></div>
+</nav>
+
+<div class="page-hero">
+  <span class="stag">Join the Waitlist</span>
+  <h1>Secure Your <em>Upload Slot.</em></h1>
+  <p>100 founding members. Priority access. Founding pricing locked for life. Your slot is waiting.</p>
+</div>
+
+<div class="contact-wrap">
+  <div class="form-box">
+    <div class="form-title">Waitlist Signup</div>
+    <div class="form-sub">Tell us about yourself. We'll contact you to schedule your first session.</div>
+    <form onsubmit="submitWaitlist(event)">
+      <div class="fr">
+        <div class="ff"><label class="fl">First Name *</label><input type="text" class="fi" id="c-fn" placeholder="Derek" required></div>
+        <div class="ff"><label class="fl">Last Name *</label><input type="text" class="fi" id="c-ln" placeholder="Francisco" required></div>
+      </div>
+      <div class="ff"><label class="fl">Email *</label><input type="email" class="fi" id="c-em" placeholder="you@yourempire.com" required></div>
+      <div class="ff"><label class="fl">Company / Empire Name</label><input type="text" class="fi" id="c-co" placeholder="Your Holdings Inc."></div>
+      <div class="ff">
+        <label class="fl">Tier Interest *</label>
+        <select class="fs" id="c-tr" required>
+          <option value="">Select a tier...</option>
+          <option>Starter — $99/mo</option>
+          <option>Professional — $499/mo</option>
+          <option>Enterprise — $1,999/mo</option>
+          <option>Sovereign — Custom Pricing</option>
+        </select>
+      </div>
+      <div class="ff">
+        <label class="fl">Why Do You Need a Clone?</label>
+        <textarea class="ft" id="c-msg" placeholder="Tell us about your empire and what you want your digital twin to handle..."></textarea>
+      </div>
+      <button type="submit" class="btn-sub">Secure My Upload Slot</button>
+      <p class="fn">We reach out within 24 hours. No spam. Ever. Your data is protected by OmniaGuard's 14-agent security layer.</p>
+    </form>
+  </div>
+
+  <div class="contact-info">
+    <span class="stag">Get in Touch</span>
+    <h2>The Team Behind the Technology</h2>
+    <p>SoulStack.ai is a Francisco Holdings Inc. company. We're a small, focused team building the most ambitious platform in AI history. We read every message.</p>
+    <div class="channel">
+      <div class="ch-icon">✉️</div>
+      <div class="ch-title">Waitlist & Sales</div>
+      <div class="ch-desc">Join the waitlist, ask about tiers, or schedule a consultation.</div>
+      <a href="mailto:omniaguard1@gmail.com?subject=SoulStack.ai Inquiry" class="ch-link">omniaguard1@gmail.com</a>
+    </div>
+    <div class="channel">
+      <div class="ch-icon">🏛️</div>
+      <div class="ch-title">Enterprise Partnerships</div>
+      <div class="ch-desc">Large organizations deploying multiple clones, custom architecture, white-label options.</div>
+      <a href="mailto:omniaguard1@gmail.com?subject=SoulStack Enterprise Partnership" class="ch-link">Enterprise Inquiry →</a>
+    </div>
+    <div class="channel">
+      <div class="ch-icon">🔐</div>
+      <div class="ch-title">Security & Privacy</div>
+      <div class="ch-desc">Questions about how your consciousness data is stored, protected, and controlled.</div>
+      <a href="mailto:omniaguard1@gmail.com?subject=SoulStack Security Question" class="ch-link">Security Questions →</a>
+    </div>
+    <div class="wl-count">
+      <div class="wlc-num">83</div>
+      <div class="wlc-label">Slots Remaining</div>
+      <div class="wlc-sub">17 of 100 founding upload slots have been claimed. Founding pricing locks permanently on signup.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="fg">
+    <div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="bm">SS</div><span style="font-size:18px;font-weight:700;color:var(--white)">SoulStack.ai</span></div><p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:260px">AI clone creation platform. Upload your consciousness. Deploy your empire.</p></div>
+    <div><div class="fh">Platform</div><a href="how-it-works.html" class="fa">How It Works</a><a href="pricing.html" class="fa">Pricing</a><a href="demo.html" class="fa">Demo</a></div>
+    <div><div class="fh">Company</div><a href="about.html" class="fa">About</a><a href="contact.html" class="fa">Contact</a></div>
+  </div>
+  <div class="fb"><span>© 2026 SoulStack.ai</span><span style="color:rgba(0,212,255,.3)">A Francisco Holdings Inc. Company</span></div>
+</footer>
+<script>
+function submitWaitlist(e){
+  e.preventDefault();
+  const fn=document.getElementById('c-fn').value;
+  const ln=document.getElementById('c-ln').value;
+  const em=document.getElementById('c-em').value;
+  const co=document.getElementById('c-co').value;
+  const tr=document.getElementById('c-tr').value;
+  const msg=document.getElementById('c-msg').value;
+  const body=`SoulStack.ai Waitlist Signup%0A%0AName: ${fn} ${ln}%0AEmail: ${em}%0ACompany: ${co||'N/A'}%0ATier: ${tr}%0A%0AWhy they need a clone:%0A${msg}`;
+  window.location.href=`mailto:omniaguard1@gmail.com?subject=SoulStack Waitlist — ${fn} ${ln}&body=${body}`;
+}
+</script>
+</body>
+</html>

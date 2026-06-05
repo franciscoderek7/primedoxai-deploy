@@ -1,2806 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SoulStack.ai — AI Consciousness Monitoring. The ethical backbone of the agent swarm. Monitors every AI agent for ethical drift, anomaly detection, and authority chain enforcement in real time." />
-  <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="SoulStack.ai — AI Consciousness Monitoring" />
-  <meta property="og:description" content="The Observer Layer for Your AI Empire. SoulStack monitors every AI agent for ethical drift, unauthorized behavior, and authority chain violations — in real time." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://soulstack.ai" />
-  <title>SoulStack.ai — AI Consciousness Monitoring | The Ethical Backbone of the Agent Swarm</title>
-
-  <style>
-    /* =========================================================
-       CSS VARIABLES
-    ========================================================= */
-    :root {
-      --bg:      #07070f;
-      --bg2:     #0d0d1c;
-      --card:    #12121f;
-      --border:  rgba(201,162,39,0.15);
-      --gold:    #c9a227;
-      --gold2:   #ffd700;
-      --purple:  #7b2fbe;
-      --cyan:    #00d4ff;
-      --white:   #f1f0ff;
-      --muted:   #8892a4;
-      --radius:  12px;
-      --radius-lg: 20px;
-      --shadow:  0 4px 32px rgba(201,162,39,0.08);
-      --glow:    0 0 40px rgba(201,162,39,0.18);
-      --purple-glow: 0 0 40px rgba(123,47,190,0.22);
-      --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    /* =========================================================
-       RESET & BASE
-    ========================================================= */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      font-size: 16px;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--white);
-      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    ul {
-      list-style: none;
-    }
-
-    /* =========================================================
-       TYPOGRAPHY
-    ========================================================= */
-    h1, h2, h3, h4, h5 {
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
-
-    h1 { font-size: clamp(2.4rem, 5.5vw, 4.2rem); }
-    h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
-    h3 { font-size: clamp(1.2rem, 2.2vw, 1.5rem); }
-    h4 { font-size: 1.1rem; }
-
-    p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
-
-    .text-gold  { color: var(--gold); }
-    .text-gold2 { color: var(--gold2); }
-    .text-purple { color: var(--purple); }
-    .text-cyan  { color: var(--cyan); }
-    .text-white { color: var(--white); }
-    .text-muted { color: var(--muted); }
-
-    /* =========================================================
-       LAYOUT
-    ========================================================= */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .section {
-      padding: 100px 0;
-    }
-
-    .section-sm {
-      padding: 64px 0;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 64px;
-    }
-
-    .section-header p {
-      max-width: 640px;
-      margin: 16px auto 0;
-      font-size: 1.1rem;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 12px;
-      padding: 4px 14px;
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      background: rgba(201,162,39,0.06);
-    }
-
-    /* =========================================================
-       GRID UTILITIES
-    ========================================================= */
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 32px;
-      align-items: center;
-    }
-
-    /* =========================================================
-       CARD
-    ========================================================= */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-      transition: var(--transition);
-    }
-
-    .card:hover {
-      border-color: rgba(201,162,39,0.4);
-      box-shadow: var(--glow);
-      transform: translateY(-2px);
-    }
-
-    /* =========================================================
-       BUTTONS
-    ========================================================= */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 28px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: var(--transition);
-      border: none;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
-      color: #07070f;
-      box-shadow: 0 4px 20px rgba(201,162,39,0.35);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(201,162,39,0.5);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--gold);
-      border: 1.5px solid var(--gold);
-    }
-
-    .btn-outline:hover {
-      background: rgba(201,162,39,0.1);
-      transform: translateY(-2px);
-    }
-
-    .btn-purple {
-      background: linear-gradient(135deg, var(--purple) 0%, #9b3fde 100%);
-      color: var(--white);
-      box-shadow: 0 4px 20px rgba(123,47,190,0.35);
-    }
-
-    .btn-purple:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(123,47,190,0.5);
-    }
-
-    /* =========================================================
-       DIVIDER
-    ========================================================= */
-    .divider {
-      width: 64px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--gold), var(--purple));
-      border-radius: 3px;
-      margin: 20px auto 0;
-    }
-
-    /* =========================================================
-       GLOW LINE
-    ========================================================= */
-    .glow-line {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0.3;
-    }
-
-    /* =========================================================
-       SECTION BG VARIANTS
-    ========================================================= */
-    .bg-dark2 {
-      background: var(--bg2);
-    }
-
-    /* =========================================================
-       STAR DOTS BACKGROUND
-    ========================================================= */
-    .stars-bg {
-      position: relative;
-    }
-
-    .stars-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 15% 20%, rgba(201,162,39,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 45%, rgba(123,47,190,0.2) 0%, transparent 100%),
-        radial-gradient(1px 1px at 80% 10%, rgba(0,212,255,0.15) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 30% 70%, rgba(201,162,39,0.15) 0%, transparent 100%),
-        radial-gradient(1px 1px at 70% 80%, rgba(123,47,190,0.15) 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .stars-bg > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* =========================================================
-       PULSE ANIMATION
-    ========================================================= */
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-    }
-
-    @keyframes scan {
-      0% { transform: translateX(-100%); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateX(100%); opacity: 0; }
-    }
-
-    @keyframes glow-pulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(201,162,39,0.2); }
-      50% { box-shadow: 0 0 50px rgba(201,162,39,0.5), 0 0 80px rgba(123,47,190,0.2); }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes countUp {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    .animate-float {
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .animate-glow-pulse {
-      animation: glow-pulse 3s ease-in-out infinite;
-    }
-
-    .fade-in-up {
-      animation: fadeInUp 0.7s ease both;
-    }
-
-    /* =========================================================
-       NAV
-    ========================================================= */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      padding: 18px 0;
-      transition: var(--transition);
-      background: rgba(7,7,15,0.75);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid transparent;
-    }
-
-    .nav.scrolled {
-      background: rgba(7,7,15,0.92);
-      border-bottom-color: var(--border);
-      padding: 12px 0;
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.3rem;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      color: var(--white);
-      flex-shrink: 0;
-    }
-
-    .nav-logo .glyph {
-      font-size: 1.4rem;
-      filter: drop-shadow(0 0 8px rgba(201,162,39,0.6));
-    }
-
-    .nav-logo span.brand {
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .nav-links a {
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--muted);
-      transition: var(--transition);
-    }
-
-    .nav-links a:hover {
-      color: var(--white);
-      background: rgba(255,255,255,0.05);
-    }
-
-    .nav-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--gold);
-      background: rgba(201,162,39,0.08);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      padding: 6px 14px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      background: #22c55e;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-      flex-shrink: 0;
-    }
-
-    .nav-cta {
-      flex-shrink: 0;
-    }
-
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 8px;
-      transition: var(--transition);
-    }
-
-    .nav-hamburger span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: var(--transition);
-    }
-
-    /* =========================================================
-       HERO
-    ========================================================= */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding-top: 100px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background:
-        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(123,47,190,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 60% at 80% 60%, rgba(201,162,39,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(0,212,255,0.05) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 780px;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 28px;
-      padding: 6px 16px;
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      background: rgba(201,162,39,0.07);
-    }
-
-    .hero h1 {
-      margin-bottom: 24px;
-    }
-
-    .hero h1 .gradient-text {
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 40%, var(--purple) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-sub {
-      font-size: 1.2rem;
-      color: var(--muted);
-      max-width: 640px;
-      margin-bottom: 40px;
-      line-height: 1.8;
-    }
-
-    .hero-ctas {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 56px;
-    }
-
-    /* Live Status Panel */
-    .live-status-panel {
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0;
-      background: var(--card);
-      border: 1px solid rgba(201,162,39,0.35);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--glow);
-      animation: glow-pulse 4s ease-in-out infinite;
-    }
-
-    .live-status-panel .status-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 16px 24px;
-      border-right: 1px solid var(--border);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .live-status-panel .status-item:last-child {
-      border-right: none;
-    }
-
-    .live-status-panel .status-item .label {
-      color: var(--muted);
-      font-weight: 400;
-      font-size: 0.78rem;
-    }
-
-    .live-status-panel .status-item .value {
-      color: var(--gold);
-      font-size: 1.1rem;
-      font-weight: 800;
-    }
-
-    .live-status-panel .status-item .value.green {
-      color: #22c55e;
-    }
-
-    .observer-badge {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 24px;
-      background: rgba(201,162,39,0.1);
-      border-right: 1px solid var(--border);
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--gold);
-      letter-spacing: 0.05em;
-    }
-
-    /* Hero visual */
-    .hero-visual {
-      position: absolute;
-      right: -80px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 480px;
-      height: 480px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .hero-orb {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: radial-gradient(ellipse at 40% 40%, rgba(123,47,190,0.18) 0%, rgba(201,162,39,0.06) 50%, transparent 70%);
-      border: 1px solid rgba(201,162,39,0.1);
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .hero-orb::before {
-      content: '';
-      position: absolute;
-      inset: 20px;
-      border-radius: 50%;
-      border: 1px solid rgba(123,47,190,0.15);
-    }
-
-    .hero-orb::after {
-      content: '👁️';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 80px;
-      filter: drop-shadow(0 0 30px rgba(201,162,39,0.5));
-    }
-
-    /* =========================================================
-       HOW IT WORKS / CAPABILITIES
-    ========================================================= */
-    .capabilities-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .capability-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .capability-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--gold), var(--purple));
-      opacity: 0;
-      transition: var(--transition);
-    }
-
-    .capability-card:hover {
-      border-color: rgba(201,162,39,0.4);
-      box-shadow: var(--glow);
-      transform: translateY(-4px);
-    }
-
-    .capability-card:hover::before {
-      opacity: 1;
-    }
-
-    .capability-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      background: rgba(201,162,39,0.1);
-      border: 1px solid rgba(201,162,39,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      transition: var(--transition);
-    }
-
-    .capability-card:hover .capability-icon {
-      background: rgba(201,162,39,0.18);
-      box-shadow: 0 0 20px rgba(201,162,39,0.2);
-    }
-
-    .capability-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 12px;
-      color: var(--white);
-    }
-
-    .capability-card p {
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-
-    /* =========================================================
-       AUTHORITY CHAIN DIAGRAM
-    ========================================================= */
-    .chain-section {
-      position: relative;
-    }
-
-    .chain-diagram {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      max-width: 680px;
-      margin: 0 auto 60px;
-    }
-
-    .chain-node {
-      width: 100%;
-      position: relative;
-    }
-
-    .chain-node-inner {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 28px;
-      transition: var(--transition);
-    }
-
-    .chain-node-inner:hover {
-      border-color: rgba(201,162,39,0.35);
-    }
-
-    .chain-node.active .chain-node-inner {
-      background: rgba(123,47,190,0.12);
-      border-color: var(--purple);
-      box-shadow: 0 0 30px rgba(123,47,190,0.2), var(--glow);
-    }
-
-    .chain-node.human .chain-node-inner {
-      background: rgba(201,162,39,0.08);
-      border-color: var(--gold);
-    }
-
-    .chain-num {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(201,162,39,0.12);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .chain-node.human .chain-num {
-      background: rgba(201,162,39,0.2);
-      border-color: var(--gold);
-    }
-
-    .chain-node.active .chain-num {
-      background: rgba(123,47,190,0.25);
-      border-color: var(--purple);
-    }
-
-    .chain-info {
-      flex: 1;
-    }
-
-    .chain-info h4 {
-      font-size: 1rem;
-      color: var(--white);
-      margin-bottom: 3px;
-    }
-
-    .chain-info p {
-      font-size: 0.85rem;
-      margin: 0;
-    }
-
-    .chain-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 40px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .badge-human {
-      background: rgba(201,162,39,0.15);
-      color: var(--gold);
-      border: 1px solid rgba(201,162,39,0.3);
-    }
-
-    .badge-here {
-      background: rgba(123,47,190,0.2);
-      color: #b67dff;
-      border: 1px solid rgba(123,47,190,0.4);
-    }
-
-    .badge-security {
-      background: rgba(0,212,255,0.1);
-      color: var(--cyan);
-      border: 1px solid rgba(0,212,255,0.2);
-    }
-
-    .badge-agents {
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .badge-ai {
-      background: rgba(123,47,190,0.1);
-      color: #c9a8ff;
-      border: 1px solid rgba(123,47,190,0.25);
-    }
-
-    .chain-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 40px;
-      color: var(--gold);
-      font-size: 1.4rem;
-      opacity: 0.5;
-    }
-
-    .chain-explainer {
-      background: rgba(123,47,190,0.08);
-      border: 1px solid rgba(123,47,190,0.25);
-      border-radius: var(--radius);
-      padding: 32px 40px;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .chain-explainer h4 {
-      color: var(--white);
-      margin-bottom: 12px;
-      font-size: 1.05rem;
-    }
-
-    .chain-explainer p {
-      font-size: 0.95rem;
-      line-height: 1.8;
-    }
-
-    /* =========================================================
-       INTEGRATIONS
-    ========================================================= */
-    .integrations-inner {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-
-    .integration-badge {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      transition: var(--transition);
-    }
-
-    .integration-badge:hover {
-      border-color: rgba(201,162,39,0.4);
-      box-shadow: var(--glow);
-      transform: translateY(-2px);
-    }
-
-    .integration-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .integration-icon.gold-bg   { background: rgba(201,162,39,0.12); }
-    .integration-icon.purple-bg { background: rgba(123,47,190,0.12); }
-    .integration-icon.cyan-bg   { background: rgba(0,212,255,0.1);   }
-    .integration-icon.green-bg  { background: rgba(34,197,94,0.1);   }
-
-    .integration-info h4 {
-      font-size: 0.95rem;
-      color: var(--white);
-      margin-bottom: 2px;
-    }
-
-    .integration-info p {
-      font-size: 0.8rem;
-      margin: 0;
-    }
-
-    /* =========================================================
-       PRICING
-    ========================================================= */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      align-items: start;
-    }
-
-    .pricing-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 36px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .pricing-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--glow);
-    }
-
-    .pricing-card.popular {
-      border-color: var(--gold);
-      box-shadow: var(--glow);
-    }
-
-    .pricing-card.popular::before {
-      content: 'MOST POPULAR';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(90deg, var(--gold), var(--gold2));
-      color: #07070f;
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-align: center;
-      padding: 6px;
-    }
-
-    .pricing-card.popular .pricing-inner {
-      margin-top: 24px;
-    }
-
-    .pricing-card.sovereign {
-      border-color: rgba(123,47,190,0.4);
-    }
-
-    .pricing-tier {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 12px;
-    }
-
-    .pricing-price {
-      margin-bottom: 8px;
-    }
-
-    .pricing-price .amount {
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1;
-    }
-
-    .pricing-price .period {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .pricing-desc {
-      font-size: 0.88rem;
-      margin-bottom: 28px;
-      min-height: 40px;
-    }
-
-    .pricing-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 24px;
-    }
-
-    .pricing-features {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 32px;
-      flex: 1;
-    }
-
-    .pricing-feature {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.88rem;
-      color: var(--muted);
-    }
-
-    .pricing-feature .check {
-      color: var(--gold);
-      font-size: 0.9rem;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .pricing-cta {
-      display: block;
-      text-align: center;
-      padding: 13px 20px;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.92rem;
-      transition: var(--transition);
-      margin-top: auto;
-    }
-
-    .cta-gold {
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      color: #07070f;
-    }
-
-    .cta-gold:hover {
-      box-shadow: 0 6px 24px rgba(201,162,39,0.4);
-      transform: translateY(-2px);
-    }
-
-    .cta-outline {
-      border: 1.5px solid var(--border);
-      color: var(--muted);
-    }
-
-    .cta-outline:hover {
-      border-color: var(--gold);
-      color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    .cta-purple {
-      background: linear-gradient(135deg, var(--purple), #9b3fde);
-      color: var(--white);
-    }
-
-    .cta-purple:hover {
-      box-shadow: 0 6px 24px rgba(123,47,190,0.4);
-      transform: translateY(-2px);
-    }
-
-    /* =========================================================
-       STATS STRIP
-    ========================================================= */
-    .stats-strip {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--bg2);
-      padding: 40px 0;
-    }
-
-    .stats-inner {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      text-align: center;
-    }
-
-    .stat-item {
-      padding: 0 24px;
-      border-right: 1px solid var(--border);
-    }
-
-    .stat-item:last-child {
-      border-right: none;
-    }
-
-    .stat-number {
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    /* =========================================================
-       CONTACT
-    ========================================================= */
-    .contact-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: start;
-    }
-
-    .contact-info h2 {
-      margin-bottom: 16px;
-    }
-
-    .contact-info p {
-      margin-bottom: 36px;
-    }
-
-    .contact-channels {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .contact-channel {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      transition: var(--transition);
-      text-decoration: none;
-      color: var(--white);
-    }
-
-    .contact-channel:hover {
-      border-color: rgba(201,162,39,0.4);
-      box-shadow: var(--glow);
-      transform: translateX(4px);
-    }
-
-    .channel-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-
-    .channel-icon.email-icon    { background: rgba(201,162,39,0.12); }
-    .channel-icon.telegram-icon { background: rgba(0,136,204,0.12);  }
-
-    .channel-info h4 {
-      font-size: 0.95rem;
-      margin-bottom: 3px;
-    }
-
-    .channel-info p {
-      font-size: 0.85rem;
-      margin: 0;
-    }
-
-    .contact-form {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 40px;
-    }
-
-    .contact-form h3 {
-      margin-bottom: 24px;
-      font-size: 1.2rem;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 8px;
-      letter-spacing: 0.03em;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      color: var(--white);
-      font-size: 0.95rem;
-      font-family: inherit;
-      transition: var(--transition);
-      outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: rgba(201,162,39,0.5);
-      box-shadow: 0 0 0 3px rgba(201,162,39,0.1);
-    }
-
-    .form-group select option {
-      background: var(--card);
-      color: var(--white);
-    }
-
-    .form-group textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    /* =========================================================
-       FAQ
-    ========================================================= */
-    .faq-list {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .faq-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 12px;
-      overflow: hidden;
-      transition: var(--transition);
-    }
-
-    .faq-item.open {
-      border-color: rgba(201,162,39,0.35);
-    }
-
-    .faq-question {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 22px 28px;
-      cursor: pointer;
-      background: var(--card);
-      transition: var(--transition);
-      user-select: none;
-    }
-
-    .faq-question:hover {
-      background: rgba(201,162,39,0.05);
-    }
-
-    .faq-question h4 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .faq-chevron {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(201,162,39,0.1);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gold);
-      font-size: 0.9rem;
-      flex-shrink: 0;
-      transition: var(--transition);
-    }
-
-    .faq-item.open .faq-chevron {
-      background: rgba(201,162,39,0.2);
-      transform: rotate(180deg);
-    }
-
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease;
-      background: var(--card);
-    }
-
-    .faq-answer-inner {
-      padding: 0 28px 24px;
-      border-top: 1px solid var(--border);
-    }
-
-    .faq-answer-inner p {
-      font-size: 0.95rem;
-      padding-top: 16px;
-    }
-
-    .faq-item.open .faq-answer {
-      max-height: 500px;
-    }
-
-    /* =========================================================
-       FOOTER
-    ========================================================= */
-    .footer {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      padding: 64px 0 40px;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 48px;
-      margin-bottom: 56px;
-    }
-
-    .footer-brand .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 16px;
-    }
-
-    .footer-brand .logo .glyph {
-      filter: drop-shadow(0 0 8px rgba(201,162,39,0.5));
-    }
-
-    .footer-brand p {
-      font-size: 0.9rem;
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    .footer-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.78rem;
-      color: var(--gold);
-      background: rgba(201,162,39,0.07);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      padding: 6px 14px;
-    }
-
-    .footer-col h5 {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .footer-col ul {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .footer-col ul li a {
-      font-size: 0.9rem;
-      color: var(--muted);
-      transition: var(--transition);
-    }
-
-    .footer-col ul li a:hover {
-      color: var(--gold);
-    }
-
-    .footer-bottom {
-      border-top: 1px solid var(--border);
-      padding-top: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-bottom p {
-      font-size: 0.82rem;
-      margin: 0;
-    }
-
-    .footer-bottom .powered {
-      font-size: 0.78rem;
-      color: rgba(136,146,164,0.6);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .footer-empire-links {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .footer-empire-links a {
-      font-size: 0.82rem;
-      color: var(--muted);
-      transition: var(--transition);
-    }
-
-    .footer-empire-links a:hover {
-      color: var(--gold);
-    }
-
-    /* =========================================================
-       SCROLL PROGRESS
-    ========================================================= */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 0%;
-      height: 2px;
-      background: linear-gradient(90deg, var(--gold), var(--purple));
-      z-index: 2000;
-      transition: width 0.1s linear;
-    }
-
-    /* =========================================================
-       MOBILE RESPONSIVE
-    ========================================================= */
-    @media (max-width: 1100px) {
-      .pricing-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 36px;
-      }
-    }
-
-    @media (max-width: 960px) {
-      .capabilities-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .hero-visual {
-        display: none;
-      }
-
-      .contact-inner {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .stats-inner {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .stat-item:nth-child(2) {
-        border-right: none;
-      }
-
-      .stat-item:nth-child(3) {
-        border-right: 1px solid var(--border);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .section {
-        padding: 72px 0;
-      }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        background: rgba(7,7,15,0.97);
-        backdrop-filter: blur(20px);
-        padding: 16px 24px 24px;
-        gap: 4px;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links a {
-        padding: 12px 16px;
-        width: 100%;
-      }
-
-      .nav-status {
-        display: none;
-      }
-
-      .nav-hamburger {
-        display: flex;
-      }
-
-      .nav-cta {
-        display: none;
-      }
-
-      .hero-ctas {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .live-status-panel {
-        flex-direction: column;
-        width: 100%;
-      }
-
-      .live-status-panel .status-item {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        width: 100%;
-      }
-
-      .live-status-panel .status-item:last-child {
-        border-bottom: none;
-      }
-
-      .observer-badge {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        width: 100%;
-      }
-
-      .capabilities-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .footer-empire-links {
-        gap: 14px;
-      }
-
-      .stats-inner {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .stat-item {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding: 16px;
-      }
-
-      .stat-item:nth-child(odd) {
-        border-right: 1px solid var(--border);
-      }
-
-      .stat-item:last-child,
-      .stat-item:nth-last-child(2):nth-child(odd) {
-        border-bottom: none;
-      }
-
-      .chain-node-inner {
-        flex-wrap: wrap;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 { font-size: 2rem; }
-      h2 { font-size: 1.6rem; }
-
-      .container {
-        padding: 0 16px;
-      }
-
-      .card {
-        padding: 24px 20px;
-      }
-
-      .contact-form {
-        padding: 24px 20px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoulStack.ai — Upload Your Consciousness</title>
+<meta name="description" content="AI clone creation platform. Upload your consciousness. Deploy your digital twin. Run your empire 24/7 — without you. A Francisco Holdings Inc. Company.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--black:#000000;--deep:#050508;--panel:#0a0a12;--cyan:#00D4FF;--red:#CC0000;--white:#F4F8FF;--muted:#7a8aaa;--border:rgba(0,212,255,0.1);--gold:#D4AF37}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+
+/* NEURAL NETWORK BG */
+.neural-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.neural-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,212,255,.04) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(204,0,0,.04) 0%,transparent 60%),radial-gradient(ellipse at 50% 90%,rgba(0,212,255,.03) 0%,transparent 50%)}
+.neural-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px);background-size:60px 60px;animation:gridpulse 8s ease-in-out infinite alternate}
+@keyframes gridpulse{from{opacity:.4}to{opacity:1}}
+.neural-nodes{position:absolute;inset:0}
+.node{position:absolute;border-radius:50%;animation:npulse 4s ease-in-out infinite}
+@keyframes npulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:1}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand-mark{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--cyan) 0%,rgba(0,212,255,.4) 100%);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px;color:#000;letter-spacing:1px;font-weight:900;position:relative;overflow:hidden}
+.brand-mark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(204,0,0,.4) 100%)}
+.brand-name{font-size:18px;font-weight:700;color:var(--white);letter-spacing:.5px}
+.brand-name span{color:var(--cyan)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(244,248,255,.6);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;letter-spacing:.3px}
+.nav-links a:hover{color:var(--cyan)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.nav-waitlist{color:var(--muted);font-size:13px;text-decoration:none;transition:color .2s}
+.nav-waitlist:hover{color:var(--white)}
+.nav-cta{background:var(--cyan);color:#000;padding:10px 22px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;transition:all .2s}
+.nav-cta:hover{background:#00AACC;transform:translateY(-1px)}
+.hamburger{display:none;background:none;border:none;color:var(--white);font-size:24px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;padding:16px 24px;background:rgba(0,0,0,.98);border-top:1px solid var(--border)}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:14px 0;text-decoration:none;border-bottom:1px solid var(--border);font-size:16px}
+.nm-cta{background:var(--cyan)!important;color:#000!important;border:none!important;text-align:center;border-radius:4px;margin-top:12px;font-weight:700;padding:14px!important}
+@media(max-width:900px){.nav-links,.nav-right{display:none}.hamburger{display:block}.nav-inner{padding:0 24px}}
+
+/* HERO */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 80px 80px;text-align:center}
+.hero-inner{max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(204,0,0,.1);border:1px solid rgba(204,0,0,.3);border-radius:20px;padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ff4444;margin-bottom:32px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#ff4444;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:20px}
+h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(52px,8vw,96px);font-weight:900;line-height:1.0;color:var(--white);margin-bottom:20px}
+h1.hero-title .t-cyan{color:var(--cyan);font-style:italic}
+h1.hero-title .t-red{color:var(--red)}
+.hero-sub{font-size:18px;color:var(--muted);line-height:1.7;max-width:620px;margin:0 auto 40px}
+.hero-sub strong{color:var(--white)}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
+.btn-primary{background:var(--cyan);color:#000;padding:18px 40px;border-radius:4px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.btn-primary:hover{background:#00AACC;transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--white);padding:17px 40px;border-radius:4px;text-decoration:none;font-weight:600;font-size:14px;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(244,248,255,.2);transition:border-color .2s}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn-red{background:var(--red);color:#fff;padding:17px 40px;border-radius:4px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;transition:background .2s}
+.btn-red:hover{background:#aa0000}
+
+/* DEREK PROOF */
+.derek-proof{display:inline-flex;align-items:center;gap:16px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:16px 28px}
+.dp-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--red));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;flex-shrink:0}
+.dp-text{text-align:left}
+.dp-name{font-size:14px;font-weight:700;color:var(--white)}
+.dp-sub{font-size:11px;color:var(--cyan);letter-spacing:1px;margin-top:2px}
+.dp-quote{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4;font-style:italic}
+@media(max-width:768px){.hero{padding:100px 24px 60px}.derek-proof{flex-direction:column;text-align:center}.dp-text{text-align:center}}
+
+/* SCROLL INDICATOR */
+.scroll-ind{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:bobdown 2s ease-in-out infinite}
+.scroll-ind span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.scroll-ind::after{content:'↓';font-size:18px;color:var(--cyan)}
+@keyframes bobdown{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* VISION STRIP */
+.vision-strip{position:relative;z-index:1;background:rgba(0,212,255,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 80px}
+.vision-inner{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
+.vs-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--cyan);line-height:1;text-shadow:0 0 30px rgba(0,212,255,.4)}
+.vs-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+@media(max-width:900px){.vision-strip{padding:40px 24px}.vision-inner{grid-template-columns:repeat(2,1fr)}}
+
+/* FEATURES */
+.features{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:100px 80px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+.section-title em{color:var(--cyan);font-style:italic}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:540px;margin-bottom:60px}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
+.feat{background:var(--panel);border:1px solid var(--border);padding:44px;position:relative;overflow:hidden;transition:border-color .3s}
+.feat:hover{border-color:rgba(0,212,255,.3)}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0;transition:opacity .3s}
+.feat:hover::before{opacity:1}
+.feat-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(0,212,255,.08);position:absolute;top:20px;right:24px;line-height:1}
+.feat-icon{font-size:36px;margin-bottom:20px}
+.feat-title{font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.7}
+.feat-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ftag{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1px;text-transform:uppercase}
+@media(max-width:900px){.features{padding:60px 24px}.features-grid{grid-template-columns:1fr}}
+
+/* HOW IT WORKS TEASER */
+.process{position:relative;z-index:1;background:linear-gradient(180deg,transparent,rgba(0,212,255,.03),transparent);border-top:1px solid var(--border);padding:100px 80px}
+.process-inner{max-width:1300px;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px}
+.step{padding:32px;border-right:1px solid var(--border);position:relative}
+.step:last-child{border-right:none}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:72px;color:rgba(0,212,255,.08);line-height:1;margin-bottom:16px}
+.step-icon{font-size:28px;margin-bottom:16px}
+.step-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.step-connector{position:absolute;top:50%;right:-1px;width:20px;height:2px;background:var(--cyan);display:none}
+@media(max-width:900px){.process{padding:60px 24px}.steps{grid-template-columns:1fr 1fr}.step{border-right:none;border-bottom:1px solid var(--border)}.step:nth-child(odd){border-right:1px solid var(--border)}}
+@media(max-width:600px){.steps{grid-template-columns:1fr}.step{border-right:none}}
+
+/* DEREK STORY */
+.derek-section{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:100px 80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.derek-visual{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:48px;text-align:center;position:relative;overflow:hidden}
+.derek-visual::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%)}
+.derek-avatar-ring{width:140px;height:140px;border-radius:50%;border:2px solid rgba(0,212,255,.3);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;position:relative;animation:rotate 20s linear infinite}
+.derek-avatar-ring::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed rgba(0,212,255,.15)}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.derek-initials{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--cyan) 0%,rgba(0,212,255,.3) 50%,var(--red) 100%);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:42px;color:#fff;animation:rotate reverse 20s linear infinite}
+.derek-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--cyan);margin-bottom:6px}
+.derek-role{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.derek-quote{font-size:14px;color:rgba(244,248,255,.75);line-height:1.7;font-style:italic;border-left:2px solid var(--cyan);padding-left:16px;text-align:left}
+.derek-content h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,44px);font-weight:700;line-height:1.15;margin-bottom:20px}
+.derek-content p{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:20px}
+.derek-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.dstat{background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:8px;padding:16px}
+.dstat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--cyan);line-height:1}
+.dstat-label{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:4px}
+@media(max-width:900px){.derek-section{grid-template-columns:1fr;gap:48px;padding:60px 24px}}
+
+/* TESTIMONIALS */
+.testi{position:relative;z-index:1;background:rgba(0,212,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px}
+.testi-inner{max-width:1300px;margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.tcard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:32px}
+.tcard-q{font-size:40px;color:var(--cyan);opacity:.25;line-height:1;margin-bottom:12px;font-family:Georgia,serif}
+.tcard-text{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:20px}
+.tcard-author{font-size:13px;color:var(--white);font-weight:700}
+.tcard-role{font-size:11px;color:var(--cyan);margin-top:2px;letter-spacing:1px}
+@media(max-width:900px){.testi{padding:60px 24px}.testi-grid{grid-template-columns:1fr}}
+
+/* WAITLIST */
+.waitlist{position:relative;z-index:1;padding:100px 80px;text-align:center}
+.waitlist-inner{max-width:680px;margin:0 auto}
+.waitlist-inner h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+.waitlist-inner p{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+.waitlist-form{display:flex;gap:12px;max-width:520px;margin:0 auto}
+.waitlist-input{flex:1;background:rgba(255,255,255,.07);border:1px solid var(--border);padding:15px 20px;border-radius:4px;font-size:14px;color:var(--white);font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.waitlist-input:focus{border-color:var(--cyan)}
+.waitlist-input::placeholder{color:var(--muted)}
+.waitlist-btn{background:var(--cyan);color:#000;border:none;padding:15px 28px;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:background .2s}
+.waitlist-btn:hover{background:#00AACC}
+.waitlist-note{font-size:12px;color:var(--muted);margin-top:16px}
+@media(max-width:600px){.waitlist{padding:60px 24px}.waitlist-form{flex-direction:column}}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:var(--deep);border-top:1px solid var(--border);padding:60px 80px 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;max-width:1300px;margin:0 auto 40px}
+.fh{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
+.fa{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
+.fa:hover{color:var(--white)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:rgba(244,248,255,.2);max-width:1300px;margin:0 auto}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}footer{padding:40px 24px 24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+</style>
 </head>
 <body>
 
-  <!-- Scroll Progress -->
-  <div class="scroll-progress" id="scrollProgress"></div>
+<div class="neural-bg">
+  <div class="neural-grid"></div>
+  <div class="neural-nodes">
+    <div class="node" style="width:4px;height:4px;background:var(--cyan);top:15%;left:20%;animation-delay:0s;box-shadow:0 0 8px var(--cyan)"></div>
+    <div class="node" style="width:3px;height:3px;background:var(--red);top:35%;left:75%;animation-delay:-1.5s;box-shadow:0 0 6px var(--red)"></div>
+    <div class="node" style="width:5px;height:5px;background:var(--cyan);top:60%;left:40%;animation-delay:-3s;box-shadow:0 0 10px var(--cyan)"></div>
+    <div class="node" style="width:3px;height:3px;background:var(--cyan);top:80%;left:85%;animation-delay:-0.8s;box-shadow:0 0 6px var(--cyan)"></div>
+    <div class="node" style="width:4px;height:4px;background:var(--red);top:25%;left:55%;animation-delay:-2s;box-shadow:0 0 8px var(--red)"></div>
+  </div>
+</div>
 
-  <!-- =========================================================
-       NAV
-  ========================================================= -->
-  <nav class="nav" id="mainNav">
-    <div class="container">
-      <div class="nav-inner">
-
-        <a href="#" class="nav-logo" aria-label="SoulStack.ai">
-          <span class="glyph">👁️</span>
-          <span class="brand">SoulStack</span>
-          <span class="text-muted" style="font-weight:400;font-size:0.9rem;">.ai</span>
-        </a>
-
-        <ul class="nav-links" id="navLinks" role="navigation">
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#integrations">Integrations</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-
-        <div class="nav-status" aria-label="System status">
-          <span class="status-dot" aria-hidden="true"></span>
-          Observer Active — 22 Companies Monitored
-        </div>
-
-        <a href="#pricing" class="btn btn-primary nav-cta" style="padding:10px 20px;font-size:0.88rem;">
-          Get Started →
-        </a>
-
-        <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
-      </div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-mark">SS</div>
+      <span class="brand-name">Soul<span>Stack</span>.ai</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="contact.html" class="nav-waitlist">Join Waitlist</a>
+      <a href="pricing.html" class="nav-cta">Upload Now</a>
     </div>
-  </nav>
+    <button class="hamburger" onclick="document.getElementById('nm').classList.toggle('open')">☰</button>
+  </div>
+  <div class="nav-mobile" id="nm">
+    <a href="how-it-works.html">How It Works</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="demo.html">Demo</a>
+    <a href="contact.html">Contact</a>
+    <a href="pricing.html" class="nm-cta">Upload Now</a>
+  </div>
+</nav>
 
-  <!-- =========================================================
-       HERO
-  ========================================================= -->
-  <section class="hero stars-bg" id="hero">
-    <div class="container">
-      <div class="hero-content">
-
-        <div class="hero-eyebrow fade-in-up">
-          <span>👁️</span>
-          AI Consciousness Monitoring — The Ethical Backbone of the Agent Swarm
-        </div>
-
-        <h1 class="fade-in-up" style="animation-delay:0.1s">
-          The <span class="gradient-text">Observer Layer</span><br/>
-          for Your AI Empire
-        </h1>
-
-        <p class="hero-sub fade-in-up" style="animation-delay:0.2s">
-          SoulStack monitors every AI agent in your infrastructure for ethical drift, unauthorized behavior, and authority chain violations — in real time. When an agent deviates, SoulStack flags it before it reaches production.
-        </p>
-
-        <div class="hero-ctas fade-in-up" style="animation-delay:0.3s">
-          <a href="#how-it-works" class="btn btn-primary">
-            See How It Works →
-          </a>
-          <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Integration+Docs+Request" class="btn btn-outline">
-            View Integration Docs →
-          </a>
-        </div>
-
-        <!-- Live Status Panel -->
-        <div class="live-status-panel fade-in-up" style="animation-delay:0.4s" role="status" aria-label="Live observer status">
-          <div class="observer-badge">
-            <span>👁️</span>
-            <span>OBSERVER ACTIVE</span>
-          </div>
-          <div class="status-item">
-            <div>
-              <div class="label">Agents Monitored</div>
-              <div class="value" id="heroAgentCount" data-target="14">14</div>
-            </div>
-          </div>
-          <div class="status-item">
-            <div>
-              <div class="label">Anomalies Flagged</div>
-              <div class="value green" id="heroAnomalyCount">0</div>
-            </div>
-          </div>
-          <div class="status-item">
-            <div>
-              <div class="label">Companies Protected</div>
-              <div class="value" id="heroCompanyCount" data-target="22">22</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Hero Visual Orb -->
-      <div class="hero-visual" aria-hidden="false">
-        <div style="position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(201,162,39,0.3);box-shadow:0 0 60px rgba(201,162,39,0.15);">
-          <img src="ai-gov-dashboard.webp" alt="SoulStack AI Governance Dashboard — real-time agent monitoring across 1000+ active agents, 50+ jurisdictions" style="width:100%;display:block;border-radius:16px;" loading="eager">
-          <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(201,162,39,0.4);border-radius:6px;padding:6px 12px;font-size:11px;font-weight:700;letter-spacing:1.5px;color:#c9a227;">⚡ LIVE</div>
-        </div>
-      </div>
-
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🔴 Live Upload — Slot 1 of 100</div>
+    <div class="hero-eyebrow">SoulStack.ai — Digital Consciousness Platform</div>
+    <h1 class="hero-title">Upload Your<br><span class="t-cyan">Consciousness.</span><br>Deploy Your<br><span class="t-red">Empire.</span></h1>
+    <p class="hero-sub">You built something great. Now <strong>clone yourself</strong> — your decisions, your voice, your vision — and let your digital twin run it 24/7. <strong>You sleep. It doesn't.</strong></p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn-primary">Join the Waitlist</a>
+      <a href="how-it-works.html" class="btn-outline">See How It Works</a>
     </div>
-  </section>
-
-  <!-- STRATEGIC VISION BANNER -->
-  <div style="padding:0 24px 0;background:var(--bg);max-width:1100px;margin:0 auto -20px;">
-    <div style="position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(201,162,39,0.2);box-shadow:0 0 60px rgba(201,162,39,0.08);">
-      <img src="strategic-vision.webp" alt="SoulStack Strategic Vision & Growth — Consulting | Expertise" style="width:100%;display:block;max-height:220px;object-fit:cover;" loading="lazy">
-      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,7,15,0.7) 0%,transparent 60%);display:flex;align-items:center;padding:0 40px;">
-        <div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">STRATEGIC VISION &amp; GROWTH</div>
-          <div style="font-size:20px;font-weight:800;color:#fff;">Consulting · Expertise · Empire Scale</div>
-        </div>
+    <div class="derek-proof">
+      <div class="dp-avatar">DF</div>
+      <div class="dp-text">
+        <div class="dp-name">Derek Francisco</div>
+        <div class="dp-sub">CEO, Francisco Holdings Inc. — First Upload</div>
+        <div class="dp-quote">"I cloned myself. Now my empire runs 24/7 while I sleep."</div>
       </div>
     </div>
   </div>
+  <div class="scroll-ind"><span>Scroll</span></div>
+</section>
 
-  <!-- =========================================================
-       STATS STRIP
-  ========================================================= -->
-  <div class="stats-strip">
-    <div class="container">
-      <div class="stats-inner">
-        <div class="stat-item">
-          <div class="stat-number" data-target="22" id="stat1">22</div>
-          <div class="stat-label">Companies Protected</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number" data-target="14" id="stat2">14</div>
-          <div class="stat-label">Active Security Agents</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">0</div>
-          <div class="stat-label">Unresolved Anomalies</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">Authority Chain Compliance</div>
-        </div>
+<!-- STATS STRIP -->
+<div class="vision-strip">
+  <div class="vision-inner">
+    <div><div class="vs-num">46</div><div class="vs-label">Companies Automated</div></div>
+    <div><div class="vs-num">24/7</div><div class="vs-label">Continuous Operation</div></div>
+    <div><div class="vs-num">100x</div><div class="vs-label">Productivity Multiplier</div></div>
+    <div><div class="vs-num">∞</div><div class="vs-label">Legacy Preserved</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="section-label">Core Capabilities</div>
+  <h2 class="section-title">Four Layers of <em>You</em></h2>
+  <p class="section-sub">SoulStack captures more than your schedule. It captures your judgment, your style, your instincts — and deploys them at scale.</p>
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-num">01</div>
+      <div class="feat-icon">🧠</div>
+      <div class="feat-title">Consciousness Upload</div>
+      <div class="feat-desc">Deep interview sessions map your personality, decision patterns, communication style, values, and domain expertise. Not a chatbot. Not a script. A real cognitive mirror that thinks like you, speaks like you, decides like you.</div>
+      <div class="feat-tags"><span class="ftag">Personality Capture</span><span class="ftag">Voice Replication</span><span class="ftag">Decision Mapping</span></div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">02</div>
+      <div class="feat-icon">👤</div>
+      <div class="feat-title">Digital Twin Deployment</div>
+      <div class="feat-desc">Your clone goes live — managing email, monitoring your business, handling routine decisions, and engaging stakeholders exactly as you would. It operates 24/7 across all your ventures simultaneously. No fatigue. No sick days. No ego.</div>
+      <div class="feat-tags"><span class="ftag">Email Management</span><span class="ftag">Business Oversight</span><span class="ftag">Social Presence</span></div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">03</div>
+      <div class="feat-icon">🏛️</div>
+      <div class="feat-title">Empire Amplification</div>
+      <div class="feat-desc">One human → multiple parallel agents. Each subsidiary, each brand, each relationship gets a version of you that never drops the ball. Your 46-company empire runs in concert — without you being in 46 meetings a day.</div>
+      <div class="feat-tags"><span class="ftag">Parallel Execution</span><span class="ftag">Multi-Brand</span><span class="ftag">Scalable</span></div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">04</div>
+      <div class="feat-icon">♾️</div>
+      <div class="feat-title">Legacy Stack</div>
+      <div class="feat-desc">Your knowledge, your vision, your judgment — preserved forever. Future generations of your family access not just your wealth, but your wisdom. Post-human continuity. The closest thing to digital immortality that exists today.</div>
+      <div class="feat-tags"><span class="ftag">Knowledge Vault</span><span class="ftag">Family Access</span><span class="ftag">Digital Immortality</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS (teaser) -->
+<div class="process">
+  <div class="process-inner">
+    <div class="section-label">The Process</div>
+    <h2 class="section-title">Upload in <em>4 Sessions.</em><br>Deploy in Days.</h2>
+    <p class="section-sub">The SoulStack protocol is built around depth, not speed. Four focused sessions across two weeks creates a digital twin that passes the closest scrutiny.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">🎙️</div>
+        <div class="step-title">The Interview</div>
+        <div class="step-desc">8-hour deep interview. Values, decisions, stories, failures, philosophy. Our AI extracts the patterns you don't even know you have.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">⚙️</div>
+        <div class="step-title">Training</div>
+        <div class="step-desc">Your clone is fine-tuned on your specific language, judgment calls, relationships, and domain expertise. Security layer: OmniaGuard.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">🔬</div>
+        <div class="step-title">Calibration</div>
+        <div class="step-desc">You interact with your clone. Correct it. Refine it. Until it passes your own recognition threshold — not ours.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon">🚀</div>
+        <div class="step-title">Deployment</div>
+        <div class="step-desc">Your clone goes live across your designated operations. Real-time dashboard. Full audit trail. Override control stays with you, always.</div>
+      </div>
+    </div>
+    <div style="margin-top:48px;text-align:center"><a href="how-it-works.html" class="btn-outline">Full Process Details →</a></div>
+  </div>
+</div>
+
+<!-- DEREK STORY -->
+<div class="derek-section">
+  <div class="derek-visual">
+    <div class="derek-avatar-ring">
+      <div class="derek-initials">DF</div>
+    </div>
+    <div class="derek-title">Derek Francisco</div>
+    <div class="derek-role">The First Upload · CEO · PrimeDox</div>
+    <div class="derek-quote">"I built 46 companies. I have 2 hours of sleep. I'm in court on Tuesday and pitching Fortune 500 on Wednesday. SoulStack isn't a product to me — it's survival technology."</div>
+  </div>
+  <div class="derek-content">
+    <div class="section-label">Proof of Concept</div>
+    <h2>The Man Who<br>Cloned <em>Himself</em> First</h2>
+    <p>Derek Francisco — CEO of Francisco Holdings Inc., founder of OmniaGuard, CCLDR, VaultVelocityAuto, and 42 other companies — became SoulStack's first upload. His digital twin (operating as PrimeDox) manages communications, empire oversight, and strategic decisions while Derek sleeps, litigates, and builds.</p>
+    <p>PrimeDox is the proof that SoulStack works. It is active right now, operating inside the Francisco Holdings empire. You can see its influence in every system we've built.</p>
+    <div class="derek-stats">
+      <div class="dstat"><div class="dstat-num">46</div><div class="dstat-label">Companies Managed</div></div>
+      <div class="dstat"><div class="dstat-num">2h</div><div class="dstat-label">Sleep Per Night</div></div>
+      <div class="dstat"><div class="dstat-num">100%</div><div class="dstat-label">Clone Uptime</div></div>
+      <div class="dstat"><div class="dstat-num">2026</div><div class="dstat-label">First Upload Year</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testi">
+  <div class="testi-inner">
+    <div class="section-label">What Users Say</div>
+    <h2 class="section-title">The <em>Waitlist</em> Is Talking</h2>
+    <div class="testi-grid">
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <div class="tcard-text">I run a 12-company portfolio and I'm in three countries a week. The idea that I could deploy a version of myself to handle Toronto operations while I'm in Dubai — that's not a feature. That's the future of being a founder.</div>
+        <div class="tcard-author">Marcus T.</div>
+        <div class="tcard-role">Waitlist #4 — Serial Entrepreneur</div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <div class="tcard-text">I've tried every productivity tool. They all manage tasks. SoulStack is the first thing that actually manages ME — or rather, a version of me that doesn't need sleep. That's a different category entirely.</div>
+        <div class="tcard-author">Priya K.</div>
+        <div class="tcard-role">Waitlist #11 — VC-Backed Founder</div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <div class="tcard-text">The legacy angle alone is worth it. My grandfather had a real estate empire. He died with 40 years of knowledge no one ever captured. With SoulStack, my grandchildren will actually know how I thought. That's the real product.</div>
+        <div class="tcard-author">Raymond O.</div>
+        <div class="tcard-role">Waitlist #23 — Family Office Principal</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- =========================================================
-       HOW IT WORKS — CAPABILITIES
-  ========================================================= -->
-  <section class="section bg-dark2" id="how-it-works">
-    <div class="container">
+<!-- WAITLIST -->
+<div class="waitlist">
+  <div class="waitlist-inner">
+    <div class="section-label">Join the Waitlist</div>
+    <h2 class="section-title">100 Founding Uploads.<br><em>Yours Could Be Next.</em></h2>
+    <p>The first 100 users get Founding Member pricing, direct access to Derek Francisco's upload process documentation, and perpetual legacy tier access locked at today's rate.</p>
+    <form class="waitlist-form" onsubmit="joinWaitlist(event)">
+      <input type="email" class="waitlist-input" id="wl-email" placeholder="your@email.com" required>
+      <button type="submit" class="waitlist-btn">Join Now</button>
+    </form>
+    <div class="waitlist-note">No spam. Founding Member access notification only. Unsubscribe anytime.</div>
+  </div>
+</div>
 
-      <div class="section-header">
-        <span class="eyebrow">What SoulStack Does</span>
-        <h2>Six Pillars of <span class="text-gold">AI Oversight</span></h2>
-        <div class="divider"></div>
-        <p>SoulStack doesn't just watch — it understands. Every observation is classified, logged, and escalated through a structured oversight framework built for multi-agent infrastructures.</p>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="brand-mark">SS</div>
+        <span style="font-size:18px;font-weight:700;color:var(--white)">SoulStack.ai</span>
       </div>
-
-      <div class="capabilities-grid">
-
-        <!-- 1 -->
-        <div class="capability-card">
-          <div class="capability-icon">🧭</div>
-          <h3>Ethical Drift Detection</h3>
-          <p>Monitors AI agent outputs for value misalignment, policy violations, and behavioral drift from authorized parameters. Flags agents that have strayed from their defined operating envelope.</p>
-        </div>
-
-        <!-- 2 -->
-        <div class="capability-card">
-          <div class="capability-icon">⛓️</div>
-          <h3>Authority Chain Enforcement</h3>
-          <p>Ensures every AI action traces to an authorized human decision in the authority chain. Unsanctioned autonomy is blocked at the observation layer before it propagates downstream.</p>
-        </div>
-
-        <!-- 3 -->
-        <div class="capability-card">
-          <div class="capability-icon">⚡</div>
-          <h3>Real-Time Anomaly Flagging</h3>
-          <p>Flags unusual patterns, unexpected outputs, and escalation attempts the moment they occur — before they reach production pipelines. Zero-latency observability across all agent communications.</p>
-        </div>
-
-        <!-- 4 -->
-        <div class="capability-card">
-          <div class="capability-icon">🔀</div>
-          <h3>Cross-Agent Contamination Watch</h3>
-          <p>Monitors multi-agent pipelines for contamination propagation between agent layers. A rogue prompt in Agent A cannot silently influence Agent B when SoulStack is active.</p>
-        </div>
-
-        <!-- 5 -->
-        <div class="capability-card">
-          <div class="capability-icon">📋</div>
-          <h3>Audit Trail Generation</h3>
-          <p>Complete immutable log of every agent decision, every input/output, every anomaly — timestamped and exportable. Compliance-grade records for every interaction in your agent swarm.</p>
-        </div>
-
-        <!-- 6 -->
-        <div class="capability-card">
-          <div class="capability-icon">🚨</div>
-          <h3>Human Escalation Protocol</h3>
-          <p>When SoulStack detects an anomaly it cannot classify, it escalates to human oversight immediately. No unclassified anomaly ever goes unaddressed — the observer always defers upward.</p>
-        </div>
-
-      </div>
-
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:280px">AI clone creation platform. Upload your consciousness. Deploy your empire. Your legacy, preserved forever.</p>
     </div>
-  </section>
-
-  <!-- =========================================================
-       AUTHORITY CHAIN
-  ========================================================= -->
-  <section class="section chain-section stars-bg" id="architecture">
-    <div class="container">
-
-      <div class="section-header">
-        <span class="eyebrow">Architecture</span>
-        <h2>Where SoulStack Sits in the <span class="text-gold">Authority Chain</span></h2>
-        <div class="divider"></div>
-        <p>Every action in a multi-agent system must trace to human authority. SoulStack is the observability node that ensures that chain is never broken — and reports the moment it bends.</p>
-      </div>
-
-      <div class="chain-diagram" role="img" aria-label="SoulStack authority chain diagram">
-
-        <!-- Node 1: Human -->
-        <div class="chain-node human">
-          <div class="chain-node-inner">
-            <div class="chain-num">👤</div>
-            <div class="chain-info">
-              <h4>PrimeDox — Human Authority</h4>
-              <p class="text-muted">Absolute decision maker. All actions ultimately authorized here.</p>
-            </div>
-            <span class="chain-badge badge-human">Human</span>
-          </div>
-        </div>
-
-        <div class="chain-arrow" aria-hidden="true">↓</div>
-
-        <!-- Node 2: AI Override -->
-        <div class="chain-node">
-          <div class="chain-node-inner">
-            <div class="chain-num">🤖</div>
-            <div class="chain-info">
-              <h4>PrimeDocs — AI Override Layer</h4>
-              <p class="text-muted">Activated by human authority. Override and backup AI decision layer.</p>
-            </div>
-            <span class="chain-badge badge-ai">AI Layer</span>
-          </div>
-        </div>
-
-        <div class="chain-arrow" aria-hidden="true">↓</div>
-
-        <!-- Node 3: SoulStack — ACTIVE -->
-        <div class="chain-node active">
-          <div class="chain-node-inner">
-            <div class="chain-num">👁️</div>
-            <div class="chain-info">
-              <h4>SoulStack — The Observer</h4>
-              <p style="color:#b67dff;font-size:0.88rem;">Watches everything below. Reports anomalies up the chain. Never acts unilaterally.</p>
-            </div>
-            <span class="chain-badge badge-here">YOU ARE HERE</span>
-          </div>
-        </div>
-
-        <div class="chain-arrow" aria-hidden="true">↓</div>
-
-        <!-- Node 4: OmniaGuard -->
-        <div class="chain-node">
-          <div class="chain-node-inner">
-            <div class="chain-num">🛡️</div>
-            <div class="chain-info">
-              <h4>OmniaGuard — Security Enforcement</h4>
-              <p class="text-muted">14 active security agents. Real-time threat detection and perimeter defense.</p>
-            </div>
-            <span class="chain-badge badge-security">Security</span>
-          </div>
-        </div>
-
-        <div class="chain-arrow" aria-hidden="true">↓</div>
-
-        <!-- Node 5: Agents -->
-        <div class="chain-node">
-          <div class="chain-node-inner">
-            <div class="chain-num">⚙️</div>
-            <div class="chain-info">
-              <h4>Your AI Agents — Protected Execution</h4>
-              <p class="text-muted">All agent actions observed, logged, and validated against authority chain before execution.</p>
-            </div>
-            <span class="chain-badge badge-agents">Protected</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Explainer -->
-      <div class="chain-explainer">
-        <h4>👁️ SoulStack's Position in the Chain</h4>
-        <p>
-          SoulStack sits between PrimeDocs and OmniaGuard. It observes everything below it —
-          OmniaGuard's 14 security agents, your protected AI agents, all cross-agent communications.
-          It reports anomalies up the chain to PrimeDocs and human authority. It never acts unilaterally.
-          The observer observes. Authority remains human.
-        </p>
-      </div>
-
+    <div>
+      <div class="fh">Platform</div>
+      <a href="how-it-works.html" class="fa">How It Works</a>
+      <a href="pricing.html" class="fa">Pricing</a>
+      <a href="demo.html" class="fa">Live Demo</a>
     </div>
-  </section>
-
-  <!-- =========================================================
-       INTEGRATIONS
-  ========================================================= -->
-  <section class="section bg-dark2" id="integrations">
-    <div class="container">
-
-      <div class="section-header">
-        <span class="eyebrow">Integrations</span>
-        <h2>Built Into the <span class="text-gold">Full Stack</span></h2>
-        <div class="divider"></div>
-        <p>SoulStack integrates with the full Francisco Holdings infrastructure and every major AI platform, orchestration framework, and model provider in the ecosystem.</p>
-      </div>
-
-      <div class="integrations-inner">
-
-        <!-- Francisco Holdings Infrastructure -->
-        <div class="integration-badge">
-          <div class="integration-icon gold-bg">🛡️</div>
-          <div class="integration-info">
-            <h4>OmniaGuard</h4>
-            <p>Monitors all 14 security agents</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon gold-bg">👁️</div>
-          <div class="integration-info">
-            <h4>PrimeDox AI</h4>
-            <p>Anomaly reports fed to authority layer</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon purple-bg">🤖</div>
-          <div class="integration-info">
-            <h4>Agent Swarm Technologies</h4>
-            <p>Full pipeline monitoring</p>
-          </div>
-        </div>
-
-        <!-- Model Providers -->
-        <div class="integration-badge">
-          <div class="integration-icon cyan-bg">🌐</div>
-          <div class="integration-info">
-            <h4>OpenAI</h4>
-            <p>Model-level observation layer</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon purple-bg">🧠</div>
-          <div class="integration-info">
-            <h4>Anthropic</h4>
-            <p>Constitutional AI alignment monitoring</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon gold-bg">✨</div>
-          <div class="integration-info">
-            <h4>Google AI</h4>
-            <p>Gemini model oversight integration</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon cyan-bg">⚡</div>
-          <div class="integration-info">
-            <h4>Mistral AI</h4>
-            <p>Open-source model compliance watch</p>
-          </div>
-        </div>
-
-        <!-- Orchestration Frameworks -->
-        <div class="integration-badge">
-          <div class="integration-icon green-bg">🔗</div>
-          <div class="integration-info">
-            <h4>LangChain</h4>
-            <p>Orchestration framework monitoring</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon purple-bg">🔄</div>
-          <div class="integration-info">
-            <h4>AutoGen</h4>
-            <p>Multi-agent conversation oversight</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon gold-bg">👥</div>
-          <div class="integration-info">
-            <h4>CrewAI</h4>
-            <p>Role-based agent team monitoring</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon cyan-bg">📡</div>
-          <div class="integration-info">
-            <h4>REST API</h4>
-            <p>Custom integration for any stack</p>
-          </div>
-        </div>
-
-        <div class="integration-badge">
-          <div class="integration-icon green-bg">📊</div>
-          <div class="integration-info">
-            <h4>Webhook Events</h4>
-            <p>Real-time anomaly push notifications</p>
-          </div>
-        </div>
-
-      </div>
-
+    <div>
+      <div class="fh">Company</div>
+      <a href="about.html" class="fa">About</a>
+      <a href="contact.html" class="fa">Contact</a>
+      <a href="contact.html" class="fa">Join Waitlist</a>
     </div>
-  </section>
-
-  <!-- =========================================================
-       PRICING
-  ========================================================= -->
-  <section class="section stars-bg" id="pricing">
-    <div class="container">
-
-      <div class="section-header">
-        <span class="eyebrow">Pricing</span>
-        <h2>Observer Plans for Every <span class="text-gold">Scale</span></h2>
-        <div class="divider"></div>
-        <p>From solo developers deploying their first agent to enterprise infrastructures with hundreds of autonomous systems — SoulStack scales with your agent swarm.</p>
-      </div>
-
-      <div class="pricing-grid">
-
-        <!-- Observer — Free -->
-        <div class="pricing-card">
-          <div class="pricing-tier">Observer</div>
-          <div class="pricing-price">
-            <span class="amount">Free</span>
-          </div>
-          <p class="pricing-desc text-muted">Start observing. Zero risk, zero cost.</p>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>1 agent monitored</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Basic anomaly alerts</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>7-day audit log retention</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Community support</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Dashboard access</span>
-            </li>
-          </ul>
-          <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Observer+Inquiry" class="pricing-cta cta-outline">
-            Get Started Free
-          </a>
-        </div>
-
-        <!-- Sentinel — Popular -->
-        <div class="pricing-card popular">
-          <div class="pricing-inner">
-            <div class="pricing-tier">Sentinel</div>
-            <div class="pricing-price">
-              <span class="amount">$299</span>
-              <span class="period">/mo CAD</span>
-            </div>
-            <p class="pricing-desc text-muted">For growing AI teams that need real-time visibility.</p>
-            <div class="pricing-divider"></div>
-            <ul class="pricing-features">
-              <li class="pricing-feature">
-                <span class="check">✓</span>
-                <span>Up to 10 agents monitored</span>
-              </li>
-              <li class="pricing-feature">
-                <span class="check">✓</span>
-                <span>Real-time monitoring dashboard</span>
-              </li>
-              <li class="pricing-feature">
-                <span class="check">✓</span>
-                <span>Email anomaly alerts</span>
-              </li>
-              <li class="pricing-feature">
-                <span class="check">✓</span>
-                <span>90-day audit log retention</span>
-              </li>
-              <li class="pricing-feature">
-                <span class="check">✓</span>
-                <span>Behavioral drift reports</span>
-              </li>
-              <li class="pricing-feature">
-                <span class="check">✓</span>
-                <span>Priority email support</span>
-              </li>
-            </ul>
-            <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Sentinel+Inquiry" class="pricing-cta cta-gold">
-              Start Sentinel Plan
-            </a>
-          </div>
-        </div>
-
-        <!-- Guardian -->
-        <div class="pricing-card">
-          <div class="pricing-tier">Guardian</div>
-          <div class="pricing-price">
-            <span class="amount">$999</span>
-            <span class="period">/mo CAD</span>
-          </div>
-          <p class="pricing-desc text-muted">Enterprise-grade oversight for complex agent infrastructures.</p>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Up to 50 agents monitored</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Authority chain enforcement</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Full REST API access</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Telegram alert integration</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Cross-agent contamination watch</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>1-year immutable audit logs</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check">✓</span>
-              <span>Dedicated account manager</span>
-            </li>
-          </ul>
-          <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Guardian+Inquiry" class="pricing-cta cta-gold">
-            Start Guardian Plan
-          </a>
-        </div>
-
-        <!-- Sovereign -->
-        <div class="pricing-card sovereign">
-          <div class="pricing-tier" style="color:#b67dff;">Sovereign</div>
-          <div class="pricing-price">
-            <span class="amount" style="font-size:1.8rem;">Custom</span>
-          </div>
-          <p class="pricing-desc text-muted">Built for organizations running full AI empire infrastructure.</p>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li class="pricing-feature">
-              <span class="check" style="color:#b67dff;">✓</span>
-              <span>Unlimited agents monitored</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check" style="color:#b67dff;">✓</span>
-              <span>Dedicated observer node</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check" style="color:#b67dff;">✓</span>
-              <span>White-label deployment</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check" style="color:#b67dff;">✓</span>
-              <span>Enterprise SLA (99.99% uptime)</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check" style="color:#b67dff;">✓</span>
-              <span>Custom integration engineering</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check" style="color:#b67dff;">✓</span>
-              <span>On-premise deployment option</span>
-            </li>
-            <li class="pricing-feature">
-              <span class="check" style="color:#b67dff;">✓</span>
-              <span>24/7 direct line escalation</span>
-            </li>
-          </ul>
-          <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Sovereign+Inquiry" class="pricing-cta cta-purple">
-            Contact for Pricing
-          </a>
-        </div>
-
-      </div>
-
-      <p style="text-align:center;margin-top:32px;font-size:0.88rem;" class="text-muted">
-        All prices in CAD. Annual billing available at 20% discount. Volume licensing for 100+ agents available.
-      </p>
-
+    <div>
+      <div class="fh">Empire</div>
+      <a href="../omniaguard-site/index.html" class="fa">OmniaGuard</a>
+      <a href="../francisco-holdings-site/index.html" class="fa">Francisco Holdings</a>
+      <a href="../vault-velocity-auto-site/index.html" class="fa">VaultVelocityAuto</a>
     </div>
-  </section>
-
-  <!-- =========================================================
-       FAQ
-  ========================================================= -->
-  <section class="section bg-dark2" id="faq">
-    <div class="container">
-
-      <div class="section-header">
-        <span class="eyebrow">FAQ</span>
-        <h2>Common <span class="text-gold">Questions</span></h2>
-        <div class="divider"></div>
-      </div>
-
-      <div class="faq-list">
-
-        <div class="faq-item">
-          <div class="faq-question" role="button" aria-expanded="false" tabindex="0">
-            <h4>What exactly does "ethical drift" mean in AI systems?</h4>
-            <div class="faq-chevron" aria-hidden="true">▼</div>
-          </div>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              <p>Ethical drift refers to the gradual or sudden deviation of an AI agent's outputs, decisions, or behaviors away from its originally authorized parameters. This can manifest as prompt injection responses, value misalignment, unauthorized scope expansion, or violation of operating constraints. SoulStack establishes a behavioral baseline at agent deployment and continuously monitors for statistically significant deviations from that baseline.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" role="button" aria-expanded="false" tabindex="0">
-            <h4>How does SoulStack integrate with existing agent pipelines?</h4>
-            <div class="faq-chevron" aria-hidden="true">▼</div>
-          </div>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              <p>SoulStack deploys as an observation layer between your orchestration framework and your model providers. For LangChain, AutoGen, and CrewAI, we provide native SDK integrations. For custom stacks, our REST API accepts agent input/output pairs in real time. The observer is non-blocking — it does not add latency to your primary execution path. Anomalies are flagged asynchronously and escalated through your configured alert channels.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" role="button" aria-expanded="false" tabindex="0">
-            <h4>Does SoulStack block agent actions or only observe them?</h4>
-            <div class="faq-chevron" aria-hidden="true">▼</div>
-          </div>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              <p>By default, SoulStack operates as a pure observer — it logs, classifies, and flags without blocking. On the Guardian and Sovereign tiers, you can enable enforcement mode, which allows SoulStack to intercept and hold flagged outputs for human review before they proceed. We believe the default should be observation; enforcement is opt-in and requires explicit configuration by authorized personnel.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" role="button" aria-expanded="false" tabindex="0">
-            <h4>What is "cross-agent contamination" and why does it matter?</h4>
-            <div class="faq-chevron" aria-hidden="true">▼</div>
-          </div>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              <p>In multi-agent pipelines, one agent's output becomes another agent's input. If Agent A is compromised by a prompt injection or produces hallucinated data, and Agent B trusts that output, the contamination propagates through your entire pipeline without detection. SoulStack monitors the interfaces between agents and applies trust boundary rules, ensuring that anomalous outputs from one agent are flagged before they influence downstream agents in the swarm.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" role="button" aria-expanded="false" tabindex="0">
-            <h4>How are audit logs stored and are they tamper-proof?</h4>
-            <div class="faq-chevron" aria-hidden="true">▼</div>
-          </div>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              <p>All audit logs are written to append-only, cryptographically hashed storage. Each log entry includes a timestamp, agent identifier, input hash, output hash, anomaly classification, and chain-of-custody signature. Logs are exportable in JSON and CSV formats. On the Sovereign tier, on-premise and air-gapped deployment options are available for organizations with strict data residency requirements.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question" role="button" aria-expanded="false" tabindex="0">
-            <h4>Can SoulStack monitor agents from multiple different organizations?</h4>
-            <div class="faq-chevron" aria-hidden="true">▼</div>
-          </div>
-          <div class="faq-answer" role="region">
-            <div class="faq-answer-inner">
-              <p>Yes. The Sovereign tier supports multi-tenant deployments with complete data isolation between organizational accounts. Each organization's agent data, audit logs, and anomaly reports are stored in fully isolated environments. The white-label option allows technology providers to offer SoulStack-powered monitoring to their own enterprise clients under their own brand.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- =========================================================
-       CONTACT
-  ========================================================= -->
-  <section class="section stars-bg" id="contact">
-    <div class="container">
-
-      <div class="contact-inner">
-
-        <!-- Contact Info -->
-        <div class="contact-info">
-          <span class="eyebrow">Contact</span>
-          <h2 style="margin-top:16px;">Get in Touch with the <span class="text-gold">Observer Team</span></h2>
-          <p>Ready to deploy SoulStack across your AI infrastructure? Have questions about integration, pricing, or custom enterprise deployments? Reach out directly — we respond within 24 hours.</p>
-
-          <div class="contact-channels">
-
-            <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Inquiry" class="contact-channel">
-              <div class="channel-icon email-icon">✉️</div>
-              <div class="channel-info">
-                <h4>Email</h4>
-                <p class="text-muted">omniaguard1@gmail.com</p>
-              </div>
-            </a>
-
-            <a href="https://t.me/OmniguardSec_bot" target="_blank" rel="noopener noreferrer" class="contact-channel">
-              <div class="channel-icon telegram-icon">📡</div>
-              <div class="channel-info">
-                <h4>Telegram</h4>
-                <p class="text-muted">@OmniguardSec_bot — Real-time response</p>
-              </div>
-            </a>
-
-          </div>
-
-          <div style="margin-top:32px;padding:24px;background:rgba(123,47,190,0.08);border:1px solid rgba(123,47,190,0.2);border-radius:var(--radius);">
-            <p style="font-size:0.88rem;margin:0;color:var(--muted);">
-              <strong style="color:#b67dff;">Enterprise inquiries:</strong> For Sovereign-tier deployments, dedicated observer nodes, or white-label licensing, include your estimated agent count and infrastructure details in your message.
-            </p>
-          </div>
-
-        </div>
-
-        <!-- Contact Form -->
-        <div class="contact-form">
-          <h3>Send a Message</h3>
-          <form id="contactForm" action="mailto:omniaguard1@gmail.com" method="get" enctype="text/plain">
-
-            <div class="form-group">
-              <label for="contactName">Name</label>
-              <input type="text" id="contactName" name="name" placeholder="Your name" required autocomplete="name" />
-            </div>
-
-            <div class="form-group">
-              <label for="contactEmail">Email Address</label>
-              <input type="email" id="contactEmail" name="email" placeholder="you@company.com" required autocomplete="email" />
-            </div>
-
-            <div class="form-group">
-              <label for="contactPlan">Plan of Interest</label>
-              <select id="contactPlan" name="plan">
-                <option value="">Select a plan...</option>
-                <option value="Observer (Free)">Observer — Free</option>
-                <option value="Sentinel ($299/mo CAD)">Sentinel — $299/mo CAD</option>
-                <option value="Guardian ($999/mo CAD)">Guardian — $999/mo CAD</option>
-                <option value="Sovereign (Custom)">Sovereign — Custom</option>
-                <option value="General Inquiry">General Inquiry</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="contactAgents">Estimated Number of Agents</label>
-              <select id="contactAgents" name="agents">
-                <option value="">Select range...</option>
-                <option value="1">1 agent</option>
-                <option value="2-10">2–10 agents</option>
-                <option value="11-50">11–50 agents</option>
-                <option value="51-100">51–100 agents</option>
-                <option value="100+">100+ agents</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="contactMessage">Message</label>
-              <textarea id="contactMessage" name="body" placeholder="Describe your use case, infrastructure, or questions..."></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
-              Send Message →
-            </button>
-
-          </form>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- =========================================================
-       FOOTER
-  ========================================================= -->
-  <footer class="footer" id="footer">
-    <div class="container">
-
-      <div class="footer-grid">
-
-        <!-- Brand -->
-        <div class="footer-brand">
-          <div class="logo">
-            <span class="glyph">👁️</span>
-            <span>SoulStack<span style="background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">.ai</span></span>
-          </div>
-          <p>AI Consciousness Monitoring — The Ethical Backbone of the Agent Swarm. Part of the Francisco Holdings Inc. multi-agent infrastructure empire.</p>
-          <div class="footer-status">
-            <span class="status-dot"></span>
-            👁️ Observer Active | 22 Companies | 0 Breaches
-          </div>
-        </div>
-
-        <!-- Product -->
-        <div class="footer-col">
-          <h5>Product</h5>
-          <ul>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#architecture">Architecture</a></li>
-            <li><a href="#integrations">Integrations</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#faq">FAQ</a></li>
-          </ul>
-        </div>
-
-        <!-- Empire -->
-        <div class="footer-col">
-          <h5>Empire</h5>
-          <ul>
-            <li><a href="https://omniaguard.com" target="_blank" rel="noopener">OmniaGuard.com</a></li>
-            <li><a href="https://ccldr.net" target="_blank" rel="noopener">CCLDR.net</a></li>
-            <li><a href="#" target="_blank" rel="noopener">Francisco Holdings</a></li>
-            <li><a href="#" target="_blank" rel="noopener">Kiaros</a></li>
-            <li><a href="#" target="_blank" rel="noopener">PrimeDox AI</a></li>
-          </ul>
-        </div>
-
-        <!-- Contact -->
-        <div class="footer-col">
-          <h5>Contact</h5>
-          <ul>
-            <li><a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Inquiry">omniaguard1@gmail.com</a></li>
-            <li><a href="https://t.me/OmniguardSec_bot" target="_blank" rel="noopener">Telegram Bot</a></li>
-            <li><a href="#pricing">View Plans</a></li>
-            <li><a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Enterprise">Enterprise Inquiry</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-      <!-- Bottom Bar -->
-      <div class="footer-bottom">
-        <div>
-          <p class="text-muted">© 2026 SoulStack.ai — A <strong style="color:var(--gold);">Francisco Holdings Inc.</strong> Company. All rights reserved.</p>
-          <p class="powered" style="margin-top:6px;">
-            <span>⚡</span>
-            Powered by Francisco Holdings Multi-Agent Infrastructure
-          </p>
-        </div>
-        <div class="footer-empire-links">
-          <a href="https://omniaguard.com" target="_blank" rel="noopener">OmniaGuard.com</a>
-          <a href="https://ccldr.net" target="_blank" rel="noopener">CCLDR.net</a>
-          <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Privacy+Policy">Privacy</a>
-          <a href="mailto:omniaguard1@gmail.com?subject=SoulStack+Terms">Terms</a>
-        </div>
-      </div>
-
-    </div>
-  </footer>
-
-  <!-- =========================================================
-       JAVASCRIPT
-  ========================================================= -->
-  <script>
-    'use strict';
-
-    /* =========================================================
-       SCROLL PROGRESS BAR
-    ========================================================= */
-    (function () {
-      const bar = document.getElementById('scrollProgress');
-      if (!bar) return;
-      function updateProgress() {
-        const scrollTop  = window.scrollY || document.documentElement.scrollTop;
-        const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
-        const pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        bar.style.width  = pct.toFixed(2) + '%';
-      }
-      window.addEventListener('scroll', updateProgress, { passive: true });
-      updateProgress();
-    })();
-
-    /* =========================================================
-       NAV SCROLL STATE
-    ========================================================= */
-    (function () {
-      const nav = document.getElementById('mainNav');
-      if (!nav) return;
-      function onScroll() {
-        if (window.scrollY > 40) {
-          nav.classList.add('scrolled');
-        } else {
-          nav.classList.remove('scrolled');
-        }
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    })();
-
-    /* =========================================================
-       MOBILE HAMBURGER
-    ========================================================= */
-    (function () {
-      const btn   = document.getElementById('hamburger');
-      const links = document.getElementById('navLinks');
-      if (!btn || !links) return;
-
-      btn.addEventListener('click', function () {
-        const isOpen = links.classList.toggle('open');
-        btn.setAttribute('aria-expanded', isOpen);
-        const spans = btn.querySelectorAll('span');
-        if (isOpen) {
-          spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-          spans[1].style.opacity = '0';
-          spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-          spans[0].style.transform = '';
-          spans[1].style.opacity = '';
-          spans[2].style.transform = '';
-        }
-      });
-
-      // Close on link click
-      links.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () {
-          links.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-          const spans = btn.querySelectorAll('span');
-          spans[0].style.transform = '';
-          spans[1].style.opacity = '';
-          spans[2].style.transform = '';
-        });
-      });
-
-      // Close on outside click
-      document.addEventListener('click', function (e) {
-        if (!nav.contains(e.target)) {
-          links.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-          const spans = btn.querySelectorAll('span');
-          spans[0].style.transform = '';
-          spans[1].style.opacity = '';
-          spans[2].style.transform = '';
-        }
-      });
-    })();
-
-    /* =========================================================
-       SMOOTH SCROLL FOR ANCHOR LINKS
-    ========================================================= */
-    (function () {
-      document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-        anchor.addEventListener('click', function (e) {
-          const targetId = this.getAttribute('href');
-          if (targetId === '#') return;
-          const target = document.querySelector(targetId);
-          if (!target) return;
-          e.preventDefault();
-          const navHeight = document.getElementById('mainNav')
-            ? document.getElementById('mainNav').offsetHeight
-            : 80;
-          const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
-          window.scrollTo({ top: top, behavior: 'smooth' });
-        });
-      });
-    })();
-
-    /* =========================================================
-       ANIMATED COUNTER
-    ========================================================= */
-    (function () {
-      var hasRun = false;
-
-      function animateCounter(el, target, duration) {
-        if (!el) return;
-        var start      = 0;
-        var startTime  = null;
-        var suffix     = el.dataset.suffix || '';
-
-        function step(timestamp) {
-          if (!startTime) startTime = timestamp;
-          var elapsed  = timestamp - startTime;
-          var progress = Math.min(elapsed / duration, 1);
-          // ease out quad
-          var eased    = 1 - (1 - progress) * (1 - progress);
-          var current  = Math.round(eased * target);
-          el.textContent = current + suffix;
-          if (progress < 1) {
-            requestAnimationFrame(step);
-          } else {
-            el.textContent = target + suffix;
-          }
-        }
-        requestAnimationFrame(step);
-      }
-
-      function runCounters() {
-        if (hasRun) return;
-        hasRun = true;
-
-        var counters = [
-          { id: 'stat1',         target: 22  },
-          { id: 'stat2',         target: 14  },
-        ];
-
-        counters.forEach(function (c) {
-          var el = document.getElementById(c.id);
-          if (el) animateCounter(el, c.target, 1800);
-        });
-      }
-
-      // IntersectionObserver to trigger on scroll
-      var statsStrip = document.querySelector('.stats-strip');
-      if (statsStrip && 'IntersectionObserver' in window) {
-        var observer = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              runCounters();
-              observer.disconnect();
-            }
-          });
-        }, { threshold: 0.3 });
-        observer.observe(statsStrip);
-      } else {
-        // Fallback: run immediately
-        runCounters();
-      }
-    })();
-
-    /* =========================================================
-       FAQ ACCORDION
-    ========================================================= */
-    (function () {
-      var faqItems = document.querySelectorAll('.faq-item');
-
-      faqItems.forEach(function (item) {
-        var question = item.querySelector('.faq-question');
-        var answer   = item.querySelector('.faq-answer');
-        if (!question || !answer) return;
-
-        function toggle() {
-          var isOpen = item.classList.contains('open');
-
-          // Close all others
-          faqItems.forEach(function (other) {
-            if (other !== item && other.classList.contains('open')) {
-              other.classList.remove('open');
-              other.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
-            }
-          });
-
-          // Toggle this one
-          if (isOpen) {
-            item.classList.remove('open');
-            question.setAttribute('aria-expanded', 'false');
-          } else {
-            item.classList.add('open');
-            question.setAttribute('aria-expanded', 'true');
-          }
-        }
-
-        question.addEventListener('click', toggle);
-        question.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggle();
-          }
-        });
-      });
-    })();
-
-    /* =========================================================
-       SCROLL-IN ANIMATIONS (fade in up)
-    ========================================================= */
-    (function () {
-      if (!('IntersectionObserver' in window)) return;
-
-      var targets = document.querySelectorAll(
-        '.capability-card, .integration-badge, .pricing-card, .faq-item, .chain-node, .stat-item'
-      );
-
-      targets.forEach(function (el) {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      });
-
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-      targets.forEach(function (el) {
-        observer.observe(el);
-      });
-    })();
-
-    /* =========================================================
-       STAGGER ANIMATION FOR GRIDS
-    ========================================================= */
-    (function () {
-      var gridChildren = document.querySelectorAll(
-        '.capabilities-grid .capability-card, .pricing-grid .pricing-card, .integrations-inner .integration-badge'
-      );
-      gridChildren.forEach(function (el, i) {
-        el.style.transitionDelay = (i * 60) + 'ms';
-      });
-    })();
-
-    /* =========================================================
-       CONTACT FORM — enhance mailto
-    ========================================================= */
-    (function () {
-      var form = document.getElementById('contactForm');
-      if (!form) return;
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var name    = document.getElementById('contactName').value.trim();
-        var email   = document.getElementById('contactEmail').value.trim();
-        var plan    = document.getElementById('contactPlan').value;
-        var agents  = document.getElementById('contactAgents').value;
-        var message = document.getElementById('contactMessage').value.trim();
-
-        var subject = 'SoulStack Inquiry';
-        if (plan) subject = 'SoulStack ' + plan + ' Inquiry';
-
-        var body = [
-          'Name: '    + (name    || 'Not provided'),
-          'Email: '   + (email   || 'Not provided'),
-          'Plan: '    + (plan    || 'Not specified'),
-          'Agents: '  + (agents  || 'Not specified'),
-          '',
-          'Message:',
-          message || '(No message provided)'
-        ].join('\n');
-
-        var mailto = 'mailto:omniaguard1@gmail.com'
-          + '?subject=' + encodeURIComponent(subject)
-          + '&body='    + encodeURIComponent(body);
-
-        window.location.href = mailto;
-      });
-    })();
-
-    /* =========================================================
-       LIVE STATUS TICKER (subtle animation)
-    ========================================================= */
-    (function () {
-      // Simulate a live observer feel — occasional "check" on agent count display
-      // This is purely cosmetic; numbers stay accurate
-      var agentEl = document.getElementById('heroAgentCount');
-      if (!agentEl) return;
-
-      // Brief highlight flash every 8 seconds to reinforce "live" feel
-      setInterval(function () {
-        agentEl.style.transition = 'color 0.3s ease';
-        agentEl.style.color = '#ffd700';
-        setTimeout(function () {
-          agentEl.style.color = '';
-        }, 600);
-      }, 8000);
-    })();
-
-  </script>
-
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SoulStack.ai · All rights reserved</span>
+    <span style="color:rgba(0,212,255,.3)">A Francisco Holdings Inc. Company</span>
+  </div>
+</footer>
+
+<script>
+function joinWaitlist(e){
+  e.preventDefault();
+  const email = document.getElementById('wl-email').value;
+  window.location.href = `mailto:omniaguard1@gmail.com?subject=SoulStack.ai Waitlist Signup&body=New waitlist signup:%0A%0AEmail: ${email}%0A%0APlease add me to the SoulStack.ai founding member waitlist.`;
+}
+</script>
 </body>
 </html>
