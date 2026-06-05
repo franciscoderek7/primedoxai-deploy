@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Library — CCLDR Virtual Courthouse | Cannabis Case Law Database</title>
+<meta name="description" content="CCLDR canonical case law database. Parker, Smith, Allard, Hitzig, Mernagh, Ward and more. Searchable cannabis legal precedent for Canadian courts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--card:#141414;--gold:#c9a227;--gold-light:#e0b840;--green:#27ae60;--green-dark:#1e8449;--white:#f5f5f5;--muted:#888;--border:#2a2a2a;--cream:#f5f0e8}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.ch-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 30% 0%,rgba(201,162,39,.06) 0%,var(--black) 60%)}
+
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.97);border-bottom:1px solid var(--gold);padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:13px;color:var(--muted);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 22px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:26px;cursor:pointer}
+
+.page-hero{position:relative;z-index:1;text-align:center;padding:100px 40px 48px}
+.hero-icon{font-size:60px;margin-bottom:16px}
+.page-title{font-family:'Cinzel',serif;font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--white);margin-bottom:12px}
+.page-title .gold{color:var(--gold)}
+.page-sub{font-size:15px;color:var(--muted);max-width:580px;margin:0 auto 32px;line-height:1.6}
+
+.search-wrap{max-width:680px;margin:0 auto 60px;position:relative;z-index:1}
+.search-bar{width:100%;padding:16px 56px 16px 20px;background:var(--card);border:1px solid var(--gold);border-radius:4px;color:var(--white);font-size:15px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.search-bar::placeholder{color:var(--muted)}
+.search-bar:focus{border-color:var(--gold-light)}
+.search-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:18px;pointer-events:none}
+
+.library-layout{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:240px 1fr;gap:40px}
+.lib-sidebar{}
+.lib-section-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.lib-filter-list{list-style:none}
+.lib-filter-list li{padding:8px 12px;font-size:13px;color:var(--muted);cursor:pointer;border-radius:2px;transition:all .2s;margin-bottom:2px}
+.lib-filter-list li:hover,.lib-filter-list li.active{background:rgba(201,162,39,.1);color:var(--gold)}
+.lib-filter-list li.active{border-left:2px solid var(--gold);padding-left:10px}
+.lib-count{font-size:10px;color:rgba(136,136,136,.5);margin-left:6px}
+
+.cases-container{display:flex;flex-direction:column;gap:16px}
+.case-entry{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:24px 28px;cursor:pointer;transition:border-color .2s}
+.case-entry:hover{border-color:var(--gold)}
+.ce-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
+.ce-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--white)}
+.ce-badge{flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:10px}
+.badge-landmark{background:rgba(201,162,39,.12);color:var(--gold);border:1px solid rgba(201,162,39,.25)}
+.badge-key{background:rgba(39,174,96,.1);color:var(--green);border:1px solid rgba(39,174,96,.2)}
+.badge-charter{background:rgba(100,149,237,.1);color:#6495ED;border:1px solid rgba(100,149,237,.2)}
+.ce-citation{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:8px}
+.ce-ratio{font-size:13px;color:rgba(245,245,245,.8);line-height:1.6;margin-bottom:12px}
+.ce-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ce-tag{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:2px 10px;font-size:10px;color:var(--muted)}
+.case-expanded{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.case-expanded.open{display:block}
+.exp-section{margin-bottom:16px}
+.exp-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.exp-text{font-size:13px;color:rgba(245,245,245,.75);line-height:1.7}
+
+@media(max-width:900px){.library-layout{grid-template-columns:1fr}.lib-sidebar{display:none}.page-hero{padding:80px 20px 32px}.library-layout{padding:0 20px 60px}.search-wrap{padding:0 20px}}
+@media(max-width:640px){nav{padding:0 20px}.nav-links,.nav-cta{display:none}.hamburger{display:block}}
+</style>
+</head>
+<body>
+<div class="ch-bg" aria-hidden="true"></div>
+<nav>
+  <div><div class="nav-logo">CCLDR</div><div class="nav-sub">Virtual Courthouse</div></div>
+  <div class="nav-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="library.html" class="active">Library</a>
+    <a href="clerks-office.html">Clerk's Office</a>
+    <a href="pricing.html">Upgrade</a>
+  </div>
+  <a href="pricing.html" class="nav-cta">Upgrade Access</a>
+  <button class="hamburger">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-icon">📚</div>
+  <h1 class="page-title">The <span class="gold">Library</span></h1>
+  <p class="page-sub">Canonical cannabis case law. The cases that built Canadian cannabis rights. Research the precedents that protect you.</p>
+</section>
+
+<div class="search-wrap">
+  <input type="text" class="search-bar" id="search-input" placeholder="Search cases, citations, Charter sections, keywords..." oninput="filterCases()">
+  <span class="search-icon">🔍</span>
+</div>
+
+<div class="library-layout">
+  <div class="lib-sidebar">
+    <div class="lib-section-title">Filter By</div>
+    <ul class="lib-filter-list" id="filter-list">
+      <li class="active" onclick="setFilter('all',this)">All Cases <span class="lib-count">(12)</span></li>
+      <li onclick="setFilter('landmark',this)">Landmark <span class="lib-count">(5)</span></li>
+      <li onclick="setFilter('charter',this)">Charter Challenges <span class="lib-count">(8)</span></li>
+      <li onclick="setFilter('medical',this)">Medical Access <span class="lib-count">(4)</span></li>
+      <li onclick="setFilter('possession',this)">Possession <span class="lib-count">(6)</span></li>
+      <li onclick="setFilter('search',this)">Search & Seizure <span class="lib-count">(4)</span></li>
+    </ul>
+    <div class="lib-section-title" style="margin-top:24px">Charter Sections</div>
+    <ul class="lib-filter-list">
+      <li onclick="setFilter('s7',this)">s.7 — Life, Liberty, Security</li>
+      <li onclick="setFilter('s8',this)">s.8 — Search & Seizure</li>
+      <li onclick="setFilter('s15',this)">s.15 — Equality Rights</li>
+    </ul>
+  </div>
+
+  <div class="cases-container" id="cases-container">
+
+    <div class="case-entry" data-tags="landmark charter s7 medical possession" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Parker</div>
+        <span class="ce-badge badge-landmark">Landmark</span>
+      </div>
+      <div class="ce-citation">2000 CanLII 5762 (ON CA) — Ontario Court of Appeal</div>
+      <p class="ce-ratio">Struck down the criminal prohibition on marijuana possession as unconstitutional under s.7 of the Charter. Established that a person has the constitutional right to possess cannabis for medical purposes when necessary to preserve life.</p>
+      <div class="ce-tags"><span class="ce-tag">s.7 Charter</span><span class="ce-tag">Medical necessity</span><span class="ce-tag">Criminal law</span><span class="ce-tag">Epilepsy</span></div>
+      <div class="case-expanded">
+        <div class="exp-section"><div class="exp-label">Key Ratio</div><div class="exp-text">Marijuana prohibition violates s.7 of the Charter (right to life, liberty, and security of the person) when applied to individuals who require cannabis for medical purposes. The Court held the government must provide a constitutionally valid exemption for medical use or the possession prohibition is invalid.</div></div>
+        <div class="exp-section"><div class="exp-label">Impact</div><div class="exp-text">Led directly to the creation of the Marihuana Medical Access Regulations (MMAR) in 2001. The foundational case for all subsequent medical cannabis rights litigation in Canada.</div></div>
+        <div class="exp-section"><div class="exp-label">Doc WeedLaw's Take</div><div class="exp-text">Parker is your constitution. When the Crown argues possession is always criminal, Parker says: not when life and health are at stake. This case gave us MMAR, then ACMPR, then the Cannabis Act framework. Know it cold.</div></div>
+      </div>
+    </div>
+
+    <div class="case-entry" data-tags="landmark charter s15 medical possession" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">Allard v. Canada (Allard #1 & #2)</div>
+        <span class="ce-badge badge-landmark">Landmark</span>
+      </div>
+      <div class="ce-citation">2016 FC 236 — Federal Court of Canada</div>
+      <p class="ce-ratio">Struck down MMPR (Marihuana for Medical Purposes Regulations) as unconstitutional. Patients cannot be forced to obtain cannabis only from licensed producers — they have the constitutional right to grow their own medicine.</p>
+      <div class="ce-tags"><span class="ce-tag">s.7 Charter</span><span class="ce-tag">MMPR struck down</span><span class="ce-tag">Home cultivation</span><span class="ce-tag">Medical access</span></div>
+      <div class="case-expanded">
+        <div class="exp-section"><div class="exp-label">Key Ratio</div><div class="exp-text">The MMPR violated patients' s.7 rights by prohibiting them from growing their own medical cannabis and forcing them into a more expensive commercial market. The court found the regulations impeded reasonable access to medicine.</div></div>
+        <div class="exp-section"><div class="exp-label">Impact</div><div class="exp-text">Directly led to the ACMPR (Access to Cannabis for Medical Purposes Regulations) which restored the right to home cultivation for medical patients. Constitutional protection for growing your own medicine.</div></div>
+      </div>
+    </div>
+
+    <div class="case-entry" data-tags="landmark charter s7 medical" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Smith</div>
+        <span class="ce-badge badge-landmark">Landmark</span>
+      </div>
+      <div class="ce-citation">2015 SCC 34 — Supreme Court of Canada</div>
+      <p class="ce-ratio">Struck down the restrictions on cannabis derivative products. The government cannot allow raw cannabis for medical patients while prohibiting cannabis oils, edibles, and other forms — that violates s.7 Charter rights.</p>
+      <div class="ce-tags"><span class="ce-tag">s.7 Charter</span><span class="ce-tag">Cannabis derivatives</span><span class="ce-tag">Extracts</span><span class="ce-tag">SCC</span></div>
+      <div class="case-expanded">
+        <div class="exp-section"><div class="exp-label">Key Ratio</div><div class="exp-text">The prohibition on non-dried forms of medical cannabis was unconstitutional. Patients cannot be forced to smoke their medicine when other forms are medically preferable. The right to access medical cannabis extends to all forms of the substance.</div></div>
+        <div class="exp-section"><div class="exp-label">Impact</div><div class="exp-text">Led to the legalization of cannabis oils, extracts, and edibles for medical purposes. Foundation for Cannabis 2.0 (extracts, edibles, topicals legalized in 2019).</div></div>
+      </div>
+    </div>
+
+    <div class="case-entry" data-tags="charter s8 search possession" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Grant</div>
+        <span class="ce-badge badge-charter">Charter</span>
+      </div>
+      <div class="ce-citation">2009 SCC 32 — Supreme Court of Canada</div>
+      <p class="ce-ratio">Establishes the three-part test for determining whether evidence obtained through a Charter breach should be excluded under s.24(2). The foundational case for Charter remedies.</p>
+      <div class="ce-tags"><span class="ce-tag">s.24(2) exclusion</span><span class="ce-tag">Evidence</span><span class="ce-tag">Charter remedies</span><span class="ce-tag">3-part test</span></div>
+      <div class="case-expanded">
+        <div class="exp-section"><div class="exp-label">The Grant Test (3 Branches)</div><div class="exp-text">1. Seriousness of the Charter-infringing conduct (was it deliberate, systemic, or inadvertent?)<br>2. Impact of the breach on the Charter-protected interests of the accused (direct? peripheral?)<br>3. Society's interest in adjudication on the merits (balancing act)</div></div>
+        <div class="exp-section"><div class="exp-label">Doc WeedLaw's Take</div><div class="exp-text">Grant is the key that unlocks s.24(2). If police violated your Charter rights to get evidence, Grant is how you argue exclusion. Memorize all three branches. Apply each one to your specific facts. A well-argued Grant analysis can exclude the Crown's entire case.</div></div>
+      </div>
+    </div>
+
+    <div class="case-entry" data-tags="charter s7 medical possession" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Hitzig</div>
+        <span class="ce-badge badge-charter">Charter</span>
+      </div>
+      <div class="ce-citation">2003 CanLII 42488 (ON CA)</div>
+      <p class="ce-ratio">Struck down MMAR provisions that prohibited designated persons from selling cannabis to patients. The court held that patients must have a reasonable means of obtaining their medicine — the exemption cannot be illusory.</p>
+      <div class="ce-tags"><span class="ce-tag">MMAR</span><span class="ce-tag">Medical access</span><span class="ce-tag">Designated persons</span><span class="ce-tag">s.7 Charter</span></div>
+      <div class="case-expanded">
+        <div class="exp-section"><div class="exp-label">Key Ratio</div><div class="exp-text">A constitutional exemption for medical cannabis that cannot be practically exercised is no exemption at all. The government must ensure patients can actually obtain their medicine, not just theoretically access it.</div></div>
+      </div>
+    </div>
+
+    <div class="case-entry" data-tags="charter s7 possession landmark" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Mernagh</div>
+        <span class="ce-badge badge-landmark">Landmark</span>
+      </div>
+      <div class="ce-citation">2011 ONSC 2121, aff'd 2013 ONCA 67</div>
+      <p class="ce-ratio">MMAR struck down at Superior Court level — the regime was so impractical that it was constitutionally invalid. On appeal, the finding was narrowed but the principle of practical access reinforced.</p>
+      <div class="ce-tags"><span class="ce-tag">MMAR</span><span class="ce-tag">Practical access</span><span class="ce-tag">s.7 Charter</span><span class="ce-tag">Ontario</span></div>
+      <div class="case-expanded">
+        <div class="exp-section"><div class="exp-label">Key Ratio</div><div class="exp-text">The MMAR's physician approval requirement was constitutionally deficient because most Canadian doctors would not sign the required forms, making the exemption practically unavailable to those who needed it most.</div></div>
+      </div>
+    </div>
+
+    <div class="case-entry" data-tags="charter s8 search" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Saeed</div>
+        <span class="ce-badge badge-charter">Charter</span>
+      </div>
+      <div class="ce-citation">2016 SCC 24 — Supreme Court of Canada</div>
+      <p class="ce-ratio">Clarified when a search incident to arrest is constitutionally permissible. The scope of a warrantless search must be tailored to the arrest — cannot be a blanket authorization to search anything and everything.</p>
+      <div class="ce-tags"><span class="ce-tag">s.8 Charter</span><span class="ce-tag">Search incident to arrest</span><span class="ce-tag">Warrantless search</span><span class="ce-tag">Scope</span></div>
+    </div>
+
+    <div class="case-entry" data-tags="charter s8 search" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Ward</div>
+        <span class="ce-badge badge-charter">Charter</span>
+      </div>
+      <div class="ce-citation">2012 ONCA 660 — Ontario Court of Appeal</div>
+      <p class="ce-ratio">Important case on damages for Charter breaches. Police can be ordered to pay compensation to individuals whose Charter rights were violated — personal consequences for Charter violations.</p>
+      <div class="ce-tags"><span class="ce-tag">s.24(1) damages</span><span class="ce-tag">Charter breach</span><span class="ce-tag">Police accountability</span><span class="ce-tag">Compensation</span></div>
+      <div class="case-expanded">
+        <div class="exp-section"><div class="exp-label">Key Ratio</div><div class="exp-text">Courts can award damages under s.24(1) of the Charter for government violations of constitutional rights. Ward established the framework: functional justification, good governance concerns, and consistency with the Charter's remedial purposes all factor in.</div></div>
+        <div class="exp-section"><div class="exp-label">Doc WeedLaw's Take</div><div class="exp-text">Ward is your civil remedy. If police violated your Charter rights and exclusion of evidence isn't enough, you can sue for damages. Derek Francisco uses this framework in ongoing litigation against the Crown.</div></div>
+      </div>
+    </div>
+
+    <div class="case-entry" data-tags="charter s8 search" onclick="toggleCase(this)">
+      <div class="ce-header">
+        <div class="ce-title">R. v. Stairs</div>
+        <span class="ce-badge badge-charter">Charter</span>
+      </div>
+      <div class="ce-citation">2022 SCC 11 — Supreme Court of Canada</div>
+      <p class="ce-ratio">Limits the scope of search incident to arrest — police cannot conduct a full warrantless search of an entire residence upon arrest. Recent and important for cannabis possession cases where police search homes.</p>
+      <div class="ce-tags"><span class="ce-tag">s.8 Charter</span><span class="ce-tag">Home search</span><span class="ce-tag">Search incident to arrest</span><span class="ce-tag">2022</span></div>
+    </div>
+
+  </div>
+</div>
+
+<footer style="position:relative;z-index:1;background:rgba(10,10,10,.98);border-top:1px solid #2a2a2a;padding:40px;text-align:center">
+  <div style="font-family:'Cinzel',serif;font-size:18px;color:#c9a227;margin-bottom:8px">CCLDR.NET</div>
+  <div style="font-size:12px;color:#888;margin-bottom:16px">Cannabis Legal Defense & Education Resources · Library</div>
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+    <a href="lobby.html" style="font-size:12px;color:#888;transition:color .2s">Lobby</a>
+    <a href="courtroom.html" style="font-size:12px;color:#888">Courtroom</a>
+    <a href="practice-courtroom.html" style="font-size:12px;color:#888">AI Practice</a>
+    <a href="clerks-office.html" style="font-size:12px;color:#888">Clerk's Office</a>
+  </div>
+  <div style="margin-top:20px;font-size:11px;color:rgba(136,136,136,.3)">© 2026 CCLDR.NET · A Francisco Holdings Inc. Venture · For educational purposes — not legal advice</div>
+</footer>
+
+<script>
+function toggleCase(el){el.querySelector('.case-expanded').classList.toggle('open')}
+
+let activeFilter='all';
+function setFilter(filter,el){
+  document.querySelectorAll('#filter-list li').forEach(li=>li.classList.remove('active'));
+  el.classList.add('active');
+  activeFilter=filter;
+  filterCases();
+}
+
+function filterCases(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  document.querySelectorAll('.case-entry').forEach(entry=>{
+    const tags=entry.getAttribute('data-tags')||'';
+    const text=entry.textContent.toLowerCase();
+    const matchFilter=activeFilter==='all'||tags.includes(activeFilter);
+    const matchSearch=!q||text.includes(q);
+    entry.style.display=(matchFilter&&matchSearch)?'':'none';
+  });
+}
+</script>
+</body>
+</html>
