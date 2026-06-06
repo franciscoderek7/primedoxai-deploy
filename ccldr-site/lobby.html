@@ -307,11 +307,15 @@ footer{position:relative;z-index:1;background:rgba(10,10,10,.98);border-top:1px 
   <div class="footer-bottom">© 2026 CCLDR.NET · A Francisco Holdings Inc. Venture · All information is educational — not legal advice</div>
 </footer>
 
+<script type="module" src="/membership.js"></script>
 <script>
-// Simple tier display from localStorage
+// Tier display — verified server-side via Supabase (membership.js), not a browser-editable flag
 const tiers = {free:'Free / Lobby',warrior:'Warrior',professional:'Professional',elite:'Elite',sovereign:'Sovereign'};
-const saved = localStorage.getItem('ccldr_tier') || 'free';
-document.getElementById('tier-name').textContent = tiers[saved] || 'Free / Lobby';
+function renderTier(tier){
+  document.getElementById('tier-name').textContent = tiers[tier] || 'Free / Lobby';
+}
+renderTier('free');
+document.addEventListener('ccldr-tier-verified', e => renderTier(e.detail.tier));
 </script>
 </body>
 </html>

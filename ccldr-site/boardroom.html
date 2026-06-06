@@ -511,12 +511,14 @@ footer{position:relative;z-index:1;background:rgba(10,10,15,.98);border-top:1px 
   <div class="footer-copy">© 2026 CCLDR.NET | Doc WeedLaw | ccldr.net — Educational platform. Not legal advice. For information purposes only.</div>
 </footer>
 
+<script type="module" src="/membership.js"></script>
 <script>
-// ─── TIER SYSTEM ───────────────────────────────────────────────────────────
+// ─── TIER SYSTEM (server-verified via Supabase — see membership.js) ────────
 const TIER_ORDER = ['free','warrior','professional','elite','sovereign'];
+let ccldrVerifiedTier = 'free';
 
 function checkTier() {
-  return localStorage.getItem('ccldr_tier') || 'free';
+  return ccldrVerifiedTier;
 }
 
 function tierLevel(t) {
@@ -952,6 +954,11 @@ function downloadDoc(type) {
 }
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('ccldr-tier-verified', (e) => {
+  ccldrVerifiedTier = e.detail.tier;
+  initAccess();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   initAccess();
   loadChecklist();

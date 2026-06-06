@@ -530,14 +530,16 @@ footer{position:relative;z-index:1;background:rgba(7,7,10,.99);border-top:1px so
   <div class="footer-bottom">© 2026 CCLDR.NET | Doc WeedLaw | <a href="https://ccldr.net" style="color:rgba(136,136,136,.5)">ccldr.net</a> · A Francisco Holdings Inc. Venture · All information is educational — not legal advice</div>
 </footer>
 
+<script type="module" src="/membership.js"></script>
 <script>
 const TIER_ORDER = ['free','warrior','professional','elite','sovereign'];
 const TIER_LABELS = {free:'Free',warrior:'Warrior',professional:'Professional',elite:'Elite',sovereign:'Sovereign'};
+let ccldrVerifiedTier = 'free';
 
 function tierRank(t){ return TIER_ORDER.indexOf(t||'free'); }
 
 function checkTier(){
-  const tier = localStorage.getItem('ccldr_tier') || 'free';
+  const tier = ccldrVerifiedTier;
   const rank = tierRank(tier);
 
   document.getElementById('hero-tier-label').textContent = TIER_LABELS[tier] || 'Free';
@@ -556,7 +558,7 @@ function checkTier(){
 }
 
 function tierGate(required){
-  const tier = localStorage.getItem('ccldr_tier') || 'free';
+  const tier = ccldrVerifiedTier;
   const rank = tierRank(tier);
   const req = tierRank(required);
   if(rank < req){
@@ -601,6 +603,10 @@ document.getElementById('upgrade-modal').addEventListener('click', function(e){
 
 // Initialize
 checkTier();
+document.addEventListener('ccldr-tier-verified', (e) => {
+  ccldrVerifiedTier = e.detail.tier;
+  checkTier();
+});
 </script>
 </body>
 </html>
