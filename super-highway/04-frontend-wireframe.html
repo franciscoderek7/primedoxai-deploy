@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Highway Superstore — Wireframe</title>
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --hub-dark: #0f0f13;
+    --hub-mid:  #1a1a24;
+    --hub-card: #22222e;
+    --hub-border: #2e2e3e;
+    --accent-a: #4a6cf7;   /* Loop A — Derek identity */
+    --accent-b: #6a5acd;   /* Loop B — Anonymous */
+    --accent-gold: #c9a84c;
+    --text-primary: #f0f0f8;
+    --text-muted:   #8888a8;
+    --text-dim:     #5a5a7a;
+    --radius: 10px;
+  }
+  body { background: var(--hub-dark); color: var(--text-primary); font-family: system-ui, -apple-system, sans-serif; font-size: 15px; line-height: 1.5; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; font-family: inherit; }
+
+  /* ===== ANNOUNCEMENT BAR ===== */
+  .announcement-bar {
+    background: var(--accent-gold); color: #111; text-align: center;
+    padding: 8px 40px; font-size: 13px; font-weight: 600; position: relative;
+  }
+  .announcement-bar .ab-close {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: #111; font-size: 18px; cursor: pointer;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--hub-mid); border-bottom: 1px solid var(--hub-border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; gap: 20px; height: 64px;
+  }
+  .logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent-gold); }
+  nav { flex: 1; display: flex; align-items: center; gap: 4px; }
+  nav a {
+    padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500;
+    color: var(--text-muted); transition: all 0.15s;
+  }
+  nav a:hover, nav a.active { background: var(--hub-card); color: var(--text-primary); }
+  .header-search {
+    display: flex; align-items: center; background: var(--hub-card); border: 1px solid var(--hub-border);
+    border-radius: 8px; overflow: hidden; width: 260px;
+  }
+  .header-search input {
+    background: none; border: none; outline: none; padding: 8px 12px; flex: 1;
+    color: var(--text-primary); font-size: 14px;
+  }
+  .header-search button {
+    background: none; border: none; padding: 8px 12px; color: var(--text-muted);
+  }
+  .header-actions { display: flex; align-items: center; gap: 8px; }
+  .btn-ghost {
+    background: none; border: 1px solid var(--hub-border); color: var(--text-muted);
+    padding: 7px 14px; border-radius: 8px; font-size: 14px; font-weight: 500;
+  }
+  .btn-ghost:hover { border-color: var(--accent-a); color: var(--text-primary); }
+  .btn-primary {
+    background: var(--accent-a); color: #fff; border: none;
+    padding: 7px 16px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .cart-btn {
+    background: var(--hub-card); border: 1px solid var(--hub-border);
+    padding: 7px 14px; border-radius: 8px; font-size: 14px; font-weight: 500;
+    color: var(--text-primary); display: flex; align-items: center; gap: 6px;
+    position: relative;
+  }
+  .cart-badge {
+    position: absolute; top: -6px; right: -6px;
+    background: var(--accent-a); color: #fff; font-size: 11px; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    max-width: 1280px; margin: 0 auto; padding: 64px 24px;
+    display: grid; grid-template-columns: 1fr 400px; gap: 48px; align-items: center;
+  }
+  .hero-kicker {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent-gold); margin-bottom: 12px;
+  }
+  .hero-headline {
+    font-size: 52px; font-weight: 900; line-height: 1.05; letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+  .hero-headline .hl-a { color: var(--accent-a); }
+  .hero-headline .hl-b { color: var(--accent-b); }
+  .hero-sub {
+    font-size: 17px; color: var(--text-muted); max-width: 500px; margin-bottom: 32px;
+  }
+  .hero-ctas { display: flex; gap: 12px; }
+  .btn-lg {
+    padding: 14px 28px; border-radius: 10px; font-size: 16px; font-weight: 700; border: none;
+  }
+  .btn-lg-primary { background: var(--accent-a); color: #fff; }
+  .btn-lg-secondary { background: var(--hub-card); color: var(--text-primary); border: 1px solid var(--hub-border); }
+  .hero-stats {
+    display: flex; gap: 28px; margin-top: 40px; padding-top: 28px;
+    border-top: 1px solid var(--hub-border);
+  }
+  .stat-item { text-align: left; }
+  .stat-num { font-size: 28px; font-weight: 800; letter-spacing: -1px; color: var(--text-primary); }
+  .stat-lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .hero-visual {
+    background: var(--hub-card); border: 1px solid var(--hub-border); border-radius: 16px;
+    padding: 24px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .mini-card {
+    background: var(--hub-mid); border: 1px solid var(--hub-border); border-radius: 10px;
+    padding: 14px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .mini-card-info { }
+  .mini-card-name { font-size: 14px; font-weight: 600; }
+  .mini-card-tag { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .mini-card-price { font-size: 15px; font-weight: 700; }
+  .loop-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em; padding: 2px 6px; border-radius: 4px;
+    margin-right: 6px;
+  }
+  .loop-badge-a { background: rgba(74,108,247,0.2); color: var(--accent-a); }
+  .loop-badge-b { background: rgba(106,90,205,0.2); color: var(--accent-b); }
+
+  /* ===== CATEGORY TABS ===== */
+  .section { max-width: 1280px; margin: 0 auto; padding: 0 24px 56px; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+  .section-title { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+  .section-link { font-size: 14px; color: var(--accent-a); font-weight: 600; }
+  .tabs { display: flex; gap: 4px; background: var(--hub-card); padding: 4px; border-radius: 10px; margin-bottom: 28px; }
+  .tab {
+    flex: 1; text-align: center; padding: 8px 12px; border-radius: 7px;
+    font-size: 13px; font-weight: 600; color: var(--text-muted); background: none; border: none;
+    cursor: pointer;
+  }
+  .tab.active { background: var(--hub-mid); color: var(--text-primary); }
+  .tab:hover:not(.active) { color: var(--text-primary); }
+
+  /* ===== PRODUCT GRID ===== */
+  .product-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;
+  }
+  .product-card {
+    background: var(--hub-card); border: 1px solid var(--hub-border); border-radius: var(--radius);
+    overflow: hidden; transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .product-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .product-img {
+    width: 100%; height: 140px; background: var(--hub-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+  }
+  .product-body { padding: 16px; }
+  .product-module { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .product-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+  .product-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price { font-size: 16px; font-weight: 800; }
+  .product-price-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+  .btn-add {
+    background: var(--hub-mid); border: 1px solid var(--hub-border);
+    color: var(--text-primary); padding: 7px 14px; border-radius: 7px;
+    font-size: 13px; font-weight: 600; transition: all 0.15s;
+  }
+  .btn-add:hover { background: var(--accent-a); border-color: var(--accent-a); }
+
+  /* ===== CART DRAWER ===== */
+  .cart-drawer-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 200;
+    display: flex; justify-content: flex-end;
+  }
+  .cart-drawer {
+    width: 420px; background: var(--hub-mid); border-left: 1px solid var(--hub-border);
+    display: flex; flex-direction: column; height: 100%;
+  }
+  .cart-drawer-header {
+    padding: 20px 24px; border-bottom: 1px solid var(--hub-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-drawer-title { font-size: 18px; font-weight: 700; }
+  .cart-close { background: none; border: none; color: var(--text-muted); font-size: 22px; }
+  .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .cart-item {
+    background: var(--hub-card); border: 1px solid var(--hub-border); border-radius: 8px;
+    padding: 12px; display: flex; gap: 12px; align-items: flex-start;
+  }
+  .cart-item-icon { font-size: 28px; flex-shrink: 0; }
+  .cart-item-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .cart-item-module { font-size: 11px; color: var(--text-muted); }
+  .cart-item-price { font-size: 14px; font-weight: 700; margin-top: 4px; }
+  .cart-divider { border: none; border-top: 1px solid var(--hub-border); margin: 4px 0; }
+  .cart-split-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin: 4px 0; }
+  .cart-footer { padding: 20px 24px; border-top: 1px solid var(--hub-border); }
+  .cart-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+  .cart-row.total { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hub-border); }
+  .btn-checkout {
+    width: 100%; background: var(--accent-a); color: #fff; border: none;
+    padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; margin-top: 16px;
+  }
+  .btn-checkout:hover { opacity: 0.9; }
+  .cart-note { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 10px; }
+
+  /* ===== LOOP SECTION (loop A featured) ===== */
+  .loop-section-a {
+    background: linear-gradient(135deg, rgba(74,108,247,0.08) 0%, rgba(74,108,247,0.02) 100%);
+    border: 1px solid rgba(74,108,247,0.15); border-radius: 16px; padding: 32px;
+    margin-bottom: 20px;
+  }
+  .loop-section-b {
+    background: linear-gradient(135deg, rgba(106,90,205,0.08) 0%, rgba(106,90,205,0.02) 100%);
+    border: 1px solid rgba(106,90,205,0.15); border-radius: 16px; padding: 32px;
+  }
+  .loop-section-label {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+  }
+  .loop-section-label-badge {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .lsl-a { background: rgba(74,108,247,0.2); color: var(--accent-a); }
+  .lsl-b { background: rgba(106,90,205,0.2); color: var(--accent-b); }
+  .loop-section-desc { font-size: 13px; color: var(--text-muted); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--hub-border); background: var(--hub-mid);
+    padding: 48px 24px 32px;
+  }
+  .footer-inner { max-width: 1280px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+  .footer-brand .logo { font-size: 22px; margin-bottom: 12px; display: block; }
+  .footer-brand p { font-size: 13px; color: var(--text-muted); max-width: 280px; }
+  .footer-col h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 14px; }
+  .footer-col a { display: block; font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+  .footer-col a:hover { color: var(--text-primary); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid var(--hub-border); }
+  .footer-bottom p { font-size: 13px; color: var(--text-dim); }
+
+  /* ===== CHECKOUT PAGE ===== */
+  .checkout-layout {
+    max-width: 960px; margin: 0 auto; padding: 40px 24px;
+    display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start;
+  }
+  .checkout-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 28px; }
+  .checkout-section { background: var(--hub-card); border: 1px solid var(--hub-border); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .checkout-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+  .form-field input, .form-field select {
+    width: 100%; background: var(--hub-mid); border: 1px solid var(--hub-border); border-radius: 7px;
+    padding: 10px 12px; color: var(--text-primary); font-size: 14px; outline: none;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: var(--accent-a); }
+  .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+  .payment-method {
+    border: 1px solid var(--hub-border); border-radius: 8px; padding: 14px 10px;
+    text-align: center; cursor: pointer; transition: all 0.15s;
+  }
+  .payment-method.selected { border-color: var(--accent-a); background: rgba(74,108,247,0.08); }
+  .payment-method-icon { font-size: 20px; margin-bottom: 4px; }
+  .payment-method-label { font-size: 12px; font-weight: 600; }
+  .order-summary { background: var(--hub-card); border: 1px solid var(--hub-border); border-radius: 12px; padding: 24px; }
+  .order-summary h3 { font-size: 15px; font-weight: 700; margin-bottom: 18px; }
+  .summary-item { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--hub-border); }
+  .summary-item:last-of-type { border-bottom: none; }
+  .summary-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; padding-top: 14px; margin-top: 6px; border-top: 2px solid var(--hub-border); }
+  .security-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .security-badge { font-size: 11px; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .checkout-layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .hero-headline { font-size: 34px; }
+    .header-search { display: none; }
+    .product-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+    .cart-drawer { width: 100%; }
+  }
+
+  /* ===== PAGE TOGGLE (wireframe navigation) ===== */
+  .wireframe-nav {
+    position: fixed; bottom: 20px; right: 20px; z-index: 999;
+    background: var(--hub-card); border: 1px solid var(--hub-border); border-radius: 12px;
+    padding: 12px; display: flex; flex-direction: column; gap: 6px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .wireframe-nav p { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .wf-btn {
+    background: var(--hub-mid); border: 1px solid var(--hub-border); color: var(--text-muted);
+    padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; text-align: left;
+  }
+  .wf-btn.active, .wf-btn:hover { background: var(--accent-a); border-color: var(--accent-a); color: #fff; }
+  .page { display: none; }
+  .page.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ===== WIREFRAME NAVIGATION ===== -->
+<div class="wireframe-nav">
+  <p>📐 Wireframe Screens</p>
+  <button class="wf-btn active" onclick="showPage('home')">1. Home / Superstore</button>
+  <button class="wf-btn" onclick="showPage('cart')">2. Cart Drawer</button>
+  <button class="wf-btn" onclick="showPage('checkout')">3. Checkout</button>
+</div>
+
+<!-- ====================================================================== -->
+<!-- PAGE 1 — HOME / SUPERSTORE                                             -->
+<!-- ====================================================================== -->
+<div class="page active" id="page-home">
+
+  <!-- Announcement bar -->
+  <div class="announcement-bar">
+    ⚡ Emergency Defense available 24/7 — $99, instant access &nbsp;|&nbsp; OmniaGuard free AI security audits open this week
+    <button class="ab-close">&times;</button>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo">Super <span>Highway</span></a>
+      <nav>
+        <a href="#" class="active">All Products</a>
+        <a href="#">Legal Defense</a>
+        <a href="#">AI Security</a>
+        <a href="#">SaaS Tools</a>
+        <a href="#">Courses</a>
+        <a href="#">Physical</a>
+      </nav>
+      <div class="header-search">
+        <input type="text" placeholder="Search 45 companies…" />
+        <button>🔍</button>
+      </div>
+      <div class="header-actions">
+        <button class="btn-ghost" onclick="showPage('cart')">Sign In</button>
+        <button class="btn-primary">Sign Up</button>
+        <button class="cart-btn" onclick="showPage('cart')">
+          🛒 Cart
+          <span class="cart-badge">2</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <div class="hero-kicker">Francisco Holdings Inc. — 45 companies, one checkout</div>
+      <h1 class="hero-headline">
+        One cart.<br>
+        <span class="hl-a">Legal defense.</span><br>
+        <span class="hl-b">AI security.</span><br>
+        Everything.
+      </h1>
+      <p class="hero-sub">
+        From constitutional cannabis defense education to enterprise AI security — browse every Francisco Holdings property and check out in a single transaction.
+      </p>
+      <div class="hero-ctas">
+        <button class="btn-lg btn-lg-primary">Browse All Products</button>
+        <button class="btn-lg btn-lg-secondary">Free Tools</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">45</div>
+          <div class="stat-lbl">Companies</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">200+</div>
+          <div class="stat-lbl">Educational Wins</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">$99</div>
+          <div class="stat-lbl">Emergency Defense</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">24/7</div>
+          <div class="stat-lbl">AI Availability</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero visual — mini product cards -->
+    <div class="hero-visual">
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Recently added to cart →</div>
+
+      <div class="mini-card">
+        <div class="mini-card-info">
+          <div class="mini-card-name">
+            <span class="loop-badge loop-badge-a">A</span>
+            PrimeDox Emergency Defense
+          </div>
+          <div class="mini-card-tag">primedoxai.com — one-time</div>
+        </div>
+        <div class="mini-card-price">$99</div>
+      </div>
+
+      <div class="mini-card">
+        <div class="mini-card-info">
+          <div class="mini-card-name">
+            <span class="loop-badge loop-badge-a">A</span>
+            CCLDR Warrior Tier
+          </div>
+          <div class="mini-card-tag">ccldr.net — monthly</div>
+        </div>
+        <div class="mini-card-price">$149<span style="font-size:11px;font-weight:400;">/mo</span></div>
+      </div>
+
+      <div style="height:1px;background:var(--hub-border);"></div>
+
+      <div class="mini-card">
+        <div class="mini-card-info">
+          <div class="mini-card-name">
+            <span class="loop-badge loop-badge-b">B</span>
+            OmniaGuard Guardian
+          </div>
+          <div class="mini-card-tag">omniaguard.com — monthly</div>
+        </div>
+        <div class="mini-card-price">$2,499<span style="font-size:11px;font-weight:400;">/mo</span></div>
+      </div>
+
+      <div style="background:var(--hub-mid);border-radius:8px;padding:12px;font-size:12px;color:var(--text-muted);">
+        ℹ️ Items from different loops are processed in separate payment intents — your privacy is enforced at checkout.
+      </div>
+    </div>
+  </div>
+
+  <!-- Category tabs + product grid -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">All Products</h2>
+      <a href="#" class="section-link">View all 45 companies →</a>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active">All</button>
+      <button class="tab">Legal Defense</button>
+      <button class="tab">AI Security</button>
+      <button class="tab">SaaS Tools</button>
+      <button class="tab">Courses</button>
+      <button class="tab">Physical</button>
+      <button class="tab">Services</button>
+    </div>
+
+    <!-- Loop A featured section -->
+    <div class="loop-section-a" style="margin-bottom:24px;">
+      <div class="loop-section-label">
+        <span class="loop-section-label-badge lsl-a">Derek Francisco — Constitutional Defense & AI</span>
+        <span class="loop-section-desc">Personal-identity brands · Cannabis education · Legal tech</span>
+      </div>
+      <div class="product-grid">
+
+        <div class="product-card">
+          <div class="product-img">⚖️</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-a">A</span> PrimeDox AI</div>
+            <div class="product-name">Emergency Defense</div>
+            <div class="product-desc">24/7 framework walkthrough + Charter rights reference card for the next 72 hours</div>
+            <div class="product-footer">
+              <div class="product-price">$99 <span class="product-price-sub">one-time</span></div>
+              <button class="btn-add" onclick="showPage('cart')">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img">🌿</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-a">A</span> CCLDR.net</div>
+            <div class="product-name">Warrior Tier</div>
+            <div class="product-desc">BENO-X framework, 12-Appearance timeline tracker, complete case law library</div>
+            <div class="product-footer">
+              <div class="product-price">$149 <span class="product-price-sub">/mo</span></div>
+              <button class="btn-add" onclick="showPage('cart')">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img">📚</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-a">A</span> Weedlaw Education</div>
+            <div class="product-name">Doc Weedlaw Masterclass</div>
+            <div class="product-desc">Full constitutional cannabis defense curriculum — self-paced, lifetime access</div>
+            <div class="product-footer">
+              <div class="product-price">$499 <span class="product-price-sub">lifetime</span></div>
+              <button class="btn-add" onclick="showPage('cart')">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img">👑</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-a">A</span> CCLDR.net</div>
+            <div class="product-name">Sovereign Coaching</div>
+            <div class="product-desc">1-on-1 strategy sessions with Doc Weedlaw — 3 spots open this month</div>
+            <div class="product-footer">
+              <div class="product-price">$1,499 <span class="product-price-sub">/mo</span></div>
+              <button class="btn-add" onclick="showPage('cart')">Add</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Loop B featured section -->
+    <div class="loop-section-b">
+      <div class="loop-section-label">
+        <span class="loop-section-label-badge lsl-b">Francisco Holdings Portfolio — Enterprise Technology</span>
+        <span class="loop-section-desc">Anonymous brands · AI security · SaaS · Clean tech</span>
+      </div>
+      <div class="product-grid">
+
+        <div class="product-card">
+          <div class="product-img">🛡️</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-b">B</span> OmniaGuard</div>
+            <div class="product-name">Free Security Audit</div>
+            <div class="product-desc">14-agent swarm reviews your AI stack — plain-language findings, no upsell pressure</div>
+            <div class="product-footer">
+              <div class="product-price">$0 <span class="product-price-sub">free</span></div>
+              <button class="btn-add">Request</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img">🔒</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-b">B</span> OmniaGuard</div>
+            <div class="product-name">Guardian Plan</div>
+            <div class="product-desc">Real-time prompt-injection defense for up to 3 AI agents in production</div>
+            <div class="product-footer">
+              <div class="product-price">$2,499 <span class="product-price-sub">/mo</span></div>
+              <button class="btn-add" onclick="showPage('cart')">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img">🧹</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-b">B</span> CleanSwarm</div>
+            <div class="product-name">14-Day Free Trial</div>
+            <div class="product-desc">AI scheduling + client follow-up automation for cleaning businesses — no card needed</div>
+            <div class="product-footer">
+              <div class="product-price">$0 <span class="product-price-sub">free trial</span></div>
+              <button class="btn-add">Start Trial</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img">⚙️</div>
+          <div class="product-body">
+            <div class="product-module"><span class="loop-badge loop-badge-b">B</span> Kiaros</div>
+            <div class="product-name">AI Consulting Retainer</div>
+            <div class="product-desc">Fractional AI advisory for growth-stage companies — strategy, architecture, deployment</div>
+            <div class="product-footer">
+              <div class="product-price">Custom <span class="product-price-sub">contact us</span></div>
+              <button class="btn-add">Inquire</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo">Super <span>Highway</span></span>
+          <p>The unified commerce platform for all 45 Francisco Holdings Inc. companies — one cart, one checkout, zero cross-contamination.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Legal Defense (Loop A)</h5>
+          <a href="#">CCLDR.net</a>
+          <a href="#">PrimeDox AI</a>
+          <a href="#">Weedlaw Education</a>
+          <a href="#">Francisco Holdings</a>
+          <a href="#">CCC.net</a>
+        </div>
+        <div class="footer-col">
+          <h5>Enterprise Tech (Loop B)</h5>
+          <a href="#">OmniaGuard</a>
+          <a href="#">Kiaros</a>
+          <a href="#">SoulStack</a>
+          <a href="#">CleanSwarm</a>
+          <a href="#">All 45 companies →</a>
+        </div>
+        <div class="footer-col">
+          <h5>Account</h5>
+          <a href="#">Sign In (Loop A)</a>
+          <a href="#">Sign In (Loop B)</a>
+          <a href="#">My Orders</a>
+          <a href="#">Affiliates</a>
+          <a href="#">Investor Portal</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Francisco Holdings Inc. All rights reserved. Tech Pet Cage (registered Ontario business).</p>
+        <p style="font-size:12px;color:var(--text-dim);">Educational content is not legal advice. Not a law firm. All AI tools are educational only.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ====================================================================== -->
+<!-- PAGE 2 — CART DRAWER                                                   -->
+<!-- ====================================================================== -->
+<div class="page" id="page-cart">
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo" onclick="showPage('home')">Super <span>Highway</span></a>
+      <div style="flex:1;text-align:center;font-size:14px;color:var(--text-muted);">← <a href="#" onclick="showPage('home')" style="color:var(--accent-a);">Back to store</a></div>
+    </div>
+  </header>
+
+  <div style="max-width:1280px;margin:0 auto;padding:32px 24px;display:grid;grid-template-columns:1fr 400px;gap:32px;align-items:start;">
+
+    <div>
+      <h2 style="font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-bottom:24px;">Your Cart (2 items)</h2>
+
+      <!-- Loop A group -->
+      <div style="background:rgba(74,108,247,0.05);border:1px solid rgba(74,108,247,0.15);border-radius:12px;padding:20px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+          <span class="loop-section-label-badge lsl-a">Loop A — Derek Francisco brands</span>
+          <span style="font-size:12px;color:var(--text-muted);">Processed via CCLDR / PrimeDox Stripe account</span>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--hub-border);">
+          <div style="font-size:28px;">⚖️</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;">PrimeDox Emergency Defense</div>
+            <div style="font-size:12px;color:var(--text-muted);">One-time · Instant digital access</div>
+          </div>
+          <div style="font-size:15px;font-weight:700;">$99.00</div>
+          <button style="background:none;border:none;color:var(--text-dim);font-size:16px;">✕</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;padding:14px 0;">
+          <div style="font-size:28px;">🌿</div>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:600;">CCLDR Warrior Tier</div>
+            <div style="font-size:12px;color:var(--text-muted);">Monthly subscription · Billed today, then monthly</div>
+          </div>
+          <div style="font-size:15px;font-weight:700;">$149.00/mo</div>
+          <button style="background:none;border:none;color:var(--text-dim);font-size:16px;">✕</button>
+        </div>
+
+        <div style="text-align:right;font-size:13px;color:var(--text-muted);margin-top:4px;">Loop A subtotal: <strong style="color:var(--text-primary);">$248.00</strong></div>
+      </div>
+
+      <!-- Recommended -->
+      <div style="background:var(--hub-card);border:1px solid var(--hub-border);border-radius:12px;padding:20px;">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:14px;">💡 People with this cart also added</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="font-size:22px;">🌿</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;">Weedlaw Education — Doc Weedlaw Masterclass</div>
+              <div style="font-size:12px;color:var(--text-muted);">Complete cannabis defense curriculum — lifetime access</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-weight:700;">$499</span>
+            <button class="btn-add" onclick="showPage('cart')">+ Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order summary -->
+    <div>
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+
+        <div class="summary-item">
+          <span>PrimeDox Emergency Defense</span>
+          <span>$99.00</span>
+        </div>
+        <div class="summary-item">
+          <span>CCLDR Warrior (Month 1)</span>
+          <span>$149.00</span>
+        </div>
+        <div class="summary-item">
+          <span>Discount</span>
+          <span style="color:#4ade80;">—$0.00</span>
+        </div>
+        <div class="summary-item">
+          <span>Tax (ON HST 13%)</span>
+          <span>$32.24</span>
+        </div>
+        <div class="summary-total">
+          <span>Total due today</span>
+          <span>$280.24 CAD</span>
+        </div>
+
+        <button class="btn-checkout" onclick="showPage('checkout')">Continue to Checkout →</button>
+
+        <div class="cart-note" style="margin-top:12px;">
+          🔐 Secure checkout · Loop A items split to separate payment
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Have an affiliate code?</div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" placeholder="CCLDR-PARTNER-…" style="flex:1;background:var(--hub-mid);border:1px solid var(--hub-border);border-radius:7px;padding:8px 10px;color:var(--text-primary);font-size:13px;outline:none;" />
+            <button class="btn-ghost" style="font-size:13px;">Apply</button>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Loyalty credits (0 available)</div>
+          <div style="background:var(--hub-mid);border-radius:7px;padding:10px;font-size:12px;color:var(--text-muted);">
+            Earn 28 credits on this order (spend 100 credits = $10 off any future purchase)
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;text-align:center;">
+        <div class="security-badges" style="justify-content:center;">
+          <span class="security-badge">🔒 SSL encrypted</span>
+          <span class="security-badge">💳 Stripe Payments</span>
+          <span class="security-badge">🛡️ PIPEDA compliant</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====================================================================== -->
+<!-- PAGE 3 — CHECKOUT                                                      -->
+<!-- ====================================================================== -->
+<div class="page" id="page-checkout">
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo" onclick="showPage('home')">Super <span>Highway</span></a>
+      <div style="flex:1;text-align:center;font-size:14px;color:var(--text-muted);">Secure Checkout</div>
+    </div>
+  </header>
+
+  <div class="checkout-layout">
+    <div>
+      <h2 class="checkout-title">Checkout</h2>
+
+      <!-- Contact -->
+      <div class="checkout-section">
+        <h3>Contact Information</h3>
+        <div class="form-row">
+          <div class="form-field">
+            <label>First Name</label>
+            <input type="text" placeholder="Jane" />
+          </div>
+          <div class="form-field">
+            <label>Last Name</label>
+            <input type="text" placeholder="Smith" />
+          </div>
+        </div>
+        <div class="form-field" style="margin-bottom:14px;">
+          <label>Email Address</label>
+          <input type="email" placeholder="jane@example.com" />
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);">
+          Used to deliver your digital access and receipt. We will NOT share your email across Loop A and Loop B brands.
+        </div>
+      </div>
+
+      <!-- Payment method -->
+      <div class="checkout-section">
+        <h3>Payment Method</h3>
+        <div class="payment-methods">
+          <div class="payment-method selected">
+            <div class="payment-method-icon">💳</div>
+            <div class="payment-method-label">Credit Card<br><span style="color:var(--text-dim);font-size:10px;">via Stripe</span></div>
+          </div>
+          <div class="payment-method">
+            <div class="payment-method-icon">₿</div>
+            <div class="payment-method-label">Crypto<br><span style="color:var(--text-dim);font-size:10px;">BTC · ETH · XMR</span></div>
+          </div>
+          <div class="payment-method">
+            <div class="payment-method-icon">🏦</div>
+            <div class="payment-method-label">Interac<br><span style="color:var(--text-dim);font-size:10px;">e-Transfer</span></div>
+          </div>
+        </div>
+
+        <!-- Card fields -->
+        <div style="background:var(--hub-mid);border:1px solid var(--hub-border);border-radius:8px;padding:14px;margin-bottom:14px;">
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">Card Number</div>
+          <div style="font-size:15px;letter-spacing:2px;color:var(--text-primary);">•••• •••• •••• ••••</div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Expiry</label>
+            <input type="text" placeholder="MM / YY" />
+          </div>
+          <div class="form-field">
+            <label>CVC</label>
+            <input type="text" placeholder="•••" />
+          </div>
+        </div>
+
+        <div style="background:rgba(74,108,247,0.08);border:1px solid rgba(74,108,247,0.2);border-radius:8px;padding:12px;font-size:12px;color:var(--text-muted);margin-top:6px;">
+          ℹ️ Your payment will be split: $248.00 to the CCLDR/PrimeDox connected Stripe account + applicable HST. Your card details are processed by Stripe and never touch our servers.
+        </div>
+      </div>
+
+      <button class="btn-checkout" style="width:100%;margin-top:0;" onclick="alert('Wireframe only — no real payment processing.')">
+        Pay $280.24 CAD →
+      </button>
+
+      <div style="text-align:center;margin-top:12px;">
+        <div class="security-badges" style="justify-content:center;">
+          <span class="security-badge">🔒 256-bit SSL</span>
+          <span class="security-badge">💳 Stripe Connect</span>
+          <span class="security-badge">🛡️ PIPEDA · GDPR</span>
+          <span class="security-badge">🔐 Loop-isolated</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order summary sidebar -->
+    <div>
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-item">
+          <span style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">⚖️</span> PrimeDox Emergency Defense</span>
+          <span>$99.00</span>
+        </div>
+        <div class="summary-item">
+          <span style="display:flex;align-items:center;gap:6px;"><span style="font-size:16px;">🌿</span> CCLDR Warrior (Month 1)</span>
+          <span>$149.00</span>
+        </div>
+        <div style="height:1px;background:var(--hub-border);margin:8px 0;"></div>
+        <div class="summary-item"><span>Subtotal</span><span>$248.00</span></div>
+        <div class="summary-item"><span>HST (13%)</span><span>$32.24</span></div>
+        <div class="summary-total"><span>Total due today</span><span>$280.24 CAD</span></div>
+        <div style="margin-top:14px;font-size:12px;color:var(--text-muted);">
+          CCLDR Warrior renews at $149.00/mo on July 6, 2026 — cancel anytime.
+        </div>
+      </div>
+
+      <!-- What happens next -->
+      <div style="background:var(--hub-card);border:1px solid var(--hub-border);border-radius:12px;padding:20px;margin-top:16px;">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:14px;">What happens after payment</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;gap:10px;font-size:13px;">
+            <span>⚡</span>
+            <span><strong>Instant:</strong> PrimeDox Emergency Defense access email sent within 30 seconds</span>
+          </div>
+          <div style="display:flex;gap:10px;font-size:13px;">
+            <span>⚡</span>
+            <span><strong>Instant:</strong> CCLDR Warrior membership activated — case tracker + full library unlocked</span>
+          </div>
+          <div style="display:flex;gap:10px;font-size:13px;">
+            <span>📧</span>
+            <span>Receipt to your email — separate receipts per brand (CCLDR receipt from derek@ccldr.net, PrimeDox receipt from derek@primedoxai.com)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.wf-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['home','cart','checkout'][i] === id);
+  });
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
