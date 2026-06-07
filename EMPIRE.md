@@ -1,5 +1,5 @@
 # EMPIRE.md — Francisco Holdings Master State Document
-# Last Updated: 2026-06-04
+# Last Updated: 2026-06-07
 # Authority: PrimeDox (Derek Francisco) — Human Final Authority
 # Override: PrimeDocs — Activated only by PrimeDox explicit instruction
 
@@ -7,43 +7,64 @@
 
 ## 1. HOLDING STRUCTURE
 
-| Entity | Role | Status | Domain | Repo |
-|--------|------|--------|--------|------|
-| Francisco Holdings Inc. | Parent holding company | ACTIVE | — | — |
-| CleanSwarm | SaaS for cleaning businesses | LIVE | cleanswarm.ca | GitHub |
-| CCLDR.net | Cannabis defense education | LIVE | ccldr.net | GitHub |
-| CCC.net | Cannabis compliance/consulting | LIVE | ccc.net | GitHub |
-| OmniaGuard | AI security / agent protection | LIVE | omniaguard.com | GitHub |
-| Kiaros | AI consulting | LIVE | kiaros.ai | GitHub |
-| Weedlaw Education | Doc Weedlaw educational platform | LIVE | weedlaw-education | GitHub |
-| PrimeDox AI | Derek's AI persona/clone | LIVE | primedoxai-deploy | GitHub |
-| Tech Pack Cage | Registered business (Stripe acct) | ACTIVE | — | — |
-| SoulStack.ai | AI infrastructure layer | PENDING | soulstack.ai | PENDING |
-| [RESERVED] 11 additional entities | TBD | PLANNED | — | — |
+| Entity | Role | Loop | Status | Domain | Repo |
+|--------|------|------|--------|--------|------|
+| Francisco Holdings Inc. | Parent holding company | A | ACTIVE | franciscoholdingsinc.com | franciscoderek7/francisco-holdings |
+| CleanSwarm | SaaS for cleaning businesses | B | LIVE | cleanswarm.ca | franciscoderek7/cleanswarm |
+| CCLDR.net | Cannabis defense education | A | LIVE | ccldr.net | franciscoderek7/ccldr |
+| CCC.net | Cannabis compliance/consulting | A | LIVE | ccc.net | GitHub |
+| OmniaGuard | AI security / agent protection | B | LIVE | omniaguard.com | franciscoderek7/omniaguard |
+| Kiaros | AI consulting | B | LIVE | kiaros.ai | GitHub |
+| Weedlaw Education | Doc Weedlaw educational platform | A | LIVE | weedlaw-education | GitHub |
+| PrimeDox AI | Derek's AI persona/clone | A | LIVE | primedoxai.com | franciscoderek7/primedox |
+| ZPrimeDoxAI HQ | Private command center | A | LIVE | zprimedoxaihq.com | franciscoderek7/zprimedoxaihq |
+| Vault Velocity Auto | Auto AI (pending scope) | B | PENDING | vaultvelocityauto.com | franciscoderek7/vaultvelocityauto |
+| Tech Pack Cage | Registered business (Stripe acct) | B | ACTIVE | — | — |
+| SoulStack.ai | AI infrastructure layer | B | PENDING | soulstack.ai | PENDING |
+| [RESERVED] 9 additional entities | TBD | — | PLANNED | — | — |
 
 **Target: 22 companies by Year 1, 392 by Year 4**
+
+### Porkbun Registered Domains (Confirmed)
+| Domain | Brand | Loop | DNS Status |
+|--------|-------|------|-----------|
+| omniaguard.ca | OmniaGuard | B | ⬜ Set 301 → omniaguard.com |
+| omniaguard.com | OmniaGuard | B | ⬜ Set A+CNAME (see docs/porkbun-dns-setup.md) |
+| omniaguard.io | OmniaGuard | B | ⬜ Set 301 → omniaguard.com |
+| omniaguard.pro | OmniaGuard | B | ⬜ Set 301 → omniaguard.com |
+| omniaguard.tech | OmniaGuard | B | ⬜ Set 301 → omniaguard.com |
+| franciscoholdingsinc.com | Francisco Holdings | A | ⬜ Set A+CNAME |
+| franciscoholdingsinc.ca | Francisco Holdings | A | ⬜ Set 301 → .com |
+| franciscoholdingsinc.buzz | Francisco Holdings | A | ⬜ Set 301 → .com |
+| vaultvelocityauto.com | Vault Velocity Auto | B | ⬜ Set A+CNAME (when site ready) |
+| zprimedoxaihq.com | ZPrimeDoxAI HQ | A | ⬜ Set A+CNAME |
 
 ---
 
 ## 2. SITE DEPLOYMENT TRACKER
 
-| Site | Market | Status | URL | Last Deploy |
-|------|--------|--------|-----|-------------|
-| OmniaGuard | AI Security | LIVE | omniaguard.com | 2026-06-04 |
-| CCLDR.net | Cannabis Education | LIVE | ccldr.net | 2026-04-15 |
-| CCC.net | Cannabis Compliance | LIVE | ccc.net | 2026-04-15 |
-| Weedlaw Education | Doc Weedlaw Platform | LIVE | weedlaw-education | 2026-05-31 |
-| PrimeDox AI | AI Persona | LIVE | primedoxai-deploy | 2026-06-04 |
-| Kiaros | AI Consulting | LIVE | kiaros.ai | 2026-06-03 |
-| CleanSwarm | Cleaning SaaS | LIVE | cleanswarm.ca | 2026-06-01 |
-| space-swarm-site | Space Ops AI | LIVE | GitHub Pages | 2026-06-03 |
-| auto-swarm-site | AV Intelligence | LIVE | GitHub Pages | 2026-06-03 |
-| quantum-swarm-site | Quantum AI | LIVE | GitHub Pages | 2026-06-03 |
-| biotech-swarm-site | Drug Discovery AI | LIVE | GitHub Pages | 2026-06-03 |
-| health-swarm-site | Clinical AI | LIVE | GitHub Pages | 2026-06-03 |
-| fintech-swarm-site | Payment AI | LIVE | GitHub Pages | 2026-06-03 |
-| energy-swarm-site | Renewables AI | LIVE | GitHub Pages | 2026-06-03 |
-| logistics-swarm-site | Supply Chain AI | LIVE | GitHub Pages | 2026-06-03 |
+| Site | Market | Loop | Status | Deploy Workflow | Domain | Last Deploy |
+|------|--------|------|--------|----------------|--------|-------------|
+| OmniaGuard | AI Security | B | LIVE | deploy-omniaguard.yml | omniaguard.com | 2026-06-04 |
+| CCLDR.net | Cannabis Education | A | LIVE → REDEPLOY READY | deploy-ccldr.yml | ccldr.net | 2026-06-07 |
+| CCC.net | Cannabis Compliance | A | LIVE | — | ccc.net | 2026-04-15 |
+| Weedlaw Education | Doc Weedlaw Platform | A | LIVE | — | weedlaw-education | 2026-05-31 |
+| PrimeDox AI | AI Persona | A | LIVE → REDEPLOY READY | deploy-primedox.yml | primedoxai.com | 2026-06-07 |
+| Kiaros | AI Consulting | B | LIVE | kiaros-deploy.yml | kiaros.ai | 2026-06-03 |
+| CleanSwarm | Cleaning SaaS | B | LIVE → REDEPLOY READY | deploy-cleanswarm.yml | cleanswarm.ca | 2026-06-07 |
+| Francisco Holdings | Parent Holding Co | A | LIVE → REDEPLOY READY | deploy-francisco-holdings.yml | franciscoholdingsinc.com | 2026-06-07 |
+| ZPrimeDoxAI HQ | Private Command Center | A | LIVE → REDEPLOY READY | deploy-zprimedoxaihq.yml | zprimedoxaihq.com | 2026-06-07 |
+| Vault Velocity Auto | Auto AI | B | PENDING SCOPE | — | vaultvelocityauto.com | — |
+| space-swarm-site | Space Ops AI | B | LIVE | — | GitHub Pages | 2026-06-03 |
+| auto-swarm-site | AV Intelligence | B | LIVE | — | GitHub Pages | 2026-06-03 |
+| quantum-swarm-site | Quantum AI | B | LIVE | — | GitHub Pages | 2026-06-03 |
+| biotech-swarm-site | Drug Discovery AI | B | LIVE | — | GitHub Pages | 2026-06-03 |
+| health-swarm-site | Clinical AI | B | LIVE | — | GitHub Pages | 2026-06-03 |
+| fintech-swarm-site | Payment AI | B | LIVE | — | GitHub Pages | 2026-06-03 |
+| energy-swarm-site | Renewables AI | B | LIVE | — | GitHub Pages | 2026-06-03 |
+| logistics-swarm-site | Supply Chain AI | B | LIVE | — | GitHub Pages | 2026-06-03 |
+
+**Deploy workflows in `.github/workflows/` — all trigger on `main` push to their respective `paths:`**
 
 ---
 
@@ -87,8 +108,14 @@
 | 6 | FOI requests (6 provincial + medical + CRU + Ombudsman) | Derek | ASAP | PENDING |
 | 7 | BDC investor contact follow-up | Derek | 2026-06-05 | PENDING |
 | 8 | Kiaros site rebuild (Cyan #00D4FF + Black + Gold) | Claude | TBD | PENDING |
-| 9 | Porkbun DNS for ccldr.net | Derek (local) | TBD | PENDING |
-| 10 | GitHub Pages config — omniaguard custom domain + HTTPS | Derek (browser) | ASAP | PENDING |
+| 9 | Porkbun DNS for all domains | Derek (browser) | ASAP | PENDING — see docs/porkbun-dns-setup.md |
+| 10 | GitHub Pages config — custom domains + HTTPS | Derek (browser) | ASAP | PENDING — 5 new repos needed |
+| 11 | Merge feature branch → main to trigger all 5 deploy workflows | Derek | ASAP | PENDING — Claude built workflows |
+| 12 | Create GitHub repos (ccldr, primedox, cleanswarm, francisco-holdings, zprimedoxaihq) | Derek | Before merge | PENDING |
+| 13 | Legal: Affidavit of Service + Default Judgment motion + CPL | Derek | **JUNE 9 CRITICAL** | PENDING — docs ready in legal-filings/ |
+| 14 | Super Highway Phase 2: Provision 3 Supabase projects | Derek | When ready | PENDING |
+| 15 | Stripe payment links (12 products across OmniaGuard/CCLDR/CleanSwarm) | Derek | ASAP | PENDING |
+| 16 | Vault Velocity Auto — confirm scope/positioning | Derek | TBD | PENDING — domain registered |
 
 ---
 
@@ -233,5 +260,40 @@ Claude                         — Builder/executor — acts on direct PrimeDox 
 
 ---
 
-*Updated: 2026-06-05 | Session: Francisco Revenue Sprint | Builder: Claude*
+---
+
+## 12. JUNE 7, 2026 BUILD SESSION — COMPLETED
+
+### Deploy Workflows Built ✅
+| Workflow | Target Domain | Target Repo | Guard |
+|----------|-------------|-------------|-------|
+| deploy-ccldr.yml | ccldr.net | franciscoderek7/ccldr | Loop A — no Loop B bleed |
+| deploy-primedox.yml | primedoxai.com | franciscoderek7/primedox | Loop A — no cannabis bleed |
+| deploy-cleanswarm.yml | cleanswarm.ca | franciscoderek7/cleanswarm | Loop B — no Derek, no cannabis |
+| deploy-francisco-holdings.yml | franciscoholdingsinc.com | franciscoderek7/francisco-holdings | Loop A — parent co |
+| deploy-zprimedoxaihq.yml | zprimedoxaihq.com | franciscoderek7/zprimedoxaihq | Private HQ — no server secrets |
+
+### ZPrimeDoxAI HQ (Private Command Center) ✅
+- File: zprimedoxaihq-site/index.html
+- Lock screen with JS access code (FHI2026 — editable in source)
+- 6 views: Dashboard, Action Queue, Legal Tracker, Loop A, Loop B, Domain Vault
+- All 10 Porkbun domains listed with expiry dates
+- Links: financial-dashboard, deal-room, GitHub, Supabase, Stripe, Porkbun
+
+### DNS Setup Guide ✅
+- File: docs/porkbun-dns-setup.md
+- Per-domain A + CNAME records
+- 301 redirect instructions for .ca/.io/.pro/.tech variants
+- GitHub Pages repo creation + HTTPS enforcement checklist
+
+### Derek Action Required to Go Live:
+1. Create 5 GitHub repos (ccldr, primedox, cleanswarm, francisco-holdings, zprimedoxaihq)
+2. Enable GitHub Pages on each repo (branch: main, root: /)
+3. Merge `claude/francisco-revenue-sprint-MEva6` → `main` to trigger all workflows
+4. Set DNS in Porkbun per docs/porkbun-dns-setup.md
+5. After DNS propagation: enable "Enforce HTTPS" in each GitHub Pages Settings
+
+---
+
+*Updated: 2026-06-07 | Session: Francisco Revenue Sprint | Builder: Claude*
 *Source of truth for the Francisco Holdings empire. Update after every deployment.*

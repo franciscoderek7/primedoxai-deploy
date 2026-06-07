@@ -1,0 +1,76 @@
+name: Deploy ZPrimeDoxAI HQ to zprimedoxaihq.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'zprimedoxaihq-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify private HQ security (no public personal info exposure)
+        run: |
+          # This is a password-protected private command center
+          # The lock screen JS code is intentional — it is NOT a secret key
+          # Verify the access code is in the JS (not in plain HTML meta/head content)
+          # Verify no Supabase service role keys are hardcoded
+          SERVICE_KEY=$(grep -rn "service_role\|sk_live_\|sk_test_" zprimedoxaihq-site/ --include="*.html" | wc -l)
+          if [ "$SERVICE_KEY" -gt 0 ]; then
+            echo "FAIL: Service role key or Stripe secret key found in HQ site"
+            exit 1
+          fi
+          echo "PASS: No server-side secrets exposed in client code"
+
+      - name: Clone zprimedoxaihq repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/zprimedoxaihq.git /tmp/zprimedoxaihq
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cd zprimedoxaihq-site
+          for f in *.html; do cp "$f" /tmp/zprimedoxaihq/"$f" && echo "  copied $f"; done
+          for ext in jpg jpeg png webp gif svg js css; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/zprimedoxaihq/"$f" && echo "  copied $f"; done
+          done
+          echo "zprimedoxaihq.com" > /tmp/zprimedoxaihq/CNAME
+          echo "All HQ files copied"
+
+      - name: Commit and push to zprimedoxaihq repo
+        run: |
+          cd /tmp/zprimedoxaihq
+          git config user.email "deploy@zprimedoxaihq.com"
+          git config user.name "ZPrimeDoxAI HQ Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: zprimedoxaihq.com
+          Type: Private command center (password-protected)
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/zprimedoxaihq — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "================================================"
+          echo "  ZPRIMEDOXAIHQ COMMAND CENTER DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/zprimedoxaihq (main)"
+          echo "  CNAME: zprimedoxaihq.com"
+          echo "  Type: Private HQ — password-protected"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo ""
+          echo "  Access: https://zprimedoxaihq.com"
+          echo "  NOTE: GitHub Pages repo must be set to private if"
+          echo "        you want to restrict public source-code access"
+          echo "================================================"

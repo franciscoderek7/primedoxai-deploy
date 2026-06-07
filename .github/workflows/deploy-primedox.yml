@@ -1,0 +1,72 @@
+name: Deploy PrimeDox AI to primedoxai.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'primedoxai-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop A identity (Derek Francisco visible, no cannabis bleed)
+        run: |
+          # PrimeDox is Loop A — Derek Francisco visible, AI persona content
+          # Must NOT reference cannabis content (would bleed into AI brand)
+          CANNABIS_BLEED=$(grep -rn "cannabis\|marijuana\|weed\|CCLDR\|Doc Weedlaw" primedoxai-site/ --include="*.html" -i | wc -l)
+          if [ "$CANNABIS_BLEED" -gt 0 ]; then
+            echo "FAIL: Cannabis content found in PrimeDox AI site (Loop A AI brand — no cannabis bleed)"
+            grep -rn "cannabis\|marijuana\|weed\|CCLDR\|Doc Weedlaw" primedoxai-site/ --include="*.html" -i
+            exit 1
+          fi
+          echo "PASS: Zero cannabis bleed in PrimeDox AI"
+
+      - name: Clone primedox repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/primedox.git /tmp/primedox
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cd primedoxai-site
+          for f in *.html; do cp "$f" /tmp/primedox/"$f" && echo "  copied $f"; done
+          for ext in jpg jpeg png webp gif svg js css; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/primedox/"$f" && echo "  copied $f"; done
+          done
+          echo "primedoxai.com" > /tmp/primedox/CNAME
+          echo "All PrimeDox files copied"
+
+      - name: Commit and push to primedox repo
+        run: |
+          cd /tmp/primedox
+          git config user.email "deploy@primedoxai.com"
+          git config user.name "PrimeDox Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: primedoxai.com
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/primedox — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "================================================"
+          echo "  PRIMEDOX AI DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/primedox (main)"
+          echo "  CNAME: primedoxai.com"
+          echo "  Loop: A (Derek Francisco — AI persona)"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo ""
+          echo "  Check: https://primedoxai.com"
+          echo "================================================"
