@@ -1087,6 +1087,18 @@ footer {
   </div>
 </nav>
 
+<!-- URGENCY BAR -->
+<div id="fh-urgency" style="background:linear-gradient(90deg,#06050f,#090818,#06050f);border-bottom:1px solid rgba(201,168,76,0.25);padding:9px 16px;text-align:center;font-size:13px;color:#6a6a7a;position:relative;">
+  <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;">
+    <span style="width:7px;height:7px;border-radius:50%;background:#c9a84c;display:inline-block;animation:fhpulse 2s infinite;flex-shrink:0;"></span>
+    <strong style="color:#f5f0e8;">3 consulting slots available this week.</strong>
+    Booking window closes in: <strong id="fh-countdown" style="color:#c9a84c;font-family:monospace;letter-spacing:1px;">--:--:--</strong>
+    <a href="book.html" style="color:#c9a84c;font-weight:800;text-decoration:none;border:1px solid rgba(201,168,76,0.4);padding:3px 12px;border-radius:4px;margin-left:4px;">Book $500/hr →</a>
+    <a href="#" onclick="document.getElementById('fh-urgency').style.display='none';return false;" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#3a3a4a;font-size:18px;line-height:1;text-decoration:none;">&times;</a>
+  </span>
+</div>
+<style>@keyframes fhpulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+
 <!-- HERO -->
 <section id="hero">
   <canvas id="hero-canvas"></canvas>
@@ -2180,5 +2192,46 @@ document.querySelectorAll('.filter-btn').forEach(function(btn) {
   </div>
 </section>
 
+
+<!-- EMAIL CAPTURE -->
+<section style="background:linear-gradient(135deg,#07060f,#0a090a);border-top:1px solid rgba(201,168,76,0.12);padding:52px 20px;">
+  <div style="max-width:520px;margin:0 auto;text-align:center;">
+    <div style="font-size:11px;font-weight:900;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">🎁 FREE BRIEFING</div>
+    <h2 style="font-family:Georgia,serif;font-size:clamp(20px,4vw,28px);font-weight:700;color:var(--text);margin-bottom:10px;">Receive the Empire Blueprint — Free</h2>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;">A private overview of the Francisco Holdings 21-company expansion strategy. Delivered by email.</p>
+    <form id="fh-email-form" onsubmit="fhEmailSubmit(event)" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;">
+      <input type="email" id="fh-email-field" placeholder="your@email.com" required style="flex:1;min-width:220px;background:rgba(255,255,255,0.04);border:1px solid rgba(201,168,76,0.2);border-radius:4px;padding:13px 16px;color:var(--text);font-size:14px;outline:none;font-family:inherit;">
+      <button type="submit" style="background:var(--gold);color:var(--bg);border:none;border-radius:4px;padding:13px 24px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;letter-spacing:0.5px;">Request Briefing →</button>
+    </form>
+    <div id="fh-email-success" style="display:none;color:var(--gold);font-weight:700;font-size:15px;padding:12px;background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:4px;margin-bottom:10px;"></div>
+    <p style="font-size:11px;color:var(--muted);">Qualified investors only. We respond within 24 hours.</p>
+  </div>
+</section>
+
+<script>
+// FH urgency countdown
+function fhUpdateCountdown() {
+  var el = document.getElementById('fh-countdown');
+  if (!el) return;
+  var now = new Date(), midnight = new Date();
+  midnight.setHours(23,59,59,0);
+  var diff = midnight - now;
+  if (diff <= 0) { el.textContent = '00:00:00'; return; }
+  var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+  el.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+setInterval(fhUpdateCountdown, 1000); fhUpdateCountdown();
+
+// FH email capture
+function fhEmailSubmit(e) {
+  e.preventDefault();
+  var email = document.getElementById('fh-email-field').value;
+  document.getElementById('fh-email-form').style.display = 'none';
+  var s = document.getElementById('fh-email-success');
+  s.style.display = 'block';
+  s.textContent = '✓ Request received. Sending the Empire Blueprint to ' + email + ' within 24 hours.';
+  try { window.open('mailto:franciscoderek7@gmail.com?subject=FH+Briefing+Request+%E2%80%94+'+encodeURIComponent(email)+'&body=New+briefing+request:+'+encodeURIComponent(email), '_blank'); } catch(err){}
+}
+</script>
 </body>
 </html>

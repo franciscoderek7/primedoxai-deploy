@@ -1698,6 +1698,18 @@
     </div>
   </nav>
 
+  <!-- URGENCY BAR -->
+  <div id="pd-urgency" style="background:linear-gradient(90deg,#070812,#0b0b1e,#070812);border-bottom:1px solid rgba(0,212,255,0.2);padding:9px 16px;text-align:center;font-size:13px;color:#7a8a9a;position:relative;z-index:998;">
+    <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;">
+      <span style="width:7px;height:7px;border-radius:50%;background:#00d4ff;display:inline-block;animation:pdpulse 2s infinite;flex-shrink:0;"></span>
+      <strong style="color:#f1f5f9;">Emergency defense slots closing tonight.</strong>
+      Offer expires in: <strong id="pd-countdown" style="color:#00d4ff;font-family:monospace;letter-spacing:1px;">--:--:--</strong>
+      <a href="#pricing" style="color:#ffd700;font-weight:800;text-decoration:none;margin-left:4px;">Get Help Now →</a>
+      <a href="#" onclick="document.getElementById('pd-urgency').style.display='none';return false;" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#3a4a5a;font-size:18px;line-height:1;text-decoration:none;">&times;</a>
+    </span>
+  </div>
+  <style>@keyframes pdpulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+
   <!-- Mobile nav drawer -->
   <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
     <a href="#features" onclick="closeMobileNav()">Features</a>
@@ -2106,6 +2118,27 @@
             💳 Pay $199/mo via PayPal →
           </a>
           <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Elite+%E2%80%94+%24199%2Fmo&body=I%20want%20PrimeDox%20AI%20Elite%20at%20%24199%2Fmo.%20Sending%20Interac%20e-transfer." style="display:block;text-align:center;margin-top:8px;font-size:12px;color:#7b8a9a;text-decoration:none;">💸 Pay via Interac instead</a>
+        </div>
+
+        <!-- Enterprise $499/mo -->
+        <div class="pricing-card fade-up" style="border-color:rgba(0,212,255,0.35);">
+          <div class="pricing-tier-icon">🏢</div>
+          <div class="pricing-tier-name">Enterprise</div>
+          <div class="pricing-price"><sup>$</sup>499</div>
+          <div class="pricing-period">per month CAD</div>
+          <div class="pricing-divider"></div>
+          <ul class="pricing-features">
+            <li>Everything in Elite</li>
+            <li>Dedicated AI agent instance</li>
+            <li>Priority document processing</li>
+            <li>Team access (up to 5 users)</li>
+            <li>Monthly strategy call with PrimeDox AI</li>
+            <li>Custom BENO-X workflow templates</li>
+          </ul>
+          <a href="https://paypal.me/derekfrancisco/499CAD" target="_blank" rel="noopener" class="pricing-cta" style="background:linear-gradient(135deg,#00d4ff,#0077cc);color:#fff;border-color:#00d4ff;">
+            💳 Pay $499/mo via PayPal →
+          </a>
+          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Enterprise+%E2%80%94+%24499%2Fmo&body=I%20want%20PrimeDox%20AI%20Enterprise%20at%20%24499%2Fmo.%20Sending%20Interac%20e-transfer." style="display:block;text-align:center;margin-top:8px;font-size:12px;color:#7b8a9a;text-decoration:none;">💸 Pay via Interac instead</a>
         </div>
 
         <!-- Sovereign -->
@@ -2762,5 +2795,46 @@
     });
   </script>
 
+
+  <!-- EMAIL CAPTURE -->
+  <section style="background:var(--bg2);border-top:1px solid var(--border);padding:52px 20px;">
+    <div class="container" style="max-width:540px;margin:0 auto;text-align:center;">
+      <div style="font-size:11px;font-weight:900;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:12px;">🎁 FREE RESOURCE</div>
+      <h2 style="font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--white);margin-bottom:10px;">Get the Cannabis Defense Emergency Checklist — Free</h2>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;">Used in 200+ real cases. Know your rights before you ever need them. Instant download.</p>
+      <form id="pd-email-form" onsubmit="pdEmailSubmit(event)" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;">
+        <input type="email" id="pd-email-field" placeholder="your@email.com" required style="flex:1;min-width:220px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+        <button type="submit" style="background:var(--cyan);color:#000;border:none;border-radius:10px;padding:13px 22px;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;font-family:inherit;">Send Me the Checklist →</button>
+      </form>
+      <div id="pd-email-success" style="display:none;color:var(--cyan);font-weight:700;font-size:15px;padding:12px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);border-radius:10px;margin-bottom:10px;"></div>
+      <p style="font-size:11px;color:var(--muted);">No spam. Unsubscribe anytime. Educational content only.</p>
+    </div>
+  </section>
+
+  <script>
+  // PrimeDox urgency countdown
+  function pdUpdateCountdown() {
+    var el = document.getElementById('pd-countdown');
+    if (!el) return;
+    var now = new Date(), midnight = new Date();
+    midnight.setHours(23,59,59,0);
+    var diff = midnight - now;
+    if (diff <= 0) { el.textContent = '00:00:00'; return; }
+    var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+    el.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }
+  setInterval(pdUpdateCountdown, 1000); pdUpdateCountdown();
+
+  // PrimeDox email capture
+  function pdEmailSubmit(e) {
+    e.preventDefault();
+    var email = document.getElementById('pd-email-field').value;
+    document.getElementById('pd-email-form').style.display = 'none';
+    var s = document.getElementById('pd-email-success');
+    s.style.display = 'block';
+    s.textContent = '✓ Got it! Sending emergency checklist to ' + email;
+    try { window.open('mailto:franciscoderek7@gmail.com?subject=PrimeDox+Lead+%E2%80%94+'+encodeURIComponent(email)+'&body=New+subscriber:+'+encodeURIComponent(email), '_blank'); } catch(err){}
+  }
+  </script>
 </body>
 </html>
