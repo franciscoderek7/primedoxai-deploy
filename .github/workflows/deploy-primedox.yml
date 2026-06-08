@@ -14,17 +14,18 @@ jobs:
       - name: Checkout primedoxai-deploy
         uses: actions/checkout@v4
 
-      - name: Verify Loop A identity (Derek Francisco visible, no cannabis bleed)
+      - name: Verify no server-side secrets in client code
         run: |
-          # PrimeDox is Loop A — Derek Francisco visible, AI persona content
-          # Must NOT reference cannabis content (would bleed into AI brand)
-          CANNABIS_BLEED=$(grep -rn "cannabis\|marijuana\|weed\|CCLDR\|Doc Weedlaw" primedoxai-site/ --include="*.html" -i | wc -l)
-          if [ "$CANNABIS_BLEED" -gt 0 ]; then
-            echo "FAIL: Cannabis content found in PrimeDox AI site (Loop A AI brand — no cannabis bleed)"
-            grep -rn "cannabis\|marijuana\|weed\|CCLDR\|Doc Weedlaw" primedoxai-site/ --include="*.html" -i
+          # PrimeDox is Loop A — Derek Francisco visible, cannabis defense is the product
+          # Site intentionally cross-references empire portfolio (OmniaGuard, CleanSwarm, Kiaros links are correct)
+          # Only check: no Stripe live keys, no Supabase service_role keys, no raw private address/phone
+          SECRETS=$(grep -rn "sk_live_\|sk_test_\|service_role\|705-307-8080\|Kent St W\|K9V 2Z8" primedoxai-site/ --include="*.html" | wc -l)
+          if [ "$SECRETS" -gt 0 ]; then
+            echo "FAIL: Server-side secret or private personal info found in client code"
+            grep -rn "sk_live_\|sk_test_\|service_role\|705-307-8080\|Kent St W\|K9V 2Z8" primedoxai-site/ --include="*.html"
             exit 1
           fi
-          echo "PASS: Zero cannabis bleed in PrimeDox AI"
+          echo "PASS: No server-side secrets exposed"
 
       - name: Clone primedox repo
         run: |
