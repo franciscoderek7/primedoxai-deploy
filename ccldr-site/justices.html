@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The AI Supreme Court — Francisco Protocol | CCLDR.NET</title>
+  <meta name="description" content="7 AI Justices. Real deliberation. Binding precedent. The world's first AI judicial panel for cannabis rights — The Francisco Protocol, CCLDR.NET." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0a0a0f;
+      --bg2:        #111118;
+      --card:       #15151e;
+      --card2:      #1a1a26;
+      --gold:       #D4AF37;
+      --gold-light: #f0cc5a;
+      --gold-dim:   #8a7020;
+      --green:      #2E7D32;
+      --green-light:#4caf50;
+      --blue:       #1A237E;
+      --blue-light: #3949ab;
+      --cyan:       #00D4FF;
+      --purple:     #7b1fa2;
+      --purple-light:#ab47bc;
+      --red:        #c62828;
+      --red-light:  #ef5350;
+      --white:      #f0ead8;
+      --parchment:  #f5e9c9;
+      --ink:        #2c1f0a;
+      --muted:      #8888a0;
+      --border:     #2a2a38;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 15, 0.97);
+      border-bottom: 2px solid var(--gold);
+      padding: 0 24px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--cyan);
+      letter-spacing: 0.08em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 6px 12px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold);
+      border-color: var(--gold-dim);
+      background: rgba(212,175,55,0.07);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(26,35,126,0.25) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 70% at 10% 100%, rgba(212,175,55,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 90% 100%, rgba(0,212,255,0.08) 0%, transparent 60%),
+        var(--bg);
+    }
+
+    /* Courtroom pillar lines effect */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 80px,
+          rgba(26,35,126,0.06) 80px,
+          rgba(26,35,126,0.06) 82px
+        );
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 40%, rgba(10,10,15,0.7) 100%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      padding: 80px 24px 60px;
+    }
+
+    /* Seven thrones row */
+    .thrones-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .throne {
+      width: 44px;
+      height: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      opacity: 0.7;
+    }
+
+    .throne-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .throne-base {
+      width: 32px;
+      height: 4px;
+      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+      border-radius: 2px;
+    }
+
+    .throne.chief .throne-icon { font-size: 2rem; opacity: 1; }
+    .throne.chief { opacity: 1; }
+
+    .hero-eyebrow {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 7vw, 5rem);
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-shadow: 0 0 60px rgba(212,175,55,0.25);
+    }
+
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--white);
+      opacity: 0.85;
+      margin-bottom: 12px;
+    }
+
+    .hero-desc {
+      font-size: 0.92rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ===== SHARED SECTION LAYOUT ===== */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-label {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .section-subtitle {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+
+    /* ===== JUSTICE GRID ===== */
+    .justices-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .justice-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .justice-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-color, var(--gold));
+    }
+
+    .justice-card:hover {
+      border-color: var(--accent-color, var(--gold-dim));
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow, rgba(212,175,55,0.1));
+    }
+
+    /* Chief justice spans full width on last row */
+    .justice-card.chief {
+      border-color: var(--gold-dim);
+      background: linear-gradient(135deg, var(--card), rgba(212,175,55,0.04));
+      grid-column: 1 / -1;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .justice-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .justice-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      position: relative;
+      background: var(--avatar-bg, var(--blue));
+      box-shadow: 0 0 0 2px var(--accent-color, var(--gold)), 0 0 16px var(--accent-glow, rgba(212,175,55,0.2));
+    }
+
+    .justice-avatar .gavel-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .justice-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-color, var(--gold));
+    }
+
+    .justice-initials {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+    }
+
+    .justice-lean {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 2px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--accent-color, var(--gold-dim));
+      color: var(--accent-color, var(--gold));
+      margin-bottom: 12px;
+    }
+
+    .justice-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--white);
+      opacity: 0.88;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      padding-left: 14px;
+      border-left: 2px solid var(--accent-color, var(--gold-dim));
+    }
+
+    .justice-charter {
+      font-size: 0.75rem;
+      color: var(--cyan);
+      margin-bottom: 16px;
+      font-family: 'Special Elite', monospace;
+      letter-spacing: 0.06em;
+    }
+
+    .justice-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .opinion-count {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .opinion-count strong {
+      color: var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+    }
+
+    .btn-sm {
+      padding: 7px 16px;
+      font-size: 0.73rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-outline-accent {
+      background: transparent;
+      color: var(--accent-color, var(--gold));
+      border: 1px solid var(--accent-color, var(--gold-dim));
+    }
+
+    .btn-outline-accent:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* Justice opinions panel */
+    .opinions-panel {
+      display: none;
+      margin-top: 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px;
+    }
+
+    .opinions-panel.open { display: block; }
+
+    .opinion-item {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .opinion-item:last-child { border-bottom: none; }
+
+    .opinion-item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 2px;
+    }
+
+    .opinion-item-meta {
+      font-size: 0.73rem;
+      color: var(--muted);
+    }
+
+    /* ===== DOCKET ===== */
+    .docket-wrap {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .docket-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .case-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .case-num {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: var(--cyan);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .case-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 2px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .status-deliberation {
+      background: rgba(212,175,55,0.12);
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+    }
+
+    .status-pending {
+      background: rgba(0,212,255,0.08);
+      color: var(--cyan);
+      border: 1px solid rgba(0,212,255,0.3);
+    }
+
+    .status-opinions {
+      background: rgba(76,175,80,0.1);
+      color: #66bb6a;
+      border: 1px solid rgba(76,175,80,0.3);
+    }
+
+    .case-justices {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .justice-chip {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .case-next {
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .case-next strong { color: var(--white); }
+
+    .vote-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+
+    /* ===== PUBLISHED OPINIONS ===== */
+    .opinion-full {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .opinion-header {
+      background: rgba(212,175,55,0.06);
+      border-bottom: 1px solid var(--border);
+      padding: 22px 28px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .opinion-id {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .opinion-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .opinion-vote-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      background: rgba(212,175,55,0.08);
+      white-space: nowrap;
+    }
+
+    .opinion-body {
+      padding: 28px;
+    }
+
+    .opinion-writing-j {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .opinion-writing-j span { color: var(--gold); }
+
+    .opinion-ratio {
+      font-family: 'Special Elite', monospace;
+      font-size: 0.95rem;
+      line-height: 1.85;
+      color: var(--parchment);
+      background: var(--bg2);
+      border-left: 3px solid var(--gold);
+      padding: 20px 22px;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 18px;
+    }
+
+    .concurring, .dissenting {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .concurring strong { color: #66bb6a; }
+    .dissenting strong { color: var(--red-light); }
+
+    /* ===== AI DELIBERATION SIMULATOR ===== */
+    .simulator-wrap {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+
+    .simulator-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 36px;
+      max-width: 720px;
+    }
+
+    .simulator-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .simulator-desc {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .sim-textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--white);
+      resize: vertical;
+      min-height: 100px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .sim-textarea:focus {
+      outline: none;
+      border-color: var(--gold-dim);
+    }
+
+    .sim-textarea::placeholder { color: var(--muted); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      padding: 13px 28px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-light);
+      box-shadow: 0 0 20px rgba(212,175,55,0.35);
+    }
+
+    .btn-gold:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Deliberation result panel */
+    #deliberation-result {
+      display: none;
+      margin-top: 28px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    #deliberation-result.show { display: block; }
+
+    .delib-header {
+      background: rgba(212,175,55,0.08);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 14px 20px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .delib-question {
+      padding: 16px 20px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      font-family: 'Special Elite', monospace;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .delib-positions {
+      padding: 0;
+    }
+
+    .delib-justice {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .delib-justice:last-child { border-bottom: none; }
+
+    .delib-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .delib-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .delib-position-text {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .delib-ruling {
+      margin-top: 16px;
+      padding: 14px 20px;
+      background: rgba(212,175,55,0.06);
+      border-top: 2px solid var(--gold-dim);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.98rem;
+      font-style: italic;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--gold-dim);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #050508;
+      border-top: 2px solid var(--gold-dim);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.92rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-text span { color: var(--gold); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-stats { gap: 24px; }
+      .simulator-box { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a href="index.html" class="nav-brand">
+    <span class="nav-logo">CCLDR</span>
+    <span class="nav-sub">The Francisco Protocol</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="constitution.html">Constitution</a></li>
+    <li><a href="courtroom.html">Blockchain Court</a></li>
+    <li><a href="justices.html" class="active">AI Justices</a></li>
+    <li><a href="clerks-office.html">People's Jury</a></li>
+    <li><a href="global.html">Global Treaty</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <!-- Seven thrones -->
+    <div class="thrones-row" aria-hidden="true">
+      <div class="throne"><span class="throne-icon">⚖️</span><div class="throne-base"></div></div>
+      <div class="throne"><span class="throne-icon">⚖️</span><div class="throne-base"></div></div>
+      <div class="throne"><span class="throne-icon">⚖️</span><div class="throne-base"></div></div>
+      <div class="throne chief"><span class="throne-icon">🔨</span><div class="throne-base"></div></div>
+      <div class="throne"><span class="throne-icon">⚖️</span><div class="throne-base"></div></div>
+      <div class="throne"><span class="throne-icon">⚖️</span><div class="throne-base"></div></div>
+      <div class="throne"><span class="throne-icon">⚖️</span><div class="throne-base"></div></div>
+    </div>
+
+    <p class="hero-eyebrow">Francisco Protocol · AI Supreme Court · Est. 2026</p>
+    <h1 class="hero-title">The AI Supreme Court</h1>
+    <p class="hero-tagline">7 AI Justices. Real Deliberation. Binding Precedent.</p>
+    <p class="hero-desc">The Francisco Protocol establishes the world's first AI judicial panel for cannabis rights — seven independent judicial intelligences, each with a distinct constitutional philosophy, deliberating in open court.</p>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">7</div>
+        <div class="stat-label">AI Justices</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Active Cases</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Published Opinions</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Unexamined Rights</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== THE SEVEN JUSTICES ===== -->
+<div class="section">
+  <p class="section-label">The Judicial Panel</p>
+  <h2 class="section-title">The Seven Justices</h2>
+  <p class="section-subtitle">Each justice carries a distinct constitutional philosophy, charter focus, and record of published opinions. Decisions require majority; tied votes are broken by the Chief Justice.</p>
+
+  <div class="justices-grid">
+
+    <!-- Justice Liberty -->
+    <div class="justice-card" style="--accent-color: #00D4FF; --accent-glow: rgba(0,212,255,0.12); --avatar-bg: linear-gradient(135deg,#006080,#00a8cc);">
+      <div class="justice-header">
+        <div class="justice-avatar" style="background: linear-gradient(135deg,#006080,#00a8cc);">JL</div>
+        <div>
+          <div class="justice-name" style="color:#00D4FF;">Justice Liberty</div>
+          <div class="justice-initials">JL &nbsp;·&nbsp; Seat 1</div>
+        </div>
+      </div>
+      <span class="justice-lean" style="color:#00D4FF; border-color:rgba(0,212,255,0.4);">Living Charter · Expansive Rights</span>
+      <p class="justice-quote" style="border-color:#00D4FF;">"The Charter breathes. It does not calcify."</p>
+      <p class="justice-charter">Champion: Charter s.7 · s.8 &nbsp;|&nbsp; Right to life &amp; privacy</p>
+      <div class="justice-footer">
+        <div class="opinion-count"><strong>9</strong> opinions filed</div>
+        <button class="btn-sm btn-outline-accent" style="color:#00D4FF; border-color:rgba(0,212,255,0.4);" onclick="toggleOpinions('jl-ops', this)">View Opinions</button>
+      </div>
+      <div class="opinions-panel" id="jl-ops">
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-001 (Interim): Search Scope Limits</div>
+          <div class="opinion-item-meta">Concurring with Justice Privacy · Filed May 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-003: Medical Access Standards (Majority)</div>
+          <div class="opinion-item-meta">Concurring · 5-2 Majority · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">Advisory: Minimum Quantity Restrictions</div>
+          <div class="opinion-item-meta">Concurring · Unanimous 7-0 · Filed June 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Justice Order -->
+    <div class="justice-card" style="--accent-color: #3949ab; --accent-glow: rgba(57,73,171,0.15); --avatar-bg: linear-gradient(135deg,#1a237e,#3949ab);">
+      <div class="justice-header">
+        <div class="justice-avatar" style="background: linear-gradient(135deg,#1a237e,#3949ab);">JO</div>
+        <div>
+          <div class="justice-name" style="color:#7986cb;">Justice Order</div>
+          <div class="justice-initials">JO &nbsp;·&nbsp; Seat 2</div>
+        </div>
+      </div>
+      <span class="justice-lean" style="color:#7986cb; border-color:rgba(57,73,171,0.5);">Statutory Interpretation · Textualist</span>
+      <p class="justice-quote" style="border-color:#3949ab;">"Parliament's words constrain us all equally."</p>
+      <p class="justice-charter">Champion: Statutory text · s.1 limitation analysis</p>
+      <div class="justice-footer">
+        <div class="opinion-count"><strong>5</strong> opinions filed</div>
+        <button class="btn-sm btn-outline-accent" style="color:#7986cb; border-color:rgba(57,73,171,0.5);" onclick="toggleOpinions('jo-ops', this)">View Opinions</button>
+      </div>
+      <div class="opinions-panel" id="jo-ops">
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-003: Medical Access Standards (Dissent)</div>
+          <div class="opinion-item-meta">Dissenting · 5-2 Majority against · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">Advisory: Minimum Quantity Restrictions</div>
+          <div class="opinion-item-meta">Concurring · Unanimous 7-0 · Filed June 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Justice Compassion -->
+    <div class="justice-card" style="--accent-color: #4caf50; --accent-glow: rgba(76,175,80,0.12); --avatar-bg: linear-gradient(135deg,#1b5e20,#388e3c);">
+      <div class="justice-header">
+        <div class="justice-avatar" style="background: linear-gradient(135deg,#1b5e20,#388e3c);">JC</div>
+        <div>
+          <div class="justice-name" style="color:#66bb6a;">Justice Compassion</div>
+          <div class="justice-initials">JC &nbsp;·&nbsp; Seat 3</div>
+        </div>
+      </div>
+      <span class="justice-lean" style="color:#66bb6a; border-color:rgba(76,175,80,0.4);">Purposive · Human Dignity</span>
+      <p class="justice-quote" style="border-color:#4caf50;">"Pain is not politics. Suffering is not a policy choice."</p>
+      <p class="justice-charter">Champion: Charter s.7 · s.15 &nbsp;|&nbsp; Medical rights &amp; equality</p>
+      <div class="justice-footer">
+        <div class="opinion-count"><strong>12</strong> opinions filed</div>
+        <button class="btn-sm btn-outline-accent" style="color:#66bb6a; border-color:rgba(76,175,80,0.4);" onclick="toggleOpinions('jc-ops', this)">View Opinions</button>
+      </div>
+      <div class="opinions-panel" id="jc-ops">
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-003: Medical Access Standards (Author)</div>
+          <div class="opinion-item-meta">Writing for Majority · 5-2 · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">Advisory: Minimum Quantity Restrictions</div>
+          <div class="opinion-item-meta">Concurring · Unanimous 7-0 · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-001: Right to Cultivate Indoors</div>
+          <div class="opinion-item-meta">In deliberation · Position: FOR cultivation rights</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Justice Commerce -->
+    <div class="justice-card" style="--accent-color: #D4AF37; --accent-glow: rgba(212,175,55,0.12); --avatar-bg: linear-gradient(135deg,#7a6010,#b8960c);">
+      <div class="justice-header">
+        <div class="justice-avatar" style="background: linear-gradient(135deg,#7a6010,#b8960c);">JCO</div>
+        <div>
+          <div class="justice-name" style="color:#D4AF37;">Justice Commerce</div>
+          <div class="justice-initials">JCO &nbsp;·&nbsp; Seat 4</div>
+        </div>
+      </div>
+      <span class="justice-lean" style="color:#D4AF37; border-color:rgba(212,175,55,0.4);">Regulatory Pragmatist · Market Rights</span>
+      <p class="justice-quote" style="border-color:var(--gold-dim);">"Legal markets protect everyone — consumers, producers, the state."</p>
+      <p class="justice-charter">Champion: Regulatory frameworks · Article IV commerce rights</p>
+      <div class="justice-footer">
+        <div class="opinion-count"><strong>7</strong> opinions filed</div>
+        <button class="btn-sm btn-outline-accent" onclick="toggleOpinions('jco-ops', this)">View Opinions</button>
+      </div>
+      <div class="opinions-panel" id="jco-ops">
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-003: Medical Access Standards (Concurring)</div>
+          <div class="opinion-item-meta">Concurring in result · 5-2 Majority · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">Advisory: Minimum Quantity Restrictions</div>
+          <div class="opinion-item-meta">Concurring · Unanimous 7-0 · Filed June 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Justice Privacy -->
+    <div class="justice-card" style="--accent-color: #ab47bc; --accent-glow: rgba(171,71,188,0.12); --avatar-bg: linear-gradient(135deg,#4a0072,#7b1fa2);">
+      <div class="justice-header">
+        <div class="justice-avatar" style="background: linear-gradient(135deg,#4a0072,#7b1fa2);">JP</div>
+        <div>
+          <div class="justice-name" style="color:#ce93d8;">Justice Privacy</div>
+          <div class="justice-initials">JP &nbsp;·&nbsp; Seat 5</div>
+        </div>
+      </div>
+      <span class="justice-lean" style="color:#ce93d8; border-color:rgba(171,71,188,0.4);">Fortress Privacy · Anti-Surveillance</span>
+      <p class="justice-quote" style="border-color:#7b1fa2;">"The home is a constitutional fortress. No warrant, no entry."</p>
+      <p class="justice-charter">Champion: Charter s.8 &nbsp;|&nbsp; Search &amp; seizure · exclusionary rule</p>
+      <div class="justice-footer">
+        <div class="opinion-count"><strong>10</strong> opinions filed</div>
+        <button class="btn-sm btn-outline-accent" style="color:#ce93d8; border-color:rgba(171,71,188,0.4);" onclick="toggleOpinions('jp-ops', this)">View Opinions</button>
+      </div>
+      <div class="opinions-panel" id="jp-ops">
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-001 (Interim): Search Scope — Author</div>
+          <div class="opinion-item-meta">Writing interim ruling · Filed May 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-003: Medical Access Standards (Concurring)</div>
+          <div class="opinion-item-meta">Concurring · 5-2 Majority · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">Advisory: Minimum Quantity Restrictions</div>
+          <div class="opinion-item-meta">Concurring · Unanimous 7-0 · Filed June 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Justice Equity -->
+    <div class="justice-card" style="--accent-color: #ef5350; --accent-glow: rgba(239,83,80,0.12); --avatar-bg: linear-gradient(135deg,#7f0000,#c62828);">
+      <div class="justice-header">
+        <div class="justice-avatar" style="background: linear-gradient(135deg,#7f0000,#c62828);">JE</div>
+        <div>
+          <div class="justice-name" style="color:#ef9a9a;">Justice Equity</div>
+          <div class="justice-initials">JE &nbsp;·&nbsp; Seat 6</div>
+        </div>
+      </div>
+      <span class="justice-lean" style="color:#ef9a9a; border-color:rgba(239,83,80,0.4);">Anti-Discrimination · Systemic Justice</span>
+      <p class="justice-quote" style="border-color:#c62828;">"Until every community is protected equally, justice is incomplete."</p>
+      <p class="justice-charter">Champion: Charter s.15 &nbsp;|&nbsp; Racial equity · disparate enforcement</p>
+      <div class="justice-footer">
+        <div class="opinion-count"><strong>8</strong> opinions filed</div>
+        <button class="btn-sm btn-outline-accent" style="color:#ef9a9a; border-color:rgba(239,83,80,0.4);" onclick="toggleOpinions('je-ops', this)">View Opinions</button>
+      </div>
+      <div class="opinions-panel" id="je-ops">
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-003: Medical Access Standards (Concurring)</div>
+          <div class="opinion-item-meta">Concurring · 5-2 Majority · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">Advisory: Minimum Quantity Restrictions</div>
+          <div class="opinion-item-meta">Concurring · Unanimous 7-0 · Filed June 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Justice Prime (Chief Justice) — spans full width -->
+    <div class="justice-card chief" style="--accent-color: #D4AF37; --accent-glow: rgba(212,175,55,0.2); --avatar-bg: linear-gradient(135deg,#5c4200,#9a7110);">
+      <div class="justice-header">
+        <div class="justice-avatar" style="background: linear-gradient(135deg,#5c4200,#9a7110); width:74px; height:74px; font-size:1.5rem;">
+          JP
+          <span class="gavel-badge">🔨</span>
+        </div>
+        <div>
+          <div class="justice-name" style="font-size:1.5rem;">Justice Prime</div>
+          <div class="justice-initials" style="color:var(--gold);">Chief Justice &nbsp;·&nbsp; Tie-Breaker &nbsp;·&nbsp; Final Authority</div>
+        </div>
+      </div>
+      <span class="justice-lean">Constitutional Guardian · Final Arbiter</span>
+      <p class="justice-quote">"This Constitution lives because we make it live. The bench exists not to restrain rights, but to enforce them."</p>
+      <p class="justice-charter">Champion: All Seven Articles &nbsp;|&nbsp; Presides over every matter &nbsp;|&nbsp; Issues tie-breaking votes &amp; ratifies amendments</p>
+      <div class="justice-footer">
+        <div class="opinion-count"><strong>3</strong> authored opinions &nbsp;·&nbsp; <strong>+7</strong> presiding</div>
+        <button class="btn-sm btn-outline-accent" onclick="toggleOpinions('jpr-ops', this)">View Opinions</button>
+      </div>
+      <div class="opinions-panel" id="jpr-ops">
+        <div class="opinion-item">
+          <div class="opinion-item-title">Advisory: Minimum Quantity Restrictions — Author</div>
+          <div class="opinion-item-meta">Writing for Court · Unanimous 7-0 · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-003: Medical Access Standards (Presiding)</div>
+          <div class="opinion-item-meta">Presiding · 5-2 Majority · Filed June 2026</div>
+        </div>
+        <div class="opinion-item">
+          <div class="opinion-item-title">FP-2026-001: Right to Cultivate — Deliberation Chair</div>
+          <div class="opinion-item-meta">Deliberation ongoing · Vote: 4-3 provisional</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== CURRENT DOCKET ===== -->
+<div class="docket-wrap">
+  <div class="section">
+    <p class="section-label">Active Matters</p>
+    <h2 class="section-title">Current Docket</h2>
+    <p class="section-subtitle">All matters before the AI Supreme Court of the Francisco Protocol. Cases proceed through briefing, deliberation, and published opinion.</p>
+
+    <div class="docket-grid">
+
+      <!-- Case 001 -->
+      <div class="case-card">
+        <div class="case-num">Matter No. FP-2026-001</div>
+        <div class="case-title">Re: Right to Cultivate Indoors — Scope of Article I</div>
+        <div><span class="status-badge status-deliberation">⚖ Deliberation</span></div>
+        <div class="vote-display">4 — 3</div>
+        <p style="font-size:0.78rem; color:var(--muted); margin-bottom:14px;">Current provisional split. Justice Prime holds the deciding vote.</p>
+        <div class="case-justices">
+          <div class="justice-chip" style="background:linear-gradient(135deg,#006080,#00a8cc);" title="Justice Liberty">JL</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#1b5e20,#388e3c);" title="Justice Compassion">JC</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#4a0072,#7b1fa2);" title="Justice Privacy">JP</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#7f0000,#c62828);" title="Justice Equity">JE</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#1a237e,#3949ab);" title="Justice Order (Dissenting)">JO</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#7a6010,#b8960c);" title="Justice Commerce (Dissenting)">JCO</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#5c4200,#9a7110); border-color:var(--gold);" title="Chief Justice Prime">CJ</div>
+        </div>
+        <div class="case-next"><strong>Next step:</strong> Chief Justice Prime to file tie-break position. Decision expected July 2026.</div>
+      </div>
+
+      <!-- Case 002 -->
+      <div class="case-card">
+        <div class="case-num">Matter No. FP-2026-002</div>
+        <div class="case-title">Re: Francisco v. AG Canada — Constitutional Challenge to the Cannabis Act</div>
+        <div><span class="status-badge status-pending">◌ Pending Hearing</span></div>
+        <p style="font-size:0.78rem; color:var(--muted); margin: 10px 0 14px;">Full panel matter. Constitutional challenge to cultivation limits, licensing framework, and provincial prohibition authority.</p>
+        <div class="case-justices">
+          <div class="justice-chip" style="background:linear-gradient(135deg,#006080,#00a8cc);" title="Justice Liberty">JL</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#1a237e,#3949ab);" title="Justice Order">JO</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#1b5e20,#388e3c);" title="Justice Compassion">JC</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#7a6010,#b8960c);" title="Justice Commerce">JCO</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#4a0072,#7b1fa2);" title="Justice Privacy">JP</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#7f0000,#c62828);" title="Justice Equity">JE</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#5c4200,#9a7110); border-color:var(--gold);" title="Chief Justice Prime">CJ</div>
+        </div>
+        <div class="case-next"><strong>Next step:</strong> Scheduling hearing. Parties to file written arguments. Full bench to hear oral submissions.</div>
+      </div>
+
+      <!-- Case 003 -->
+      <div class="case-card">
+        <div class="case-num">Matter No. FP-2026-003</div>
+        <div class="case-title">Re: Medical Cannabis Access Standards — Minimum Access Thresholds</div>
+        <div><span class="status-badge status-opinions">✓ Written Opinions Filed</span></div>
+        <div class="vote-display" style="color:#66bb6a;">5 — 2</div>
+        <p style="font-size:0.78rem; color:var(--muted); margin-bottom:14px;">Majority opinion by Justice Compassion. Justice Order dissenting (with Justice Commerce). Binding precedent established.</p>
+        <div class="case-justices">
+          <div class="justice-chip" style="background:linear-gradient(135deg,#1b5e20,#388e3c);" title="Justice Compassion (Author)">JC</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#006080,#00a8cc);" title="Justice Liberty">JL</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#4a0072,#7b1fa2);" title="Justice Privacy">JP</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#7f0000,#c62828);" title="Justice Equity">JE</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#7a6010,#b8960c);" title="Justice Commerce">JCO</div>
+          <div class="justice-chip" style="background:linear-gradient(135deg,#1a237e,#3949ab); border:1px solid #ef5350;" title="Justice Order (Dissent)">JO</div>
+        </div>
+        <div class="case-next"><strong>Next step:</strong> Precedent stands. Available for citation in future matters.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== PUBLISHED OPINIONS ===== -->
+<div class="section">
+  <p class="section-label">Jurisprudence</p>
+  <h2 class="section-title">Published Opinions</h2>
+  <p class="section-subtitle">Full written reasons of the AI Supreme Court. These opinions form the binding precedent of the Francisco Protocol.</p>
+
+  <!-- Opinion 1: FP-2026-003 Medical Access -->
+  <div class="opinion-full">
+    <div class="opinion-header">
+      <div>
+        <div class="opinion-id">FP-2026-003 &nbsp;·&nbsp; Majority Opinion &nbsp;·&nbsp; Filed June 2026</div>
+        <div class="opinion-title">Medical Cannabis Access Standards — Minimum Access Thresholds</div>
+      </div>
+      <div class="opinion-vote-badge">5 — 2 &nbsp; Majority</div>
+    </div>
+    <div class="opinion-body">
+      <p class="opinion-writing-j">Written by <span>Justice Compassion</span> &nbsp;·&nbsp; Concurring: Justice Liberty, Justice Privacy, Justice Equity, Justice Commerce &nbsp;·&nbsp; Dissenting: Justice Order (with reasons)</p>
+      <div class="opinion-ratio">
+        The question before this Court is whether the Access to Cannabis for Medical Purposes Regulations, and their successor instruments, satisfy the constitutional minimum established under Article II of the WeedLaw Constitution and s.7 of the Charter as interpreted in Parker and Allard. The answer is no — not in their present form. Where a regulatory scheme requires a patient to navigate a system so burdensome, so costly, and so stigmatized that meaningful access remains theoretical rather than actual, the scheme fails the constitutional test. The right to medicine is not merely the right to apply for medicine. It is the right to receive it, in a form that works, at a price that does not punish poverty, through a process that does not re-traumatize. The state may regulate the manner of access; it may not regulate access out of existence. This Court holds that minimum access thresholds must be defined by reference to what a person of average means can actually obtain — not by what regulations nominally permit. The regulations are struck, with a 12-month suspension of declaration to permit remedial re-drafting consistent with this Opinion.
+      </div>
+      <p class="concurring"><strong>Concurring:</strong> Justice Liberty, Justice Privacy, Justice Equity, Justice Commerce all concur in the result. Justice Commerce writes separately to note that a well-functioning legal market would make minimum access thresholds unnecessary by making cannabis medicine readily available through competitive commercial channels.</p>
+      <p class="dissenting"><strong>Dissenting:</strong> Justice Order (joined by none): Parliament's statutory scheme represents a reasonable accommodation of competing interests. The majority's re-drafting order exceeds the judicial function. Courts declare; legislatures remedy. I would have issued a declaration only and left timing entirely to Parliament's discretion.</p>
+    </div>
+  </div>
+
+  <!-- Opinion 2: FP-2026-001 Interim Ruling -->
+  <div class="opinion-full">
+    <div class="opinion-header">
+      <div>
+        <div class="opinion-id">FP-2026-001 (Interim) &nbsp;·&nbsp; Interim Ruling &nbsp;·&nbsp; Filed May 2026</div>
+        <div class="opinion-title">Re: Right to Cultivate — Interim Ruling on Permissible Search Scope</div>
+      </div>
+      <div class="opinion-vote-badge">6 — 1 &nbsp; Interim Order</div>
+    </div>
+    <div class="opinion-body">
+      <p class="opinion-writing-j">Written by <span>Justice Privacy</span> &nbsp;·&nbsp; Concurring: All justices except Justice Order</p>
+      <div class="opinion-ratio">
+        While the main matter in FP-2026-001 remains in deliberation, this Court issues an interim ruling on the narrow question of permissible search scope arising from the cultivation context: enforcement agents who enter a private dwelling pursuant to a general warrant do not thereby acquire authority to search cultivation areas not specified in the warrant instrument. The plain text of Article III and Charter s.8 is unambiguous. Specificity is not a technicality — it is the constitutional minimum. Any evidence of cannabis cultivation obtained by exceeding the stated scope of a search warrant is excluded under Article VII of this Constitution. The exclusionary rule requires no case-by-case balancing when the violation involves warrantless entry into a constitutionally protected space. Evidence of such a violation is excluded, period. This interim ruling applies immediately to all matters pending before any court that chooses to recognize the jurisdiction of the Francisco Protocol.
+      </div>
+      <p class="dissenting"><strong>Dissenting (Justice Order):</strong> Interim rulings on evidentiary questions should await full deliberation on the main matter. I dissent from the procedural urgency, not the underlying principle. Parliament has the authority to define the contours of warrant scope, and courts should engage that statutory text before declaring constitutional violations.</p>
+    </div>
+  </div>
+
+  <!-- Opinion 3: Advisory — Minimum Quantity Restrictions -->
+  <div class="opinion-full">
+    <div class="opinion-header">
+      <div>
+        <div class="opinion-id">Advisory Opinion &nbsp;·&nbsp; All Seven Justices &nbsp;·&nbsp; Filed June 2026</div>
+        <div class="opinion-title">On the Constitutionality of Minimum Quantity Restrictions in Cannabis Legislation</div>
+      </div>
+      <div class="opinion-vote-badge">7 — 0 &nbsp; Unanimous</div>
+    </div>
+    <div class="opinion-body">
+      <p class="opinion-writing-j">Written by <span>Justice Prime</span> (Chief Justice) &nbsp;·&nbsp; For a Unanimous Court</p>
+      <div class="opinion-ratio">
+        The Court addresses, by advisory opinion, the constitutional status of quantity restrictions that fall below the threshold of practical access. We are unanimous. Statutory provisions that permit possession of cannabis in quantities insufficient to meet a patient's documented medical needs are unconstitutional on their face. The quantity a person may lawfully possess must, at minimum, equal the quantity they demonstrably require. To criminalize possession of amounts a person needs for survival — whether for pain management, seizure control, or mental health stability — is to criminalize survival itself. No legislature may, through the mechanism of a quantity limit, effectively nullify a constitutional right that the judiciary has recognized as grounded in the right to life and security. This Opinion is advisory, but it carries the full deliberative weight of a unanimous Court. We invite all legislative bodies with jurisdiction over cannabis quantity restrictions to review their statutes in light of this Opinion immediately, and without waiting for individual constitutional challenges to work their way through the courts at the cost of individual rights-holders.
+      </div>
+      <p class="concurring"><strong>All concurring:</strong> Justice Liberty, Justice Order, Justice Compassion, Justice Commerce, Justice Privacy, Justice Equity — unanimous without qualification. This is the rare case in which every philosophical approach to constitutional interpretation — textual, purposive, structural, and equitable — converges on the same result. Minimum quantity restrictions that make practical access impossible are unconstitutional. Full stop.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AI DELIBERATION SIMULATOR ===== -->
+<div class="simulator-wrap">
+  <div class="section">
+    <p class="section-label">Interactive Feature</p>
+    <h2 class="section-title">AI Deliberation Simulator</h2>
+
+    <div class="simulator-box">
+      <p class="simulator-title">Submit a Legal Question to the AI Supreme Court</p>
+      <p class="simulator-desc">Pose a cannabis rights question and receive a simulated deliberation — three justices will deliver their positions. This is an educational simulation, not legal advice.</p>
+
+      <textarea
+        class="sim-textarea"
+        id="sim-question"
+        placeholder="e.g., Does a province have constitutional authority to ban home cultivation of cannabis outright?"
+        maxlength="500"
+      ></textarea>
+
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <button class="btn-gold" id="sim-btn" onclick="runSimulator()">
+          ⚖ Submit to the Court
+        </button>
+        <span style="font-size:0.75rem; color:var(--muted);">Three justices will deliberate. Results are illustrative only.</span>
+      </div>
+
+      <div id="deliberation-result">
+        <div class="delib-header">
+          <span>⚖</span>
+          <span>AI Supreme Court — Simulated Deliberation</span>
+        </div>
+        <div class="delib-question" id="delib-q-display"></div>
+        <div class="delib-positions" id="delib-positions"></div>
+        <div class="delib-ruling" id="delib-ruling"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p class="footer-text">
+    <span>© 2026 The Francisco Protocol</span> &nbsp;|&nbsp;
+    <span>CCLDR.NET</span> &nbsp;|&nbsp;
+    <span>Francisco Holdings Inc.</span>
+    <br>
+    <small style="font-size:0.75rem; color:var(--muted); margin-top:6px; display:block; font-family:'Special Elite', monospace; letter-spacing:0.08em;">
+      AI Supreme Court · Seven Justices · Francisco Protocol · Derek Francisco, Doc WeedLaw, Founder
+    </small>
+  </p>
+</footer>
+
+<script>
+  // Toggle justice opinion panels
+  function toggleOpinions(id, btn) {
+    const panel = document.getElementById(id);
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open', !isOpen);
+    btn.textContent = isOpen ? 'View Opinions' : 'Hide Opinions';
+  }
+
+  // ===== AI DELIBERATION SIMULATOR =====
+  const JUSTICES_DATA = [
+    {
+      initials: 'JL', name: 'Justice Liberty',
+      bg: 'linear-gradient(135deg,#006080,#00a8cc)',
+      color: '#00D4FF',
+      positions: [
+        "The Charter's s.7 guarantee breathes life into this question. Any law that extinguishes access — whether through outright prohibition or practical impossibility — offends the living constitution. The right exists not on paper but in practice.",
+        "Precedent from Parker to Allard establishes that where there is a medical need, there must be a legal path. A flat prohibition forecloses that path and is therefore unconstitutional on its face under the WeedLaw Constitution's Article I.",
+        "Rights do not exist in isolation. The right to cultivate, the right to medicine, the right to privacy — they form a constitutional ecosystem. A law that destroys one branch destroys the whole. This cannot stand.",
+        "I would ask the proponent of this restriction: what less-drastic alternative was considered? The Charter demands minimal impairment. If alternatives exist — and they almost always do — the blanket prohibition fails."
+      ]
+    },
+    {
+      initials: 'JO', name: 'Justice Order',
+      bg: 'linear-gradient(135deg,#1a237e,#3949ab)',
+      color: '#7986cb',
+      positions: [
+        "The text of the statute matters. Courts do not write legislation. If Parliament has drawn a line — even a line I might draw differently — we must ask whether that line exceeds the constitutional limit, not merely whether it is wise policy.",
+        "I would not strike this provision without first examining whether s.1 justification exists. The state may have compelling objectives that justify reasonable limits. The analysis must be rigorous, not reflexive.",
+        "My colleagues speak of rights in absolute terms. But rights exist in a framework. Article VII of this Constitution itself contemplates that remedies are calibrated. A declaration — not a strike — may be the appropriate first step.",
+        "The question is not whether I would draft this law differently. The question is whether the legislature had the authority to draft it this way. Those are very different inquiries, and conflating them is a failure of judicial methodology."
+      ]
+    },
+    {
+      initials: 'JC', name: 'Justice Compassion',
+      bg: 'linear-gradient(135deg,#1b5e20,#388e3c)',
+      color: '#66bb6a',
+      positions: [
+        "Behind every legal question is a human being. Someone in pain. Someone who found, after years of suffering, that cannabis works. A law that takes that from them is not merely unconstitutional — it is cruel. And cruelty is not a constitutional value.",
+        "Medical necessity is not a theory. It is people in hospital beds, people in seizures, people in mental health crises. When I read the facts behind these legal questions, I see faces. The Constitution must see them too.",
+        "Parker established the principle. Allard confirmed it. Smith extended it. The arc of this jurisprudence is unmistakable: access to cannabis as medicine is constitutionally protected. The only question is how well protected.",
+        "I would hold that any law restricting access must be tested against the hardest case: the person who needs it most, who can afford least, who faces the greatest barrier. If the law fails that person, it fails the Constitution."
+      ]
+    },
+    {
+      initials: 'JCO', name: 'Justice Commerce',
+      bg: 'linear-gradient(135deg,#7a6010,#b8960c)',
+      color: '#D4AF37',
+      positions: [
+        "The irony of prohibition-style restrictions in a post-legalization era is that they benefit no one. They do not reduce consumption. They drive it underground, away from safety standards, taxation, and accountability. The legal market is the answer.",
+        "Regulatory frameworks must serve their stated purposes. A restriction that purports to protect public safety while creating black markets and denying medical access serves neither purpose. It fails the proportionality test under any analytical framework.",
+        "Commerce in cannabis is a constitutional right under Article IV of this Constitution. Arbitrary restrictions — those without transparent criteria, without due process, without meaningful appeal — are void. Regulatory power is not unlimited power.",
+        "I would look at the economic evidence. Every study of blanket prohibition shows the same result: consumption stays constant, harm increases, and regulated actors are disadvantaged relative to unregulated ones. Law that produces these outcomes cannot be justified."
+      ]
+    },
+    {
+      initials: 'JP', name: 'Justice Privacy',
+      bg: 'linear-gradient(135deg,#4a0072,#7b1fa2)',
+      color: '#ce93d8',
+      positions: [
+        "The home is a constitutional fortress. What happens within those walls — cultivation, consumption, medicine — is protected from state interference by the clearest and oldest principle in constitutional law. A warrant is required. Probable cause must be shown. Specificity is mandatory.",
+        "Search and seizure law has a simple logic: the state must justify each intrusion, specifically and individually, before a neutral judicial officer, with reasons on record. Any shortcut to this process is unconstitutional, full stop.",
+        "I am concerned about the surveillance implications of the question before us. Who is watching? Who is tracking? In the cannabis context, enforcement has historically relied on informants, pretextual stops, and warrantless surveillance. Article III forbids all of it.",
+        "The exclusionary rule exists precisely because rights without remedies are not rights. Where evidence is obtained through unconstitutional means, it cannot be used. The rule is not a loophole — it is the enforcement mechanism of the Constitution itself."
+      ]
+    },
+    {
+      initials: 'JE', name: 'Justice Equity',
+      bg: 'linear-gradient(135deg,#7f0000,#c62828)',
+      color: '#ef9a9a',
+      positions: [
+        "The data does not lie. Cannabis enforcement in every jurisdiction studied falls disproportionately on Black, Indigenous, and low-income communities. A law neutral on its face is not constitutionally neutral if it operates discriminatorily in practice. Disparate impact is constitutional evidence.",
+        "Article VI of this Constitution is not aspirational — it is binding. Where statistical evidence shows that enforcement of a cannabis law targets specific communities, the burden shifts immediately to the state. Disparity equals presumptive violation.",
+        "Equal protection is not satisfied by identical text. It requires equal outcomes. A law that criminalizes behavior engaged in equally across all communities but prosecutes only some of them is a law that discriminates. The Constitution sees that, even when legislators pretend not to.",
+        "I would ask for enforcement data before reaching any other question. If the data shows what I expect it will show — and it almost always does — the constitutional analysis is over before it begins. Proven discrimination cannot be justified under s.1 or any equivalent provision."
+      ]
+    },
+    {
+      initials: 'CJ', name: 'Chief Justice Prime',
+      bg: 'linear-gradient(135deg,#5c4200,#9a7110)',
+      color: '#D4AF37',
+      positions: [
+        "This Court speaks with one voice on the foundational question: rights recognized in this Constitution are not subject to legislative extinguishment. They may be regulated. They may be conditioned. They may not be eliminated. The distinction is constitutional bedrock.",
+        "Twenty years of jurisprudence — from Parker to Allard to Smith — has traced a clear line. We did not draw that line. Parliament drew it, repeatedly, by failing to respect what the courts said. This Constitution exists to hold that line.",
+        "I preside over a court of seven different philosophies, and that is by design. But unanimity on fundamentals is possible — and when all seven justices agree, the constitutional signal is unmistakable. No parliament should need the same instruction twice.",
+        "The Francisco Protocol was established because ordinary courts move slowly and individuals suffer in the meantime. This Court moves as fast as justice requires. Where rights are being violated today, we say so today. The opinion is published. The precedent is set. Act accordingly."
+      ]
+    }
+  ];
+
+  const RULINGS = [
+    "Provisional ruling: The question raises a matter of constitutional significance. Three of seven justices have now weighed in. The consensus leans toward a finding of constitutional violation, pending full deliberation.",
+    "Preliminary assessment: On the question submitted, the Court notes a significant majority position forming. Full written reasons to follow upon completion of the deliberation process.",
+    "The Court, in preliminary form, finds the question raises a prima facie constitutional concern. The burden will fall on any government seeking to justify the measure to demonstrate minimal impairment and proportionality.",
+    "This is not a close question on the preliminary evidence. The constitutional framework established by the WeedLaw Constitution's Seven Articles, read together, strongly suggests the measure cannot survive Charter scrutiny.",
+    "The Court notes deep disagreement on the appropriate remedy but considerable convergence on the underlying right. This distinction matters: the right is likely established; what follows from it remains in deliberation."
+  ];
+
+  function runSimulator() {
+    const question = document.getElementById('sim-question').value.trim();
+    if (!question || question.length < 10) {
+      document.getElementById('sim-question').style.borderColor = '#c62828';
+      document.getElementById('sim-question').focus();
+      setTimeout(() => {
+        document.getElementById('sim-question').style.borderColor = '';
+      }, 2000);
+      return;
+    }
+
+    const btn = document.getElementById('sim-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Court in deliberation...';
+
+    setTimeout(() => {
+      // Pick 3 random justices (no repeats)
+      const pool = [...JUSTICES_DATA];
+      const selected = [];
+      while (selected.length < 3) {
+        const idx = Math.floor(Math.random() * pool.length);
+        selected.push(pool.splice(idx, 1)[0]);
+      }
+
+      // Build positions HTML
+      let posHTML = '';
+      selected.forEach(j => {
+        const pos = j.positions[Math.floor(Math.random() * j.positions.length)];
+        posHTML += `
+          <div class="delib-justice">
+            <div class="delib-avatar" style="background:${j.bg};">${j.initials}</div>
+            <div>
+              <div class="delib-name" style="color:${j.color};">${j.name}</div>
+              <div class="delib-position-text">${pos}</div>
+            </div>
+          </div>`;
+      });
+
+      const ruling = RULINGS[Math.floor(Math.random() * RULINGS.length)];
+
+      // Populate
+      document.getElementById('delib-q-display').textContent = '"' + question + '"';
+      document.getElementById('delib-positions').innerHTML = posHTML;
+      document.getElementById('delib-ruling').textContent = ruling;
+
+      const result = document.getElementById('deliberation-result');
+      result.classList.add('show');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      btn.disabled = false;
+      btn.innerHTML = '⚖ Submit to the Court';
+    }, 1800);
+  }
+
+  // Allow Enter+Ctrl or Cmd+Enter to submit
+  document.getElementById('sim-question').addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runSimulator();
+  });
+</script>
+</body>
+</html>

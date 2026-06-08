@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Records Room — CCLDR Virtual Courthouse | Legal Document Vault</title>
+<meta name="description" content="CCLDR Records Room: court-ready legal document templates, fillable forms, filing tracker, and Derek Francisco's active case documents. Elite tier required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0f;--card:#141418;--card2:#1a1a20;--gold:#D4AF37;--gold-light:#e8c84a;--gold-dim:rgba(212,175,55,.15);--green:#2E7D32;--green-light:#43a047;--white:#f5f5f5;--muted:#888;--border:#2a2a32;--cabinet:#111114;--cabinet2:#181820}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* BG */
+.ch-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 40% 0%,rgba(212,175,55,.06) 0%,var(--black) 65%)}
+.ch-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(212,175,55,.02) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(212,175,55,.02) 60px)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,10,15,.97);border-bottom:1px solid var(--gold);padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.nav-links a{font-size:12px;color:var(--muted);transition:color .2s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;transition:background .2s;white-space:nowrap}
+.nav-cta:hover{background:var(--gold-light)}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(10,10,15,.99);border-bottom:1px solid var(--gold);padding:16px 40px;position:relative;z-index:999}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:12px 0;border-bottom:1px solid var(--border);font-size:14px}
+
+/* HERO */
+.page-hero{position:relative;z-index:1;text-align:center;padding:100px 40px 60px}
+.hero-icon{font-size:64px;margin-bottom:20px;filter:drop-shadow(0 0 24px rgba(212,175,55,.4))}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(147,112,219,.1);border:1px solid rgba(147,112,219,.35);border-radius:2px;padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#9370DB;margin-bottom:20px}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.page-title{font-family:'Cinzel',serif;font-size:clamp(36px,5vw,68px);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:14px}
+.page-title .gold{color:var(--gold)}
+.page-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:580px;margin:0 auto 32px}
+
+/* CABINET VISUAL */
+.cabinet-visual{position:relative;z-index:1;max-width:700px;margin:0 auto 16px;padding:0 40px}
+.filing-cabinet{background:linear-gradient(135deg,var(--cabinet2) 0%,var(--cabinet) 50%,var(--cabinet2) 100%);border:1px solid rgba(212,175,55,.25);border-radius:4px;padding:20px 32px;display:flex;align-items:center;justify-content:center;gap:0;box-shadow:0 16px 48px rgba(0,0,0,.7),inset 0 1px 0 rgba(212,175,55,.15)}
+.cabinet-drawer{flex:1;border:1px solid rgba(212,175,55,.2);border-radius:2px;margin:6px;padding:10px 12px;background:rgba(255,255,255,.02);display:flex;align-items:center;gap:10px;cursor:default}
+.drawer-handle{width:30px;height:6px;background:linear-gradient(90deg,rgba(212,175,55,.4),rgba(212,175,55,.8),rgba(212,175,55,.4));border-radius:3px;flex-shrink:0}
+.drawer-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,175,55,.5)}
+
+/* BACK NAV */
+.back-nav{position:relative;z-index:1;padding:20px 40px 0;max-width:1200px;margin:0 auto}
+.back-link{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);transition:color .2s;letter-spacing:1px;text-transform:uppercase}
+.back-link:hover{color:var(--gold)}
+.back-link::before{content:'←';font-size:16px}
+
+/* MAIN LAYOUT */
+.main-content{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 40px 80px}
+
+/* SECTION BLOCKS */
+.section-block{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:36px;margin-bottom:32px}
+.section-block.gold-accent{border-color:rgba(212,175,55,.3)}
+.section-block.purple-accent{border-color:rgba(147,112,219,.25)}
+.sb-header{display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.sb-icon{font-size:28px}
+.sb-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold)}
+.sb-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.sb-tier{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:10px;background:rgba(147,112,219,.12);color:#9370DB;border:1px solid rgba(147,112,219,.3);margin-left:8px;vertical-align:middle}
+.sb-tier.sovereign{background:rgba(212,175,55,.12);color:var(--gold);border-color:rgba(212,175,55,.3)}
+
+/* DOCUMENT VAULT GRID */
+.vault-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.vault-doc{background:var(--card2);border:1px solid var(--border);border-radius:4px;padding:22px;position:relative;transition:border-color .2s}
+.vault-doc:hover{border-color:rgba(212,175,55,.3)}
+.vault-doc.locked-doc{opacity:.65}
+.vd-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+.vd-name{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--white);line-height:1.3}
+.lock-icon{font-size:14px;flex-shrink:0;color:var(--muted)}
+.vd-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px}
+.vd-court{font-size:10px;color:rgba(212,175,55,.6);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.vd-btn{width:100%;padding:9px;background:transparent;border:1px solid rgba(212,175,55,.4);border-radius:2px;color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.vd-btn:hover{background:rgba(212,175,55,.1);border-color:var(--gold)}
+.vd-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* FORM FILL ASSISTANT */
+.fill-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.fill-field{display:flex;flex-direction:column;gap:6px}
+.fill-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.fill-input{padding:11px 14px;background:rgba(10,10,15,.7);border:1px solid var(--border);border-radius:3px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.fill-input:focus{border-color:rgba(212,175,55,.4)}
+.fill-input::placeholder{color:rgba(136,136,136,.5)}
+.fill-btn{padding:12px 28px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.4);border-radius:3px;color:var(--gold);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.fill-btn:hover{background:rgba(212,175,55,.22)}
+.fill-result{display:none;flex-direction:column;gap:12px}
+.fill-result.visible{display:flex}
+.fill-textarea{width:100%;min-height:200px;padding:16px;background:rgba(10,10,15,.8);border:1px solid rgba(212,175,55,.3);border-radius:3px;color:rgba(245,245,245,.85);font-family:'Inter',sans-serif;font-size:12px;line-height:1.8;resize:vertical;outline:none}
+.dl-filled-btn{align-self:flex-start;padding:10px 24px;background:var(--gold);border:none;border-radius:2px;color:#000;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.dl-filled-btn:hover{background:var(--gold-light)}
+
+/* FILING TRACKER */
+.tracker-controls{margin-bottom:20px}
+.tracker-add-btn{padding:10px 22px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.4);border-radius:3px;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.tracker-add-btn:hover{background:rgba(212,175,55,.22)}
+.tracker-form{display:none;background:var(--card2);border:1px solid var(--border);border-radius:3px;padding:20px;margin-bottom:16px;grid-template-columns:repeat(5,1fr) auto;gap:10px;align-items:end}
+.tracker-form.open{display:grid}
+.tf-field{display:flex;flex-direction:column;gap:5px}
+.tf-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.tf-input{padding:8px 10px;background:rgba(10,10,15,.7);border:1px solid var(--border);border-radius:2px;color:var(--white);font-family:'Inter',sans-serif;font-size:12px;outline:none;transition:border-color .2s}
+.tf-input:focus{border-color:rgba(212,175,55,.4)}
+.tf-save{padding:9px 16px;background:var(--green);border:none;border-radius:2px;color:#000;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background .2s;white-space:nowrap}
+.tf-save:hover{background:var(--green-light)}
+.tracker-table{width:100%;border-collapse:collapse}
+.tracker-table th{padding:10px 14px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:left;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015)}
+.tracker-table td{padding:12px 14px;font-size:12px;color:rgba(245,245,245,.8);border-bottom:1px solid rgba(255,255,255,.03);vertical-align:top}
+.tracker-table td:first-child{white-space:nowrap;color:var(--gold);font-weight:600}
+.status-badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.status-filed{background:rgba(46,125,50,.15);color:#66bb6a;border:1px solid rgba(46,125,50,.3)}
+.status-pending{background:rgba(212,175,55,.12);color:var(--gold);border:1px solid rgba(212,175,55,.25)}
+.status-served{background:rgba(100,149,237,.12);color:#6495ED;border:1px solid rgba(100,149,237,.25)}
+.status-other{background:rgba(136,136,136,.1);color:var(--muted);border:1px solid rgba(136,136,136,.2)}
+.row-remove{background:none;border:none;color:rgba(136,136,136,.4);font-size:14px;cursor:pointer;padding:2px 5px;border-radius:2px;transition:color .2s}
+.row-remove:hover{color:rgba(200,80,80,.8)}
+.tracker-empty{text-align:center;padding:32px;color:var(--muted);font-size:13px;border:1px dashed var(--border);border-radius:3px}
+
+/* DEREK'S CASE DOCUMENTS */
+.derek-cases{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.case-card{background:linear-gradient(135deg,rgba(20,20,24,.9),rgba(28,15,8,.4));border:1px solid rgba(212,175,55,.3);border-radius:6px;padding:28px;position:relative;overflow:hidden}
+.case-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),rgba(212,175,55,.3))}
+.case-card.green-top::before{background:linear-gradient(90deg,var(--green),rgba(46,125,50,.3))}
+.cc-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:6px}
+.cc-sub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.urgent-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:rgba(220,53,69,.15);color:#ef5350;border:1px solid rgba(220,53,69,.35);margin-bottom:12px}
+.active-badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:rgba(46,125,50,.15);color:#66bb6a;border:1px solid rgba(46,125,50,.35);margin-bottom:12px}
+.cc-docs{display:flex;flex-direction:column;gap:10px}
+.cc-doc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:3px}
+.cc-doc-name{font-size:12px;color:rgba(245,245,245,.85)}
+.cc-doc-date{font-size:10px;color:var(--muted)}
+.cc-view-btn{padding:6px 14px;background:transparent;border:1px solid rgba(212,175,55,.35);border-radius:2px;color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.cc-view-btn:hover{background:rgba(212,175,55,.1)}
+.cc-view-btn.green{border-color:rgba(46,125,50,.35);color:#66bb6a}
+.cc-view-btn.green:hover{background:rgba(46,125,50,.1)}
+
+/* LOCKED PANEL */
+.locked-panel{position:relative;z-index:1;max-width:1200px;margin:0 auto 40px;padding:0 40px}
+.lock-card{background:linear-gradient(135deg,rgba(20,20,24,.95),rgba(20,10,30,.5));border:1px solid rgba(147,112,219,.4);border-radius:6px;padding:60px 48px;text-align:center;display:none}
+.lock-card.visible{display:block}
+.lock-icon-big{font-size:64px;margin-bottom:20px;filter:drop-shadow(0 0 12px rgba(147,112,219,.4))}
+.lock-title{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:#9370DB;margin-bottom:12px}
+.lock-sub{font-size:15px;color:var(--muted);max-width:500px;margin:0 auto 32px;line-height:1.7}
+.lock-tiers{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.lock-tier{background:rgba(147,112,219,.08);border:1px solid rgba(147,112,219,.3);border-radius:3px;padding:14px 24px;text-align:center}
+.lock-tier.sovereign-tier{background:rgba(212,175,55,.08);border-color:rgba(212,175,55,.3)}
+.lt-name{font-size:12px;color:#9370DB;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:4px;font-family:'Cinzel',serif}
+.lock-tier.sovereign-tier .lt-name{color:var(--gold)}
+.lt-price{font-size:24px;font-weight:800;color:var(--white)}
+.lt-price span{font-size:12px;color:var(--muted)}
+.lock-cta{display:inline-block;padding:14px 36px;background:#9370DB;color:#fff;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border-radius:2px;transition:background .2s}
+.lock-cta:hover{background:#a080e8}
+
+/* SOVEREIGN LOCK PANEL (inline) */
+.sovereign-lock{background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.2);border-radius:4px;padding:32px;text-align:center}
+.sl-icon{font-size:40px;margin-bottom:12px}
+.sl-title{font-family:'Cinzel',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
+.sl-sub{font-size:13px;color:var(--muted);max-width:400px;margin:0 auto 20px;line-height:1.6}
+.sl-cta{display:inline-block;padding:11px 28px;background:rgba(212,175,55,.12);border:1px solid var(--gold);border-radius:2px;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.sl-cta:hover{background:rgba(212,175,55,.2)}
+
+/* UPGRADE MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid rgba(147,112,219,.5);border-radius:6px;padding:48px 40px;max-width:460px;width:90%;text-align:center;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;transition:color .2s}
+.modal-close:hover{color:var(--white)}
+.modal-icon{font-size:52px;margin-bottom:16px}
+.modal-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:#9370DB;margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.modal-btn{display:block;width:100%;padding:14px 20px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:all .2s;margin-bottom:10px}
+.modal-elite{background:rgba(147,112,219,.15);border:1px solid #9370DB;color:#9370DB}
+.modal-elite:hover{background:rgba(147,112,219,.25)}
+.modal-sov{background:rgba(212,175,55,.15);border:1px solid var(--gold);color:var(--gold)}
+.modal-sov:hover{background:rgba(212,175,55,.25)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:rgba(10,10,15,.98);border-top:1px solid var(--border);padding:40px;text-align:center;margin-top:40px}
+.footer-brand{font-family:'Cinzel',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
+.footer-doc{font-size:12px;color:var(--muted);margin-bottom:16px}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.footer-links a{font-size:12px;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{font-size:11px;color:rgba(136,136,136,.35)}
+
+/* RESPONSIVE */
+@media(max-width:960px){.vault-grid{grid-template-columns:1fr 1fr}.derek-cases{grid-template-columns:1fr}.fill-grid{grid-template-columns:1fr}.tracker-form.open{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:640px){nav{padding:0 20px}.nav-links,.nav-cta{display:none}.hamburger{display:block}.page-hero{padding:80px 20px 40px}.main-content{padding:0 20px 60px}.back-nav{padding:16px 20px 0}.cabinet-visual{padding:0 20px}.filing-cabinet{padding:16px}.locked-panel{padding:0 20px}.lock-card{padding:40px 24px}.vault-grid{grid-template-columns:1fr}.tracker-form.open{grid-template-columns:1fr}.tracker-table{font-size:11px}.tracker-table th,.tracker-table td{padding:8px 10px}}
+</style>
+</head>
+<body>
+<div class="ch-bg" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div>
+      <div class="nav-logo">CCLDR</div>
+      <div class="nav-sub">Virtual Courthouse</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="clerks-office.html">Clerk's Office</a>
+    <a href="library.html">Library</a>
+    <a href="classroom.html">Classroom</a>
+    <a href="boardroom.html">Boardroom</a>
+    <a href="judges-chambers.html">Judge's Chambers</a>
+    <a href="records-room.html" class="active">Records Room</a>
+  </div>
+  <a href="pricing.html" class="nav-cta">Upgrade</a>
+  <button class="hamburger" onclick="document.getElementById('nmob').classList.toggle('open')">☰</button>
+</nav>
+<div class="nav-mobile" id="nmob">
+  <a href="lobby.html">Lobby</a>
+  <a href="courtroom.html">Courtroom</a>
+  <a href="clerks-office.html">Clerk's Office</a>
+  <a href="library.html">Library</a>
+  <a href="classroom.html">Classroom</a>
+  <a href="boardroom.html">Boardroom</a>
+  <a href="judges-chambers.html">Judge's Chambers</a>
+  <a href="records-room.html">Records Room</a>
+  <a href="pricing.html">Upgrade Access</a>
+</div>
+
+<!-- BACK NAV -->
+<div class="back-nav">
+  <a href="lobby.html" class="back-link">Back to Lobby</a>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="hero-icon">🗄️</div>
+  <div class="hero-badge">Elite Tier — Document Vault</div>
+  <h1 class="page-title">The <span class="gold">Records Room</span></h1>
+  <p class="page-sub">Your Legal Documents, Ready to File. Court-ready templates, fillable forms, and active case filings — organized and accessible.</p>
+</section>
+
+<!-- CABINET VISUAL -->
+<div class="cabinet-visual">
+  <div class="filing-cabinet">
+    <div class="cabinet-drawer"><div class="drawer-handle"></div><div class="drawer-label">Claims &amp; Writs</div></div>
+    <div class="cabinet-drawer"><div class="drawer-handle"></div><div class="drawer-label">Motions &amp; Facta</div></div>
+    <div class="cabinet-drawer"><div class="drawer-handle"></div><div class="drawer-label">FOI &amp; Demands</div></div>
+    <div class="cabinet-drawer"><div class="drawer-handle"></div><div class="drawer-label">Active Cases</div></div>
+  </div>
+</div>
+
+<!-- DEREK'S CASE DOCUMENTS — always visible, public record -->
+<div style="position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:24px 40px 0">
+  <div class="section-block gold-accent">
+    <div class="sb-header">
+      <span class="sb-icon">⚖️</span>
+      <div>
+        <div class="sb-title">Derek Francisco — Active Case Documents</div>
+        <div class="sb-sub">Public record. These cases are active litigation. Filed documents are matters of public court record.</div>
+      </div>
+    </div>
+
+    <div class="derek-cases">
+
+      <!-- Francisco v. AG Canada -->
+      <div class="case-card">
+        <div class="active-badge">Active Litigation</div>
+        <div class="cc-title">Francisco v. Attorney General of Canada</div>
+        <div class="cc-sub">Constitutional challenge. Charter sections 7, 8, 15. Federal Court of Canada.</div>
+        <div class="cc-docs">
+          <div class="cc-doc-row">
+            <div>
+              <div class="cc-doc-name">Statement of Claim</div>
+              <div class="cc-doc-date">Filed: June 2026</div>
+            </div>
+            <button class="cc-view-btn" onclick="downloadDerekDoc('soc_agcan')">Download</button>
+          </div>
+          <div class="cc-doc-row">
+            <div>
+              <div class="cc-doc-name">FOI Request — Active</div>
+              <div class="cc-doc-date">Submitted: June 2026 | Response Pending</div>
+            </div>
+            <button class="cc-view-btn green" onclick="downloadDerekDoc('foi_agcan')">Download</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Francisco v. Denby -->
+      <div class="case-card green-top">
+        <div class="urgent-badge">Urgent — June 17 Deadline</div>
+        <div class="cc-title">Francisco v. Denby</div>
+        <div class="cc-sub">Default judgment enforcement. New claim filing deadline: June 17, 2026. Ontario Superior Court.</div>
+        <div class="cc-docs">
+          <div class="cc-doc-row">
+            <div>
+              <div class="cc-doc-name">Default Judgment — $1,000,000</div>
+              <div class="cc-doc-date">Judgment Obtained: 2026</div>
+            </div>
+            <button class="cc-view-btn" onclick="downloadDerekDoc('judgment_denby')">Download</button>
+          </div>
+          <div class="cc-doc-row">
+            <div>
+              <div class="cc-doc-name">New Claim — Filing Deadline</div>
+              <div class="cc-doc-date" style="color:#ef5350;font-weight:700">DEADLINE: June 17, 2026</div>
+            </div>
+            <button class="cc-view-btn" style="border-color:rgba(220,53,69,.5);color:#ef5350" onclick="downloadDerekDoc('claim_denby')">Download</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LOCKED PANEL (shown for free/warrior/professional) -->
+<div class="locked-panel" id="lock-panel">
+  <div class="lock-card" id="lock-card">
+    <div class="lock-icon-big">🔒</div>
+    <h2 class="lock-title">Records Room — Elite Tier Required</h2>
+    <p class="lock-sub">The Records Room contains 12 court-ready document templates, a quick-fill form assistant, and the full filing tracking system. Elite access and above unlocks the complete vault.</p>
+    <div class="lock-tiers">
+      <div class="lock-tier">
+        <div class="lt-name">Elite</div>
+        <div class="lt-price">$999<span>/mo</span></div>
+      </div>
+      <div class="lock-tier sovereign-tier">
+        <div class="lt-name">Sovereign</div>
+        <div class="lt-price">$1,499<span>/mo</span></div>
+      </div>
+    </div>
+    <a href="mailto:info@ccldr.net?subject=Elite%20Tier%20Signup%20—%20Records%20Room%20Access" class="lock-cta">Upgrade to Elite</a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT (shown for elite+) -->
+<div class="main-content" id="main-content" style="display:none">
+
+  <!-- SECTION 1: DOCUMENT VAULT -->
+  <div class="section-block gold-accent">
+    <div class="sb-header">
+      <span class="sb-icon">📁</span>
+      <div>
+        <div class="sb-title">Document Vault <span class="sb-tier">Elite+</span></div>
+        <div class="sb-sub">12 court-ready templates. Download, customize, and file. All documents are templates only — not legal advice.</div>
+      </div>
+    </div>
+
+    <div class="vault-grid">
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Statement of Claim (Superior Court)</div></div>
+        <div class="vd-desc">Initiates a civil action. Sets out parties, material facts, and relief sought against the defendant.</div>
+        <div class="vd-court">Ontario Superior Court of Justice — Form 14A</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('soc')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Writ of Seizure and Sale (Form 60A)</div></div>
+        <div class="vd-desc">Enforcement document directing the Sheriff to seize and sell debtor's property to satisfy a judgment.</div>
+        <div class="vd-court">Ontario Superior Court — Enforcement</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('writ')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Notice of Examination</div></div>
+        <div class="vd-desc">Requires a debtor or witness to appear for examination under oath regarding assets or relevant facts.</div>
+        <div class="vd-court">Ontario — Form 34A / 31A</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('exam')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Certificate of Pending Litigation</div></div>
+        <div class="vd-desc">Registers a claim against real property in the land titles system, preventing sale during litigation.</div>
+        <div class="vd-court">Ontario Superior Court — Land Titles Act</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('cpl')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Sheriff Instruction Letter</div></div>
+        <div class="vd-desc">Written instructions to the Sheriff's office directing enforcement of a Writ of Seizure and Sale.</div>
+        <div class="vd-court">Ontario Sheriff's Office — All Jurisdictions</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('sheriff')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Affidavit of Service</div></div>
+        <div class="vd-desc">Sworn statement confirming documents were served on a party, detailing method, date, and server identity.</div>
+        <div class="vd-court">All Ontario Courts — Rule 16</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('aos')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Notice of Motion</div></div>
+        <div class="vd-desc">Formally requests a court order on a specific issue. Sets out the order sought, grounds, and evidence relied upon.</div>
+        <div class="vd-court">Ontario Superior Court — Rule 37</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('nom')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Factum Template</div></div>
+        <div class="vd-desc">Written argument containing facts, law, and argument organized for motion or appeal hearings.</div>
+        <div class="vd-court">Ontario Court of Appeal / Superior Court</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('factum')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Demand Letter (Pre-Litigation)</div></div>
+        <div class="vd-desc">Formal written demand requiring action or payment before legal proceedings are commenced.</div>
+        <div class="vd-court">Pre-litigation — All Jurisdictions</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('demand')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Freedom of Information Request</div></div>
+        <div class="vd-desc">Formal request under FIPPA / ATI Act for government records, reports, communications, or data held by public bodies.</div>
+        <div class="vd-court">Federal — ATI Act / Provincial — FIPPA</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('foi')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Response to Request for Documents</div></div>
+        <div class="vd-desc">Formal response to documentary discovery demands, identifying produced documents and any privilege claims.</div>
+        <div class="vd-court">Ontario — Rule 30 / Federal Court Rules</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('rrd')">Download Template</button>
+      </div>
+
+      <div class="vault-doc">
+        <div class="vd-header"><div class="vd-name">Bill of Costs</div></div>
+        <div class="vd-desc">Itemized statement of legal costs claimed following a successful proceeding, submitted for assessment.</div>
+        <div class="vd-court">All Ontario Courts — Tariff A/B Assessment</div>
+        <button class="vd-btn" onclick="downloadVaultDoc('boc')">Download Template</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 2: FORM FILL ASSISTANT -->
+  <div class="section-block purple-accent">
+    <div class="sb-header">
+      <span class="sb-icon">✏️</span>
+      <div>
+        <div class="sb-title">Quick Fill Assistant <span class="sb-tier">Elite+</span></div>
+        <div class="sb-sub">Enter your details once — generate a pre-populated document template ready to review and file.</div>
+      </div>
+    </div>
+
+    <div class="fill-grid">
+      <div class="fill-field">
+        <label class="fill-label" for="ff-name">Your Full Legal Name</label>
+        <input type="text" id="ff-name" class="fill-input" placeholder="Derek Francisco">
+      </div>
+      <div class="fill-field">
+        <label class="fill-label" for="ff-addr">Your Address</label>
+        <input type="text" id="ff-addr" class="fill-input" placeholder="123 Main Street, City, Province, Postal Code">
+      </div>
+      <div class="fill-field">
+        <label class="fill-label" for="ff-case">Case Name</label>
+        <input type="text" id="ff-case" class="fill-input" placeholder="Francisco v. Smith">
+      </div>
+      <div class="fill-field">
+        <label class="fill-label" for="ff-file">Court File Number</label>
+        <input type="text" id="ff-file" class="fill-input" placeholder="CV-26-00123456-0000">
+      </div>
+      <div class="fill-field">
+        <label class="fill-label" for="ff-date">Document Date</label>
+        <input type="date" id="ff-date" class="fill-input" style="color-scheme:dark">
+      </div>
+      <div class="fill-field">
+        <label class="fill-label" for="ff-court">Court</label>
+        <input type="text" id="ff-court" class="fill-input" placeholder="Ontario Superior Court of Justice">
+      </div>
+    </div>
+
+    <button class="fill-btn" onclick="applyFillData()">Apply to Document Template →</button>
+
+    <div class="fill-result" id="fill-result">
+      <textarea class="fill-textarea" id="fill-output" readonly></textarea>
+      <button class="dl-filled-btn" onclick="downloadFilledDoc()">Download Filled Document (.txt)</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: FILING TRACKING TABLE (Sovereign+) -->
+  <div class="section-block" id="tracker-section">
+    <div class="sb-header">
+      <span class="sb-icon">📊</span>
+      <div>
+        <div class="sb-title">Filing Tracker <span class="sb-tier sovereign">Sovereign+</span></div>
+        <div class="sb-sub">Track every document filed. Date, court, status, and notes — saved to this browser automatically.</div>
+      </div>
+    </div>
+    <div id="tracker-content"></div>
+  </div>
+
+</div><!-- /main-content -->
+
+<!-- UPGRADE MODAL -->
+<div class="modal-overlay" id="upgrade-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('upgrade-modal').classList.remove('open')">✕</button>
+    <div class="modal-icon">🗄️</div>
+    <div class="modal-title">Upgrade Required</div>
+    <p class="modal-sub">The Records Room requires Elite tier or above. The Filing Tracker requires Sovereign tier.</p>
+    <a href="mailto:info@ccldr.net?subject=Elite%20Tier%20Signup%20—%20Records%20Room" class="modal-btn modal-elite">Elite — $999/mo</a>
+    <a href="mailto:info@ccldr.net?subject=Sovereign%20Tier%20Inquiry%20—%20Records%20Room" class="modal-btn modal-sov">Sovereign — $1,499/mo</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">CCLDR.NET</div>
+  <div class="footer-doc">Doc WeedLaw | Cannabis Legal Defense &amp; Education Research</div>
+  <div class="footer-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="clerks-office.html">Clerk's Office</a>
+    <a href="library.html">Library</a>
+    <a href="boardroom.html">Boardroom</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="mailto:info@ccldr.net">info@ccldr.net</a>
+  </div>
+  <div class="footer-copy">© 2026 CCLDR.NET | Doc WeedLaw | ccldr.net — Educational platform. Not legal advice. Templates for informational purposes only.</div>
+</footer>
+
+<script type="module" src="/membership.js"></script>
+<script>
+// ─── TIER SYSTEM (server-verified via Supabase — see membership.js) ────────
+const TIER_ORDER = ['free','warrior','professional','elite','sovereign'];
+let ccldrVerifiedTier = 'free';
+
+function checkTier() {
+  return ccldrVerifiedTier;
+}
+
+function tierLevel(t) {
+  const idx = TIER_ORDER.indexOf(t);
+  return idx === -1 ? 0 : idx;
+}
+
+function tierGate(required) {
+  const current = checkTier();
+  if (tierLevel(current) >= tierLevel(required)) return true;
+  document.getElementById('upgrade-modal').classList.add('open');
+  return false;
+}
+
+function initAccess() {
+  const tier = checkTier();
+  const hasElite = tierLevel(tier) >= tierLevel('elite');
+  const hasSovereign = tierLevel(tier) >= tierLevel('sovereign');
+
+  document.getElementById('main-content').style.display = hasElite ? 'block' : 'none';
+  const lockCard = document.getElementById('lock-card');
+  lockCard.classList.toggle('visible', !hasElite);
+
+  if (hasElite) {
+    renderTrackerSection(hasSovereign);
+  }
+}
+
+// ─── DOCUMENT VAULT ────────────────────────────────────────────────────────
+const VAULT_DOCS = {
+  soc: {
+    filename: 'CCLDR_Statement_of_Claim_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+B E T W E E N:
+
+[PLAINTIFF FULL LEGAL NAME]
+                                                          Plaintiff
+
+— and —
+
+[DEFENDANT FULL LEGAL NAME]
+                                                          Defendant
+
+STATEMENT OF CLAIM
+
+TO THE DEFENDANT:
+
+A LEGAL PROCEEDING HAS BEEN COMMENCED AGAINST YOU by the Plaintiff.
+The claim made against you is set out in the following pages.
+
+IF YOU WISH TO DEFEND THIS PROCEEDING, you or an Ontario lawyer acting for
+you must prepare a Statement of Defence in Form 18A prescribed by the Rules
+of Civil Procedure, serve it on the Plaintiff's lawyer or, where the Plaintiff
+does not have a lawyer, serve it on the Plaintiff, and file it, with proof of
+service, in this court office, WITHIN TWENTY DAYS after this Statement of Claim
+is served on you, if you are served in Ontario.
+
+If you are served in another province or territory of Canada or in the United
+States of America, the period for serving and filing your Statement of Defence
+is forty days. If you are served outside Canada and the United States of America,
+the period is sixty days.
+
+Instead of serving and filing a Statement of Defence, you may serve and file a
+Notice of Intent to Defend in Form 18B prescribed by the Rules of Civil Procedure.
+This will entitle you to ten more days within which to serve and file your
+Statement of Defence.
+
+IF YOU FAIL TO DEFEND THIS PROCEEDING, JUDGMENT MAY BE GIVEN AGAINST YOU IN
+YOUR ABSENCE AND WITHOUT FURTHER NOTICE TO YOU. IF YOU WISH TO DEFEND THIS
+PROCEEDING BUT ARE UNABLE TO PAY LEGAL FEES, LEGAL AID MAY BE AVAILABLE TO YOU
+BY CONTACTING A LOCAL LEGAL AID OFFICE.
+
+Date: _______________________
+Issued by: __________________________
+             Local Registrar
+Address of
+court office: __________________________
+
+TO: [DEFENDANT NAME]
+    [DEFENDANT ADDRESS]
+
+═══════════════════════════════════════════════════════
+
+CLAIM
+
+1. The Plaintiff claims:
+
+   (a) [Primary monetary relief, e.g.: Damages in the amount of $____________];
+   (b) [Pre-judgment interest pursuant to s. 128 of the Courts of Justice Act, R.S.O. 1990, c. C.43];
+   (c) [Post-judgment interest];
+   (d) [Costs of this proceeding on a substantial indemnity basis]; and
+   (e) [Such further and other relief as this Honourable Court may deem just].
+
+2. PARTIES
+
+2.1 The Plaintiff, [PLAINTIFF NAME], is an individual residing at [ADDRESS].
+
+2.2 The Defendant, [DEFENDANT NAME], is [describe defendant — individual/corporation/government actor] with an address for service at [ADDRESS].
+
+3. MATERIAL FACTS
+
+3.1 [Paragraph 1 — Date, parties, and what happened. Be specific.]
+
+3.2 [Paragraph 2 — Continue factual narrative chronologically.]
+
+3.3 [Paragraph 3 — Continue.]
+
+3.4 [Add as many paragraphs as needed. Each paragraph = one fact.]
+
+4. LEGAL BASIS
+
+4.1 The Defendant's conduct constitutes [breach of contract / negligence / Charter violation / other cause of action] because [brief explanation].
+
+4.2 [If Charter case]: The Defendant's conduct violated the Plaintiff's rights under the Canadian Charter of Rights and Freedoms, specifically section(s) [7 / 8 / 10(b) / 15 / other].
+
+4.3 The Plaintiff has suffered damages as a direct result of the Defendant's conduct including [describe damages].
+
+5. RELIEF
+
+For the foregoing reasons, the Plaintiff respectfully requests judgment in the terms set out in paragraph 1 above.
+
+Date: _______________________
+
+_______________________________
+[PLAINTIFF NAME — SELF-REPRESENTED]
+[ADDRESS]
+[PHONE]
+[EMAIL]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  writ: {
+    filename: 'CCLDR_Writ_Seizure_Sale_Form60A_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[CREDITOR FULL LEGAL NAME]
+                                                          Creditor
+
+— and —
+
+[DEBTOR FULL LEGAL NAME]
+                                                          Debtor
+
+WRIT OF SEIZURE AND SALE
+(Form 60A — Rule 60.07)
+
+TO THE SHERIFF OF THE COUNTY/DISTRICT OF [NAME OF COUNTY]:
+
+WHEREAS on the _____ day of _____________, 20___, the Creditor obtained
+judgment against the Debtor in the Ontario Superior Court of Justice for:
+
+Principal amount:      $_______________
+Pre-judgment interest: $_______________
+Costs:                 $_______________
+─────────────────────
+TOTAL:                 $_______________
+
+AND WHEREAS the total remains unpaid;
+
+YOU ARE DIRECTED to seize and sell the personal property of the Debtor and if
+necessary direct and levy upon the real property of the Debtor within your
+jurisdiction, and to realize from the seizure and sale an amount sufficient to
+satisfy this judgment together with interest and your fees and expenses in
+connection with the enforcement of this writ.
+
+YOU ARE DIRECTED to pay the proceeds of the sale to the Creditor or as the
+Creditor directs to the extent necessary to satisfy this writ, and to pay the
+balance, if any, to the Debtor.
+
+WARNING: THIS WRIT IS SUBJECT TO A PRIORITY OF CLAIMS as set out in the
+Creditors' Relief Act, 2010.
+
+Issued at: _______________
+Date of Issue: _______________
+
+_______________________________
+Local Registrar
+
+Creditor Information:
+Name: [CREDITOR NAME]
+Address for Service: [ADDRESS]
+Telephone: [PHONE]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  exam: {
+    filename: 'CCLDR_Notice_of_Examination_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[EXAMINING PARTY]
+                                                          [Creditor / Plaintiff]
+— and —
+
+[PERSON TO BE EXAMINED]
+                                                          [Debtor / Witness]
+
+NOTICE OF EXAMINATION
+(Rule 34.04 / Rule 60.18)
+
+TO: [NAME OF PERSON TO BE EXAMINED]
+    [ADDRESS]
+
+YOU ARE REQUIRED to attend before an official examiner at:
+
+Place:    _______________________________________________
+Address:  _______________________________________________
+Date:     _______________________________________________
+Time:     _______________________________________________
+
+FOR THE PURPOSE OF: [Select applicable]
+□ Examination in Aid of Execution (Rule 60.18) — regarding your assets,
+  income, and means to satisfy the judgment against you
+□ Examination for Discovery (Rule 31) — regarding matters at issue in
+  this proceeding
+□ Examination of a Witness (Rule 36)
+
+YOU ARE REQUIRED to bring with you and produce at the examination the following
+documents:
+
+1. All bank statements for accounts in your name or which you control for the
+   past 24 months.
+2. All financial statements, tax returns (T1/T2), and notices of assessment
+   for the past 3 taxation years.
+3. All documents relating to your ownership or interest in real property.
+4. [Additional specific documents]
+
+IF YOU FAIL TO ATTEND, a warrant may be issued for your arrest.
+
+Date: _______________
+
+_______________________________
+[NAME OF PARTY OR LAWYER]
+[ADDRESS]
+[TELEPHONE]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  cpl: {
+    filename: 'CCLDR_Certificate_Pending_Litigation_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[PLAINTIFF / APPLICANT]
+                                                          Plaintiff
+— and —
+
+[DEFENDANT / RESPONDENT]
+                                                          Defendant
+
+CERTIFICATE OF PENDING LITIGATION
+(Land Titles Act, R.S.O. 1990, c. L.5, s. 103 / Rule 42)
+
+I, [NAME], the Local Registrar of the Ontario Superior Court of Justice at
+[LOCATION], certify that in this proceeding, there is a claim for an interest
+in the following land:
+
+PROPERTY DESCRIPTION:
+PIN: _______________________________________________
+Municipal Address: _________________________________
+Legal Description: _________________________________
+Registered Owner: __________________________________
+Land Titles Office: ________________________________
+
+THE CLAIM IN THIS PROCEEDING relates to [nature of interest, e.g.: a
+declaration that the Plaintiff has an equitable interest / constructive trust /
+beneficial ownership in the above-described lands].
+
+NOTE: This Certificate of Pending Litigation is not an indication that the
+Plaintiff will succeed in this proceeding. It is notice only that a claim is
+pending that may affect title to the land described above.
+
+Issued at: _______________
+Date: _______________
+
+_______________________________
+Local Registrar
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  sheriff: {
+    filename: 'CCLDR_Sheriff_Instruction_Letter_Template.txt',
+    content: `[DATE]
+
+Sheriff's Office
+[COUNTY / DISTRICT] Sheriff
+[ADDRESS]
+
+Dear Sheriff,
+
+RE: Writ of Seizure and Sale — [CASE NAME]
+    Court File No.: _______________
+    Writ No. (if issued): _______________
+
+I am the judgment creditor in the above-noted matter and am writing to provide
+instructions for enforcement of the Writ of Seizure and Sale filed with your office.
+
+DEBTOR INFORMATION:
+Full Legal Name:    _______________________________________________
+Known Addresses:    _______________________________________________
+                   _______________________________________________
+Date of Birth:     _______________ (if known)
+Description:       _______________________________________________
+Employer (if known): ___________________________________________
+
+JUDGMENT DETAILS:
+Judgment Amount:      $_______________
+Judgment Date:        _______________
+Outstanding Balance:  $_______________
+Interest Rate:        _______________ %
+Court:               Ontario Superior Court of Justice
+
+ASSETS TO BE SEIZED (if known):
+Real Property:    [Address/PIN if applicable]
+Vehicles:         [Make / Model / Year / Plate Number]
+Bank Accounts:    [Institution name — branch if known]
+Other Assets:     [Describe]
+
+INSTRUCTIONS:
+Please proceed with seizure and enforcement at your earliest opportunity.
+Please contact me immediately upon seizure or if you require any further
+information to proceed.
+
+I authorize you to proceed with all necessary steps including, where applicable,
+attendance at the debtor's residence or business premises.
+
+Enclosed herewith:
+□ Copy of the Writ of Seizure and Sale (Form 60A)
+□ Payment for Sheriff's fees in the amount of $_______________
+□ [Other enclosures]
+
+Yours truly,
+
+_______________________________
+[YOUR NAME]
+[ADDRESS]
+[TELEPHONE]
+[EMAIL]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  aos: {
+    filename: 'CCLDR_Affidavit_of_Service_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[APPLICANT / PLAINTIFF]
+                                                          [Applicant / Plaintiff]
+— and —
+
+[RESPONDENT / DEFENDANT]
+                                                          [Respondent / Defendant]
+
+AFFIDAVIT OF SERVICE
+
+I, [FULL NAME OF SERVER], of the [City/Town] of [CITY], in the Province of
+Ontario, MAKE OATH AND SAY (or AFFIRM):
+
+1. On the _____ day of _____________, 20___, I served [NAME OF PERSON SERVED]
+   with the [DOCUMENT SERVED, e.g.: Statement of Claim / Notice of Motion /
+   Affidavit / Other] by [method of service]:
+
+   □ Personal service — I personally handed the documents to the person.
+   □ Leaving documents at place of residence with [adult person, describe].
+   □ By courier to [address] — tracking confirmation: _______________
+   □ By email to [email address] — with consent / per court order
+   □ By regular mail to [address]
+   □ Other: _______________
+
+2. The documents were served at the following location:
+   [Full address where service was effected]
+
+3. I identified the person served by [describe how you identified them, e.g.:
+   they identified themselves / I recognized them / other].
+
+4. The person's reaction upon service was [calm / refused to take / other].
+
+5. I am [over the age of 18 years / a process server / a lawyer / a court
+   officer] and am not a party to this proceeding.
+
+SWORN (or AFFIRMED) before me at the )
+[City] of [CITY], in the Province    )
+of Ontario, on the ___ day of        )  ________________________________
+_____________, 20___                 )  Signature of Deponent
+                                     )
+________________________________     )  [FULL NAME — PRINT]
+Commissioner for Taking Affidavits   )
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  nom: {
+    filename: 'CCLDR_Notice_of_Motion_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[MOVING PARTY]
+                                                          [Applicant / Plaintiff]
+— and —
+
+[RESPONDING PARTY]
+                                                          [Respondent / Defendant]
+
+NOTICE OF MOTION
+
+THE MOVING PARTY, [YOUR NAME], will make a motion to the court on:
+
+Date:    _______________________________________________
+Time:    _______________________________________________
+Place:   _______________________________________________
+Before:  A Judge of the Ontario Superior Court of Justice
+
+PROPOSED METHOD OF HEARING:
+□ In writing (no personal appearance required)
+□ In person
+□ By video conference
+□ By telephone conference
+
+THE MOTION IS FOR:
+
+1. [State the specific order sought. Be precise. E.g.: An Order excluding
+   evidence obtained in violation of section 8 of the Canadian Charter of
+   Rights and Freedoms, pursuant to section 24(2) of the Charter];
+
+2. [Additional order, if any];
+
+3. Costs of this motion; and
+
+4. Such further and other relief as this Honourable Court deems just.
+
+THE GROUNDS FOR THE MOTION ARE:
+
+1. [Ground 1 — brief statement of legal basis];
+2. [Ground 2];
+3. [Ground 3];
+4. The provisions of the [applicable Act, Rule, or Charter section]; and
+5. Such further grounds as counsel / the moving party may advise.
+
+THE FOLLOWING DOCUMENTARY EVIDENCE will be used at the hearing of the motion:
+
+1. Affidavit of [DEPONENT NAME], sworn [DATE];
+2. [Other evidence to be relied upon];
+3. [Exhibit list if applicable].
+
+Date: _______________
+
+_______________________________
+[YOUR NAME — SELF-REPRESENTED]
+[ADDRESS]
+[TELEPHONE]
+[EMAIL]
+
+TO: [NAME OF OPPOSING PARTY OR COUNSEL]
+    [ADDRESS]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  factum: {
+    filename: 'CCLDR_Factum_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+[OR: COURT OF APPEAL FOR ONTARIO]
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[APPELLANT / APPLICANT / MOVING PARTY]
+                                                          Appellant / Applicant
+— and —
+
+[RESPONDENT / RESPONDING PARTY]
+                                                          Respondent
+
+FACTUM OF THE [APPELLANT / APPLICANT / MOVING PARTY]
+
+(Rule 61.11 — Court of Appeal / Rule 37.10 — Motion Factum)
+
+─────────────────────────────────────────────────────────────
+
+PART I — OVERVIEW
+
+[2–4 paragraph summary of the entire case. What is this proceeding about?
+What is the core issue? What do you want the Court to do? Think of this as
+your executive summary — if the judge reads only this section, they should
+understand your entire position.]
+
+─────────────────────────────────────────────────────────────
+
+PART II — STATEMENT OF FACTS
+
+[Numbered paragraphs. Each paragraph states one fact. Reference the evidence
+for each fact: (Affidavit of [Name], para. X / Exhibit Y / Transcript p. Z).]
+
+1. [Fact 1 — with evidence reference].
+
+2. [Fact 2 — with evidence reference].
+
+3. [Continue numerically. Do not argue here — only facts.]
+
+─────────────────────────────────────────────────────────────
+
+PART III — ISSUES
+
+The issues on this [motion / appeal] are:
+
+A. [Issue 1 — frame as a question: "Did the trial judge err in...?"]
+
+B. [Issue 2]
+
+C. [Issue 3]
+
+─────────────────────────────────────────────────────────────
+
+PART IV — ARGUMENT
+
+A. [ISSUE 1 — restate the issue as a heading]
+
+[State your position on Issue 1 in the first sentence. Then argue: law first,
+then application to facts.]
+
+The applicable legal standard is [state the test]. In [Case Name, citation],
+the [Court] held that "[exact quote from the decision]."
+
+Applying this standard to the facts, [explain why the law favors your position
+given the facts you established in Part II].
+
+B. [ISSUE 2]
+
+[Same structure: position → law → application]
+
+C. [ISSUE 3]
+
+[Same structure]
+
+─────────────────────────────────────────────────────────────
+
+PART V — ORDER REQUESTED
+
+The [Appellant / Applicant / Moving Party] respectfully requests that this
+Honourable Court:
+
+1. [Exact order requested — be precise];
+2. [Additional relief];
+3. Costs of this [motion / appeal] on a [partial / substantial] indemnity basis.
+
+─────────────────────────────────────────────────────────────
+
+PART VI — TABLE OF AUTHORITIES
+
+Cases:
+1. [Case Name], [Citation] — [page(s) in this factum where cited]
+2. [Case Name], [Citation] — [page(s)]
+
+Statutes:
+1. [Statute Name], [S.O./R.S.O./R.S.C. year, c. X, s. X]
+
+─────────────────────────────────────────────────────────────
+
+ALL OF WHICH IS RESPECTFULLY SUBMITTED
+
+Date: _______________
+
+_______________________________
+[YOUR NAME — SELF-REPRESENTED]
+[ADDRESS]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  demand: {
+    filename: 'CCLDR_Demand_Letter_Template.txt',
+    content: `[YOUR NAME]
+[YOUR ADDRESS]
+[CITY, PROVINCE, POSTAL CODE]
+[DATE]
+
+WITHOUT PREJUDICE
+
+[RECIPIENT NAME]
+[RECIPIENT ADDRESS]
+
+Dear [Name / Sir / Madam]:
+
+RE: FORMAL DEMAND — [Brief description of the matter]
+
+I write to you on behalf of myself as a self-represented party to formally
+demand [what you are demanding, e.g.: payment of the sum of $X / cessation
+of conduct / return of property].
+
+BACKGROUND
+
+[2–3 paragraphs describing the facts. Be factual, precise, and chronological.
+Include dates, amounts, and specific acts or omissions you are complaining about.]
+
+LEGAL POSITION
+
+Your conduct constitutes [breach of contract / negligence / Charter violation /
+tort / statutory violation / other cause of action] for the following reasons:
+
+1. [Legal reason 1]
+2. [Legal reason 2]
+3. [Legal reason 3]
+
+DEMAND
+
+TAKE NOTICE that I hereby demand that you:
+
+1. [Specific demand 1, e.g.: pay to me the sum of $_____________ within 10 days];
+2. [Specific demand 2, if any];
+3. [Specific demand 3, if any].
+
+DEADLINE FOR RESPONSE: _________________________ [give a specific date —
+typically 10–14 days from this letter's date]
+
+CONSEQUENCES OF NON-COMPLIANCE
+
+If I do not receive [payment / confirmation of compliance] by the above deadline,
+I intend to commence legal proceedings against you without further notice, seeking:
+
+- The amount demanded plus interest;
+- Costs of the proceedings; and
+- Such further relief as the court may grant.
+
+Litigation is expensive and time-consuming for all parties. I encourage you to
+resolve this matter without court involvement.
+
+GOVERNING THIS LETTER
+
+This letter is written without prejudice to all of my rights and remedies,
+all of which are expressly reserved.
+
+Yours truly,
+
+_______________________________
+[YOUR NAME]
+[EMAIL]
+[TELEPHONE]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  foi: {
+    filename: 'CCLDR_FOI_ATI_Request_Template.txt',
+    content: `FREEDOM OF INFORMATION REQUEST
+[FIPPA — Freedom of Information and Protection of Privacy Act, R.S.O. 1990, c. F.31]
+[OR: Access to Information Act, R.S.C. 1985, c. A-1 (Federal)]
+
+[DATE]
+
+Freedom of Information Coordinator
+[NAME OF INSTITUTION / GOVERNMENT BODY]
+[ADDRESS]
+
+Dear Freedom of Information Coordinator:
+
+Pursuant to [the Freedom of Information and Protection of Privacy Act (Ontario)
+/ the Access to Information Act (Canada)], I hereby request access to the
+following records:
+
+REQUESTER INFORMATION:
+Name:    _______________________________________________
+Address: _______________________________________________
+Phone:   _______________________________________________
+Email:   _______________________________________________
+
+RECORDS REQUESTED:
+
+I request all records including but not limited to: documents, reports, emails,
+correspondence, notes, memoranda, databases, logs, recordings, and any other
+records in any format, relating to the following:
+
+1. [Specific description of records sought — be as precise as possible.
+   Include: subject matter, date range, relevant file numbers, names of
+   individuals involved if known.]
+
+2. [Second category of records, if applicable]
+
+3. All records of communications between [Department A] and [Department B]
+   regarding [subject matter] from [date] to [date].
+
+4. All internal policies, procedures, directives, or guidelines regarding
+   [subject matter].
+
+DATE RANGE: From _____________ to _____________
+
+CLARIFICATION: If any portion of a record is exempt from disclosure, I request
+that the non-exempt portions be severed and disclosed.
+
+FEES: Please waive any applicable fee, as this request is made [in the public
+interest / by an individual with limited financial means / for research or
+educational purposes]. If you do not waive the fee, please notify me of the
+estimated fee before proceeding.
+
+TIMELINE: I understand that you are required to respond within [30 days (Ontario)
+/ 30 days (Federal)] of receipt of this request.
+
+Please confirm receipt of this request and provide a file number.
+
+Yours truly,
+
+_______________________________
+[YOUR NAME]
+[SIGNATURE]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  rrd: {
+    filename: 'CCLDR_Response_Request_Documents_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[PRODUCING PARTY]
+                                                          [Plaintiff / Defendant]
+— and —
+
+[REQUESTING PARTY]
+                                                          [Defendant / Plaintiff]
+
+RESPONSE TO REQUEST FOR DOCUMENTS
+(Rule 30.03 — Affidavit of Documents)
+
+I, [YOUR NAME], of the [City] of [CITY], in the Province of Ontario,
+MAKE OATH AND SAY (or AFFIRM):
+
+1. I am the [Plaintiff / Defendant] in this proceeding and as such have
+   knowledge of the matters set out herein.
+
+SCHEDULE A — DOCUMENTS IN MY POSSESSION, CONTROL, OR POWER
+(that I am not claiming privilege over and will be producing)
+
+[List each document with:
+ - Doc. No.
+ - Date of document
+ - Type of document
+ - Brief description
+ - Current location]
+
+Example:
+Doc. 1 | 2025-03-15 | Email | Email from [Name] to [Name] re: [Subject] | My files
+Doc. 2 | 2025-04-01 | Letter | Demand letter from [Name] | My files
+
+SCHEDULE B — DOCUMENTS IN MY POSSESSION, CONTROL, OR POWER
+(that I am claiming privilege over and will NOT be producing)
+
+[List with privilege basis claimed: solicitor-client privilege / litigation privilege / other]
+
+SCHEDULE C — DOCUMENTS THAT WERE IN MY POSSESSION BUT ARE NO LONGER
+
+[List with description of document, date it ceased to be in your possession,
+and reason — e.g.: destroyed in ordinary course / lost / given to another party]
+
+2. I am not aware of any documents in my possession, control, or power
+   relating to this proceeding other than those listed above.
+
+SWORN (or AFFIRMED) before me at  )
+the [City] of [CITY], Ontario,    )
+on ________________________       ) ________________________________
+                                  )  [YOUR NAME — PRINT & SIGN]
+________________________________  )
+Commissioner for Taking Affidavits)
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  },
+  boc: {
+    filename: 'CCLDR_Bill_of_Costs_Template.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+Court File No.: _______________
+
+B E T W E E N:
+
+[YOUR NAME]
+                                                          [Successful Party]
+— and —
+
+[OPPOSING PARTY]
+                                                          [Unsuccessful Party]
+
+BILL OF COSTS
+
+Prepared pursuant to Rule 57 of the Rules of Civil Procedure and
+Tariff A (Costs on Motions and Applications) / Tariff B (Partial Indemnity)
+
+I. PARTIAL INDEMNITY COSTS
+
+A. PREPARATION AND FILING
+
+Item                                    Hours    Rate/hr    Amount
+──────────────────────────────────────────────────────────────────
+Initial pleadings / application         ____     $______    $______
+Research                                ____     $______    $______
+Document review                         ____     $______    $______
+Correspondence                          ____     $______    $______
+Affidavit preparation                   ____     $______    $______
+Factum / argument preparation           ____     $______    $______
+
+B. ATTENDANCE
+
+Item                                    Hours    Rate/hr    Amount
+──────────────────────────────────────────────────────────────────
+Case conference                         ____     $______    $______
+Motion hearing                          ____     $______    $______
+[Trial / Application / Examination]     ____     $______    $______
+
+C. DISBURSEMENTS
+
+Item                                                        Amount
+──────────────────────────────────────────────────────────────────
+Court filing fees                                           $______
+Service of process fees                                     $______
+Photocopying / printing ([___] pages @ $0.20/page)         $______
+Courier / postage                                           $______
+[Expert witness fee if applicable]                         $______
+[Transcript costs]                                          $______
+[Other disbursements — specify]                            $______
+
+─────────────────────────────────────────────────────────────────
+SUBTOTAL — Fees:                                           $______
+SUBTOTAL — Disbursements:                                  $______
+HST on Fees (13%):                                         $______
+─────────────────────────────────────────────────────────────────
+TOTAL CLAIMED:                                             $______
+═════════════════════════════════════════════════════════════════
+
+II. SUBSTANTIAL INDEMNITY (if applicable — see below)
+
+[Note: Substantial indemnity costs (approximately 1.5x partial indemnity)
+are awarded in cases of reprehensible conduct, breach of an undertaking to
+the court, or as a contractual entitlement.]
+
+III. CERTIFICATE OF COUNSEL / SELF-REPRESENTED PARTY
+
+I, [YOUR NAME], certify that this Bill of Costs contains only those items
+that are fair and reasonable, that the disbursements have been made or
+are required to be made, and that the services shown were actually performed.
+
+Date: _______________
+
+_______________________________
+[YOUR NAME]
+
+═══════════════════════════════════════════════════════
+CCLDR Template — ccldr.net | Not legal advice. Consult a licensed lawyer.`
+  }
+};
+
+function downloadVaultDoc(key) {
+  const doc = VAULT_DOCS[key];
+  if (!doc) return;
+  const blob = new Blob([doc.content], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = doc.filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── DEREK'S CASE DOCUMENTS ────────────────────────────────────────────────
+const DEREK_DOCS = {
+  soc_agcan: {
+    filename: 'Francisco_v_AG_Canada_Statement_of_Claim_June2026.txt',
+    content: `FEDERAL COURT OF CANADA
+
+File No.: _______________ (to be assigned)
+
+B E T W E E N:
+
+DEREK FRANCISCO
+                                                          Plaintiff
+
+— and —
+
+ATTORNEY GENERAL OF CANADA
+                                                          Defendant
+
+STATEMENT OF CLAIM — CONSTITUTIONAL CHALLENGE
+Filed: June 2026
+
+[This document serves as public notice that Derek Francisco has filed a
+constitutional challenge against the Attorney General of Canada.
+
+The claim engages the following provisions of the Canadian Charter of Rights
+and Freedoms:
+- Section 7: Life, Liberty, and Security of the Person
+- Section 8: Unreasonable Search and Seizure
+- Section 15: Equality Rights
+
+Details of the claim are set out in the formal filed document at the
+Federal Court Registry.
+
+This template is for reference purposes. The filed version is the authoritative
+document of record.]
+
+────────────────────────────────────────────────────────
+CCLDR — ccldr.net | Public record case information.
+Not legal advice. Derek Francisco is self-represented.`
+  },
+  foi_agcan: {
+    filename: 'Francisco_v_AG_Canada_FOI_Request_June2026.txt',
+    content: `FREEDOM OF INFORMATION REQUEST — ACTIVE
+
+Submitted By: Derek Francisco
+Filed:        June 2026
+Status:       Response Pending
+
+Institution:  [Federal Government Body]
+Subject:      [Records relating to Francisco v. AG Canada proceedings
+               and any internal government files, communications, or
+               records pertaining to Derek Francisco]
+
+Pursuant to the Access to Information Act, R.S.C. 1985, c. A-1.
+
+This FOI request is active. Response deadline per statutory timeline.
+If no response is received within 30 days, the matter will be escalated
+to the Information Commissioner of Canada.
+
+────────────────────────────────────────────────────────
+CCLDR — ccldr.net | Public record. Not legal advice.`
+  },
+  judgment_denby: {
+    filename: 'Francisco_v_Denby_Default_Judgment_1M.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+B E T W E E N:
+
+DEREK FRANCISCO
+                                                          Plaintiff
+— and —
+
+DENBY [et al.]
+                                                          Defendant
+
+DEFAULT JUDGMENT
+
+THIS ACTION was heard on [DATE] in the absence of the Defendant(s).
+ON READING the Statement of Claim and proof of service, and hearing
+the submissions of the Plaintiff:
+
+IT IS ORDERED AND ADJUDGED that the Plaintiff recover from the Defendant
+the sum of ONE MILLION DOLLARS ($1,000,000.00) together with costs and
+interest.
+
+────────────────────────────────────────────────────────
+Judgment Amount: $1,000,000.00
+Status:          Judgment Obtained — Enforcement Active
+Enforcement:     Writ of Seizure and Sale to be filed
+────────────────────────────────────────────────────────
+
+CCLDR — ccldr.net | Public record. Not legal advice.`
+  },
+  claim_denby: {
+    filename: 'Francisco_v_Denby_New_Claim_June17_Deadline.txt',
+    content: `ONTARIO
+SUPERIOR COURT OF JUSTICE
+
+B E T W E E N:
+
+DEREK FRANCISCO
+                                                          Plaintiff
+— and —
+
+DENBY [et al.]
+                                                          Defendant
+
+NEW CLAIM — FILING DEADLINE: JUNE 17, 2026
+
+URGENT NOTICE: This new claim must be filed at the Ontario Superior Court
+of Justice registry on or before JUNE 17, 2026.
+
+Failure to file by this deadline may result in limitation period issues
+under the Limitations Act, 2002, S.O. 2002, c. 24, Sched. B.
+
+Nature of New Claim: [Additional causes of action arising from the
+conduct of Denby and related parties.]
+
+Steps Required Before June 17, 2026:
+□ Finalize Statement of Claim
+□ File at Superior Court Registry — pay filing fee
+□ Obtain court-issued copy with court seal
+□ Serve on all defendants within time limits
+□ File proof of service
+
+────────────────────────────────────────────────────────
+DEADLINE: JUNE 17, 2026 — DO NOT MISS
+────────────────────────────────────────────────────────
+
+CCLDR — ccldr.net | Public record. Not legal advice.`
+  }
+};
+
+function downloadDerekDoc(key) {
+  const doc = DEREK_DOCS[key];
+  if (!doc) return;
+  const blob = new Blob([doc.content], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = doc.filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── FORM FILL ASSISTANT ───────────────────────────────────────────────────
+function applyFillData() {
+  const name = document.getElementById('ff-name').value.trim() || '[YOUR NAME]';
+  const addr = document.getElementById('ff-addr').value.trim() || '[YOUR ADDRESS]';
+  const caseName = document.getElementById('ff-case').value.trim() || '[CASE NAME]';
+  const fileNum = document.getElementById('ff-file').value.trim() || '[COURT FILE NO.]';
+  const dateVal = document.getElementById('ff-date').value;
+  const courtName = document.getElementById('ff-court').value.trim() || '[COURT NAME]';
+
+  const dateFormatted = dateVal
+    ? new Date(dateVal + 'T12:00:00').toLocaleDateString('en-CA', {year:'numeric',month:'long',day:'numeric'})
+    : '[DATE]';
+
+  const template = `ONTARIO SUPERIOR COURT OF JUSTICE
+═══════════════════════════════════════
+
+COURT: ${courtName}
+FILE NO.: ${fileNum}
+CASE: ${caseName}
+DATE: ${dateFormatted}
+
+PARTY INFORMATION:
+Name:    ${name}
+Address: ${addr}
+
+═══════════════════════════════════════
+DOCUMENT — [SELECT DOCUMENT TYPE]
+═══════════════════════════════════════
+
+This document is prepared by ${name}, self-represented litigant.
+Address for service: ${addr}
+
+Case: ${caseName}
+Court File No.: ${fileNum}
+Date: ${dateFormatted}
+Court: ${courtName}
+
+─────────────────────────────────────────────────────
+[Complete the remainder of this document using the
+applicable template from the CCLDR Document Vault.
+Replace all bracketed placeholders with your specific
+information before filing.]
+─────────────────────────────────────────────────────
+
+_______________________________
+${name}
+Self-Represented
+${addr}
+
+Generated by CCLDR Records Room — ccldr.net
+Not legal advice. Review before filing.`;
+
+  document.getElementById('fill-output').value = template;
+  const result = document.getElementById('fill-result');
+  result.classList.add('visible');
+  result.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function downloadFilledDoc() {
+  const content = document.getElementById('fill-output').value;
+  if (!content) return;
+  const caseName = (document.getElementById('ff-case').value.trim() || 'Document').replace(/[^a-zA-Z0-9\s]/g,'').replace(/\s+/g,'_');
+  const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CCLDR_Filled_${caseName}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── FILING TRACKER ────────────────────────────────────────────────────────
+function renderTrackerSection(hasSovereign) {
+  const section = document.getElementById('tracker-content');
+  if (!hasSovereign) {
+    section.innerHTML = `<div class="sovereign-lock">
+      <div class="sl-icon">📊</div>
+      <div class="sl-title">Sovereign Tier Required</div>
+      <p class="sl-sub">The Filing Tracker is a Sovereign-tier feature. Upgrade to track all filings, deadlines, status, and notes in one persistent dashboard.</p>
+      <a href="mailto:info@ccldr.net?subject=Sovereign%20Tier%20Inquiry%20—%20Filing%20Tracker" class="sl-cta">Upgrade to Sovereign — $1,499/mo</a>
+    </div>`;
+    return;
+  }
+
+  const rows = JSON.parse(localStorage.getItem('ccldr_filing_tracker') || '[]');
+
+  section.innerHTML = `
+    <div class="tracker-controls">
+      <button class="tracker-add-btn" onclick="toggleTrackerForm()">+ Add Document Filed</button>
+      <div class="tracker-form" id="tracker-form">
+        <div class="tf-field"><div class="tf-label">Date Filed</div><input type="date" id="tf-date" class="tf-input" style="color-scheme:dark"></div>
+        <div class="tf-field"><div class="tf-label">Document Name</div><input type="text" id="tf-doc" class="tf-input" placeholder="Notice of Motion"></div>
+        <div class="tf-field"><div class="tf-label">Court</div><input type="text" id="tf-court" class="tf-input" placeholder="Ontario Superior Court"></div>
+        <div class="tf-field"><div class="tf-label">Status</div>
+          <select id="tf-status" class="tf-input">
+            <option value="filed">Filed</option>
+            <option value="pending">Pending</option>
+            <option value="served">Served</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="tf-field"><div class="tf-label">Notes</div><input type="text" id="tf-notes" class="tf-input" placeholder="Optional notes..."></div>
+        <button class="tf-save" onclick="saveTrackerRow()">Save</button>
+      </div>
+    </div>
+    <div id="tracker-table-wrap">${renderTrackerTable(rows)}</div>`;
+}
+
+function toggleTrackerForm() {
+  const f = document.getElementById('tracker-form');
+  if (f) f.classList.toggle('open');
+}
+
+function saveTrackerRow() {
+  const dateVal = document.getElementById('tf-date').value;
+  const docVal = document.getElementById('tf-doc').value.trim();
+  if (!dateVal || !docVal) { alert('Please enter at least a date and document name.'); return; }
+
+  const rows = JSON.parse(localStorage.getItem('ccldr_filing_tracker') || '[]');
+  rows.push({
+    id: Date.now(),
+    date: dateVal,
+    doc: docVal,
+    court: document.getElementById('tf-court').value.trim() || '—',
+    status: document.getElementById('tf-status').value,
+    notes: document.getElementById('tf-notes').value.trim() || '—'
+  });
+  rows.sort((a,b) => b.date.localeCompare(a.date));
+  localStorage.setItem('ccldr_filing_tracker', JSON.stringify(rows));
+
+  // Reset form
+  ['tf-date','tf-doc','tf-court','tf-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('tf-status').value = 'filed';
+  document.getElementById('tracker-form').classList.remove('open');
+
+  const wrap = document.getElementById('tracker-table-wrap');
+  if (wrap) wrap.innerHTML = renderTrackerTable(rows);
+}
+
+function removeTrackerRow(id) {
+  let rows = JSON.parse(localStorage.getItem('ccldr_filing_tracker') || '[]');
+  rows = rows.filter(r => r.id !== id);
+  localStorage.setItem('ccldr_filing_tracker', JSON.stringify(rows));
+  const wrap = document.getElementById('tracker-table-wrap');
+  if (wrap) wrap.innerHTML = renderTrackerTable(rows);
+}
+
+function renderTrackerTable(rows) {
+  const statusClass = {filed:'status-filed',pending:'status-pending',served:'status-served',other:'status-other'};
+  const statusLabel = {filed:'Filed',pending:'Pending',served:'Served',other:'Other'};
+
+  if (!rows.length) {
+    return '<div class="tracker-empty">No documents tracked yet. Click "Add Document Filed" to begin.</div>';
+  }
+
+  return `<table class="tracker-table">
+    <thead><tr>
+      <th>Date Filed</th>
+      <th>Document Name</th>
+      <th>Court</th>
+      <th>Status</th>
+      <th>Notes</th>
+      <th></th>
+    </tr></thead>
+    <tbody>
+      ${rows.map(r => {
+        const dateFormatted = new Date(r.date + 'T12:00:00').toLocaleDateString('en-CA', {year:'numeric',month:'short',day:'numeric'});
+        const sc = statusClass[r.status] || 'status-other';
+        const sl = statusLabel[r.status] || r.status;
+        return `<tr>
+          <td>${dateFormatted}</td>
+          <td>${r.doc.replace(/</g,'&lt;')}</td>
+          <td>${r.court.replace(/</g,'&lt;')}</td>
+          <td><span class="status-badge ${sc}">${sl}</span></td>
+          <td>${r.notes.replace(/</g,'&lt;')}</td>
+          <td><button class="row-remove" onclick="removeTrackerRow(${r.id})" title="Remove">✕</button></td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>`;
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('ccldr-tier-verified', (e) => {
+  ccldrVerifiedTier = e.detail.tier;
+  initAccess();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  initAccess();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Courtroom — CCLDR Virtual Courthouse</title>
+<meta name="description" content="Active case tracker for Derek Francisco. Francisco v. AG Canada ($35M) and Francisco v. Denby ($2.3M). Case timelines, document downloads, and AI practice courtroom.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--deep:#0d0d0d;--card:#141414;--gold:#c9a227;--gold-light:#e0b840;--green:#27ae60;--green-dark:#1e8449;--red:#c0392b;--white:#f5f5f5;--muted:#888;--border:#2a2a2a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.ch-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,162,39,.05) 0%,var(--black) 60%)}
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.97);border-bottom:1px solid var(--gold);padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:13px;color:var(--muted);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 22px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(10,10,10,.99);border-bottom:1px solid var(--gold);padding:16px 40px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:12px 0;border-bottom:1px solid var(--border);font-size:15px}
+
+/* PAGE HERO */
+.page-hero{position:relative;z-index:1;text-align:center;padding:100px 40px 60px}
+.hero-icon{font-size:64px;margin-bottom:20px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);border-radius:2px;padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#e74c3c;margin-bottom:24px}
+.hero-badge::before{content:'';width:6px;height:6px;background:#e74c3c;border-radius:50%;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.page-title{font-family:'Cinzel',serif;font-size:clamp(36px,5vw,60px);font-weight:900;color:var(--white);margin-bottom:12px}
+.page-title .gold{color:var(--gold)}
+.page-sub{font-size:16px;color:var(--muted);max-width:600px;margin:0 auto}
+
+/* ACTIVE CASES */
+.cases-section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 40px 80px}
+.section-label{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:32px;border-bottom:1px solid var(--border);padding-bottom:16px}
+.case-card{background:var(--card);border:1px solid var(--border);border-radius:4px;margin-bottom:32px;overflow:hidden}
+.case-header{padding:28px 32px;display:grid;grid-template-columns:1fr auto;align-items:start;gap:24px;border-bottom:1px solid var(--border)}
+.case-status{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:10px;margin-bottom:12px}
+.cs-active{background:rgba(39,174,96,.12);color:var(--green);border:1px solid rgba(39,174,96,.25)}
+.cs-enforcement{background:rgba(192,57,43,.12);color:#e74c3c;border:1px solid rgba(192,57,43,.25)}
+.cs-active::before,.cs-enforcement::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
+.case-name{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px}
+.case-ref{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+.case-amount{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:var(--gold);line-height:1}
+.case-amount-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.case-body{padding:28px 32px;display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.case-meta dt{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.case-meta dd{font-size:14px;color:var(--white);margin-bottom:16px;line-height:1.5}
+.case-meta dd.highlight{color:var(--gold);font-weight:600}
+.case-meta dd.urgent{color:#e74c3c;font-weight:700}
+
+/* TIMELINE */
+.timeline{padding:0}
+.timeline-title{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.tl-item{display:flex;gap:16px;margin-bottom:16px;position:relative}
+.tl-item::before{content:'';position:absolute;left:7px;top:24px;bottom:-12px;width:1px;background:var(--border)}
+.tl-item:last-child::before{display:none}
+.tl-dot{width:16px;height:16px;border-radius:50%;flex-shrink:0;margin-top:2px;border:2px solid}
+.dot-done{background:var(--green);border-color:var(--green-dark)}
+.dot-next{background:var(--gold);border-color:#a07d1a;animation:pglow 2s infinite}
+@keyframes pglow{0%,100%{box-shadow:0 0 4px rgba(201,162,39,.5)}50%{box-shadow:0 0 12px rgba(201,162,39,.8)}}
+.dot-pending{background:transparent;border-color:var(--border)}
+.tl-content{}
+.tl-date{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:2px;font-family:'JetBrains Mono',monospace}
+.tl-event{font-size:13px;color:var(--white);line-height:1.4}
+.tl-event.gold{color:var(--gold);font-weight:600}
+.tl-event.urgent{color:#e74c3c;font-weight:700}
+
+/* DOCS SECTION */
+.case-docs{padding:20px 32px;background:rgba(201,162,39,.03);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.docs-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.doc-btns{display:flex;gap:10px;flex-wrap:wrap}
+.doc-btn{padding:8px 16px;border:1px solid rgba(201,162,39,.3);border-radius:2px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);background:transparent;cursor:pointer;transition:all .2s}
+.doc-btn:hover{background:rgba(201,162,39,.1);border-color:var(--gold)}
+.doc-btn.locked{color:var(--muted);border-color:var(--border);cursor:default}
+.doc-btn.locked:hover{background:transparent}
+
+/* PRACTICE CTA */
+.practice-cta{position:relative;z-index:1;max-width:1200px;margin:0 auto 80px;padding:0 40px}
+.prac-card{background:linear-gradient(135deg,rgba(39,174,96,.08) 0%,rgba(201,162,39,.05) 100%);border:1px solid rgba(39,174,96,.25);border-radius:4px;padding:48px;text-align:center}
+.prac-title{font-family:'Cinzel',serif;font-size:32px;font-weight:900;color:var(--white);margin-bottom:12px}
+.prac-title .gold{color:var(--gold)}
+.prac-sub{font-size:15px;color:var(--muted);max-width:540px;margin:0 auto 32px;line-height:1.7}
+.prac-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-gold{background:var(--gold);color:#000;padding:14px 32px;border-radius:2px;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;transition:background .2s;display:inline-block}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-outline-green{background:transparent;color:var(--green);padding:13px 32px;border-radius:2px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(39,174,96,.4);transition:all .2s;display:inline-block}
+.btn-outline-green:hover{background:rgba(39,174,96,.1);border-color:var(--green)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:rgba(10,10,10,.98);border-top:1px solid var(--border);padding:40px;text-align:center}
+.footer-ccldr{font-family:'Cinzel',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
+.footer-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.footer-links a{font-size:12px;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{margin-top:24px;font-size:11px;color:rgba(136,136,136,.4)}
+
+@media(max-width:900px){.case-body{grid-template-columns:1fr}.case-header{grid-template-columns:1fr}.cases-section{padding:0 20px 60px}.practice-cta{padding:0 20px}}
+@media(max-width:640px){nav{padding:0 20px}.nav-links,.nav-cta{display:none}.hamburger{display:block}.page-hero{padding:80px 20px 40px}}
+</style>
+</head>
+<body>
+<div class="ch-bg" aria-hidden="true"></div>
+
+<nav>
+  <div>
+    <div class="nav-logo">CCLDR</div>
+    <div class="nav-sub">Virtual Courthouse</div>
+  </div>
+  <div class="nav-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="courtroom.html" class="active">Courtroom</a>
+    <a href="library.html">Library</a>
+    <a href="clerks-office.html">Clerk's Office</a>
+    <a href="practice-courtroom.html">AI Practice</a>
+  </div>
+  <a href="pricing.html" class="nav-cta">Upgrade</a>
+  <button class="hamburger" onclick="document.getElementById('nmob').classList.toggle('open')">☰</button>
+</nav>
+<div class="nav-mobile" id="nmob">
+  <a href="lobby.html">Lobby</a><a href="courtroom.html">Courtroom</a><a href="library.html">Library</a>
+  <a href="practice-courtroom.html">AI Practice Courtroom</a><a href="pricing.html">Upgrade Access</a>
+</div>
+
+<section class="page-hero">
+  <div class="hero-icon">⚖️</div>
+  <div class="hero-badge">2 Active Cases — Enforcement In Progress</div>
+  <h1 class="page-title">The <span class="gold">Courtroom</span></h1>
+  <p class="page-sub">Live case tracker for Derek Francisco. Real filings. Real timelines. Real stakes.</p>
+</section>
+
+<div class="cases-section">
+  <div class="section-label">Active Litigation — Derek Francisco, Plaintiff</div>
+
+  <!-- CASE 1: AG CANADA -->
+  <div class="case-card">
+    <div class="case-header">
+      <div>
+        <span class="case-status cs-active">● Investigation Active</span>
+        <div class="case-name">Francisco v. Attorney General of Canada</div>
+        <div class="case-ref">ONTARIO SUPERIOR COURT — FILE: [PENDING ASSIGNMENT]</div>
+        <dl class="case-meta" style="margin-top:12px">
+          <dt>Filed</dt><dd>[2026 — Date Pending]</dd>
+          <dt>Next Milestone</dt><dd class="highlight">60-Day Investigation Period — AG Response Awaited</dd>
+          <dt>Nature of Claim</dt><dd>Constitutional challenge, regulatory damages, systemic harm</dd>
+        </dl>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="case-amount">$35,000,000</div>
+        <div class="case-amount-label">Thirty-Five Million Dollars</div>
+      </div>
+    </div>
+    <div class="case-body">
+      <dl class="case-meta">
+        <dt>Plaintiff</dt><dd>Derek Francisco, Lindsay, Ontario</dd>
+        <dt>Defendant</dt><dd>Attorney General of Canada / Government of Canada</dd>
+        <dt>Court</dt><dd>Ontario Superior Court of Justice</dd>
+        <dt>Jurisdiction</dt><dd>Ontario — Federal respondent</dd>
+        <dt>Legal Basis</dt><dd>Canadian Charter of Rights and Freedoms, ss. 7, 8, 15 / Crown Liability and Proceedings Act</dd>
+      </dl>
+      <div>
+        <div class="timeline-title">Case Timeline</div>
+        <div class="tl-item">
+          <div class="tl-dot dot-done"></div>
+          <div class="tl-content"><div class="tl-date">2026</div><div class="tl-event">Claim filed with Ontario Superior Court</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-next"></div>
+          <div class="tl-content"><div class="tl-date">NOW</div><div class="tl-event tl-event gold">60-Day investigation period — Attorney General reviewing claim</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-pending"></div>
+          <div class="tl-content"><div class="tl-date">TBD</div><div class="tl-event">AG files response / Statement of Defence</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-pending"></div>
+          <div class="tl-content"><div class="tl-date">TBD</div><div class="tl-event">Examination for Discovery</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-pending"></div>
+          <div class="tl-content"><div class="tl-date">TBD</div><div class="tl-event">Trial / Mediation</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="case-docs">
+      <span class="docs-label">Documents</span>
+      <div class="doc-btns">
+        <button class="doc-btn" onclick="alert('Statement of Claim — contact info@ccldr.net for Sovereign tier access')">Statement of Claim</button>
+        <button class="doc-btn locked">🔒 AG Response (Pending)</button>
+        <button class="doc-btn locked">🔒 Case Strategy (Sovereign)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 2: FRANCISCO v. DENBY -->
+  <div class="case-card">
+    <div class="case-header">
+      <div>
+        <span class="case-status cs-enforcement">⚡ Enforcement Active</span>
+        <div class="case-name">Francisco v. Denby</div>
+        <div class="case-ref">ONTARIO SUPERIOR COURT — KAWARTHA LAKES — FILE: [ACTIVE]</div>
+        <dl class="case-meta" style="margin-top:12px">
+          <dt>Filed (Original)</dt><dd>April 21, 2026</dd>
+          <dt>Next Hearing</dt><dd class="urgent">🚨 JUNE 17, 2026 — Criminal Hearing + Enforcement</dd>
+          <dt>Nature of Claim</dt><dd>Civil damages + Default judgment enforcement + New claim</dd>
+        </dl>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="case-amount">$3,300,000</div>
+        <div class="case-amount-label">$1M Judgment + $2.3M New Claim</div>
+      </div>
+    </div>
+    <div class="case-body">
+      <dl class="case-meta">
+        <dt>Plaintiff / Creditor</dt><dd>Derek Francisco, Lindsay, Ontario</dd>
+        <dt>Defendant / Debtor</dt><dd>Denby [Full name — confidential]</dd>
+        <dt>Existing Judgment</dt><dd class="highlight">Default Judgment — $1,000,000 — OBTAINED</dd>
+        <dt>New Claim Filed</dt><dd>June 2026 — $2,300,000.00</dd>
+        <dt>Enforcement Status</dt><dd>Sheriff instructions prepared. Writ pending issuance.</dd>
+        <dt>Criminal Component</dt><dd>Separate criminal hearing June 17, 2026</dd>
+      </dl>
+      <div>
+        <div class="timeline-title">Case Timeline</div>
+        <div class="tl-item">
+          <div class="tl-dot dot-done"></div>
+          <div class="tl-content"><div class="tl-date">APR 21, 2026</div><div class="tl-event">Original Statement of Claim filed</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-done"></div>
+          <div class="tl-content"><div class="tl-date">2026</div><div class="tl-event">Default Judgment obtained — $1,000,000</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-done"></div>
+          <div class="tl-content"><div class="tl-date">JUNE 2026</div><div class="tl-event">New Statement of Claim filed — $2,300,000</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-next"></div>
+          <div class="tl-content"><div class="tl-date">JUNE 17, 2026</div><div class="tl-event tl-event urgent">🚨 CRIMINAL HEARING + CIVIL ENFORCEMENT — THIS DATE</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-pending"></div>
+          <div class="tl-content"><div class="tl-date">PENDING</div><div class="tl-event">Sheriff enforcement / Asset seizure</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot dot-pending"></div>
+          <div class="tl-content"><div class="tl-date">PENDING</div><div class="tl-event">CPL registered on property (if applicable)</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="case-docs">
+      <span class="docs-label">Documents</span>
+      <div class="doc-btns">
+        <button class="doc-btn" onclick="alert('Contact info@ccldr.net for document access')">Statement of Claim ($2.3M)</button>
+        <button class="doc-btn" onclick="alert('Contact info@ccldr.net for document access')">Default Judgment ($1M)</button>
+        <button class="doc-btn locked">🔒 Writ of Seizure (Draft)</button>
+        <button class="doc-btn locked">🔒 Sheriff Letter (Draft)</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PRACTICE CTA -->
+<div class="practice-cta">
+  <div class="prac-card">
+    <div class="prac-title">Practice in the <span class="gold">AI Courtroom</span></div>
+    <p class="prac-sub">Don't go to court unprepared. Practice your defense against AI Justice Prime, AI Crown Agent, and get real-time strategy from Doc WeedLaw AI — Canada's only AI legal education simulator.</p>
+    <div class="prac-btns">
+      <a href="practice-courtroom.html" class="btn-gold">Enter AI Courtroom</a>
+      <a href="library.html" class="btn-outline-green">Research Case Law</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-ccldr">CCLDR.NET</div>
+  <div class="footer-sub">Cannabis Legal Defense & Education Resources</div>
+  <div class="footer-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="library.html">Library</a>
+    <a href="practice-courtroom.html">AI Courtroom</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="mailto:info@ccldr.net">Contact</a>
+  </div>
+  <div class="footer-bottom">© 2026 CCLDR.NET · A Francisco Holdings Inc. Venture · Case information is for educational and awareness purposes only. Not legal advice.</div>
+</footer>
+
+<script>
+function toggleNav(){document.getElementById('nmob').classList.toggle('open')}
+</script>
+</body>
+</html>

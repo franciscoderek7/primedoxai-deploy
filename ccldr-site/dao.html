@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The People's Jury — CCLDR | Francisco Protocol</title>
+  <meta name="description" content="10,000+ members. Community governance. Real democracy. The People's Jury is the decentralized governing body of the Francisco Protocol — the world's first AI Blockchain Court for cannabis rights." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0a0a0f;
+      --gold:        #D4AF37;
+      --gold-dim:    #a88a28;
+      --green:       #2E7D32;
+      --green-light: #43a047;
+      --blue:        #1A237E;
+      --blue-light:  #3949ab;
+      --cyan:        #00D4FF;
+      --red:         #CC0000;
+      --white:       #f0ede6;
+      --muted:       #8a8790;
+      --card:        #10101a;
+      --card-border: #1e1e2e;
+      --surface:     #14141f;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 15, 0.97);
+      border-bottom: 2px solid var(--gold);
+      padding: 0 32px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-logo-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--green) 100%);
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--bg);
+      flex-shrink: 0;
+      letter-spacing: 1px;
+    }
+
+    .nav-titles { display: flex; flex-direction: column; line-height: 1.2; }
+
+    .nav-ccldr {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 3px;
+    }
+
+    .nav-sub {
+      font-family: 'Special Elite', cursive;
+      font-size: 10px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--gold); background: rgba(212,175,55,0.08); }
+    .nav-links a.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .nav-hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--gold); border-radius: 2px; transition: all 0.3s;
+    }
+
+    .nav-mobile {
+      display: none;
+      position: absolute;
+      top: 70px; left: 0; right: 0;
+      background: rgba(10,10,15,0.99);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 24px;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 999;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      padding: 12px 16px;
+      font-size: 15px;
+      color: var(--muted);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .nav-mobile a:hover { color: var(--gold); background: rgba(212,175,55,0.08); }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      padding: 100px 32px 80px;
+      text-align: center;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,35,126,0.35) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 40% at 80% 100%, rgba(46,125,50,0.2) 0%, transparent 60%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 39px,
+        rgba(212,175,55,0.04) 40px
+      );
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 9vw, 96px);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.0;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-tagline {
+      font-family: 'Special Elite', cursive;
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--cyan);
+      letter-spacing: 3px;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto 48px;
+      font-size: 18px;
+      color: rgba(240,237,230,0.75);
+      line-height: 1.8;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, #b8941f 100%);
+      color: var(--bg);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.35); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--cyan);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border-radius: 4px;
+      border: 1px solid var(--cyan);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .btn-secondary:hover { background: rgba(0,212,255,0.08); transform: translateY(-2px); }
+
+    /* ===== STATS COUNTERS ===== */
+    .stats-section {
+      padding: 60px 32px;
+      background: var(--surface);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .stat-card {
+      padding: 24px 16px;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-number.cyan { color: var(--cyan); }
+    .stat-number.green { color: var(--green-light); }
+    .stat-number.red { color: var(--red); }
+
+    .stat-label {
+      display: block;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .stat-sub {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      color: rgba(138,135,144,0.6);
+      font-family: 'Special Elite', cursive;
+    }
+
+    /* ===== SECTION COMMON ===== */
+    .section {
+      padding: 80px 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .gold-rule {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 20px auto 0;
+    }
+
+    /* ===== ACTIVE VOTES ===== */
+    .votes-section {
+      padding: 80px 32px;
+      background: var(--surface);
+    }
+
+    .votes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .vote-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .vote-card:hover {
+      border-color: rgba(212,175,55,0.3);
+      transform: translateY(-3px);
+    }
+
+    .vote-card-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .proposal-num {
+      font-family: 'Special Elite', cursive;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .proposal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .status-open {
+      background: rgba(46,125,50,0.2);
+      color: var(--green-light);
+      border: 1px solid rgba(46,125,50,0.4);
+    }
+
+    .status-deliberation {
+      background: rgba(0,212,255,0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(0,212,255,0.3);
+    }
+
+    .vote-card-body { padding: 20px 24px; }
+
+    .vote-description {
+      font-size: 14px;
+      color: rgba(240,237,230,0.65);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .vote-tally {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tally-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px 6px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+    }
+
+    .tally-num {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .tally-yes .tally-num { color: var(--green-light); }
+    .tally-no .tally-num { color: var(--red); }
+    .tally-abstain .tally-num { color: var(--muted); }
+
+    .tally-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .progress-bar-wrap {
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 100%);
+      transition: width 1.5s ease;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      margin-bottom: 16px;
+    }
+
+    .vote-closes {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-family: 'Special Elite', cursive;
+      letter-spacing: 1px;
+    }
+
+    .vote-closes strong { color: var(--gold); }
+
+    .btn-vote {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-vote:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-vote-disabled {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      cursor: not-allowed;
+    }
+
+    .voted-indicator {
+      display: none;
+      width: 100%;
+      padding: 10px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green-light);
+      border: 1px solid var(--green);
+      border-radius: 4px;
+      background: rgba(46,125,50,0.1);
+      letter-spacing: 1px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      padding: 40px 36px;
+      max-width: 480px;
+      width: 90%;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 20px;
+      background: none; border: none;
+      color: var(--muted); font-size: 24px;
+      cursor: pointer; line-height: 1;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--white); }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .modal-proposal {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .modal-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .choice-btn {
+      padding: 14px 20px;
+      border-radius: 6px;
+      border: 2px solid;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+    }
+
+    .choice-yes {
+      border-color: var(--green);
+      color: var(--green-light);
+    }
+    .choice-yes:hover { background: rgba(46,125,50,0.15); transform: translateX(4px); }
+
+    .choice-no {
+      border-color: var(--red);
+      color: #ff4444;
+    }
+    .choice-no:hover { background: rgba(204,0,0,0.1); transform: translateX(4px); }
+
+    .choice-abstain {
+      border-color: var(--muted);
+      color: var(--muted);
+    }
+    .choice-abstain:hover { background: rgba(138,135,144,0.1); transform: translateX(4px); }
+
+    .modal-note {
+      font-size: 12px;
+      color: rgba(138,135,144,0.6);
+      text-align: center;
+      font-style: italic;
+    }
+
+    .modal-confirm {
+      text-align: center;
+      display: none;
+    }
+    .modal-confirm-icon { font-size: 48px; margin-bottom: 12px; }
+    .modal-confirm h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--green-light);
+      margin-bottom: 8px;
+    }
+    .modal-confirm p { font-size: 14px; color: var(--muted); }
+
+    /* ===== JUSTICE TOKEN ===== */
+    .token-section {
+      padding: 80px 32px;
+      background: linear-gradient(180deg, var(--bg) 0%, rgba(26,35,126,0.15) 50%, var(--bg) 100%);
+    }
+
+    .token-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .token-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .token-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .token-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .token-coin {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        var(--gold) 0%,
+        #b8941f 25%,
+        var(--gold) 50%,
+        #e8c84a 75%,
+        var(--gold) 100%
+      );
+      border: 4px solid rgba(212,175,55,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      box-shadow: 0 0 40px rgba(212,175,55,0.3), 0 0 80px rgba(212,175,55,0.1);
+      animation: coinSpin 8s linear infinite;
+    }
+
+    @keyframes coinSpin {
+      0% { transform: perspective(400px) rotateY(0deg); }
+      50% { transform: perspective(400px) rotateY(10deg); }
+      100% { transform: perspective(400px) rotateY(0deg); }
+    }
+
+    .token-coin-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--bg);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+    .token-coin-sub {
+      font-size: 10px;
+      color: var(--bg);
+      letter-spacing: 3px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .token-soulbound-badge {
+      font-family: 'Special Elite', cursive;
+      font-size: 13px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .token-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .token-info p {
+      font-size: 15px;
+      color: rgba(240,237,230,0.7);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .token-earn-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .token-earn-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      font-size: 14px;
+      color: rgba(240,237,230,0.8);
+    }
+
+    .earn-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .earn-tokens {
+      display: inline-block;
+      margin-left: auto;
+      font-family: 'Special Elite', cursive;
+      font-size: 13px;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    .token-warning {
+      padding: 16px 20px;
+      background: rgba(204,0,0,0.08);
+      border: 1px solid rgba(204,0,0,0.3);
+      border-radius: 6px;
+      font-size: 13px;
+      color: rgba(240,237,230,0.7);
+      font-family: 'Special Elite', cursive;
+      letter-spacing: 0.5px;
+      line-height: 1.6;
+    }
+
+    /* ===== REGISTRATION FORM ===== */
+    .reg-section {
+      padding: 80px 32px;
+      background: var(--surface);
+    }
+
+    .reg-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .reg-form {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 40px 36px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--white);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .form-select option { background: var(--card); color: var(--white); }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.6;
+    }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,125,50,0.3); }
+
+    /* ===== AMENDMENT HISTORY ===== */
+    .amendment-section {
+      padding: 80px 32px;
+    }
+
+    .amendment-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .amendment-table-wrap {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    .amendment-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .amendment-table th {
+      padding: 14px 20px;
+      background: var(--surface);
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .amendment-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--card-border);
+      color: rgba(240,237,230,0.7);
+    }
+
+    .amendment-empty {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .amendment-empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .amendment-empty p {
+      font-family: 'Special Elite', cursive;
+      font-size: 15px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      line-height: 1.7;
+    }
+
+    .version-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 4px;
+      font-family: 'Special Elite', cursive;
+      font-size: 13px;
+      color: var(--gold);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #08080d;
+      border-top: 2px solid var(--gold);
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+
+    .footer-tagline {
+      font-family: 'Special Elite', cursive;
+      font-size: 12px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(138,135,144,0.5);
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .hero { padding: 60px 20px 50px; }
+      .section, .votes-section, .token-section, .reg-section, .amendment-section { padding: 50px 20px; }
+      .votes-section { padding-left: 20px; padding-right: 20px; }
+      .reg-form { padding: 28px 20px; }
+      .modal-box { padding: 28px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-circle">⚖</div>
+    <div class="nav-titles">
+      <span class="nav-ccldr">CCLDR</span>
+      <span class="nav-sub">Francisco Protocol</span>
+    </div>
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="index.html">Constitution</a></li>
+    <li><a href="courtroom.html">Blockchain Court</a></li>
+    <li><a href="courtroom.html">AI Justices</a></li>
+    <li><a href="dao.html" class="active">People's Jury</a></li>
+    <li><a href="treaty.html">Global Treaty</a></li>
+  </ul>
+
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile" id="navMobile">
+  <a href="index.html">Constitution</a>
+  <a href="courtroom.html">Blockchain Court</a>
+  <a href="courtroom.html">AI Justices</a>
+  <a href="dao.html">People's Jury</a>
+  <a href="treaty.html">Global Treaty</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-badge">DAO — Decentralized Governance</div>
+  <h1>The People's Jury</h1>
+  <p class="hero-tagline">10,000+ Members &nbsp;·&nbsp; Community Governance &nbsp;·&nbsp; Real Democracy</p>
+  <p>Every cannabis rights holder has a voice. JUSTICE tokens are yours — soul-bound, non-transferable, real. This is not a corporate board. This is your court.</p>
+  <div class="hero-cta-row">
+    <a class="btn-primary" href="#register">Join the People's Jury</a>
+    <a class="btn-secondary" href="#votes">View Active Votes</a>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number" id="counter-members">0</span>
+      <span class="stat-label">Current Members</span>
+      <span class="stat-sub">Growing daily</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number cyan" id="counter-votes">0</span>
+      <span class="stat-label">Active Votes</span>
+      <span class="stat-sub">Open now</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number green" id="counter-amendments">0</span>
+      <span class="stat-label">Amendments Ratified</span>
+      <span class="stat-sub">Constitution v1.0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number" id="counter-cases">0</span>
+      <span class="stat-label">Cases Funded</span>
+      <span class="stat-sub">By the Jury</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACTIVE VOTES ===== -->
+<section class="votes-section" id="votes">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header">
+      <span class="section-eyebrow">Live Democracy</span>
+      <h2 class="section-title">Active Votes</h2>
+      <p class="section-sub">These proposals are open to all registered members of the People's Jury. Your JUSTICE token is your ballot.</p>
+      <div class="gold-rule"></div>
+    </div>
+
+    <div class="votes-grid">
+
+      <!-- Proposal 001 -->
+      <div class="vote-card">
+        <div class="vote-card-header">
+          <div class="proposal-num">PROPOSAL #001</div>
+          <div class="proposal-title">"Ratify Article I: Right to Cultivate"</div>
+          <span class="status-badge status-open">Voting Open</span>
+        </div>
+        <div class="vote-card-body">
+          <p class="vote-description">"Ratify the first article of the WeedLaw Constitution — affirming every Canadian's inherent right to cultivate cannabis for personal use, free from criminal sanction, in accordance with the spirit of R. v. Parker 2000."</p>
+          <div class="vote-tally">
+            <div class="tally-item tally-yes">
+              <span class="tally-num" id="v1-yes">612</span>
+              <span class="tally-label">Yes</span>
+            </div>
+            <div class="tally-item tally-no">
+              <span class="tally-num" id="v1-no">87</span>
+              <span class="tally-label">No</span>
+            </div>
+            <div class="tally-item tally-abstain">
+              <span class="tally-num" id="v1-abstain">148</span>
+              <span class="tally-label">Abstain</span>
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="v1-bar" style="width:0%"></div>
+          </div>
+          <div class="progress-label" id="v1-pct">73% approval</div>
+          <p class="vote-closes">Closes: <strong>June 30, 2026</strong></p>
+          <button class="btn-vote" id="btn-v1" onclick="showVoteModal('p001', 'Ratify Article I: Right to Cultivate')">Cast Your Vote</button>
+          <div class="voted-indicator" id="voted-v1"></div>
+        </div>
+      </div>
+
+      <!-- Proposal 002 -->
+      <div class="vote-card">
+        <div class="vote-card-header">
+          <div class="proposal-num">PROPOSAL #002</div>
+          <div class="proposal-title">"Fund Francisco v. AG Canada Class Action Outreach"</div>
+          <span class="status-badge status-open">Voting Open</span>
+        </div>
+        <div class="vote-card-body">
+          <p class="vote-description">"Allocate 500 JUSTICE tokens to fund outreach for the $35M class action — Francisco v. Attorney General of Canada — reaching affected Canadians whose cannabis rights were violated under pre-legalization enforcement."</p>
+          <div class="vote-tally">
+            <div class="tally-item tally-yes">
+              <span class="tally-num" id="v2-yes">521</span>
+              <span class="tally-label">Yes</span>
+            </div>
+            <div class="tally-item tally-no">
+              <span class="tally-num" id="v2-no">156</span>
+              <span class="tally-label">No</span>
+            </div>
+            <div class="tally-item tally-abstain">
+              <span class="tally-num" id="v2-abstain">170</span>
+              <span class="tally-label">Abstain</span>
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="v2-bar" style="width:0%"></div>
+          </div>
+          <div class="progress-label" id="v2-pct">61% approval</div>
+          <p class="vote-closes">Closes: <strong>July 15, 2026</strong></p>
+          <button class="btn-vote" id="btn-v2" onclick="showVoteModal('p002', 'Fund Francisco v. AG Canada Class Action Outreach')">Cast Your Vote</button>
+          <div class="voted-indicator" id="voted-v2"></div>
+        </div>
+      </div>
+
+      <!-- Proposal 003 -->
+      <div class="vote-card">
+        <div class="vote-card-header">
+          <div class="proposal-num">PROPOSAL #003</div>
+          <div class="proposal-title">"Appoint Justice Equity as Second Chief Justice"</div>
+          <span class="status-badge status-deliberation">Deliberation</span>
+        </div>
+        <div class="vote-card-body">
+          <p class="vote-description">"Nominate and appoint Justice Equity — the People's AI advocate — as Second Chief Justice of the Francisco Protocol Blockchain Court, to represent marginalized and equity-seeking cannabis litigants."</p>
+          <div class="vote-tally">
+            <div class="tally-item tally-yes">
+              <span class="tally-num" style="color:var(--muted)">—</span>
+              <span class="tally-label">Yes</span>
+            </div>
+            <div class="tally-item tally-no">
+              <span class="tally-num" style="color:var(--muted)">—</span>
+              <span class="tally-label">No</span>
+            </div>
+            <div class="tally-item tally-abstain">
+              <span class="tally-num" style="color:var(--muted)">—</span>
+              <span class="tally-label">Abstain</span>
+            </div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:0%; background: rgba(138,135,144,0.3)"></div>
+          </div>
+          <div class="progress-label">Voting opens July 1, 2026</div>
+          <p class="vote-closes">Deliberation closes: <strong>June 30, 2026</strong></p>
+          <button class="btn-vote-disabled" disabled>Voting Not Yet Open</button>
+        </div>
+      </div>
+
+    </div><!-- /votes-grid -->
+  </div>
+</section>
+
+<!-- ===== JUSTICE TOKEN ===== -->
+<section class="token-section" id="token">
+  <div class="token-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Soul-Bound Governance</span>
+      <h2 class="section-title">The JUSTICE Token</h2>
+      <p class="section-sub">Not a cryptocurrency. Not for sale. Yours alone — earned through participation, valid only in your hands.</p>
+      <div class="gold-rule"></div>
+    </div>
+
+    <div class="token-grid">
+      <div class="token-visual">
+        <div class="token-coin">
+          <span class="token-coin-text">JUSTICE</span>
+          <span class="token-coin-sub">SOUL-BOUND</span>
+        </div>
+        <div class="token-soulbound-badge">Non-transferable &nbsp;·&nbsp; 1 Token = 1 Vote</div>
+        <div style="padding:20px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;text-align:center;max-width:280px;">
+          <div style="font-family:'Special Elite',cursive;font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:12px;">BLOCKCHAIN RECORD</div>
+          <div style="font-size:11px;color:rgba(0,212,255,0.7);font-family:monospace;word-break:break-all;line-height:1.8;">
+            0x4A3F...C91B<br>
+            Token: JUSTICE-DAO-v1<br>
+            Type: SBT (ERC-5192)<br>
+            Transferable: FALSE<br>
+            Votes Cast: 0
+          </div>
+        </div>
+      </div>
+
+      <div class="token-info">
+        <h3>What is the JUSTICE Token?</h3>
+        <p>The JUSTICE token is a soul-bound governance credential — it represents your membership and voice in the Francisco Protocol People's Jury. It cannot be bought, sold, or transferred. It lives with you and only you.</p>
+        <p>This is not DeFi. This is democracy.</p>
+
+        <ul class="token-earn-list">
+          <li>
+            <span class="earn-icon">🏛</span>
+            <span>Join the People's Jury (registration)</span>
+            <span class="earn-tokens">+1 token</span>
+          </li>
+          <li>
+            <span class="earn-icon">⚖</span>
+            <span>Participate in mock trials</span>
+            <span class="earn-tokens">+1–5 tokens</span>
+          </li>
+          <li>
+            <span class="earn-icon">📚</span>
+            <span>Contribute a case to the case library</span>
+            <span class="earn-tokens">+10 tokens</span>
+          </li>
+          <li>
+            <span class="earn-icon">💰</span>
+            <span>Fund a legal case or class action</span>
+            <span class="earn-tokens">Variable</span>
+          </li>
+          <li>
+            <span class="earn-icon">🗳</span>
+            <span>Vote on every open proposal</span>
+            <span class="earn-tokens">Baseline</span>
+          </li>
+        </ul>
+
+        <div class="token-warning">
+          ⚠ JUSTICE tokens can never be sold or transferred. They exist to amplify your voice — not your wallet. Any attempt to trade JUSTICE tokens is fraudulent and will result in permanent revocation.
+        </div>
+
+        <div style="margin-top:28px;">
+          <a href="mailto:info@ccldr.net?subject=JUSTICE Token Request" class="btn-primary">Claim Your Tokens</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REGISTRATION ===== -->
+<section class="reg-section" id="register">
+  <div class="reg-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Voter Registration</span>
+      <h2 class="section-title">Join the People's Jury</h2>
+      <p class="section-sub">Register your voice. Receive your JUSTICE token. Become part of the first decentralized cannabis rights court in history.</p>
+      <div class="gold-rule"></div>
+    </div>
+
+    <div class="reg-form">
+      <form id="juryForm" onsubmit="handleRegSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Full Name</label>
+          <input class="form-input" id="reg-name" name="name" type="text" placeholder="Your full name" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-province">Province / Territory</label>
+          <select class="form-select" id="reg-province" name="province" required>
+            <option value="" disabled selected>Select your province or territory</option>
+            <option value="AB">Alberta</option>
+            <option value="BC">British Columbia</option>
+            <option value="MB">Manitoba</option>
+            <option value="NB">New Brunswick</option>
+            <option value="NL">Newfoundland and Labrador</option>
+            <option value="NS">Nova Scotia</option>
+            <option value="NT">Northwest Territories</option>
+            <option value="NU">Nunavut</option>
+            <option value="ON">Ontario</option>
+            <option value="PE">Prince Edward Island</option>
+            <option value="QC">Quebec</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="YT">Yukon</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-impact">How has cannabis law affected you? <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(Optional)</span></label>
+          <textarea class="form-textarea" id="reg-impact" name="impact" placeholder="Share your story — criminal record, medical access denied, prosecution, lost employment... Your experience is evidence."></textarea>
+          <div class="form-note">This information is confidential and may be used (anonymized) as testimony in Francisco Protocol proceedings.</div>
+        </div>
+
+        <button type="submit" class="btn-submit">Join the People's Jury — Claim Your Seat</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AMENDMENT HISTORY ===== -->
+<section class="amendment-section" id="amendments">
+  <div class="amendment-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Constitutional Record</span>
+      <h2 class="section-title">Amendment History</h2>
+      <p class="section-sub">Every ratified change to the WeedLaw Constitution is recorded here — immutably, permanently, publicly.</p>
+      <div class="gold-rule"></div>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div class="version-badge">Constitution v1.0 — Ratified 2026</div>
+      <span style="font-size:12px;color:var(--muted);font-family:'Special Elite',cursive;letter-spacing:1px;">0 Amendments</span>
+    </div>
+
+    <div class="amendment-table-wrap">
+      <table class="amendment-table">
+        <thead>
+          <tr>
+            <th>Amendment #</th>
+            <th>Article Affected</th>
+            <th>Date Ratified</th>
+            <th>Vote Result</th>
+            <th>Blockchain Hash</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="6" class="amendment-empty">
+              <div class="amendment-empty-icon">📜</div>
+              <p>No amendments yet.<br>
+              The Constitution is at v1.0.<br><br>
+              <strong style="color:var(--gold)">Be part of the first amendment.</strong><br>
+              Join the People's Jury and propose change.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VOTE MODAL ===== -->
+<div class="modal-overlay" id="voteModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeVoteModal()" aria-label="Close">&times;</button>
+
+    <div id="modalVoteContent">
+      <div class="modal-title">Cast Your Vote</div>
+      <div class="modal-proposal" id="modalProposalText"></div>
+
+      <div class="modal-choices">
+        <button class="choice-btn choice-yes" onclick="castVote('YES')">✓ &nbsp; Yes — I Support This</button>
+        <button class="choice-btn choice-no" onclick="castVote('NO')">✗ &nbsp; No — I Oppose This</button>
+        <button class="choice-btn choice-abstain" onclick="castVote('ABSTAIN')">— &nbsp; Abstain</button>
+      </div>
+
+      <p class="modal-note">Your vote is recorded in localStorage and simulated on-chain. This is a demonstration of the Francisco Protocol governance model.</p>
+    </div>
+
+    <div class="modal-confirm" id="modalConfirm">
+      <div class="modal-confirm-icon">✅</div>
+      <h3>Vote Recorded</h3>
+      <p id="modalConfirmText">Your vote has been cast and recorded to the People's Jury ledger.</p>
+      <div style="margin-top:24px;">
+        <button class="btn-primary" onclick="closeVoteModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-brand">CCLDR.NET</div>
+  <div class="footer-tagline">Francisco Protocol — The World's First AI Blockchain Court</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html">Constitution</a>
+    <a href="courtroom.html">Blockchain Court</a>
+    <a href="dao.html">People's Jury</a>
+    <a href="treaty.html">Global Treaty</a>
+    <a href="mailto:info@ccldr.net">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 The Francisco Protocol &nbsp;|&nbsp; CCLDR.NET &nbsp;|&nbsp; Francisco Holdings Inc.</div>
+</footer>
+
+<script>
+  /* ===== HAMBURGER ===== */
+  const hamburger = document.getElementById('hamburger');
+  const navMobile = document.getElementById('navMobile');
+  hamburger.addEventListener('click', () => {
+    const open = navMobile.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  /* ===== ANIMATED COUNTERS ===== */
+  const COUNTER_CONFIG = [
+    { id: 'counter-members',    target: 847,  duration: 2000 },
+    { id: 'counter-votes',      target: 3,    duration: 800  },
+    { id: 'counter-amendments', target: 0,    duration: 500  },
+    { id: 'counter-cases',      target: 2,    duration: 1000 },
+  ];
+
+  function animateCounter(el, target, duration) {
+    if (target === 0) { el.textContent = '0'; return; }
+    const start = performance.now();
+    function step(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function initCounters() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          COUNTER_CONFIG.forEach(cfg => {
+            const el = document.getElementById(cfg.id);
+            if (el) animateCounter(el, cfg.target, cfg.duration);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) observer.observe(statsSection);
+  }
+
+  /* ===== PROGRESS BARS ===== */
+  function initProgressBars() {
+    const bars = [
+      { bar: 'v1-bar', pct: 'v1-pct', yes: 612, no: 87, abstain: 148 },
+      { bar: 'v2-bar', pct: 'v2-pct', yes: 521, no: 156, abstain: 170 },
+    ];
+
+    bars.forEach(b => {
+      const total = b.yes + b.no + b.abstain;
+      const approval = Math.round((b.yes / total) * 100);
+      const barEl = document.getElementById(b.bar);
+      const pctEl = document.getElementById(b.pct);
+
+      setTimeout(() => {
+        if (barEl) barEl.style.width = approval + '%';
+        if (pctEl) pctEl.textContent = approval + '% approval';
+      }, 400);
+    });
+  }
+
+  /* ===== VOTING ===== */
+  let currentProposalId = null;
+
+  function showVoteModal(proposalId, proposalTitle) {
+    const stored = localStorage.getItem('fpVote_' + proposalId);
+    if (stored) return; // already voted
+
+    currentProposalId = proposalId;
+    document.getElementById('modalProposalText').textContent = 'Proposal: ' + proposalTitle;
+    document.getElementById('modalVoteContent').style.display = '';
+    document.getElementById('modalConfirm').style.display = 'none';
+    document.getElementById('voteModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVoteModal() {
+    document.getElementById('voteModal').classList.remove('open');
+    document.body.style.overflow = '';
+    currentProposalId = null;
+  }
+
+  function castVote(choice) {
+    if (!currentProposalId) return;
+    localStorage.setItem('fpVote_' + currentProposalId, choice);
+
+    const choiceLabels = { YES: 'YES — Approved', NO: 'NO — Opposed', ABSTAIN: 'ABSTAIN — Recorded' };
+    document.getElementById('modalConfirmText').textContent =
+      'Your vote of "' + choiceLabels[choice] + '" has been cast and recorded to the People\'s Jury ledger. Your JUSTICE token has been spent on this vote.';
+
+    document.getElementById('modalVoteContent').style.display = 'none';
+    document.getElementById('modalConfirm').style.display = 'block';
+
+    updateVoteDisplay(currentProposalId, choice);
+  }
+
+  function updateVoteDisplay(proposalId, choice) {
+    const map = {
+      'p001': { btn: 'btn-v1', indicator: 'voted-v1' },
+      'p002': { btn: 'btn-v2', indicator: 'voted-v2' },
+    };
+    const ids = map[proposalId];
+    if (!ids) return;
+
+    const btn = document.getElementById(ids.btn);
+    const indicator = document.getElementById(ids.indicator);
+    if (btn) btn.style.display = 'none';
+    if (indicator) {
+      const labels = { YES: '✓ Voted YES', NO: '✗ Voted NO', ABSTAIN: '— Voted ABSTAIN' };
+      indicator.textContent = labels[choice] || 'Vote Recorded';
+      indicator.style.display = 'block';
+    }
+  }
+
+  function restoreVoteStates() {
+    const proposals = [
+      { id: 'p001', btn: 'btn-v1', indicator: 'voted-v1' },
+      { id: 'p002', btn: 'btn-v2', indicator: 'voted-v2' },
+    ];
+    proposals.forEach(p => {
+      const stored = localStorage.getItem('fpVote_' + p.id);
+      if (stored) updateVoteDisplay(p.id, stored);
+    });
+  }
+
+  /* ===== REGISTRATION FORM ===== */
+  function handleRegSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('reg-name').value.trim();
+    const province = document.getElementById('reg-province').value;
+    const subject = encodeURIComponent('Jury Registration');
+    const impact = document.getElementById('reg-impact').value.trim();
+    const body = encodeURIComponent(
+      'Name: ' + name + '\nProvince: ' + province + '\n\nImpact Statement:\n' + (impact || 'Not provided') +
+      '\n\n---\nRegistered via Francisco Protocol People\'s Jury\nccldr.net/dao.html'
+    );
+    window.location.href = 'mailto:info@ccldr.net?subject=' + subject + '&body=' + body;
+  }
+
+  /* ===== CLOSE MODAL ON OVERLAY CLICK ===== */
+  document.getElementById('voteModal').addEventListener('click', function(e) {
+    if (e.target === this) closeVoteModal();
+  });
+
+  /* ===== INIT ===== */
+  document.addEventListener('DOMContentLoaded', () => {
+    initCounters();
+    initProgressBars();
+    restoreVoteStates();
+  });
+</script>
+</body>
+</html>

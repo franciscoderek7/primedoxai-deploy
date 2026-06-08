@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual Courthouse — CCLDR.net | Cannabis Legal Defense & Education</title>
+<meta name="description" content="Welcome to the CCLDR Virtual Courthouse. Navigate the Lobby, Courtroom, Library, Judge's Chambers, Boardroom, Clerk's Office, Classroom, and Records Room.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--deep:#0d0d0d;--card:#141414;--gold:#c9a227;--gold-light:#e0b840;--green:#27ae60;--green-dark:#1e8449;--white:#f5f5f5;--muted:#888;--border:#2a2a2a;--wood:#1a1208;--cream:#f5f0e8}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* COURTHOUSE BG */
+.ch-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,162,39,.06) 0%,var(--black) 60%)}
+.ch-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(201,162,39,.03) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(201,162,39,.03) 60px)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.97);border-bottom:1px solid var(--gold);padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:13px;color:var(--muted);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 22px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;transition:background .2s}
+.nav-cta:hover{background:var(--gold-light)}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(10,10,10,.99);border-bottom:1px solid var(--gold);padding:16px 40px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:12px 0;border-bottom:1px solid var(--border);font-size:15px}
+
+/* LOBBY HERO */
+.lobby-hero{position:relative;z-index:1;text-align:center;padding:100px 40px 60px}
+.court-crest{font-size:72px;margin-bottom:24px;filter:drop-shadow(0 0 20px rgba(201,162,39,.4))}
+.lobby-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.3);border-radius:2px;padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.lobby-badge::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.lobby-title{font-family:'Cinzel',serif;font-size:clamp(36px,5vw,68px);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:16px}
+.lobby-title .gold{color:var(--gold)}
+.lobby-sub{font-size:17px;color:var(--muted);line-height:1.7;max-width:620px;margin:0 auto 48px}
+.tier-display{display:inline-flex;align-items:center;gap:8px;background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.25);border-radius:2px;padding:8px 20px;font-size:12px;color:var(--green);font-weight:600;letter-spacing:1px}
+#tier-name{font-weight:800;color:var(--gold)}
+
+/* ROOM DIRECTORY */
+.directory{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:0 40px 80px}
+.dir-title{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:32px;text-align:center;padding-top:16px;border-top:1px solid var(--border)}
+.rooms-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.room-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:32px 24px;cursor:pointer;transition:border-color .25s,transform .2s,box-shadow .25s;position:relative;text-align:center}
+.room-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.room-card.locked{cursor:default;opacity:.75}
+.room-card.locked:hover{transform:none;border-color:var(--border)}
+.room-icon{font-size:44px;margin-bottom:16px;display:block}
+.room-name{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px}
+.room-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.room-tier{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;display:inline-block;padding:3px 10px;border-radius:10px}
+.tier-free{background:rgba(39,174,96,.12);color:var(--green);border:1px solid rgba(39,174,96,.25)}
+.tier-warrior{background:rgba(201,162,39,.1);color:var(--gold);border:1px solid rgba(201,162,39,.2)}
+.tier-pro{background:rgba(100,149,237,.1);color:#6495ED;border:1px solid rgba(100,149,237,.2)}
+.tier-elite{background:rgba(147,112,219,.1);color:#9370DB;border:1px solid rgba(147,112,219,.2)}
+.tier-sovereign{background:rgba(201,162,39,.15);color:#FFD700;border:1px solid rgba(201,162,39,.35)}
+.room-enter{display:block;width:100%;padding:10px;background:var(--green);color:#000;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:2px;cursor:pointer;transition:background .2s}
+.room-enter:hover{background:var(--green-dark)}
+.room-enter.locked-btn{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.room-enter.locked-btn:hover{background:rgba(201,162,39,.1)}
+.lock-icon{position:absolute;top:14px;right:14px;font-size:16px;color:var(--muted)}
+
+/* TIER ACCESS GUIDE */
+.tier-guide{position:relative;z-index:1;background:rgba(20,20,20,.8);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 40px}
+.tier-guide-inner{max-width:1100px;margin:0 auto}
+.tg-title{font-family:'Cinzel',serif;font-size:28px;font-weight:700;text-align:center;color:var(--gold);margin-bottom:40px}
+.tier-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.tier-col{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:28px 24px}
+.tier-col.featured{border-color:var(--gold)}
+.tc-name{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.tc-price{font-size:32px;font-weight:800;color:var(--white);margin-bottom:4px}
+.tc-price span{font-size:13px;color:var(--muted);font-weight:400}
+.tc-rooms{list-style:none;margin:16px 0 20px}
+.tc-rooms li{font-size:12px;color:rgba(245,245,245,.7);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:8px}
+.tc-rooms li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.tc-cta{display:block;width:100%;padding:10px;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;transition:all .2s}
+.cta-green{background:var(--green);color:#000}
+.cta-green:hover{background:var(--green-dark)}
+.cta-gold{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.cta-gold:hover{background:rgba(201,162,39,.1)}
+
+/* PAYWALL MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--gold);border-radius:4px;padding:48px;max-width:440px;width:90%;text-align:center;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1}
+.modal-close:hover{color:var(--white)}
+.modal-icon{font-size:52px;margin-bottom:16px}
+.modal-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.modal-tiers{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.modal-tier-btn{display:block;padding:12px 20px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:all .2s}
+.mti-warrior{background:rgba(201,162,39,.1);border:1px solid var(--gold);color:var(--gold)}
+.mti-warrior:hover{background:rgba(201,162,39,.2)}
+.mti-pro{background:rgba(100,149,237,.1);border:1px solid #6495ED;color:#6495ED}
+.mti-pro:hover{background:rgba(100,149,237,.2)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:rgba(10,10,10,.98);border-top:1px solid var(--border);padding:40px;text-align:center}
+.footer-ccldr{font-family:'Cinzel',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
+.footer-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.footer-links a{font-size:12px;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{margin-top:24px;font-size:11px;color:rgba(136,136,136,.4)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.rooms-grid{grid-template-columns:repeat(2,1fr)}.tier-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.rooms-grid{grid-template-columns:1fr}.tier-row{grid-template-columns:1fr}.lobby-hero{padding:80px 20px 40px}.directory{padding:0 20px 60px}.tier-guide{padding:48px 20px}nav{padding:0 20px}.nav-links,.nav-cta{display:none}.hamburger{display:block}}
+</style>
+</head>
+<body>
+<div class="ch-bg" aria-hidden="true"></div>
+
+<nav>
+  <div class="nav-brand">
+    <div>
+      <div class="nav-logo">CCLDR</div>
+      <div class="nav-sub">Virtual Courthouse</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Main Site</a>
+    <a href="lobby.html" class="active">Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="library.html">Library</a>
+    <a href="clerks-office.html">Clerk's Office</a>
+    <a href="pricing.html">Pricing</a>
+  </div>
+  <a href="pricing.html" class="nav-cta">Upgrade Access</a>
+  <button class="hamburger" onclick="document.getElementById('nmob').classList.toggle('open')">☰</button>
+</nav>
+<div class="nav-mobile" id="nmob">
+  <a href="index.html">Main Site</a>
+  <a href="courtroom.html">Courtroom</a>
+  <a href="library.html">Library</a>
+  <a href="clerks-office.html">Clerk's Office</a>
+  <a href="classroom.html">Classroom</a>
+  <a href="pricing.html">Upgrade Access</a>
+</div>
+
+<!-- LOBBY HERO -->
+<section class="lobby-hero">
+  <div class="court-crest">⚖️</div>
+  <div class="lobby-badge">Courthouse Open — All Rooms Accessible by Tier</div>
+  <h1 class="lobby-title">Welcome to the<br><span class="gold">CCLDR Virtual Courthouse</span></h1>
+  <p class="lobby-sub">Canada's first interactive legal education platform modeled on real courthouse architecture. Navigate between rooms to learn, research, plan, and access court-ready documents.</p>
+  <div class="tier-display">Current Access: <span id="tier-name">Free / Lobby</span>&nbsp;·&nbsp;<a href="pricing.html" style="color:var(--gold);font-weight:700">Upgrade →</a></div>
+</section>
+
+<!-- ROOM DIRECTORY -->
+<div class="directory">
+  <div class="dir-title">Choose Your Room</div>
+  <div class="rooms-grid">
+
+    <!-- LOBBY — FREE -->
+    <div class="room-card">
+      <span class="room-icon">🏛️</span>
+      <div class="room-name">The Lobby</div>
+      <div class="room-desc">Welcome centre, orientation, virtual receptionist, courthouse directory, and FAQ. Entry point for all visitors.</div>
+      <span class="room-tier tier-free">Free — All Visitors</span>
+      <button class="room-enter" onclick="location.href='lobby.html'">You Are Here</button>
+    </div>
+
+    <!-- COURTROOM — FREE -->
+    <div class="room-card">
+      <span class="room-icon">⚖️</span>
+      <div class="room-name">The Courtroom</div>
+      <div class="room-desc">Active case tracker, Derek Francisco's litigation timeline, document downloads, and hearing calendar.</div>
+      <span class="room-tier tier-free">Free — All Visitors</span>
+      <button class="room-enter" onclick="location.href='courtroom.html'">Enter</button>
+    </div>
+
+    <!-- CLERK'S OFFICE — FREE -->
+    <div class="room-card">
+      <span class="room-icon">📋</span>
+      <div class="room-name">Clerk's Office</div>
+      <div class="room-desc">Filing procedures, court forms, fee calculator, timeline guide, and step-by-step instructions for self-represented litigants.</div>
+      <span class="room-tier tier-free">Free — All Visitors</span>
+      <button class="room-enter" onclick="location.href='clerks-office.html'">Enter</button>
+    </div>
+
+    <!-- LIBRARY — WARRIOR+ -->
+    <div class="room-card">
+      <span class="room-icon">📚</span>
+      <div class="room-name">The Library</div>
+      <div class="room-desc">Canonical cannabis case law, constitutional references, Parker, Smith, Allard, Hitzig, Mernagh, Ward. Searchable database.</div>
+      <span class="room-tier tier-warrior">Warrior $149+</span>
+      <button class="room-enter" onclick="location.href='library.html'">Enter</button>
+    </div>
+
+    <!-- CLASSROOM — WARRIOR+ -->
+    <div class="room-card">
+      <span class="room-icon">🎓</span>
+      <div class="room-name">Classroom</div>
+      <div class="room-desc">BENO-X Framework courses, 12-Appearance Sovereignty, Canadian constitutional law modules, progress tracking.</div>
+      <span class="room-tier tier-warrior">Warrior $149+</span>
+      <button class="room-enter" onclick="location.href='classroom.html'">Enter</button>
+    </div>
+
+    <!-- BOARDROOM — PROFESSIONAL+ -->
+    <div class="room-card">
+      <span class="room-icon">🗂️</span>
+      <div class="room-name">Boardroom</div>
+      <div class="room-desc">Case strategy sessions, hearing preparation, evidence organization worksheets, mock consultation simulations.</div>
+      <span class="room-tier tier-pro">Professional $499+</span>
+      <button class="room-enter" onclick="location.href='boardroom.html'">Enter</button>
+    </div>
+
+    <!-- JUDGE'S CHAMBERS — PROFESSIONAL+ -->
+    <div class="room-card">
+      <span class="room-icon">🏛</span>
+      <div class="room-name">Judge's Chambers</div>
+      <div class="room-desc">Judicial decision-making, constitutional law analysis, sample rulings in cannabis cases, judicial independence study.</div>
+      <span class="room-tier tier-pro">Professional $499+</span>
+      <button class="room-enter" onclick="location.href='judges-chambers.html'">Enter</button>
+    </div>
+
+    <!-- RECORDS ROOM — ELITE+ -->
+    <div class="room-card">
+      <span class="room-icon">🗄️</span>
+      <div class="room-name">Records Room</div>
+      <div class="room-desc">Court-ready document templates, auto-populated forms, Statement of Claim, Defence forms, Motion templates, PDF export.</div>
+      <span class="room-tier tier-elite">Elite $999+</span>
+      <button class="room-enter" onclick="location.href='records-room.html'">Enter</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- TIER ACCESS GUIDE -->
+<div class="tier-guide">
+  <div class="tier-guide-inner">
+    <h2 class="tg-title">Choose Your Level of Access</h2>
+    <div class="tier-row">
+      <div class="tier-col">
+        <div class="tc-name">Warrior</div>
+        <div class="tc-price">$149<span>/mo</span></div>
+        <ul class="tc-rooms">
+          <li>Lobby + Courtroom</li>
+          <li>Clerk's Office (full)</li>
+          <li>Library — full database</li>
+          <li>Classroom — all modules</li>
+          <li>Email support</li>
+        </ul>
+        <a href="mailto:info@ccldr.net?subject=Warrior%20Tier%20Signup" class="tc-cta cta-gold">Join Warrior</a>
+      </div>
+      <div class="tier-col featured">
+        <div class="tc-name">Professional</div>
+        <div class="tc-price">$499<span>/mo</span></div>
+        <ul class="tc-rooms">
+          <li>Everything in Warrior</li>
+          <li>Judge's Chambers</li>
+          <li>Boardroom strategy tools</li>
+          <li>Case strategy worksheets</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup" class="tc-cta cta-green">Join Professional</a>
+      </div>
+      <div class="tier-col">
+        <div class="tc-name">Elite</div>
+        <div class="tc-price">$999<span>/mo</span></div>
+        <ul class="tc-rooms">
+          <li>Everything in Professional</li>
+          <li>Records Room — all templates</li>
+          <li>Auto-populated court forms</li>
+          <li>Advanced case tracking</li>
+          <li>Document download priority</li>
+        </ul>
+        <a href="mailto:info@ccldr.net?subject=Elite%20Tier%20Signup" class="tc-cta cta-gold">Join Elite</a>
+      </div>
+      <div class="tier-col">
+        <div class="tc-name">Sovereign</div>
+        <div class="tc-price">$1,499<span>/mo</span></div>
+        <ul class="tc-rooms">
+          <li>All rooms, all content</li>
+          <li>Personal consultation scheduling</li>
+          <li>Direct Derek Francisco access</li>
+          <li>Custom case strategy</li>
+          <li>Priority emergency support</li>
+        </ul>
+        <a href="mailto:info@ccldr.net?subject=Sovereign%20Tier%20Inquiry" class="tc-cta cta-green">Join Sovereign</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-ccldr">CCLDR.NET</div>
+  <div class="footer-sub">Cannabis Legal Defense & Education Resources · Virtual Courthouse</div>
+  <div class="footer-links">
+    <a href="index.html">Main Site</a>
+    <a href="lobby.html">Courthouse Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="library.html">Library</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="mailto:info@ccldr.net">Contact</a>
+  </div>
+  <div class="footer-bottom">© 2026 CCLDR.NET · A Francisco Holdings Inc. Venture · All information is educational — not legal advice</div>
+</footer>
+
+<script type="module" src="/membership.js"></script>
+<script>
+// Tier display — verified server-side via Supabase (membership.js), not a browser-editable flag
+const tiers = {free:'Free / Lobby',warrior:'Warrior',professional:'Professional',elite:'Elite',sovereign:'Sovereign'};
+function renderTier(tier){
+  document.getElementById('tier-name').textContent = tiers[tier] || 'Free / Lobby';
+}
+renderTier('free');
+document.addEventListener('ccldr-tier-verified', e => renderTier(e.detail.tier));
+</script>
+</body>
+</html>

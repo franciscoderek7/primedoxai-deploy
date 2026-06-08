@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Holdings — Revenue Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --dark: #0a0a12; --mid: #12121e; --card: #1a1a2e; --border: #2a2a3e;
+    --gold: #c9a84c; --green: #2e9e6b; --red: #e63946; --blue: #4a6cf7; --purple: #7c3aed;
+    --text: #f0f0f8; --muted: #8888a8; --dim: #4a4a6a;
+  }
+  body { background: var(--dark); color: var(--text); font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
+
+  /* Header */
+  header { background: var(--mid); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: 16px; font-weight: 800; }
+  .logo span { color: var(--gold); }
+  .header-right { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+  .live-indicator { display: flex; align-items: center; gap: 6px; }
+  .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 52px); }
+  nav { background: var(--mid); border-right: 1px solid var(--border); padding: 20px 0; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--muted); font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; }
+  nav a:hover, nav a.active { background: var(--card); color: var(--text); }
+  nav .nav-section { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); padding: 16px 20px 4px; }
+  main { padding: 24px; overflow-x: auto; }
+
+  /* Metric cards */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .metric-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+  .metric-value { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+  .metric-change { font-size: 12px; margin-top: 4px; }
+  .positive { color: var(--green); }
+  .negative { color: var(--red); }
+  .neutral { color: var(--muted); }
+
+  /* Section headers */
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .section-title { font-size: 16px; font-weight: 700; }
+  .section-actions { display: flex; gap: 8px; }
+  .btn-sm { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; }
+  .btn-sm-primary { background: var(--gold); color: #111; }
+  .btn-sm-ghost { background: var(--card); border: 1px solid var(--border); color: var(--text); }
+
+  /* Property table */
+  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--mid); }
+  th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); white-space: nowrap; }
+  td { padding: 12px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .property-name { font-weight: 600; }
+  .property-domain { font-size: 12px; color: var(--muted); }
+  .status-live { color: var(--green); font-size: 11px; font-weight: 700; }
+  .status-pending { color: var(--gold); font-size: 11px; font-weight: 700; }
+  .status-offline { color: var(--red); font-size: 11px; font-weight: 700; }
+  .loop-a { font-size: 10px; background: rgba(46,158,107,0.15); color: var(--green); border: 1px solid rgba(46,158,107,0.3); padding: 2px 6px; border-radius: 3px; font-weight: 700; }
+  .loop-b { font-size: 10px; background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); padding: 2px 6px; border-radius: 3px; font-weight: 700; }
+  .revenue-num { font-weight: 700; }
+  .revenue-zero { color: var(--dim); }
+  .action-link { color: var(--gold); font-size: 12px; font-weight: 600; text-decoration: none; }
+  .action-link:hover { text-decoration: underline; }
+
+  /* Payment status section */
+  .payment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .payment-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .payment-card.urgent { border-color: var(--gold); }
+  .payment-card.alert { border-color: var(--red); }
+  .payment-card-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .payment-card p { font-size: 12px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+  .payment-amount { font-size: 20px; font-weight: 900; margin: 8px 0; }
+  .badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; }
+  .badge-urgent { background: rgba(201,168,76,0.2); color: var(--gold); }
+  .badge-ok { background: rgba(46,158,107,0.2); color: var(--green); }
+  .badge-alert { background: rgba(230,57,70,0.2); color: var(--red); }
+
+  /* Quick links */
+  .quick-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+  .quick-link { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--text); text-decoration: none; font-weight: 500; }
+  .quick-link:hover { border-color: var(--gold); color: var(--gold); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    nav { display: none; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .payment-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Francisco <span>Holdings</span> — Revenue Dashboard</div>
+  <div class="header-right">
+    <div class="live-indicator"><span class="live-dot"></span>Live Data — Manual Update Required</div>
+    <span>June 7, 2026</span>
+    <span>Derek Francisco, CEO</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Sidebar nav -->
+  <nav>
+    <div class="nav-section">Overview</div>
+    <a class="active">📊 Revenue Overview</a>
+    <a>💳 Payment Status</a>
+    <a>📈 Projections</a>
+
+    <div class="nav-section">Loop A</div>
+    <a>⚖️ CCLDR.net</a>
+    <a>🤖 PrimeDox AI</a>
+    <a>📚 Weedlaw Education</a>
+    <a>🏢 Francisco Holdings</a>
+    <a>🌿 CCC.net</a>
+
+    <div class="nav-section">Loop B</div>
+    <a>🛡️ OmniaGuard</a>
+    <a>⚙️ Kiaros</a>
+    <a>🧹 CleanSwarm</a>
+    <a>🔗 SoulStack</a>
+    <a>🐾 TechPetCage</a>
+
+    <div class="nav-section">Finance</div>
+    <a>🏦 Stripe Account</a>
+    <a>📬 Interac Records</a>
+    <a>💰 Affiliate Payouts</a>
+    <a>🧾 SR&ED Tracker</a>
+  </nav>
+
+  <!-- Main content -->
+  <main>
+
+    <!-- Top metrics -->
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-label">Total ARR (Active)</div>
+        <div class="metric-value" style="color:var(--gold);">$0</div>
+        <div class="metric-change neutral">Target: $696K Year 1 — Update when first recurring revenues confirmed</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">One-Time Revenue (MTD)</div>
+        <div class="metric-value">$0</div>
+        <div class="metric-change neutral">Update after Stripe recovery + first sales</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Stripe Balance</div>
+        <div class="metric-value" style="color:var(--gold);">$406.80</div>
+        <div class="metric-change negative">⚠ Pending payout — Stripe account under review</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Active Subscribers</div>
+        <div class="metric-value">0</div>
+        <div class="metric-change neutral">Update after first subscribers enroll</div>
+      </div>
+    </div>
+
+    <!-- Payment status alerts -->
+    <div class="section-header">
+      <div class="section-title">⚠️ Action Required — Payment & Financial Items</div>
+    </div>
+
+    <div class="payment-grid">
+      <div class="payment-card urgent">
+        <div class="payment-card-title">Stripe Account Recovery <span class="badge badge-urgent">Urgent</span></div>
+        <div class="payment-amount" style="color:var(--gold);">$406.80</div>
+        <p>Stripe balance pending. Account under 2FA review. Complete recovery at dashboard.stripe.com/recover. Upload government ID. Set up Authy 2FA after recovery.</p>
+        <a href="mailto:franciscoderek7@gmail.com?subject=Stripe Recovery Reminder" class="action-link">→ Use STRIPE-REPLY-TEMPLATE.md</a>
+      </div>
+      <div class="payment-card alert">
+        <div class="payment-card-title">MDG Order #8600918 <span class="badge badge-alert">Dispute</span></div>
+        <div class="payment-amount" style="color:var(--red);">-$35.00</div>
+        <p>$35 NSF fee dispute + order reschedule request. Email template ready in Phase 2 content kit. Send to finance@mdg.ca with case number.</p>
+        <a href="mailto:finance@mdg.ca?subject=Order 8600918 — NSF Fee Dispute" class="action-link">→ Send MDG Dispute Email</a>
+      </div>
+      <div class="payment-card">
+        <div class="payment-card-title">Tech Pet Cage — Balance <span class="badge badge-alert">Review</span></div>
+        <div class="payment-amount" style="color:var(--red);">-$134.00</div>
+        <p>Negative balance on Tech Pet Cage Stripe account. Determine: dispute vs. clear balance. Check Stripe dashboard for transaction details.</p>
+        <a href="#" class="action-link">→ Review in Stripe Dashboard</a>
+      </div>
+    </div>
+
+    <!-- Quick action links -->
+    <div class="section-header">
+      <div class="section-title">Quick Actions</div>
+    </div>
+
+    <div class="quick-links">
+      <a href="https://paypal.me/derekfrancisco" target="_blank" class="quick-link">💳 PayPal.me/derekfrancisco</a>
+      <a href="mailto:franciscoderek7@gmail.com" class="quick-link">📬 Interac e-Transfer</a>
+      <a href="https://dashboard.stripe.com" target="_blank" class="quick-link">🏦 Stripe Dashboard</a>
+      <a href="../deal-room/index.html" class="quick-link">🤝 Deal Room</a>
+      <a href="../francisco-holdings-site/investors.html" class="quick-link">📊 Investor Page</a>
+      <a href="../legal-filings/README.md" class="quick-link">⚖️ Legal Filings</a>
+    </div>
+
+    <!-- All properties table -->
+    <div class="section-header">
+      <div class="section-title">All Properties — Revenue Tracker</div>
+      <div class="section-actions">
+        <button class="btn-sm btn-sm-ghost">Export CSV</button>
+        <button class="btn-sm btn-sm-primary">+ Add Property</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Loop</th>
+            <th>Status</th>
+            <th>Revenue Model</th>
+            <th>MTD Revenue</th>
+            <th>ARR Run Rate</th>
+            <th>Next Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="property-name">CCLDR.net</div><div class="property-domain">ccldr.net</div></td>
+            <td><span class="loop-a">A</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>$149–$1,499/mo subscriptions</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td><a href="mailto:franciscoderek7@gmail.com?subject=CCLDR New Member" class="action-link">Send partner outreach</a></td>
+          </tr>
+          <tr>
+            <td><div class="property-name">PrimeDox AI</div><div class="property-domain">primedoxai.com</div></td>
+            <td><span class="loop-a">A</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>$99 one-time / $49–$199/mo</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td><a href="../primedoxai-site/emergency-defense.html" class="action-link">Check emergency-defense page</a></td>
+          </tr>
+          <tr>
+            <td><div class="property-name">Weedlaw Education</div><div class="property-domain">weedlaw-education</div></td>
+            <td><span class="loop-a">A</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>$149–$1,499 courses</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td><a href="../weedlaw-education/course-sales.html" class="action-link">Check course sales page</a></td>
+          </tr>
+          <tr>
+            <td><div class="property-name">Francisco Holdings</div><div class="property-domain">franciscoholdingsinc.com</div></td>
+            <td><span class="loop-a">A</span></td>
+            <td><span class="status-pending">⏳ PENDING DEPLOY</span></td>
+            <td>Investor tiers $25K–$500K+</td>
+            <td class="revenue-zero">$0</td>
+            <td class="revenue-zero">—</td>
+            <td><a href="../francisco-holdings-site/investors.html" class="action-link">Deploy investor page</a></td>
+          </tr>
+          <tr>
+            <td><div class="property-name">CCC.net</div><div class="property-domain">ccc.net</div></td>
+            <td><span class="loop-a">A</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>Products + compliance SaaS</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><div class="property-name">OmniaGuard</div><div class="property-domain">omniaguard.com</div></td>
+            <td><span class="loop-b">B</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>$499–$99,999/mo SaaS</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td>Run free audit campaigns</td>
+          </tr>
+          <tr>
+            <td><div class="property-name">Kiaros</div><div class="property-domain">kiaros.ai</div></td>
+            <td><span class="loop-b">B</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>Consulting retainers (custom)</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><div class="property-name">CleanSwarm</div><div class="property-domain">cleanswarm.ca</div></td>
+            <td><span class="loop-b">B</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>$199–$2,499/mo SaaS</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td><a href="../cleanswarm-checkout/for-cleaning-businesses.html" class="action-link">Send LOI follow-ups (Brent, Ali, Matt)</a></td>
+          </tr>
+          <tr>
+            <td><div class="property-name">SoulStack</div><div class="property-domain">soulstack.ai</div></td>
+            <td><span class="loop-b">B</span></td>
+            <td><span class="status-pending">⏳ PENDING</span></td>
+            <td>AI infrastructure SaaS</td>
+            <td class="revenue-zero">$0</td>
+            <td class="revenue-zero">—</td>
+            <td>Register soulstack.ai domain</td>
+          </tr>
+          <tr>
+            <td><div class="property-name">TechPetCage</div><div class="property-domain">techpetcage.com</div></td>
+            <td><span class="loop-b">B</span></td>
+            <td><span class="status-live">● LIVE</span></td>
+            <td>Physical product sales</td>
+            <td class="revenue-zero">$0 — update</td>
+            <td class="revenue-zero">—</td>
+            <td>Resolve -$134 Stripe balance</td>
+          </tr>
+          <tr>
+            <td><div class="property-name">Vault Velocity Auto</div><div class="property-domain">vaultvelocityauto.com</div></td>
+            <td><span class="loop-b">B</span></td>
+            <td><span class="status-pending">⏳ NEW — SCOPE NEEDED</span></td>
+            <td>TBD</td>
+            <td class="revenue-zero">—</td>
+            <td class="revenue-zero">—</td>
+            <td>Confirm brand positioning with Derek</td>
+          </tr>
+          <tr>
+            <td><div class="property-name">zprimedoxaihq.com</div><div class="property-domain">zprimedoxaihq.com</div></td>
+            <td><span class="loop-a">A</span></td>
+            <td><span class="status-pending">⏳ SCOPE NEEDED</span></td>
+            <td>Members HQ portal?</td>
+            <td class="revenue-zero">—</td>
+            <td class="revenue-zero">—</td>
+            <td>Confirm intended use with Derek</td>
+          </tr>
+          <tr>
+            <td colspan="7" style="text-align:center;color:var(--dim);font-size:12px;padding:16px;">
+              + 8 swarm properties (Space/Auto/Quantum/Biotech/Health/FinTech/Energy/Logistics) — placeholder revenue $0 until SaaS tiers live
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SR&ED tracker -->
+    <div class="section-header">
+      <div class="section-title">SR&ED (Scientific Research & Experimental Development) Tracker</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Qualifying Activity</th>
+            <th>Estimated Spend</th>
+            <th>35% Refund Estimate</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>OmniaGuard — 14-agent swarm development</td>
+            <td>AI R&D, experimental agent coordination</td>
+            <td>[ENTER ACTUAL]</td>
+            <td class="positive">35% of eligible spend</td>
+            <td><span class="status-pending">Track expenses</span></td>
+          </tr>
+          <tr>
+            <td>PrimeDox AI — training pipeline</td>
+            <td>AI model fine-tuning on case law corpus</td>
+            <td>[ENTER ACTUAL]</td>
+            <td class="positive">35% of eligible spend</td>
+            <td><span class="status-pending">Track expenses</span></td>
+          </tr>
+          <tr>
+            <td>Super Highway — identity loop system</td>
+            <td>Novel cross-brand privacy architecture</td>
+            <td>[ENTER ACTUAL]</td>
+            <td class="positive">35% of eligible spend</td>
+            <td><span class="status-pending">Track expenses</span></td>
+          </tr>
+          <tr>
+            <td>CCLDR — BENO-X AI integration</td>
+            <td>AI-powered legal framework analysis</td>
+            <td>[ENTER ACTUAL]</td>
+            <td class="positive">35% of eligible spend</td>
+            <td><span class="status-pending">Track expenses</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:12px;color:var(--dim);margin-top:8px;">SR&ED refund requires annual T661 filing with CRA. Engage an SR&ED consultant (e.g., KPMG, MNP, or specialist SR&ED firm) to maximize eligible claim. All development expenses should be tracked with time logs and project notes.</p>
+
+  </main>
+</div>
+
+</body>
+</html>

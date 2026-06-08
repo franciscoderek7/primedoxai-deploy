@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed! — TechPetCage</title>
+<meta name="description" content="Thank you for your TechPetCage order. Your smart pet tech is on its way!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0066FF;
+  --orange: #FF6B35;
+  --mint: #00D9C0;
+  --dark: #0a0f1e;
+  --panel: #131929;
+  --border: #1e2a45;
+  --white: #f8faff;
+  --muted: #7a8bb0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; display: flex; flex-direction: column; }
+
+nav { background: var(--panel); border-bottom: 1px solid var(--border); padding: 0 40px; height: 64px; display: flex; align-items: center; justify-content: center; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo-text { font-size: 17px; font-weight: 700; color: var(--white); }
+.nav-logo-text span { color: var(--blue); }
+
+.success-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 24px; }
+
+.success-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 60px 48px; max-width: 620px; width: 100%; text-align: center; }
+
+.success-icon { font-size: 72px; margin-bottom: 24px; animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+@keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.success-title { font-size: 32px; font-weight: 800; color: var(--white); margin-bottom: 12px; }
+
+.success-sub { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 420px; margin: 0 auto 32px; }
+
+.order-ref { background: rgba(0,217,192,0.08); border: 1px solid rgba(0,217,192,0.25); border-radius: 10px; padding: 20px 28px; margin-bottom: 32px; display: inline-block; }
+
+.order-ref-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mint); margin-bottom: 6px; }
+
+.order-ref-id { font-size: 22px; font-weight: 700; color: var(--white); letter-spacing: 2px; font-variant-numeric: tabular-nums; }
+
+.delivery-info { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 40px; }
+
+.delivery-card { background: rgba(30,42,69,0.5); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+
+.delivery-icon { font-size: 28px; margin-bottom: 8px; }
+
+.delivery-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+
+.delivery-val { font-size: 14px; font-weight: 600; color: var(--white); }
+
+.order-items { background: rgba(30,42,69,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; text-align: left; }
+
+.items-title { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+
+.order-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(30,42,69,0.8); font-size: 14px; }
+.order-item:last-child { border-bottom: none; }
+.order-item-name { color: var(--white); }
+.order-item-price { color: var(--mint); font-weight: 600; }
+
+.order-total { display: flex; justify-content: space-between; padding-top: 12px; font-weight: 700; font-size: 16px; }
+
+.cta-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+.btn-primary { background: var(--blue); color: #fff; padding: 14px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 14px; transition: background 0.2s, transform 0.15s; }
+.btn-primary:hover { background: #0052CC; transform: translateY(-1px); }
+
+.btn-outline { background: transparent; color: var(--white); padding: 13px 28px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px; border: 1px solid var(--border); transition: border-color 0.2s; }
+.btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+.tracking-note { margin-top: 28px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+.confetti { position: fixed; top: 0; left: 0; right: 0; pointer-events: none; z-index: 999; }
+
+@media (max-width: 640px) {
+  .success-card { padding: 40px 24px; }
+  .delivery-info { grid-template-columns: 1fr; }
+  .cta-buttons { flex-direction: column; }
+  .btn-primary, .btn-outline { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<canvas class="confetti" id="confetti"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+      <rect width="40" height="40" rx="10" fill="#0066FF"/>
+      <path d="M20 8 L24 14 L32 14 L26 20 L28 28 L20 24 L12 28 L14 20 L8 14 L16 14 Z" fill="white" opacity="0.9"/>
+    </svg>
+    <span class="nav-logo-text">Tech<span>Pet</span>Cage</span>
+  </a>
+</nav>
+
+<div class="success-wrap">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <h1 class="success-title">Order Confirmed!</h1>
+    <p class="success-sub">Your smart pet tech is on its way! You'll receive a confirmation email shortly with tracking information once your order ships.</p>
+
+    <div class="order-ref">
+      <div class="order-ref-label">Order Reference</div>
+      <div class="order-ref-id" id="order-id">TPC-XXXXXX</div>
+    </div>
+
+    <div class="delivery-info">
+      <div class="delivery-card">
+        <div class="delivery-icon">📦</div>
+        <div class="delivery-label">Estimated Delivery</div>
+        <div class="delivery-val">15–30 Days</div>
+      </div>
+      <div class="delivery-card">
+        <div class="delivery-icon">✉️</div>
+        <div class="delivery-label">Confirmation</div>
+        <div class="delivery-val" id="confirm-email">Your email</div>
+      </div>
+      <div class="delivery-card">
+        <div class="delivery-icon">↩</div>
+        <div class="delivery-label">Returns</div>
+        <div class="delivery-val">30-Day Policy</div>
+      </div>
+    </div>
+
+    <div class="order-items" id="order-items-wrap">
+      <div class="items-title">Items Ordered</div>
+      <div id="order-items-list"></div>
+      <div class="order-total">
+        <span>Total Charged</span>
+        <span id="order-total-val" style="color:var(--mint);">$0.00</span>
+      </div>
+    </div>
+
+    <div class="cta-buttons">
+      <a href="shop.html" class="btn-primary">🛒 Continue Shopping</a>
+      <a href="index.html" class="btn-outline">← Back to Home</a>
+    </div>
+
+    <p class="tracking-note">
+      Questions about your order? Email us at <a href="mailto:omniaguard1@gmail.com" style="color:var(--blue);">omniaguard1@gmail.com</a> with your order reference number. Tracking numbers are sent within 3–5 business days after dispatch.
+    </p>
+  </div>
+</div>
+
+<script>
+// Load order data
+const order = (() => {
+  try { return JSON.parse(localStorage.getItem('tpc_last_order')); } catch { return null; }
+})();
+
+if (order) {
+  document.getElementById('order-id').textContent = order.id;
+  document.getElementById('confirm-email').textContent = order.email || 'Your email';
+  document.getElementById('order-total-val').textContent = '$' + order.total.toFixed(2);
+
+  const list = document.getElementById('order-items-list');
+  list.innerHTML = order.items.map(item => `
+    <div class="order-item">
+      <span class="order-item-name">${item.name} × ${item.qty}</span>
+      <span class="order-item-price">$${(item.price * item.qty).toFixed(2)}</span>
+    </div>
+  `).join('');
+} else {
+  // Demo data
+  document.getElementById('order-id').textContent = 'TPC-' + Math.random().toString(36).substring(2,8).toUpperCase();
+  document.getElementById('confirm-email').textContent = 'your@email.com';
+  document.getElementById('order-total-val').textContent = '$139.97';
+  document.getElementById('order-items-list').innerHTML = `
+    <div class="order-item"><span class="order-item-name">AutoFeed WiFi Pro × 1</span><span class="order-item-price">$89.99</span></div>
+    <div class="order-item"><span class="order-item-name">GPS PawTracker × 1</span><span class="order-item-price">$49.98</span></div>
+  `;
+}
+
+// Confetti animation
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const COLORS = ['#0066FF','#FF6B35','#00D9C0','#FFD700','#FF69B4','#00FF88'];
+const particles = Array.from({length: 80}, () => ({
+  x: Math.random() * canvas.width,
+  y: -10,
+  w: Math.random() * 10 + 5,
+  h: Math.random() * 5 + 3,
+  color: COLORS[Math.floor(Math.random() * COLORS.length)],
+  speed: Math.random() * 3 + 2,
+  angle: Math.random() * 360,
+  spin: Math.random() * 4 - 2,
+  opacity: 1
+}));
+
+let frame = 0;
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let active = false;
+  particles.forEach(p => {
+    if (p.y < canvas.height + 20) {
+      active = true;
+      p.y += p.speed;
+      p.angle += p.spin;
+      p.opacity -= 0.004;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle * Math.PI / 180);
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    }
+  });
+  if (frame < 200) { frame++; requestAnimationFrame(drawConfetti); }
+}
+drawConfetti();
+</script>
+</body>
+</html>

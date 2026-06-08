@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire.OS — Francisco Holdings Inc.</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0a; --surface: #111111; --card: #161616; --border: #222222; --border2: #2a2a2a;
+  --gold: #D4AF37; --gold2: #e8c84a; --gold-dim: rgba(212,175,55,.15);
+  --green: #2E7D32; --green2: #43a047; --green3: #81c784;
+  --red: #c62828; --red2: #ef5350; --red-dim: rgba(198,40,40,.15);
+  --yellow: #f57f17; --yellow2: #ffa726; --yellow-dim: rgba(245,127,23,.12);
+  --text: #f0f0f0; --muted: #888; --dim: #444;
+  --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* ── HEADER ── */
+.hdr { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; height: 52px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+.hdr-logo { font-size: 15px; font-weight: 900; letter-spacing: -.3px; color: var(--gold); }
+.hdr-sub { font-size: 12px; color: var(--muted); }
+.hdr-spacer { flex: 1; }
+.hdr-time { font-size: 12px; color: var(--dim); }
+.hdr-updated { font-size: 11px; color: var(--dim); }
+.hdr-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green2); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── LAYOUT ── */
+.page { padding: 20px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+/* ── STAT ROW ── */
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+.stat-val { font-size: 26px; font-weight: 900; letter-spacing: -.5px; }
+.stat-val.gold { color: var(--gold); }
+.stat-val.red { color: var(--red2); }
+.stat-val.green { color: var(--green3); }
+.stat-val.neutral { color: var(--text); }
+.stat-note { font-size: 11px; color: var(--dim); margin-top: 4px; }
+
+/* ── SECTION HEADER ── */
+.sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.sec-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.sec-badge { font-size: 11px; color: var(--dim); }
+
+/* ── MAIN GRID ── */
+.main-grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; }
+
+/* ── COMPANY FILTERS ── */
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.filter-btn { padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 12px; cursor: pointer; transition: all .15s; }
+.filter-btn:hover { border-color: var(--border2); color: var(--text); }
+.filter-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+
+/* ── COMPANY GRID ── */
+.company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 10px; }
+.co-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; transition: border-color .15s; }
+.co-card:hover { border-color: var(--border2); }
+.co-card.mvr-red { border-left: 3px solid var(--red2); }
+.co-card.mvr-yellow { border-left: 3px solid var(--yellow2); }
+.co-card.mvr-green { border-left: 3px solid var(--green3); }
+.co-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.co-name { font-size: 13px; font-weight: 700; line-height: 1.3; }
+.co-mvr { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+.co-mvr.red { background: var(--red2); box-shadow: 0 0 6px rgba(239,83,80,.5); }
+.co-mvr.yellow { background: var(--yellow2); }
+.co-mvr.green { background: var(--green3); box-shadow: 0 0 6px rgba(129,199,132,.4); }
+.co-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; letter-spacing: .3px; }
+.badge-mvp { background: rgba(66,165,245,.15); color: #64b5f6; }
+.badge-growth { background: rgba(255,152,0,.15); color: #ffb74d; }
+.badge-automated { background: rgba(156,39,176,.15); color: #ce93d8; }
+.badge-revenue { background: rgba(46,125,50,.2); color: var(--green3); }
+.badge-a { background: var(--gold-dim); color: var(--gold); }
+.badge-b { background: rgba(66,165,245,.1); color: #64b5f6; }
+.co-financials { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.co-fin-item { font-size: 12px; }
+.co-fin-label { color: var(--muted); }
+.co-fin-val { font-weight: 700; }
+.co-fin-val.pos { color: var(--green3); }
+.co-fin-val.neg { color: var(--red2); }
+.co-fin-val.zero { color: var(--dim); }
+.co-domain { font-size: 11px; color: var(--dim); margin-top: 8px; }
+.co-updated { font-size: 10px; color: var(--dim); margin-top: 4px; }
+
+/* ── RIGHT COLUMN ── */
+.right-col { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── APPROVAL QUEUE ── */
+.approval-list { display: flex; flex-direction: column; gap: 8px; }
+.appr-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; display: flex; gap: 10px; align-items: flex-start; }
+.appr-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.appr-body { flex: 1; }
+.appr-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.appr-note { font-size: 11px; color: var(--muted); }
+.appr-amount { font-size: 13px; font-weight: 800; flex-shrink: 0; }
+.appr-item.g { border-left: 3px solid var(--green3); }
+.appr-item.g .appr-amount { color: var(--green3); }
+.appr-item.y { border-left: 3px solid var(--yellow2); }
+.appr-item.y .appr-amount { color: var(--yellow2); }
+.appr-item.r { border-left: 3px solid var(--red2); }
+.appr-item.r .appr-amount { color: var(--red2); }
+
+/* ── LITIGATION ── */
+.lit-list { display: flex; flex-direction: column; gap: 10px; }
+.lit-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.lit-hdr { padding: 10px 13px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+.lit-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.lit-dot.critical { background: var(--red2); animation: blink 1s infinite; }
+.lit-dot.active { background: var(--yellow2); }
+.lit-name { font-size: 13px; font-weight: 700; flex: 1; }
+.lit-amount { font-size: 12px; font-weight: 700; color: var(--gold); }
+.lit-body { padding: 10px 13px; }
+.lit-file { font-size: 11px; color: var(--dim); margin-bottom: 8px; }
+.lit-status { font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.lit-status.critical { color: var(--red2); }
+.lit-status.active { color: var(--yellow2); }
+.deadline-list { display: flex; flex-direction: column; gap: 5px; }
+.deadline { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.deadline-flag { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.deadline-flag.urgent { background: var(--red2); animation: blink 1s infinite; }
+.deadline-flag.normal { background: var(--dim); }
+.deadline-date { color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.deadline-label { color: var(--text); }
+.deadline-days { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; flex-shrink: 0; }
+.deadline-days.urgent { background: var(--red-dim); color: var(--red2); }
+.deadline-days.soon { background: var(--yellow-dim); color: var(--yellow2); }
+.deadline-days.ok { background: rgba(0,0,0,.3); color: var(--dim); }
+
+/* ── EMPTY STATE ── */
+.empty { color: var(--dim); font-style: italic; font-size: 13px; padding: 8px 0; }
+
+/* ── MOBILE ── */
+@media (max-width: 900px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: repeat(2,1fr); }
+  .right-col { order: -1; }
+}
+@media (max-width: 480px) {
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .company-grid { grid-template-columns: 1fr; }
+  .page { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo">EMPIRE.OS</div>
+  <div class="hdr-sub">Francisco Holdings Inc.</div>
+  <div class="hdr-spacer"></div>
+  <div class="hdr-dot"></div>
+  <div class="hdr-time" id="clock"></div>
+  <div class="hdr-updated" id="last-updated"></div>
+</header>
+
+<div class="page">
+
+  <!-- ── FINANCIAL SUMMARY ── -->
+  <div>
+    <div class="sec-hdr">
+      <div class="sec-title">Financial Summary</div>
+      <div class="sec-badge" id="fin-period"></div>
+    </div>
+    <div class="stat-row" id="stat-row"></div>
+  </div>
+
+  <!-- ── MAIN GRID ── -->
+  <div class="main-grid">
+
+    <!-- LEFT: COMPANIES -->
+    <div>
+      <div class="sec-hdr">
+        <div class="sec-title">Companies <span id="co-count" style="color:var(--dim)"></span></div>
+      </div>
+      <div class="filter-bar" id="filter-bar"></div>
+      <div class="company-grid" id="company-grid"></div>
+    </div>
+
+    <!-- RIGHT: QUEUE + LITIGATION -->
+    <div class="right-col">
+
+      <div>
+        <div class="sec-hdr">
+          <div class="sec-title">Approval Queue</div>
+          <div class="sec-badge" id="queue-counts"></div>
+        </div>
+        <div class="approval-list" id="approval-list"></div>
+      </div>
+
+      <div>
+        <div class="sec-hdr">
+          <div class="sec-title">Litigation Tracker</div>
+          <div class="sec-badge" id="lit-total"></div>
+        </div>
+        <div class="lit-list" id="lit-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  EMPIRE DATA — Derek, edit this section to update the dashboard
+// ═══════════════════════════════════════════════════════════════
+
+const EMPIRE = {
+
+  // ── Updated timestamp (ISO date string) ──
+  updated: "2026-06-08",
+
+  // ── Financial summary (all in CAD) ──
+  financial: {
+    totalRevenue:  0,        // monthly total revenue across all companies
+    totalExpenses: 580,      // monthly total expenses (hosting, tools, etc.)
+    cashRunway:    0,        // months of runway (update manually)
+    currency: "CAD",
+    period: "June 2026",
+  },
+
+  // ── Companies ──
+  // stage: "MVP" | "Growth" | "Automated" | "Revenue"
+  // mvr:   "red" | "yellow" | "green"
+  // loop:  "A" | "B"
+  // revenue, expenses: monthly CAD numbers (0 = not yet live)
+  companies: [
+    { name:"Francisco Holdings Inc.",  loop:"A", stage:"Growth",    mvr:"yellow", revenue:0,    expenses:0,   domain:"franciscoholdingsinc.com", updated:"2026-06-08" },
+    { name:"CCLDR",                    loop:"A", stage:"Revenue",   mvr:"yellow", revenue:0,    expenses:45,  domain:"ccldr.net",                updated:"2026-06-08" },
+    { name:"OmniaGuard",               loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:45,  domain:"omniaguard.com",           updated:"2026-06-08" },
+    { name:"PrimeDox AI",              loop:"A", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"primedoxai.com",           updated:"2026-06-08" },
+    { name:"CleanSwarm",               loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"cleanswarm.ca",            updated:"2026-06-08" },
+    { name:"Kiaros",                   loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"kiaros.ai",                updated:"2026-06-08" },
+    { name:"Weedlaw Education",        loop:"A", stage:"MVP",       mvr:"yellow", revenue:0,    expenses:0,   domain:"weedlaw-education.com",    updated:"2026-06-08" },
+    { name:"CCC",                      loop:"A", stage:"Growth",    mvr:"yellow", revenue:0,    expenses:0,   domain:"ccc.net",                  updated:"2026-06-08" },
+    { name:"SoulStack",                loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"soulstack.ai",             updated:"2026-06-08" },
+    { name:"VIGILAX",                  loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"vigilax.com",              updated:"2026-06-08" },
+    { name:"Vault Velocity Auto",      loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"vaultvelocityauto.com",    updated:"2026-06-08" },
+    { name:"TechPetCage",              loop:"B", stage:"Revenue",   mvr:"red",    revenue:0,    expenses:134, domain:"—",                        updated:"2026-06-08" },
+    { name:"Doc Weedlaw",              loop:"A", stage:"Growth",    mvr:"yellow", revenue:0,    expenses:0,   domain:"docweedlaw.ca",            updated:"2026-06-08" },
+    { name:"ZPrimeDoxAI HQ",           loop:"A", stage:"Automated", mvr:"green",  revenue:0,    expenses:0,   domain:"zprimedoxaihq.com",        updated:"2026-06-08" },
+    { name:"Super Highway",            loop:"A", stage:"MVP",       mvr:"red",    revenue:0,    expenses:45,  domain:"hub.franciscoholdingsinc.com", updated:"2026-06-08" },
+    { name:"Space Swarm",              loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    { name:"Auto Swarm",               loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    { name:"Quantum Swarm",            loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    { name:"BioTech Swarm",            loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    { name:"Health Swarm",             loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    { name:"FinTech Swarm",            loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    { name:"Energy Swarm",             loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    { name:"Logistics Swarm",          loop:"B", stage:"MVP",       mvr:"red",    revenue:0,    expenses:0,   domain:"GitHub Pages",             updated:"2026-06-08" },
+    // ── Add more companies here following the same structure ──
+  ],
+
+  // ── Approval Queue ──
+  // status: "green" (auto-under-500) | "yellow" (24h hold) | "red" (Derek required)
+  approvalQueue: [
+    { item:"Supabase Pro plan",                    amount:45,     category:"Infrastructure", status:"green",  note:"Under $500 — auto-approved" },
+    { item:"OmniaGuard domain renewals (.ca/.io/.pro/.tech)", amount:220, category:"Domains",       status:"green",  note:"Under $500 — auto-approved" },
+    { item:"MDG $35 charge dispute",               amount:35,     category:"Finance",        status:"yellow", note:"24h hold — email finance@mdg.ca" },
+    { item:"Stripe $406.80 payout release",        amount:406.80, category:"Finance",        status:"yellow", note:"24h hold — verify dashboard.stripe.com/recover" },
+    { item:"CPL registration — Denby property",   amount:0,      category:"Legal",          status:"red",    note:"Your signature required — file June 9" },
+  ],
+
+  // ── Litigation ──
+  // status: "critical" | "active"
+  litigation: [
+    {
+      name:"Francisco v. Denby",
+      file:"CV-26-00000064-0000",
+      status:"critical",
+      statusLabel:"DEFAULT — JUDGMENT READY",
+      amount:"$3,300,000",
+      deadlines:[
+        { date:"2026-06-08", label:"Swear Affidavit of Service (Doc 6)",        urgent:true  },
+        { date:"2026-06-09", label:"File Default Judgment Motion (Docs 7a/7b/7c)", urgent:true  },
+        { date:"2026-06-09", label:"Register CPL at Land Registry Office",       urgent:true  },
+        { date:"2026-06-17", label:"Court hearing / next appearance",            urgent:false },
+      ]
+    },
+    {
+      name:"Francisco v. AG Canada",
+      file:"Health Canada — Charter Challenge",
+      status:"active",
+      statusLabel:"ACTIVE — Evidence Gathering",
+      amount:"$35,000,000",
+      deadlines:[
+        { date:"2026-07-04", label:"FOI response target (if filed)",            urgent:false },
+      ]
+    },
+    {
+      name:"HRTO Matters",
+      file:"Human Rights Tribunal of Ontario",
+      status:"active",
+      statusLabel:"ACTIVE — Ongoing Proceedings",
+      amount:"TBD",
+      deadlines:[]
+    },
+  ],
+};
+
+// ═══════════════════════════════════════════════════════════════
+//  END OF DATA — do not edit below unless you know what you're doing
+// ═══════════════════════════════════════════════════════════════
+
+// ── Helpers ──
+const $ = id => document.getElementById(id);
+const fmt = n => n === 0 ? '—' : '$' + n.toLocaleString('en-CA', {minimumFractionDigits:0, maximumFractionDigits:0});
+const daysFrom = dateStr => {
+  const diff = new Date(dateStr) - new Date();
+  return Math.ceil(diff / 86400000);
+};
+const fmtDate = dateStr => {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-CA', { month:'short', day:'numeric' });
+};
+
+// ── Clock ──
+function tick() {
+  $('clock').textContent = new Date().toLocaleString('en-CA', {
+    timeZone:'America/Toronto', hour:'2-digit', minute:'2-digit',
+    weekday:'short', month:'short', day:'numeric'
+  });
+}
+tick(); setInterval(tick, 30000);
+$('last-updated').textContent = 'Updated ' + new Date(EMPIRE.updated + 'T00:00:00').toLocaleDateString('en-CA', { month:'short', day:'numeric' });
+
+// ── Financial Stats ──
+function renderStats() {
+  const f = EMPIRE.financial;
+  const net = f.totalRevenue - f.totalExpenses;
+  $('fin-period').textContent = f.period;
+  $('stat-row').innerHTML = [
+    { label:'Monthly Revenue', val: fmt(f.totalRevenue), cls: f.totalRevenue > 0 ? 'gold' : 'neutral', note:'All companies combined' },
+    { label:'Monthly Expenses', val: fmt(f.totalExpenses), cls: 'neutral', note:'Hosting, tools, subscriptions' },
+    { label:'Net Profit',  val: net === 0 ? '—' : (net > 0 ? '+' : '') + fmt(Math.abs(net)), cls: net > 0 ? 'green' : net < 0 ? 'red' : 'neutral', note: net < 0 ? 'In the red' : net > 0 ? 'Profitable' : 'Break-even' },
+    { label:'Cash Runway', val: f.cashRunway > 0 ? f.cashRunway + ' mo' : '—', cls: f.cashRunway >= 6 ? 'green' : f.cashRunway >= 2 ? 'neutral' : 'red', note:'At current burn rate' },
+  ].map(s => `<div class="stat"><div class="stat-label">${s.label}</div><div class="stat-val ${s.cls}">${s.val}</div><div class="stat-note">${s.note}</div></div>`).join('');
+}
+
+// ── Company Grid ──
+let activeFilter = 'all';
+const FILTERS = [
+  { key:'all',       label:'All' },
+  { key:'loop-a',    label:'Loop A' },
+  { key:'loop-b',    label:'Loop B' },
+  { key:'revenue',   label:'Revenue' },
+  { key:'growth',    label:'Growth' },
+  { key:'mvp',       label:'MVP' },
+  { key:'red',       label:'🔴 Red MVR' },
+  { key:'yellow',    label:'🟡 Yellow MVR' },
+  { key:'green',     label:'🟢 Green MVR' },
+];
+
+function renderFilters() {
+  $('filter-bar').innerHTML = FILTERS.map(f =>
+    `<button class="filter-btn ${activeFilter===f.key?'active':''}" onclick="setFilter('${f.key}')">${f.label}</button>`
+  ).join('');
+}
+
+function setFilter(key) {
+  activeFilter = key;
+  renderFilters();
+  renderCompanies();
+}
+
+function filterCompanies() {
+  const cos = EMPIRE.companies;
+  switch(activeFilter) {
+    case 'loop-a':  return cos.filter(c => c.loop === 'A');
+    case 'loop-b':  return cos.filter(c => c.loop === 'B');
+    case 'revenue': return cos.filter(c => c.stage === 'Revenue');
+    case 'growth':  return cos.filter(c => c.stage === 'Growth');
+    case 'mvp':     return cos.filter(c => c.stage === 'MVP');
+    case 'red':     return cos.filter(c => c.mvr === 'red');
+    case 'yellow':  return cos.filter(c => c.mvr === 'yellow');
+    case 'green':   return cos.filter(c => c.mvr === 'green');
+    default:        return cos;
+  }
+}
+
+function stageBadge(s) {
+  const map = { MVP:'badge-mvp', Growth:'badge-growth', Automated:'badge-automated', Revenue:'badge-revenue' };
+  return `<span class="badge ${map[s]||''}">${s.toUpperCase()}</span>`;
+}
+
+function renderCompanies() {
+  const list = filterCompanies();
+  $('co-count').textContent = `(${list.length})`;
+  if (!list.length) { $('company-grid').innerHTML = '<div class="empty">No companies match this filter.</div>'; return; }
+  $('company-grid').innerHTML = list.map(c => {
+    const net = c.revenue - c.expenses;
+    const netCls = net > 0 ? 'pos' : net < 0 ? 'neg' : 'zero';
+    return `
+<div class="co-card mvr-${c.mvr}">
+  <div class="co-top">
+    <div class="co-name">${c.name}</div>
+    <div class="co-mvr ${c.mvr}"></div>
+  </div>
+  <div class="co-meta">
+    ${stageBadge(c.stage)}
+    <span class="badge badge-${c.loop.toLowerCase()}">Loop ${c.loop}</span>
+  </div>
+  <div class="co-financials">
+    <div class="co-fin-item"><div class="co-fin-label">Revenue</div><div class="co-fin-val ${c.revenue>0?'pos':'zero'}">${fmt(c.revenue)}</div></div>
+    <div class="co-fin-item"><div class="co-fin-label">Expenses</div><div class="co-fin-val ${c.expenses>0?'neg':'zero'}">${fmt(c.expenses)}</div></div>
+    <div class="co-fin-item" style="grid-column:1/-1"><div class="co-fin-label">Net</div><div class="co-fin-val ${netCls}">${net===0?'—':(net>0?'+':'')+fmt(Math.abs(net))}</div></div>
+  </div>
+  <div class="co-domain">${c.domain}</div>
+  <div class="co-updated">Updated ${c.updated}</div>
+</div>`;
+  }).join('');
+}
+
+// ── Approval Queue ──
+function renderQueue() {
+  const iconMap = { green:'✅', yellow:'⏳', red:'🔴' };
+  const clsMap  = { green:'g', yellow:'y', red:'r' };
+  const counts  = { green:0, yellow:0, red:0 };
+  EMPIRE.approvalQueue.forEach(i => counts[i.status]++);
+  $('queue-counts').textContent = `${counts.green} auto · ${counts.yellow} hold · ${counts.red} required`;
+  $('approval-list').innerHTML = EMPIRE.approvalQueue.map(i => `
+<div class="appr-item ${clsMap[i.status]}">
+  <div class="appr-icon">${iconMap[i.status]}</div>
+  <div class="appr-body">
+    <div class="appr-title">${i.item}</div>
+    <div class="appr-note">${i.category} · ${i.note}</div>
+  </div>
+  <div class="appr-amount">${i.amount > 0 ? fmt(i.amount) : '—'}</div>
+</div>`).join('');
+}
+
+// ── Litigation ──
+function renderLitigation() {
+  const totalClaims = EMPIRE.litigation.reduce((sum, c) => {
+    const n = parseFloat(c.amount.replace(/[^0-9.]/g,'')) || 0;
+    return sum + n;
+  }, 0);
+  $('lit-total').textContent = fmt(totalClaims) + ' total claims';
+  $('lit-list').innerHTML = EMPIRE.litigation.map(c => {
+    const deadlineHtml = c.deadlines.length ? c.deadlines.map(d => {
+      const days = daysFrom(d.date);
+      const dayCls = days <= 1 ? 'urgent' : days <= 7 ? 'soon' : 'ok';
+      const dayLabel = days < 0 ? `${Math.abs(days)}d ago` : days === 0 ? 'TODAY' : `${days}d`;
+      return `
+<div class="deadline">
+  <div class="deadline-flag ${d.urgent?'urgent':'normal'}"></div>
+  <div class="deadline-date">${fmtDate(d.date)}</div>
+  <div class="deadline-label">${d.label}</div>
+  <div class="deadline-days ${dayCls}">${dayLabel}</div>
+</div>`;
+    }).join('') : '<div class="empty">No pending deadlines.</div>';
+
+    return `
+<div class="lit-card">
+  <div class="lit-hdr">
+    <div class="lit-dot ${c.status}"></div>
+    <div class="lit-name">${c.name}</div>
+    <div class="lit-amount">${c.amount}</div>
+  </div>
+  <div class="lit-body">
+    <div class="lit-file">${c.file}</div>
+    <div class="lit-status ${c.status}">${c.statusLabel}</div>
+    <div class="deadline-list">${deadlineHtml}</div>
+  </div>
+</div>`;
+  }).join('');
+}
+
+// ── Init ──
+renderStats();
+renderFilters();
+renderCompanies();
+renderQueue();
+renderLitigation();
+</script>
+</body>
+</html>
