@@ -244,6 +244,14 @@
 </head>
 <body>
 
+<div id="bx-urgency" style="background:#0a0800;border-bottom:1px solid rgba(255,215,0,0.2);padding:10px 20px;text-align:center;font-size:13px;color:#ccc">
+  <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e74c3c;animation:bxpulse 1.5s infinite;margin-right:8px;vertical-align:middle"></span>
+  <strong style="color:#f5f5f5">Professional tier selling fast.</strong>
+  Offer closes in: <strong id="bx-countdown" style="color:#FFD700;font-family:monospace;letter-spacing:1px">--:--:--</strong>
+  &nbsp;&nbsp;<a href="#education" style="color:#FFD700;font-weight:800">Get Access →</a>
+</div>
+<style>@keyframes bxpulse{0%,100%{opacity:1}50%{opacity:.2}}</style>
+
 <nav>
   <div class="nav-inner">
     <a href="#" class="nav-logo">
@@ -395,7 +403,10 @@
         <h3>CCLDR.NET Professional Tier</h3>
         <p>For structured constitutional education programs built on BENO-X research foundations, visit CCLDR.NET — our partner platform for legal education and Charter defense learning.</p>
       </div>
-      <a href="PLACEHOLDER_STRIPE_URL" class="btn-gold">Enroll at CCLDR.NET &rarr;</a>
+      <div style="display:flex;flex-direction:column;gap:10px;flex-shrink:0">
+        <a href="https://paypal.me/derekfrancisco/149CAD" target="_blank" class="btn-gold">💳 Warrior — $149 via PayPal</a>
+        <a href="https://ccldr.net" target="_blank" class="btn-outline" style="text-align:center">All tiers at CCLDR.NET →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -410,7 +421,7 @@
         <input type="email" placeholder="Your institutional email" required>
         <button type="button" class="btn-gold-sm">Apply</button>
       </div>
-      <p class="capture-modal-note" style="margin-top:0.75rem;">Or email directly: <a href="mailto:omniaguard1@gmail.com" style="color:var(--gold)">omniaguard1@gmail.com</a></p>
+      <p class="capture-modal-note" style="margin-top:0.75rem;">Or email directly: <a href="mailto:franciscoderek7@gmail.com?subject=BENO-X%20Research%20Partnership" style="color:var(--gold)">franciscoderek7@gmail.com</a></p>
     </div>
   </div>
 </section>
@@ -428,5 +439,35 @@
   </p>
 </footer>
 
+<script>
+function bxTick(){
+  var now=new Date(),midnight=new Date();
+  midnight.setHours(23,59,59,0);
+  var diff=midnight-now;if(diff<0)diff=0;
+  var h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+  var el=document.getElementById('bx-countdown');
+  if(el)el.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+bxTick();setInterval(bxTick,1000);
+
+// Wire email capture forms to mailto
+document.querySelectorAll('form').forEach(function(form){
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var input=form.querySelector('input[type="email"]');
+    if(!input)return;
+    var em=input.value.trim();
+    if(!em)return;
+    window.location.href='mailto:franciscoderek7@gmail.com?subject=BENO-X%20Research%20Request&body=Please%20send%20me%20the%20requested%20research%20paper.%0A%0AEmail%3A%20'+encodeURIComponent(em);
+  });
+});
+document.querySelectorAll('.btn-gold-sm[type="button"]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var input=btn.parentElement.querySelector('input[type="email"]');
+    var em=input?input.value.trim():'';
+    window.location.href='mailto:franciscoderek7@gmail.com?subject=BENO-X%20Partnership%20Application&body=Interested%20in%20research%20partnership.%0A%0AEmail%3A%20'+encodeURIComponent(em);
+  });
+});
+</script>
 </body>
 </html>
