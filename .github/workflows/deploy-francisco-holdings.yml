@@ -32,6 +32,11 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
+      - name: Wipe old files
+        run: |
+          find /tmp/fh -mindepth 1 -not -path '/tmp/fh/.git*' -delete
+          echo "Clean slate"
+
       - name: Copy site files
         run: |
           cd francisco-holdings-site
@@ -39,13 +44,13 @@ jobs:
           for ext in jpg jpeg png webp gif svg js css; do
             for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/fh/"$f" && echo "  copied $f"; done
           done
-          # Copy logos directory if present
           if [ -d "logos" ]; then
             mkdir -p /tmp/fh/logos
             cp logos/* /tmp/fh/logos/ 2>/dev/null || true
             echo "  copied logos/"
           fi
           echo "franciscoholdingsinc.com" > /tmp/fh/CNAME
+          touch /tmp/fh/.nojekyll
           echo "All Francisco Holdings files copied"
 
       - name: Commit and push to francisco-holdings repo

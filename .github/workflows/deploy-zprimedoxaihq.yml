@@ -33,6 +33,11 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
+      - name: Wipe old files
+        run: |
+          find /tmp/zprimedoxaihq -mindepth 1 -not -path '/tmp/zprimedoxaihq/.git*' -delete
+          echo "Clean slate"
+
       - name: Copy site files
         run: |
           cd zprimedoxaihq-site
@@ -41,6 +46,7 @@ jobs:
             for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/zprimedoxaihq/"$f" && echo "  copied $f"; done
           done
           echo "zprimedoxaihq.com" > /tmp/zprimedoxaihq/CNAME
+          touch /tmp/zprimedoxaihq/.nojekyll
           echo "All HQ files copied"
 
       - name: Commit and push to zprimedoxaihq repo
