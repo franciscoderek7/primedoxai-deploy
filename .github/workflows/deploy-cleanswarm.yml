@@ -44,6 +44,11 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
+      - name: Wipe old files
+        run: |
+          find /tmp/cleanswarm -mindepth 1 -not -path '/tmp/cleanswarm/.git*' -delete
+          echo "Clean slate"
+
       - name: Copy site files
         run: |
           cd cleanswarm-checkout
@@ -52,6 +57,7 @@ jobs:
             for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/cleanswarm/"$f" && echo "  copied $f"; done
           done
           echo "cleanswarm.ca" > /tmp/cleanswarm/CNAME
+          touch /tmp/cleanswarm/.nojekyll
           echo "All CleanSwarm files copied"
 
       - name: Commit and push to cleanswarm repo
