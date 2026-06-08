@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Derek's Click-by-Click Deploy Guide — June 8, 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;--surface:#111;--surface2:#161616;--border:#222;
+  --gold:#c9a84c;--green:#27ae60;--cyan:#00d4ff;--red:#e74c3c;
+  --text:#e5e5e5;--muted:#888;--dim:#444;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;line-height:1.6;padding-bottom:80px}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:4px;padding:2px 7px;font-family:'SF Mono',Monaco,monospace;font-size:13px;color:#fbbf24}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#0d1a0d,#0a0a1a);border-bottom:2px solid var(--gold);padding:28px 24px 20px;position:sticky;top:0;z-index:100}
+.header h1{font-size:22px;font-weight:900;color:var(--gold)}
+.header p{font-size:13px;color:var(--muted);margin-top:4px}
+.progress-bar{height:4px;background:#1a1a1a;border-radius:2px;margin-top:14px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:2px;transition:width .4s;width:0%}
+.progress-label{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* LAYOUT */
+.main{max-width:900px;margin:0 auto;padding:0 16px}
+
+/* SECTION TABS */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;padding:20px 0 0;position:sticky;top:78px;z-index:99;background:var(--bg);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:0}
+.tab{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);transition:all .2s;white-space:nowrap}
+.tab:hover{border-color:var(--gold);color:var(--gold)}
+.tab.active{background:var(--gold);border-color:var(--gold);color:#111}
+.tab .tab-count{display:inline-block;background:rgba(255,255,255,.15);border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px}
+.tab.done-tab{border-color:var(--green)!important;color:var(--green)!important}
+
+/* SECTIONS */
+.section{display:none;padding-top:24px}
+.section.active{display:block}
+.section-title{font-size:20px;font-weight:800;margin-bottom:6px;color:var(--gold)}
+.section-desc{font-size:14px;color:var(--muted);margin-bottom:28px}
+
+/* STEP */
+.step{background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden;transition:border-color .2s}
+.step.done{border-color:var(--green);opacity:.75}
+.step-header{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;cursor:pointer}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--gold);color:#111;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.step.done .step-num{background:var(--green)}
+.step-title{font-size:15px;font-weight:700;flex:1;padding-top:4px}
+.step-tag{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:700;letter-spacing:.5px;flex-shrink:0;margin-top:4px}
+.tag-stripe{background:rgba(99,91,255,.2);color:#6c63ff;border:1px solid rgba(99,91,255,.3)}
+.tag-github{background:rgba(0,200,83,.12);color:var(--green);border:1px solid rgba(0,200,83,.3)}
+.tag-dns{background:rgba(0,212,255,.12);color:var(--cyan);border:1px solid rgba(0,212,255,.3)}
+.tag-social{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.tag-email{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid rgba(201,168,76,.3)}
+.tag-legal{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3)}
+.step-body{padding:0 20px 20px 20px;display:none}
+.step.open .step-body{display:block}
+.step-check{width:22px;height:22px;border:2px solid var(--border);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:5px;background:transparent;transition:all .2s}
+.step-check.checked{background:var(--green);border-color:var(--green)}
+.step-check.checked::after{content:'✓';color:#fff;font-size:13px;font-weight:700}
+
+/* INSTRUCTIONS */
+.instruction{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.instruction:last-child{border-bottom:none}
+.instruction-n{width:24px;height:24px;border-radius:50%;background:#1a1a1a;border:1px solid var(--border);font-size:11px;font-weight:700;color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.instruction-text{font-size:14px;color:var(--text);flex:1}
+.instruction-text strong{color:var(--gold)}
+.instruction-text .ui-click{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:1px 8px;border-radius:4px;font-size:12px;font-weight:700}
+.instruction-text .url-link{color:var(--cyan);font-family:monospace;font-size:13px}
+
+/* COPY BOX */
+.copy-box{background:#0d0d0d;border:1px solid #2a2a2a;border-radius:10px;padding:16px;margin:12px 0;position:relative}
+.copy-box-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
+.copy-box pre{font-family:'SF Mono',Monaco,monospace;font-size:13px;color:var(--text);white-space:pre-wrap;word-break:break-word;line-height:1.7}
+.copy-btn{position:absolute;top:10px;right:10px;background:var(--gold);color:#111;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s}
+.copy-btn:hover{background:#e8c060}
+.copy-btn.copied{background:var(--green);color:#fff}
+
+/* PRODUCT TABLE */
+.product-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+.product-table th{background:#0d0d0d;padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.product-table td{padding:10px 12px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
+.product-table tr:last-child td{border-bottom:none}
+.product-table tr:hover td{background:#141414}
+.price-id-input{background:#0d0d0d;border:1px solid #2a2a2a;border-radius:6px;padding:7px 10px;color:#fbbf24;font-family:monospace;font-size:12px;width:200px;outline:none;transition:border-color .2s}
+.price-id-input:focus{border-color:var(--gold)}
+.price-id-input.filled{border-color:var(--green);color:var(--green)}
+.billing-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.billing-once{background:rgba(0,200,83,.12);color:var(--green);border:1px solid rgba(0,200,83,.3)}
+.billing-mo{background:rgba(0,212,255,.12);color:var(--cyan);border:1px solid rgba(0,212,255,.3)}
+
+/* REPO TABLE */
+.repo-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+.repo-table th{background:#0d0d0d;padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.repo-table td{padding:10px 12px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
+.repo-table tr:last-child td{border-bottom:none}
+.loop-a{background:rgba(39,174,96,.08);color:var(--green);border:1px solid rgba(39,174,96,.25);display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.loop-b{background:rgba(0,212,255,.08);color:var(--cyan);border:1px solid rgba(0,212,255,.25);display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.status-done{color:var(--green);font-weight:700;font-size:12px}
+.status-todo{color:var(--gold);font-weight:700;font-size:12px}
+.status-need{color:var(--red);font-weight:700;font-size:12px}
+
+/* ALERT BOX */
+.alert{border-radius:10px;padding:14px 18px;margin:14px 0;font-size:13px;display:flex;gap:12px;align-items:flex-start}
+.alert-gold{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);color:var(--gold)}
+.alert-green{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.3);color:var(--green)}
+.alert-red{background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.3);color:var(--red)}
+.alert-icon{font-size:18px;flex-shrink:0}
+.alert-body strong{display:block;margin-bottom:4px}
+.alert-body{color:var(--text)}
+
+/* FLOATING DONE BUTTON */
+.float-btn{position:fixed;bottom:24px;right:24px;z-index:200;background:var(--gold);color:#111;font-weight:800;font-size:14px;padding:14px 24px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(201,168,76,.4);transition:all .2s}
+.float-btn:hover{background:#e8c060;transform:translateY(-2px)}
+
+/* DNS RECORD */
+.dns-record{background:#0d0d0d;border:1px solid #2a2a2a;border-radius:8px;padding:10px 14px;margin:6px 0;font-family:monospace;font-size:13px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.dns-type{background:var(--cyan);color:#000;font-weight:700;font-size:11px;padding:2px 8px;border-radius:4px;flex-shrink:0}
+.dns-val{color:#fbbf24}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="main">
+    <h1>🎯 Derek's Click-by-Click Empire Guide</h1>
+    <p>June 8, 2026 · Follow each step · Check the box · Money by 8 PM</p>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-label" id="progress-label">0 of 0 steps completed</div>
+  </div>
+</div>
+
+<div class="main">
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="showSection('stripe')" id="tab-stripe">💳 Stripe Setup <span class="tab-count" id="cnt-stripe">24</span></div>
+  <div class="tab" onclick="showSection('github')" id="tab-github">🐙 GitHub Repos <span class="tab-count" id="cnt-github">9</span></div>
+  <div class="tab" onclick="showSection('dns')" id="tab-dns">🌐 DNS Setup <span class="tab-count" id="cnt-dns">9</span></div>
+  <div class="tab" onclick="showSection('social')" id="tab-social">📣 Social Posts <span class="tab-count" id="cnt-social">4</span></div>
+  <div class="tab" onclick="showSection('email')" id="tab-email">📧 Email Templates <span class="tab-count" id="cnt-email">3</span></div>
+  <div class="tab" onclick="showSection('legal')" id="tab-legal">⚖️ Legal Docs <span class="tab-count" id="cnt-legal">5</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ STRIPE ═══ -->
+<div class="section active" id="section-stripe">
+  <div class="section-title">💳 Stripe Setup — 24 Products</div>
+  <div class="section-desc">Create every product once. Claude wires the Price IDs into the checkout page in minutes. Work top to bottom.</div>
+
+  <div class="alert alert-gold">
+    <div class="alert-icon">⚡</div>
+    <div class="alert-body">
+      <strong>Do this first — one time setup</strong>
+      Go to <a href="https://dashboard.stripe.com" target="_blank">dashboard.stripe.com</a> → Settings → Business Details → set Currency to <strong>CAD</strong>. Do it before creating any products.
+    </div>
+  </div>
+
+  <!-- HOW TO ADD ONE PRODUCT -->
+  <div class="step open" id="step-stripe-how">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-stripe-how"></div>
+      <div class="step-num">★</div>
+      <div class="step-title">How to add ONE product (read this once, repeat for all 24)</div>
+      <span class="step-tag tag-stripe">STRIPE</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open <a href="https://dashboard.stripe.com/products" target="_blank" class="url-link">dashboard.stripe.com/products</a></div></div>
+      <div class="instruction"><div class="instruction-n">2</div><div class="instruction-text">Click <span class="ui-click">+ Add product</span> (top right)</div></div>
+      <div class="instruction"><div class="instruction-n">3</div><div class="instruction-text">Paste the <strong>Product Name</strong> from the table below into the Name field</div></div>
+      <div class="instruction"><div class="instruction-n">4</div><div class="instruction-text">Scroll to Pricing → set the <strong>Amount</strong> → set <strong>Currency: CAD</strong> → set <strong>Recurring</strong> or <strong>One time</strong> (shown in table)</div></div>
+      <div class="instruction"><div class="instruction-n">5</div><div class="instruction-text">Click <span class="ui-click">Save product</span></div></div>
+      <div class="instruction"><div class="instruction-n">6</div><div class="instruction-text">The page shows your new product. Click the price row to expand it → copy the <strong style="color:#fbbf24">Price ID</strong> — it starts with <code>price_</code></div></div>
+      <div class="instruction"><div class="instruction-n">7</div><div class="instruction-text">Paste the Price ID into the input box in the table below → it turns <span style="color:var(--green)">green</span></div></div>
+      <div class="instruction"><div class="instruction-n">8</div><div class="instruction-text">When all 24 are filled in, scroll to the bottom of this table → click <span class="ui-click">Generate Claude Command</span> → copy that text → paste it to Claude</div></div>
+    </div>
+  </div>
+
+  <!-- PRODUCT TABLE -->
+  <div class="step open" id="step-stripe-table">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-stripe-table"></div>
+      <div class="step-num">1</div>
+      <div class="step-title">Create all 24 products + paste Price IDs here</div>
+      <span class="step-tag tag-stripe">STRIPE</span>
+    </div>
+    <div class="step-body">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Product Name (paste into Stripe)</th>
+            <th>Amount</th>
+            <th>Billing</th>
+            <th>Price ID (paste here)</th>
+          </tr>
+        </thead>
+        <tbody id="product-tbody">
+          <!-- OmniaGuard -->
+          <tr><td colspan="5" style="background:#0d0d0d;color:var(--cyan);font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 12px">OMNIAGUARD</td></tr>
+          <tr><td>1</td><td><strong>OmniaGuard Sentinel</strong></td><td>$499</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="og-sentinel" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>2</td><td><strong>OmniaGuard Guardian</strong></td><td>$2,499</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="og-guardian" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>3</td><td><strong>OmniaGuard Warden</strong></td><td>$5,000</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="og-warden" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>4</td><td><strong>OmniaGuard Protector</strong></td><td>$10,000</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="og-protector" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>5</td><td><strong>OmniaGuard Archon</strong></td><td>$15,000</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="og-archon" oninput="checkPriceId(this)"></td></tr>
+          <!-- CCLDR / Weedlaw -->
+          <tr><td colspan="5" style="background:#0d0d0d;color:var(--green);font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 12px">CCLDR / WEEDLAW EDUCATION</td></tr>
+          <tr><td>6</td><td><strong>CCLDR Digital Access</strong></td><td>$99</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="ccldr-digital" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>7</td><td><strong>CCLDR Charter Defense Course</strong></td><td>$299</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="ccldr-course" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>8</td><td><strong>Weedlaw Education — Warrior</strong></td><td>$149</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="we-warrior" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>9</td><td><strong>Weedlaw Education — Professional</strong></td><td>$499</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="we-pro" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>10</td><td><strong>Weedlaw Education — Elite</strong></td><td>$999</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="we-elite" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>11</td><td><strong>Weedlaw Education — Sovereign</strong></td><td>$1,499</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="we-sovereign" oninput="checkPriceId(this)"></td></tr>
+          <!-- PrimeDox AI -->
+          <tr><td colspan="5" style="background:#0d0d0d;color:var(--cyan);font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 12px">PRIMEDOX AI</td></tr>
+          <tr><td>12</td><td><strong>PrimeDox AI Emergency Defense</strong></td><td>$99</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="pd-emergency" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>13</td><td><strong>PrimeDox AI Starter</strong></td><td>$49</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="pd-pro" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>14</td><td><strong>PrimeDox AI Elite</strong></td><td>$199</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="pd-elite" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>15</td><td><strong>PrimeDox AI Enterprise</strong></td><td>$499</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="pd-enterprise" oninput="checkPriceId(this)"></td></tr>
+          <!-- Francisco Holdings -->
+          <tr><td colspan="5" style="background:#0d0d0d;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 12px">FRANCISCO HOLDINGS CONSULTING</td></tr>
+          <tr><td>16</td><td><strong>FH Consulting Session</strong></td><td>$500</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="fh-consult" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>17</td><td><strong>FH Monthly Strategy Retainer</strong></td><td>$1,500</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="fh-retainer" oninput="checkPriceId(this)"></td></tr>
+          <!-- CleanSwarm -->
+          <tr><td colspan="5" style="background:#0d0d0d;color:#f59e0b;font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 12px">CLEANSWARM</td></tr>
+          <tr><td>18</td><td><strong>CleanSwarm Starter</strong></td><td>$399</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="cs-starter" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>19</td><td><strong>CleanSwarm Growth</strong></td><td>$999</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="cs-growth" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>20</td><td><strong>CleanSwarm Scale</strong></td><td>$2,499</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="cs-scale" oninput="checkPriceId(this)"></td></tr>
+          <!-- ZPrimeDox HQ -->
+          <tr><td colspan="5" style="background:#0d0d0d;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 12px">ZPRIMEDOX HQ</td></tr>
+          <tr><td>21</td><td><strong>PrimeDox HQ Monthly Access</strong></td><td>$99</td><td><span class="billing-badge billing-mo">monthly</span></td><td><input class="price-id-input" placeholder="price_..." data-key="hq-access" oninput="checkPriceId(this)"></td></tr>
+          <!-- BENO-X -->
+          <tr><td colspan="5" style="background:#0d0d0d;color:var(--green);font-size:11px;font-weight:700;letter-spacing:.5px;padding:8px 12px">BENO-X FRAMEWORK</td></tr>
+          <tr><td>22</td><td><strong>BENO-X Foundation</strong></td><td>$149</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="bx-foundation" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>23</td><td><strong>BENO-X Professional</strong></td><td>$499</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="bx-pro" oninput="checkPriceId(this)"></td></tr>
+          <tr><td>24</td><td><strong>BENO-X Sovereign</strong></td><td>$1,499</td><td><span class="billing-badge billing-once">one-time</span></td><td><input class="price-id-input" placeholder="price_..." data-key="bx-sovereign" oninput="checkPriceId(this)"></td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:20px;padding:16px;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:10px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">When all filled in → copy this → paste to Claude</div>
+        <pre id="claude-command" style="font-size:12px;color:#888;font-family:monospace;white-space:pre-wrap;line-height:1.6">Fill in all Price IDs above first…</pre>
+        <button class="copy-btn" style="position:static;margin-top:10px;display:block" onclick="copyClaudeCommand()">📋 Copy Claude Command</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ GITHUB ═══ -->
+<div class="section" id="section-github">
+  <div class="section-title">🐙 GitHub Repos — Create + Enable Pages</div>
+  <div class="section-desc">Takes ~2 minutes each. Do all at once then enable Pages in batch.</div>
+
+  <div class="alert alert-gold">
+    <div class="alert-icon">🔑</div>
+    <div class="alert-body">
+      <strong>Already logged in?</strong> Open <a href="https://github.com/franciscoderek7" target="_blank">github.com/franciscoderek7</a> in a tab. Keep it open the whole time.
+    </div>
+  </div>
+
+  <!-- HOW TO CREATE A REPO -->
+  <div class="step open" id="step-gh-how">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-gh-how"></div>
+      <div class="step-num">★</div>
+      <div class="step-title">How to create a repo (read once, repeat for each)</div>
+      <span class="step-tag tag-github">GITHUB</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open <a href="https://github.com/new" target="_blank" class="url-link">github.com/new</a></div></div>
+      <div class="instruction"><div class="instruction-n">2</div><div class="instruction-text">Owner: <strong>franciscoderek7</strong> · Repository name: paste name from table</div></div>
+      <div class="instruction"><div class="instruction-n">3</div><div class="instruction-text">Set to <span class="ui-click">Public</span></div></div>
+      <div class="instruction"><div class="instruction-n">4</div><div class="instruction-text">Check <span class="ui-click">Add a README file</span> (GitHub Pages needs at least one file)</div></div>
+      <div class="instruction"><div class="instruction-n">5</div><div class="instruction-text">Click <span class="ui-click">Create repository</span></div></div>
+      <div class="instruction"><div class="instruction-n">6</div><div class="instruction-text">Mark the checkbox in the table below → move to next repo</div></div>
+    </div>
+  </div>
+
+  <!-- HOW TO ENABLE PAGES -->
+  <div class="step" id="step-gh-pages-how">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-gh-pages-how"></div>
+      <div class="step-num">★</div>
+      <div class="step-title">How to enable GitHub Pages (read once, repeat for each)</div>
+      <span class="step-tag tag-github">GITHUB</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open <code>github.com/franciscoderek7/REPONAME/settings/pages</code></div></div>
+      <div class="instruction"><div class="instruction-n">2</div><div class="instruction-text">Under <strong>Source</strong> → click the dropdown → select <span class="ui-click">Deploy from a branch</span></div></div>
+      <div class="instruction"><div class="instruction-n">3</div><div class="instruction-text">Branch dropdown → select <span class="ui-click">main</span> → folder: <span class="ui-click">/ (root)</span></div></div>
+      <div class="instruction"><div class="instruction-n">4</div><div class="instruction-text">Click <span class="ui-click">Save</span></div></div>
+      <div class="instruction"><div class="instruction-n">5</div><div class="instruction-text">The page will show "Your site is live at https://franciscoderek7.github.io/REPONAME/" — done</div></div>
+    </div>
+  </div>
+
+  <!-- REPO TABLE -->
+  <div class="step open" id="step-gh-table">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-gh-table"></div>
+      <div class="step-num">1</div>
+      <div class="step-title">All repos — create + enable Pages</div>
+      <span class="step-tag tag-github">GITHUB</span>
+    </div>
+    <div class="step-body">
+      <table class="repo-table">
+        <thead>
+          <tr><th>Repo Name</th><th>Domain</th><th>Loop</th><th>Status</th><th>Pages URL</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>primedox-ai-site</code></td><td>primedoxai.com</td><td><span class="loop-a">A</span></td><td><span class="status-done">✓ Exists</span></td><td><a href="https://github.com/franciscoderek7/primedox-ai-site/settings/pages" target="_blank">Enable Pages →</a></td></tr>
+          <tr><td><code>omniaguard</code></td><td>omniaguard.com</td><td><span class="loop-b">B</span></td><td><span class="status-done">✓ Exists</span></td><td><a href="https://github.com/franciscoderek7/omniaguard/settings/pages" target="_blank">Enable Pages →</a></td></tr>
+          <tr><td><code>cleanswarm</code></td><td>cleanswarm.ca</td><td><span class="loop-b">B</span></td><td><span class="status-done">✓ Exists</span></td><td><a href="https://github.com/franciscoderek7/cleanswarm/settings/pages" target="_blank">Enable Pages →</a></td></tr>
+          <tr><td><code>ccldr-site</code></td><td>ccldr.net</td><td><span class="loop-a">A</span></td><td><span class="status-todo">Create</span></td><td><a href="https://github.com/new" target="_blank">Create first →</a></td></tr>
+          <tr><td><code>francisco-holdings-site</code></td><td>franciscoholdingsinc.com</td><td><span class="loop-a">A</span></td><td><span class="status-todo">Create</span></td><td><a href="https://github.com/new" target="_blank">Create first →</a></td></tr>
+          <tr><td><code>weedlaw-education</code></td><td>weedlaweducation.com</td><td><span class="loop-a">A</span></td><td><span class="status-todo">Create</span></td><td><a href="https://github.com/new" target="_blank">Create first →</a></td></tr>
+          <tr><td><code>zprimedoxaihq</code></td><td>zprimedoxaihq.com</td><td><span class="loop-a">A</span></td><td><span class="status-todo">Create</span></td><td><a href="https://github.com/new" target="_blank">Create first →</a></td></tr>
+          <tr><td><code>docweedlaw</code></td><td>docweedlaw.com</td><td><span class="loop-a">A</span></td><td><span class="status-need">⚠ Create</span></td><td><a href="https://github.com/new" target="_blank">Create first →</a></td></tr>
+          <tr><td><code>beno-x</code></td><td>beno-x.com</td><td><span class="loop-a">A</span></td><td><span class="status-need">⚠ Create</span></td><td><a href="https://github.com/new" target="_blank">Create first →</a></td></tr>
+          <tr><td><code>kiaros</code></td><td>kiaros.com</td><td><span class="loop-b">B</span></td><td><span class="status-need">⚠ Create</span></td><td><a href="https://github.com/new" target="_blank">Create first →</a></td></tr>
+        </tbody>
+      </table>
+      <div class="alert alert-green" style="margin-top:14px">
+        <div class="alert-icon">✅</div>
+        <div class="alert-body"><strong>After creating each repo:</strong> Tell Claude "I created franciscoderek7/REPONAME" — Claude will trigger the deploy workflow immediately.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ DNS ═══ -->
+<div class="section" id="section-dns">
+  <div class="section-title">🌐 DNS Setup at Porkbun</div>
+  <div class="section-desc">Do this for every domain you own. Takes ~3 minutes per domain once you're logged in.</div>
+
+  <div class="alert alert-gold">
+    <div class="alert-icon">🔑</div>
+    <div class="alert-body">
+      <strong>Open Porkbun first:</strong> <a href="https://porkbun.com/account/domainsSpeedy" target="_blank">porkbun.com/account/domainsSpeedy</a> — keep this tab open the whole time.
+    </div>
+  </div>
+
+  <div class="step open" id="step-dns-how">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-dns-how"></div>
+      <div class="step-num">★</div>
+      <div class="step-title">How to add DNS records for one domain (repeat for each)</div>
+      <span class="step-tag tag-dns">DNS</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">At Porkbun, click <span class="ui-click">DNS</span> next to your domain name</div></div>
+      <div class="instruction"><div class="instruction-n">2</div><div class="instruction-text">Delete any existing A records for <strong>@</strong> (the root) — they'll conflict</div></div>
+      <div class="instruction"><div class="instruction-n">3</div><div class="instruction-text">Add these <strong>4 A records</strong> — one at a time. Type: <code>A</code> · Host: <code>@</code> · Answer: (IP) · TTL: 600</div></div>
+
+      <div style="margin:12px 0 4px;font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px">GitHub Pages IP addresses (add all 4):</div>
+      <div class="dns-record"><span class="dns-type">A</span> <span>Host: <strong>@</strong></span> <span>→</span> <span class="dns-val">185.199.108.153</span> <button class="copy-btn" style="position:static;padding:3px 10px;font-size:11px" onclick="copyText('185.199.108.153',this)">Copy</button></div>
+      <div class="dns-record"><span class="dns-type">A</span> <span>Host: <strong>@</strong></span> <span>→</span> <span class="dns-val">185.199.109.153</span> <button class="copy-btn" style="position:static;padding:3px 10px;font-size:11px" onclick="copyText('185.199.109.153',this)">Copy</button></div>
+      <div class="dns-record"><span class="dns-type">A</span> <span>Host: <strong>@</strong></span> <span>→</span> <span class="dns-val">185.199.110.153</span> <button class="copy-btn" style="position:static;padding:3px 10px;font-size:11px" onclick="copyText('185.199.110.153',this)">Copy</button></div>
+      <div class="dns-record"><span class="dns-type">A</span> <span>Host: <strong>@</strong></span> <span>→</span> <span class="dns-val">185.199.111.153</span> <button class="copy-btn" style="position:static;padding:3px 10px;font-size:11px" onclick="copyText('185.199.111.153',this)">Copy</button></div>
+
+      <div class="instruction" style="margin-top:12px"><div class="instruction-n">4</div><div class="instruction-text">Add ONE <code>CNAME</code> record: Type: <code>CNAME</code> · Host: <code>www</code> · Answer: <code>franciscoderek7.github.io</code> · TTL: 600</div></div>
+      <div class="dns-record"><span class="dns-type">CNAME</span> <span>Host: <strong>www</strong></span> <span>→</span> <span class="dns-val">franciscoderek7.github.io</span> <button class="copy-btn" style="position:static;padding:3px 10px;font-size:11px" onclick="copyText('franciscoderek7.github.io',this)">Copy</button></div>
+      <div class="instruction" style="margin-top:8px"><div class="instruction-n">5</div><div class="instruction-text">Back in GitHub → repo Settings → Pages → scroll to <strong>Custom domain</strong> → type your domain (e.g. <code>ccldr.net</code>) → click <span class="ui-click">Save</span>. GitHub handles the HTTPS cert automatically.</div></div>
+      <div class="instruction"><div class="instruction-n">6</div><div class="instruction-text">DNS propagates in 5–30 minutes. You're done with that domain.</div></div>
+    </div>
+  </div>
+
+  <div class="step" id="step-dns-domains">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-dns-domains"></div>
+      <div class="step-num">1</div>
+      <div class="step-title">All domains — apply DNS for each</div>
+      <span class="step-tag tag-dns">DNS</span>
+    </div>
+    <div class="step-body">
+      <table class="repo-table">
+        <thead><tr><th>Domain</th><th>Repo</th><th>Custom Domain in GitHub Pages</th></tr></thead>
+        <tbody>
+          <tr><td>ccldr.net</td><td>ccldr-site</td><td><code>ccldr.net</code></td></tr>
+          <tr><td>primedoxai.com</td><td>primedox-ai-site</td><td><code>primedoxai.com</code></td></tr>
+          <tr><td>omniaguard.com</td><td>omniaguard</td><td><code>omniaguard.com</code></td></tr>
+          <tr><td>franciscoholdingsinc.com</td><td>francisco-holdings-site</td><td><code>franciscoholdingsinc.com</code></td></tr>
+          <tr><td>cleanswarm.ca</td><td>cleanswarm</td><td><code>cleanswarm.ca</code></td></tr>
+          <tr><td>zprimedoxaihq.com</td><td>zprimedoxaihq</td><td><code>zprimedoxaihq.com</code></td></tr>
+          <tr><td>weedlaweducation.com</td><td>weedlaw-education</td><td><code>weedlaweducation.com</code></td></tr>
+          <tr><td>docweedlaw.com</td><td>docweedlaw</td><td><code>docweedlaw.com</code></td></tr>
+          <tr><td>beno-x.com</td><td>beno-x</td><td><code>beno-x.com</code></td></tr>
+          <tr><td>kiaros.com</td><td>kiaros</td><td><code>kiaros.com</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SOCIAL ═══ -->
+<div class="section" id="section-social">
+  <div class="section-title">📣 Social Media Posts — Copy &amp; Paste</div>
+  <div class="section-desc">Open each platform → paste → post. That's all.</div>
+
+  <div class="step open" id="step-fb-ccldr">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-fb-ccldr"></div>
+      <div class="step-num">1</div>
+      <div class="step-title">Facebook — CCLDR 40% Off (Lawyers/Paralegals)</div>
+      <span class="step-tag tag-social">FACEBOOK</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open <a href="https://facebook.com" target="_blank">facebook.com</a> → click <span class="ui-click">What's on your mind?</span></div></div>
+      <div class="instruction"><div class="instruction-n">2</div><div class="instruction-text">Copy the post below → paste → post</div></div>
+      <div class="copy-box">
+        <div class="copy-box-label">Post Text</div>
+        <pre id="fb-post-text">I was the first person in the world to get marijuana returned from court — half pound, 197 grams, equipment, scales, pipes, bongs, lighting.
+
+20+ years of constitutional advocacy. Fought the Crown using the Canadian Charter. Won.
+
+Now I'm teaching lawyers and paralegals how to do the same.
+
+CCLDR — 40% off for licensed legal professionals.
+
+If you're a lawyer or paralegal dealing with cannabis charges and losing on constitutional grounds — I can show you the BENO-X Framework. The exact system used in 200+ cases.
+
+Contact Doc Weedlaw today: ccldr.net
+Direct: franciscoderek7@gmail.com</pre>
+        <button class="copy-btn" onclick="copyBox('fb-post-text',this)">📋 Copy</button>
+      </div>
+      <div class="instruction"><div class="instruction-n">3</div><div class="instruction-text">Add to first comment (hashtags): <code>#CannabisCriminalLaw #CharterRights #BENO #DocWeedlaw #CCLDR #ConstitutionalLaw</code></div></div>
+    </div>
+  </div>
+
+  <div class="step" id="step-linkedin">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-linkedin"></div>
+      <div class="step-num">2</div>
+      <div class="step-title">LinkedIn — Francisco Holdings Consulting ($500/hr)</div>
+      <span class="step-tag tag-social">LINKEDIN</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open <a href="https://linkedin.com/feed" target="_blank">linkedin.com</a> → click <span class="ui-click">Start a post</span></div></div>
+      <div class="copy-box">
+        <div class="copy-box-label">Post Text</div>
+        <pre id="li-post-text">$500/hr. One session. Real outcomes.
+
+Francisco Holdings offers constitutional and strategic consulting on:
+• Cannabis law (Section 8, 9, 10 Charter violations)
+• Property rights and asset protection
+• Charter s.7 + s.15 litigation strategy
+• Business structure and AI automation
+
+20+ years of advocacy. First in the world to have marijuana returned from court.
+
+3 slots available this week.
+
+Book now: franciscoholdingsinc.com/book.html
+
+— Derek Francisco
+CEO, Francisco Holdings Inc.</pre>
+        <button class="copy-btn" onclick="copyBox('li-post-text',this)">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="step-twitter">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-twitter"></div>
+      <div class="step-num">3</div>
+      <div class="step-title">Twitter/X — OmniaGuard Surveillance Thread</div>
+      <span class="step-tag tag-social">TWITTER/X</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open <a href="https://x.com" target="_blank">x.com</a> → click <span class="ui-click">Post</span> → post Tweet 1 → reply to it with Tweet 2 → continue the thread</div></div>
+      <div class="copy-box"><div class="copy-box-label">Tweet 1</div><pre id="tw1">🧵 Thread: 5 ways your phone is being tracked RIGHT NOW — and what to do about it.
+
+This is not tinfoil hat stuff. This is documented, legal, and happening to you today.</pre><button class="copy-btn" onclick="copyBox('tw1',this)">📋 Copy</button></div>
+      <div class="copy-box"><div class="copy-box-label">Tweet 2</div><pre id="tw2">1. Telus, Rogers, Bell sell your location data to advertisers and government contractors. Your "private" location history is a product they're already monetizing.</pre><button class="copy-btn" onclick="copyBox('tw2',this)">📋 Copy</button></div>
+      <div class="copy-box"><div class="copy-box-label">Tweet 3</div><pre id="tw3">2. Your apps "in background" are not sleeping — they're tracking. Health apps, weather apps, gaming apps. All harvesting behavioral data even when you're not using them.</pre><button class="copy-btn" onclick="copyBox('tw3',this)">📋 Copy</button></div>
+      <div class="copy-box"><div class="copy-box-label">Tweet 4</div><pre id="tw4">3. Google Ads tracks every search, click, and page visit across every device logged into your account. That "deleted" search history is still on Google's servers.</pre><button class="copy-btn" onclick="copyBox('tw4',this)">📋 Copy</button></div>
+      <div class="copy-box"><div class="copy-box-label">Tweet 5 (final)</div><pre id="tw5">4. Your smart TV is recording your room. Your voice assistant is transcribing. Your fitness tracker is building a biometric profile.
+
+5. Most people never know it happened.
+
+OmniaGuard monitors your threat surface and deploys countermeasures.
+Deploy in 4 hours: omniaguard.com
+
+Reply "PROTECT" if you want the full threat assessment checklist.</pre><button class="copy-btn" onclick="copyBox('tw5',this)">📋 Copy</button></div>
+    </div>
+  </div>
+
+  <div class="step" id="step-instagram">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-instagram"></div>
+      <div class="step-num">4</div>
+      <div class="step-title">Instagram — Canadian Cannabis Church</div>
+      <span class="step-tag tag-social">INSTAGRAM</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open Instagram → click <span class="ui-click">+</span> → choose a green/cannabis photo → paste caption below</div></div>
+      <div class="copy-box">
+        <div class="copy-box-label">Caption</div>
+        <pre id="ig-caption">Canadian Cannabis Church ✝️🌿
+
+Ordained reverend. Cannabis sacrament. Religious freedom — Charter s.2(a).
+
+We are not a dispensary. We are not a grey market.
+
+We are a registered religious organization operating under constitutional protection since Day 1.
+
+Education. Sacrament. Community. Rights.
+
+If you've been targeted for your religious practice — Doc Weedlaw can help.
+
+Link in bio → ccldr.net
+
+#CanadaCannabisChurch #CCC #CannabisSacrament #ReligiousFreedom #Charter2a #DocWeedlaw #CCLDR</pre>
+        <button class="copy-btn" onclick="copyBox('ig-caption',this)">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ EMAIL ═══ -->
+<div class="section" id="section-email">
+  <div class="section-title">📧 Email Templates — Open Gmail, Paste, Send</div>
+  <div class="section-desc">Three warm-lead emails to send TODAY. Each takes 60 seconds.</div>
+
+  <div class="step open" id="step-email-lawyers">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-email-lawyers"></div>
+      <div class="step-num">1</div>
+      <div class="step-title">Email to Cannabis Lawyers (CCLDR 40% off offer)</div>
+      <span class="step-tag tag-email">GMAIL</span>
+    </div>
+    <div class="step-body">
+      <div class="instruction"><div class="instruction-n">1</div><div class="instruction-text">Open <a href="https://mail.google.com" target="_blank">Gmail</a> → click <span class="ui-click">Compose</span> → put a cannabis lawyer's email in the To: field</div></div>
+      <div class="copy-box"><div class="copy-box-label">Subject Line</div><pre id="email1-sub">BENO-X Framework — 40% off for your cannabis caseload</pre><button class="copy-btn" onclick="copyBox('email1-sub',this)">📋 Copy</button></div>
+      <div class="copy-box">
+        <div class="copy-box-label">Email Body</div>
+        <pre id="email1-body">Hi [Name],
+
+I'm Derek Francisco — Doc Weedlaw. I've been doing constitutional cannabis defense for 20+ years, and I'm the first person in the world to have marijuana returned from court (half pound, full equipment).
+
+I built the BENO-X Framework — a 5-pillar Charter defense system used in 200+ cases. I've just opened access to legal professionals at 40% off standard pricing.
+
+This isn't course content. This is the exact constitutional analysis I use: breach identification, s.24(2) exclusion, negotiation leverage, on-record defense strategy.
+
+If you're handling cannabis charges and want to win more of them on constitutional grounds — let's talk.
+
+Reply to this email or book at franciscoholdingsinc.com/book.html
+
+— Derek Francisco (Doc Weedlaw)
+CCLDR.net | 705-307-8080</pre>
+        <button class="copy-btn" onclick="copyBox('email1-body',this)">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="step-email-dispensaries">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-email-dispensaries"></div>
+      <div class="step-num">2</div>
+      <div class="step-title">Email to Dispensaries (referral arrangement)</div>
+      <span class="step-tag tag-email">GMAIL</span>
+    </div>
+    <div class="step-body">
+      <div class="copy-box"><div class="copy-box-label">Subject Line</div><pre id="email2-sub">Protect your customers — constitutional cannabis defense</pre><button class="copy-btn" onclick="copyBox('email2-sub',this)">📋 Copy</button></div>
+      <div class="copy-box">
+        <div class="copy-box-label">Email Body</div>
+        <pre id="email2-body">Hi [Name],
+
+Derek Francisco here. I run the Canadian Constitutional Law Defense Resource (CCLDR) and advise on cannabis constitutional law.
+
+Your customers face arrests, raids, and charges — even post-legalization. Many of them have no idea their Charter rights protect them.
+
+I'd like to discuss a referral arrangement: any customer of yours who faces legal trouble gets connected to CCLDR. I'll handle the constitutional defense.
+
+Simple 20% referral commission. No upfront cost to you.
+
+Interested? Reply to this email.
+
+— Derek Francisco
+CCLDR.net | franciscoderek7@gmail.com</pre>
+        <button class="copy-btn" onclick="copyBox('email2-body',this)">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" id="step-email-investors">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-email-investors"></div>
+      <div class="step-num">3</div>
+      <div class="step-title">Email to Investors (Francisco Holdings deck request)</div>
+      <span class="step-tag tag-email">GMAIL</span>
+    </div>
+    <div class="step-body">
+      <div class="copy-box"><div class="copy-box-label">Subject Line</div><pre id="email3-sub">Francisco Holdings Inc. — 22 brands, $0 raised, asking first time</pre><button class="copy-btn" onclick="copyBox('email3-sub',this)">📋 Copy</button></div>
+      <div class="copy-box">
+        <div class="copy-box-label">Email Body</div>
+        <pre id="email3-body">Hi [Name],
+
+I've built a 22-brand empire — cannabis law education, enterprise AI security, document automation, consulting, and more — with 2 people and no external capital.
+
+Revenue streams:
+- CCLDR: $149–$1,499 digital products
+- OmniaGuard: $499–$15,000/mo enterprise security
+- PrimeDox AI: $49–$499/mo SaaS
+- Francisco Holdings Consulting: $500/hr, $1,500/mo retainer
+
+I'm raising a first round to accelerate: marketing, team, and two new product lines.
+
+15-minute call? I'll send the full deck.
+
+— Derek Francisco
+CEO, Francisco Holdings Inc.
+franciscoholdingsinc.com</pre>
+        <button class="copy-btn" onclick="copyBox('email3-body',this)">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ LEGAL ═══ -->
+<div class="section" id="section-legal">
+  <div class="section-title">⚖️ Legal Docs — Fill In &amp; File Monday June 9</div>
+  <div class="section-desc">5 documents are complete in <code>legal-filings/</code>. Every [BRACKETED] item needs your input. File at Kawartha Lakes Superior Court, 180 Kent St W, Lindsay ON, Monday morning.</div>
+
+  <div class="alert alert-red">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body">
+      <strong>Deadline: Monday June 9, 2026</strong>
+      Documents 6 and 7b require you to be sworn before a Commissioner of Oaths <strong>before filing</strong>. Courts have them on-site. Bring both affidavits unsigned and swear them at the courthouse counter.
+    </div>
+  </div>
+
+  <div class="step open" id="step-legal-list">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-check" onclick="event.stopPropagation();checkStep(this)" id="check-legal-list"></div>
+      <div class="step-num">1</div>
+      <div class="step-title">Fill in all 5 documents — bracketed fields</div>
+      <span class="step-tag tag-legal">LEGAL</span>
+    </div>
+    <div class="step-body">
+      <table class="repo-table">
+        <thead><tr><th>Document</th><th>File</th><th>Key Brackets to Fill</th><th>Sworn?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Doc 6</strong><br>Affidavit of Service</td><td><code>document-6-affidavit-of-service.md</code></td><td>[DATE OF SERVICE], [NAME OF PERSON SERVED], [METHOD], [ADDRESS]</td><td><span style="color:var(--red);font-weight:700">YES — swear at courthouse</span></td></tr>
+          <tr><td><strong>Doc 7a</strong><br>Notice of Motion</td><td><code>document-7a-notice-of-motion-default.md</code></td><td>[RETURN DATE], [MOTION DATE], [RELIEF SOUGHT details]</td><td>No</td></tr>
+          <tr><td><strong>Doc 7b</strong><br>Affidavit — Default Judgment</td><td><code>document-7b-affidavit-default-judgment.md</code></td><td>[AMOUNT OWING], [INTEREST RATE], [CALCULATION DATE]</td><td><span style="color:var(--red);font-weight:700">YES — swear at courthouse</span></td></tr>
+          <tr><td><strong>Doc 7c</strong><br>Draft Order</td><td><code>document-7c-draft-order-default.md</code></td><td>[JUDGMENT AMOUNT], [COSTS], [DEFENDANT NAME]</td><td>No</td></tr>
+          <tr><td><strong>CPL Certificate</strong><br>Pending Litigation</td><td><code>document-cpl-certificate-pending-litigation.md</code></td><td>[COURT FILE NUMBER], [PROPERTY ADDRESS], [PARCEL ID]</td><td>No</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:16px;font-size:13px;color:var(--muted)"><strong style="color:var(--text)">How to find the files:</strong> They're in <code>legal-filings/</code> in the primedoxai-deploy repository. Open each .md file, find every <code>[BRACKETED]</code> item, fill it in, print to PDF.</div>
+
+      <div class="alert alert-gold" style="margin-top:16px">
+        <div class="alert-icon">📍</div>
+        <div class="alert-body">
+          <strong>Kawartha Lakes Superior Court of Justice</strong><br>
+          180 Kent St W, Lindsay, Ontario K9V 2Z8<br>
+          Hours: Monday–Friday 8:30am–4:30pm<br>
+          Commissioner of Oaths available at the counter — no appointment needed.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<button class="float-btn" onclick="showSection(nextSection())">Next Section →</button>
+
+<script>
+var SECTIONS = ['stripe','github','dns','social','email','legal'];
+var current = 0;
+
+function showSection(name){
+  SECTIONS.forEach(function(s){
+    document.getElementById('section-'+s).classList.remove('active');
+    document.getElementById('tab-'+s).classList.remove('active');
+  });
+  document.getElementById('section-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  current = SECTIONS.indexOf(name);
+  updateFloatBtn();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextSection(){
+  return SECTIONS[(current+1) % SECTIONS.length];
+}
+
+function updateFloatBtn(){
+  var n = nextSection();
+  var labels = {stripe:'💳 Stripe',github:'🐙 GitHub',dns:'🌐 DNS',social:'📣 Social',email:'📧 Email',legal:'⚖️ Legal'};
+  document.querySelector('.float-btn').textContent = labels[n] + ' →';
+}
+updateFloatBtn();
+
+function toggleStep(header){
+  var step = header.closest('.step');
+  step.classList.toggle('open');
+}
+
+function checkStep(el){
+  el.classList.toggle('checked');
+  var step = el.closest('.step');
+  if(el.classList.contains('checked')){step.classList.add('done');}else{step.classList.remove('done');}
+  updateProgress();
+}
+
+function updateProgress(){
+  var total = document.querySelectorAll('.step-check').length;
+  var done = document.querySelectorAll('.step-check.checked').length;
+  var pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-label').textContent = done+' of '+total+' steps completed ('+pct+'%)';
+}
+updateProgress();
+
+function copyBox(id, btn){
+  var text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='📋 Copy';btn.classList.remove('copied');},2000);
+  }).catch(function(){
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent='✅ Copied!'; btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='📋 Copy';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyText(text, btn){
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent='✅'; setTimeout(function(){btn.textContent='Copy';},1500);
+  });
+}
+
+function checkPriceId(input){
+  var val = input.value.trim();
+  if(val.startsWith('price_') && val.length > 8){
+    input.classList.add('filled');
+  } else {
+    input.classList.remove('filled');
+  }
+  generateClaudeCommand();
+}
+
+function generateClaudeCommand(){
+  var inputs = document.querySelectorAll('.price-id-input');
+  var pairs = [];
+  inputs.forEach(function(inp){
+    var val = inp.value.trim();
+    if(val.startsWith('price_') && val.length > 8){
+      pairs.push(inp.dataset.key+':'+val);
+    }
+  });
+  var el = document.getElementById('claude-command');
+  if(pairs.length === 0){
+    el.textContent = 'Fill in all Price IDs above first…';
+    el.style.color = '#888';
+    return;
+  }
+  el.style.color = '#e5e5e5';
+  el.textContent = 'STRIPE PRICE IDs — wire these into stripe-checkout.html:\n\n'+pairs.map(function(p){return '  '+p;}).join('\n')+'\n\nAll '+pairs.length+' of 24 filled.';
+}
+
+function copyClaudeCommand(){
+  var text = document.getElementById('claude-command').textContent;
+  navigator.clipboard.writeText(text);
+  alert('Copied! Paste this into your Claude chat.');
+}
+</script>
+</body>
+</html>
