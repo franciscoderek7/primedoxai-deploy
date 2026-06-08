@@ -295,5 +295,46 @@ Claude                         — Builder/executor — acts on direct PrimeDox 
 
 ---
 
-*Updated: 2026-06-07 | Session: Francisco Revenue Sprint | Builder: Claude*
+## 13. JUNE 8, 2026 BUILD SESSION — 9-PHASE REVENUE SPRINT COMPLETE
+
+### Phase Status
+| Phase | Description | Files | Status |
+|-------|-------------|-------|--------|
+| 1 | OmniaGuard spelling audit + cannabis check | — | ✅ CLEAN |
+| 2 | OmniaGuard Shield Network + lead capture | omniaguard-site/shield-network.html, assessment.html | ✅ COMMITTED |
+| 3 | CCLDR Warrior Network + all 4 pricing tiers | ccldr-site/warrior-network.html | ✅ COMMITTED |
+| 4 | PrimeDox emergency defense page | primedoxai-site/get-help-now.html | ✅ COMMITTED |
+| 5 | Francisco Holdings investor hub | francisco-holdings-site/investors.html | ✅ ALREADY LIVE |
+| 6 | CleanSwarm pricing + per-job fees + payment CTAs | cleanswarm-checkout/pricing.html | ✅ COMMITTED |
+| 7 | Weedlaw Education courses catalogue | ccldr-site/courses.html | ✅ COMMITTED |
+| 8 | Email sequences — all 3 brands (5 emails each) | content-marketing/email-sequences/*.md | ✅ COMMITTED |
+| 9 | Deploy (awaiting Derek: merge → main) | — | ⬜ PENDING DEREK ACTION |
+
+### New Pages Summary
+| Page | URL | Payment Method | Loop |
+|------|-----|----------------|------|
+| Shield Network | omniaguard.com/shield-network | contact@omniaguard.com | B |
+| AI Assessment | omniaguard.com/assessment | contact@omniaguard.com | B |
+| Warrior Network | ccldr.net/warrior-network | PayPal + Interac | A |
+| Courses | ccldr.net/courses | PayPal + Interac | A |
+| Emergency Defense | primedoxai.com/get-help-now | PayPal + Interac | A |
+| CleanSwarm Pricing | cleanswarm.ca/pricing | Interac (Loop B) | B |
+
+### Email Sequences Ready for Mailchimp/ConvertKit
+| Sequence | FROM | Emails | CTA |
+|----------|------|--------|-----|
+| omniaguard-sequence.md | security@omniaguard.com | 5 (Day 0/1/3/7/14) | contact@omniaguard.com |
+| ccldr-sequence.md | derek@ccldr.net | 5 (Day 0/1/3/7/14) | PayPal + Interac |
+| primedox-sequence.md | derek@primedoxai.com | 5 (Day 0/1/3/7/14) | PayPal + Interac |
+
+### Pending Actions Added
+| # | Action | Owner | Status |
+|---|--------|-------|--------|
+| 17 | Load email sequences into Mailchimp or ConvertKit | Derek | PENDING |
+| 18 | Connect assessment/warrior-network forms to email automation | Derek | PENDING |
+| 19 | Deploy Phase 9: merge feature branch → main | Derek | PENDING |
+
+---
+
+*Updated: 2026-06-08 | Session: Francisco Revenue Sprint | Builder: Claude*
 *Source of truth for the Francisco Holdings empire. Update after every deployment.*
