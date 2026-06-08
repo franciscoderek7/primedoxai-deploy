@@ -33,6 +33,11 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
+      - name: Wipe old files
+        run: |
+          find /tmp/primedox -mindepth 1 -not -path '/tmp/primedox/.git*' -delete
+          echo "Clean slate"
+
       - name: Copy site files
         run: |
           cd primedoxai-site
@@ -41,6 +46,7 @@ jobs:
             for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/primedox/"$f" && echo "  copied $f"; done
           done
           echo "primedoxai.com" > /tmp/primedox/CNAME
+          touch /tmp/primedox/.nojekyll
           echo "All PrimeDox files copied"
 
       - name: Commit and push to primedox repo
