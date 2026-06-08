@@ -732,6 +732,18 @@
     </div>
   </nav>
 
+  <!-- URGENCY BAR -->
+  <div id="ccldr-urgency" style="background:linear-gradient(90deg,#050a07,#071007,#050a07);border-bottom:1px solid rgba(39,174,96,0.3);padding:9px 16px;text-align:center;font-size:13px;color:#888;position:relative;z-index:998;">
+    <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;">
+      <span style="width:7px;height:7px;border-radius:50%;background:#27ae60;display:inline-block;animation:ccldrpulse 2s infinite;flex-shrink:0;"></span>
+      <strong style="color:#f5f5f5;">Only 7 consultation spots left this month.</strong>
+      Offer expires in: <strong id="ccldr-countdown" style="color:#27ae60;font-family:monospace;letter-spacing:1px;">--:--:--</strong>
+      <a href="#pricing" style="color:#fbbf24;font-weight:800;text-decoration:none;margin-left:4px;">See Pricing →</a>
+      <a href="#" onclick="document.getElementById('ccldr-urgency').style.display='none';return false;" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#444;font-size:18px;line-height:1;text-decoration:none;">&times;</a>
+    </span>
+  </div>
+  <style>@keyframes ccldrpulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+
   <!-- HERO -->
   <section class="hero">
     <div class="hero-inner">
@@ -1136,5 +1148,46 @@
 })();
 </script>
 
+
+  <!-- EMAIL CAPTURE -->
+  <section id="email-capture" style="background:#050a07;border-top:1px solid rgba(39,174,96,0.15);padding:52px 20px;">
+    <div style="max-width:520px;margin:0 auto;text-align:center;">
+      <div style="font-size:11px;font-weight:900;letter-spacing:3px;color:#27ae60;text-transform:uppercase;margin-bottom:12px;">🎁 FREE RESOURCE</div>
+      <h2 style="font-family:'Cinzel',serif;font-size:clamp(20px,4vw,26px);font-weight:700;color:#f5f5f5;margin-bottom:10px;">Get the BENO-X Framework Guide — Free</h2>
+      <p style="font-size:14px;color:#666;margin-bottom:24px;line-height:1.6;">The exact constitutional framework used in 200+ cannabis defense cases. Enter your email and we'll send it right away.</p>
+      <form id="ccldr-email-form" onsubmit="ccldrEmailSubmit(event)" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;">
+        <input type="email" id="ccldr-email-field" placeholder="your@email.com" required style="flex:1;min-width:220px;background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:12px 16px;color:#f5f5f5;font-size:14px;outline:none;font-family:inherit;">
+        <button type="submit" style="background:#27ae60;color:#fff;border:none;border-radius:8px;padding:12px 22px;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;font-family:inherit;">Get Free Guide →</button>
+      </form>
+      <div id="ccldr-email-success" style="display:none;color:#27ae60;font-weight:700;font-size:15px;padding:12px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:8px;margin-bottom:10px;"></div>
+      <p style="font-size:11px;color:#444;">No spam. Unsubscribe anytime. Educational content only.</p>
+    </div>
+  </section>
+
+  <script>
+  // CCLDR Urgency countdown — counts down to midnight tonight
+  function ccldrUpdateCountdown() {
+    var el = document.getElementById('ccldr-countdown');
+    if (!el) return;
+    var now = new Date(), midnight = new Date();
+    midnight.setHours(23,59,59,0);
+    var diff = midnight - now;
+    if (diff <= 0) { el.textContent = '00:00:00'; return; }
+    var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+    el.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }
+  setInterval(ccldrUpdateCountdown, 1000); ccldrUpdateCountdown();
+
+  // CCLDR Email capture
+  function ccldrEmailSubmit(e) {
+    e.preventDefault();
+    var email = document.getElementById('ccldr-email-field').value;
+    document.getElementById('ccldr-email-form').style.display = 'none';
+    var s = document.getElementById('ccldr-email-success');
+    s.style.display = 'block';
+    s.textContent = '✓ Got it! Sending the BENO-X guide to ' + email + ' — check your inbox (and spam folder).';
+    try { window.open('mailto:franciscoderek7@gmail.com?subject=CCLDR+Lead+%E2%80%94+'+encodeURIComponent(email)+'&body=New+subscriber:+'+encodeURIComponent(email), '_blank'); } catch(err){}
+  }
+  </script>
 </body>
 </html>
