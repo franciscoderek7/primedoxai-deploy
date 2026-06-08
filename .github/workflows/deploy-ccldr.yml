@@ -32,6 +32,12 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
+      - name: Wipe old Jekyll files
+        run: |
+          # Remove ALL old files except .git/ so stale Jekyll blog files don't linger
+          find /tmp/ccldr -mindepth 1 -not -path '/tmp/ccldr/.git*' -delete
+          echo "Old repo contents wiped — clean slate"
+
       - name: Copy site files
         run: |
           cd ccldr-site
@@ -48,7 +54,9 @@ jobs:
             echo "  copied membership/"
           fi
           echo "ccldr.net" > /tmp/ccldr/CNAME
-          echo "All CCLDR files copied"
+          # Disable Jekyll so GitHub Pages serves raw HTML
+          touch /tmp/ccldr/.nojekyll
+          echo "All CCLDR files copied — Jekyll disabled"
 
       - name: Commit and push to ccldr repo
         run: |
