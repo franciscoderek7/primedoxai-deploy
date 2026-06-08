@@ -1,0 +1,75 @@
+name: Deploy BENO-X to beno-x.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'beno-x-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop A identity (Derek Francisco visible — cannabis OK)
+        run: |
+          ADDR_LEAK=$(grep -rn "705-307-8080\|Kent St W\|K9V 2Z8\|sk_live_\|sk_test_" beno-x-site/ --include="*.html" | wc -l)
+          if [ "$ADDR_LEAK" -gt 0 ]; then
+            echo "FAIL: Private address or API key found in beno-x-site"
+            grep -rn "705-307-8080\|Kent St W\|K9V 2Z8\|sk_live_\|sk_test_" beno-x-site/ --include="*.html"
+            exit 1
+          fi
+          echo "PASS: Loop A identity verified — no private addresses"
+
+      - name: Clone beno-x repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/beno-x.git /tmp/beno-x
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe old files
+        run: |
+          find /tmp/beno-x -mindepth 1 -not -path '/tmp/beno-x/.git*' -delete
+          echo "Clean slate"
+
+      - name: Copy site files
+        run: |
+          cd beno-x-site
+          for f in *.html; do [ -f "$f" ] && cp "$f" /tmp/beno-x/"$f" && echo "  copied $f"; done
+          for ext in jpg jpeg png webp gif svg js css ico; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/beno-x/"$f" && echo "  copied $f"; done
+          done
+          echo "beno-x.com" > /tmp/beno-x/CNAME
+          touch /tmp/beno-x/.nojekyll
+          echo "All BENO-X files copied"
+
+      - name: Commit and push to beno-x repo
+        run: |
+          cd /tmp/beno-x
+          git config user.email "deploy@beno-x.com"
+          git config user.name "BENO-X Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: beno-x.com
+          Loop: A (BENO-X Framework — constitutional defense)
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/beno-x — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "  BENO-X DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/beno-x (main)"
+          echo "  CNAME: beno-x.com"
+          echo "  Loop: A (BENO-X Framework)"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo "  Check: https://beno-x.com"
+          echo "================================================"
