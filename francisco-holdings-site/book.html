@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book a Consulting Session — Francisco Holdings Inc.</title>
+<meta name="description" content="Book a private 1-hour consulting session with Derek Francisco, CEO of Francisco Holdings Inc. $500/hr CAD.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#070712;color:#e0e4f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+:root{--gold:#c9a84c;--green:#00c853;--gray:#7a8599;--bg2:#0d0d1e;--bg3:#11112a;--border:rgba(201,168,76,0.15);}
+
+nav{padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);max-width:1100px;margin:0 auto;}
+.nav-logo{font-size:18px;font-weight:800;color:var(--gold);text-decoration:none;}
+.nav-back{color:var(--gray);text-decoration:none;font-size:13px;}
+.nav-back:hover{color:#fff;}
+
+.page{max-width:720px;margin:0 auto;padding:60px 24px 100px;}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+h1{font-size:clamp(28px,5vw,44px);font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:16px;}
+.sub{font-size:17px;color:var(--gray);line-height:1.7;margin-bottom:48px;}
+.sub strong{color:#fff;}
+
+/* WHAT YOU GET */
+.what-box{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-bottom:40px;}
+.what-box h3{font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.what-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.what-list li{font-size:14px;color:#c0c8d8;display:flex;gap:10px;align-items:flex-start;}
+.what-list li::before{content:"✓";color:var(--gold);font-weight:900;flex-shrink:0;margin-top:1px;}
+
+/* PRICE CARD */
+.price-card{background:rgba(201,168,76,0.05);border:2px solid var(--gold);border-radius:16px;padding:32px;text-align:center;margin-bottom:32px;}
+.price-label{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.price-amount{font-size:56px;font-weight:900;letter-spacing:-2px;line-height:1;color:#fff;}
+.price-amount span{font-size:18px;font-weight:500;color:var(--gray);}
+.price-note{font-size:13px;color:var(--gray);margin-top:8px;}
+
+/* PAYMENT BUTTONS */
+.pay-section{margin-bottom:40px;}
+.pay-section h3{font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray);margin-bottom:16px;}
+.btn-paypal{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--gold);color:#000;font-weight:900;font-size:16px;padding:17px 28px;border-radius:12px;text-decoration:none;margin-bottom:12px;transition:all .2s;box-shadow:0 0 24px rgba(201,168,76,0.25);}
+.btn-paypal:hover{background:#e0bb5a;box-shadow:0 0 40px rgba(201,168,76,0.4);transform:translateY(-2px);}
+.btn-interac{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;border:1px solid rgba(201,168,76,0.35);color:#c0c8d8;font-weight:700;font-size:14px;padding:14px 28px;border-radius:12px;text-decoration:none;margin-bottom:12px;transition:all .2s;}
+.btn-interac:hover{border-color:var(--gold);color:#fff;background:rgba(201,168,76,0.05);}
+
+/* BOOKING FORM */
+.form-section{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:32px;}
+.form-section h3{font-size:15px;font-weight:800;color:#fff;margin-bottom:6px;}
+.form-section p{font-size:13px;color:var(--gray);margin-bottom:24px;line-height:1.6;}
+.form-group{margin-bottom:16px;}
+label{display:block;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;}
+input,select,textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 14px;font-size:14px;color:#fff;font-family:inherit;transition:border-color .2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(201,168,76,0.5);}
+select option{background:#111;}
+textarea{resize:vertical;min-height:80px;}
+.btn-submit{width:100%;background:var(--gold);color:#000;font-weight:900;font-size:15px;padding:16px;border:none;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;margin-top:8px;}
+.btn-submit:hover{background:#e0bb5a;transform:translateY(-1px);}
+
+/* INTERAC DETAIL */
+.interac-detail{background:rgba(0,0,0,0.3);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:18px 20px;margin-top:16px;font-size:13px;color:var(--gray);line-height:1.7;}
+.interac-detail strong{color:#fff;}
+
+/* BIO */
+.bio-card{display:flex;gap:20px;align-items:flex-start;background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:40px;}
+.bio-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6a20);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#000;}
+.bio-text h4{font-size:15px;font-weight:800;color:#fff;margin-bottom:4px;}
+.bio-text p{font-size:13px;color:var(--gray);line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div style="max-width:1100px;margin:0 auto;">
+  <nav>
+    <a href="index.html" class="nav-logo">Francisco Holdings Inc.</a>
+    <a href="index.html" class="nav-back">← Back</a>
+  </nav>
+</div>
+
+<div class="page">
+  <div class="eyebrow">Private Consulting</div>
+  <h1>Book a 1-Hour Session with Derek Francisco</h1>
+  <p class="sub">Direct strategy, capital allocation, AI integration, and business architecture. <strong>$500 CAD per hour.</strong> No fluff. No agency overhead. You get the founder.</p>
+
+  <div class="bio-card">
+    <div class="bio-avatar">DF</div>
+    <div class="bio-text">
+      <h4>Derek Francisco — CEO, Francisco Holdings Inc.</h4>
+      <p>Founder of a 12-entity holdings empire across AI security, cannabis law, automation, and financial services. 20+ years building in regulated industries. Now available for private consulting engagements.</p>
+    </div>
+  </div>
+
+  <div class="what-box">
+    <h3>What You Get in 60 Minutes</h3>
+    <ul class="what-list">
+      <li>Direct 1-on-1 with Derek Francisco — no juniors, no assistants</li>
+      <li>Strategic review of your business, model, or investment thesis</li>
+      <li>AI integration roadmap for your industry vertical</li>
+      <li>Capital structure and holding company architecture advice</li>
+      <li>Written follow-up notes delivered within 24 hours</li>
+      <li>One 15-minute follow-up call within 30 days (included)</li>
+    </ul>
+  </div>
+
+  <div class="price-card">
+    <div class="price-label">Consulting Rate</div>
+    <div class="price-amount">$500<span>/hr CAD</span></div>
+    <div class="price-note">Payment required to confirm booking. Follow-up call included.</div>
+  </div>
+
+  <div class="pay-section">
+    <h3>Pay to Confirm Your Booking</h3>
+    <a href="https://paypal.me/derekfrancisco/500CAD" target="_blank" rel="noopener" class="btn-paypal">
+      💳 Pay $500 via PayPal → Confirm Session
+    </a>
+    <a href="mailto:franciscoderek7@gmail.com?subject=Consulting%20Session%20Booking%20%E2%80%94%20%24500%20CAD&body=Hi%20Derek%2C%0A%0AI%20would%20like%20to%20book%20a%201-hour%20consulting%20session%20at%20%24500%20CAD.%0A%0AI%20will%20send%20Interac%20e-Transfer%20to%20franciscoderek7%40gmail.com.%0A%0APreferred%20times%3A%20%5Blist%203%20times%5D%0ATopic%3A%20%5Bbrief%20description%5D%0ACompany%3A%20%5Byour%20company%5D%0AContact%3A%20%5Byour%20email%2Fphone%5D%0A%0ALooking%20forward%20to%20it." class="btn-interac">
+      💸 Pay via Interac e-Transfer → franciscoderek7@gmail.com
+    </a>
+    <div class="interac-detail">
+      <strong>Interac instructions:</strong> Send $500 CAD to <strong>franciscoderek7@gmail.com</strong> · Message field: <strong>"Consulting — [Your Name]"</strong> · After sending, use the form below to submit your preferred times.
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>After Paying — Submit Your Details</h3>
+    <p>Pay first via PayPal or Interac above, then fill in your details below. Derek will confirm your booking within 4 hours.</p>
+    <form action="mailto:franciscoderek7@gmail.com" method="post" enctype="text/plain">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" placeholder="Jane Smith" required>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email" placeholder="jane@company.com" required>
+      </div>
+      <div class="form-group">
+        <label>Company / Organization</label>
+        <input type="text" name="company" placeholder="Acme Corp">
+      </div>
+      <div class="form-group">
+        <label>Payment Method Used</label>
+        <select name="payment">
+          <option>PayPal</option>
+          <option>Interac e-Transfer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Times (list 3 options)</label>
+        <textarea name="times" placeholder="e.g. Monday June 9 at 2pm ET, Tuesday June 10 at 10am ET..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>What do you want to cover?</label>
+        <textarea name="topic" placeholder="Brief description of what you'd like to discuss..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">📅 Submit Booking Details →</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
