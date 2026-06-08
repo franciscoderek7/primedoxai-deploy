@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stripe Checkout Snippets — Francisco Holdings</title>
+<style>
+body{background:#070715;color:#f0f0f0;font-family:-apple-system,sans-serif;padding:40px 24px;max-width:900px;margin:0 auto;}
+h1{color:#c9a84c;font-size:1.4rem;margin-bottom:8px;}
+.sub{color:#555;font-size:.85rem;margin-bottom:40px;}
+h2{color:#c9a84c;font-size:1rem;letter-spacing:2px;text-transform:uppercase;margin:32px 0 12px;border-bottom:1px solid #1a1a30;padding-bottom:8px;}
+.step{background:#0d0d28;border:1px solid #1a1a30;border-radius:10px;padding:20px 24px;margin-bottom:16px;}
+.step-num{font-size:11px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.step-title{color:#fff;font-weight:700;margin-bottom:6px;}
+.step-body{color:#888;font-size:14px;line-height:1.7;}
+.step-body a{color:#c9a84c;}
+code{background:#111;border:1px solid #222;border-radius:4px;padding:2px 7px;font-size:12px;color:#00d4ff;font-family:'JetBrains Mono',monospace;}
+pre{background:#0a0a1a;border:1px solid #1a2030;border-radius:8px;padding:16px;overflow-x:auto;font-size:12px;color:#ccc;line-height:1.7;margin:12px 0;}
+.price-tag{display:inline-block;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);color:#c9a84c;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-right:6px;}
+.warn{background:rgba(255,165,0,0.08);border:1px solid rgba(255,165,0,0.25);border-radius:8px;padding:14px 18px;font-size:13px;color:#ffaa44;margin:16px 0;}
+.success{background:rgba(0,200,83,0.07);border:1px solid rgba(0,200,83,0.2);border-radius:8px;padding:14px 18px;font-size:13px;color:#00c853;margin:16px 0;}
+</style>
+</head>
+<body>
+
+<h1>Stripe Checkout Integration — Francisco Holdings Empire</h1>
+<p class="sub">Complete these 3 steps in your Stripe dashboard, then paste the Price IDs below. All buttons are ready — just swap placeholders.</p>
+
+<div class="warn">
+  ⚠️ Your Stripe public key is already live in OmniaGuard: <code>pk_live_51TG0cI...</code><br>
+  You need PRICE IDs for each product. Create them at <a href="https://dashboard.stripe.com" style="color:#c9a84c;">dashboard.stripe.com</a> → Products.
+</div>
+
+<!-- ═══════════════════ STEP 1 ═══════════════════ -->
+<h2>Step 1 — Create Products in Stripe</h2>
+
+<div class="step">
+  <div class="step-num">Stripe Dashboard</div>
+  <div class="step-title">Go to: dashboard.stripe.com → Products → + Add product</div>
+  <div class="step-body">
+    Create one product per item below. For recurring prices, set "Recurring" and choose Monthly.
+    For one-time, choose "One time."
+    <br><br>
+    After creating each product, click the price → copy the Price ID (starts with <code>price_</code>).
+  </div>
+</div>
+
+<!-- CCLDR -->
+<h2>CCLDR.NET Products</h2>
+
+<div class="step">
+  <div class="step-num">Product 1</div>
+  <div class="step-title">CCLDR — Foundation ($149/mo recurring)</div>
+  <div class="step-body">
+    Name: CCLDR Foundation Membership<br>
+    Price: $149.00 CAD · Recurring · Monthly<br>
+    Copy Price ID → paste here: <code>price_CCLDR_FOUNDATION_MONTHLY</code>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">Product 2</div>
+  <div class="step-title">CCLDR — Practitioner ($499/mo recurring)</div>
+  <div class="step-body">
+    Name: CCLDR Practitioner Membership<br>
+    Price: $499.00 CAD · Recurring · Monthly<br>
+    Copy Price ID: <code>price_CCLDR_PRACTITIONER_MONTHLY</code>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">Product 3 — NEW TIER (from your request)</div>
+  <div class="step-title">CCLDR — $99/mo Membership (40% off = $59.40 first month)</div>
+  <div class="step-body">
+    Name: CCLDR Digital Membership<br>
+    Price: $99.00 CAD · Recurring · Monthly<br>
+    (Apply a 40% coupon code for the intro offer — create under Coupons in Stripe dashboard)<br>
+    Copy Price ID: <code>price_CCLDR_DIGITAL_MONTHLY</code>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">Product 4 — NEW TIER (from your request)</div>
+  <div class="step-title">CCLDR — $299 Course (one-time)</div>
+  <div class="step-body">
+    Name: CCLDR Charter Defense Course<br>
+    Price: $299.00 CAD · One time<br>
+    Copy Price ID: <code>price_CCLDR_COURSE_ONETIME</code>
+  </div>
+</div>
+
+<!-- CCLDR CHECKOUT BUTTONS -->
+<h2>CCLDR Checkout Button Code (paste into ccldr-site/index.html)</h2>
+<pre>&lt;!-- STRIPE CHECKOUT — Replace price_XXX with your actual Price IDs --&gt;
+&lt;script src="https://js.stripe.com/v3/"&gt;&lt;/script&gt;
+&lt;script&gt;
+var stripe = Stripe('pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz');
+function ccldrCheckout(priceId){
+  stripe.redirectToCheckout({
+    lineItems:[{price:priceId,quantity:1}],
+    mode: priceId.includes('ONETIME') ? 'payment' : 'subscription',
+    successUrl: 'https://ccldr.net/success.html',
+    cancelUrl:  'https://ccldr.net/#pricing',
+  }).then(function(result){ if(result.error) alert(result.error.message); });
+}
+&lt;/script&gt;
+
+&lt;!-- CCLDR $99/mo membership button --&gt;
+&lt;button onclick="ccldrCheckout('price_CCLDR_DIGITAL_MONTHLY')"
+  style="background:#27ae60;color:#fff;font-weight:700;padding:14px 28px;border-radius:8px;border:none;cursor:pointer;font-size:15px;"&gt;
+  Enroll — $99/mo 🔒 Secured by Stripe
+&lt;/button&gt;
+
+&lt;!-- CCLDR $299 one-time course button --&gt;
+&lt;button onclick="ccldrCheckout('price_CCLDR_COURSE_ONETIME')"
+  style="background:#c9a227;color:#000;font-weight:700;padding:14px 28px;border-radius:8px;border:none;cursor:pointer;font-size:15px;"&gt;
+  Get the Course — $299 🔒 Secured by Stripe
+&lt;/button&gt;</pre>
+
+<!-- OMNIAGUARD -->
+<h2>OmniaGuard Products (your $29/$99/$299 tiers)</h2>
+
+<div class="warn">
+  ⚠️ Price conflict: OmniaGuard currently shows $499/mo (Sentinel) to $15,000/mo (Archon) on the pricing page.
+  Your new $29/$99/$299 tiers are a different product line (consumer/SMB vs enterprise).
+  Confirm: Are these NEW tiers to add alongside the existing ones, or replacements?
+  I'll build whichever you say.
+</div>
+
+<div class="step">
+  <div class="step-num">Product 5</div>
+  <div class="step-title">OmniaGuard — Starter ($29/mo recurring)</div>
+  <div class="step-body">
+    Name: OmniaGuard Starter<br>Price: $29.00 CAD · Monthly<br>
+    Price ID: <code>price_OG_STARTER_MONTHLY</code>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">Product 6</div>
+  <div class="step-title">OmniaGuard — Pro ($99/mo recurring)</div>
+  <div class="step-body">
+    Name: OmniaGuard Pro<br>Price: $99.00 CAD · Monthly<br>
+    Price ID: <code>price_OG_PRO_MONTHLY</code>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">Product 7</div>
+  <div class="step-title">OmniaGuard — Business ($299/mo recurring)</div>
+  <div class="step-body">
+    Name: OmniaGuard Business<br>Price: $299.00 CAD · Monthly<br>
+    Price ID: <code>price_OG_BUSINESS_MONTHLY</code>
+  </div>
+</div>
+
+<!-- OG CHECKOUT BUTTONS -->
+<h2>OmniaGuard Checkout Button Code</h2>
+<pre>&lt;!-- OmniaGuard already has Stripe loaded in the head — just add these buttons --&gt;
+&lt;!-- Replace price_XXX with your actual Price IDs from Stripe dashboard --&gt;
+&lt;script&gt;
+function ogStripeCheckout(priceId, tier){
+  var s = Stripe(window.stripePublicKey);
+  s.redirectToCheckout({
+    lineItems:[{price:priceId,quantity:1}],
+    mode:'subscription',
+    successUrl:'https://omniaguard.com/payment-success.html?tier='+tier,
+    cancelUrl:'https://omniaguard.com/pricing.html',
+  }).then(function(r){ if(r.error) alert(r.error.message); });
+}
+&lt;/script&gt;
+
+&lt;!-- $29/mo Starter button --&gt;
+&lt;button onclick="ogStripeCheckout('price_OG_STARTER_MONTHLY','starter')"
+  style="background:#00c853;color:#000;font-weight:700;padding:13px 24px;border-radius:8px;border:none;cursor:pointer;font-size:14px;width:100%;"&gt;
+  🛡️ DEPLOY SHIELD — $29/mo →
+&lt;/button&gt;
+
+&lt;!-- $99/mo Pro button --&gt;
+&lt;button onclick="ogStripeCheckout('price_OG_PRO_MONTHLY','pro')"
+  style="background:#00c853;color:#000;font-weight:700;padding:13px 24px;border-radius:8px;border:none;cursor:pointer;font-size:14px;width:100%;"&gt;
+  🛡️ DEPLOY SHIELD — $99/mo →
+&lt;/button&gt;
+
+&lt;!-- $299/mo Business button --&gt;
+&lt;button onclick="ogStripeCheckout('price_OG_BUSINESS_MONTHLY','business')"
+  style="background:#00c853;color:#000;font-weight:700;padding:13px 24px;border-radius:8px;border:none;cursor:pointer;font-size:14px;width:100%;"&gt;
+  🛡️ DEPLOY SHIELD — $299/mo →
+&lt;/button&gt;</pre>
+
+<!-- FH CONSULTING -->
+<h2>Francisco Holdings — Consulting ($500/hr)</h2>
+
+<div class="step">
+  <div class="step-num">Product 8</div>
+  <div class="step-title">Francisco Holdings Consulting — $500/hr (one-time)</div>
+  <div class="step-body">
+    Name: Francisco Holdings Consulting — 1 Hour<br>
+    Price: $500.00 CAD · One time<br>
+    Price ID: <code>price_FH_CONSULTING_1HR</code>
+  </div>
+</div>
+
+<pre>&lt;!-- Francisco Holdings consulting button — add to franciscoholdingsinc.com --&gt;
+&lt;script src="https://js.stripe.com/v3/"&gt;&lt;/script&gt;
+&lt;script&gt;
+var stripe = Stripe('pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz');
+function fhConsulting(){
+  stripe.redirectToCheckout({
+    lineItems:[{price:'price_FH_CONSULTING_1HR',quantity:1}],
+    mode:'payment',
+    successUrl:'https://franciscoholdingsinc.com/booked.html',
+    cancelUrl:'https://franciscoholdingsinc.com/#investors',
+  }).then(function(r){ if(r.error) alert(r.error.message); });
+}
+&lt;/script&gt;
+
+&lt;button onclick="fhConsulting()"
+  style="background:#c9a84c;color:#000;font-weight:700;padding:15px 32px;border-radius:8px;border:none;cursor:pointer;font-size:15px;"&gt;
+  Book Consulting — $500/hr 🔒
+&lt;/button&gt;</pre>
+
+<div class="success">
+  ✅ Once you create the Stripe products and get your Price IDs, send them to Claude in the format:<br>
+  "CCLDR Foundation = price_1abc... | OG Starter = price_1xyz..." — I'll wire them all in instantly.
+</div>
+
+</body>
+</html>

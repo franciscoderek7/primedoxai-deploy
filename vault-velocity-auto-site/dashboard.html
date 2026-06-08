@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Garage — VaultVelocityAuto</title>
+<meta name="description" content="Your VaultVelocityAuto dashboard. Manage your listings, saved vehicles, won auctions, and account settings.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#050507;--deep:#0a0a0f;--panel:#111118;--gold:#D4AF37;--gold-lt:#F2D675;--red:#CC0000;--chrome:#C8C8C8;--white:#F8F8F8;--muted:#777;--border:rgba(212,175,55,0.2)}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+
+.main-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,5,7,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.vv-mark{width:40px;height:40px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#000;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.brand-name{font-size:18px;font-weight:700;color:var(--white);font-family:'Bebas Neue',sans-serif;letter-spacing:2px}
+.brand-sub{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;display:block}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.5px;transition:color 0.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-right{display:flex;gap:16px;align-items:center}
+.nav-link-dash{color:var(--gold);font-size:13px;text-decoration:none;font-weight:600}
+.nav-cta{background:var(--gold);color:#000;padding:10px 22px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;transition:background 0.2s}
+.nav-cta:hover{background:var(--gold-lt)}
+.nav-hamburger{display:none;background:none;border:none;color:var(--white);font-size:24px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(5,5,7,0.99);padding:16px 24px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:14px 0;text-decoration:none;border-bottom:1px solid var(--border);font-size:16px}
+.mobile-cta{background:var(--gold);color:#000!important;padding:14px!important;text-align:center;border:none!important;border-radius:2px;margin-top:12px;font-weight:700}
+@media(max-width:900px){.nav-links,.nav-right{display:none}.nav-hamburger{display:block}.nav-inner{padding:0 24px}}
+
+/* HEADER */
+.dash-header{padding:100px 80px 40px;max-width:1400px;margin:0 auto}
+@media(max-width:768px){.dash-header{padding:88px 24px 32px}}
+.preview-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,0.1);border:1px solid var(--border);padding:7px 16px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
+.dash-title{font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,56px);font-weight:700;color:var(--white);margin-bottom:8px}
+.dash-sub{font-size:14px;color:var(--muted)}
+
+/* TABS */
+.tabs-wrap{max-width:1400px;margin:0 auto;padding:0 80px;border-bottom:1px solid var(--border)}
+@media(max-width:768px){.tabs-wrap{padding:0 24px}}
+.tabs{display:flex;gap:0;overflow-x:auto}
+.tab{padding:14px 24px;font-size:13px;font-weight:600;letter-spacing:0.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:'Inter',sans-serif}
+.tab:hover{color:var(--white)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* CONTENT */
+.dash-content{max-width:1400px;margin:0 auto;padding:40px 80px 100px}
+@media(max-width:768px){.dash-content{padding:32px 24px 60px}}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:900px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+.stat-box{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:20px}
+.stat-box-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);letter-spacing:1px;line-height:1}
+.stat-box-label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:6px}
+
+/* LISTINGS */
+.listing-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:16px;display:grid;grid-template-columns:200px 1fr auto;align-items:center;gap:0}
+@media(max-width:768px){.listing-card{grid-template-columns:120px 1fr;grid-template-rows:auto auto}}
+.listing-img{height:130px}
+.listing-img img{width:100%;height:100%;object-fit:cover}
+.listing-body{padding:20px 24px}
+.listing-status{display:inline-block;padding:3px 10px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.status-live{background:rgba(212,175,55,0.15);color:var(--gold)}
+.status-won{background:rgba(0,200,100,0.15);color:#00c864}
+.status-ended{background:rgba(255,255,255,0.08);color:var(--muted)}
+.listing-name{font-size:17px;font-weight:700;color:var(--white);margin-bottom:8px}
+.listing-stats{display:flex;gap:20px;flex-wrap:wrap}
+.listing-stat{font-size:12px;color:var(--muted)}
+.listing-stat strong{color:var(--white)}
+.listing-actions{padding:20px;display:flex;flex-direction:column;gap:10px}
+@media(max-width:768px){.listing-actions{grid-column:1/-1;flex-direction:row;padding:12px 16px}}
+.btn-sm{padding:9px 18px;border-radius:2px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;text-align:center;transition:all 0.2s;border:none;white-space:nowrap}
+.btn-sm-gold{background:var(--gold);color:#000}
+.btn-sm-gold:hover{background:var(--gold-lt)}
+.btn-sm-outline{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-sm-outline:hover{border-color:var(--chrome);color:var(--white)}
+.btn-sm-red{background:transparent;color:rgba(204,0,0,0.7);border:1px solid rgba(204,0,0,0.3);font-size:10px}
+.btn-sm-red:hover{background:rgba(204,0,0,0.1)}
+
+/* SAVED GRID */
+.saved-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.saved-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.saved-grid{grid-template-columns:1fr}}
+.saved-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden;position:relative}
+.saved-remove{position:absolute;top:10px;right:10px;background:rgba(5,5,7,0.8);border:none;color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;transition:color 0.2s;display:flex;align-items:center;justify-content:center}
+.saved-remove:hover{color:var(--red)}
+.saved-img{height:180px;overflow:hidden}
+.saved-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s}
+.saved-card:hover .saved-img img{transform:scale(1.04)}
+.saved-body{padding:16px}
+.saved-meta{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.saved-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:10px}
+.saved-bid{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);margin-bottom:12px}
+.saved-timer{font-size:11px;color:var(--muted);margin-bottom:12px}
+
+/* WON */
+.won-card{background:var(--panel);border:1px solid rgba(0,200,100,0.2);border-radius:4px;overflow:hidden;display:grid;grid-template-columns:220px 1fr;align-items:stretch;margin-bottom:16px}
+@media(max-width:768px){.won-card{grid-template-columns:1fr}}
+.won-img{position:relative;min-height:160px}
+.won-img img{width:100%;height:100%;object-fit:cover}
+.won-tag{position:absolute;top:12px;left:12px;background:rgba(0,200,100,0.9);color:#000;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;border-radius:2px;text-transform:uppercase}
+.won-body{padding:24px}
+.won-name{font-size:18px;font-weight:700;color:var(--white);margin-bottom:12px}
+.won-details{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+@media(max-width:600px){.won-details{grid-template-columns:repeat(2,1fr)}}
+.won-detail-label{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.won-detail-val{font-size:15px;font-weight:600;color:var(--white)}
+.won-detail-val.gold{color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:22px}
+
+/* ACCOUNT */
+.account-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:768px){.account-grid{grid-template-columns:1fr}}
+.account-box{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:28px}
+.account-box-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.acct-field{margin-bottom:16px}
+.acct-label{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--chrome);text-transform:uppercase;margin-bottom:8px;display:block}
+.acct-input{width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);padding:12px 14px;border-radius:2px;font-size:14px;color:var(--white);font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s}
+.acct-input:focus{border-color:var(--gold)}
+.acct-input::placeholder{color:var(--muted)}
+.btn-acct{background:var(--gold);color:#000;border:none;padding:12px 24px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;margin-top:8px}
+.btn-acct:hover{background:var(--gold-lt)}
+.notif-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.notif-row:last-child{border-bottom:none}
+.notif-label{font-size:13px;color:rgba(255,255,255,0.7)}
+.toggle-sm{width:36px;height:20px;background:rgba(255,255,255,0.1);border-radius:10px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;border:none}
+.toggle-sm.on{background:var(--gold)}
+.toggle-sm::after{content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left 0.2s}
+.toggle-sm.on::after{left:19px}
+
+/* EMPTY */
+.list-another{background:rgba(212,175,55,0.04);border:2px dashed var(--border);border-radius:4px;padding:40px;text-align:center;margin-top:16px}
+.list-another p{font-size:14px;color:var(--muted);margin-bottom:16px}
+
+.site-footer{background:var(--deep);border-top:1px solid var(--border);padding:60px 80px 32px;margin-top:0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;max-width:1400px;margin:0 auto 40px}
+.footer-h{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.footer-a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color 0.2s}
+.footer-a:hover{color:var(--white)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:rgba(255,255,255,0.3);max-width:1400px;margin:0 auto}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}.site-footer{padding:40px 24px 24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+</style>
+</head>
+<body>
+
+<nav class="main-nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="vv-mark">VV</div>
+      <div class="nav-brand-text">
+        <span class="brand-name">VaultVelocity</span>
+        <span class="brand-sub">AUTO MARKETPLACE</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="auctions.html">Auctions</a></li>
+      <li><a href="sell.html">Sell</a></li>
+      <li><a href="financing.html">Finance</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="dashboard.html" class="nav-link-dash">My Garage</a>
+      <a href="auctions.html" class="nav-cta">Browse Auctions</a>
+    </div>
+    <button class="nav-hamburger" onclick="toggleNav()">☰</button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="auctions.html">Auctions</a>
+    <a href="sell.html">Sell Your Vehicle</a>
+    <a href="financing.html">Financing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="auctions.html" class="mobile-cta">Browse Now</a>
+  </div>
+</nav>
+
+<div class="dash-header">
+  <div class="preview-badge">Dashboard Preview — Full features launching soon</div>
+  <h1 class="dash-title">My Garage</h1>
+  <p class="dash-sub">Manage your listings, track saved vehicles, and review your auction history.</p>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('listings',this)">My Listings</button>
+    <button class="tab" onclick="switchTab('saved',this)">Saved Vehicles</button>
+    <button class="tab" onclick="switchTab('won',this)">Won Auctions</button>
+    <button class="tab" onclick="switchTab('account',this)">Account</button>
+  </div>
+</div>
+
+<div class="dash-content">
+
+  <!-- MY LISTINGS -->
+  <div class="tab-panel active" id="tab-listings">
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-box-num">2</div>
+        <div class="stat-box-label">Active Listings</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">18</div>
+        <div class="stat-box-label">Total Bids Received</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">1,541</div>
+        <div class="stat-box-label">Total Views</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">$540K</div>
+        <div class="stat-box-label">Combined Current Bid</div>
+      </div>
+    </div>
+
+    <!-- Listing 1 -->
+    <div class="listing-card">
+      <div class="listing-img">
+        <img src="https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=400&q=80" alt="1969 Chevrolet Camaro SS 396">
+      </div>
+      <div class="listing-body">
+        <span class="listing-status status-live">Live — 2d 14h remaining</span>
+        <div class="listing-name">1969 Chevrolet Camaro SS 396</div>
+        <div class="listing-stats">
+          <div class="listing-stat">Current Bid: <strong>$145,000</strong></div>
+          <div class="listing-stat">Bids: <strong>7</strong></div>
+          <div class="listing-stat">Views: <strong>847</strong></div>
+          <div class="listing-stat">Saves: <strong>34</strong></div>
+          <div class="listing-stat">Reserve: <strong style="color:var(--gold)">MET</strong></div>
+          <div class="listing-stat">Tier: <strong>Premium</strong></div>
+        </div>
+      </div>
+      <div class="listing-actions">
+        <a href="auction-detail.html?id=1" class="btn-sm btn-sm-gold">View Listing</a>
+        <a href="contact.html" class="btn-sm btn-sm-outline">Message Bidder</a>
+        <button class="btn-sm btn-sm-red" onclick="alert('Contact us at omniaguard1@gmail.com to request an edit while the auction is live.')">Request Edit</button>
+      </div>
+    </div>
+
+    <!-- Listing 2 -->
+    <div class="listing-card">
+      <div class="listing-img">
+        <img src="https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=400&q=80" alt="1971 Plymouth Hemi 'Cuda">
+      </div>
+      <div class="listing-body">
+        <span class="listing-status status-live">Live — 2d 18h remaining</span>
+        <div class="listing-name">1971 Plymouth Hemi 'Cuda</div>
+        <div class="listing-stats">
+          <div class="listing-stat">Current Bid: <strong>$395,000</strong></div>
+          <div class="listing-stat">Bids: <strong>11</strong></div>
+          <div class="listing-stat">Views: <strong>694</strong></div>
+          <div class="listing-stat">Saves: <strong>52</strong></div>
+          <div class="listing-stat">Reserve: <strong style="color:var(--gold)">MET</strong></div>
+          <div class="listing-stat">Tier: <strong>Concierge</strong></div>
+        </div>
+      </div>
+      <div class="listing-actions">
+        <a href="auction-detail.html?id=7" class="btn-sm btn-sm-gold">View Listing</a>
+        <a href="contact.html" class="btn-sm btn-sm-outline">Message Bidder</a>
+        <button class="btn-sm btn-sm-red" onclick="alert('Contact us at omniaguard1@gmail.com to request an edit while the auction is live.')">Request Edit</button>
+      </div>
+    </div>
+
+    <div class="list-another">
+      <p>Ready to list another legend?</p>
+      <a href="sell.html" class="btn-sm btn-sm-gold">List Another Vehicle</a>
+    </div>
+  </div>
+
+  <!-- SAVED VEHICLES -->
+  <div class="tab-panel" id="tab-saved">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:28px">3 vehicles saved to your watchlist. Bid alerts active on all.</p>
+    <div class="saved-grid" id="saved-grid"></div>
+    <div style="margin-top:32px;text-align:center">
+      <a href="auctions.html" style="display:inline-block;background:var(--gold);color:#000;padding:13px 28px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;transition:background 0.2s">Browse More Auctions</a>
+    </div>
+  </div>
+
+  <!-- WON AUCTIONS -->
+  <div class="tab-panel" id="tab-won">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:28px">1 auction won. Contact us if you have questions about delivery or title transfer.</p>
+    <div class="won-card">
+      <div class="won-img">
+        <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&q=80" alt="1963 Corvette Split-Window">
+        <div class="won-tag">Won</div>
+      </div>
+      <div class="won-body">
+        <div class="won-name">1963 Chevrolet Corvette Split-Window</div>
+        <div class="won-details">
+          <div>
+            <div class="won-detail-label">Winning Bid</div>
+            <div class="won-detail-val gold">$215,000</div>
+          </div>
+          <div>
+            <div class="won-detail-label">Auction Closed</div>
+            <div class="won-detail-val">May 28, 2026</div>
+          </div>
+          <div>
+            <div class="won-detail-label">Status</div>
+            <div class="won-detail-val" style="color:#00c864">Title In Transit</div>
+          </div>
+          <div>
+            <div class="won-detail-label">Condition</div>
+            <div class="won-detail-val">Matching Numbers</div>
+          </div>
+          <div>
+            <div class="won-detail-label">Mileage</div>
+            <div class="won-detail-val">71,200 mi</div>
+          </div>
+          <div>
+            <div class="won-detail-label">Vault Certified</div>
+            <div class="won-detail-val" style="color:var(--gold)">✓ Yes</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="auction-detail.html?id=6" class="btn-sm btn-sm-gold">View Auction Record</a>
+          <a href="contact.html" class="btn-sm btn-sm-outline">Contact About Delivery</a>
+          <a href="shipping.html" class="btn-sm btn-sm-outline">Shipping Info</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div class="tab-panel" id="tab-account">
+    <div class="account-grid">
+      <div class="account-box">
+        <div class="account-box-title">Profile Information</div>
+        <div class="acct-field">
+          <label class="acct-label">Full Name</label>
+          <input type="text" class="acct-input" placeholder="Your full name">
+        </div>
+        <div class="acct-field">
+          <label class="acct-label">Email</label>
+          <input type="email" class="acct-input" placeholder="your@email.com">
+        </div>
+        <div class="acct-field">
+          <label class="acct-label">Phone</label>
+          <input type="tel" class="acct-input" placeholder="+1 (xxx) xxx-xxxx">
+        </div>
+        <div class="acct-field">
+          <label class="acct-label">Location (City, Province/State)</label>
+          <input type="text" class="acct-input" placeholder="e.g. Toronto, Ontario">
+        </div>
+        <button class="btn-acct" onclick="alert('Account management launching soon. Contact omniaguard1@gmail.com to update your profile.')">Save Changes</button>
+      </div>
+      <div class="account-box">
+        <div class="account-box-title">Notification Preferences</div>
+        <div class="notif-row">
+          <span class="notif-label">Bid alerts on saved vehicles</span>
+          <button class="toggle-sm on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="notif-row">
+          <span class="notif-label">New vehicle listings (my categories)</span>
+          <button class="toggle-sm on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="notif-row">
+          <span class="notif-label">Auction ending reminders (24h, 1h)</span>
+          <button class="toggle-sm on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="notif-row">
+          <span class="notif-label">Outbid alerts</span>
+          <button class="toggle-sm on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="notif-row">
+          <span class="notif-label">Weekly market report</span>
+          <button class="toggle-sm" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="notif-row">
+          <span class="notif-label">Dubai import arrivals</span>
+          <button class="toggle-sm on" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <button class="btn-acct" style="margin-top:20px" onclick="alert('Notification preferences saved. (Full system launching soon.)')">Save Preferences</button>
+      </div>
+      <div class="account-box">
+        <div class="account-box-title">Verification Status</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7)">Email Verified</span>
+            <span style="color:#00c864;font-size:13px;font-weight:600">✓ Verified</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7)">Phone Verified</span>
+            <span style="color:#00c864;font-size:13px;font-weight:600">✓ Verified</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7)">ID Verification</span>
+            <span style="color:var(--gold);font-size:13px;font-weight:600;cursor:pointer" onclick="alert('Upload government-issued ID to enable bidding over $100,000. Contact omniaguard1@gmail.com.')">Pending →</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:13px;color:rgba(255,255,255,0.7)">Vault Seller Status</span>
+            <span style="color:#00c864;font-size:13px;font-weight:600">✓ Active</span>
+          </div>
+        </div>
+      </div>
+      <div class="account-box">
+        <div class="account-box-title">Bidding Power</div>
+        <div style="margin-bottom:20px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Current Bid Limit</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);letter-spacing:1px">$500,000</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px">Full verification complete</div>
+        </div>
+        <div style="background:rgba(212,175,55,0.07);border:1px solid var(--border);border-radius:3px;padding:14px;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6">
+          Your bid limit is based on ID verification and payment method on file. Contact us to increase your limit for ultra-high-value auctions.
+        </div>
+        <button class="btn-acct" style="margin-top:16px" onclick="alert('Contact omniaguard1@gmail.com to discuss bid limit increases for vehicles over $500,000.')">Request Higher Limit</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="vv-mark" style="width:32px;height:32px;font-size:13px;">VV</div>
+        <span style="font-size:20px;font-weight:700;color:var(--white);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;">VAULT VELOCITY AUTO</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:280px;">The world's most discerning auto marketplace. Commission-based. No inventory. Infinite scale. Where Legends Change Hands.</p>
+      <div style="margin-top:16px;"><a href="https://youtube.com/@VelocityVaultMotor" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#CC0000;color:#fff;padding:8px 14px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:700;">▶ YouTube Channel</a></div>
+    </div>
+    <div>
+      <div class="footer-h">Marketplace</div>
+      <a href="auctions.html" class="footer-a">Browse Auctions</a>
+      <a href="sell.html" class="footer-a">Sell Your Vehicle</a>
+      <a href="dashboard.html" class="footer-a">My Garage</a>
+    </div>
+    <div>
+      <div class="footer-h">Services</div>
+      <a href="financing.html" class="footer-a">Financing</a>
+      <a href="shipping.html" class="footer-a">Shipping</a>
+      <a href="about.html" class="footer-a">About</a>
+      <a href="contact.html" class="footer-a">Contact</a>
+    </div>
+    <div>
+      <div class="footer-h">Legal</div>
+      <a href="legal.html" class="footer-a">Terms of Service</a>
+      <a href="legal.html#privacy" class="footer-a">Privacy Policy</a>
+      <a href="legal.html#buyer" class="footer-a">Buyer Protection</a>
+      <a href="legal.html#seller" class="footer-a">Seller Agreement</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 VaultVelocityAuto · vaultvelocityauto.com · Ontario, Canada</span>
+    <span style="color:rgba(212,175,55,0.4)">A Francisco Holdings Inc. Venture</span>
+  </div>
+</footer>
+
+<script>
+const INVENTORY = [
+  { id:4,  year:2023, make:"Ferrari",     model:"296 GTB",       bid:385000, ends:"5d 2h 18m",  cat:"supercar", certified:true, img:"https://images.unsplash.com/photo-1486496572940-2bb2341fdbdf?w=900&q=80" },
+  { id:5,  year:2019, make:"Lamborghini", model:"Aventador SVJ", bid:495000, ends:"6d 10h 44m", cat:"supercar", certified:true, img:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=80" },
+  { id:12, year:2024, make:"Rolls-Royce", model:"Spectre",       bid:475000, ends:"9d 20h 5m",  cat:"luxury",  certified:true, img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=900&q=80" }
+];
+
+function fmt(n){ return '$'+n.toLocaleString(); }
+
+function startCountdown(str, el){
+  const m=str.match(/(\d+)d\s*(\d+)h\s*(\d+)m/);
+  if(!m) return;
+  let secs=parseInt(m[1])*86400+parseInt(m[2])*3600+parseInt(m[3])*60;
+  function tick(){
+    if(secs<=0){el.textContent="ENDED";return;}
+    const d=Math.floor(secs/86400),h=Math.floor((secs%86400)/3600),mn=Math.floor((secs%3600)/60),s=secs%60;
+    el.innerHTML=`${d}d ${h}h ${mn}m ${s}s`;
+    secs--;setTimeout(tick,1000);
+  }
+  tick();
+}
+
+function toggleNav(){ document.getElementById('nav-mobile').classList.toggle('open'); }
+
+function switchTab(id, btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+// Render saved
+const savedGrid = document.getElementById('saved-grid');
+INVENTORY.forEach(car => {
+  const div = document.createElement('div');
+  div.className = 'saved-card';
+  div.innerHTML = `
+    <button class="saved-remove" onclick="this.closest('.saved-card').remove()">×</button>
+    <div class="saved-img"><img src="${car.img}" alt="${car.make} ${car.model}" loading="lazy"></div>
+    <div class="saved-body">
+      <div class="saved-meta">${car.year} · ${car.cat}</div>
+      <div class="saved-name">${car.make} ${car.model}</div>
+      <div class="saved-bid">${fmt(car.bid)}</div>
+      <div class="saved-timer" data-ends="${car.ends}"></div>
+      <a href="auction-detail.html?id=${car.id}" style="display:inline-block;background:var(--gold);color:#000;padding:9px 18px;border-radius:2px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;transition:background 0.2s;margin-right:8px;">View Auction</a>
+      <a href="mailto:omniaguard1@gmail.com?subject=Bid Alert — ${car.year} ${car.make} ${car.model}" style="display:inline-block;background:transparent;color:var(--muted);border:1px solid var(--border);padding:8px 14px;border-radius:2px;font-size:11px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase;">🔔 Alert</a>
+    </div>
+  `;
+  savedGrid.appendChild(div);
+});
+savedGrid.querySelectorAll('.saved-timer').forEach(el => startCountdown(el.dataset.ends, el));
+</script>
+</body>
+</html>

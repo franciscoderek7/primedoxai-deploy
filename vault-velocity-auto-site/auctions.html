@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Live Auctions — VaultVelocityAuto</title>
+<meta name="description" content="Browse all 12 live collector car auctions on VaultVelocityAuto. Muscle cars, supercars, classics, luxury — all Vault Certified.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#050507;--deep:#0a0a0f;--panel:#111118;--gold:#D4AF37;--gold-lt:#F2D675;--red:#CC0000;--chrome:#C8C8C8;--white:#F8F8F8;--muted:#777;--border:rgba(212,175,55,0.2)}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+
+.main-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,5,7,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.vv-mark{width:40px;height:40px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#000;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.brand-name{font-size:18px;font-weight:700;color:var(--white);font-family:'Bebas Neue',sans-serif;letter-spacing:2px}
+.brand-sub{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;display:block}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.5px;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-right{display:flex;gap:16px;align-items:center}
+.nav-link-dash{color:var(--chrome);font-size:13px;text-decoration:none;transition:color 0.2s}
+.nav-link-dash:hover{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:10px 22px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;transition:background 0.2s}
+.nav-cta:hover{background:var(--gold-lt)}
+.nav-hamburger{display:none;background:none;border:none;color:var(--white);font-size:24px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(5,5,7,0.99);padding:16px 24px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:14px 0;text-decoration:none;border-bottom:1px solid var(--border);font-size:16px}
+.mobile-cta{background:var(--gold);color:#000!important;padding:14px!important;text-align:center;border:none!important;border-radius:2px;margin-top:12px;font-weight:700}
+@media(max-width:900px){.nav-links,.nav-right{display:none}.nav-hamburger{display:block}.nav-inner{padding:0 24px}}
+
+/* PAGE HERO */
+.page-hero{padding:140px 80px 60px;max-width:1400px;margin:0 auto}
+.page-label{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.page-title{font-family:'Playfair Display',serif;font-size:clamp(40px,5vw,72px);font-weight:900;color:var(--white);margin-bottom:16px;line-height:1.1}
+.page-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:500px}
+@media(max-width:768px){.page-hero{padding:120px 24px 40px}}
+
+/* LAYOUT */
+.auctions-layout{max-width:1400px;margin:0 auto;padding:0 80px 100px;display:grid;grid-template-columns:280px 1fr;gap:48px}
+@media(max-width:1100px){.auctions-layout{grid-template-columns:1fr;padding:0 24px 60px}}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:96px;height:fit-content}
+@media(max-width:1100px){.sidebar{position:static}}
+.sidebar-block{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:24px;margin-bottom:16px}
+.sidebar-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.filter-group{margin-bottom:20px}
+.filter-label{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--chrome);text-transform:uppercase;margin-bottom:10px;display:block}
+.filter-check{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--muted)}
+.filter-check input{accent-color:var(--gold);width:15px;height:15px}
+.filter-check:hover{color:var(--white)}
+.filter-check.active-label{color:var(--white)}
+.range-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.range-input{background:rgba(255,255,255,0.07);border:1px solid var(--border);padding:10px 12px;border-radius:2px;font-size:13px;color:var(--white);font-family:'Inter',sans-serif;width:100%;outline:none;transition:border-color 0.2s}
+.range-input:focus{border-color:var(--gold)}
+.range-input::placeholder{color:var(--muted)}
+.cert-toggle{display:flex;align-items:center;gap:10px;cursor:pointer}
+.toggle-track{width:40px;height:22px;background:rgba(255,255,255,0.1);border-radius:11px;position:relative;transition:background 0.2s;flex-shrink:0}
+.toggle-track.on{background:var(--gold)}
+.toggle-thumb{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left 0.2s}
+.toggle-track.on .toggle-thumb{left:21px}
+.cert-toggle-label{font-size:13px;color:var(--muted)}
+.btn-filter{width:100%;background:var(--gold);color:#000;border:none;padding:12px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s}
+.btn-filter:hover{background:var(--gold-lt)}
+.btn-reset{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px;border-radius:2px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px;transition:all 0.2s}
+.btn-reset:hover{border-color:var(--chrome);color:var(--white)}
+.bid-alert-btn{width:100%;background:transparent;color:var(--gold);border:1px solid var(--gold);padding:12px;border-radius:2px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;text-decoration:none;display:block;text-align:center}
+.bid-alert-btn:hover{background:var(--gold);color:#000}
+
+/* MAIN */
+.auctions-main{}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.results-count{font-size:13px;color:var(--muted)}
+.results-count strong{color:var(--white);font-weight:600}
+.sort-row{display:flex;gap:8px;flex-wrap:wrap}
+.sort-btn{background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:8px 14px;border-radius:2px;font-size:11px;font-weight:600;letter-spacing:0.5px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.sort-btn:hover,.sort-btn.active{background:rgba(212,175,55,0.12);border-color:var(--gold);color:var(--gold)}
+.auction-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:1400px){.auction-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.auction-grid{grid-template-columns:1fr}}
+.car-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;text-decoration:none;display:block;color:inherit}
+.car-card:hover{transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,0.6),0 0 0 1px var(--gold)}
+.car-img{position:relative;height:210px;overflow:hidden}
+.car-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s}
+.car-card:hover .car-img img{transform:scale(1.06)}
+.car-badge{position:absolute;top:10px;left:10px;background:var(--gold);color:#000;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;border-radius:2px;text-transform:uppercase}
+.car-timer{position:absolute;bottom:10px;left:10px;background:rgba(5,5,7,0.9);backdrop-filter:blur(10px);padding:4px 10px;border-radius:2px;font-size:11px;font-weight:600;color:var(--white);letter-spacing:0.5px}
+.car-timer.urgent{color:#ff4444}
+.car-body{padding:16px}
+.car-meta{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.car-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:12px;line-height:1.3}
+.car-price-row{display:flex;justify-content:space-between;align-items:flex-end}
+.car-bid-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.car-bid{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:1px}
+.car-bids{font-size:11px;color:var(--muted);text-align:right}
+.car-bids span{display:block;font-size:15px;font-weight:700;color:var(--chrome)}
+.no-results{text-align:center;padding:80px 40px;color:var(--muted)}
+.no-results h3{font-size:24px;color:var(--white);margin-bottom:12px;font-family:'Playfair Display',serif}
+
+.site-footer{background:var(--deep);border-top:1px solid var(--border);padding:60px 80px 32px;margin-top:0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;max-width:1400px;margin:0 auto 40px}
+.footer-h{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.footer-a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color 0.2s}
+.footer-a:hover{color:var(--white)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:rgba(255,255,255,0.3);max-width:1400px;margin:0 auto}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}.site-footer{padding:40px 24px 24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+</style>
+</head>
+<body>
+
+<nav class="main-nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="vv-mark">VV</div>
+      <div class="nav-brand-text">
+        <span class="brand-name">VaultVelocity</span>
+        <span class="brand-sub">AUTO MARKETPLACE</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="auctions.html" class="active">Auctions</a></li>
+      <li><a href="sell.html">Sell</a></li>
+      <li><a href="financing.html">Finance</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="dashboard.html" class="nav-link-dash">My Garage</a>
+      <a href="auctions.html" class="nav-cta">Browse Auctions</a>
+    </div>
+    <button class="nav-hamburger" onclick="toggleNav()">☰</button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="auctions.html">Auctions</a>
+    <a href="sell.html">Sell Your Vehicle</a>
+    <a href="financing.html">Financing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="auctions.html" class="mobile-cta">Browse Now</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-label">Live Auctions</div>
+  <h1 class="page-title">The Vault is Open</h1>
+  <p class="page-sub">12 collector vehicles, live now. Every car Vault Certified or clearly marked. Every bid protected by our escrow guarantee.</p>
+</div>
+
+<div class="auctions-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-block">
+      <div class="sidebar-title">Filter Auctions</div>
+
+      <div class="filter-group">
+        <span class="filter-label">Category</span>
+        <label class="filter-check"><input type="checkbox" name="cat" value="muscle" onchange="applyFilters()"> Muscle Cars</label>
+        <label class="filter-check"><input type="checkbox" name="cat" value="supercar" onchange="applyFilters()"> Supercars</label>
+        <label class="filter-check"><input type="checkbox" name="cat" value="classic" onchange="applyFilters()"> Classics</label>
+        <label class="filter-check"><input type="checkbox" name="cat" value="luxury" onchange="applyFilters()"> Luxury</label>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Price Range</span>
+        <div class="range-row">
+          <input type="number" class="range-input" id="min-price" placeholder="Min $" min="0" oninput="applyFilters()">
+          <input type="number" class="range-input" id="max-price" placeholder="Max $" min="0" oninput="applyFilters()">
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Year Range</span>
+        <div class="range-row">
+          <input type="number" class="range-input" id="min-year" placeholder="From" min="1900" max="2025" oninput="applyFilters()">
+          <input type="number" class="range-input" id="max-year" placeholder="To" min="1900" max="2025" oninput="applyFilters()">
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Certified Only</span>
+        <div class="cert-toggle" onclick="toggleCert()" id="cert-toggle">
+          <div class="toggle-track" id="cert-track"><div class="toggle-thumb"></div></div>
+          <span class="cert-toggle-label" id="cert-label">Show All</span>
+        </div>
+      </div>
+
+      <button class="btn-reset" onclick="resetFilters()">Reset All Filters</button>
+    </div>
+
+    <a href="mailto:omniaguard1@gmail.com?subject=Bid Alert Request — VaultVelocityAuto&body=Hi, I'd like to set up a bid alert for specific vehicles on VaultVelocityAuto. Please contact me." class="bid-alert-btn">
+      🔔 Create Bid Alert
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="auctions-main">
+    <div class="toolbar">
+      <div class="results-count">Showing <strong id="result-count">12</strong> vehicles</div>
+      <div class="sort-row">
+        <button class="sort-btn active" onclick="setSort('ending',this)">Ending Soon</button>
+        <button class="sort-btn" onclick="setSort('newest',this)">Newest</button>
+        <button class="sort-btn" onclick="setSort('price-asc',this)">Price ↑</button>
+        <button class="sort-btn" onclick="setSort('price-desc',this)">Price ↓</button>
+        <button class="sort-btn" onclick="setSort('bids',this)">Most Bids</button>
+      </div>
+    </div>
+
+    <div class="auction-grid" id="auction-grid"></div>
+    <div class="no-results" id="no-results" style="display:none">
+      <h3>No vehicles match your filters</h3>
+      <p>Try adjusting your search criteria or <button onclick="resetFilters()" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:inherit;text-decoration:underline">reset all filters</button> to see all 12 auctions.</p>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="vv-mark" style="width:32px;height:32px;font-size:13px;">VV</div>
+        <span style="font-size:20px;font-weight:700;color:var(--white);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;">VAULT VELOCITY AUTO</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:280px;">The world's most discerning auto marketplace. Commission-based. No inventory. Infinite scale. Where Legends Change Hands.</p>
+      <div style="margin-top:16px;"><a href="https://youtube.com/@VelocityVaultMotor" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#CC0000;color:#fff;padding:8px 14px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:700;">▶ YouTube Channel</a></div>
+    </div>
+    <div>
+      <div class="footer-h">Marketplace</div>
+      <a href="auctions.html" class="footer-a">Browse Auctions</a>
+      <a href="sell.html" class="footer-a">Sell Your Vehicle</a>
+      <a href="dashboard.html" class="footer-a">My Garage</a>
+    </div>
+    <div>
+      <div class="footer-h">Services</div>
+      <a href="financing.html" class="footer-a">Financing</a>
+      <a href="shipping.html" class="footer-a">Shipping</a>
+      <a href="about.html" class="footer-a">About</a>
+      <a href="contact.html" class="footer-a">Contact</a>
+    </div>
+    <div>
+      <div class="footer-h">Legal</div>
+      <a href="legal.html" class="footer-a">Terms of Service</a>
+      <a href="legal.html#privacy" class="footer-a">Privacy Policy</a>
+      <a href="legal.html#buyer" class="footer-a">Buyer Protection</a>
+      <a href="legal.html#seller" class="footer-a">Seller Agreement</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 VaultVelocityAuto · vaultvelocityauto.com · Ontario, Canada</span>
+    <span style="color:rgba(212,175,55,0.4)">A Francisco Holdings Inc. Venture</span>
+  </div>
+</footer>
+
+<script>
+const INVENTORY = [
+  { id:1,  year:1969, make:"Chevrolet",   model:"Camaro SS 396",         bid:145000, reserve:125000, bids:7,  ends:"2d 14h 33m", cat:"muscle",   certified:true,  color:"Hugger Orange",    trans:"4-Speed Manual",    mi:87420,  cond:"Restored",         img:"https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=900&q=80" },
+  { id:2,  year:1970, make:"Dodge",       model:"Challenger R/T Hemi",   bid:265000, reserve:240000, bids:12, ends:"3d 8h 12m",  cat:"muscle",   certified:true,  color:"Plum Crazy Purple",trans:"4-Speed Manual",    mi:52300,  cond:"Numbers Matching", img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=900&q=80" },
+  { id:3,  year:1967, make:"Shelby",      model:"GT500",                  bid:195000, reserve:165000, bids:9,  ends:"1d 22h 5m",  cat:"muscle",   certified:true,  color:"Brittany Blue",    trans:"4-Speed Manual",    mi:68900,  cond:"Full Restoration", img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" },
+  { id:4,  year:2023, make:"Ferrari",     model:"296 GTB",                bid:385000, reserve:360000, bids:4,  ends:"5d 2h 18m",  cat:"supercar", certified:true,  color:"Rosso Corsa",      trans:"8-Speed DCT",       mi:3200,   cond:"Like New",         img:"https://images.unsplash.com/photo-1486496572940-2bb2341fdbdf?w=900&q=80" },
+  { id:5,  year:2019, make:"Lamborghini", model:"Aventador SVJ",          bid:495000, reserve:460000, bids:2,  ends:"6d 10h 44m", cat:"supercar", certified:true,  color:"Arancio Borealis", trans:"7-Speed ISR",       mi:8100,   cond:"Excellent",        img:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=80" },
+  { id:6,  year:1963, make:"Chevrolet",   model:"Corvette Split-Window",  bid:215000, reserve:190000, bids:6,  ends:"4d 6h 20m",  cat:"classic",  certified:true,  color:"Sebring Silver",   trans:"4-Speed Manual",    mi:71200,  cond:"Matching Numbers", img:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=900&q=80" },
+  { id:7,  year:1971, make:"Plymouth",    model:"Hemi 'Cuda",             bid:395000, reserve:360000, bids:11, ends:"2d 18h 55m", cat:"muscle",   certified:true,  color:"Lemon Twist",      trans:"4-Speed Manual",    mi:44600,  cond:"Numbers Matching", img:"https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=900&q=80" },
+  { id:8,  year:2024, make:"Porsche",     model:"911 GT3 RS",             bid:355000, reserve:330000, bids:3,  ends:"7d 14h 30m", cat:"supercar", certified:true,  color:"Python Green",     trans:"7-Speed PDK",       mi:220,    cond:"New",              img:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80" },
+  { id:9,  year:1969, make:"Ford",        model:"Mustang Boss 429",       bid:235000, reserve:210000, bids:8,  ends:"3d 12h 8m",  cat:"muscle",   certified:false, color:"Black Jade",       trans:"4-Speed Manual",    mi:91300,  cond:"Full Restoration", img:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=80" },
+  { id:10, year:2023, make:"McLaren",     model:"765LT",                  bid:405000, reserve:380000, bids:1,  ends:"8d 5h 22m",  cat:"supercar", certified:true,  color:"Storm Grey",       trans:"7-Speed SSG",       mi:1800,   cond:"Like New",         img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" },
+  { id:11, year:1970, make:"Chevrolet",   model:"Chevelle SS 454",        bid:125000, reserve:105000, bids:15, ends:"1d 4h 17m",  cat:"muscle",   certified:false, color:"Fathom Green",     trans:"Turbo-Hydramatic",  mi:112400, cond:"Driver Quality",   img:"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=900&q=80" },
+  { id:12, year:2024, make:"Rolls-Royce", model:"Spectre",                bid:475000, reserve:450000, bids:2,  ends:"9d 20h 5m",  cat:"luxury",   certified:true,  color:"Arctic White",     trans:"Single-Speed Auto", mi:850,    cond:"New",              img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=900&q=80" }
+];
+
+let currentSort = 'ending';
+let certOnly = false;
+
+function getParam(key){ return new URLSearchParams(window.location.search).get(key); }
+function fmt(n){ return '$'+n.toLocaleString(); }
+
+function endsToSecs(str){
+  const m=str.match(/(\d+)d\s*(\d+)h\s*(\d+)m/);
+  if(!m) return 0;
+  return parseInt(m[1])*86400+parseInt(m[2])*3600+parseInt(m[3])*60;
+}
+
+function startCountdown(str, el){
+  const m=str.match(/(\d+)d\s*(\d+)h\s*(\d+)m/);
+  if(!m) return;
+  let secs=parseInt(m[1])*86400+parseInt(m[2])*3600+parseInt(m[3])*60;
+  function tick(){
+    if(secs<=0){el.textContent="ENDED";return;}
+    const d=Math.floor(secs/86400),h=Math.floor((secs%86400)/3600),mn=Math.floor((secs%3600)/60),s=secs%60;
+    el.innerHTML=`${d}d ${h}h ${mn}m ${s}s`;
+    secs--;setTimeout(tick,1000);
+  }
+  tick();
+}
+
+function toggleNav(){ document.getElementById('nav-mobile').classList.toggle('open'); }
+
+function toggleCert(){
+  certOnly=!certOnly;
+  const track=document.getElementById('cert-track');
+  const label=document.getElementById('cert-label');
+  track.classList.toggle('on',certOnly);
+  label.textContent=certOnly?'Certified Only':'Show All';
+  applyFilters();
+}
+
+let currentSortEl=null;
+function setSort(sort,btn){
+  currentSort=sort;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters(){
+  const cats=[...document.querySelectorAll('input[name=cat]:checked')].map(i=>i.value);
+  const minPrice=parseInt(document.getElementById('min-price').value)||0;
+  const maxPrice=parseInt(document.getElementById('max-price').value)||Infinity;
+  const minYear=parseInt(document.getElementById('min-year').value)||0;
+  const maxYear=parseInt(document.getElementById('max-year').value)||9999;
+
+  let filtered=INVENTORY.filter(car=>{
+    if(cats.length && !cats.includes(car.cat)) return false;
+    if(car.bid<minPrice||car.bid>maxPrice) return false;
+    if(car.year<minYear||car.year>maxYear) return false;
+    if(certOnly && !car.certified) return false;
+    return true;
+  });
+
+  switch(currentSort){
+    case 'ending': filtered.sort((a,b)=>endsToSecs(a.ends)-endsToSecs(b.ends)); break;
+    case 'newest': filtered.sort((a,b)=>b.year-a.year); break;
+    case 'price-asc': filtered.sort((a,b)=>a.bid-b.bid); break;
+    case 'price-desc': filtered.sort((a,b)=>b.bid-a.bid); break;
+    case 'bids': filtered.sort((a,b)=>b.bids-a.bids); break;
+  }
+
+  renderGrid(filtered);
+}
+
+function renderGrid(cars){
+  const grid=document.getElementById('auction-grid');
+  const noRes=document.getElementById('no-results');
+  document.getElementById('result-count').textContent=cars.length;
+
+  if(cars.length===0){ grid.innerHTML=''; noRes.style.display='block'; return; }
+  noRes.style.display='none';
+
+  grid.innerHTML='';
+  cars.forEach(car=>{
+    const urgent=car.ends.startsWith('1d')||car.ends.startsWith('0d');
+    const card=document.createElement('a');
+    card.href=`auction-detail.html?id=${car.id}`;
+    card.className='car-card';
+    card.innerHTML=`
+      <div class="car-img">
+        <img src="${car.img}" alt="${car.year} ${car.make} ${car.model}" loading="lazy">
+        ${car.certified?'<div class="car-badge">Vault Certified</div>':''}
+        <div class="car-timer${urgent?' urgent':''}" data-ends="${car.ends}"></div>
+      </div>
+      <div class="car-body">
+        <div class="car-meta">${car.year} · ${car.cond} · ${car.mi.toLocaleString()} mi</div>
+        <div class="car-name">${car.make} ${car.model}</div>
+        <div class="car-price-row">
+          <div>
+            <div class="car-bid-label">Current Bid</div>
+            <div class="car-bid">${fmt(car.bid)}</div>
+          </div>
+          <div class="car-bids">
+            <span>${car.bids}</span>
+            Bids
+          </div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.car-timer').forEach(el=>startCountdown(el.dataset.ends,el));
+}
+
+function resetFilters(){
+  document.querySelectorAll('input[name=cat]').forEach(i=>i.checked=false);
+  document.getElementById('min-price').value='';
+  document.getElementById('max-price').value='';
+  document.getElementById('min-year').value='';
+  document.getElementById('max-year').value='';
+  certOnly=false;
+  document.getElementById('cert-track').classList.remove('on');
+  document.getElementById('cert-label').textContent='Show All';
+  applyFilters();
+}
+
+// Init
+window.addEventListener('DOMContentLoaded',()=>{
+  const catParam=getParam('cat');
+  if(catParam){
+    const checkbox=document.querySelector(`input[name=cat][value="${catParam}"]`);
+    if(checkbox) checkbox.checked=true;
+  }
+  applyFilters();
+});
+</script>
+</body>
+</html>

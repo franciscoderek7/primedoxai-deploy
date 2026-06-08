@@ -1,0 +1,79 @@
+name: Deploy Francisco Holdings to franciscoholdingsinc.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'francisco-holdings-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop A identity (Derek Francisco parent co — no cannabis, no Loop B bleed)
+        run: |
+          # Francisco Holdings is the parent holding company — Loop A
+          # Derek Francisco is visible; no cannabis content; no Loop B anonymous brands
+          LOOP_B_BLEED=$(grep -rn "OmniaGuard\|Kiaros\|SoulStack\|CleanSwarm" francisco-holdings-site/ --include="*.html" | wc -l)
+          if [ "$LOOP_B_BLEED" -gt 0 ]; then
+            echo "WARN: Loop B brand references detected in Francisco Holdings site"
+            grep -rn "OmniaGuard\|Kiaros\|SoulStack\|CleanSwarm" francisco-holdings-site/ --include="*.html"
+            # Warn but don't fail — holding co may legitimately reference subsidiaries
+          fi
+          echo "PASS: Identity check complete"
+
+      - name: Clone francisco-holdings repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/franciscoholdings.git /tmp/fh
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cd francisco-holdings-site
+          for f in *.html; do cp "$f" /tmp/fh/"$f" && echo "  copied $f"; done
+          for ext in jpg jpeg png webp gif svg js css; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/fh/"$f" && echo "  copied $f"; done
+          done
+          # Copy logos directory if present
+          if [ -d "logos" ]; then
+            mkdir -p /tmp/fh/logos
+            cp logos/* /tmp/fh/logos/ 2>/dev/null || true
+            echo "  copied logos/"
+          fi
+          echo "franciscoholdingsinc.com" > /tmp/fh/CNAME
+          echo "All Francisco Holdings files copied"
+
+      - name: Commit and push to francisco-holdings repo
+        run: |
+          cd /tmp/fh
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Francisco Holdings Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: franciscoholdingsinc.com
+          Loop: A (Derek Francisco — parent holding company)
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/franciscoholdings — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "================================================"
+          echo "  FRANCISCO HOLDINGS DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/franciscoholdings (main)"
+          echo "  CNAME: franciscoholdingsinc.com"
+          echo "  Loop: A (Derek Francisco — parent holding company)"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo ""
+          echo "  Check: https://franciscoholdingsinc.com"
+          echo "================================================"

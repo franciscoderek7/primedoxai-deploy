@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Dashboard — Francisco Holdings Inc.</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070715;color:#f5f0e8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:0 0 60px;}
+.header{background:#090920;border-bottom:1px solid rgba(201,168,76,0.2);padding:20px 32px;display:flex;align-items:center;justify-content:space-between;}
+.header-title{font-family:Georgia,serif;font-size:20px;color:#c9a84c;font-weight:700;}
+.header-sub{font-size:12px;color:#555;letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#00c853;box-shadow:0 0 8px #00c853;animation:pulse 1.5s ease-in-out infinite;display:inline-block;margin-right:6px;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.main{max-width:1100px;margin:0 auto;padding:40px 24px;}
+.goal-bar-wrap{background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.2);border-radius:16px;padding:32px;margin-bottom:32px;}
+.goal-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;}
+.goal-total{font-size:48px;font-weight:900;font-family:Georgia,serif;color:#c9a84c;line-height:1;}
+.goal-target{font-size:14px;color:#555;text-align:right;}
+.goal-target span{display:block;font-size:22px;color:#333;font-weight:700;}
+.bar-track{height:20px;background:rgba(255,255,255,0.05);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.bar-fill{height:100%;background:linear-gradient(90deg,#c9a84c,#e2c579);border-radius:10px;transition:width 1s cubic-bezier(.4,0,.2,1);position:relative;min-width:3px;}
+.bar-fill::after{content:'';position:absolute;right:0;top:0;height:100%;width:30px;background:rgba(255,255,255,0.3);border-radius:0 10px 10px 0;filter:blur(6px);}
+.bar-pct{font-size:13px;color:#555;}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px;}
+.stat-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px;text-align:center;}
+.stat-val{font-size:28px;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;}
+.stat-lbl{font-size:11px;color:#555;letter-spacing:1.5px;text-transform:uppercase;}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;}
+@media(max-width:700px){.panels{grid-template-columns:1fr}}
+.panel{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;}
+.panel-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c9a84c;margin-bottom:16px;}
+.add-sale-form{display:flex;flex-direction:column;gap:12px;}
+.add-sale-form select,.add-sale-form input{background:#0d0d28;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#f5f0e8;padding:12px 14px;font-size:14px;font-family:inherit;width:100%;}
+.add-sale-form select:focus,.add-sale-form input:focus{outline:none;border-color:rgba(201,168,76,0.5);}
+.btn-add{background:#c9a84c;color:#000;font-weight:700;font-size:15px;padding:13px 20px;border-radius:8px;border:none;cursor:pointer;width:100%;font-family:inherit;transition:background .2s;}
+.btn-add:hover{background:#e2c579;}
+.btn-add:active{transform:scale(.98);}
+.sales-log{max-height:280px;overflow-y:auto;}
+.sale-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;gap:8px;}
+.sale-row:last-child{border-bottom:none;}
+.sale-site{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(201,168,76,0.12);color:#c9a84c;letter-spacing:.5px;flex-shrink:0;}
+.sale-desc{color:#aaa;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sale-amt{font-weight:700;color:#c9a84c;flex-shrink:0;}
+.sale-time{font-size:10px;color:#444;flex-shrink:0;}
+.empty-log{text-align:center;color:#333;padding:32px 0;font-size:13px;}
+.milestone-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.milestone-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;font-size:13px;color:#aaa;transition:background .2s;}
+.milestone-item.reached{background:rgba(201,168,76,0.08);color:#e2c579;}
+.milestone-dot{width:10px;height:10px;border-radius:50%;border:2px solid #333;flex-shrink:0;}
+.milestone-item.reached .milestone-dot{background:#c9a84c;border-color:#c9a84c;box-shadow:0 0 8px rgba(201,168,76,0.5);}
+.milestone-lbl{flex:1;}
+.milestone-amt{font-weight:700;}
+.btn-reset{background:none;border:1px solid rgba(255,59,59,0.3);color:rgba(255,59,59,0.5);font-size:11px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;float:right;}
+.btn-reset:hover{border-color:rgba(255,59,59,0.6);color:#ff6b6b;}
+.btn-export{background:none;border:1px solid rgba(201,168,76,0.25);color:#c9a84c;font-size:11px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;}
+.btn-export:hover{background:rgba(201,168,76,0.08);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Francisco Holdings — Revenue Dashboard</div>
+    <div class="header-sub">Private · <span class="live-dot"></span>Live Tracker</div>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn-export" onclick="exportCSV()">Export CSV</button>
+    <button class="btn-reset" onclick="resetAll()">Reset All</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- GOAL BAR -->
+  <div class="goal-bar-wrap">
+    <div class="goal-label">
+      <div>
+        <div style="font-size:12px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Total Revenue</div>
+        <div class="goal-total">$<span id="total-display">0.00</span></div>
+      </div>
+      <div class="goal-target">
+        <div style="font-size:11px;color:#444;letter-spacing:1px;">TARGET</div>
+        <span>$1,000,000</span>
+      </div>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
+    <div class="bar-pct"><span id="pct-display">0.00%</span> of $1,000,000 goal</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-val" id="stat-today">$0</div>
+      <div class="stat-lbl">Today</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="stat-count">0</div>
+      <div class="stat-lbl">Total Sales</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="stat-avg">$0</div>
+      <div class="stat-lbl">Avg. Sale</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="stat-top">—</div>
+      <div class="stat-lbl">Top Property</div>
+    </div>
+  </div>
+
+  <div class="panels">
+
+    <!-- ADD SALE -->
+    <div class="panel">
+      <div class="panel-title">Record New Sale</div>
+      <div class="add-sale-form">
+        <select id="sale-site">
+          <option value="CCLDR">CCLDR.NET</option>
+          <option value="OmniaGuard">OmniaGuard</option>
+          <option value="Francisco Holdings">Francisco Holdings</option>
+          <option value="ZPrimeDoxAI HQ">ZPrimeDoxAI HQ</option>
+          <option value="CleanSwarm">CleanSwarm</option>
+          <option value="PrimeDox AI">PrimeDox AI</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" id="sale-desc" placeholder="Description (e.g. Practitioner — 1 month)">
+        <input type="number" id="sale-amt" placeholder="Amount (CAD)" min="0" step="0.01">
+        <button class="btn-add" onclick="addSale()">+ Record Sale</button>
+      </div>
+    </div>
+
+    <!-- MILESTONES -->
+    <div class="panel">
+      <div class="panel-title">Milestones</div>
+      <ul class="milestone-list" id="milestone-list">
+        <li class="milestone-item" data-target="1"><span class="milestone-dot"></span><span class="milestone-lbl">First Dollar</span><span class="milestone-amt">$1</span></li>
+        <li class="milestone-item" data-target="100"><span class="milestone-dot"></span><span class="milestone-lbl">First $100</span><span class="milestone-amt">$100</span></li>
+        <li class="milestone-item" data-target="500"><span class="milestone-dot"></span><span class="milestone-lbl">First $500</span><span class="milestone-amt">$500</span></li>
+        <li class="milestone-item" data-target="1000"><span class="milestone-dot"></span><span class="milestone-lbl">First $1,000</span><span class="milestone-amt">$1,000</span></li>
+        <li class="milestone-item" data-target="5000"><span class="milestone-dot"></span><span class="milestone-lbl">$5,000</span><span class="milestone-amt">$5,000</span></li>
+        <li class="milestone-item" data-target="10000"><span class="milestone-dot"></span><span class="milestone-lbl">$10,000</span><span class="milestone-amt">$10,000</span></li>
+        <li class="milestone-item" data-target="50000"><span class="milestone-dot"></span><span class="milestone-lbl">$50,000</span><span class="milestone-amt">$50,000</span></li>
+        <li class="milestone-item" data-target="100000"><span class="milestone-dot"></span><span class="milestone-lbl">$100,000</span><span class="milestone-amt">$100,000</span></li>
+        <li class="milestone-item" data-target="1000000"><span class="milestone-dot"></span><span class="milestone-lbl">$1,000,000</span><span class="milestone-amt">$1,000,000</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- SALES LOG -->
+  <div class="panel">
+    <div class="panel-title" style="display:flex;justify-content:space-between;align-items:center;">
+      <span>Sales Log</span>
+      <span id="log-count" style="font-size:11px;color:#444;font-weight:400;letter-spacing:0;text-transform:none;">0 transactions</span>
+    </div>
+    <div class="sales-log" id="sales-log">
+      <div class="empty-log" id="empty-msg">No sales recorded yet. Add your first sale above.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var GOAL = 1000000;
+var KEY = 'fh_revenue_sales';
+
+function getSales(){
+  try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }
+  catch(e){ return []; }
+}
+
+function saveSales(sales){ localStorage.setItem(KEY, JSON.stringify(sales)); }
+
+function fmt(n){ return n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtShort(n){
+  if(n>=1000000) return '$'+(n/1000000).toFixed(1)+'M';
+  if(n>=1000) return '$'+(n/1000).toFixed(1)+'K';
+  return '$'+Math.round(n);
+}
+
+function addSale(){
+  var site = document.getElementById('sale-site').value;
+  var desc = document.getElementById('sale-desc').value.trim() || site + ' sale';
+  var amt  = parseFloat(document.getElementById('sale-amt').value);
+  if(!amt || amt<=0){ alert('Enter a valid amount.'); return; }
+  var sales = getSales();
+  sales.unshift({ site:site, desc:desc, amt:amt, time: new Date().toISOString() });
+  saveSales(sales);
+  document.getElementById('sale-desc').value = '';
+  document.getElementById('sale-amt').value = '';
+  render();
+}
+
+function render(){
+  var sales = getSales();
+  var total = sales.reduce(function(s,x){return s+x.amt;},0);
+  var today = sales.filter(function(x){
+    return new Date(x.time).toDateString()===new Date().toDateString();
+  }).reduce(function(s,x){return s+x.amt;},0);
+
+  // Site breakdown for top property
+  var bysite = {};
+  sales.forEach(function(x){ bysite[x.site]=(bysite[x.site]||0)+x.amt; });
+  var top = Object.keys(bysite).sort(function(a,b){return bysite[b]-bysite[a];})[0] || '—';
+
+  document.getElementById('total-display').textContent = fmt(total);
+  var pct = Math.min(100, total/GOAL*100);
+  document.getElementById('bar-fill').style.width = Math.max(pct,0.3)+'%';
+  document.getElementById('pct-display').textContent = pct.toFixed(4)+'%';
+
+  document.getElementById('stat-today').textContent = '$'+fmt(today);
+  document.getElementById('stat-count').textContent = sales.length;
+  document.getElementById('stat-avg').textContent = sales.length ? '$'+fmt(total/sales.length) : '$0';
+  document.getElementById('stat-top').textContent = top;
+
+  // Milestones
+  document.querySelectorAll('.milestone-item').forEach(function(el){
+    var t = parseFloat(el.dataset.target);
+    if(total >= t) el.classList.add('reached');
+    else el.classList.remove('reached');
+  });
+
+  // Log
+  var log = document.getElementById('sales-log');
+  var emptyMsg = document.getElementById('empty-msg');
+  document.getElementById('log-count').textContent = sales.length + ' transaction' + (sales.length!==1?'s':'');
+  if(sales.length===0){
+    emptyMsg.style.display='block';
+  } else {
+    emptyMsg.style.display='none';
+    var html = sales.map(function(s){
+      var t = new Date(s.time);
+      var ts = (t.getMonth()+1)+'/'+t.getDate()+' '+t.getHours()+':'+String(t.getMinutes()).padStart(2,'0');
+      return '<div class="sale-row"><span class="sale-site">'+s.site+'</span><span class="sale-desc">'+s.desc+'</span><span class="sale-amt">+$'+fmt(s.amt)+'</span><span class="sale-time">'+ts+'</span></div>';
+    }).join('');
+    log.innerHTML = '<div class="empty-log" id="empty-msg" style="display:none"></div>' + html;
+  }
+}
+
+function resetAll(){
+  if(confirm('Reset all sales data? This cannot be undone.')){ localStorage.removeItem(KEY); render(); }
+}
+
+function exportCSV(){
+  var sales = getSales();
+  if(!sales.length){ alert('No sales to export.'); return; }
+  var rows = [['Date','Site','Description','Amount CAD']];
+  sales.forEach(function(s){ rows.push([s.time.slice(0,10), s.site, '"'+s.desc+'"', s.amt]); });
+  var csv = rows.map(function(r){return r.join(',');}).join('\n');
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'fh-revenue-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+render();
+// Enter key on amount field submits
+document.getElementById('sale-amt').addEventListener('keydown',function(e){if(e.key==='Enter')addSale();});
+</script>
+</body>
+</html>

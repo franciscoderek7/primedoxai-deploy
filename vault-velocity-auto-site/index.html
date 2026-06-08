@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VaultVelocityAuto — Where Legends Change Hands</title>
+<meta name="description" content="The world's most discerning collector car marketplace. $47M+ in sales. 2,400+ vehicles. 98% sell-through rate. VaultVelocityAuto — Where Legends Change Hands.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#050507;--deep:#0a0a0f;--panel:#111118;
+  --gold:#D4AF37;--gold-lt:#F2D675;--red:#CC0000;
+  --chrome:#C8C8C8;--white:#F8F8F8;--muted:#777;
+  --border:rgba(212,175,55,0.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+
+/* NAV */
+.main-nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,5,7,0.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.vv-mark{width:40px;height:40px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#000;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+.brand-name{font-size:18px;font-weight:700;color:var(--white);font-family:'Bebas Neue',sans-serif;letter-spacing:2px}
+.brand-sub{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;display:block}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.5px;transition:color 0.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-right{display:flex;gap:16px;align-items:center}
+.nav-link-dash{color:var(--chrome);font-size:13px;text-decoration:none;transition:color 0.2s}
+.nav-link-dash:hover{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:10px 22px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;transition:background 0.2s}
+.nav-cta:hover{background:var(--gold-lt)}
+.nav-hamburger{display:none;background:none;border:none;color:var(--white);font-size:24px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(5,5,7,0.99);padding:16px 24px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:14px 0;text-decoration:none;border-bottom:1px solid var(--border);font-size:16px}
+.mobile-cta{background:var(--gold);color:#000!important;padding:14px!important;text-align:center;border:none!important;border-radius:2px;margin-top:12px;font-weight:700}
+@media(max-width:900px){.nav-links,.nav-right{display:none}.nav-hamburger{display:block}.nav-inner{padding:0 24px}}
+
+/* HERO */
+.hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:
+  linear-gradient(135deg,rgba(5,5,7,0.92) 0%,rgba(10,10,15,0.75) 50%,rgba(5,5,7,0.88) 100%),
+  url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1800&q=85') center/cover no-repeat;z-index:0}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,var(--black) 100%)}
+.hero-content{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 80px;padding-top:72px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,0.12);border:1px solid var(--border);padding:7px 16px;border-radius:2px;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:28px}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(56px,7vw,112px);font-weight:900;line-height:1.0;color:var(--white);margin-bottom:24px;letter-spacing:-1px}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero-sub{font-size:18px;color:rgba(255,255,255,0.65);max-width:540px;line-height:1.7;margin-bottom:44px;font-weight:300}
+.hero-sub strong{color:var(--chrome);font-weight:500}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary{display:inline-block;background:var(--gold);color:#000;padding:16px 36px;border-radius:2px;font-size:13px;font-weight:700;letter-spacing:2px;text-decoration:none;text-transform:uppercase;transition:all 0.25s}
+.btn-primary:hover{background:var(--gold-lt);transform:translateY(-2px)}
+.btn-outline{display:inline-block;background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,0.4);padding:15px 36px;border-radius:2px;font-size:13px;font-weight:600;letter-spacing:2px;text-decoration:none;text-transform:uppercase;transition:all 0.25s}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{position:absolute;bottom:60px;right:80px;display:flex;gap:48px;z-index:2}
+.hero-stat{text-align:right}
+.hero-stat-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);letter-spacing:1px}
+.hero-stat-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+@media(max-width:768px){.hero-content{padding:0 24px;padding-top:72px}.hero h1{font-size:clamp(42px,10vw,72px)}.hero-stats{display:none}}
+
+/* TICKER */
+.ticker-wrap{background:var(--gold);overflow:hidden;white-space:nowrap;padding:13px 0}
+.ticker-inner{display:inline-flex;animation:ticker 30s linear infinite}
+.ticker-inner span{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:#000;padding:0 32px}
+.ticker-sep{color:rgba(0,0,0,0.4)}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTION COMMONS */
+.section{max-width:1400px;margin:0 auto;padding:100px 80px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,56px);font-weight:700;color:var(--white);margin-bottom:16px;line-height:1.15}
+.section-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:520px}
+.section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;gap:24px;flex-wrap:wrap}
+@media(max-width:768px){.section{padding:64px 24px}}
+
+/* AUCTION CARDS */
+.auction-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:1100px){.auction-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.auction-grid{grid-template-columns:1fr}}
+.car-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;cursor:pointer;text-decoration:none;display:block;color:inherit}
+.car-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.6),0 0 0 1px var(--gold)}
+.car-img{position:relative;height:220px;overflow:hidden}
+.car-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s}
+.car-card:hover .car-img img{transform:scale(1.06)}
+.car-badge{position:absolute;top:12px;left:12px;background:var(--gold);color:#000;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:4px 10px;border-radius:2px;text-transform:uppercase}
+.car-timer{position:absolute;bottom:12px;left:12px;background:rgba(5,5,7,0.88);backdrop-filter:blur(10px);padding:5px 10px;border-radius:2px;font-size:11px;font-weight:600;color:var(--white);letter-spacing:0.5px}
+.car-timer.urgent{color:#ff4444}
+.car-body{padding:20px}
+.car-meta{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.car-name{font-size:17px;font-weight:700;color:var(--white);margin-bottom:14px;line-height:1.3}
+.car-price-row{display:flex;justify-content:space-between;align-items:flex-end}
+.car-bid-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.car-bid{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);letter-spacing:1px}
+.car-bids{font-size:11px;color:var(--muted);text-align:right}
+.car-bids span{display:block;font-size:16px;font-weight:700;color:var(--chrome)}
+
+/* ENDING SOON */
+.ending-strip{padding:0 0 0 80px;overflow:hidden}
+@media(max-width:768px){.ending-strip{padding:0 0 0 24px}}
+.ending-scroll{display:flex;gap:20px;overflow-x:auto;padding-bottom:16px;padding-right:80px;scrollbar-width:thin;scrollbar-color:var(--gold) transparent}
+.ending-scroll::-webkit-scrollbar{height:4px}
+.ending-scroll::-webkit-scrollbar-track{background:transparent}
+.ending-scroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+.ending-card{min-width:340px;background:var(--panel);border:1px solid rgba(204,0,0,0.3);border-radius:4px;overflow:hidden;display:flex;text-decoration:none;color:inherit;transition:border-color 0.2s}
+.ending-card:hover{border-color:var(--red)}
+.ending-card-img{width:140px;flex-shrink:0;position:relative}
+.ending-card-img img{width:100%;height:100%;object-fit:cover}
+.ending-urgent{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-size:8px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:2px;text-transform:uppercase}
+.ending-card-body{padding:16px;flex:1}
+.ending-card-meta{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.ending-card-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:10px}
+.ending-card-bid{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold)}
+.ending-card-timer{font-size:12px;color:var(--red);font-weight:600;margin-top:4px}
+
+/* CATEGORIES */
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+@media(max-width:1100px){.cat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.cat-grid{grid-template-columns:repeat(2,1fr)}}
+.cat-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:28px 20px;text-align:center;text-decoration:none;color:inherit;transition:all 0.25s;display:block}
+.cat-card:hover{border-color:var(--gold);background:#16161f;transform:translateY(-4px)}
+.cat-icon{font-size:32px;margin-bottom:12px;display:block}
+.cat-label{font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--white);text-transform:uppercase}
+.cat-count{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* DUBAI SECTION */
+.dubai-section{background:var(--deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:100px 0}
+.dubai-inner{max-width:1400px;margin:0 auto;padding:0 80px}
+.dubai-header{display:grid;grid-template-columns:1fr auto;align-items:center;margin-bottom:48px;gap:24px}
+.dubai-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,0.1);border:1px solid var(--gold);padding:6px 16px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.dubai-desc{font-size:15px;color:var(--muted);line-height:1.7;max-width:500px;margin-top:12px}
+.dubai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:900px){.dubai-grid{grid-template-columns:1fr};.dubai-header{grid-template-columns:1fr}}
+@media(max-width:768px){.dubai-inner{padding:0 24px}}
+.dubai-card{background:var(--panel);border:1px solid rgba(212,175,55,0.15);border-radius:4px;overflow:hidden}
+.dubai-card-img{height:200px;background:linear-gradient(135deg,#1a1408,#0d0d18);display:flex;align-items:center;justify-content:center;position:relative}
+.dubai-placeholder{text-align:center}
+.dubai-placeholder .icon{font-size:48px;opacity:0.3}
+.dubai-placeholder p{font-size:11px;color:var(--muted);letter-spacing:2px;margin-top:8px;text-transform:uppercase}
+.dubai-card-badge{position:absolute;top:12px;right:12px;background:rgba(212,175,55,0.15);border:1px solid var(--gold);color:var(--gold);font-size:9px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:2px;text-transform:uppercase}
+.dubai-card-body{padding:20px}
+.dubai-card-flag{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.dubai-card-name{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px}
+.dubai-card-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.dubai-card-cta{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:1px;text-decoration:none;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:2px;transition:border-color 0.2s}
+.dubai-card-cta:hover{border-color:var(--gold)}
+
+/* HOW IT WORKS */
+.hiw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;position:relative}
+.hiw-grid::before{content:'';position:absolute;top:32px;left:16.6%;right:16.6%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);z-index:0}
+@media(max-width:768px){.hiw-grid{grid-template-columns:1fr;gap:32px}.hiw-grid::before{display:none}}
+.hiw-card{text-align:center;position:relative;z-index:1}
+.hiw-num{width:64px;height:64px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;color:#000;margin:0 auto 24px;position:relative}
+.hiw-num::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--border)}
+.hiw-title{font-size:18px;font-weight:700;color:var(--white);margin-bottom:12px}
+.hiw-desc{font-size:14px;color:var(--muted);line-height:1.7}
+.hiw-price{color:var(--gold);font-weight:600}
+
+/* YOUTUBE */
+.yt-section{background:var(--deep);border-top:1px solid var(--border);padding:100px 0}
+.yt-inner{max-width:1400px;margin:0 auto;padding:0 80px}
+.yt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+@media(max-width:900px){.yt-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.yt-inner{padding:0 24px}}
+.yt-embed{border-radius:4px;overflow:hidden;aspect-ratio:16/9;background:#000;border:1px solid var(--border)}
+.yt-embed iframe{width:100%;height:100%;border:none;display:block}
+.yt-cta-row{text-align:center;margin-top:40px}
+.yt-subscribe{display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;padding:14px 28px;border-radius:4px;text-decoration:none;font-weight:700;font-size:14px;transition:background 0.2s}
+.yt-subscribe:hover{background:#a80000}
+
+/* TRUST BAND */
+.trust-band{background:var(--gold);padding:60px 80px}
+.trust-grid{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+@media(max-width:768px){.trust-grid{grid-template-columns:repeat(2,1fr)}.trust-band{padding:40px 24px}}
+.trust-item{text-align:center}
+.trust-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#000;letter-spacing:2px;line-height:1}
+.trust-label{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(0,0,0,0.6);text-transform:uppercase;margin-top:6px}
+
+/* NEWSLETTER */
+.newsletter-section{padding:80px 80px;max-width:1400px;margin:0 auto}
+@media(max-width:768px){.newsletter-section{padding:60px 24px}}
+.newsletter-box{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:60px 80px;text-align:center;position:relative;overflow:hidden}
+.newsletter-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-lt),var(--gold))}
+.newsletter-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--white);margin-bottom:12px}
+.newsletter-sub{font-size:15px;color:var(--muted);margin-bottom:36px}
+.newsletter-form{display:flex;gap:12px;max-width:480px;margin:0 auto;flex-wrap:wrap}
+.newsletter-input{flex:1;min-width:240px;background:rgba(255,255,255,0.07);border:1px solid var(--border);padding:14px 20px;border-radius:2px;font-size:14px;color:var(--white);font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s}
+.newsletter-input::placeholder{color:var(--muted)}
+.newsletter-input:focus{border-color:var(--gold)}
+.newsletter-btn{background:var(--gold);color:#000;border:none;padding:14px 28px;border-radius:2px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;font-family:'Inter',sans-serif}
+.newsletter-btn:hover{background:var(--gold-lt)}
+@media(max-width:768px){.newsletter-box{padding:40px 24px}.newsletter-title{font-size:28px}}
+
+/* FOOTER */
+.site-footer{background:var(--deep);border-top:1px solid var(--border);padding:60px 80px 32px;margin-top:0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;max-width:1400px;margin:0 auto 40px}
+.footer-h{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.footer-a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color 0.2s}
+.footer-a:hover{color:var(--white)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:rgba(255,255,255,0.3);max-width:1400px;margin:0 auto}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}.site-footer{padding:40px 24px 24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="main-nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="vv-mark">VV</div>
+      <div class="nav-brand-text">
+        <span class="brand-name">VaultVelocity</span>
+        <span class="brand-sub">AUTO MARKETPLACE</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="auctions.html">Auctions</a></li>
+      <li><a href="sell.html">Sell</a></li>
+      <li><a href="financing.html">Finance</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="dashboard.html" class="nav-link-dash">My Garage</a>
+      <a href="auctions.html" class="nav-cta">Browse Auctions</a>
+    </div>
+    <button class="nav-hamburger" onclick="toggleNav()">☰</button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="auctions.html">Auctions</a>
+    <a href="sell.html">Sell Your Vehicle</a>
+    <a href="financing.html">Financing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="auctions.html" class="mobile-cta">Browse Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>Live Auctions Now</span>
+    </div>
+    <h1>Where Legends<br><em>Change Hands.</em></h1>
+    <p class="hero-sub">The world's most discerning collector car marketplace. <strong>$47M+ in sales.</strong> <strong>2,400+ vehicles.</strong> <strong>98% sell-through rate.</strong></p>
+    <div class="hero-ctas">
+      <a href="auctions.html" class="btn-primary">Enter the Vault</a>
+      <a href="sell.html" class="btn-outline">Sell Your Vehicle</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">$47M+</div>
+      <div class="hero-stat-label">Total Sales</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">98%</div>
+      <div class="hero-stat-label">Sell-Through</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2,400+</div>
+      <div class="hero-stat-label">Vehicles Sold</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker">
+    <span>VAULT VELOCITY AUTO</span><span class="ticker-sep">·</span>
+    <span>WHERE LEGENDS CHANGE HANDS</span><span class="ticker-sep">·</span>
+    <span>COMMISSION-BASED MARKETPLACE</span><span class="ticker-sep">·</span>
+    <span>5% SUCCESS FEE</span><span class="ticker-sep">·</span>
+    <span>VAULT CERTIFIED INSPECTIONS</span><span class="ticker-sep">·</span>
+    <span>12 LIVE AUCTIONS</span><span class="ticker-sep">·</span>
+    <span>ONTARIO, CANADA</span><span class="ticker-sep">·</span>
+    <span>50+ COUNTRIES SERVED</span><span class="ticker-sep">·</span>
+    <span>VAULT VELOCITY AUTO</span><span class="ticker-sep">·</span>
+    <span>WHERE LEGENDS CHANGE HANDS</span><span class="ticker-sep">·</span>
+    <span>COMMISSION-BASED MARKETPLACE</span><span class="ticker-sep">·</span>
+    <span>5% SUCCESS FEE</span><span class="ticker-sep">·</span>
+    <span>VAULT CERTIFIED INSPECTIONS</span><span class="ticker-sep">·</span>
+    <span>12 LIVE AUCTIONS</span><span class="ticker-sep">·</span>
+    <span>ONTARIO, CANADA</span><span class="ticker-sep">·</span>
+    <span>50+ COUNTRIES SERVED</span><span class="ticker-sep">·</span>
+  </div>
+</div>
+
+<!-- FEATURED AUCTIONS -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Featured Auctions</div>
+      <h2 class="section-title">Live Now — Place Your Bid</h2>
+      <p class="section-sub">The finest collector vehicles, verified by our Vault Certified program. Every auction transparent, every bid protected.</p>
+    </div>
+    <a href="auctions.html" class="btn-primary" style="white-space:nowrap">View All 12 Auctions</a>
+  </div>
+  <div class="auction-grid" id="featured-grid"></div>
+</div>
+
+<!-- ENDING SOON -->
+<div style="padding:0 0 100px">
+  <div style="max-width:1400px;margin:0 auto 32px;padding:0 80px">
+    <div class="section-label">Ending Soon</div>
+    <h2 class="section-title" style="font-size:36px;">Don't Miss These</h2>
+  </div>
+  <div class="ending-strip">
+    <div class="ending-scroll" id="ending-soon"></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section" style="padding-top:0">
+  <div class="section-label">Browse by Category</div>
+  <h2 class="section-title" style="margin-bottom:48px">Find Your Legend</h2>
+  <div class="cat-grid">
+    <a href="auctions.html?cat=muscle" class="cat-card">
+      <span class="cat-icon">🔴</span>
+      <div class="cat-label">Muscle Cars</div>
+      <div class="cat-count">6 Listed</div>
+    </a>
+    <a href="auctions.html?cat=supercar" class="cat-card">
+      <span class="cat-icon">⚡</span>
+      <div class="cat-label">Supercars</div>
+      <div class="cat-count">4 Listed</div>
+    </a>
+    <a href="auctions.html?cat=classic" class="cat-card">
+      <span class="cat-icon">🏆</span>
+      <div class="cat-label">Classics</div>
+      <div class="cat-count">1 Listed</div>
+    </a>
+    <a href="auctions.html?cat=luxury" class="cat-card">
+      <span class="cat-icon">💎</span>
+      <div class="cat-label">Luxury</div>
+      <div class="cat-count">1 Listed</div>
+    </a>
+    <a href="auctions.html?cat=dubai" class="cat-card">
+      <span class="cat-icon">🌙</span>
+      <div class="cat-label">Dubai Imports</div>
+      <div class="cat-count">Coming Soon</div>
+    </a>
+    <a href="auctions.html?cat=custom" class="cat-card">
+      <span class="cat-icon">🔧</span>
+      <div class="cat-label">Custom Builds</div>
+      <div class="cat-count">Coming Soon</div>
+    </a>
+  </div>
+</div>
+
+<!-- DUBAI SECTION -->
+<div class="dubai-section">
+  <div class="dubai-inner">
+    <div class="dubai-header">
+      <div>
+        <div class="dubai-badge">🌙 Desert Finds</div>
+        <h2 class="section-title" style="margin-top:16px;margin-bottom:0">Dubai Import Collection</h2>
+        <p class="dubai-desc">Sourced from abandoned Dubai lots, meticulously restored and Vault Certified — the rarest finds from the desert kingdom.</p>
+      </div>
+      <a href="contact.html" class="btn-outline">Inquire Now</a>
+    </div>
+    <div class="dubai-grid">
+      <div class="dubai-card">
+        <div class="dubai-card-img">
+          <div class="dubai-placeholder">
+            <div class="icon">🏎</div>
+            <p>Coming Q3 2026</p>
+          </div>
+          <div class="dubai-card-badge">Vault Certified</div>
+        </div>
+        <div class="dubai-card-body">
+          <div class="dubai-card-flag">🇦🇪 Dubai, UAE</div>
+          <div class="dubai-card-name">2016 Lamborghini Aventador LP 700-4</div>
+          <div class="dubai-card-desc">Found in a private storage facility, 4,200 km, full carbon package. Being restored at our Ontario facility.</div>
+          <a href="contact.html" class="dubai-card-cta">Register Interest →</a>
+        </div>
+      </div>
+      <div class="dubai-card">
+        <div class="dubai-card-img">
+          <div class="dubai-placeholder">
+            <div class="icon">🚗</div>
+            <p>Coming Q3 2026</p>
+          </div>
+          <div class="dubai-card-badge">In Restoration</div>
+        </div>
+        <div class="dubai-card-body">
+          <div class="dubai-card-flag">🇦🇪 Dubai, UAE</div>
+          <div class="dubai-card-name">2018 Ferrari 488 Pista</div>
+          <div class="dubai-card-desc">Acquired from a Dubai collector's estate. 9,100 km, Rosso Scuderia, full Pista spec with titanium exhaust.</div>
+          <a href="contact.html" class="dubai-card-cta">Register Interest →</a>
+        </div>
+      </div>
+      <div class="dubai-card">
+        <div class="dubai-card-img">
+          <div class="dubai-placeholder">
+            <div class="icon">🏁</div>
+            <p>Coming Q4 2026</p>
+          </div>
+          <div class="dubai-card-badge">Pending Import</div>
+        </div>
+        <div class="dubai-card-body">
+          <div class="dubai-card-flag">🇦🇪 Dubai, UAE</div>
+          <div class="dubai-card-name">2020 McLaren Senna</div>
+          <div class="dubai-card-desc">One of 500 produced worldwide. Located in a private collection in Dubai. Full inspection report available on request.</div>
+          <a href="contact.html" class="dubai-card-cta">Register Interest →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-label">The Process</div>
+      <h2 class="section-title">How VaultVelocityAuto Works</h2>
+    </div>
+  </div>
+  <div class="hiw-grid">
+    <div class="hiw-card">
+      <div class="hiw-num">1</div>
+      <h3 class="hiw-title">Seller Lists</h3>
+      <p class="hiw-desc">Choose your listing tier — <span class="hiw-price">Basic ($99), Premium ($299), or Concierge ($999)</span>. Set your reserve. We handle the Vault Certified inspection, photography, and listing creation.</p>
+    </div>
+    <div class="hiw-card">
+      <div class="hiw-num">2</div>
+      <h3 class="hiw-title">Buyers Bid Live</h3>
+      <p class="hiw-desc">Your vehicle reaches our network of 50,000+ qualified collectors globally. Live bidding, real-time countdowns, and complete transparency — every bid verified, every bidder authenticated.</p>
+    </div>
+    <div class="hiw-card">
+      <div class="hiw-num">3</div>
+      <h3 class="hiw-title">We Handle the Rest</h3>
+      <p class="hiw-desc">On a successful sale, we collect a <span class="hiw-price">5% success fee</span>. We coordinate escrow, title transfer, enclosed transport, and financing for the buyer. You get paid. We handle everything.</p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:56px">
+    <a href="sell.html" class="btn-primary" style="margin-right:16px">List Your Vehicle</a>
+    <a href="auctions.html" class="btn-outline">Browse Auctions</a>
+  </div>
+</div>
+
+<!-- YOUTUBE -->
+<div class="yt-section">
+  <div class="yt-inner">
+    <div class="section-label">YouTube Channel</div>
+    <h2 class="section-title">Watch on @VelocityVaultMotor</h2>
+    <p class="section-sub" style="margin-bottom:0">16,000 subscribers and growing — car reviews, auction recaps, market insights, and behind-the-scenes from the Vault.</p>
+    <div class="yt-grid">
+      <div class="yt-embed">
+        <iframe src="https://www.youtube.com/embed/videoseries?list=UUVelocityVaultMotor" title="VelocityVaultMotor Channel" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="yt-embed">
+        <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=VelocityVaultMotor&index=2" title="VelocityVaultMotor — Latest Videos" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="yt-embed">
+        <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=VelocityVaultMotor&index=3" title="VelocityVaultMotor — Car Reviews" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+    <div class="yt-cta-row">
+      <a href="https://youtube.com/@VelocityVaultMotor" target="_blank" class="yt-subscribe">
+        ▶ Subscribe to @VelocityVaultMotor — 16K Strong
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAND -->
+<div class="trust-band">
+  <div class="trust-grid">
+    <div class="trust-item">
+      <div class="trust-num">$47M+</div>
+      <div class="trust-label">In Total Sales</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">2,400+</div>
+      <div class="trust-label">Vehicles Sold</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">98%</div>
+      <div class="trust-label">Sell-Through Rate</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-num">50+</div>
+      <div class="trust-label">Countries Served</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter-section">
+  <div class="newsletter-box">
+    <h2 class="newsletter-title">Get First Look</h2>
+    <p class="newsletter-sub">New listings, Dubai finds, and market insights — direct to your inbox before they go live.</p>
+    <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+      <input type="email" class="newsletter-input" placeholder="Your email address" required>
+      <button type="submit" class="newsletter-btn">Get First Look</button>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="vv-mark" style="width:32px;height:32px;font-size:13px;">VV</div>
+        <span style="font-size:20px;font-weight:700;color:var(--white);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;">VAULT VELOCITY AUTO</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:280px;">The world's most discerning auto marketplace. Commission-based. No inventory. Infinite scale. Where Legends Change Hands.</p>
+      <div style="margin-top:16px;">
+        <a href="https://youtube.com/@VelocityVaultMotor" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#CC0000;color:#fff;padding:8px 14px;border-radius:4px;text-decoration:none;font-size:12px;font-weight:700;">▶ YouTube Channel</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-h">Marketplace</div>
+      <a href="auctions.html" class="footer-a">Browse Auctions</a>
+      <a href="sell.html" class="footer-a">Sell Your Vehicle</a>
+      <a href="dashboard.html" class="footer-a">My Garage</a>
+    </div>
+    <div>
+      <div class="footer-h">Services</div>
+      <a href="financing.html" class="footer-a">Financing</a>
+      <a href="shipping.html" class="footer-a">Shipping</a>
+      <a href="about.html" class="footer-a">About</a>
+      <a href="contact.html" class="footer-a">Contact</a>
+    </div>
+    <div>
+      <div class="footer-h">Legal</div>
+      <a href="legal.html" class="footer-a">Terms of Service</a>
+      <a href="legal.html#privacy" class="footer-a">Privacy Policy</a>
+      <a href="legal.html#buyer" class="footer-a">Buyer Protection</a>
+      <a href="legal.html#seller" class="footer-a">Seller Agreement</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 VaultVelocityAuto · vaultvelocityauto.com · Ontario, Canada</span>
+    <span style="color:rgba(212,175,55,0.4)">A Francisco Holdings Inc. Venture</span>
+  </div>
+</footer>
+
+<script>
+const INVENTORY = [
+  { id:1,  year:1969, make:"Chevrolet",   model:"Camaro SS 396",         bid:145000, reserve:125000, bids:7,  ends:"2d 14h 33m", cat:"muscle",   certified:true,  color:"Hugger Orange",    trans:"4-Speed Manual",    mi:87420,  cond:"Restored",         img:"https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=900&q=80" },
+  { id:2,  year:1970, make:"Dodge",       model:"Challenger R/T Hemi",   bid:265000, reserve:240000, bids:12, ends:"3d 8h 12m",  cat:"muscle",   certified:true,  color:"Plum Crazy Purple",trans:"4-Speed Manual",    mi:52300,  cond:"Numbers Matching", img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=900&q=80" },
+  { id:3,  year:1967, make:"Shelby",      model:"GT500",                  bid:195000, reserve:165000, bids:9,  ends:"1d 22h 5m",  cat:"muscle",   certified:true,  color:"Brittany Blue",    trans:"4-Speed Manual",    mi:68900,  cond:"Full Restoration", img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" },
+  { id:4,  year:2023, make:"Ferrari",     model:"296 GTB",                bid:385000, reserve:360000, bids:4,  ends:"5d 2h 18m",  cat:"supercar", certified:true,  color:"Rosso Corsa",      trans:"8-Speed DCT",       mi:3200,   cond:"Like New",         img:"https://images.unsplash.com/photo-1486496572940-2bb2341fdbdf?w=900&q=80" },
+  { id:5,  year:2019, make:"Lamborghini", model:"Aventador SVJ",          bid:495000, reserve:460000, bids:2,  ends:"6d 10h 44m", cat:"supercar", certified:true,  color:"Arancio Borealis", trans:"7-Speed ISR",       mi:8100,   cond:"Excellent",        img:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=80" },
+  { id:6,  year:1963, make:"Chevrolet",   model:"Corvette Split-Window",  bid:215000, reserve:190000, bids:6,  ends:"4d 6h 20m",  cat:"classic",  certified:true,  color:"Sebring Silver",   trans:"4-Speed Manual",    mi:71200,  cond:"Matching Numbers", img:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=900&q=80" },
+  { id:7,  year:1971, make:"Plymouth",    model:"Hemi 'Cuda",             bid:395000, reserve:360000, bids:11, ends:"2d 18h 55m", cat:"muscle",   certified:true,  color:"Lemon Twist",      trans:"4-Speed Manual",    mi:44600,  cond:"Numbers Matching", img:"https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=900&q=80" },
+  { id:8,  year:2024, make:"Porsche",     model:"911 GT3 RS",             bid:355000, reserve:330000, bids:3,  ends:"7d 14h 30m", cat:"supercar", certified:true,  color:"Python Green",     trans:"7-Speed PDK",       mi:220,    cond:"New",              img:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80" },
+  { id:9,  year:1969, make:"Ford",        model:"Mustang Boss 429",       bid:235000, reserve:210000, bids:8,  ends:"3d 12h 8m",  cat:"muscle",   certified:false, color:"Black Jade",       trans:"4-Speed Manual",    mi:91300,  cond:"Full Restoration", img:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=900&q=80" },
+  { id:10, year:2023, make:"McLaren",     model:"765LT",                  bid:405000, reserve:380000, bids:1,  ends:"8d 5h 22m",  cat:"supercar", certified:true,  color:"Storm Grey",       trans:"7-Speed SSG",       mi:1800,   cond:"Like New",         img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" },
+  { id:11, year:1970, make:"Chevrolet",   model:"Chevelle SS 454",        bid:125000, reserve:105000, bids:15, ends:"1d 4h 17m",  cat:"muscle",   certified:false, color:"Fathom Green",     trans:"Turbo-Hydramatic",  mi:112400, cond:"Driver Quality",   img:"https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=900&q=80" },
+  { id:12, year:2024, make:"Rolls-Royce", model:"Spectre",                bid:475000, reserve:450000, bids:2,  ends:"9d 20h 5m",  cat:"luxury",   certified:true,  color:"Arctic White",     trans:"Single-Speed Auto", mi:850,    cond:"New",              img:"https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=900&q=80" }
+];
+
+function fmt(n){ return '$' + n.toLocaleString(); }
+
+function startCountdown(str, el) {
+  const m = str.match(/(\d+)d\s*(\d+)h\s*(\d+)m/);
+  if (!m) return;
+  let secs = parseInt(m[1])*86400 + parseInt(m[2])*3600 + parseInt(m[3])*60;
+  function tick() {
+    if (secs <= 0) { el.textContent = "ENDED"; return; }
+    const d=Math.floor(secs/86400), h=Math.floor((secs%86400)/3600), mn=Math.floor((secs%3600)/60), s=secs%60;
+    el.innerHTML = `${d}d ${h}h ${mn}m ${s}s`;
+    secs--; setTimeout(tick, 1000);
+  }
+  tick();
+}
+
+function toggleNav() {
+  document.getElementById('nav-mobile').classList.toggle('open');
+}
+
+// Render featured grid (first 6)
+const grid = document.getElementById('featured-grid');
+INVENTORY.slice(0,6).forEach(car => {
+  const card = document.createElement('a');
+  card.href = `auction-detail.html?id=${car.id}`;
+  card.className = 'car-card';
+  const urgent = car.ends.startsWith('1d') || car.ends.startsWith('0d');
+  card.innerHTML = `
+    <div class="car-img">
+      <img src="${car.img}" alt="${car.year} ${car.make} ${car.model}" loading="lazy">
+      ${car.certified ? '<div class="car-badge">Vault Certified</div>' : ''}
+      <div class="car-timer${urgent?' urgent':''}" data-ends="${car.ends}"></div>
+    </div>
+    <div class="car-body">
+      <div class="car-meta">${car.year} · ${car.cond}</div>
+      <div class="car-name">${car.make} ${car.model}</div>
+      <div class="car-price-row">
+        <div>
+          <div class="car-bid-label">Current Bid</div>
+          <div class="car-bid">${fmt(car.bid)}</div>
+        </div>
+        <div class="car-bids">
+          <span>${car.bids}</span>
+          Bids
+        </div>
+      </div>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+grid.querySelectorAll('.car-timer').forEach(el => startCountdown(el.dataset.ends, el));
+
+// Ending soon (ids 3, 7, 11)
+const endingIds = [3,7,11];
+const endingScroll = document.getElementById('ending-soon');
+endingIds.forEach(id => {
+  const car = INVENTORY.find(c=>c.id===id);
+  const div = document.createElement('a');
+  div.href = `auction-detail.html?id=${car.id}`;
+  div.className = 'ending-card';
+  div.innerHTML = `
+    <div class="ending-card-img">
+      <img src="${car.img}" alt="${car.make} ${car.model}" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+      <div class="ending-urgent">Ending Soon</div>
+    </div>
+    <div class="ending-card-body">
+      <div class="ending-card-meta">${car.year} ${car.cat}</div>
+      <div class="ending-card-name">${car.make} ${car.model}</div>
+      <div class="ending-card-bid">${fmt(car.bid)}</div>
+      <div class="ending-card-timer" data-ends="${car.ends}"></div>
+    </div>
+  `;
+  endingScroll.appendChild(div);
+});
+endingScroll.querySelectorAll('.ending-card-timer').forEach(el => startCountdown(el.dataset.ends, el));
+
+// Newsletter
+function handleNewsletter(e) {
+  e.preventDefault();
+  const email = e.target.querySelector('input').value;
+  window.location.href = `mailto:omniaguard1@gmail.com?subject=VaultVelocityAuto Newsletter Signup&body=Please add me to the VaultVelocityAuto First Look list.%0A%0AEmail: ${encodeURIComponent(email)}`;
+}
+</script>
+</body>
+</html>

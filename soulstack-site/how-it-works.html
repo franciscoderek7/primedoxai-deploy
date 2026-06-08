@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How It Works — SoulStack.ai | AI Clone Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--black:#000;--deep:#050508;--panel:#0a0a12;--cyan:#00D4FF;--red:#CC0000;--white:#F4F8FF;--muted:#7a8aaa;--border:rgba(0,212,255,0.1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 20% 40%,rgba(0,212,255,.03) 0%,transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(204,0,0,.03) 0%,transparent 60%);background-image:linear-gradient(rgba(0,212,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.025) 1px,transparent 1px);background-size:60px 60px}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.bm{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),rgba(0,212,255,.4));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px;color:#000}
+.bn{font-size:18px;font-weight:700;color:var(--white)}
+.bn span{color:var(--cyan)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(244,248,255,.6);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+.nav-cta{background:var(--cyan);color:#000;padding:10px 22px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase}
+.hamburger{display:none;background:none;border:none;color:var(--white);font-size:24px;cursor:pointer}
+.nm{display:none;flex-direction:column;padding:16px 24px;background:rgba(0,0,0,.98);border-top:1px solid var(--border)}
+.nm.open{display:flex}
+.nm a{color:var(--white);padding:14px 0;text-decoration:none;border-bottom:1px solid var(--border);font-size:16px}
+.nm-cta{background:var(--cyan)!important;color:#000!important;border:none!important;text-align:center;border-radius:4px;margin-top:12px;font-weight:700;padding:14px!important}
+@media(max-width:900px){.nav-links,.nav-cta{display:none}.hamburger{display:block}.nav-inner{padding:0 24px}}
+
+.hero{position:relative;z-index:1;padding:160px 80px 80px;max-width:900px;margin:0 auto;text-align:center}
+.stag{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:12px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,6vw,72px);font-weight:900;line-height:1.05;margin-bottom:16px}
+.hero h1 em{color:var(--cyan);font-style:italic}
+.hero p{font-size:17px;color:var(--muted);line-height:1.7;max-width:560px;margin:0 auto}
+@media(max-width:768px){.hero{padding:120px 24px 60px}}
+
+.section{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:80px}
+@media(max-width:768px){.section{padding:60px 24px}}
+
+/* PHASES */
+.phase{display:grid;grid-template-columns:80px 1fr;gap:40px;margin-bottom:80px;position:relative}
+.phase::before{content:'';position:absolute;left:39px;top:80px;bottom:-80px;width:2px;background:linear-gradient(to bottom,var(--cyan),transparent)}
+.phase:last-child::before{display:none}
+.phase-num{width:80px;height:80px;border-radius:50%;border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--cyan);flex-shrink:0;background:rgba(0,212,255,.05);position:relative;z-index:1}
+.phase-content{padding-top:12px}
+.phase-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+.phase-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);font-weight:700;margin-bottom:16px}
+.phase-desc{font-size:15px;color:var(--muted);line-height:1.8;max-width:600px;margin-bottom:24px}
+.phase-details{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.pd-item{font-size:13px;color:rgba(244,248,255,.7);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.pd-item::before{content:'→';color:var(--cyan);font-weight:700;flex-shrink:0}
+.phase-time{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:6px 16px;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:1px;margin-bottom:20px}
+@media(max-width:600px){.phase{grid-template-columns:1fr;gap:20px}.phase::before{display:none}.phase-details{grid-template-columns:1fr}}
+
+/* SECURITY NOTE */
+.sec-note{position:relative;z-index:1;background:rgba(204,0,0,.04);border:1px solid rgba(204,0,0,.2);border-radius:12px;padding:40px;max-width:1300px;margin:0 auto 80px;display:grid;grid-template-columns:60px 1fr;gap:24px;align-items:start}
+.sec-icon{font-size:40px}
+.sec-note h3{font-size:18px;font-weight:700;color:var(--white);margin-bottom:8px}
+.sec-note p{font-size:14px;color:var(--muted);line-height:1.7}
+@media(max-width:900px){.sec-note{margin:0 24px 60px;grid-template-columns:1fr}}
+
+/* CTA */
+.cta{position:relative;z-index:1;text-align:center;padding:80px}
+.cta h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;margin-bottom:16px}
+.cta h2 em{color:var(--cyan);font-style:italic}
+.cta p{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 32px;line-height:1.7}
+.btn-p{background:var(--cyan);color:#000;padding:18px 40px;border-radius:4px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;display:inline-block;transition:background .2s}
+.btn-p:hover{background:#00AACC}
+@media(max-width:768px){.cta{padding:60px 24px}}
+
+footer{position:relative;z-index:1;background:var(--deep);border-top:1px solid var(--border);padding:48px 80px 28px}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;max-width:1300px;margin:0 auto 32px}
+.fh{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+.fa{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:9px}
+.fa:hover{color:var(--white)}
+.fb{display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:20px;font-size:12px;color:rgba(244,248,255,.2);max-width:1300px;margin:0 auto}
+@media(max-width:768px){footer{padding:40px 24px 24px}.fg{grid-template-columns:1fr 1fr}.fb{flex-direction:column;gap:8px;text-align:center}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><div class="bm">SS</div><span class="bn">Soul<span>Stack</span>.ai</span></a>
+    <ul class="nav-links"><li><a href="how-it-works.html" class="active">How It Works</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="about.html">About</a></li><li><a href="demo.html">Demo</a></li><li><a href="contact.html">Contact</a></li></ul>
+    <a href="pricing.html" class="nav-cta">Upload Now</a>
+    <button class="hamburger" onclick="document.getElementById('nm-mob').classList.toggle('open')">☰</button>
+  </div>
+  <div class="nm" id="nm-mob"><a href="how-it-works.html">How It Works</a><a href="pricing.html">Pricing</a><a href="about.html">About</a><a href="demo.html">Demo</a><a href="contact.html">Contact</a><a href="pricing.html" class="nm-cta">Upload Now</a></div>
+</nav>
+
+<div class="hero">
+  <span class="stag">The Process</span>
+  <h1>From Human to <em>Clone</em><br>in 4 Sessions.</h1>
+  <p>The SoulStack Protocol is the most rigorous consciousness-capture process ever designed for an entrepreneur. Here is exactly how it works.</p>
+</div>
+
+<div class="section">
+  <div class="phase">
+    <div class="phase-num">01</div>
+    <div class="phase-content">
+      <div class="phase-label">Session One · Week One</div>
+      <div class="phase-time">⏱ 8 Hours</div>
+      <div class="phase-title">The Deep Interview</div>
+      <div class="phase-desc">This is not a survey. This is the most revealing conversation you will ever have about yourself. Our AI-guided interviewer — trained on 10,000+ entrepreneur case studies — extracts the patterns underneath your decisions. Your origin story. Your values hierarchy. Your risk tolerance. Your relationship patterns. Your vision for what you're building and why.</div>
+      <div class="phase-details">
+        <div class="pd-item">Life story + formative decisions</div>
+        <div class="pd-item">Values mapping and hierarchy</div>
+        <div class="pd-item">Business philosophy and mental models</div>
+        <div class="pd-item">Communication style and tone</div>
+        <div class="pd-item">Relationship patterns with key people</div>
+        <div class="pd-item">Risk tolerance and decision frameworks</div>
+        <div class="pd-item">Domain expertise extraction</div>
+        <div class="pd-item">Failure stories and lessons</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">02</div>
+    <div class="phase-content">
+      <div class="phase-label">Behind the Scenes · Days 8–14</div>
+      <div class="phase-time">⏱ 7 Days Processing</div>
+      <div class="phase-title">The Training Phase</div>
+      <div class="phase-desc">While you go back to building your empire, SoulStack trains your clone on the transcripts, patterns, and behavioral models extracted from the interview. The model is fine-tuned on your specific language — your sentence structures, your vocabulary, your rhythm. OmniaGuard provides the security layer: your consciousness data is encrypted, isolated, and never used for any purpose beyond your own clone.</div>
+      <div class="phase-details">
+        <div class="pd-item">Personality model fine-tuning</div>
+        <div class="pd-item">Voice and tone calibration</div>
+        <div class="pd-item">Decision pattern embedding</div>
+        <div class="pd-item">Domain knowledge integration</div>
+        <div class="pd-item">OmniaGuard security encapsulation</div>
+        <div class="pd-item">Identity verification protocols</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">03</div>
+    <div class="phase-content">
+      <div class="phase-label">Session Two · Week Three</div>
+      <div class="phase-time">⏱ 4 Hours</div>
+      <div class="phase-title">Calibration — You vs. You</div>
+      <div class="phase-desc">You sit down with your clone. You ask it questions. You challenge it. You see yourself from the outside for the first time. The calibration session is often described as the most unsettling and exhilarating experience of a founder's life. You correct the clone where it's wrong. You refine where it's approximate. The standard is your own recognition threshold — not a benchmark we set.</div>
+      <div class="phase-details">
+        <div class="pd-item">Live interaction with your clone</div>
+        <div class="pd-item">Correction and refinement rounds</div>
+        <div class="pd-item">Edge-case scenario testing</div>
+        <div class="pd-item">Relationship-specific tuning</div>
+        <div class="pd-item">Override control configuration</div>
+        <div class="pd-item">Approval threshold setting</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">04</div>
+    <div class="phase-content">
+      <div class="phase-label">Final Phase · Week Four</div>
+      <div class="phase-time">⏱ Perpetual</div>
+      <div class="phase-title">Deployment — Your Clone Goes Live</div>
+      <div class="phase-desc">Your clone is deployed across your designated operations. It handles what you authorize. It escalates what requires you. It learns continuously from its interactions, growing more accurate over time. You see a real-time dashboard of everything it does, with full override control always in your hands. Your empire now has two of you — and one of them never sleeps.</div>
+      <div class="phase-details">
+        <div class="pd-item">Email drafting and management</div>
+        <div class="pd-item">Business decision support</div>
+        <div class="pd-item">Social media tone guidance</div>
+        <div class="pd-item">Real-time operations dashboard</div>
+        <div class="pd-item">Full audit trail of all actions</div>
+        <div class="pd-item">Continuous learning loop</div>
+        <div class="pd-item">Override control — always yours</div>
+        <div class="pd-item">Legacy vault update on every session</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-note">
+  <div class="sec-icon">🔐</div>
+  <div>
+    <h3>Your Consciousness Is Yours. Protected by OmniaGuard.</h3>
+    <p>SoulStack uses OmniaGuard's 14-agent security layer to protect your consciousness data. Your interview transcripts, personality models, and clone instances are encrypted at rest, isolated per-user, and never accessed by any party other than you. We do not train on your data. We do not sell your patterns. Your consciousness is your property — legally and technically. Every SoulStack deployment includes a data sovereignty agreement that confirms your exclusive ownership.</p>
+  </div>
+</div>
+
+<div class="cta">
+  <h2>Ready to Meet <em>Yourself?</em></h2>
+  <p>The waiting list is open. 100 founding uploads. The first session takes 8 hours. Your empire runs forever after.</p>
+  <a href="contact.html" class="btn-p">Join the Waitlist</a>
+</div>
+
+<footer>
+  <div class="fg">
+    <div><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="bm">SS</div><span style="font-size:18px;font-weight:700;color:var(--white)">SoulStack.ai</span></div><p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:260px">AI clone creation platform. Upload your consciousness. Deploy your empire.</p></div>
+    <div><div class="fh">Platform</div><a href="how-it-works.html" class="fa">How It Works</a><a href="pricing.html" class="fa">Pricing</a><a href="demo.html" class="fa">Demo</a></div>
+    <div><div class="fh">Company</div><a href="about.html" class="fa">About</a><a href="contact.html" class="fa">Contact</a></div>
+  </div>
+  <div class="fb"><span>© 2026 SoulStack.ai</span><span style="color:rgba(0,212,255,.3)">A Francisco Holdings Inc. Company</span></div>
+</footer>
+</body>
+</html>

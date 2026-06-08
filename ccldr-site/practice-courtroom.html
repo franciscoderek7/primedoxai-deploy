@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Practice Courtroom — CCLDR Virtual Courthouse</title>
+<meta name="description" content="Practice your cannabis law defense against AI Justice Prime, AI Crown Agent, and get real-time strategy from Doc WeedLaw AI. Canada's only legal education simulator.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--deep:#0d0d0d;--card:#141414;--gold:#c9a227;--gold-light:#e0b840;--green:#27ae60;--green-dark:#1e8449;--red:#c0392b;--blue:#3498db;--white:#f5f5f5;--muted:#888;--border:#2a2a2a;--bench:#1a1208;--wood-light:#2a1f0a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(10,10,10,.97);border-bottom:1px solid var(--gold);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);letter-spacing:2px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:1px}
+.nav-links{display:flex;gap:20px;align-items:center}
+.nav-links a{font-size:12px;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:24px;cursor:pointer}
+
+/* SCENARIO SELECTION SCREEN */
+#scenario-screen{max-width:1100px;margin:0 auto;padding:60px 32px}
+.sc-title{font-family:'Cinzel',serif;font-size:clamp(28px,4vw,48px);font-weight:900;color:var(--white);text-align:center;margin-bottom:8px}
+.sc-title .gold{color:var(--gold)}
+.sc-sub{font-size:15px;color:var(--muted);text-align:center;margin-bottom:48px;line-height:1.6}
+.diff-selector{display:flex;gap:12px;justify-content:center;margin-bottom:40px;flex-wrap:wrap}
+.diff-btn{padding:8px 20px;border-radius:2px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;border:1px solid}
+.diff-btn[data-diff="beginner"]{border-color:var(--green);color:var(--green);background:transparent}
+.diff-btn[data-diff="beginner"].active,.diff-btn[data-diff="beginner"]:hover{background:rgba(39,174,96,.15)}
+.diff-btn[data-diff="intermediate"]{border-color:var(--gold);color:var(--gold);background:transparent}
+.diff-btn[data-diff="intermediate"].active,.diff-btn[data-diff="intermediate"]:hover{background:rgba(201,162,39,.12)}
+.diff-btn[data-diff="advanced"]{border-color:var(--red);color:var(--red);background:transparent}
+.diff-btn[data-diff="advanced"].active,.diff-btn[data-diff="advanced"]:hover{background:rgba(192,57,43,.12)}
+.scenarios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.scenario-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:28px 24px;cursor:pointer;transition:border-color .25s,transform .2s}
+.scenario-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+.sc-num{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:3px;color:var(--muted);margin-bottom:8px}
+.sc-case-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.3}
+.sc-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.sc-charge{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.sc-enter{display:block;width:100%;padding:10px;background:transparent;border:1px solid rgba(201,162,39,.4);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;cursor:pointer;transition:all .2s}
+.sc-enter:hover{background:rgba(201,162,39,.1);border-color:var(--gold)}
+.sc-diff{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:8px;display:inline-block;margin-bottom:8px}
+.d-beginner{background:rgba(39,174,96,.12);color:var(--green)}
+.d-intermediate{background:rgba(201,162,39,.1);color:var(--gold)}
+.d-advanced{background:rgba(192,57,43,.1);color:var(--red)}
+
+/* COURTROOM SCREEN */
+#courtroom-screen{display:none}
+.court-layout{display:grid;grid-template-columns:1fr 320px;gap:0;min-height:calc(100vh - 64px)}
+
+/* MAIN COURTROOM */
+.court-main{border-right:1px solid var(--border);display:flex;flex-direction:column}
+.court-bench{background:var(--bench);border-bottom:1px solid var(--gold);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.bench-info{display:flex;align-items:center;gap:16px}
+.bench-crest{font-size:32px}
+.bench-case{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);font-weight:700}
+.bench-sub{font-size:10px;color:rgba(201,162,39,.6);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.turn-progress{display:flex;align-items:center;gap:8px}
+.turn-label{font-size:11px;color:var(--muted);letter-spacing:1px}
+.turn-dots{display:flex;gap:4px}
+.turn-dot{width:10px;height:10px;border-radius:50%;border:1px solid var(--border);transition:background .3s,border-color .3s}
+.turn-dot.done{background:var(--green);border-color:var(--green-dark)}
+.turn-dot.current{background:var(--gold);border-color:var(--gold);animation:pglow 1.5s infinite}
+@keyframes pglow{0%,100%{box-shadow:0 0 4px rgba(201,162,39,.4)}50%{box-shadow:0 0 10px rgba(201,162,39,.7)}}
+
+/* TRANSCRIPT */
+.transcript{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:16px;min-height:300px;max-height:calc(100vh - 340px)}
+.msg{display:flex;gap:12px;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid}
+.av-judge{background:rgba(52,73,94,.8);border-color:#2c3e50}
+.av-crown{background:rgba(192,57,43,.2);border-color:var(--red)}
+.av-user{background:rgba(52,152,219,.2);border-color:var(--blue)}
+.av-system{background:rgba(201,162,39,.1);border-color:var(--gold)}
+.msg-content{}
+.msg-speaker{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.sp-judge{color:#8fa8c8}
+.sp-crown{color:#e74c3c}
+.sp-user{color:var(--blue)}
+.sp-system{color:var(--gold)}
+.msg-text{font-size:14px;color:rgba(245,245,245,.85);line-height:1.7;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:12px 16px}
+.msg-text.verdict-win{background:rgba(39,174,96,.08);border-color:rgba(39,174,96,.25)}
+.msg-text.verdict-lose{background:rgba(192,57,43,.08);border-color:rgba(192,57,43,.25)}
+.msg-text.verdict-partial{background:rgba(201,162,39,.08);border-color:rgba(201,162,39,.25)}
+
+/* USER CHOICES */
+.user-actions{border-top:1px solid var(--border);padding:20px 28px;background:rgba(13,13,13,.9)}
+.ua-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.ua-choices{display:flex;flex-direction:column;gap:10px}
+.choice-btn{padding:12px 20px;background:transparent;border:1px solid rgba(201,162,39,.2);border-radius:4px;color:rgba(245,245,245,.8);font-size:13px;text-align:left;cursor:pointer;transition:all .2s;line-height:1.4}
+.choice-btn:hover{border-color:var(--gold);background:rgba(201,162,39,.08);color:var(--white)}
+.choice-btn:disabled{opacity:.4;cursor:not-allowed}
+.choice-tag{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-right:8px;opacity:.7}
+
+/* DOC WEEDLAW SIDEBAR */
+.court-sidebar{background:rgba(10,12,10,.95);display:flex;flex-direction:column}
+.sidebar-header{background:rgba(39,174,96,.08);border-bottom:1px solid rgba(39,174,96,.2);padding:20px 20px 16px}
+.dw-avatar{font-size:40px;margin-bottom:8px}
+.dw-name{font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:var(--green);margin-bottom:2px}
+.dw-title{font-size:10px;color:rgba(39,174,96,.6);letter-spacing:2px;text-transform:uppercase}
+.dw-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green);margin-top:8px}
+.dw-status::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.sidebar-content{flex:1;overflow-y:auto;padding:16px 20px}
+.advice-msg{background:rgba(39,174,96,.06);border:1px solid rgba(39,174,96,.15);border-radius:4px;padding:14px;margin-bottom:12px;font-size:13px;color:rgba(245,245,245,.8);line-height:1.6;animation:fadeIn .4s ease}
+.advice-msg .advice-tag{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--green);display:block;margin-bottom:6px}
+.score-panel{border-top:1px solid var(--border);padding:16px 20px}
+.score-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.score-bar-wrap{background:var(--border);border-radius:2px;height:6px;margin-bottom:4px}
+.score-bar{height:6px;border-radius:2px;background:var(--green);transition:width .6s ease}
+.score-num{font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:var(--gold)}
+.score-max{font-size:12px;color:var(--muted)}
+
+/* VERDICT SCREEN */
+.verdict-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.verdict-overlay.open{display:flex}
+.verdict-box{background:var(--card);border:2px solid var(--gold);border-radius:4px;padding:48px;max-width:580px;width:90%;text-align:center}
+.verdict-icon{font-size:64px;margin-bottom:16px}
+.verdict-type{font-family:'Cinzel',serif;font-size:32px;font-weight:900;margin-bottom:8px}
+.vt-win{color:var(--green)}
+.vt-lose{color:var(--red)}
+.vt-partial{color:var(--gold)}
+.verdict-ruling{font-size:15px;color:rgba(245,245,245,.8);line-height:1.7;margin-bottom:24px}
+.verdict-score{font-size:48px;font-weight:900;color:var(--gold);font-family:'Cinzel',serif;margin-bottom:8px}
+.verdict-grade{font-size:14px;color:var(--muted);margin-bottom:32px}
+.verdict-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.vbtn{padding:13px 28px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.vbtn-green{background:var(--green);color:#000;border:none}
+.vbtn-green:hover{background:var(--green-dark)}
+.vbtn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.vbtn-outline:hover{background:rgba(201,162,39,.1)}
+
+@media(max-width:900px){.scenarios-grid{grid-template-columns:1fr 1fr}.court-layout{grid-template-columns:1fr}.court-sidebar{display:none}}
+@media(max-width:640px){.scenarios-grid{grid-template-columns:1fr}#scenario-screen{padding:40px 20px}}
+@media(max-width:768px){nav{padding:0 20px}.nav-links{display:none}.hamburger{display:block}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div>
+    <div class="nav-logo">CCLDR</div>
+    <div class="nav-sub">AI Practice Courtroom</div>
+  </div>
+  <div class="nav-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="courtroom.html">Live Cases</a>
+    <a href="library.html">Library</a>
+    <a href="pricing.html">Upgrade</a>
+  </div>
+  <button class="hamburger" onclick="alert('Menu')">☰</button>
+</nav>
+
+<!-- SCENARIO SELECTION -->
+<div id="scenario-screen">
+  <h1 class="sc-title">AI Practice <span class="gold">Courtroom</span></h1>
+  <p class="sc-sub">Choose a case scenario. AI Justice Prime will preside. AI Crown Agent will prosecute.<br>Doc WeedLaw AI will advise you in real time. Your decisions determine the verdict.</p>
+
+  <div class="diff-selector">
+    <button class="diff-btn active" data-diff="beginner">Beginner — Judge Guides</button>
+    <button class="diff-btn" data-diff="intermediate">Intermediate — Standard Crown</button>
+    <button class="diff-btn" data-diff="advanced">Advanced — No Mercy</button>
+  </div>
+
+  <div class="scenarios-grid">
+    <div class="scenario-card" onclick="startCase(0)">
+      <div class="sc-diff d-beginner">Beginner</div>
+      <div class="sc-num">CASE 01</div>
+      <div class="sc-case-title">"The Illegal Search"</div>
+      <div class="sc-charge">Charge: Possession — Cannabis — s.9 CDSA</div>
+      <div class="sc-desc">Police searched your vehicle without a warrant and found cannabis. Charter s.8 violation. Can you get the evidence excluded?</div>
+      <button class="sc-enter">Begin Trial →</button>
+    </div>
+    <div class="scenario-card" onclick="startCase(1)">
+      <div class="sc-diff d-beginner">Beginner</div>
+      <div class="sc-num">CASE 02</div>
+      <div class="sc-case-title">"The Coerced Confession"</div>
+      <div class="sc-charge">Charge: Possession — Trafficking — s.5 CDSA</div>
+      <div class="sc-desc">Police questioned you for 4 hours without a lawyer. You made statements. Charter s.10(b) violation — right to counsel never given.</div>
+      <button class="sc-enter">Begin Trial →</button>
+    </div>
+    <div class="scenario-card" onclick="startCase(2)">
+      <div class="sc-diff d-intermediate">Intermediate</div>
+      <div class="sc-num">CASE 03</div>
+      <div class="sc-case-title">"The Medical Necessity Defense"</div>
+      <div class="sc-charge">Charge: Cultivation — Over MMAR Limits</div>
+      <div class="sc-desc">You grew cannabis for medical purposes but exceeded your MMAR authorization. The Parker/Allard line — does medical necessity apply?</div>
+      <button class="sc-enter">Begin Trial →</button>
+    </div>
+    <div class="scenario-card" onclick="startCase(3)">
+      <div class="sc-diff d-intermediate">Intermediate</div>
+      <div class="sc-num">CASE 04</div>
+      <div class="sc-case-title">"The Trafficking Charge"</div>
+      <div class="sc-charge">Charge: Possession for Purpose of Trafficking</div>
+      <div class="sc-desc">Police found 28 grams on you and claim you intended to traffic. No scale, no baggies, no texts — only the quantity. Crown over-reaches.</div>
+      <button class="sc-enter">Begin Trial →</button>
+    </div>
+    <div class="scenario-card" onclick="startCase(4)">
+      <div class="sc-diff d-advanced">Advanced</div>
+      <div class="sc-num">CASE 05</div>
+      <div class="sc-case-title">"The Cannabis DUI"</div>
+      <div class="sc-charge">Charge: Impaired Driving — Cannabis — s.253 CC</div>
+      <div class="sc-desc">Breathalyzer negative. Blood THC at 4ng/mL — above legal limit. No actual impairment observed. Challenge the science and the threshold.</div>
+      <button class="sc-enter">Begin Trial →</button>
+    </div>
+    <div class="scenario-card" onclick="startCase(5)">
+      <div class="sc-diff d-advanced">Advanced</div>
+      <div class="sc-num">CASE 06</div>
+      <div class="sc-case-title">"The Workplace Termination"</div>
+      <div class="sc-charge">Claim: Human Rights Violation — Medical Cannabis</div>
+      <div class="sc-desc">You were fired for testing positive for cannabis despite being a licensed medical cannabis patient. Ontario Human Rights Code — disability discrimination.</div>
+      <button class="sc-enter">Begin Trial →</button>
+    </div>
+    <div class="scenario-card" onclick="startCase(6)">
+      <div class="sc-diff d-advanced">Advanced</div>
+      <div class="sc-num">CASE 07</div>
+      <div class="sc-case-title">"The Charter Challenge"</div>
+      <div class="sc-charge">Application: s.52 Constitutional Challenge</div>
+      <div class="sc-desc">You challenge the constitutionality of possession limits under the Cannabis Act. Armed with Ward, Allard, Parker. Full constitutional argument.</div>
+      <button class="sc-enter">Begin Trial →</button>
+    </div>
+  </div>
+</div>
+
+<!-- COURTROOM SCREEN -->
+<div id="courtroom-screen">
+  <div class="court-layout">
+    <!-- MAIN COURTROOM -->
+    <div class="court-main">
+      <div class="court-bench">
+        <div class="bench-info">
+          <div class="bench-crest">⚖️</div>
+          <div>
+            <div class="bench-case" id="case-title-display">Case Loading...</div>
+            <div class="bench-sub">Ontario Superior Court of Justice — Simulated Proceeding</div>
+          </div>
+        </div>
+        <div class="turn-progress">
+          <span class="turn-label">Progress</span>
+          <div class="turn-dots" id="turn-dots"></div>
+        </div>
+      </div>
+      <div class="transcript" id="transcript"></div>
+      <div class="user-actions">
+        <div class="ua-label">Your Response — Choose Carefully</div>
+        <div class="ua-choices" id="ua-choices"></div>
+      </div>
+    </div>
+
+    <!-- DOC WEEDLAW SIDEBAR -->
+    <div class="court-sidebar">
+      <div class="sidebar-header">
+        <div class="dw-avatar">👨‍⚖️</div>
+        <div class="dw-name">Doc WeedLaw AI</div>
+        <div class="dw-title">Defense Counsel — AI Strategic Advisor</div>
+        <div class="dw-status">Active — Real-Time Guidance</div>
+      </div>
+      <div class="sidebar-content" id="sidebar-advice">
+        <div class="advice-msg">
+          <span class="advice-tag">Strategy</span>
+          Welcome. I'm Doc WeedLaw AI. I'll guide your defense strategy in real time. Watch the Crown carefully — their tactics follow predictable patterns.
+        </div>
+      </div>
+      <div class="score-panel">
+        <div class="score-label">Defense Performance</div>
+        <div class="score-bar-wrap"><div class="score-bar" id="score-bar" style="width:50%"></div></div>
+        <div style="display:flex;align-items:baseline;gap:4px;margin-top:6px">
+          <span class="score-num" id="score-display">50</span>
+          <span class="score-max">/ 100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VERDICT OVERLAY -->
+<div class="verdict-overlay" id="verdict-overlay">
+  <div class="verdict-box">
+    <div class="verdict-icon" id="verdict-icon">⚖️</div>
+    <div class="verdict-type" id="verdict-type">Verdict</div>
+    <p class="verdict-ruling" id="verdict-ruling"></p>
+    <div class="verdict-score" id="verdict-score">0</div>
+    <div class="verdict-grade" id="verdict-grade">out of 100</div>
+    <div class="verdict-btns">
+      <button class="vbtn vbtn-green" onclick="restartTrial()">Try Another Case</button>
+      <a href="library.html" class="vbtn vbtn-outline">Study Case Law</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const CASES = [
+  {
+    title:"R. v. [You] — The Illegal Search",
+    charge:"Possession of Cannabis — s.9 CDSA",
+    totalTurns:5,
+    turns:[
+      {
+        transcript:[
+          {speaker:'system',avatar:'📋',text:"Court is now in session. The Honourable Justice Prime presiding. This is a simulated proceeding for educational purposes."},
+          {speaker:'judge',avatar:'⚖️',text:"Crown, please proceed with your opening."},
+          {speaker:'crown',avatar:'⚡',text:"Your Honour, on the evening of March 15th, officers stopped the accused vehicle at a routine check. A plain-clothes officer smelled cannabis and searched the vehicle without a warrant, finding 14 grams. The accused was charged with possession. The Crown submits the evidence is admissible and the charge should be sustained."},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, your response to the Crown's opening?"}
+        ],
+        choices:[
+          {text:"Object immediately — 'Your Honour, the search was conducted without a warrant in violation of s.8 of the Charter. The evidence must be excluded under s.24(2).'",points:20,tag:"OBJECTION",correct:true},
+          {text:"Ask the Crown to clarify what 'plain smell' legally justifies — probe for the threshold.",points:12,tag:"PROBE",correct:false},
+          {text:"Accept the Crown's opening and wait to hear the officer's testimony before acting.",points:-5,tag:"WAIT",correct:false}
+        ],
+        advice:"This is your opening moment. Charter s.8 protects against unreasonable search and seizure. An alleged smell alone is unlikely to meet the threshold for a warrantless search — raise it now. The earlier you raise it, the more strategic weight it carries."
+      },
+      {
+        transcript:[
+          {speaker:'judge',avatar:'⚖️',text:"The defense has raised a Charter s.8 concern. Crown, how do you respond?"},
+          {speaker:'crown',avatar:'⚡',text:"Your Honour, the officer had reasonable grounds based on the odour of cannabis emanating from the vehicle. Under the common law and recent jurisprudence, a trained officer's nose constitutes reasonable grounds for a search incident to an investigative detention."},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, the Crown cites reasonable grounds based on smell. How do you respond?"}
+        ],
+        choices:[
+          {text:"Cite R. v. Saeed — smell alone must be combined with other articulable cause. Ask Crown to identify ALL grounds, not just smell.",points:18,tag:"CASE LAW",correct:true},
+          {text:"Request voir dire — 'Your Honour, I request a Charter voir dire to fully canvass the s.8 issue before this evidence is admitted.'",points:20,tag:"VOIR DIRE",correct:true},
+          {text:"Accept that smell might be enough and pivot to challenging the quantity.",points:-10,tag:"CONCEDE",correct:false}
+        ],
+        advice:"A voir dire is your best friend. It separates the Charter issue from the main trial and forces the Crown to justify the search on the record. Always request a voir dire for Charter challenges — it gives you the most procedural protection. R. v. Grant (2009) SCC 32 gives you the framework for s.24(2) exclusion."
+      },
+      {
+        transcript:[
+          {speaker:'judge',avatar:'⚖️',text:"Voir dire is granted on the Charter s.8 issue. Officer MacPherson, you are called. Crown, examine your witness."},
+          {speaker:'crown',avatar:'⚡',text:"Officer, describe what you observed on the evening of March 15th."},
+          {speaker:'judge',avatar:'⚖️',text:"[Witness]: 'I observed a vehicle travelling 3km/h over the limit. Upon approaching the window, I detected a strong odour of cannabis. I asked the driver to exit and conducted a search.'"},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, your cross-examination."}
+        ],
+        choices:[
+          {text:"'Officer, you mentioned 3km/h over — was a traffic ticket issued? If this was a traffic stop, a cannabis search requires more than smell.'",points:15,tag:"CROSS"},
+          {text:"'Officer, were you wearing a mask on that evening? Have you been trained in cannabis odour identification? What course, when, who certified you?'",points:20,tag:"QUALIFICATION",correct:true},
+          {text:"'Officer, is it possible the smell was from a legal hemp product or CBD oil — both of which are not cannabis under the Act?'",points:18,tag:"REASONABLE DOUBT",correct:true}
+        ],
+        advice:"Cross-examination is your chance to undermine the 'reasonable grounds.' Attack the officer's qualification to identify cannabis by smell and introduce alternate explanations (CBD products, hemp). If you can show the smell identification is unreliable, the entire basis for the warrantless search collapses. R. v. Stairs (2022) SCC is also relevant for the scope of search incident to arrest."
+      },
+      {
+        transcript:[
+          {speaker:'judge',avatar:'⚖️',text:"The voir dire has been heard. Crown's final submission on s.8?"},
+          {speaker:'crown',avatar:'⚡',text:"The Crown submits the officer's detection of cannabis odour, combined with the minor traffic infraction, provided sufficient articulable cause for an investigative detention and search. The evidence is admissible."},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, your s.24(2) argument on whether to exclude the evidence?"}
+        ],
+        choices:[
+          {text:"Apply the Grant test: '(1) seriousness of Charter violation — warrantless, no warrant sought; (2) impact on accused — direct; (3) society's interest — exclusion protects the justice system from police overreach. Evidence must be excluded.'",points:22,tag:"GRANT TEST",correct:true},
+          {text:"Simply argue: 'The search was illegal and the evidence should be excluded' — without citing Grant.",points:5,tag:"WEAK ARG"},
+          {text:"Concede admissibility and focus on arguing the quantity is consistent with personal use only.",points:-8,tag:"CONCEDE"}
+        ],
+        advice:"The R. v. Grant test (2009 SCC 32) is the governing test for s.24(2) exclusion. You must address all three branches: (1) seriousness of the Charter-infringing conduct, (2) impact on the accused's Charter-protected interests, (3) society's interest in adjudication on the merits. If you apply Grant properly, you have a strong chance of exclusion."
+      },
+      {
+        transcript:[
+          {speaker:'judge',avatar:'⚖️',text:"I have considered the submissions on the s.8 voir dire. The question is whether the officer had sufficient grounds for a warrantless search."},
+          {speaker:'judge',avatar:'⚖️',text:"The Crown must now close on the underlying charge. Crown, proceed."},
+          {speaker:'crown',avatar:'⚡',text:"Even if the Court has concerns about the search, 14 grams of cannabis clearly exceeds personal possession limits. The accused had no medical authorization. We ask for a finding of guilt on simple possession."},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, your closing argument."}
+        ],
+        choices:[
+          {text:"'Your Honour, without the illegally seized evidence, there is no case. I ask for a complete acquittal and urge this Court to send a clear message that warrantless searches based on unverified smell will not be tolerated.'",points:20,tag:"STRONG CLOSE",correct:true},
+          {text:"'Even if the evidence is admitted, 14 grams is consistent with personal use and does not establish trafficking or intent.'",points:14,tag:"FALLBACK"},
+          {text:"Accept a guilty plea to simple possession in exchange for no criminal record.",points:-15,tag:"PLEA"}
+        ],
+        advice:"Finish strong. Your Charter argument has been built across 5 turns. Tie it all together: the illegal search, the Grant analysis, and the principled exclusion. If the evidence is excluded, there's no case. If it's admitted, the quantity defence is your fallback. Don't fold on the Charter — you've built a solid argument."
+      }
+    ],
+    verdicts:{
+      high:{icon:'🏆',type:'ACQUITTAL',verdict:'Acquittal',ruling:"Justice Prime ruled in your favour. The warrantless search violated s.8 of the Charter. Applying the Grant test, all three branches favour exclusion. The evidence is excluded. Without evidence, the Crown's case collapses. ACQUITTED. Excellent use of Charter jurisprudence.",cssClass:'vt-win'},
+      mid:{icon:'⚖️',type:'STAY OF PROCEEDINGS',verdict:'Partial Victory',ruling:"Justice Prime found a Charter violation but admitted the evidence. However, the manner of police conduct was strongly criticized. Case proceeds but with serious reservations. The Crown's case is weakened — strong chance of ultimate acquittal at full trial.",cssClass:'vt-partial'},
+      low:{icon:'📋',type:'CONVICTION',verdict:'Guilty — Simple Possession',ruling:"Justice Prime found the search valid based on the officer's testimony. The evidence was admitted. You were convicted of simple possession — minor charge, no jail time. Your Charter arguments needed stronger case law citations. Review R. v. Grant and R. v. Saeed.",cssClass:'vt-lose'}
+    }
+  },
+  {
+    title:"R. v. [You] — The Coerced Confession",
+    charge:"Possession for Purpose of Trafficking — s.5 CDSA",
+    totalTurns:4,
+    turns:[
+      {
+        transcript:[
+          {speaker:'system',avatar:'📋',text:"Court is in session. R. v. [You]. Charge: Possession for Purpose of Trafficking."},
+          {speaker:'crown',avatar:'⚡',text:"Your Honour, the accused was arrested and questioned for 4 hours. During questioning — without being given access to counsel — the accused stated they had sold cannabis 'a few times.' The Crown relies on this admission as key evidence of intent to traffic."},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, opening?"}
+        ],
+        choices:[
+          {text:"Immediately raise Charter s.10(b): 'The accused was never informed of the right to retain and instruct counsel without delay. The entire statement must be excluded.'",points:22,tag:"S.10(b)",correct:true},
+          {text:"Ask to see the exact recording of when the s.10(b) caution was given.",points:15,tag:"DEMAND RECORDS"},
+          {text:"Challenge the trafficking charge — 'a few times' is ambiguous.",points:5,tag:"WEAK"}
+        ],
+        advice:"s.10(b) of the Charter guarantees the right to retain and instruct counsel without delay upon detention. If police questioned your client for 4 hours without providing s.10(b) rights, the entire statement is likely inadmissible. This is your strongest argument — raise it immediately. R. v. Manninen (1987) SCC established the duty to hold off questioning once the right is invoked."
+      },
+      {
+        transcript:[
+          {speaker:'crown',avatar:'⚡',text:"The Crown will produce the arrest log. The caution was given at the point of arrest, not at the interview room. We submit compliance with s.10(b)."},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, you've heard the Crown's position on timing."}
+        ],
+        choices:[
+          {text:"'The caution at arrest is not sufficient — s.10(b) requires meaningful opportunity to consult counsel BEFORE questioning. Four hours of interrogation without a phone call is a clear violation. R. v. Bartle (1994) SCC.'",points:22,tag:"CITE BARTLE",correct:true},
+          {text:"Request voir dire on the admissibility of the statement.",points:18,tag:"VOIR DIRE",correct:true},
+          {text:"Accept the Crown's position and challenge the content of the statement.",points:-5,tag:"CONCEDE"}
+        ],
+        advice:"R. v. Bartle (1994) is your sword. The duty under s.10(b) is not satisfied by a formulaic caution — police must provide a reasonable opportunity to exercise the right, including access to a phone, duty counsel number, and time to consult. Four hours of questioning without meaningful access to counsel is a textbook violation."
+      },
+      {
+        transcript:[
+          {speaker:'judge',avatar:'⚖️',text:"A voir dire is held on the admissibility of the accused's statement. The Crown called the interrogating officer."},
+          {speaker:'crown',avatar:'⚡',text:"[Officer testimony]: 'We told the accused their rights. They said they understood. We then proceeded with questioning at their apparent consent.'"},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, cross of the officer."}
+        ],
+        choices:[
+          {text:"'Officer, did the accused ASK for a lawyer at any point during those 4 hours? If yes, what happened?' — If they asked and were denied, the case collapses.",points:22,tag:"KEY CROSS",correct:true},
+          {text:"'Officer, was the accused offered the duty counsel telephone number? Was a phone provided? Who did they speak with?'",points:20,tag:"PROCESS CROSS",correct:true},
+          {text:"Skip the cross and rely on your written submissions on the law.",points:3,tag:"SKIP"}
+        ],
+        advice:"The most powerful question in any s.10(b) voir dire: 'Did the accused ask for a lawyer?' If yes and they were denied — automatic exclusion. Even if they didn't ask explicitly, the duty counsel number must be provided. Don't skip the cross-examination — the officer's answers will shape the judge's ruling."
+      },
+      {
+        transcript:[
+          {speaker:'judge',avatar:'⚖️',text:"Having heard the voir dire, I must determine: (1) was s.10(b) breached? (2) Should the statement be excluded under s.24(2)?"},
+          {speaker:'crown',avatar:'⚡',text:"Crown submits no breach. Even if there was, the statement should be admitted in the public interest — trafficking is a serious offence."},
+          {speaker:'judge',avatar:'⚖️',text:"Defense, final submissions."}
+        ],
+        choices:[
+          {text:"'Grant test, branch 3: Society has NO interest in convicting people based on involuntary statements extracted in violation of their right to counsel. The integrity of the justice system demands exclusion. R. v. Spencer (2014) SCC — Charter rights must be meaningful.'",points:22,tag:"GRANT BRANCH 3",correct:true},
+          {text:"'The accused was young, scared, and didn't understand their rights. The circumstances made the statement inherently unreliable.'",points:12,tag:"RELIABILITY"},
+          {text:"Suggest a plea to simple possession if the Crown drops trafficking.",points:8,tag:"PLEA DEAL"}
+        ],
+        advice:"Branch 3 of Grant is about the justice system's long-term integrity. Courts have repeatedly held that admitting statements obtained without proper s.10(b) compliance undermines public confidence in the administration of justice more than excluding them. Make this argument forcefully. The trafficking charge is only sustainable if the statement is admitted."
+      }
+    ],
+    verdicts:{
+      high:{icon:'🏆',type:'ACQUITTAL',verdict:'Acquittal',ruling:"Justice Prime found a clear breach of s.10(b) — no meaningful opportunity to consult counsel was provided. Under the Grant test, the statement is excluded. Without the admission, the Crown has no evidence of intent to traffic. ACQUITTED on trafficking. Outstanding Charter lawyering.",cssClass:'vt-win'},
+      mid:{icon:'⚖️',type:'REDUCED CHARGE',verdict:'Conviction — Simple Possession Only',ruling:"Justice Prime excluded the statement as a s.10(b) breach. Without the admission, trafficking cannot be proven. However, the cannabis itself was lawfully seized — conviction on simple possession only. You won the main battle.",cssClass:'vt-partial'},
+      low:{icon:'📋',type:'CONVICTION',verdict:'Guilty — Trafficking',ruling:"The statement was admitted. Without stronger Charter arguments and more precise cross-examination, the voir dire failed. Review R. v. Bartle and the Grant test. The accused needs better preparation.",cssClass:'vt-lose'}
+    }
+  }
+];
+
+let currentCase=null, currentTurn=0, score=50, turnScores=[];
+
+function startCase(idx){
+  if(idx>=CASES.length){
+    alert('This scenario is coming soon. Try Case 01 or 02.');
+    return;
+  }
+  currentCase=CASES[idx];
+  currentTurn=0;
+  score=50;
+  turnScores=[];
+  document.getElementById('scenario-screen').style.display='none';
+  document.getElementById('courtroom-screen').style.display='block';
+  document.getElementById('case-title-display').textContent=currentCase.title;
+  document.getElementById('transcript').innerHTML='';
+  document.getElementById('sidebar-advice').innerHTML='';
+  buildTurnDots();
+  renderTurn(0);
+}
+
+function buildTurnDots(){
+  const dots=document.getElementById('turn-dots');
+  dots.innerHTML='';
+  for(let i=0;i<currentCase.totalTurns;i++){
+    const d=document.createElement('div');
+    d.className='turn-dot'+(i===0?' current':'');
+    d.id='dot-'+i;
+    dots.appendChild(d);
+  }
+}
+
+function updateDots(){
+  for(let i=0;i<currentCase.totalTurns;i++){
+    const d=document.getElementById('dot-'+i);
+    if(!d)continue;
+    d.className='turn-dot';
+    if(i<currentTurn) d.classList.add('done');
+    else if(i===currentTurn) d.classList.add('current');
+  }
+}
+
+function renderTurn(tIdx){
+  const turn=currentCase.turns[tIdx];
+  if(!turn)return;
+  updateDots();
+  const transcript=document.getElementById('transcript');
+  turn.transcript.forEach((m,i)=>{
+    setTimeout(()=>{
+      const msg=document.createElement('div');
+      msg.className='msg';
+      const avatarClass=m.speaker==='judge'?'av-judge':m.speaker==='crown'?'av-crown':m.speaker==='user'?'av-user':'av-system';
+      const speakerClass=m.speaker==='judge'?'sp-judge':m.speaker==='crown'?'sp-crown':m.speaker==='user'?'sp-user':'sp-system';
+      const speakerName=m.speaker==='judge'?'Justice Prime':m.speaker==='crown'?'Crown Agent':m.speaker==='user'?'You (Defense)':'Court';
+      msg.innerHTML=`<div class="msg-avatar ${avatarClass}">${m.avatar}</div><div class="msg-content"><div class="msg-speaker ${speakerClass}">${speakerName}</div><div class="msg-text">${m.text}</div></div>`;
+      transcript.appendChild(msg);
+      transcript.scrollTop=transcript.scrollHeight;
+    },i*600);
+  });
+  const delay=turn.transcript.length*600+300;
+  setTimeout(()=>renderChoices(turn),delay);
+  if(turn.advice) setTimeout(()=>addAdvice(turn.advice),delay-200);
+}
+
+function renderChoices(turn){
+  const ca=document.getElementById('ua-choices');
+  ca.innerHTML='';
+  turn.choices.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.className='choice-btn';
+    btn.innerHTML=`<span class="choice-tag">${c.tag}</span>${c.text}`;
+    btn.onclick=()=>handleChoice(c,turn);
+    ca.appendChild(btn);
+  });
+}
+
+function handleChoice(choice,turn){
+  document.querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);
+  score=Math.max(0,Math.min(100,score+choice.points));
+  turnScores.push(choice.points);
+  updateScore();
+  const transcript=document.getElementById('transcript');
+  const userMsg=document.createElement('div');
+  userMsg.className='msg';
+  userMsg.innerHTML=`<div class="msg-avatar av-user">👤</div><div class="msg-content"><div class="msg-speaker sp-user">You (Defense)</div><div class="msg-text">${choice.text}</div></div>`;
+  transcript.appendChild(userMsg);
+  transcript.scrollTop=transcript.scrollHeight;
+  currentTurn++;
+  if(currentTurn>=currentCase.totalTurns){
+    setTimeout(()=>showVerdict(),1200);
+  } else {
+    setTimeout(()=>renderTurn(currentTurn),1000);
+  }
+}
+
+function addAdvice(text){
+  const sb=document.getElementById('sidebar-advice');
+  const div=document.createElement('div');
+  div.className='advice-msg';
+  div.innerHTML=`<span class="advice-tag">Strategy — Turn ${currentTurn+1}</span>${text}`;
+  sb.appendChild(div);
+  sb.scrollTop=sb.scrollHeight;
+}
+
+function updateScore(){
+  const bar=document.getElementById('score-bar');
+  const num=document.getElementById('score-display');
+  bar.style.width=score+'%';
+  if(score>=70) bar.style.background='var(--green)';
+  else if(score>=40) bar.style.background='var(--gold)';
+  else bar.style.background='var(--red)';
+  num.textContent=score;
+}
+
+function showVerdict(){
+  const v=currentCase.verdicts;
+  let result;
+  if(score>=72) result=v.high;
+  else if(score>=45) result=v.mid;
+  else result=v.low;
+  document.getElementById('verdict-icon').textContent=result.icon;
+  document.getElementById('verdict-type').textContent=result.verdict;
+  document.getElementById('verdict-type').className='verdict-type '+result.cssClass;
+  document.getElementById('verdict-ruling').textContent=result.ruling;
+  document.getElementById('verdict-score').textContent=score;
+  const grade=score>=85?'Outstanding — Future Barrister':score>=70?'Strong Performance — Well Argued':score>=50?'Competent — More Case Law Needed':score>=30?'Developing — Review Charter Fundamentals':'Needs Significant Work — Start with the Library';
+  document.getElementById('verdict-grade').textContent=grade;
+  document.getElementById('verdict-overlay').classList.add('open');
+}
+
+function restartTrial(){
+  document.getElementById('verdict-overlay').classList.remove('open');
+  document.getElementById('courtroom-screen').style.display='none';
+  document.getElementById('scenario-screen').style.display='block';
+  document.getElementById('ua-choices').innerHTML='';
+}
+
+// Difficulty buttons
+document.querySelectorAll('.diff-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

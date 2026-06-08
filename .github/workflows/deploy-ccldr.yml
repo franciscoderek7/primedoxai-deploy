@@ -1,0 +1,80 @@
+name: Deploy CCLDR to ccldr.net
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ccldr-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop A identity (Derek Francisco visible, no AI/security bleed)
+        run: |
+          # CCLDR is Loop A — Derek Francisco is allowed, cannabis content is core
+          # Must NOT reference OmniaGuard, Kiaros, SoulStack, CleanSwarm (Loop B bleed)
+          BLEED=$(grep -rn "OmniaGuard\|Kiaros\|SoulStack\|CleanSwarm" ccldr-site/ --include="*.html" | grep -v "legal-partners" | wc -l)
+          if [ "$BLEED" -gt 0 ]; then
+            echo "FAIL: Loop B brand bleed detected in CCLDR site"
+            grep -rn "OmniaGuard\|Kiaros\|SoulStack\|CleanSwarm" ccldr-site/ --include="*.html" | grep -v "legal-partners"
+            exit 1
+          fi
+          echo "PASS: Zero Loop B bleed"
+
+      - name: Clone ccldr repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/Ccldr-net.git /tmp/ccldr
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cd ccldr-site
+          # Copy all HTML files to deploy target
+          for f in *.html; do cp "$f" /tmp/ccldr/"$f" && echo "  copied $f"; done
+          # Copy assets
+          for ext in jpg jpeg png webp gif svg js css; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/ccldr/"$f" && echo "  copied $f"; done
+          done
+          # Copy membership subdirectory if it exists
+          if [ -d "membership" ]; then
+            mkdir -p /tmp/ccldr/membership
+            cp membership/* /tmp/ccldr/membership/ 2>/dev/null || true
+            echo "  copied membership/"
+          fi
+          echo "ccldr.net" > /tmp/ccldr/CNAME
+          echo "All CCLDR files copied"
+
+      - name: Commit and push to ccldr repo
+        run: |
+          cd /tmp/ccldr
+          git config user.email "deploy@ccldr.net"
+          git config user.name "CCLDR Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: ccldr.net
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/ccldr — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "================================================"
+          echo "  CCLDR DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/ccldr (main)"
+          echo "  CNAME: ccldr.net"
+          echo "  Loop: A (Derek Francisco — cannabis education)"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo ""
+          echo "  Check: https://ccldr.net"
+          echo "================================================"

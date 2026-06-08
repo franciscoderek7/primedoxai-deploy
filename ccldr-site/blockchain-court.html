@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockchain Court — The Francisco Protocol | CCLDR.NET</title>
+  <meta name="description" content="Decentralized cannabis case management. Every filing hashed on-chain. Every ruling immutable. File for $50. No government can erase it." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:        #0a0a0f;
+      --bg2:       #0f0f1a;
+      --bg3:       #141420;
+      --card:      #12121e;
+      --card2:     #1a1a2e;
+      --gold:      #D4AF37;
+      --gold-dim:  #a88a22;
+      --green:     #2E7D32;
+      --green-lt:  #4CAF50;
+      --blue:      #1A237E;
+      --blue-lt:   #3949AB;
+      --cyan:      #00D4FF;
+      --cyan-dim:  #0099bb;
+      --white:     #f0f0f8;
+      --muted:     #7a7a9a;
+      --border:    #1e1e32;
+      --border2:   #2a2a45;
+      --red:       #e53935;
+      --orange:    #F57C00;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 15, 0.97);
+      border-bottom: 1px solid var(--gold);
+      padding: 0 24px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--card2);
+    }
+
+    .nav-logo-placeholder {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: var(--card2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .nav-title-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .nav-title-sub {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links a {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      border-radius: 5px;
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover { color: var(--gold); background: rgba(212,175,55,0.08); }
+    .nav-links a.active { color: var(--cyan); background: rgba(0,212,255,0.08); border-bottom: 2px solid var(--cyan); border-radius: 5px 5px 0 0; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 25px;
+      height: 2px;
+      background: var(--green-lt);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-mobile {
+      display: none;
+      position: absolute;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: rgba(10,10,15,0.99);
+      border-bottom: 1px solid var(--border2);
+      padding: 16px;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 999;
+    }
+
+    .nav-mobile.open { display: flex; }
+
+    .nav-mobile a {
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-mobile a:hover { color: var(--gold); background: rgba(212,175,55,0.08); }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 80px 0; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(160deg, #0a0a0f 0%, #0d0d1f 40%, #0f1028 70%, #0a0a0f 100%);
+      padding: 100px 0 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 800px 400px at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 600px 300px at 80% 80%, rgba(26,35,126,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 30px;
+      padding: 7px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 8vw, 88px);
+      font-weight: 700;
+      line-height: 1.0;
+      color: var(--gold);
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+      text-shadow: 0 0 60px rgba(212,175,55,0.3);
+    }
+
+    .hero h1 span {
+      display: block;
+      font-size: clamp(18px, 3vw, 28px);
+      color: var(--cyan);
+      letter-spacing: 8px;
+      font-style: italic;
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(18px, 3vw, 26px);
+      font-style: italic;
+      color: rgba(240,240,248,0.85);
+      margin: 24px 0 16px;
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto 40px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .hero-sub strong {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #0a0a0f;
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #e8c54a;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--cyan);
+      padding: 13px 28px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      border: 1px solid rgba(0,212,255,0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0,212,255,0.08);
+      border-color: var(--cyan);
+      transform: translateY(-1px);
+    }
+
+    .hero-chain-visual {
+      margin-top: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .chain-link {
+      width: 40px;
+      height: 20px;
+      border: 2px solid var(--border2);
+      border-radius: 10px;
+      background: var(--card);
+      flex-shrink: 0;
+      transition: border-color 0.3s;
+    }
+
+    .chain-link.active { border-color: var(--cyan); background: rgba(0,212,255,0.08); }
+    .chain-connector {
+      width: 18px;
+      height: 2px;
+      background: var(--border2);
+      flex-shrink: 0;
+    }
+
+    /* ===== SECTION HEADERS ===== */
+    .section-header {
+      margin-bottom: 48px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* ===== LIVE DOCKET ===== */
+    #live-docket {
+      background: var(--bg2);
+      border-top: 1px solid var(--border2);
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 56px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 28px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s;
+    }
+
+    .stat-card:hover { border-color: var(--cyan); }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--cyan);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .recent-blocks-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(46,125,50,0.15);
+      border: 1px solid rgba(76,175,80,0.3);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green-lt);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green-lt);
+      animation: live-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes live-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .block-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .block-card {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 22px;
+      font-family: 'Inter', monospace;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .block-card:hover {
+      border-color: rgba(0,212,255,0.35);
+      box-shadow: 0 4px 20px rgba(0,212,255,0.07);
+    }
+
+    .block-card.genesis {
+      border-color: rgba(212,175,55,0.35);
+    }
+
+    .block-card.genesis:hover { border-color: var(--gold-dim); }
+
+    .block-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--cyan);
+    }
+
+    .block-card.genesis::before { background: var(--gold); }
+
+    .block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .block-number {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1px;
+      font-family: 'Inter', monospace;
+    }
+
+    .block-card.genesis .block-number { color: var(--gold); }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-filing { background: rgba(26,35,126,0.4); color: #7986CB; border: 1px solid rgba(121,134,203,0.3); }
+    .badge-ruling { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); }
+    .badge-amendment { background: rgba(46,125,50,0.2); color: var(--green-lt); border: 1px solid rgba(76,175,80,0.3); }
+    .badge-confirmed { background: rgba(76,175,80,0.1); color: #81C784; border: 1px solid rgba(76,175,80,0.25); font-size: 10px; }
+    .badge-genesis { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid rgba(212,175,55,0.4); font-size: 10px; }
+    .badge-active { background: rgba(0,212,255,0.1); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3); }
+    .badge-resolved { background: rgba(76,175,80,0.12); color: var(--green-lt); border: 1px solid rgba(76,175,80,0.25); }
+    .badge-opinions { background: rgba(212,175,55,0.12); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); }
+    .badge-urgent { background: rgba(229,57,53,0.15); color: #EF9A9A; border: 1px solid rgba(229,57,53,0.35); animation: urgent-flash 2s ease-in-out infinite; }
+
+    @keyframes urgent-flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .block-case-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 10px;
+      line-height: 1.4;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .block-meta {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 4px 14px;
+      font-size: 11px;
+    }
+
+    .block-meta-label { color: var(--muted); font-weight: 500; }
+    .block-meta-value { color: rgba(240,240,248,0.7); font-family: 'Inter', monospace; }
+    .block-meta-value.hash { color: var(--cyan); opacity: 0.8; }
+    .block-card.genesis .block-meta-value.hash { color: var(--gold); opacity: 0.8; }
+
+    /* ===== CASE EXPLORER ===== */
+    #case-explorer { background: var(--bg); }
+
+    .search-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 13px 16px 13px 42px;
+      color: var(--white);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+    }
+
+    .search-btn {
+      background: var(--cyan);
+      color: #0a0a0f;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 24px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { background: #33ddff; }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .filter-btn.active { background: rgba(0,212,255,0.1); border-color: var(--cyan); color: var(--cyan); }
+
+    .cases-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .case-card {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .case-card:hover { border-color: var(--border2); }
+
+    .case-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px 28px;
+      gap: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .case-card-header:hover { background: rgba(255,255,255,0.02); }
+
+    .case-number {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-family: 'Inter', monospace;
+    }
+
+    .case-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .case-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .case-meta-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .case-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .case-amount-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .case-expand-icon {
+      color: var(--muted);
+      font-size: 18px;
+      margin-top: 4px;
+      transition: transform 0.25s;
+    }
+
+    .case-card.expanded .case-expand-icon { transform: rotate(180deg); }
+
+    .case-docket {
+      display: none;
+      padding: 0 28px 28px;
+      border-top: 1px solid var(--border2);
+    }
+
+    .case-card.expanded .case-docket { display: block; }
+
+    .docket-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 40px;
+      margin: 20px 0 24px;
+    }
+
+    .docket-item-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .docket-item-value {
+      font-size: 14px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .docket-item-value.mono { font-family: 'Inter', monospace; color: var(--cyan); font-size: 13px; }
+
+    .docket-filings-list {
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .docket-filing-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border2);
+      font-size: 13px;
+    }
+
+    .docket-filing-row:last-child { border-bottom: none; }
+    .docket-filing-row:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+    .docket-filing-date {
+      color: var(--muted);
+      font-family: 'Inter', monospace;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .docket-filing-desc { flex: 1; color: var(--white); }
+    .docket-filing-hash { color: var(--cyan); font-family: 'Inter', monospace; font-size: 11px; opacity: 0.75; }
+
+    .docket-cta {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ===== FILE A CASE ===== */
+    #file-case {
+      background: var(--bg2);
+      border-top: 1px solid var(--border2);
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .file-case-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .file-case-pitch {
+      background: var(--card);
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 12px;
+      padding: 32px;
+      position: sticky;
+      top: 90px;
+    }
+
+    .pitch-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+
+    .pitch-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .pitch-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .pitch-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .pitch-features li strong { color: var(--white); }
+    .pitch-check { color: var(--green-lt); font-size: 16px; flex-shrink: 0; }
+
+    .pitch-price-block {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border2);
+      text-align: center;
+    }
+
+    .pitch-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 54px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .pitch-price-label {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .pitch-price-compare {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .pitch-price-compare s { opacity: 0.6; }
+
+    .filing-form-wrap {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 36px;
+    }
+
+    .form-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 7px;
+      padding: 13px 16px;
+      color: var(--white);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+    }
+
+    .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7a9a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    .form-select option { background: #1a1a2e; color: var(--white); }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #D4AF37, #a88a22);
+      color: #0a0a0f;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #e8c54a, #c09428);
+      box-shadow: 0 8px 24px rgba(212,175,55,0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .hash-animation {
+      display: none;
+      margin-top: 24px;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .hash-animation.show { display: block; }
+
+    .hash-animation-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .hash-display {
+      font-family: 'Inter', monospace;
+      font-size: 14px;
+      color: var(--cyan);
+      word-break: break-all;
+      min-height: 22px;
+    }
+
+    .progress-bar-wrap {
+      height: 4px;
+      background: var(--border2);
+      border-radius: 2px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--blue-lt));
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .filing-success {
+      display: none;
+      margin-top: 24px;
+      background: rgba(46,125,50,0.1);
+      border: 1px solid rgba(76,175,80,0.3);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .filing-success.show { display: block; }
+
+    .success-icon { font-size: 40px; margin-bottom: 12px; }
+
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--green-lt);
+      margin-bottom: 8px;
+    }
+
+    .success-ref {
+      font-family: 'Inter', monospace;
+      font-size: 15px;
+      color: var(--cyan);
+      font-weight: 600;
+      margin: 10px 0;
+    }
+
+    .success-detail { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .success-detail a { color: var(--gold); text-decoration: underline; }
+
+    /* ===== HASH VERIFIER ===== */
+    #hash-verifier { background: var(--bg); }
+
+    .verifier-wrap {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .verifier-input-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .verifier-result {
+      display: none;
+      padding: 24px;
+      border-radius: 10px;
+    }
+
+    .verifier-result.show { display: block; }
+    .verifier-result.found { background: rgba(0,212,255,0.07); border: 1px solid rgba(0,212,255,0.25); }
+    .verifier-result.not-found { background: rgba(229,57,53,0.07); border: 1px solid rgba(229,57,53,0.25); }
+
+    .verifier-result-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .verifier-result.found .verifier-result-title { color: var(--cyan); }
+    .verifier-result.not-found .verifier-result-title { color: #EF9A9A; }
+
+    .verifier-detail-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 20px;
+      font-size: 13px;
+    }
+
+    .vd-label { color: var(--muted); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: 11px; }
+    .vd-value { color: var(--white); }
+    .vd-value.mono { font-family: 'Inter', monospace; color: var(--cyan); }
+
+    .demo-hashes {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border2);
+    }
+
+    .demo-hashes-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .demo-hash-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .demo-hash-chip {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 5px;
+      padding: 6px 12px;
+      font-family: 'Inter', monospace;
+      font-size: 12px;
+      color: var(--cyan);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .demo-hash-chip:hover { border-color: var(--cyan); }
+
+    /* ===== SMART CONTRACT PHASE 2 ===== */
+    #smart-contracts {
+      background: var(--bg2);
+      border-top: 1px solid var(--border2);
+    }
+
+    .phase2-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .phase2-card {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0.7;
+      filter: saturate(0.6);
+    }
+
+    .phase2-lock {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 22px;
+      opacity: 0.6;
+    }
+
+    .phase2-icon {
+      font-size: 32px;
+      margin-bottom: 14px;
+    }
+
+    .phase2-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .phase2-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .phase2-tag {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 12px;
+      background: rgba(26,35,126,0.3);
+      border: 1px solid rgba(57,73,171,0.4);
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #7986CB;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border2);
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .block-grid { grid-template-columns: 1fr; }
+      .file-case-layout { grid-template-columns: 1fr; }
+      .file-case-pitch { position: static; }
+      .phase2-grid { grid-template-columns: 1fr; }
+      .docket-grid { grid-template-columns: 1fr; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      section { padding: 60px 0; }
+      .hero { padding: 70px 0 60px; }
+      .case-card-header { flex-direction: column; }
+      .case-meta-right { text-align: left; }
+      .verifier-input-row { flex-direction: column; }
+      .filing-form-wrap { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-placeholder">FP</div>
+    <div>
+      <div class="nav-title-main">CCLDR</div>
+      <div class="nav-title-sub">The Francisco Protocol</div>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Constitution</a>
+    <a href="blockchain-court.html" class="active">Blockchain Court</a>
+    <a href="justices.html">AI Justices</a>
+    <a href="jury.html">People's Jury</a>
+    <a href="global.html">Global Treaty</a>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile" id="navMobile">
+  <a href="index.html" onclick="closeMenu()">Constitution</a>
+  <a href="blockchain-court.html" onclick="closeMenu()">Blockchain Court</a>
+  <a href="justices.html" onclick="closeMenu()">AI Justices</a>
+  <a href="jury.html" onclick="closeMenu()">People's Jury</a>
+  <a href="global.html" onclick="closeMenu()">Global Treaty</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Decentralized Case Management System</div>
+
+    <h1>
+      <span>THE FRANCISCO PROTOCOL</span>
+      THE BLOCKCHAIN COURT
+    </h1>
+
+    <p class="hero-tagline">"Every Filing. Every Ruling. Immutable. Transparent. Forever."</p>
+
+    <p class="hero-sub">
+      File for <strong>$50</strong>. Verify instantly. Your case on-chain —
+      <strong>no government can erase it</strong>. Cannabis justice on a decentralized ledger,
+      accessible to 10,000+ members worldwide.
+    </p>
+
+    <div class="hero-cta-row">
+      <button class="btn-primary" onclick="document.getElementById('file-case').scrollIntoView({behavior:'smooth'})">
+        &#9654;&nbsp; File a Case — $50
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('case-explorer').scrollIntoView({behavior:'smooth'})">
+        &#128269;&nbsp; Browse Docket
+      </button>
+    </div>
+
+    <div class="hero-chain-visual" aria-hidden="true">
+      <div class="chain-link"></div><div class="chain-connector"></div>
+      <div class="chain-link active"></div><div class="chain-connector"></div>
+      <div class="chain-link active"></div><div class="chain-connector"></div>
+      <div class="chain-link active"></div><div class="chain-connector"></div>
+      <div class="chain-link"></div><div class="chain-connector"></div>
+      <div class="chain-link active"></div><div class="chain-connector"></div>
+      <div class="chain-link"></div><div class="chain-connector"></div>
+      <div class="chain-link active"></div><div class="chain-connector"></div>
+      <div class="chain-link active"></div><div class="chain-connector"></div>
+      <div class="chain-link"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LIVE DOCKET ===== -->
+<section id="live-docket">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Live Ledger Status</div>
+      <h2 class="section-title">Public Blockchain Docket</h2>
+      <p class="section-desc">All filings and rulings are hashed to the public ledger in real time. This record is permanent and tamper-proof.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-number" id="counter-cases" data-target="47">0</span>
+        <div class="stat-label">Total Cases Filed</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" id="counter-filings" data-target="183">0</span>
+        <div class="stat-label">Total Filings Hashed</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" id="counter-rulings" data-target="12">0</span>
+        <div class="stat-label">Total Rulings Published</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number" id="counter-members" data-target="847">0</span>
+        <div class="stat-label">Members</div>
+      </div>
+    </div>
+
+    <!-- Recent Blocks -->
+    <div class="recent-blocks-header">
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--gold);">Recent Blocks</h3>
+      <div class="live-badge"><div class="live-dot"></div> Live Ledger</div>
+    </div>
+
+    <div class="block-grid">
+
+      <!-- Block 47 -->
+      <div class="block-card">
+        <div class="block-header">
+          <div class="block-number">Block #FP-0047</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-filing">Filing</span>
+            <span class="badge badge-confirmed">&#10003; Confirmed</span>
+          </div>
+        </div>
+        <div class="block-case-name">Francisco v. Denby — Supplemental Claim</div>
+        <div class="block-meta">
+          <span class="block-meta-label">Hash</span>
+          <span class="block-meta-value hash">0x4f2c...a91e</span>
+          <span class="block-meta-label">Timestamp</span>
+          <span class="block-meta-value">2026-06-04 14:23:07 UTC</span>
+          <span class="block-meta-label">Prev Block</span>
+          <span class="block-meta-value">#FP-0046 &rarr; 0x8b3a...c44f</span>
+          <span class="block-meta-label">Status</span>
+          <span class="block-meta-value" style="color:var(--green-lt);">CONFIRMED — 6 validators</span>
+        </div>
+      </div>
+
+      <!-- Block 46 -->
+      <div class="block-card">
+        <div class="block-header">
+          <div class="block-number">Block #FP-0046</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-ruling">Ruling</span>
+            <span class="badge badge-confirmed">&#10003; Confirmed</span>
+          </div>
+        </div>
+        <div class="block-case-name">Matter FP-2026-003 Medical Access — Opinion Filed</div>
+        <div class="block-meta">
+          <span class="block-meta-label">Hash</span>
+          <span class="block-meta-value hash">0x8b3a...c44f</span>
+          <span class="block-meta-label">Timestamp</span>
+          <span class="block-meta-value">2026-06-03 09:15:44 UTC</span>
+          <span class="block-meta-label">Prev Block</span>
+          <span class="block-meta-value">#FP-0045 &rarr; 0x1d7f...e82b</span>
+          <span class="block-meta-label">Status</span>
+          <span class="block-meta-value" style="color:var(--green-lt);">CONFIRMED — 6 validators</span>
+        </div>
+      </div>
+
+      <!-- Block 45 (Genesis) -->
+      <div class="block-card genesis">
+        <div class="block-header">
+          <div class="block-number">Block #FP-0045</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-amendment">Amendment</span>
+            <span class="badge badge-genesis">&#11088; Genesis</span>
+          </div>
+        </div>
+        <div class="block-case-name">Constitution v1.0 Ratified</div>
+        <div class="block-meta">
+          <span class="block-meta-label">Hash</span>
+          <span class="block-meta-value hash">0x1d7f...e82b</span>
+          <span class="block-meta-label">Timestamp</span>
+          <span class="block-meta-value">2026-06-02 00:00:01 UTC</span>
+          <span class="block-meta-label">Prev Block</span>
+          <span class="block-meta-value">#FP-0044 &rarr; 0xa2e9...5c3d</span>
+          <span class="block-meta-label">Status</span>
+          <span class="block-meta-value" style="color:var(--gold);">GENESIS — Origin Record</span>
+        </div>
+      </div>
+
+      <!-- Block 44 -->
+      <div class="block-card">
+        <div class="block-header">
+          <div class="block-number">Block #FP-0044</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge badge-filing">Filing</span>
+            <span class="badge badge-confirmed">&#10003; Confirmed</span>
+          </div>
+        </div>
+        <div class="block-case-name">Francisco v. AG Canada — Charter Challenge</div>
+        <div class="block-meta">
+          <span class="block-meta-label">Hash</span>
+          <span class="block-meta-value hash">0xa2e9...5c3d</span>
+          <span class="block-meta-label">Timestamp</span>
+          <span class="block-meta-value">2026-06-01 11:44:22 UTC</span>
+          <span class="block-meta-label">Prev Block</span>
+          <span class="block-meta-value">#FP-0043 &rarr; 0x3c8d...f10a</span>
+          <span class="block-meta-label">Status</span>
+          <span class="block-meta-value" style="color:var(--green-lt);">CONFIRMED — 6 validators</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== CASE EXPLORER ===== -->
+<section id="case-explorer">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Public Ledger</div>
+      <h2 class="section-title">Case Explorer</h2>
+      <p class="section-desc">Search every case filed with the Francisco Protocol. All records are permanent and publicly verifiable.</p>
+    </div>
+
+    <div class="search-row">
+      <div class="search-input-wrap">
+        <span class="search-icon">&#128269;</span>
+        <input class="search-input" id="caseSearch" type="text" placeholder="Search by case name, case number, or hash..." oninput="searchCases(this.value)" />
+      </div>
+      <button class="search-btn" onclick="searchCases(document.getElementById('caseSearch').value)">Search</button>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterCases('ALL', this)">All</button>
+      <button class="filter-btn" onclick="filterCases('ACTIVE', this)">Active</button>
+      <button class="filter-btn" onclick="filterCases('RESOLVED', this)">Resolved</button>
+      <button class="filter-btn" onclick="filterCases('APPEAL', this)">On Appeal</button>
+    </div>
+
+    <!-- No results message -->
+    <div id="noResults" style="display:none; text-align:center; padding:48px; color:var(--muted);">
+      <div style="font-size:32px;margin-bottom:12px;">&#128270;</div>
+      <div style="font-size:16px;">No cases found matching your search.</div>
+      <div style="font-size:13px;margin-top:8px;">Try a different term, or <button onclick="clearSearch()" style="background:none;border:none;color:var(--cyan);cursor:pointer;font-size:13px;text-decoration:underline;">clear the search</button> to see all cases.</div>
+    </div>
+
+    <div class="cases-grid" id="casesGrid">
+
+      <!-- Case FP-2026-002 -->
+      <div class="case-card" id="case-002" data-status="ACTIVE" data-name="Francisco v. Attorney General of Canada FP-2026-002 charter">
+        <div class="case-card-header" onclick="expandCase('002')">
+          <div>
+            <div class="case-number">Case No. FP-2026-002</div>
+            <div class="case-name">Francisco v. Attorney General of Canada</div>
+            <div class="case-badges">
+              <span class="badge badge-active">Active</span>
+              <span class="badge badge-filing">Charter Challenge</span>
+              <span style="font-size:11px;color:var(--muted);">Filed: June 2026</span>
+            </div>
+          </div>
+          <div class="case-meta-right">
+            <div class="case-amount">$35,000,000</div>
+            <div class="case-amount-label">Claim Value</div>
+            <div class="case-expand-icon" id="icon-002">&#9660;</div>
+          </div>
+        </div>
+        <div class="case-docket" id="docket-002">
+          <div class="docket-grid">
+            <div>
+              <div class="docket-item-label">Claims</div>
+              <div class="docket-item-value">Charter ss. 7, 12, 15</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Status</div>
+              <div class="docket-item-value" style="color:var(--cyan);">Active — Under Investigation</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Filed</div>
+              <div class="docket-item-value">June 2026</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Jurisdiction</div>
+              <div class="docket-item-value">Federal — Canada</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Case Hash</div>
+              <div class="docket-item-value mono">0x4a1b2c3d...8e9f0a1b</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Last Updated</div>
+              <div class="docket-item-value">2026-06-01 — Block #FP-0044</div>
+            </div>
+          </div>
+          <div class="docket-item-label" style="margin-bottom:10px;">Docket — All Filings</div>
+          <div class="docket-filings-list">
+            <div class="docket-filing-row">
+              <span class="badge badge-filing">Filing</span>
+              <span class="docket-filing-date">2026-06-01</span>
+              <span class="docket-filing-desc">Initial Application — Charter Challenge s.7, s.12, s.15</span>
+              <span class="docket-filing-hash">0xa2e9...5c3d</span>
+            </div>
+            <div class="docket-filing-row">
+              <span class="badge badge-filing">Filing</span>
+              <span class="docket-filing-date">2026-06-03</span>
+              <span class="docket-filing-desc">Supporting Affidavits — Medical Records Package</span>
+              <span class="docket-filing-hash">0x7c4e...2a1f</span>
+            </div>
+            <div class="docket-filing-row">
+              <span class="badge badge-filing">Filing</span>
+              <span class="docket-filing-date">2026-06-04</span>
+              <span class="docket-filing-desc">Notice of Constitutional Question filed</span>
+              <span class="docket-filing-hash">0x3b9d...6f8c</span>
+            </div>
+          </div>
+          <div class="docket-cta">
+            <button class="btn-secondary" style="font-size:13px;padding:10px 20px;" onclick="window.location.href='mailto:info@ccldr.net?subject=Case FP-2026-002 Inquiry'">
+              Contact Re: This Case
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case FP-2026-001 -->
+      <div class="case-card" id="case-001" data-status="ACTIVE" data-name="Francisco v. Denby FP-2026-001 defamation extortion">
+        <div class="case-card-header" onclick="expandCase('001')">
+          <div>
+            <div class="case-number">Case No. FP-2026-001</div>
+            <div class="case-name">Francisco v. Denby</div>
+            <div class="case-badges">
+              <span class="badge badge-active">Active</span>
+              <span class="badge badge-urgent">&#9888; HEARING: June 17, 2026</span>
+              <span style="font-size:11px;color:var(--muted);">Filed: 2025</span>
+            </div>
+          </div>
+          <div class="case-meta-right">
+            <div class="case-amount">$3,300,000</div>
+            <div class="case-amount-label">Total Claim</div>
+            <div class="case-expand-icon" id="icon-001">&#9660;</div>
+          </div>
+        </div>
+        <div class="case-docket" id="docket-001">
+          <div class="docket-grid">
+            <div>
+              <div class="docket-item-label">Claims</div>
+              <div class="docket-item-value">Defamation, Extortion, Conversion, Conspiracy</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Status</div>
+              <div class="docket-item-value" style="color:#EF9A9A;">Active — Hearing June 17, 2026</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Default Judgment</div>
+              <div class="docket-item-value" style="color:var(--gold);">$1,000,000 (Obtained)</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Supplemental Claim</div>
+              <div class="docket-item-value" style="color:var(--gold);">$2,300,000 (Pending)</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Case Hash</div>
+              <div class="docket-item-value mono">0xf81a3c9d...4e2b7f05</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Last Updated</div>
+              <div class="docket-item-value">2026-06-04 — Block #FP-0047</div>
+            </div>
+          </div>
+          <div class="docket-item-label" style="margin-bottom:10px;">Docket — All Filings</div>
+          <div class="docket-filings-list">
+            <div class="docket-filing-row">
+              <span class="badge badge-filing">Filing</span>
+              <span class="docket-filing-date">2025-09-10</span>
+              <span class="docket-filing-desc">Initial Statement of Claim — Defamation, Extortion, Conversion, Conspiracy</span>
+              <span class="docket-filing-hash">0xd3a1...8e2c</span>
+            </div>
+            <div class="docket-filing-row">
+              <span class="badge badge-ruling">Ruling</span>
+              <span class="docket-filing-date">2025-12-01</span>
+              <span class="docket-filing-desc">Default Judgment Granted — $1,000,000</span>
+              <span class="docket-filing-hash">0x9c5f...1a4b</span>
+            </div>
+            <div class="docket-filing-row">
+              <span class="badge badge-filing">Filing</span>
+              <span class="docket-filing-date">2026-06-04</span>
+              <span class="docket-filing-desc">Supplemental Claim — $2,300,000 Additional Damages</span>
+              <span class="docket-filing-hash">0x4f2c...a91e</span>
+            </div>
+          </div>
+          <div class="docket-cta">
+            <button class="btn-secondary" style="font-size:13px;padding:10px 20px;" onclick="window.location.href='mailto:info@ccldr.net?subject=Case FP-2026-001 Inquiry'">
+              Contact Re: This Case
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case FP-2026-003 -->
+      <div class="case-card" id="case-003" data-status="RESOLVED" data-name="Medical Cannabis Access Standards FP-2026-003 AI court opinions">
+        <div class="case-card-header" onclick="expandCase('003')">
+          <div>
+            <div class="case-number">Case No. FP-2026-003</div>
+            <div class="case-name">Re: Medical Cannabis Access Standards</div>
+            <div class="case-badges">
+              <span class="badge badge-opinions">Opinions Filed — 5-2 Majority</span>
+              <span class="badge badge-ruling">AI Court Matter</span>
+              <span style="font-size:11px;color:var(--muted);">Filed: June 2026</span>
+            </div>
+          </div>
+          <div class="case-meta-right">
+            <div class="case-amount" style="font-size:18px;color:var(--muted);">Policy</div>
+            <div class="case-amount-label">Matter Type</div>
+            <div class="case-expand-icon" id="icon-003">&#9660;</div>
+          </div>
+        </div>
+        <div class="case-docket" id="docket-003">
+          <div class="docket-grid">
+            <div>
+              <div class="docket-item-label">Matter Type</div>
+              <div class="docket-item-value">AI Court Advisory Opinion</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Status</div>
+              <div class="docket-item-value" style="color:var(--gold);">Opinions Filed — 5-2 Majority</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Decision Block</div>
+              <div class="docket-item-value">Block #FP-0046</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Opinion Published</div>
+              <div class="docket-item-value">2026-06-03</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Case Hash</div>
+              <div class="docket-item-value mono">0x8b3a...c44f</div>
+            </div>
+            <div>
+              <div class="docket-item-label">Dissent</div>
+              <div class="docket-item-value">2 Justices — opinions attached</div>
+            </div>
+          </div>
+          <div class="docket-cta">
+            <a class="btn-secondary" href="justices.html" style="font-size:13px;padding:10px 20px;">
+              View Full Opinions &rarr; AI Justices
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FILE A CASE ===== -->
+<section id="file-case">
+  <div class="container">
+    <div class="file-case-layout">
+
+      <!-- Pitch sidebar -->
+      <div class="file-case-pitch">
+        <div class="pitch-icon">&#9878;</div>
+        <div class="pitch-title">File Your Cannabis Case On-Chain</div>
+        <ul class="pitch-features">
+          <li>
+            <span class="pitch-check">&#10003;</span>
+            <div><strong>Filing fee: $50</strong> — vs $300+ in traditional court systems</div>
+          </li>
+          <li>
+            <span class="pitch-check">&#10003;</span>
+            <div><strong>Permanent hash within 24 hours</strong> — your filing is on-chain forever</div>
+          </li>
+          <li>
+            <span class="pitch-check">&#10003;</span>
+            <div><strong>Accessible to 10,000+ member jury</strong> — global peer review</div>
+          </li>
+          <li>
+            <span class="pitch-check">&#10003;</span>
+            <div><strong>AI Justice review within 48 hours</strong> — constitutional analysis included</div>
+          </li>
+          <li>
+            <span class="pitch-check">&#10003;</span>
+            <div><strong>Government-proof record</strong> — no court can erase or suppress it</div>
+          </li>
+          <li>
+            <span class="pitch-check">&#10003;</span>
+            <div><strong>Cannabis-specific expertise</strong> — Charter challenges, medical access, wrongful termination</div>
+          </li>
+        </ul>
+        <div class="pitch-price-block">
+          <div class="pitch-price">$50</div>
+          <div class="pitch-price-label">Filing Fee</div>
+          <div class="pitch-price-compare">Traditional court: <s>$300–$600</s></div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="filing-form-wrap">
+        <div class="form-title">Submit Your Case for Hashing</div>
+
+        <div class="form-group">
+          <label class="form-label" for="caseName">Case Name</label>
+          <input class="form-input" id="caseName" type="text" placeholder="e.g. Plaintiff v. Respondent or Re: Matter Name" />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="caseType">Case Type</label>
+            <select class="form-select" id="caseType">
+              <option value="" disabled selected>Select case type...</option>
+              <option value="Charter Challenge">Charter Challenge</option>
+              <option value="Wrongful Termination">Wrongful Termination</option>
+              <option value="Medical Access Denial">Medical Access Denial</option>
+              <option value="Search & Seizure">Search &amp; Seizure</option>
+              <option value="Property Seizure">Property Seizure</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="jurisdiction">Jurisdiction</label>
+            <select class="form-select" id="jurisdiction">
+              <option value="" disabled selected>Select jurisdiction...</option>
+              <option value="Federal">Federal</option>
+              <option value="Ontario">Ontario</option>
+              <option value="British Columbia">British Columbia</option>
+              <option value="Alberta">Alberta</option>
+              <option value="Quebec">Quebec</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="caseDesc">Brief Description of Your Case</label>
+          <textarea class="form-textarea" id="caseDesc" placeholder="Describe what happened, what rights were violated, and what remedy you are seeking. All submissions are reviewed for constitutional merit before hashing."></textarea>
+        </div>
+
+        <div class="form-group" style="margin-bottom:28px;">
+          <label class="form-label" for="filerName">Your Name (or Organization)</label>
+          <input class="form-input" id="filerName" type="text" placeholder="Full legal name or organization name" />
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitFiling()">
+          &#9650;&nbsp; Submit for Hashing — $50 Filing Fee
+        </button>
+
+        <!-- Hash animation -->
+        <div class="hash-animation" id="hashAnimation">
+          <div class="hash-animation-label">Generating cryptographic hash...</div>
+          <div class="hash-display" id="hashDisplay">0x</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <!-- Success state -->
+        <div class="filing-success" id="filingSuccess">
+          <div class="success-icon">&#9989;</div>
+          <div class="success-title">Filing Submitted to Blockchain Queue</div>
+          <div class="success-ref" id="successRef">Reference: FP-2026-XXX</div>
+          <div class="success-detail">
+            Your case has been added to the blockchain queue. You will receive confirmation
+            and your permanent hash within 24 hours.<br /><br />
+            Questions? Contact us at
+            <a href="mailto:info@ccldr.net">info@ccldr.net</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HASH VERIFIER ===== -->
+<section id="hash-verifier">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Ledger Verification</div>
+      <h2 class="section-title">Verify a Filing Hash</h2>
+      <p class="section-desc">
+        Enter any filing hash to verify its authenticity against the public Francisco Protocol ledger.
+        Every confirmed filing returns its complete case record.
+      </p>
+    </div>
+
+    <div class="verifier-wrap">
+      <div class="verifier-input-row">
+        <div class="search-input-wrap" style="flex:1;">
+          <span class="search-icon">&#128279;</span>
+          <input class="search-input" id="hashInput" type="text" placeholder="0x4f2c...a91e — enter full or partial hash" />
+        </div>
+        <button class="search-btn" onclick="verifyHash()">Verify</button>
+      </div>
+
+      <div class="verifier-result" id="verifierResult">
+        <div class="verifier-result-title" id="verifierResultTitle"></div>
+        <div class="verifier-detail-grid" id="verifierResultBody"></div>
+      </div>
+
+      <div class="demo-hashes">
+        <div class="demo-hashes-label">Try a demo hash from the live ledger</div>
+        <div class="demo-hash-chips">
+          <div class="demo-hash-chip" onclick="prefillHash('0x4f2ca91e')">0x4f2c...a91e</div>
+          <div class="demo-hash-chip" onclick="prefillHash('0x8b3ac44f')">0x8b3a...c44f</div>
+          <div class="demo-hash-chip" onclick="prefillHash('0x1d7fe82b')">0x1d7f...e82b</div>
+          <div class="demo-hash-chip" onclick="prefillHash('0xa2e95c3d')">0xa2e9...5c3d</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SMART CONTRACT PHASE 2 ===== -->
+<section id="smart-contracts">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Roadmap</div>
+      <h2 class="section-title">Coming in Phase 2 — Smart Contract Execution</h2>
+      <p class="section-desc">
+        The Francisco Protocol is building full smart contract infrastructure for automated
+        enforcement, settlement, and cross-border treaty execution.
+      </p>
+    </div>
+
+    <div class="phase2-grid">
+
+      <div class="phase2-card">
+        <div class="phase2-lock">&#128274;</div>
+        <div class="phase2-icon">&#129534;</div>
+        <div class="phase2-title">Settlement Execution on Confirmation</div>
+        <div class="phase2-desc">
+          When a ruling is confirmed by 6 validators, smart contracts automatically
+          trigger settlement proceedings — no human intermediary required.
+          Funds held in escrow until both parties confirm receipt.
+        </div>
+        <div class="phase2-tag">&#128274;&nbsp; Phase 2 — Locked</div>
+      </div>
+
+      <div class="phase2-card">
+        <div class="phase2-lock">&#128274;</div>
+        <div class="phase2-icon">&#128176;</div>
+        <div class="phase2-title">Automatic Fee Distribution</div>
+        <div class="phase2-desc">
+          Filing fees, justice compensation, jury stipends, and platform maintenance
+          costs distributed automatically on-chain. Full transparency — every
+          distribution publicly verifiable on the ledger.
+        </div>
+        <div class="phase2-tag">&#128274;&nbsp; Phase 2 — Locked</div>
+      </div>
+
+      <div class="phase2-card">
+        <div class="phase2-lock">&#128274;</div>
+        <div class="phase2-icon">&#9889;</div>
+        <div class="phase2-title">Judgment Enforcement Triggers</div>
+        <div class="phase2-desc">
+          Confirmed judgments automatically trigger enforcement actions — liens,
+          public registry entries, and cross-platform reputation flags. Judgment
+          debtor compliance tracked on-chain indefinitely.
+        </div>
+        <div class="phase2-tag">&#128274;&nbsp; Phase 2 — Locked</div>
+      </div>
+
+      <div class="phase2-card">
+        <div class="phase2-lock">&#128274;</div>
+        <div class="phase2-icon">&#127757;</div>
+        <div class="phase2-title">Cross-Border Treaty Enforcement</div>
+        <div class="phase2-desc">
+          Francisco Protocol rulings recognized by signatory jurisdictions worldwide.
+          Smart contracts enforce cross-border judgments automatically, bypassing
+          slow extradition and mutual recognition processes.
+        </div>
+        <div class="phase2-tag">&#128274;&nbsp; Phase 2 — Locked</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-brand">THE FRANCISCO PROTOCOL</div>
+    <div class="footer-links">
+      <a href="index.html">Constitution</a>
+      <a href="blockchain-court.html">Blockchain Court</a>
+      <a href="justices.html">AI Justices</a>
+      <a href="jury.html">People's Jury</a>
+      <a href="global.html">Global Treaty</a>
+      <a href="mailto:info@ccldr.net">Contact</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 The Francisco Protocol &nbsp;|&nbsp; CCLDR.NET &nbsp;|&nbsp; Francisco Holdings Inc.
+    </div>
+  </div>
+</footer>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  /* ───────────────────────────────
+     MOBILE NAV
+  ─────────────────────────────── */
+  function toggleMenu() {
+    const btn = document.getElementById('hamburger');
+    const menu = document.getElementById('navMobile');
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  }
+
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('navMobile').classList.remove('open');
+  }
+
+  /* ───────────────────────────────
+     ANIMATED COUNTERS
+  ─────────────────────────────── */
+  function animateCounter(el, target) {
+    const duration = 1800;
+    const start = performance.now();
+    const startVal = 0;
+
+    function step(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * (target - startVal) + startVal);
+      el.textContent = current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString();
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  // Observe when stats row enters viewport
+  const counterEls = document.querySelectorAll('.stat-number[data-target]');
+  let countersStarted = false;
+
+  const counterObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !countersStarted) {
+        countersStarted = true;
+        counterEls.forEach(function(el) {
+          animateCounter(el, parseInt(el.getAttribute('data-target'), 10));
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  if (counterEls.length > 0) {
+    counterObserver.observe(counterEls[0].closest('.stats-row') || counterEls[0]);
+  }
+
+  /* ───────────────────────────────
+     CASE EXPLORER
+  ─────────────────────────────── */
+  var currentFilter = 'ALL';
+
+  function expandCase(id) {
+    var card = document.getElementById('case-' + id);
+    var icon = document.getElementById('icon-' + id);
+    var isExpanded = card.classList.contains('expanded');
+    // Close all
+    document.querySelectorAll('.case-card').forEach(function(c) {
+      c.classList.remove('expanded');
+    });
+    document.querySelectorAll('.case-expand-icon').forEach(function(i) {
+      i.style.transform = '';
+    });
+    // Toggle target
+    if (!isExpanded) {
+      card.classList.add('expanded');
+      if (icon) icon.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  function searchCases(query) {
+    query = (query || '').toLowerCase().trim();
+    var cards = document.querySelectorAll('.case-card');
+    var anyVisible = false;
+
+    cards.forEach(function(card) {
+      var nameData = (card.getAttribute('data-name') || '').toLowerCase();
+      var status = (card.getAttribute('data-status') || '').toUpperCase();
+      var matchesQuery = !query || nameData.indexOf(query) !== -1;
+      var matchesFilter = currentFilter === 'ALL' || status === currentFilter;
+
+      if (matchesQuery && matchesFilter) {
+        card.style.display = '';
+        anyVisible = true;
+      } else {
+        card.style.display = 'none';
+        card.classList.remove('expanded');
+      }
+    });
+
+    document.getElementById('noResults').style.display = anyVisible ? 'none' : 'block';
+  }
+
+  function filterCases(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    searchCases(document.getElementById('caseSearch').value);
+  }
+
+  function clearSearch() {
+    document.getElementById('caseSearch').value = '';
+    searchCases('');
+  }
+
+  /* ───────────────────────────────
+     FILING FORM — FAKE HASH GENERATION
+  ─────────────────────────────── */
+  var hashChars = '0123456789abcdef';
+
+  function randomHexChar() {
+    return hashChars[Math.floor(Math.random() * hashChars.length)];
+  }
+
+  function randomRefNum() {
+    return Math.floor(Math.random() * 900) + 100;
+  }
+
+  function submitFiling() {
+    var caseName = document.getElementById('caseName').value.trim();
+    var caseType = document.getElementById('caseType').value;
+    var jurisdiction = document.getElementById('jurisdiction').value;
+    var caseDesc = document.getElementById('caseDesc').value.trim();
+    var filerName = document.getElementById('filerName').value.trim();
+
+    // Basic validation
+    if (!caseName || !caseType || !jurisdiction || !caseDesc || !filerName) {
+      alert('Please fill in all fields before submitting.');
+      return;
+    }
+
+    var btn = document.getElementById('submitBtn');
+    var hashAnim = document.getElementById('hashAnimation');
+    var hashDisplay = document.getElementById('hashDisplay');
+    var progressFill = document.getElementById('progressFill');
+    var successEl = document.getElementById('filingSuccess');
+    var successRef = document.getElementById('successRef');
+
+    // Disable button
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+
+    // Show hash animation
+    hashAnim.classList.add('show');
+    successEl.classList.remove('show');
+
+    // Build hash character by character
+    var fullHash = '0x';
+    for (var i = 0; i < 62; i++) {
+      fullHash += randomHexChar();
+    }
+
+    var charIndex = 2;
+    var displayedHash = '0x';
+    var totalChars = fullHash.length;
+
+    function addChar() {
+      if (charIndex >= totalChars) {
+        // Done animating
+        setTimeout(function() {
+          hashAnim.classList.remove('show');
+          successEl.classList.add('show');
+          successRef.textContent = 'Reference: FP-2026-' + randomRefNum();
+          btn.textContent = 'Case Submitted';
+        }, 600);
+        return;
+      }
+
+      // Add 1–3 chars at a time for speed variation
+      var chunkSize = Math.floor(Math.random() * 3) + 1;
+      var chunk = fullHash.slice(charIndex, charIndex + chunkSize);
+      displayedHash += chunk;
+      charIndex += chunkSize;
+
+      // Add some noise (random replacements for visual effect)
+      var noiseHash = displayedHash;
+      var remaining = totalChars - charIndex;
+      for (var n = 0; n < Math.min(remaining, 8); n++) {
+        noiseHash += randomHexChar();
+      }
+      hashDisplay.textContent = noiseHash;
+
+      // Update progress bar
+      var pct = (charIndex / totalChars) * 100;
+      progressFill.style.width = pct + '%';
+
+      var delay = 18 + Math.random() * 30;
+      setTimeout(addChar, delay);
+    }
+
+    addChar();
+  }
+
+  /* ───────────────────────────────
+     HASH VERIFIER
+  ─────────────────────────────── */
+  var demoHashes = {
+    '0x4f2ca91e': {
+      block: '#FP-0047',
+      type: 'Filing',
+      case: 'Francisco v. Denby — Supplemental Claim',
+      caseNumber: 'FP-2026-001',
+      timestamp: '2026-06-04 14:23:07 UTC',
+      status: 'CONFIRMED',
+      validators: '6 of 6'
+    },
+    '0x8b3ac44f': {
+      block: '#FP-0046',
+      type: 'Ruling',
+      case: 'Matter FP-2026-003 Medical Access — Opinion Filed',
+      caseNumber: 'FP-2026-003',
+      timestamp: '2026-06-03 09:15:44 UTC',
+      status: 'CONFIRMED',
+      validators: '6 of 6'
+    },
+    '0x1d7fe82b': {
+      block: '#FP-0045',
+      type: 'Amendment',
+      case: 'Constitution v1.0 Ratified',
+      caseNumber: 'GENESIS',
+      timestamp: '2026-06-02 00:00:01 UTC',
+      status: 'GENESIS',
+      validators: '6 of 6'
+    },
+    '0xa2e95c3d': {
+      block: '#FP-0044',
+      type: 'Filing',
+      case: 'Francisco v. AG Canada — Charter Challenge',
+      caseNumber: 'FP-2026-002',
+      timestamp: '2026-06-01 11:44:22 UTC',
+      status: 'CONFIRMED',
+      validators: '6 of 6'
+    }
+  };
+
+  function prefillHash(hash) {
+    document.getElementById('hashInput').value = hash;
+    verifyHash();
+  }
+
+  function verifyHash() {
+    var input = document.getElementById('hashInput').value.trim().toLowerCase().replace(/\s/g, '');
+    var resultEl = document.getElementById('verifierResult');
+    var titleEl = document.getElementById('verifierResultTitle');
+    var bodyEl = document.getElementById('verifierResultBody');
+
+    if (!input) {
+      resultEl.className = 'verifier-result';
+      return;
+    }
+
+    // Normalize — strip non-hex chars for lookup
+    var normalized = input.replace(/[^0-9a-fx]/g, '');
+    var found = null;
+
+    for (var key in demoHashes) {
+      // Match if the normalized input is a substring of the key (for truncated hashes)
+      var normalizedKey = key.replace(/\./g, '');
+      if (normalizedKey.indexOf(normalized) !== -1 || normalized.indexOf(normalizedKey.slice(0, normalized.length)) !== -1) {
+        found = demoHashes[key];
+        found._hash = key;
+        break;
+      }
+    }
+
+    if (found) {
+      resultEl.className = 'verifier-result found show';
+      titleEl.textContent = '✓ Hash Verified — Record Found';
+      bodyEl.innerHTML =
+        '<span class="vd-label">Hash</span><span class="vd-value mono">' + found._hash + '</span>' +
+        '<span class="vd-label">Block</span><span class="vd-value">' + found.block + '</span>' +
+        '<span class="vd-label">Type</span><span class="vd-value">' + found.type + '</span>' +
+        '<span class="vd-label">Case</span><span class="vd-value">' + found.case + '</span>' +
+        '<span class="vd-label">Case No.</span><span class="vd-value">' + found.caseNumber + '</span>' +
+        '<span class="vd-label">Timestamp</span><span class="vd-value">' + found.timestamp + '</span>' +
+        '<span class="vd-label">Status</span><span class="vd-value" style="color:var(--green-lt);">' + found.status + '</span>' +
+        '<span class="vd-label">Validators</span><span class="vd-value">' + found.validators + '</span>';
+    } else {
+      resultEl.className = 'verifier-result not-found show';
+      titleEl.textContent = '✗ Hash Not Found in Public Ledger';
+      bodyEl.innerHTML =
+        '<span class="vd-label">Queried Hash</span><span class="vd-value mono">' + input + '</span>' +
+        '<span class="vd-label">Result</span><span class="vd-value" style="color:#EF9A9A;">No matching record found in the Francisco Protocol public ledger.</span>' +
+        '<span class="vd-label">Note</span><span class="vd-value">Recently submitted cases may take up to 24 hours to appear. Contact info@ccldr.net if you believe this is an error.</span>';
+    }
+  }
+
+  // Allow Enter key in hash input
+  document.getElementById('hashInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') verifyHash();
+  });
+
+</script>
+</body>
+</html>

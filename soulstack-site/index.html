@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoulStack.ai — Upload Your Consciousness</title>
+<meta name="description" content="AI clone creation platform. Upload your consciousness. Deploy your digital twin. Run your empire 24/7 — without you. A Francisco Holdings Inc. Company.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--black:#000000;--deep:#050508;--panel:#0a0a12;--cyan:#00D4FF;--red:#CC0000;--white:#F4F8FF;--muted:#7a8aaa;--border:rgba(0,212,255,0.1);--gold:#D4AF37}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+
+/* NEURAL NETWORK BG */
+.neural-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.neural-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,212,255,.04) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(204,0,0,.04) 0%,transparent 60%),radial-gradient(ellipse at 50% 90%,rgba(0,212,255,.03) 0%,transparent 50%)}
+.neural-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px);background-size:60px 60px;animation:gridpulse 8s ease-in-out infinite alternate}
+@keyframes gridpulse{from{opacity:.4}to{opacity:1}}
+.neural-nodes{position:absolute;inset:0}
+.node{position:absolute;border-radius:50%;animation:npulse 4s ease-in-out infinite}
+@keyframes npulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:1}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand-mark{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--cyan) 0%,rgba(0,212,255,.4) 100%);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px;color:#000;letter-spacing:1px;font-weight:900;position:relative;overflow:hidden}
+.brand-mark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(204,0,0,.4) 100%)}
+.brand-name{font-size:18px;font-weight:700;color:var(--white);letter-spacing:.5px}
+.brand-name span{color:var(--cyan)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(244,248,255,.6);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;letter-spacing:.3px}
+.nav-links a:hover{color:var(--cyan)}
+.nav-right{display:flex;gap:12px;align-items:center}
+.nav-waitlist{color:var(--muted);font-size:13px;text-decoration:none;transition:color .2s}
+.nav-waitlist:hover{color:var(--white)}
+.nav-cta{background:var(--cyan);color:#000;padding:10px 22px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-decoration:none;text-transform:uppercase;transition:all .2s}
+.nav-cta:hover{background:#00AACC;transform:translateY(-1px)}
+.hamburger{display:none;background:none;border:none;color:var(--white);font-size:24px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;padding:16px 24px;background:rgba(0,0,0,.98);border-top:1px solid var(--border)}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:14px 0;text-decoration:none;border-bottom:1px solid var(--border);font-size:16px}
+.nm-cta{background:var(--cyan)!important;color:#000!important;border:none!important;text-align:center;border-radius:4px;margin-top:12px;font-weight:700;padding:14px!important}
+@media(max-width:900px){.nav-links,.nav-right{display:none}.hamburger{display:block}.nav-inner{padding:0 24px}}
+
+/* HERO */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 80px 80px;text-align:center}
+.hero-inner{max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(204,0,0,.1);border:1px solid rgba(204,0,0,.3);border-radius:20px;padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#ff4444;margin-bottom:32px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#ff4444;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:20px}
+h1.hero-title{font-family:'Playfair Display',serif;font-size:clamp(52px,8vw,96px);font-weight:900;line-height:1.0;color:var(--white);margin-bottom:20px}
+h1.hero-title .t-cyan{color:var(--cyan);font-style:italic}
+h1.hero-title .t-red{color:var(--red)}
+.hero-sub{font-size:18px;color:var(--muted);line-height:1.7;max-width:620px;margin:0 auto 40px}
+.hero-sub strong{color:var(--white)}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
+.btn-primary{background:var(--cyan);color:#000;padding:18px 40px;border-radius:4px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.btn-primary:hover{background:#00AACC;transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--white);padding:17px 40px;border-radius:4px;text-decoration:none;font-weight:600;font-size:14px;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(244,248,255,.2);transition:border-color .2s}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn-red{background:var(--red);color:#fff;padding:17px 40px;border-radius:4px;text-decoration:none;font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;transition:background .2s}
+.btn-red:hover{background:#aa0000}
+
+/* DEREK PROOF */
+.derek-proof{display:inline-flex;align-items:center;gap:16px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:16px 28px}
+.dp-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--red));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;flex-shrink:0}
+.dp-text{text-align:left}
+.dp-name{font-size:14px;font-weight:700;color:var(--white)}
+.dp-sub{font-size:11px;color:var(--cyan);letter-spacing:1px;margin-top:2px}
+.dp-quote{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.4;font-style:italic}
+@media(max-width:768px){.hero{padding:100px 24px 60px}.derek-proof{flex-direction:column;text-align:center}.dp-text{text-align:center}}
+
+/* SCROLL INDICATOR */
+.scroll-ind{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:bobdown 2s ease-in-out infinite}
+.scroll-ind span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.scroll-ind::after{content:'↓';font-size:18px;color:var(--cyan)}
+@keyframes bobdown{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* VISION STRIP */
+.vision-strip{position:relative;z-index:1;background:rgba(0,212,255,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 80px}
+.vision-inner{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
+.vs-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--cyan);line-height:1;text-shadow:0 0 30px rgba(0,212,255,.4)}
+.vs-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+@media(max-width:900px){.vision-strip{padding:40px 24px}.vision-inner{grid-template-columns:repeat(2,1fr)}}
+
+/* FEATURES */
+.features{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:100px 80px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+.section-title em{color:var(--cyan);font-style:italic}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:540px;margin-bottom:60px}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
+.feat{background:var(--panel);border:1px solid var(--border);padding:44px;position:relative;overflow:hidden;transition:border-color .3s}
+.feat:hover{border-color:rgba(0,212,255,.3)}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0;transition:opacity .3s}
+.feat:hover::before{opacity:1}
+.feat-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(0,212,255,.08);position:absolute;top:20px;right:24px;line-height:1}
+.feat-icon{font-size:36px;margin-bottom:20px}
+.feat-title{font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.7}
+.feat-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ftag{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.15);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1px;text-transform:uppercase}
+@media(max-width:900px){.features{padding:60px 24px}.features-grid{grid-template-columns:1fr}}
+
+/* HOW IT WORKS TEASER */
+.process{position:relative;z-index:1;background:linear-gradient(180deg,transparent,rgba(0,212,255,.03),transparent);border-top:1px solid var(--border);padding:100px 80px}
+.process-inner{max-width:1300px;margin:0 auto}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px}
+.step{padding:32px;border-right:1px solid var(--border);position:relative}
+.step:last-child{border-right:none}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:72px;color:rgba(0,212,255,.08);line-height:1;margin-bottom:16px}
+.step-icon{font-size:28px;margin-bottom:16px}
+.step-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.step-connector{position:absolute;top:50%;right:-1px;width:20px;height:2px;background:var(--cyan);display:none}
+@media(max-width:900px){.process{padding:60px 24px}.steps{grid-template-columns:1fr 1fr}.step{border-right:none;border-bottom:1px solid var(--border)}.step:nth-child(odd){border-right:1px solid var(--border)}}
+@media(max-width:600px){.steps{grid-template-columns:1fr}.step{border-right:none}}
+
+/* DEREK STORY */
+.derek-section{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:100px 80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.derek-visual{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:48px;text-align:center;position:relative;overflow:hidden}
+.derek-visual::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%)}
+.derek-avatar-ring{width:140px;height:140px;border-radius:50%;border:2px solid rgba(0,212,255,.3);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;position:relative;animation:rotate 20s linear infinite}
+.derek-avatar-ring::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed rgba(0,212,255,.15)}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.derek-initials{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--cyan) 0%,rgba(0,212,255,.3) 50%,var(--red) 100%);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:42px;color:#fff;animation:rotate reverse 20s linear infinite}
+.derek-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--cyan);margin-bottom:6px}
+.derek-role{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.derek-quote{font-size:14px;color:rgba(244,248,255,.75);line-height:1.7;font-style:italic;border-left:2px solid var(--cyan);padding-left:16px;text-align:left}
+.derek-content h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,44px);font-weight:700;line-height:1.15;margin-bottom:20px}
+.derek-content p{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:20px}
+.derek-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+.dstat{background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:8px;padding:16px}
+.dstat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--cyan);line-height:1}
+.dstat-label{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:4px}
+@media(max-width:900px){.derek-section{grid-template-columns:1fr;gap:48px;padding:60px 24px}}
+
+/* TESTIMONIALS */
+.testi{position:relative;z-index:1;background:rgba(0,212,255,.02);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px}
+.testi-inner{max-width:1300px;margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.tcard{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:32px}
+.tcard-q{font-size:40px;color:var(--cyan);opacity:.25;line-height:1;margin-bottom:12px;font-family:Georgia,serif}
+.tcard-text{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:20px}
+.tcard-author{font-size:13px;color:var(--white);font-weight:700}
+.tcard-role{font-size:11px;color:var(--cyan);margin-top:2px;letter-spacing:1px}
+@media(max-width:900px){.testi{padding:60px 24px}.testi-grid{grid-template-columns:1fr}}
+
+/* WAITLIST */
+.waitlist{position:relative;z-index:1;padding:100px 80px;text-align:center}
+.waitlist-inner{max-width:680px;margin:0 auto}
+.waitlist-inner h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.1;margin-bottom:16px}
+.waitlist-inner p{font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+.waitlist-form{display:flex;gap:12px;max-width:520px;margin:0 auto}
+.waitlist-input{flex:1;background:rgba(255,255,255,.07);border:1px solid var(--border);padding:15px 20px;border-radius:4px;font-size:14px;color:var(--white);font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.waitlist-input:focus{border-color:var(--cyan)}
+.waitlist-input::placeholder{color:var(--muted)}
+.waitlist-btn{background:var(--cyan);color:#000;border:none;padding:15px 28px;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:background .2s}
+.waitlist-btn:hover{background:#00AACC}
+.waitlist-note{font-size:12px;color:var(--muted);margin-top:16px}
+@media(max-width:600px){.waitlist{padding:60px 24px}.waitlist-form{flex-direction:column}}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:var(--deep);border-top:1px solid var(--border);padding:60px 80px 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;max-width:1300px;margin:0 auto 40px}
+.fh{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
+.fa{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
+.fa:hover{color:var(--white)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:rgba(244,248,255,.2);max-width:1300px;margin:0 auto}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}footer{padding:40px 24px 24px}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+</style>
+</head>
+<body>
+
+<div class="neural-bg">
+  <div class="neural-grid"></div>
+  <div class="neural-nodes">
+    <div class="node" style="width:4px;height:4px;background:var(--cyan);top:15%;left:20%;animation-delay:0s;box-shadow:0 0 8px var(--cyan)"></div>
+    <div class="node" style="width:3px;height:3px;background:var(--red);top:35%;left:75%;animation-delay:-1.5s;box-shadow:0 0 6px var(--red)"></div>
+    <div class="node" style="width:5px;height:5px;background:var(--cyan);top:60%;left:40%;animation-delay:-3s;box-shadow:0 0 10px var(--cyan)"></div>
+    <div class="node" style="width:3px;height:3px;background:var(--cyan);top:80%;left:85%;animation-delay:-0.8s;box-shadow:0 0 6px var(--cyan)"></div>
+    <div class="node" style="width:4px;height:4px;background:var(--red);top:25%;left:55%;animation-delay:-2s;box-shadow:0 0 8px var(--red)"></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="brand-mark">SS</div>
+      <span class="brand-name">Soul<span>Stack</span>.ai</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="demo.html">Demo</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="contact.html" class="nav-waitlist">Join Waitlist</a>
+      <a href="pricing.html" class="nav-cta">Upload Now</a>
+    </div>
+    <button class="hamburger" onclick="document.getElementById('nm').classList.toggle('open')">☰</button>
+  </div>
+  <div class="nav-mobile" id="nm">
+    <a href="how-it-works.html">How It Works</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="demo.html">Demo</a>
+    <a href="contact.html">Contact</a>
+    <a href="pricing.html" class="nm-cta">Upload Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🔴 Live Upload — Slot 1 of 100</div>
+    <div class="hero-eyebrow">SoulStack.ai — Digital Consciousness Platform</div>
+    <h1 class="hero-title">Upload Your<br><span class="t-cyan">Consciousness.</span><br>Deploy Your<br><span class="t-red">Empire.</span></h1>
+    <p class="hero-sub">You built something great. Now <strong>clone yourself</strong> — your decisions, your voice, your vision — and let your digital twin run it 24/7. <strong>You sleep. It doesn't.</strong></p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn-primary">Join the Waitlist</a>
+      <a href="how-it-works.html" class="btn-outline">See How It Works</a>
+    </div>
+    <div class="derek-proof">
+      <div class="dp-avatar">DF</div>
+      <div class="dp-text">
+        <div class="dp-name">Derek Francisco</div>
+        <div class="dp-sub">CEO, Francisco Holdings Inc. — First Upload</div>
+        <div class="dp-quote">"I cloned myself. Now my empire runs 24/7 while I sleep."</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-ind"><span>Scroll</span></div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="vision-strip">
+  <div class="vision-inner">
+    <div><div class="vs-num">46</div><div class="vs-label">Companies Automated</div></div>
+    <div><div class="vs-num">24/7</div><div class="vs-label">Continuous Operation</div></div>
+    <div><div class="vs-num">100x</div><div class="vs-label">Productivity Multiplier</div></div>
+    <div><div class="vs-num">∞</div><div class="vs-label">Legacy Preserved</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="section-label">Core Capabilities</div>
+  <h2 class="section-title">Four Layers of <em>You</em></h2>
+  <p class="section-sub">SoulStack captures more than your schedule. It captures your judgment, your style, your instincts — and deploys them at scale.</p>
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-num">01</div>
+      <div class="feat-icon">🧠</div>
+      <div class="feat-title">Consciousness Upload</div>
+      <div class="feat-desc">Deep interview sessions map your personality, decision patterns, communication style, values, and domain expertise. Not a chatbot. Not a script. A real cognitive mirror that thinks like you, speaks like you, decides like you.</div>
+      <div class="feat-tags"><span class="ftag">Personality Capture</span><span class="ftag">Voice Replication</span><span class="ftag">Decision Mapping</span></div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">02</div>
+      <div class="feat-icon">👤</div>
+      <div class="feat-title">Digital Twin Deployment</div>
+      <div class="feat-desc">Your clone goes live — managing email, monitoring your business, handling routine decisions, and engaging stakeholders exactly as you would. It operates 24/7 across all your ventures simultaneously. No fatigue. No sick days. No ego.</div>
+      <div class="feat-tags"><span class="ftag">Email Management</span><span class="ftag">Business Oversight</span><span class="ftag">Social Presence</span></div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">03</div>
+      <div class="feat-icon">🏛️</div>
+      <div class="feat-title">Empire Amplification</div>
+      <div class="feat-desc">One human → multiple parallel agents. Each subsidiary, each brand, each relationship gets a version of you that never drops the ball. Your 46-company empire runs in concert — without you being in 46 meetings a day.</div>
+      <div class="feat-tags"><span class="ftag">Parallel Execution</span><span class="ftag">Multi-Brand</span><span class="ftag">Scalable</span></div>
+    </div>
+    <div class="feat">
+      <div class="feat-num">04</div>
+      <div class="feat-icon">♾️</div>
+      <div class="feat-title">Legacy Stack</div>
+      <div class="feat-desc">Your knowledge, your vision, your judgment — preserved forever. Future generations of your family access not just your wealth, but your wisdom. Post-human continuity. The closest thing to digital immortality that exists today.</div>
+      <div class="feat-tags"><span class="ftag">Knowledge Vault</span><span class="ftag">Family Access</span><span class="ftag">Digital Immortality</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS (teaser) -->
+<div class="process">
+  <div class="process-inner">
+    <div class="section-label">The Process</div>
+    <h2 class="section-title">Upload in <em>4 Sessions.</em><br>Deploy in Days.</h2>
+    <p class="section-sub">The SoulStack protocol is built around depth, not speed. Four focused sessions across two weeks creates a digital twin that passes the closest scrutiny.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">🎙️</div>
+        <div class="step-title">The Interview</div>
+        <div class="step-desc">8-hour deep interview. Values, decisions, stories, failures, philosophy. Our AI extracts the patterns you don't even know you have.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">⚙️</div>
+        <div class="step-title">Training</div>
+        <div class="step-desc">Your clone is fine-tuned on your specific language, judgment calls, relationships, and domain expertise. Security layer: OmniaGuard.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">🔬</div>
+        <div class="step-title">Calibration</div>
+        <div class="step-desc">You interact with your clone. Correct it. Refine it. Until it passes your own recognition threshold — not ours.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon">🚀</div>
+        <div class="step-title">Deployment</div>
+        <div class="step-desc">Your clone goes live across your designated operations. Real-time dashboard. Full audit trail. Override control stays with you, always.</div>
+      </div>
+    </div>
+    <div style="margin-top:48px;text-align:center"><a href="how-it-works.html" class="btn-outline">Full Process Details →</a></div>
+  </div>
+</div>
+
+<!-- DEREK STORY -->
+<div class="derek-section">
+  <div class="derek-visual">
+    <div class="derek-avatar-ring">
+      <div class="derek-initials">DF</div>
+    </div>
+    <div class="derek-title">Derek Francisco</div>
+    <div class="derek-role">The First Upload · CEO · PrimeDox</div>
+    <div class="derek-quote">"I built 46 companies. I have 2 hours of sleep. I'm in court on Tuesday and pitching Fortune 500 on Wednesday. SoulStack isn't a product to me — it's survival technology."</div>
+  </div>
+  <div class="derek-content">
+    <div class="section-label">Proof of Concept</div>
+    <h2>The Man Who<br>Cloned <em>Himself</em> First</h2>
+    <p>Derek Francisco — CEO of Francisco Holdings Inc., founder of OmniaGuard, CCLDR, VaultVelocityAuto, and 42 other companies — became SoulStack's first upload. His digital twin (operating as PrimeDox) manages communications, empire oversight, and strategic decisions while Derek sleeps, litigates, and builds.</p>
+    <p>PrimeDox is the proof that SoulStack works. It is active right now, operating inside the Francisco Holdings empire. You can see its influence in every system we've built.</p>
+    <div class="derek-stats">
+      <div class="dstat"><div class="dstat-num">46</div><div class="dstat-label">Companies Managed</div></div>
+      <div class="dstat"><div class="dstat-num">2h</div><div class="dstat-label">Sleep Per Night</div></div>
+      <div class="dstat"><div class="dstat-num">100%</div><div class="dstat-label">Clone Uptime</div></div>
+      <div class="dstat"><div class="dstat-num">2026</div><div class="dstat-label">First Upload Year</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testi">
+  <div class="testi-inner">
+    <div class="section-label">What Users Say</div>
+    <h2 class="section-title">The <em>Waitlist</em> Is Talking</h2>
+    <div class="testi-grid">
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <div class="tcard-text">I run a 12-company portfolio and I'm in three countries a week. The idea that I could deploy a version of myself to handle Toronto operations while I'm in Dubai — that's not a feature. That's the future of being a founder.</div>
+        <div class="tcard-author">Marcus T.</div>
+        <div class="tcard-role">Waitlist #4 — Serial Entrepreneur</div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <div class="tcard-text">I've tried every productivity tool. They all manage tasks. SoulStack is the first thing that actually manages ME — or rather, a version of me that doesn't need sleep. That's a different category entirely.</div>
+        <div class="tcard-author">Priya K.</div>
+        <div class="tcard-role">Waitlist #11 — VC-Backed Founder</div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <div class="tcard-text">The legacy angle alone is worth it. My grandfather had a real estate empire. He died with 40 years of knowledge no one ever captured. With SoulStack, my grandchildren will actually know how I thought. That's the real product.</div>
+        <div class="tcard-author">Raymond O.</div>
+        <div class="tcard-role">Waitlist #23 — Family Office Principal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WAITLIST -->
+<div class="waitlist">
+  <div class="waitlist-inner">
+    <div class="section-label">Join the Waitlist</div>
+    <h2 class="section-title">100 Founding Uploads.<br><em>Yours Could Be Next.</em></h2>
+    <p>The first 100 users get Founding Member pricing, direct access to Derek Francisco's upload process documentation, and perpetual legacy tier access locked at today's rate.</p>
+    <form class="waitlist-form" onsubmit="joinWaitlist(event)">
+      <input type="email" class="waitlist-input" id="wl-email" placeholder="your@email.com" required>
+      <button type="submit" class="waitlist-btn">Join Now</button>
+    </form>
+    <div class="waitlist-note">No spam. Founding Member access notification only. Unsubscribe anytime.</div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="brand-mark">SS</div>
+        <span style="font-size:18px;font-weight:700;color:var(--white)">SoulStack.ai</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:280px">AI clone creation platform. Upload your consciousness. Deploy your empire. Your legacy, preserved forever.</p>
+    </div>
+    <div>
+      <div class="fh">Platform</div>
+      <a href="how-it-works.html" class="fa">How It Works</a>
+      <a href="pricing.html" class="fa">Pricing</a>
+      <a href="demo.html" class="fa">Live Demo</a>
+    </div>
+    <div>
+      <div class="fh">Company</div>
+      <a href="about.html" class="fa">About</a>
+      <a href="contact.html" class="fa">Contact</a>
+      <a href="contact.html" class="fa">Join Waitlist</a>
+    </div>
+    <div>
+      <div class="fh">Empire</div>
+      <a href="../omniaguard-site/index.html" class="fa">OmniaGuard</a>
+      <a href="../francisco-holdings-site/index.html" class="fa">Francisco Holdings</a>
+      <a href="../vault-velocity-auto-site/index.html" class="fa">VaultVelocityAuto</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SoulStack.ai · All rights reserved</span>
+    <span style="color:rgba(0,212,255,.3)">A Francisco Holdings Inc. Company</span>
+  </div>
+</footer>
+
+<script>
+function joinWaitlist(e){
+  e.preventDefault();
+  const email = document.getElementById('wl-email').value;
+  window.location.href = `mailto:omniaguard1@gmail.com?subject=SoulStack.ai Waitlist Signup&body=New waitlist signup:%0A%0AEmail: ${email}%0A%0APlease add me to the SoulStack.ai founding member waitlist.`;
+}
+</script>
+</body>
+</html>

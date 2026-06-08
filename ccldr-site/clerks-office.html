@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clerk's Office — CCLDR Virtual Courthouse | Court Filing Guide</title>
+<meta name="description" content="Ontario court filing procedures for self-represented litigants. Step-by-step filing guide, fee calculator, document checklist, timeline estimator.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--card:#141414;--gold:#c9a227;--gold-light:#e0b840;--green:#27ae60;--white:#f5f5f5;--muted:#888;--border:#2a2a2a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.ch-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 70% 0%,rgba(201,162,39,.05) 0%,var(--black) 55%)}
+nav{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.97);border-bottom:1px solid var(--gold);padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:13px;color:var(--muted);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 22px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:26px;cursor:pointer}
+
+.page-hero{position:relative;z-index:1;text-align:center;padding:100px 40px 48px}
+.page-title{font-family:'Cinzel',serif;font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--white);margin-bottom:12px}
+.page-title .gold{color:var(--gold)}
+.page-sub{font-size:15px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.6}
+
+.clerk-layout{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:1fr 1fr;gap:40px}
+
+.section-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:32px}
+.section-card.full-width{grid-column:span 2}
+.sc-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.sc-icon{font-size:24px}
+
+/* STEP GUIDE */
+.steps{display:flex;flex-direction:column;gap:16px}
+.step{display:flex;gap:16px;align-items:flex-start}
+.step-num{width:32px;height:32px;border-radius:50%;background:rgba(201,162,39,.12);border:1px solid rgba(201,162,39,.3);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0}
+.step-content{}
+.step-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.step-note{margin-top:6px;padding:6px 10px;background:rgba(201,162,39,.06);border-left:2px solid var(--gold);font-size:11px;color:rgba(201,162,39,.8);line-height:1.5}
+
+/* FEE CALCULATOR */
+.calc-grid{display:flex;flex-direction:column;gap:12px}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.calc-label{font-size:13px;color:rgba(245,245,245,.7)}
+.calc-value{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold)}
+.calc-total{display:flex;justify-content:space-between;align-items:center;padding:12px 0;margin-top:4px}
+.calc-total .calc-label{font-size:15px;font-weight:700;color:var(--white)}
+.calc-total .calc-value{font-size:20px;font-weight:700}
+
+.claim-slider{width:100%;margin:16px 0 8px;accent-color:var(--gold)}
+.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+#claim-display{font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:var(--gold);margin-bottom:8px}
+
+/* CHECKLIST */
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(245,245,245,.75);cursor:pointer;padding:8px;border-radius:2px;transition:background .2s}
+.checklist li:hover{background:rgba(255,255,255,.03)}
+.checklist li.checked{color:var(--muted);text-decoration:line-through}
+.checklist li::before{content:'□';color:var(--gold);font-size:16px;flex-shrink:0;line-height:1}
+.checklist li.checked::before{content:'✓';color:var(--green)}
+
+/* TIMELINE */
+.timeline-table{width:100%;border-collapse:collapse}
+.timeline-table th{padding:10px 16px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:left;border-bottom:1px solid var(--border)}
+.timeline-table td{padding:12px 16px;font-size:13px;color:rgba(245,245,245,.75);border-bottom:1px solid rgba(255,255,255,.03)}
+.timeline-table td:first-child{color:var(--white);font-weight:600;white-space:nowrap}
+.timeline-table td.highlight{color:var(--gold)}
+
+/* CONTACT BOX */
+.contact-box{background:rgba(39,174,96,.06);border:1px solid rgba(39,174,96,.2);border-radius:4px;padding:20px;margin-top:16px}
+.cb-title{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.cb-item{display:flex;gap:8px;font-size:13px;color:rgba(245,245,245,.7);margin-bottom:6px}
+.cb-item::before{content:'📞';font-size:12px;flex-shrink:0}
+.cb-item.email::before{content:'✉️'}
+.cb-item.web::before{content:'🌐'}
+
+@media(max-width:900px){.clerk-layout{grid-template-columns:1fr}.section-card.full-width{grid-column:span 1}.page-hero{padding:80px 20px 32px}.clerk-layout{padding:0 20px 60px}}
+@media(max-width:640px){nav{padding:0 20px}.nav-links,.nav-cta{display:none}.hamburger{display:block}}
+</style>
+</head>
+<body>
+<div class="ch-bg" aria-hidden="true"></div>
+<nav>
+  <div><div class="nav-logo">CCLDR</div><div class="nav-sub">Virtual Courthouse</div></div>
+  <div class="nav-links">
+    <a href="lobby.html">Lobby</a><a href="courtroom.html">Courtroom</a><a href="library.html">Library</a>
+    <a href="clerks-office.html" class="active">Clerk's Office</a><a href="pricing.html">Upgrade</a>
+  </div>
+  <a href="pricing.html" class="nav-cta">Upgrade</a>
+  <button class="hamburger">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div style="font-size:60px;margin-bottom:16px">📋</div>
+  <h1 class="page-title">The <span class="gold">Clerk's Office</span></h1>
+  <p class="page-sub">Filing procedures, fee schedule, step-by-step guide for self-represented litigants in Ontario courts. No lawyer required to understand this.</p>
+</section>
+
+<div class="clerk-layout">
+
+  <!-- STEP BY STEP -->
+  <div class="section-card">
+    <div class="sc-title"><span class="sc-icon">📝</span>How to File a Claim in Ontario</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Draft Your Statement of Claim (Form 14A)</div>
+          <div class="step-desc">Use the template in the Records Room (Elite tier) or download Form 14A from ontario.ca/courts. Include: parties, facts, legal basis, and what you're asking for.</div>
+          <div class="step-note">💡 CCLDR Records Room has pre-filled templates for cannabis-related claims</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Go to the Courthouse — File Your Claim</div>
+          <div class="step-desc">Bring 3 copies of your Statement of Claim to the court registrar. File at the courthouse in the county where the defendant lives or where the incident occurred.</div>
+          <div class="step-note">📍 Kawartha Lakes: City of Kawartha Lakes Courthouse, Lindsay, Ontario</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Pay the Filing Fee</div>
+          <div class="step-desc">Fees are calculated based on your claim amount (see fee calculator). Pay by cash, cheque (payable to Minister of Finance), or debit/credit at some locations.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Serve the Defendant</div>
+          <div class="step-desc">The court will stamp your claim with a file number. You must serve the defendant personally (or by other approved methods) within 6 months of issuing the claim.</div>
+          <div class="step-note">⚠️ Service rules are strict — improper service can result in dismissal</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Wait for the Defence (20 Days)</div>
+          <div class="step-desc">Defendant has 20 days to file a Statement of Defence (if served in Ontario). If no defence filed, you can request Default Judgment.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-title">Exchange Documents (Discovery)</div>
+          <div class="step-desc">Both parties must exchange relevant documents within 10 days of close of pleadings. Consider Notice of Examination (Form 31A) to question the defendant under oath.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-title">Attend Mandatory Mediation</div>
+          <div class="step-desc">In Toronto, Ottawa, and Windsor — mandatory for most civil claims. Check if your county requires it. Good opportunity to settle without trial.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-title">Pre-Trial Conference → Trial</div>
+          <div class="step-desc">A judge meets both parties to narrow issues. If no settlement, trial is scheduled. Prepare your witnesses, exhibits, and opening/closing arguments.</div>
+          <div class="step-note">💡 CCLDR Boardroom (Professional tier) has trial preparation worksheets</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEE CALCULATOR -->
+  <div class="section-card">
+    <div class="sc-title"><span class="sc-icon">💰</span>Ontario Court Fee Calculator</div>
+    <div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Claim Amount:</div>
+      <div id="claim-display">$2,300,000</div>
+      <input type="range" class="claim-slider" id="claim-slider" min="0" max="5000000" step="10000" value="2300000" oninput="calcFees()">
+      <div class="slider-labels"><span>$0</span><span>$1M</span><span>$2.5M</span><span>$5M</span></div>
+    </div>
+    <div class="calc-grid" style="margin-top:20px">
+      <div class="calc-row"><span class="calc-label">Claim filing fee (Superior Court)</span><span class="calc-value" id="filing-fee">$300.00</span></div>
+      <div class="calc-row"><span class="calc-label">Service (personal, approx.)</span><span class="calc-value">$150.00</span></div>
+      <div class="calc-row"><span class="calc-label">Jury notice (if applicable)</span><span class="calc-value">$150.00</span></div>
+      <div class="calc-row"><span class="calc-label">Examination for Discovery (est.)</span><span class="calc-value">$800.00</span></div>
+      <div class="calc-row"><span class="calc-label">Expert witnesses (est.)</span><span class="calc-value" id="expert-fee">$2,000+</span></div>
+      <div class="calc-total">
+        <span class="calc-label">Estimated Total (min.)</span>
+        <span class="calc-value" id="total-fee">$3,400+</span>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:12px">Ontario Superior Court filing fees per: ontario.ca/page/superior-court-justice-fees</div>
+    <div style="margin-top:20px">
+      <div class="sc-title" style="font-size:15px;margin-bottom:12px"><span>📅</span>Key Filing Deadlines</div>
+      <table class="timeline-table">
+        <tr><td>Limitation period</td><td class="highlight">2 years from date of claim</td></tr>
+        <tr><td>Serve after filing</td><td>6 months</td></tr>
+        <tr><td>Defendant to defend</td><td>20 days (Ontario service)</td></tr>
+        <tr><td>Affidavit of documents</td><td>10 days after close of pleadings</td></tr>
+        <tr><td>Discovery completion</td><td>60 days after pleadings close</td></tr>
+        <tr><td>Pre-trial conference</td><td>Scheduled by court</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- DOCUMENT CHECKLIST -->
+  <div class="section-card">
+    <div class="sc-title"><span class="sc-icon">✅</span>Pre-Filing Checklist</div>
+    <ul class="checklist" id="checklist">
+      <li onclick="toggleCheck(this)">Statement of Claim drafted (Form 14A)</li>
+      <li onclick="toggleCheck(this)">Claim amount calculated and confirmed</li>
+      <li onclick="toggleCheck(this)">Defendant's full legal name and address confirmed</li>
+      <li onclick="toggleCheck(this)">3 copies of Statement of Claim printed</li>
+      <li onclick="toggleCheck(this)">Filing fee ready (cash or cheque to Minister of Finance)</li>
+      <li onclick="toggleCheck(this)">Courthouse location and hours confirmed</li>
+      <li onclick="toggleCheck(this)">Limitation period checked (within 2 years?)</li>
+      <li onclick="toggleCheck(this)">Evidence organized and labelled (Exhibit A, B, C...)</li>
+      <li onclick="toggleCheck(this)">Witnesses identified and available</li>
+      <li onclick="toggleCheck(this)">Process server arranged (or plan for personal service)</li>
+      <li onclick="toggleCheck(this)">Lawyer consulted (strongly recommended)</li>
+    </ul>
+  </div>
+
+  <!-- COURT CONTACTS -->
+  <div class="section-card">
+    <div class="sc-title"><span class="sc-icon">📞</span>Important Contacts</div>
+    <div class="contact-box">
+      <div class="cb-title">Kawartha Lakes / Lindsay</div>
+      <div class="cb-item">Kawartha Lakes OPP: 705-324-5252</div>
+      <div class="cb-item">Superior Court (Lindsay): 705-324-3870</div>
+      <div class="cb-item email">Law Society of Ontario (lawyer referral): 1-800-268-8326</div>
+      <div class="cb-item web">ontario.ca/courts — forms and procedures</div>
+    </div>
+    <div class="contact-box" style="margin-top:12px;background:rgba(201,162,39,.04);border-color:rgba(201,162,39,.2)">
+      <div class="cb-title" style="color:var(--gold)">Legal Aid / Self-Rep Resources</div>
+      <div class="cb-item">Legal Aid Ontario: 1-800-668-8258</div>
+      <div class="cb-item">Community Legal Clinics: legalclinics.ca</div>
+      <div class="cb-item email">ProBono Ontario: 1-855-255-7256</div>
+      <div class="cb-item web">CLIO (DIY legal tools): ontario.ca/legalaid</div>
+    </div>
+  </div>
+
+</div>
+
+<footer style="position:relative;z-index:1;background:rgba(10,10,10,.98);border-top:1px solid #2a2a2a;padding:40px;text-align:center">
+  <div style="font-family:'Cinzel',serif;font-size:18px;color:#c9a227;margin-bottom:8px">CCLDR.NET</div>
+  <div style="font-size:12px;color:#888;margin-bottom:16px">Clerk's Office — Educational Reference Only — Not Legal Advice</div>
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+    <a href="lobby.html" style="font-size:12px;color:#888">Lobby</a>
+    <a href="courtroom.html" style="font-size:12px;color:#888">Courtroom</a>
+    <a href="library.html" style="font-size:12px;color:#888">Library</a>
+    <a href="records-room.html" style="font-size:12px;color:#888">Records Room</a>
+  </div>
+  <div style="margin-top:20px;font-size:11px;color:rgba(136,136,136,.3)">© 2026 CCLDR.NET · A Francisco Holdings Inc. Venture</div>
+</footer>
+
+<script>
+function calcFees(){
+  const val=parseInt(document.getElementById('claim-slider').value);
+  document.getElementById('claim-display').textContent='$'+val.toLocaleString();
+  let filingFee=val<=100000?229:val<=500000?286:val<=1000000?420:val<=5000000?300:600;
+  document.getElementById('filing-fee').textContent='$'+filingFee.toFixed(2);
+  document.getElementById('total-fee').textContent='$'+(filingFee+950+2000).toLocaleString()+'+';
+}
+
+function toggleCheck(el){
+  el.classList.toggle('checked');
+  const total=document.querySelectorAll('#checklist li').length;
+  const done=document.querySelectorAll('#checklist li.checked').length;
+  // Save to localStorage
+  localStorage.setItem('ccldr_checklist_'+el.textContent.trim().substring(0,20),el.classList.contains('checked')?'1':'0');
+}
+// Restore checklist on load
+document.querySelectorAll('#checklist li').forEach(li=>{
+  const key='ccldr_checklist_'+li.textContent.trim().substring(0,20);
+  if(localStorage.getItem(key)==='1') li.classList.add('checked');
+});
+calcFees();
+</script>
+</body>
+</html>

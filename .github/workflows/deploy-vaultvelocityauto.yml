@@ -1,0 +1,68 @@
+name: Deploy Vault Velocity Auto to vaultvelocityauto.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'vaultvelocityauto-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop B identity (no Derek Francisco, no cannabis)
+        run: |
+          LEAKS=$(grep -rn "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8\|Derek Francisco\|Doc Weedlaw\|cannabis" vaultvelocityauto-site/ --include="*.html" | wc -l)
+          if [ "$LEAKS" -gt 0 ]; then
+            echo "FAIL: Loop B identity violation in Vault Velocity Auto site"
+            grep -rn "franciscoderek7@gmail\|705-307-8080\|Derek Francisco\|cannabis" vaultvelocityauto-site/ --include="*.html"
+            exit 1
+          fi
+          echo "PASS: Loop B identity clean"
+
+      - name: Clone vaultvelocityauto repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/vaultvelocityauto.git /tmp/vva
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cd vaultvelocityauto-site
+          for f in *.html; do cp "$f" /tmp/vva/"$f" && echo "  copied $f"; done
+          for ext in jpg jpeg png webp gif svg js css; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/vva/"$f" && echo "  copied $f"; done
+          done
+          echo "vaultvelocityauto.com" > /tmp/vva/CNAME
+          echo "All VVA files copied"
+
+      - name: Commit and push to vaultvelocityauto repo
+        run: |
+          cd /tmp/vva
+          git config user.email "deploy@vaultvelocityauto.com"
+          git config user.name "VVA Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: vaultvelocityauto.com
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/vaultvelocityauto — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "  VAULT VELOCITY AUTO DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/vaultvelocityauto (main)"
+          echo "  CNAME: vaultvelocityauto.com"
+          echo "  Loop: B (Anonymous — no Derek branding)"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo "  Check: https://vaultvelocityauto.com"
+          echo "================================================"

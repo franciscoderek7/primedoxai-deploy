@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeDox — Facing Charges? Get AI-Powered Defense in 5 Minutes</title>
+<meta name="description" content="PrimeDox is your 24/7 AI legal defense assistant — built by someone who beat 4,000 charges. Emergency Defense, Pro, and Elite tiers available now.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #07080f;
+    --bg2:     #0d0e1c;
+    --card:    #111320;
+    --border:  rgba(0, 212, 255, 0.15);
+    --cyan:    #00d4ff;
+    --purple:  #7b2fbe;
+    --gold:    #ffd700;
+    --green:   #00a86b;
+    --red:     #ff3b3b;
+    --white:   #f1f5f9;
+    --muted:   #8892a4;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 80px 0; }
+
+  nav {
+    position: sticky; top: 0; z-index: 999;
+    background: rgba(7,8,15,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { font-weight: 900; font-size: 1.1rem; color: var(--cyan); }
+  .nav-links { display: flex; gap: 24px; list-style: none; align-items: center; }
+  .nav-links a { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+  .nav-links a:hover { color: var(--cyan); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  /* URGENCY TICKER */
+  .urgency-ticker { background: linear-gradient(90deg, rgba(255,59,59,0.12), rgba(255,215,0,0.06)); border-bottom: 1px solid rgba(255,59,59,0.25); text-align: center; padding: 10px 16px; font-size: 0.82rem; color: var(--gold); font-weight: 700; }
+
+  /* HERO */
+  #hero { text-align: center; padding: 88px 24px 56px; background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,212,255,0.08), transparent); }
+  #hero h1 { font-size: clamp(2.1rem, 5vw, 3.2rem); font-weight: 900; margin-bottom: 18px; line-height: 1.2; }
+  #hero h1 span { color: var(--cyan); }
+  #hero .subhead { color: var(--muted); max-width: 620px; margin: 0 auto 40px; font-size: 1.05rem; }
+
+  .emergency-cta-wrap { margin-bottom: 40px; }
+  .btn-emergency {
+    display: inline-block; background: var(--red); color: #fff; font-weight: 900; font-size: 1.15rem;
+    padding: 22px 52px; border-radius: 14px; border: none; cursor: pointer; letter-spacing: 0.03em;
+    box-shadow: 0 0 0 0 rgba(255,59,59,0.6); animation: pulse-red 2s infinite;
+  }
+  @keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(255,59,59,0.55); }
+    70% { box-shadow: 0 0 0 22px rgba(255,59,59,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,59,59,0); }
+  }
+  .btn-emergency:hover { background: #ff5252; }
+  .emergency-sub { font-size: 0.8rem; color: var(--muted); margin-top: 14px; }
+
+  .hero-secondary { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.2); padding: 13px 26px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* SOCIAL PROOF STRIP */
+  .proof-strip { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; text-align: center; margin-top: 48px; }
+  .proof-item .proof-num { font-size: 1.7rem; font-weight: 900; color: var(--cyan); }
+  .proof-item .proof-label { font-size: 0.76rem; color: var(--muted); font-weight: 600; }
+
+  /* PAIN -> SOLUTION */
+  .section-header { text-align: center; max-width: 660px; margin: 0 auto 52px; }
+  .section-title { font-size: clamp(1.6rem, 3.2vw, 2.2rem); font-weight: 900; margin-bottom: 12px; }
+  .section-title span { color: var(--cyan); }
+  .section-desc { color: var(--muted); font-size: 0.98rem; }
+
+  /* PRICING */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+  .price-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px 26px; display: flex; flex-direction: column; position: relative; transition: transform 0.3s, border-color 0.3s; }
+  .price-card:hover { transform: translateY(-5px); border-color: var(--cyan); }
+  .price-card.urgent { border-color: var(--red); box-shadow: 0 0 32px rgba(255,59,59,0.12); }
+  .price-flag { position: absolute; top: -13px; left: 24px; background: var(--red); color: #fff; font-size: 0.7rem; font-weight: 900; padding: 5px 14px; border-radius: 20px; letter-spacing: 0.05em; }
+  .price-name { font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; }
+  .price-tag { font-size: 1.9rem; font-weight: 900; color: var(--cyan); margin-bottom: 4px; }
+  .price-card.urgent .price-tag { color: var(--red); }
+  .price-period { font-size: 0.8rem; color: var(--muted); margin-bottom: 18px; }
+  .price-features { list-style: none; margin-bottom: 24px; flex: 1; }
+  .price-features li { font-size: 0.85rem; color: var(--muted); padding: 5px 0; display: flex; gap: 8px; }
+  .price-features li::before { content: '✓'; color: var(--cyan); font-weight: 700; flex-shrink: 0; }
+  .price-card.urgent .price-features li::before { color: var(--red); }
+  .btn-buy { display: block; text-align: center; background: var(--cyan); color: #07080f; font-weight: 800; padding: 13px; border-radius: 10px; border: none; cursor: pointer; font-size: 0.92rem; }
+  .btn-buy:hover { background: #33ddff; }
+  .btn-buy.urgent { background: var(--red); color: #fff; }
+  .btn-buy.urgent:hover { background: #ff5252; }
+
+  /* TRUST GRID */
+  .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 18px; }
+  .trust-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; text-align: center; }
+  .trust-num { font-size: 1.4rem; font-weight: 900; color: var(--cyan); margin-bottom: 6px; }
+  .trust-label { font-size: 0.8rem; color: var(--muted); }
+
+  /* REFERRAL */
+  .referral-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 20px; }
+  .referral-card { background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(123,47,190,0.05)); border: 1px solid var(--border); border-radius: 16px; padding: 28px 26px; }
+  .referral-card h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--white); }
+  .referral-card p { font-size: 0.86rem; color: var(--muted); margin-bottom: 16px; line-height: 1.7; }
+
+  /* LEAD MAGNET */
+  .magnet-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 40px; max-width: 620px; margin: 0 auto; text-align: center; }
+  .magnet-icon { font-size: 2.4rem; margin-bottom: 14px; }
+  .magnet-card h3 { font-size: 1.3rem; margin-bottom: 10px; }
+  .magnet-card p { color: var(--muted); margin-bottom: 26px; font-size: 0.92rem; }
+  .magnet-form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .magnet-form input { flex: 1; min-width: 220px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 13px 16px; color: var(--white); font-size: 0.9rem; font-family: inherit; }
+  .magnet-form input:focus { outline: none; border-color: var(--cyan); }
+  .magnet-form button { background: var(--cyan); color: #07080f; font-weight: 800; padding: 13px 24px; border-radius: 10px; border: none; cursor: pointer; font-size: 0.9rem; white-space: nowrap; }
+  .magnet-form button:hover { background: #33ddff; }
+
+  footer { padding: 48px 24px; border-top: 1px solid var(--border); text-align: center; }
+  .footer-disclaimer { font-size: 0.76rem; color: var(--muted); max-width: 760px; margin: 0 auto 16px; line-height: 1.7; }
+  .footer-copy { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; }
+  .footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; font-size: 0.82rem; }
+  .footer-links a { color: var(--cyan); font-weight: 600; }
+  .footer-links a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="urgency-ticker">⚠️ If you're facing a court date or police contact in the next 72 hours, start with Emergency Defense below — don't wait.</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">⚡ PrimeDox</a>
+  <ul class="nav-links">
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#proof">Track Record</a></li>
+    <li><a href="#referral">Referrals</a></li>
+    <li><a href="#guide">Free Guide</a></li>
+    <li><a href="index.html">Full Site →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <h1>Facing Charges? Get <span>AI-Powered Defense</span><br>in 5 Minutes.</h1>
+  <p class="subhead">PrimeDox is your 24/7 legal defense assistant — an AI clone built and trained by Derek Francisco, who beat 4,000 charges using the frameworks PrimeDox now teaches you. You don't have to face this alone, and you don't have to wait for office hours.</p>
+
+  <div class="emergency-cta-wrap">
+    <button class="btn-emergency" onclick="emergencyPay()">🚨 I NEED HELP NOW</button>
+    <div class="emergency-sub">Emergency Defense package — $99 one-time — instant access, no appointment needed</div>
+  </div>
+
+  <div class="hero-secondary">
+    <a href="#pricing" class="btn-outline">See All Plans →</a>
+    <a href="#guide" class="btn-outline">Get the Free 24-Hour Guide →</a>
+  </div>
+
+  <div class="proof-strip">
+    <div class="proof-item"><div class="proof-num">200+</div><div class="proof-label">Educational Victories</div></div>
+    <div class="proof-item"><div class="proof-num">15+ yrs</div><div class="proof-label">Personal Litigation Experience</div></div>
+    <div class="proof-item"><div class="proof-num">4,000</div><div class="proof-label">Charges Stayed</div></div>
+    <div class="proof-item"><div class="proof-num">BENO-X</div><div class="proof-label">Core Defense Framework</div></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Pick the Level of <span>Defense You Need</span></h2>
+      <p class="section-desc">Crisis right now, ongoing protection, or a complex case that needs more — there's a tier built for where you're standing today.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="price-card urgent">
+        <div class="price-flag">FOR IMMEDIATE CRISIS</div>
+        <div class="price-name">🚨 Emergency Defense</div>
+        <div class="price-tag">$99</div>
+        <div class="price-period">one-time CAD — instant access</div>
+        <ul class="price-features">
+          <li>Immediate framework walkthrough for your exact situation</li>
+          <li>Charter rights reference card for the next 24-72 hours</li>
+          <li>Annotated documents you can start filling out today</li>
+          <li>Direct email follow-up for urgent clarifying questions</li>
+        </ul>
+        <button class="btn-buy urgent" onclick="emergencyPay()">Get Emergency Defense — $99 →</button>
+      </div>
+
+      <div class="price-card">
+        <div class="price-name">🔵 Pro</div>
+        <div class="price-tag">$49<span style="font-size:1rem;color:var(--muted);">/mo</span></div>
+        <div class="price-period">For ongoing protection — cancel anytime</div>
+        <ul class="price-features">
+          <li>Everything in Emergency Defense</li>
+          <li>Full BENO-X analyzer tool</li>
+          <li>12-Appearance timeline generator</li>
+          <li>Email support — 48hr response</li>
+        </ul>
+        <button class="btn-buy" onclick="planPay('Pro', 49)">Get Pro — $49/mo →</button>
+      </div>
+
+      <div class="price-card">
+        <div class="price-name">🟣 Elite</div>
+        <div class="price-tag">$199<span style="font-size:1rem;color:var(--muted);">/mo</span></div>
+        <div class="price-period">For complex cases — cancel anytime</div>
+        <ul class="price-features">
+          <li>Everything in Pro</li>
+          <li>Unlimited document drafting</li>
+          <li>10 case analyses per month</li>
+          <li>Priority support — 24hr response</li>
+        </ul>
+        <button class="btn-buy" onclick="planPay('Elite', 199)">Get Elite — $199/mo →</button>
+      </div>
+
+    </div>
+    <p style="text-align:center;margin-top:28px;font-size:0.78rem;color:var(--muted);font-style:italic;">All prices in Canadian dollars. PrimeDox is an educational AI tool — not a law firm, and not a substitute for licensed legal representation.</p>
+  </div>
+</section>
+
+<!-- TRACK RECORD -->
+<section id="proof">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Built By Someone Who's <span>Actually Done This</span></h2>
+      <p class="section-desc">PrimeDox isn't a generic chatbot wearing a legal-sounding name — it's trained directly on the frameworks Derek Francisco used to fight (and beat) his own cases for over a decade.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card"><div class="trust-num">200+</div><div class="trust-label">Educational victories documented and taught</div></div>
+      <div class="trust-card"><div class="trust-num">15+ years</div><div class="trust-label">Personal litigation experience behind every framework</div></div>
+      <div class="trust-card"><div class="trust-num">4,000</div><div class="trust-label">Charges stayed using these exact methods</div></div>
+      <div class="trust-card"><div class="trust-num">BENO-X</div><div class="trust-label">"Bad Exemption = No Offense" — the core defense framework</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERRAL -->
+<section id="referral" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Know Someone Who <span>Needs This Too?</span></h2>
+      <p class="section-desc">Nobody should face the system without backup — and helping someone else get prepared is worth something.</p>
+    </div>
+    <div class="referral-grid">
+      <div class="referral-card">
+        <h3>🤝 Refer a Friend, Get a Month Free</h3>
+        <p>Refer someone facing charges to PrimeDox. When they sign up for Pro or Elite, you get your next month free — no limit on how many people you refer.</p>
+        <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20Referral%20%E2%80%94%20Free%20Month&body=I'd%20like%20to%20refer%20someone%20to%20PrimeDox.%0A%0AMy%20name%2Femail%3A%20%0AWho%20I'm%20referring%20(name%2Femail)%3A%20" class="btn-outline" style="display:inline-block;">Send a Referral →</a>
+      </div>
+      <div class="referral-card">
+        <h3>⚖ Lawyers: Refer Clients, Earn 25%</h3>
+        <p>If you're a lawyer or paralegal, refer clients who could benefit from the educational prep PrimeDox provides — and earn 25% commission on every referral that enrolls.</p>
+        <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20Legal%20Professional%20Referral%20Program&body=I'm%20a%20lawyer%2Fparalegal%20interested%20in%20the%2025%25%20referral%20program.%0A%0AMy%20name%3A%20%0AFirm%2FLicense%20%23%3A%20%0AEmail%3A%20" class="btn-outline" style="display:inline-block;">Join the 25% Program →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEAD MAGNET -->
+<section id="guide">
+  <div class="container">
+    <div class="magnet-card">
+      <div class="magnet-icon">📘</div>
+      <h3>Free Download: "What to Do in the First 24 Hours After Arrest"</h3>
+      <p>The exact steps to protect your rights, your record, and your case — before you've even spoken to anyone. Drop your email below and it lands in your inbox in minutes.</p>
+      <form class="magnet-form" onsubmit="submitGuideRequest(event)" novalidate>
+        <input type="email" id="guide-email" placeholder="your@email.com" required>
+        <button type="submit">Send Me the Guide →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-disclaimer">
+    <strong>⚖ Disclaimer:</strong> PrimeDox is an educational AI tool created by Derek Francisco. It is not a law firm, does not provide legal representation, and using it does not create a lawyer-client relationship. For anything time-sensitive or high-stakes, consult a licensed lawyer or paralegal in your jurisdiction.
+  </div>
+  <div class="footer-copy">© 2026 PrimeDox — Derek Francisco | Educational AI Defense Assistant</div>
+  <div class="footer-links">
+    <a href="index.html">← PrimeDox / SoulStackAIHQ Home</a>
+    <a href="pricing.html">Full Pricing</a>
+  </div>
+</footer>
+
+<script>
+  function payToast(headline, amountLabel, memo) {
+    var existing = document.getElementById('pdx-toast');
+    if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+    var t = document.createElement('div');
+    t.id = 'pdx-toast';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;left:auto;max-width:380px;background:#0d1120;border:1px solid rgba(0,212,255,0.3);border-radius:14px;padding:20px 22px;z-index:99999;font-size:13px;color:#cbd3e0;box-shadow:0 16px 48px rgba(0,0,0,0.6);line-height:1.6;font-family:inherit;';
+    t.innerHTML = '<strong style="color:#00d4ff;display:block;margin-bottom:6px;font-size:14px;">' + headline + '</strong>'
+      + 'Prefer Interac e-Transfer? Send <strong style="color:#fff">' + amountLabel + '</strong> to <strong style="color:#fff">franciscoderek7@gmail.com</strong> with "' + memo + '" in the message. We activate your access within the hour of confirmed payment.'
+      + '<div style="margin-top:12px;display:flex;gap:8px;">'
+      + '<a href="mailto:franciscoderek7@gmail.com?subject=' + encodeURIComponent(memo + ' — Receipt') + '&body=' + encodeURIComponent('Hi,\n\nI just sent payment for ' + memo + ' (' + amountLabel + ').\n\nPayment method: [PayPal / Interac]\nMy situation (brief): \n\nPlease activate my access.') + '" style="flex:1;text-align:center;background:rgba(0,200,83,0.1);border:1px solid rgba(0,200,83,0.35);color:#00c853;padding:9px 12px;border-radius:8px;text-decoration:none;font-weight:700;font-size:12px;">Email Receipt →</a>'
+      + '<button onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#8892a4;padding:9px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;">Dismiss</button>'
+      + '</div>';
+    document.body.appendChild(t);
+  }
+  function emergencyPay() {
+    window.open('https://www.paypal.me/derekfrancisco/99cad', '_blank', 'noopener');
+    payToast('PayPal opening — $99 CAD — Emergency Defense', '$99 CAD', 'PrimeDox Emergency Defense');
+  }
+  function planPay(planName, amount) {
+    window.open('https://www.paypal.me/derekfrancisco/' + amount + 'cad', '_blank', 'noopener');
+    payToast('PayPal opening — $' + amount + ' CAD/mo — ' + planName, '$' + amount + ' CAD', 'PrimeDox ' + planName + ' Plan');
+  }
+  function submitGuideRequest(e) {
+    e.preventDefault();
+    var email = document.getElementById('guide-email').value.trim();
+    if (!email) return;
+    var subject = encodeURIComponent('PrimeDox — Send Me "First 24 Hours After Arrest" Guide');
+    var body = encodeURIComponent('Please send me the free guide: "What to Do in the First 24 Hours After Arrest"\n\nMy email: ' + email);
+    window.location.href = 'mailto:franciscoderek7@gmail.com?subject=' + subject + '&body=' + body;
+  }
+</script>
+</body>
+</html>

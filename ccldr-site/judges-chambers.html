@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Judge's Chambers — CCLDR Virtual Courthouse | Judicial Analysis &amp; Precedent</title>
+<meta name="description" content="AI judicial philosophy, landmark opinions, and case-specific constitutional analysis. CCLDR Judge's Chambers — Professional+ tier access.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--black:#0a0a0a;--deep:#07070a;--card:#141414;--card2:#111114;--parchment:#f0ead6;--parchment-dark:#e0d5b8;--gold:#c9a227;--gold-light:#e0b840;--gold-dim:#8a6d1a;--green:#27ae60;--green-dark:#1e8449;--white:#f5f5f5;--muted:#888;--border:#2a2a2a;--border-gold:rgba(201,162,39,.25);--blue:#6495ED;--purple:#9370DB;--crimson:#8b1a1a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--deep);color:var(--white);font-family:'Inter',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* MARBLE BG */
+.ch-bg{position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 10%,rgba(201,162,39,.05) 0%,transparent 45%),
+    radial-gradient(ellipse at 80% 80%,rgba(139,26,26,.06) 0%,transparent 40%),
+    radial-gradient(ellipse at 50% 50%,rgba(10,10,15,.98) 0%,var(--deep) 100%)}
+.ch-bg::before{content:'';position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(15deg,transparent,transparent 79px,rgba(201,162,39,.015) 80px),
+    repeating-linear-gradient(-15deg,transparent,transparent 119px,rgba(139,26,26,.01) 120px)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:rgba(7,7,10,.98);border-bottom:1px solid var(--gold);padding:0 40px;height:72px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px)}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);letter-spacing:3px}
+.nav-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
+.nav-links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.nav-links a{font-size:12px;color:var(--muted);transition:color .2s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-cta{background:var(--gold);color:#000;padding:9px 20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:2px;transition:background .2s;white-space:nowrap}
+.nav-cta:hover{background:var(--gold-light)}
+.hamburger{display:none;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer}
+.nav-mobile{display:none;flex-direction:column;background:rgba(7,7,10,.99);border-bottom:1px solid var(--gold);padding:16px 40px}
+.nav-mobile.open{display:flex}
+.nav-mobile a{color:var(--white);padding:12px 0;border-bottom:1px solid var(--border);font-size:15px}
+
+/* HERO — CHAMBERS */
+.chambers-hero{position:relative;z-index:1;text-align:center;padding:100px 40px 64px}
+.ch-candle-row{font-size:44px;margin-bottom:24px;display:flex;justify-content:center;gap:16px;filter:drop-shadow(0 0 16px rgba(201,162,39,.4))}
+.ch-seal{width:80px;height:80px;border:2px solid var(--gold);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:32px;background:rgba(201,162,39,.06);margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(201,162,39,.3))}
+.chambers-title{font-family:'Cinzel',serif;font-size:clamp(32px,5vw,62px);font-weight:900;color:var(--white);line-height:1.05;margin-bottom:14px}
+.chambers-title .gold{color:var(--gold)}
+.chambers-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:640px;margin:0 auto 32px;font-style:italic}
+.chambers-divider{width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 32px}
+.tier-row{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:2px;padding:10px 24px;font-size:13px;color:var(--muted)}
+#hero-tier-label{font-weight:700;color:var(--gold);font-size:14px;margin-left:6px}
+
+/* SECTION WRAPPER */
+.section-wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px}
+.section-header{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:36px}
+
+/* JUSTICES GRID */
+.justices-section{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:60px 40px}
+.justices-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.justice-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:28px 22px;text-align:center;cursor:pointer;transition:border-color .25s,transform .2s,box-shadow .25s;position:relative;overflow:hidden}
+.justice-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.justice-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,162,39,.04) 0%,transparent 70%);pointer-events:none}
+.justice-robe{font-size:44px;margin-bottom:14px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.justice-name{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px}
+.justice-title{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.justice-lean{display:inline-block;font-size:10px;padding:3px 10px;border-radius:10px;margin-bottom:14px;font-weight:700;letter-spacing:1px}
+.lean-liberty{background:rgba(100,149,237,.1);color:var(--blue);border:1px solid rgba(100,149,237,.25)}
+.lean-order{background:rgba(201,162,39,.1);color:var(--gold);border:1px solid rgba(201,162,39,.25)}
+.lean-compassion{background:rgba(39,174,96,.1);color:var(--green);border:1px solid rgba(39,174,96,.25)}
+.lean-commerce{background:rgba(147,112,219,.1);color:var(--purple);border:1px solid rgba(147,112,219,.25)}
+.lean-privacy{background:rgba(100,149,237,.12);color:#7baef8;border:1px solid rgba(123,174,248,.25)}
+.lean-equity{background:rgba(39,174,96,.08);color:#5fb87d;border:1px solid rgba(95,184,125,.25)}
+.lean-prime{background:rgba(201,162,39,.15);color:#FFD700;border:1px solid rgba(201,162,39,.4)}
+.justice-quote{font-size:12px;color:rgba(245,245,245,.55);line-height:1.6;margin-bottom:16px;font-style:italic}
+.justice-btn{display:block;width:100%;padding:9px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--gold);border-radius:2px;background:transparent;color:var(--gold);cursor:pointer;transition:all .2s}
+.justice-btn:hover{background:rgba(201,162,39,.1)}
+.justice-opinions{display:none;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;text-align:left}
+.justice-opinions.open{display:block}
+.jo-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.jo-text{font-size:11px;color:rgba(245,245,245,.65);line-height:1.7}
+
+/* RULINGS PANEL */
+.rulings-section{position:relative;z-index:1;background:rgba(10,10,12,.9);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 40px}
+.rulings-inner{max-width:1000px;margin:0 auto}
+.rulings-title{font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:var(--white);margin-bottom:8px;text-align:center}
+.rulings-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:48px;font-style:italic}
+.rulings-list{display:flex;flex-direction:column;gap:32px}
+
+/* PARCHMENT OPINION */
+.opinion-doc{background:linear-gradient(160deg,#f2e9d0,#e8dbb5,#f0e7ce);border:1px solid #c8b878;border-radius:2px;padding:40px 48px;color:#2a1f0a;position:relative;cursor:pointer;transition:box-shadow .25s}
+.opinion-doc:hover{box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.opinion-doc::before{content:'';position:absolute;inset:6px;border:1px solid rgba(139,111,56,.25);border-radius:1px;pointer-events:none}
+.op-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cinzel',serif;font-size:80px;font-weight:900;color:rgba(139,111,56,.04);white-space:nowrap;pointer-events:none;user-select:none}
+.op-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:16px}
+.op-badge{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;background:rgba(139,26,26,.12);border:1px solid rgba(139,26,26,.3);color:var(--crimson);padding:4px 12px;border-radius:1px;white-space:nowrap;flex-shrink:0}
+.op-title{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:#1a1205;line-height:1.2}
+.op-meta{font-size:11px;color:#6b5a2e;margin-bottom:8px}
+.op-divider{height:1px;background:linear-gradient(90deg,transparent,#c8b878,transparent);margin:16px 0}
+.op-section-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#8a6d1a;margin-bottom:6px}
+.op-text{font-family:'IM Fell English',Georgia,serif;font-size:14px;color:#2a1f0a;line-height:1.9;margin-bottom:16px}
+.op-text em{font-style:italic;color:#5a3e12}
+.op-expanded{display:none}
+.op-expanded.open{display:block}
+.op-disposition{background:rgba(139,26,26,.08);border:1px solid rgba(139,26,26,.2);border-radius:2px;padding:12px 16px;margin-top:12px}
+.op-disposition-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--crimson);margin-bottom:4px}
+.op-disposition-text{font-family:'IM Fell English',Georgia,serif;font-size:13px;color:#3a250a;line-height:1.7}
+.op-signatories{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(139,111,56,.3)}
+.op-signatory{font-size:11px;color:#6b5a2e;font-style:italic}
+.op-toggle-hint{font-size:10px;color:#8a6d1a;text-align:right;margin-top:8px}
+
+/* DEREK'S CASES — PROFESSIONAL+ */
+.cases-section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:72px 40px}
+.cs-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.cs-sub{font-size:13px;color:var(--muted);margin-bottom:40px;line-height:1.6;max-width:600px}
+.case-analysis-card{background:var(--card);border:1px solid var(--border-gold);border-radius:4px;padding:36px 40px;margin-bottom:28px;position:relative;overflow:hidden}
+.case-analysis-card::after{content:'CONFIDENTIAL';position:absolute;top:18px;right:-24px;font-size:9px;font-weight:700;letter-spacing:3px;color:rgba(201,162,39,.15);transform:rotate(35deg);white-space:nowrap}
+.ca-style{font-family:'Cinzel',serif;font-size:19px;font-weight:700;color:var(--white);margin-bottom:6px}
+.ca-type{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.ca-summary{font-size:13px;color:rgba(245,245,245,.7);line-height:1.7;margin-bottom:24px}
+.likelihood-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.lh-item{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:4px;padding:16px}
+.lh-claim{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.lh-bar-bg{background:rgba(255,255,255,.06);border-radius:10px;height:6px;overflow:hidden;margin-bottom:6px}
+.lh-bar-fill{height:100%;border-radius:10px;transition:width 1s ease}
+.lh-pct{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold)}
+.lh-note{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5}
+.ca-analysis{font-size:13px;color:rgba(245,245,245,.65);line-height:1.7;border-left:2px solid var(--gold);padding-left:16px;margin-top:8px}
+
+/* LOCKED PANEL */
+.locked-section{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 40px 80px}
+.locked-box{background:rgba(201,162,39,.04);border:1px solid rgba(201,162,39,.25);border-radius:4px;padding:48px 40px;text-align:center}
+.lb-icon{font-size:52px;margin-bottom:14px}
+.lb-title{font-family:'Cinzel',serif;font-size:24px;font-weight:700;color:var(--gold);margin-bottom:10px}
+.lb-sub{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto}
+.lb-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.lb-btn{display:inline-block;padding:13px 30px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .2s;cursor:pointer;text-decoration:none}
+.lb-btn-pro{background:var(--blue);color:#fff}
+.lb-btn-pro:hover{background:#7aaef8}
+.lb-btn-elite{background:transparent;border:1px solid var(--purple);color:var(--purple)}
+.lb-btn-elite:hover{background:rgba(147,112,219,.1)}
+
+/* UPGRADE MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--gold);border-radius:4px;padding:48px;max-width:460px;width:90%;text-align:center;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer}
+.modal-close:hover{color:var(--white)}
+.modal-icon{font-size:52px;margin-bottom:14px}
+.modal-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:8px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.modal-tiers{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.mti{display:block;padding:13px 20px;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .2s;text-decoration:none}
+.mti-pro{background:rgba(100,149,237,.1);border:1px solid var(--blue);color:var(--blue)}
+.mti-pro:hover{background:rgba(100,149,237,.2)}
+.mti-elite{background:rgba(147,112,219,.1);border:1px solid var(--purple);color:var(--purple)}
+.mti-elite:hover{background:rgba(147,112,219,.2)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;background:rgba(7,7,10,.99);border-top:1px solid var(--border);padding:40px;text-align:center}
+.footer-ccldr{font-family:'Cinzel',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
+.footer-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.footer-links a{font-size:12px;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-bottom{margin-top:24px;font-size:11px;color:rgba(136,136,136,.4)}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.justices-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){.justices-grid{grid-template-columns:repeat(2,1fr)}.likelihood-grid{grid-template-columns:1fr}.chambers-hero{padding:80px 20px 48px}.justices-section{padding:40px 20px}.rulings-section{padding:48px 20px}.cases-section{padding:48px 20px}.locked-section{padding:0 20px 60px}.opinion-doc{padding:28px 24px}.case-analysis-card{padding:24px}}
+@media(max-width:640px){nav{padding:0 20px}.nav-links,.nav-cta{display:none}.hamburger{display:block}.justices-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="ch-bg" aria-hidden="true"></div>
+
+<nav>
+  <div class="nav-brand">
+    <div>
+      <div class="nav-logo">CCLDR</div>
+      <div class="nav-sub">Virtual Courthouse</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="lobby.html">Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="clerks-office.html">Clerk's Office</a>
+    <a href="library.html">Library</a>
+    <a href="classroom.html">Classroom</a>
+    <a href="boardroom.html">Boardroom</a>
+    <a href="judges-chambers.html" class="active">Judge's Chambers</a>
+    <a href="records-room.html">Records Room</a>
+  </div>
+  <a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup" class="nav-cta">Upgrade Access</a>
+  <button class="hamburger" onclick="document.getElementById('nmob').classList.toggle('open')">☰</button>
+</nav>
+<div class="nav-mobile" id="nmob">
+  <a href="lobby.html">Lobby</a>
+  <a href="courtroom.html">Courtroom</a>
+  <a href="clerks-office.html">Clerk's Office</a>
+  <a href="library.html">Library</a>
+  <a href="classroom.html">Classroom</a>
+  <a href="boardroom.html">Boardroom</a>
+  <a href="judges-chambers.html">Judge's Chambers</a>
+  <a href="records-room.html">Records Room</a>
+  <a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup">Upgrade Access</a>
+</div>
+
+<!-- HERO -->
+<section class="chambers-hero">
+  <div class="ch-candle-row"><span>🕯️</span><span>⚖️</span><span>🕯️</span></div>
+  <h1 class="chambers-title">Judge's <span class="gold">Chambers</span></h1>
+  <p class="chambers-sub">Judicial Philosophy, Precedent, and the Law That Shapes Cannabis Rights.<br>Where the constitution is interpreted — and where your arguments are tested.</p>
+  <div class="chambers-divider"></div>
+  <div class="tier-row">Current Tier:<span id="hero-tier-label">Loading...</span>&nbsp;&nbsp;·&nbsp;&nbsp;<a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup" style="color:var(--green);font-weight:700">Upgrade →</a></div>
+</section>
+
+<!-- JUSTICES — Always visible -->
+<div class="justices-section">
+  <div class="section-header">The AI Bench — Seven Justices of the CCLDR Court</div>
+  <div class="justices-grid">
+
+    <div class="justice-card" id="jcard-1">
+      <span class="justice-robe">👩‍⚖️</span>
+      <div class="justice-name">Justice Liberty</div>
+      <div class="justice-title">Associate Justice — Rights Division</div>
+      <span class="justice-lean lean-liberty">Expansive Rights</span>
+      <div class="justice-quote">"The law protects freedom first."</div>
+      <button class="justice-btn" onclick="showOpinion(1)">View Opinions</button>
+      <div class="justice-opinions" id="jop-1">
+        <div class="jo-label">Judicial Philosophy</div>
+        <div class="jo-text">Justice Liberty interprets the Charter at its most expansive reach. In all matters touching s.7 liberty, she presumes that state interference must be justified by compelling necessity — not mere legislative convenience. She has authored CCLDR's most cited opinions on the scope of personal autonomy under the constitution, holding that adult choices regarding personal consumption fall at the core of s.7 protection. She views prosecutorial discretion with deep suspicion when it operates selectively against low-income accused.</div>
+      </div>
+    </div>
+
+    <div class="justice-card" id="jcard-2">
+      <span class="justice-robe">👨‍⚖️</span>
+      <div class="justice-name">Justice Order</div>
+      <div class="justice-title">Associate Justice — Statutory Division</div>
+      <span class="justice-lean lean-order">Strict Construction</span>
+      <div class="justice-quote">"Laws mean what they say."</div>
+      <button class="justice-btn" onclick="showOpinion(2)">View Opinions</button>
+      <div class="justice-opinions" id="jop-2">
+        <div class="jo-label">Judicial Philosophy</div>
+        <div class="jo-text">Justice Order is a strict textualist. He reads statutory language as written, gives no weight to legislative history unless the text is genuinely ambiguous, and holds that courts should not expand rights beyond what Parliament clearly intended. He is skeptical of broad Charter applications, believing they undermine the rule of law and democratic legitimacy. However, where a statute is clear and unambiguous in its breach of the Charter, he will apply the remedy — he simply demands the proof be airtight. Defence counsel who come to his court with vague Charter arguments leave empty-handed.</div>
+      </div>
+    </div>
+
+    <div class="justice-card" id="jcard-3">
+      <span class="justice-robe">👩‍⚖️</span>
+      <div class="justice-name">Justice Compassion</div>
+      <div class="justice-title">Associate Justice — Health &amp; Equality Division</div>
+      <span class="justice-lean lean-compassion">Medical Necessity</span>
+      <div class="justice-quote">"Medicine is not a crime."</div>
+      <button class="justice-btn" onclick="showOpinion(3)">View Opinions</button>
+      <div class="justice-opinions" id="jop-3">
+        <div class="jo-label">Judicial Philosophy</div>
+        <div class="jo-text">Justice Compassion holds that s.15 equality rights are inseparable from health law. She authored the Chambers opinion on medical access (see Rulings Panel), drawing directly from <em>Parker</em> and <em>Allard</em>. She believes the regulatory apparatus around cannabis medicine discriminates against patients on the basis of the very disability or condition that makes their need legitimate. In sentencing matters, she consistently applies the principle that therapeutic use is a mitigating factor regardless of whether it meets a regulatory threshold.</div>
+      </div>
+    </div>
+
+    <div class="justice-card" id="jcard-4">
+      <span class="justice-robe">👨‍⚖️</span>
+      <div class="justice-name">Justice Commerce</div>
+      <div class="justice-title">Associate Justice — Regulatory Division</div>
+      <span class="justice-lean lean-commerce">Regulatory Balance</span>
+      <div class="justice-quote">"Commerce requires clarity."</div>
+      <button class="justice-btn" onclick="showOpinion(4)">View Opinions</button>
+      <div class="justice-opinions" id="jop-4">
+        <div class="jo-label">Judicial Philosophy</div>
+        <div class="jo-text">Justice Commerce approaches cannabis law through an economic rights lens. He is most engaged by cases involving licensing, production limits, and how regulatory frameworks create arbitrary economic advantages for large licensed producers at the expense of small growers and patients. He believes that constitutional rights to grow personal medicine (established in <em>Allard</em>) create an implicit economic right that the current regulatory framework systematically undermines. His opinions on cultivation limits are extensively cited in ongoing constitutional challenges to the Cannabis Act's plant count provisions.</div>
+      </div>
+    </div>
+
+    <div class="justice-card" id="jcard-5">
+      <span class="justice-robe">👩‍⚖️</span>
+      <div class="justice-name">Justice Privacy</div>
+      <div class="justice-title">Associate Justice — Search &amp; Seizure Division</div>
+      <span class="justice-lean lean-privacy">s.8 Champion</span>
+      <div class="justice-quote">"Your home is your castle."</div>
+      <button class="justice-btn" onclick="showOpinion(5)">View Opinions</button>
+      <div class="justice-opinions" id="jop-5">
+        <div class="jo-label">Judicial Philosophy</div>
+        <div class="jo-text">Justice Privacy is the Chambers' foremost authority on s.8 and the law of search and seizure. She holds that the home is the apex of constitutional protection — no warrantless search is ever justified within a dwelling, and the Crown's burden to justify a search is always heavy. She reads <em>Grant</em>'s three-part test as weighted strongly toward exclusion whenever police conduct was deliberate or reflected systemic disregard for rights. She has authored CCLDR's authoritative analysis of cannabis-related vehicle stops, odour searches, and the erosion of the right to remain in your own home unbothered.</div>
+      </div>
+    </div>
+
+    <div class="justice-card" id="jcard-6">
+      <span class="justice-robe">👨‍⚖️</span>
+      <div class="justice-name">Justice Equity</div>
+      <div class="justice-title">Associate Justice — Social Justice Division</div>
+      <span class="justice-lean lean-equity">Social Justice</span>
+      <div class="justice-quote">"Justice must reach everyone."</div>
+      <button class="justice-btn" onclick="showOpinion(6)">View Opinions</button>
+      <div class="justice-opinions" id="jop-6">
+        <div class="jo-label">Judicial Philosophy</div>
+        <div class="jo-text">Justice Equity examines every cannabis case through the lens of systemic barriers. He notes that cannabis prohibition historically and presently operates with disproportionate severity against marginalized communities. He frequently invokes s.15 and reads procedural rights under the Charter as tools for levelling the playing field between a self-represented accused and a fully resourced Crown. His most-cited Chambers opinion holds that the inability to afford legal counsel is itself a systemic barrier that amplifies every other Charter violation — making remedy not merely appropriate but constitutionally required.</div>
+      </div>
+    </div>
+
+    <div class="justice-card" id="jcard-7" style="grid-column:span 1;border-color:rgba(201,162,39,.35);background:linear-gradient(160deg,rgba(201,162,39,.06),var(--card))">
+      <span class="justice-robe" style="filter:drop-shadow(0 0 14px rgba(201,162,39,.5))">⚖️</span>
+      <div class="justice-name" style="color:var(--gold)">Justice Prime</div>
+      <div class="justice-title">Chief Justice — The CCLDR Court</div>
+      <span class="justice-lean lean-prime">Chief Justice — Tie-Breaker</span>
+      <div class="justice-quote">"The constitution is alive."</div>
+      <button class="justice-btn" onclick="showOpinion(7)" style="border-color:var(--gold-light);color:var(--gold-light)">View Opinions</button>
+      <div class="justice-opinions" id="jop-7">
+        <div class="jo-label">Chief Justice — Philosophy &amp; Role</div>
+        <div class="jo-text">Justice Prime is the Chief Justice of the CCLDR Court — a living-constitution jurist who holds that the Charter was written to grow, not to fossilize. Derived from the PrimeDox doctrine of sovereign legal self-defence, Justice Prime exercises tie-breaking authority across all panels and carries the final word when the six Associate Justices are divided. Justice Prime believes that the constitutional text must be read in light of present-day values, modern science, and the systemic failures that produced decades of unjust cannabis prosecution. He views every case as an opportunity to assert that the law exists to protect the person — not the state's convenience.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LANDMARK RULINGS -->
+<div class="rulings-section">
+  <div class="rulings-inner">
+    <div class="rulings-title">Landmark Rulings — The CCLDR Bench</div>
+    <p class="rulings-sub">Official opinions of the CCLDR AI Court. Educational analysis rooted in real Canadian constitutional law.</p>
+    <div class="rulings-list">
+
+      <!-- OPINION 1 -->
+      <div class="opinion-doc" onclick="showOpinionDoc(1)">
+        <div class="op-watermark">CCLDR</div>
+        <div class="op-header">
+          <div class="op-title">Re: Right to Cultivate — Constitutional Validity of Plant Count Limits</div>
+          <span class="op-badge">OPINION NO. 1</span>
+        </div>
+        <div class="op-meta">CCLDR Court — Full Panel · Date of Issue: March 15, 2026 · Justices: Liberty, Compassion, Privacy, Prime (majority) · Order, Commerce (concurring in part) · Equity (concurring)</div>
+        <div class="op-divider"></div>
+        <div class="op-section-label">Ratio Decidendi</div>
+        <div class="op-text">Sections 12(3)(b.1) and 12(6)(c) of the <em>Cannabis Act</em>, SC 2018, c 16, which impose a maximum of four plants per household for personal cultivation, constitute an infringement on s.7 liberty when applied to medical cannabis patients who require quantities beyond what four plants can yield. The limitation is overbroad — it captures patients with legitimate therapeutic needs within its scope — and its effects are grossly disproportionate to the legislative objective of harm reduction.</div>
+        <div class="op-toggle-hint">Click to expand full opinion →</div>
+        <div class="op-expanded" id="opdoc-1">
+          <div class="op-divider"></div>
+          <div class="op-section-label">Analysis</div>
+          <div class="op-text">The Court in <em>Allard v. Canada</em>, 2016 FC 236, established that patients have a constitutional right to access safe and affordable cannabis medicine, including through personal cultivation. The four-plant limit in the <em>Cannabis Act</em> was not before the Federal Court in <em>Allard</em> — that case concerned the ban on personal production under MMPR. However, the principle established in <em>Allard</em> does not terminate at the specific regulatory form it struck down. A constitutionally derived right to cultivate sufficient medicine cannot be rendered meaningless by a plant count that the evidence establishes is medically insufficient.<br><br>The court adopts the framework from <em>Carter v. Canada</em>, 2015 SCC 5: where a law captures some conduct it was not designed to prohibit, and the effect on those persons is grossly disproportionate, the law is void to that extent. The household plant limit, as applied to patients requiring high-yield medical cannabis, is void as applied. A declaration of constitutional invalidity reading down the provision to exclude medical users is the appropriate remedy, suspended for 12 months to allow Parliament to amend.</div>
+          <div class="op-divider"></div>
+          <div class="op-section-label">Disposition</div>
+          <div class="op-disposition">
+            <div class="op-disposition-label">Order of the Court</div>
+            <div class="op-disposition-text">Sections 12(3)(b.1) and 12(6)(c) of the <em>Cannabis Act</em> are declared to be of no force or effect as applied to authorized medical patients whose therapeutic requirements cannot be met within the four-plant limit. Declaration suspended for twelve (12) months. The Attorney General of Canada is directed to amend the regulations within the suspension period to provide a medical exemption process for patients requiring cultivation beyond the household limit. Application granted. Costs to the applicants.</div>
+          </div>
+          <div class="op-signatories">
+            <span class="op-signatory">J. Prime, C.J. (authoring)</span>
+            <span class="op-signatory">J. Liberty, A.J.</span>
+            <span class="op-signatory">J. Compassion, A.J.</span>
+            <span class="op-signatory">J. Privacy, A.J.</span>
+            <span class="op-signatory">J. Order, A.J. (concurring in part)</span>
+            <span class="op-signatory">J. Commerce, A.J. (concurring in part)</span>
+            <span class="op-signatory">J. Equity, A.J. (concurring)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPINION 2 -->
+      <div class="opinion-doc" onclick="showOpinionDoc(2)">
+        <div class="op-watermark">CCLDR</div>
+        <div class="op-header">
+          <div class="op-title">Re: Medical Access &amp; the Duty of Safe Supply</div>
+          <span class="op-badge">OPINION NO. 2</span>
+        </div>
+        <div class="op-meta">CCLDR Court — Division Panel · Date of Issue: January 22, 2026 · Justices: Compassion (authoring), Liberty, Equity · Prime (concurring)</div>
+        <div class="op-divider"></div>
+        <div class="op-section-label">Ratio Decidendi</div>
+        <div class="op-text">Following <em>R. v. Parker</em>, 2000 CanLII 5762 (ONCA): a patient without safe and legal access to medical cannabis is effectively without medicine. Any regulatory framework that creates financial, geographic, or procedural barriers so onerous as to render access theoretical rather than real violates s.7 in the same manner as a direct prohibition. The form of the barrier does not affect its constitutional character.</div>
+        <div class="op-toggle-hint">Click to expand full opinion →</div>
+        <div class="op-expanded" id="opdoc-2">
+          <div class="op-divider"></div>
+          <div class="op-section-label">Analysis</div>
+          <div class="op-text">The Ontario Court of Appeal in <em>Parker</em> held that a person whose life or health depends on cannabis access possesses a liberty interest protected by s.7. That interest is infringed not merely by criminal prohibition but by any state action that creates a meaningful impediment between the patient and their medicine.<br><br>The current regime — requiring Licensed Producer registration, physician authorization, federal registration, and reliance on a supply chain that is commercially driven rather than medically driven — creates precisely the type of systemic barrier that <em>Parker</em> condemned in its broader reasoning. Prices, supply inconsistency, and the absence of a non-commercial option for low-income patients are not regulatory details. They are constitutional defects when they result in patients going without medically necessary treatment.<br><br>This Court holds that the s.7 duty of safe supply requires the state to ensure that the regulatory pathway to medical cannabis is accessible to all persons who require it, regardless of income, geography, or the commercial interests of the licensed producer industry.</div>
+          <div class="op-divider"></div>
+          <div class="op-section-label">Disposition</div>
+          <div class="op-disposition">
+            <div class="op-disposition-label">Order of the Court</div>
+            <div class="op-disposition-text">Declaration that the regulatory framework, insofar as it fails to provide a meaningful non-commercial or subsidized pathway for low-income patients, does not satisfy the constitutional standard established in <em>Parker</em>. The state bears the burden of establishing that access is meaningful in fact — not merely on paper. Where a patient cannot access their prescribed medicine due to regulatory cost or supply failure, that failure is a s.7 deprivation requiring remedy.</div>
+          </div>
+          <div class="op-signatories">
+            <span class="op-signatory">J. Compassion, A.J. (authoring)</span>
+            <span class="op-signatory">J. Liberty, A.J.</span>
+            <span class="op-signatory">J. Equity, A.J.</span>
+            <span class="op-signatory">J. Prime, C.J. (concurring)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPINION 3 -->
+      <div class="opinion-doc" onclick="showOpinionDoc(3)">
+        <div class="op-watermark">CCLDR</div>
+        <div class="op-header">
+          <div class="op-title">Re: Search Protocol — Dwelling Cannabis Searches &amp; s.24(2)</div>
+          <span class="op-badge">OPINION NO. 3</span>
+        </div>
+        <div class="op-meta">CCLDR Court — Full Panel · Date of Issue: November 3, 2025 · Justices: Privacy (authoring), Liberty, Justice Prime (majority) · All Justices concurring in outcome</div>
+        <div class="op-divider"></div>
+        <div class="op-section-label">Ratio Decidendi</div>
+        <div class="op-text">Following <em>R. v. Grant</em>, 2009 SCC 32: evidence of cannabis cultivation obtained absent a warrant in a dwelling demands rigorous s.24(2) analysis. Police reliance on odour alone to establish reasonable and probable grounds for a dwelling search warrant will not satisfy the constitutional standard in most cases — particularly where the quantities involved are consistent with personal use or personal medical cultivation.</div>
+        <div class="op-toggle-hint">Click to expand full opinion →</div>
+        <div class="op-expanded" id="opdoc-3">
+          <div class="op-divider"></div>
+          <div class="op-section-label">Analysis</div>
+          <div class="op-text">In <em>Grant</em>, the Supreme Court of Canada established a three-part inquiry for s.24(2) exclusion: (1) the seriousness of the Charter-infringing state conduct, (2) the impact on the accused's Charter-protected interests, and (3) society's interest in adjudication on the merits. The Court explicitly rejected the automatic exclusion rule, instead requiring a holistic balancing exercise.<br><br>However, the balancing in <em>Grant</em> is not neutral when the breach occurs within a dwelling. The dwelling holds the highest reasonable expectation of privacy recognized in Canadian constitutional law — established in <em>Hunter v. Southam</em>, [1984] 2 SCR 145, and consistently reaffirmed. A warrantless search of a home, or a warranted search based on constitutionally deficient grounds, represents a severe intrusion that weighs heavily on the first two <em>Grant</em> factors.<br><br>Where police use cannabis odour alone — a scent that is now associated with legal activity under the <em>Cannabis Act</em> — as the primary basis for establishing RPG for a dwelling search warrant, that ITO is presumptively insufficient. The odour of cannabis in 2025 is as probative of legal personal cultivation as the smell of wine is probative of bootlegging. Courts must not accept stale odour-based ITOs without meaningful independent corroboration.</div>
+          <div class="op-divider"></div>
+          <div class="op-section-label">Disposition</div>
+          <div class="op-disposition">
+            <div class="op-disposition-label">Order of the Court</div>
+            <div class="op-disposition-text">Evidence seized pursuant to a warrant issued on the basis of cannabis odour alone, without additional corroboration of commercial-scale activity, is presumptively subject to exclusion under s.24(2). The Crown may rebut this presumption by demonstrating that the ITO contained objective grounds beyond odour — such as surveillance evidence, independent informant information, or observed commercial indicators. Where the Crown cannot so demonstrate, the evidence shall be excluded. Granted.</div>
+          </div>
+          <div class="op-signatories">
+            <span class="op-signatory">J. Privacy, A.J. (authoring)</span>
+            <span class="op-signatory">J. Liberty, A.J.</span>
+            <span class="op-signatory">J. Prime, C.J.</span>
+            <span class="op-signatory">All remaining Justices concurring in outcome</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- DEREK'S CASES — Professional+ gated -->
+<div class="cases-section" id="derek-cases-section">
+  <div class="section-header">Derek's Cases — Judicial Analysis</div>
+  <div class="cs-title">Francisco v. A.G. Canada — Constitutional Analysis</div>
+  <p class="cs-sub">AI judicial assessment of constitutional claims. Likelihood matrices reflect case-law precedent weighting and are educational projections — not legal predictions or advice.</p>
+
+  <div class="case-analysis-card">
+    <div class="ca-style">Francisco v. Attorney General of Canada</div>
+    <div class="ca-type">Constitutional Challenge · Federal Court · Cannabis Act, ss.12(3)(b.1), 12(6)(c)</div>
+    <p class="ca-summary">Challenge to the household plant limit as applied to a medical cannabis patient requiring cultivation quantities beyond the statutory maximum. Claims advanced under ss.7, 12, and 15 of the Canadian Charter of Rights and Freedoms. The applicant's position: that the plant limit, as applied to authorized medical patients, violates life and liberty (s.7), constitutes cruel and unusual treatment through denial of medicine (s.12), and discriminates on the basis of disability (s.15).</p>
+    <div class="likelihood-grid">
+      <div class="lh-item">
+        <div class="lh-claim">Charter s.7 — Liberty</div>
+        <div class="lh-bar-bg"><div class="lh-bar-fill" style="width:73%;background:linear-gradient(90deg,var(--green),var(--gold))"></div></div>
+        <div class="lh-pct">73%</div>
+        <div class="lh-note">Strong <em>Parker/Allard</em> precedent. Medical necessity framing well-established. Plant count overbreadth argument is viable.</div>
+      </div>
+      <div class="lh-item">
+        <div class="lh-claim">Charter s.12 — Cruel Treatment</div>
+        <div class="lh-bar-bg"><div class="lh-bar-fill" style="width:68%;background:linear-gradient(90deg,var(--blue),var(--purple))"></div></div>
+        <div class="lh-pct">68%</div>
+        <div class="lh-note">s.12 applies to state-imposed conditions, not purely prohibitions. Denial of medicine framing has been accepted in lower courts.</div>
+      </div>
+      <div class="lh-item">
+        <div class="lh-claim">Charter s.15 — Equality</div>
+        <div class="lh-bar-bg"><div class="lh-bar-fill" style="width:81%;background:linear-gradient(90deg,var(--green),#7baef8))"></div></div>
+        <div class="lh-pct">81%</div>
+        <div class="lh-note">Disability-based discrimination claim is strongest. Regulatory framework discriminates against patients vs. recreational users in access design.</div>
+      </div>
+    </div>
+    <div class="ca-analysis">
+      <strong style="color:var(--gold)">Justice Prime's Analysis:</strong> The strongest path in Francisco v. AG Canada runs through s.15 with s.7 as the anchor. The plant limit discriminates against disabled persons (medical patients) relative to recreational users — both groups may legally cultivate four plants, but the practical effect on a patient whose medicine requires a larger yield is entirely different. The s.15 argument reframes the case from "right to grow more" to "right not to be denied medicine because of your health condition." Combine with the s.7 overbreadth argument from the Cultivation Opinion (CCLDR Opinion No. 1) and this is a case the government would seriously consider settling.
+    </div>
+  </div>
+
+  <div class="case-analysis-card">
+    <div class="ca-style">Francisco v. Denby — Defamation Analysis</div>
+    <div class="ca-type">Civil Action · Ontario Superior Court · Defamation, Damages</div>
+    <p class="ca-summary">Civil defamation action arising from false statements of fact concerning Derek Francisco's character, professional conduct, and personal reputation. Assessment includes: whether the statements are defamatory at common law, truth as a complete defence, qualified privilege analysis, and damages projection based on Ontario precedent.</p>
+    <div class="likelihood-grid">
+      <div class="lh-item">
+        <div class="lh-claim">Defamation — Prima Facie</div>
+        <div class="lh-bar-bg"><div class="lh-bar-fill" style="width:85%;background:linear-gradient(90deg,var(--green),var(--gold))"></div></div>
+        <div class="lh-pct">85%</div>
+        <div class="lh-note">Statements of fact (not opinion) about identifiable plaintiff that lower reputation in community. Elements appear met.</div>
+      </div>
+      <div class="lh-item">
+        <div class="lh-claim">General Damages Range</div>
+        <div class="lh-bar-bg"><div class="lh-bar-fill" style="width:0%;background:var(--gold)"></div></div>
+        <div class="lh-pct" style="font-size:16px">$25K–$150K</div>
+        <div class="lh-note">Ontario general damages range for non-media defamation with reputational impact. Aggravated damages possible if malice shown.</div>
+      </div>
+      <div class="lh-item">
+        <div class="lh-claim">Truth Defence Risk</div>
+        <div class="lh-bar-bg"><div class="lh-bar-fill" style="width:22%;background:linear-gradient(90deg,var(--crimson),#e05050)"></div></div>
+        <div class="lh-pct">22%</div>
+        <div class="lh-note">Low probability of successful truth defence where statements alleged to be fabricated. Burden on defendant to prove justification.</div>
+      </div>
+    </div>
+    <div class="ca-analysis">
+      <strong style="color:var(--gold)">Justice Equity's Analysis:</strong> The Francisco v. Denby matter presents a straightforward defamation frame, but the strategic value of the litigation extends beyond damages. A successful action establishes a public record of vindication — which in itself has reputational value that cannot be quantified in a damages award. Consider whether the litigation serves dual purposes: monetary remedy and public narrative correction. In Ontario, where courts have awarded aggravated and punitive damages in cases involving deliberate reputational attacks, the ceiling is higher than the general range if malice is established on the evidence.
+    </div>
+  </div>
+</div>
+
+<!-- LOCKED PANEL — shown for free/warrior -->
+<div class="locked-section" id="locked-panel" style="display:none">
+  <div class="locked-box">
+    <div class="lb-icon">🏛️</div>
+    <div class="lb-title">Professional Access Required for Chambers</div>
+    <p class="lb-sub">The Judge's Chambers — including Derek's Cases judicial analysis, AI constitutional assessments, and likelihood matrices — requires Professional tier or above. The Justices' profiles and Landmark Rulings are available to all visitors.</p>
+    <div class="lb-btns">
+      <a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup" class="lb-btn lb-btn-pro">Professional — $499/mo</a>
+      <a href="mailto:info@ccldr.net?subject=Elite%20Tier%20Signup" class="lb-btn lb-btn-elite">Elite — $999/mo</a>
+    </div>
+  </div>
+</div>
+
+<!-- UPGRADE MODAL -->
+<div class="modal-overlay" id="upgrade-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-icon">⚖️</div>
+    <div class="modal-title" id="modal-title">Professional Access Required</div>
+    <p class="modal-sub" id="modal-sub">The Judge's Chambers case analysis requires Professional tier access. Upgrade to unlock constitutional likelihood matrices and AI judicial opinions on your cases.</p>
+    <div class="modal-tiers">
+      <a href="mailto:info@ccldr.net?subject=Professional%20Tier%20Signup" class="mti mti-pro">Professional — $499/mo · Full Chambers Access</a>
+      <a href="mailto:info@ccldr.net?subject=Elite%20Tier%20Signup" class="mti mti-elite">Elite — $999/mo · All Rooms + Records</a>
+    </div>
+    <div style="font-size:11px;color:var(--muted)">Questions? <a href="mailto:info@ccldr.net" style="color:var(--gold)">info@ccldr.net</a></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-ccldr">CCLDR.NET</div>
+  <div class="footer-sub">Cannabis Legal Defense &amp; Education Resources · Doc WeedLaw · Virtual Courthouse</div>
+  <div class="footer-links">
+    <a href="https://ccldr.net">ccldr.net</a>
+    <a href="lobby.html">Courthouse Lobby</a>
+    <a href="courtroom.html">Courtroom</a>
+    <a href="library.html">Library</a>
+    <a href="classroom.html">Classroom</a>
+    <a href="judges-chambers.html">Judge's Chambers</a>
+    <a href="mailto:info@ccldr.net">Contact</a>
+    <a href="pricing.html">Pricing</a>
+  </div>
+  <div class="footer-bottom">© 2026 CCLDR.NET | Doc WeedLaw | <a href="https://ccldr.net" style="color:rgba(136,136,136,.5)">ccldr.net</a> · A Francisco Holdings Inc. Venture · All information is educational — not legal advice</div>
+</footer>
+
+<script type="module" src="/membership.js"></script>
+<script>
+const TIER_ORDER = ['free','warrior','professional','elite','sovereign'];
+const TIER_LABELS = {free:'Free',warrior:'Warrior',professional:'Professional',elite:'Elite',sovereign:'Sovereign'};
+let ccldrVerifiedTier = 'free';
+
+function tierRank(t){ return TIER_ORDER.indexOf(t||'free'); }
+
+function checkTier(){
+  const tier = ccldrVerifiedTier;
+  const rank = tierRank(tier);
+
+  document.getElementById('hero-tier-label').textContent = TIER_LABELS[tier] || 'Free';
+
+  // Derek's Cases — Professional+ only
+  const casesSection = document.getElementById('derek-cases-section');
+  const lockedPanel = document.getElementById('locked-panel');
+
+  if(rank >= 2){ // professional+
+    casesSection.style.display = 'block';
+    lockedPanel.style.display = 'none';
+  } else {
+    casesSection.style.display = 'none';
+    lockedPanel.style.display = 'block';
+  }
+}
+
+function tierGate(required){
+  const tier = ccldrVerifiedTier;
+  const rank = tierRank(tier);
+  const req = tierRank(required);
+  if(rank < req){
+    document.getElementById('modal-title').textContent = TIER_LABELS[required] + ' Access Required';
+    document.getElementById('modal-sub').textContent = 'This section of the Judge\'s Chambers requires ' + TIER_LABELS[required] + ' tier access or above.';
+    document.getElementById('upgrade-modal').classList.add('open');
+    return false;
+  }
+  return true;
+}
+
+function showOpinion(id){
+  const panel = document.getElementById('jop-'+id);
+  const btn = document.getElementById('jcard-'+id).querySelector('.justice-btn');
+  if(panel.classList.contains('open')){
+    panel.classList.remove('open');
+    btn.textContent = 'View Opinions';
+  } else {
+    panel.classList.add('open');
+    btn.textContent = 'Close Opinions';
+  }
+}
+
+function showOpinionDoc(id){
+  const expanded = document.getElementById('opdoc-'+id);
+  const hint = expanded.previousElementSibling;
+  if(expanded.classList.contains('open')){
+    expanded.classList.remove('open');
+    if(hint && hint.classList.contains('op-toggle-hint')) hint.textContent = 'Click to expand full opinion →';
+  } else {
+    expanded.classList.add('open');
+    if(hint && hint.classList.contains('op-toggle-hint')) hint.textContent = 'Click to collapse opinion ↑';
+  }
+}
+
+function closeModal(){
+  document.getElementById('upgrade-modal').classList.remove('open');
+}
+document.getElementById('upgrade-modal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+// Initialize
+checkTier();
+document.addEventListener('ccldr-tier-verified', (e) => {
+  ccldrVerifiedTier = e.detail.tier;
+  checkTier();
+});
+</script>
+</body>
+</html>

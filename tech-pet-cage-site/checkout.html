@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — TechPetCage</title>
+<meta name="description" content="Complete your order at TechPetCage — Smart tech for your pets.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0066FF;
+  --blue-dark: #0052CC;
+  --orange: #FF6B35;
+  --mint: #00D9C0;
+  --dark: #0a0f1e;
+  --panel: #131929;
+  --border: #1e2a45;
+  --white: #f8faff;
+  --muted: #7a8bb0;
+  --success: #00D9C0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--white); min-height: 100vh; }
+
+/* NAV */
+nav { background: var(--panel); border-bottom: 1px solid var(--border); padding: 0 40px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo svg { width: 32px; height: 32px; }
+.nav-logo-text { font-size: 17px; font-weight: 700; color: var(--white); }
+.nav-logo-text span { color: var(--blue); }
+.nav-secure { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.nav-secure::before { content: '🔒'; font-size: 14px; }
+
+/* BREADCRUMB */
+.breadcrumb { background: rgba(30,42,69,0.5); padding: 12px 40px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.breadcrumb a { color: var(--blue); text-decoration: none; }
+.breadcrumb span { opacity: 0.4; }
+
+/* LAYOUT */
+.checkout-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+
+/* FORM SIDE */
+.checkout-form-section { }
+
+.section-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.section-title .step-badge { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+.form-block { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.form-group { margin-bottom: 16px; }
+.form-group:last-child { margin-bottom: 0; }
+
+.form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+
+.form-group input, .form-group select {
+  width: 100%;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0,102,255,0.12);
+}
+.form-group input::placeholder { color: rgba(122,139,176,0.5); }
+.form-group select option { background: var(--dark); }
+
+.form-group input.error { border-color: #ff4d4d; }
+
+/* PAYMENT */
+.card-icons { display: flex; gap: 8px; margin-bottom: 16px; }
+.card-icon { background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700; color: var(--muted); }
+
+.stripe-notice { display: flex; align-items: center; gap: 8px; background: rgba(0,217,192,0.06); border: 1px solid rgba(0,217,192,0.2); border-radius: 8px; padding: 12px 16px; margin-top: 16px; font-size: 12px; color: var(--mint); }
+
+/* ORDER SUMMARY SIDE */
+.order-summary { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 28px; position: sticky; top: 80px; }
+
+.summary-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+
+.summary-items { margin-bottom: 20px; }
+
+.summary-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(30,42,69,0.6); }
+
+.item-img { width: 56px; height: 56px; border-radius: 8px; background: linear-gradient(135deg, var(--blue) 0%, var(--mint) 100%); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+
+.item-info { flex: 1; }
+.item-name { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.item-qty { font-size: 12px; color: var(--muted); }
+
+.item-price { font-size: 15px; font-weight: 700; color: var(--white); }
+
+.summary-lines { border-top: 1px solid var(--border); padding-top: 16px; }
+
+.summary-line { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+.summary-line.total { color: var(--white); font-size: 18px; font-weight: 700; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.summary-line.free { color: var(--success); }
+
+.discount-code { display: flex; gap: 8px; margin: 16px 0; }
+.discount-input { flex: 1; background: var(--dark); border: 1px solid var(--border); color: var(--white); padding: 10px 14px; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; outline: none; }
+.discount-input:focus { border-color: var(--blue); }
+.discount-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+.discount-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+.place-order-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.15s, box-shadow 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.place-order-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,102,255,0.35); }
+.place-order-btn:active { transform: translateY(0); }
+.place-order-btn.loading { opacity: 0.7; pointer-events: none; }
+
+.trust-badges { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.trust-badge { background: rgba(30,42,69,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+
+/* SHIPPING OPTIONS */
+.shipping-options { display: flex; flex-direction: column; gap: 12px; }
+.shipping-option { display: flex; align-items: flex-start; gap: 12px; background: var(--dark); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; cursor: pointer; transition: border-color 0.2s; }
+.shipping-option:hover { border-color: var(--blue); }
+.shipping-option input[type="radio"] { accent-color: var(--blue); margin-top: 2px; flex-shrink: 0; }
+.shipping-option.selected { border-color: var(--blue); background: rgba(0,102,255,0.06); }
+.shipping-label { flex: 1; }
+.shipping-name { font-size: 14px; font-weight: 600; color: var(--white); }
+.shipping-eta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.shipping-price { font-size: 14px; font-weight: 700; color: var(--mint); }
+
+@media (max-width: 860px) {
+  .checkout-wrap { grid-template-columns: 1fr; }
+  .order-summary { position: static; order: -1; }
+  nav { padding: 0 16px; }
+  .breadcrumb { padding: 10px 16px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 40 40" fill="none">
+      <rect width="40" height="40" rx="10" fill="#0066FF"/>
+      <path d="M20 8 L24 14 L32 14 L26 20 L28 28 L20 24 L12 28 L14 20 L8 14 L16 14 Z" fill="white" opacity="0.9"/>
+    </svg>
+    <span class="nav-logo-text">Tech<span>Pet</span>Cage</span>
+  </a>
+  <div class="nav-secure">Secure Checkout</div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="cart.html">Cart</a>
+  <span>›</span>
+  <strong style="color:var(--white);">Checkout</strong>
+  <span>›</span>
+  <span>Confirmation</span>
+</div>
+
+<div class="checkout-wrap">
+
+  <!-- FORM SIDE -->
+  <div class="checkout-form-section">
+    <form id="checkout-form" onsubmit="placeOrder(event)">
+
+      <!-- CONTACT -->
+      <div class="form-block">
+        <div class="section-title"><span class="step-badge">1</span> Contact Information</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" name="first_name" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" name="last_name" placeholder="Doe" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone (Optional)</label>
+          <input type="tel" name="phone" placeholder="+1 (555) 000-0000">
+        </div>
+      </div>
+
+      <!-- SHIPPING ADDRESS -->
+      <div class="form-block">
+        <div class="section-title"><span class="step-badge">2</span> Shipping Address</div>
+        <div class="form-group">
+          <label>Street Address *</label>
+          <input type="text" name="address" placeholder="123 Main Street" required>
+        </div>
+        <div class="form-group">
+          <label>Apartment / Suite (Optional)</label>
+          <input type="text" name="address2" placeholder="Apt 4B">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City *</label>
+            <input type="text" name="city" placeholder="Toronto" required>
+          </div>
+          <div class="form-group">
+            <label>Province / State *</label>
+            <input type="text" name="state" placeholder="Ontario" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Postal / ZIP *</label>
+            <input type="text" name="postal" placeholder="M5V 3L9" required>
+          </div>
+          <div class="form-group">
+            <label>Country *</label>
+            <select name="country" required>
+              <option value="">Select country</option>
+              <option value="CA" selected>Canada</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AU">Australia</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHIPPING METHOD -->
+      <div class="form-block">
+        <div class="section-title"><span class="step-badge">3</span> Shipping Method</div>
+        <div class="shipping-options">
+          <label class="shipping-option selected" onclick="selectShipping(this, 0, '15–30 business days')">
+            <input type="radio" name="shipping" value="standard" checked>
+            <div class="shipping-label">
+              <div class="shipping-name">Standard Shipping</div>
+              <div class="shipping-eta">15–30 business days · Direct from manufacturer</div>
+            </div>
+            <div class="shipping-price">FREE</div>
+          </label>
+          <label class="shipping-option" onclick="selectShipping(this, 12.99, '10–18 business days')">
+            <input type="radio" name="shipping" value="expedited">
+            <div class="shipping-label">
+              <div class="shipping-name">Expedited Shipping</div>
+              <div class="shipping-eta">10–18 business days · Priority handling</div>
+            </div>
+            <div class="shipping-price">$12.99</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="form-block">
+        <div class="section-title"><span class="step-badge">4</span> Payment</div>
+        <div class="card-icons">
+          <span class="card-icon">VISA</span>
+          <span class="card-icon">MC</span>
+          <span class="card-icon">AMEX</span>
+          <span class="card-icon">PAYPAL</span>
+        </div>
+        <div class="form-group">
+          <label>Card Number *</label>
+          <input type="text" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Expiry Date *</label>
+            <input type="text" name="expiry" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)" required>
+          </div>
+          <div class="form-group">
+            <label>CVV *</label>
+            <input type="text" name="cvv" placeholder="123" maxlength="4" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Name on Card *</label>
+          <input type="text" name="card_name" placeholder="John Doe" required>
+        </div>
+        <div class="stripe-notice">
+          🔒 Payment processed securely via Stripe. Your card details are never stored on our servers.
+        </div>
+      </div>
+
+      <button type="submit" class="place-order-btn" id="place-order-btn">
+        🔒 Place Order
+      </button>
+    </form>
+  </div>
+
+  <!-- ORDER SUMMARY -->
+  <div class="order-summary">
+    <div class="summary-title">Order Summary</div>
+
+    <div class="summary-items" id="summary-items">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="discount-code">
+      <input class="discount-input" type="text" placeholder="Discount code" id="discount-input">
+      <button class="discount-btn" onclick="applyDiscount()">Apply</button>
+    </div>
+
+    <div class="summary-lines">
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <span id="subtotal-val">$0.00</span>
+      </div>
+      <div class="summary-line free">
+        <span>Shipping</span>
+        <span id="shipping-val">FREE</span>
+      </div>
+      <div class="summary-line" id="discount-line" style="display:none;color:var(--mint);">
+        <span>Discount (TECHPET10)</span>
+        <span id="discount-val">-$0.00</span>
+      </div>
+      <div class="summary-line total">
+        <span>Total</span>
+        <span id="total-val">$0.00</span>
+      </div>
+    </div>
+
+    <div class="trust-badges">
+      <div class="trust-badge">🚚 Free Shipping $75+</div>
+      <div class="trust-badge">↩ 30-Day Returns</div>
+      <div class="trust-badge">🔒 Secure Checkout</div>
+      <div class="trust-badge">📦 Tracked Delivery</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Cart data ──────────────────────────────────────
+const CART_KEY = 'tpc_cart';
+
+function getCart() {
+  try {
+    return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+// Demo items if cart is empty
+const DEMO_CART = [
+  { id: 1, name: 'AutoFeed WiFi Pro', price: 89.99, qty: 1, emoji: '🤖' },
+  { id: 2, name: 'GPS PawTracker', price: 49.99, qty: 2, emoji: '📡' }
+];
+
+let cart = getCart();
+if (cart.length === 0) cart = DEMO_CART;
+
+let shippingCost = 0;
+let discountApplied = false;
+const DISCOUNT_CODE = 'TECHPET10';
+const DISCOUNT_PCT = 0.10;
+
+function calcSubtotal() {
+  return cart.reduce((s, i) => s + (i.price * i.qty), 0);
+}
+
+function calcTotal() {
+  let sub = calcSubtotal();
+  let discount = discountApplied ? sub * DISCOUNT_PCT : 0;
+  return sub - discount + shippingCost;
+}
+
+function renderSummary() {
+  const items = document.getElementById('summary-items');
+  items.innerHTML = cart.map(item => `
+    <div class="summary-item">
+      <div class="item-img">${item.emoji || '🐾'}</div>
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        <div class="item-qty">Qty: ${item.qty}</div>
+      </div>
+      <div class="item-price">$${(item.price * item.qty).toFixed(2)}</div>
+    </div>
+  `).join('');
+
+  const sub = calcSubtotal();
+  const discount = discountApplied ? sub * DISCOUNT_PCT : 0;
+
+  document.getElementById('subtotal-val').textContent = '$' + sub.toFixed(2);
+  document.getElementById('shipping-val').textContent = shippingCost === 0 ? 'FREE' : '$' + shippingCost.toFixed(2);
+  document.getElementById('total-val').textContent = '$' + calcTotal().toFixed(2);
+
+  if (discountApplied) {
+    document.getElementById('discount-line').style.display = 'flex';
+    document.getElementById('discount-val').textContent = '-$' + discount.toFixed(2);
+  }
+}
+
+function selectShipping(el, cost, eta) {
+  document.querySelectorAll('.shipping-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  shippingCost = cost;
+  renderSummary();
+}
+
+function applyDiscount() {
+  const code = document.getElementById('discount-input').value.trim().toUpperCase();
+  if (code === DISCOUNT_CODE) {
+    discountApplied = true;
+    renderSummary();
+    showToast('✓ Discount applied — 10% off!', 'success');
+  } else {
+    showToast('Invalid discount code', 'error');
+  }
+}
+
+// ── Card formatting ────────────────────────────────
+function formatCard(el) {
+  let v = el.value.replace(/\D/g, '').substring(0, 16);
+  el.value = v.replace(/(.{4})/g, '$1 ').trim();
+}
+
+function formatExpiry(el) {
+  let v = el.value.replace(/\D/g, '');
+  if (v.length >= 2) v = v.substring(0, 2) + ' / ' + v.substring(2, 4);
+  el.value = v;
+}
+
+// ── Order placement ───────────────────────────────
+function placeOrder(e) {
+  e.preventDefault();
+  const btn = document.getElementById('place-order-btn');
+  btn.classList.add('loading');
+  btn.textContent = '⏳ Processing...';
+
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  // Build order email
+  const orderLines = cart.map(i => `• ${i.name} × ${i.qty} = $${(i.price * i.qty).toFixed(2)}`).join('\n');
+  const subject = encodeURIComponent('TechPetCage Order — ' + data.first_name + ' ' + data.last_name);
+  const body = encodeURIComponent(
+    'NEW ORDER\n\n' +
+    'Customer: ' + data.first_name + ' ' + data.last_name + '\n' +
+    'Email: ' + data.email + '\n' +
+    'Phone: ' + (data.phone || 'N/A') + '\n\n' +
+    'SHIPPING ADDRESS:\n' +
+    data.address + (data.address2 ? ' ' + data.address2 : '') + '\n' +
+    data.city + ', ' + data.state + ' ' + data.postal + '\n' +
+    data.country + '\n\n' +
+    'ITEMS:\n' + orderLines + '\n\n' +
+    'Subtotal: $' + calcSubtotal().toFixed(2) + '\n' +
+    'Shipping: ' + (shippingCost === 0 ? 'FREE' : '$' + shippingCost.toFixed(2)) + '\n' +
+    (discountApplied ? 'Discount: -$' + (calcSubtotal() * DISCOUNT_PCT).toFixed(2) + '\n' : '') +
+    'TOTAL: $' + calcTotal().toFixed(2) + '\n\n' +
+    'Shipping Method: ' + (shippingCost === 0 ? 'Standard (15-30 days)' : 'Expedited (10-18 days)')
+  );
+
+  // Save order to localStorage for success page
+  const orderId = 'TPC-' + Date.now().toString(36).toUpperCase();
+  const order = {
+    id: orderId,
+    items: cart,
+    subtotal: calcSubtotal(),
+    shipping: shippingCost,
+    total: calcTotal(),
+    email: data.email,
+    name: data.first_name + ' ' + data.last_name,
+    address: data.address + ', ' + data.city + ', ' + data.state,
+    date: new Date().toLocaleDateString()
+  };
+  localStorage.setItem('tpc_last_order', JSON.stringify(order));
+
+  // Open mailto then redirect
+  setTimeout(() => {
+    window.location.href = 'mailto:omniaguard1@gmail.com?subject=' + subject + '&body=' + body;
+    setTimeout(() => {
+      localStorage.removeItem(CART_KEY);
+      window.location.href = 'success.html';
+    }, 1500);
+  }, 1000);
+}
+
+// ── Toast ─────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:' + (type === 'success' ? 'var(--mint)' : '#ff4d4d') + ';color:#000;padding:14px 20px;border-radius:10px;font-weight:600;font-size:14px;animation:slideIn 0.3s ease;';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ── Init ──────────────────────────────────────────
+renderSummary();
+</script>
+</body>
+</html>
