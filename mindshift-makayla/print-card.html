@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Makayla Francisco — MindShift Business Card (Print Ready)</title>
+<style>
+  /* ============================================================
+     PRINT SETUP — 3.5" × 2" business card, no margins
+     Instructions for print shop:
+       - Print size: 3.5in × 2in (standard business card)
+       - Bleed: 0.125in on all sides
+       - Print on 16pt matte or soft-touch laminate
+       - Color mode: CMYK (gold approx. C:0 M:20 Y:75 K:20)
+  ============================================================ */
+  @page {
+    size: 3.5in 2in;
+    margin: 0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 3.5in;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #fff;
+  }
+
+  /* ============================================================
+     CARD WRAPPER — each card is exactly 3.5" × 2"
+     Page 1 = front, Page 2 = back
+  ============================================================ */
+  .card {
+    width: 3.5in;
+    height: 2in;
+    overflow: hidden;
+    position: relative;
+    page-break-after: always;
+  }
+
+  /* ─── FRONT CARD ─────────────────────────────────────────── */
+  .card-front {
+    background: #1B1A2E;
+  }
+
+  /* Gold border frame */
+  .card-front .border-frame {
+    position: absolute;
+    inset: 0.1in;
+    border: 1pt solid #C9A84C;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Corner accents */
+  .card-front .corner {
+    position: absolute;
+    width: 0.18in;
+    height: 0.18in;
+    border-color: #C9A84C;
+    border-style: solid;
+    z-index: 3;
+  }
+  .card-front .corner-tl { top: 0.06in; left: 0.06in; border-width: 1.5pt 0 0 1.5pt; }
+  .card-front .corner-tr { top: 0.06in; right: 0.06in; border-width: 1.5pt 1.5pt 0 0; }
+  .card-front .corner-bl { bottom: 0.06in; left: 0.06in; border-width: 0 0 1.5pt 1.5pt; }
+  .card-front .corner-br { bottom: 0.06in; right: 0.06in; border-width: 0 1.5pt 1.5pt 0; }
+
+  /* Cherry blossom decoration — top right */
+  .blossom-deco {
+    position: absolute;
+    top: -0.05in;
+    right: -0.05in;
+    width: 0.9in;
+    height: 0.9in;
+    opacity: 0.18;
+    z-index: 1;
+  }
+
+  /* Left column — logo + wordmark */
+  .front-left {
+    position: absolute;
+    left: 0.22in;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.04in;
+    z-index: 4;
+  }
+
+  .logo-seal {
+    width: 0.7in;
+    height: 0.7in;
+  }
+
+  .wordmark {
+    font-family: Georgia, serif;
+    font-size: 9pt;
+    font-weight: 700;
+    color: #C9A84C;
+    letter-spacing: 0.12em;
+    text-align: center;
+  }
+
+  .wordmark-sub {
+    font-family: Georgia, serif;
+    font-size: 5pt;
+    color: #7ECDC0;
+    letter-spacing: 0.15em;
+    text-align: center;
+    margin-top: 0.01in;
+    opacity: 0.9;
+  }
+
+  /* Divider line */
+  .front-divider {
+    position: absolute;
+    left: 1.12in;
+    top: 0.18in;
+    bottom: 0.18in;
+    width: 0.5pt;
+    background: linear-gradient(to bottom, transparent, #C9A84C 30%, #C9A84C 70%, transparent);
+    z-index: 4;
+  }
+
+  /* Right column — name + title + tagline */
+  .front-right {
+    position: absolute;
+    left: 1.26in;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+  }
+
+  .card-name {
+    font-family: Georgia, serif;
+    font-size: 12.5pt;
+    font-weight: 700;
+    color: #F4F0FF;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 0.04in;
+  }
+
+  .card-title {
+    font-family: Georgia, serif;
+    font-size: 6.5pt;
+    color: #C9A84C;
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+    margin-bottom: 0.06in;
+    font-style: italic;
+  }
+
+  .card-tagline {
+    font-size: 5pt;
+    color: #7ECDC0;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-family: Georgia, serif;
+  }
+
+  /* Teal accent bar — bottom of card */
+  .front-accent-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3pt;
+    background: linear-gradient(to right, #1B1A2E, #7ECDC0 40%, #F4A5B8 70%, #C9A84C);
+    z-index: 4;
+  }
+
+  /* ─── BACK CARD ──────────────────────────────────────────── */
+  .card-back {
+    background: #14132A;
+  }
+
+  /* Subtle blossom watermark center */
+  .back-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1.1in;
+    height: 1.1in;
+    opacity: 0.06;
+    z-index: 1;
+  }
+
+  /* Gold border frame */
+  .card-back .border-frame {
+    position: absolute;
+    inset: 0.1in;
+    border: 1pt solid #C9A84C;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Corner accents */
+  .card-back .corner {
+    position: absolute;
+    width: 0.18in;
+    height: 0.18in;
+    border-color: #C9A84C;
+    border-style: solid;
+    z-index: 3;
+  }
+  .card-back .corner-tl { top: 0.06in; left: 0.06in; border-width: 1.5pt 0 0 1.5pt; }
+  .card-back .corner-tr { top: 0.06in; right: 0.06in; border-width: 1.5pt 1.5pt 0 0; }
+  .card-back .corner-bl { bottom: 0.06in; left: 0.06in; border-width: 0 0 1.5pt 1.5pt; }
+  .card-back .corner-br { bottom: 0.06in; right: 0.06in; border-width: 0 1.5pt 1.5pt 0; }
+
+  /* Contact block */
+  .back-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.055in;
+    z-index: 4;
+    padding: 0.22in;
+  }
+
+  .back-name {
+    font-family: Georgia, serif;
+    font-size: 11pt;
+    font-weight: 700;
+    color: #F4F0FF;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+
+  .back-title {
+    font-family: Georgia, serif;
+    font-size: 5.5pt;
+    color: #C9A84C;
+    letter-spacing: 0.12em;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .back-divider {
+    width: 0.5in;
+    height: 0.5pt;
+    background: #C9A84C;
+    opacity: 0.6;
+  }
+
+  .contact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.025in;
+    align-items: center;
+  }
+
+  .contact-item {
+    font-family: Georgia, serif;
+    font-size: 5pt;
+    color: #B8C0D4;
+    letter-spacing: 0.08em;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .contact-item span {
+    color: #7ECDC0;
+    font-size: 4.5pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-right: 3pt;
+  }
+
+  .back-url {
+    font-family: Georgia, serif;
+    font-size: 4.5pt;
+    color: #C9A84C;
+    letter-spacing: 0.08em;
+    text-align: center;
+    opacity: 0.85;
+  }
+
+  .back-social {
+    display: flex;
+    gap: 0.1in;
+    align-items: center;
+  }
+
+  .back-social-item {
+    font-family: Georgia, serif;
+    font-size: 4.5pt;
+    color: #B097A8;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  .back-kokoro {
+    font-family: Georgia, serif;
+    font-size: 4.5pt;
+    color: #7ECDC0;
+    letter-spacing: 0.2em;
+    text-align: center;
+    opacity: 0.7;
+  }
+
+  /* Accent bar bottom */
+  .back-accent-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3pt;
+    background: linear-gradient(to right, #C9A84C, #F4A5B8 40%, #7ECDC0 70%, #1B1A2E);
+    z-index: 4;
+  }
+
+  /* Screen preview wrapper */
+  @media screen {
+    body {
+      background: #0a0a14;
+      width: 100vw;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      color: #C9A84C;
+      font-family: Georgia, serif;
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .preview-label {
+      color: #7ECDC0;
+      font-family: Georgia, serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-align: center;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .card {
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 0 1px rgba(201,168,76,0.2);
+      transform: scale(2.2);
+      transform-origin: top center;
+      margin-bottom: 60px;
+    }
+
+    .print-instructions {
+      color: #B097A8;
+      font-family: Georgia, serif;
+      font-size: 12px;
+      text-align: center;
+      max-width: 500px;
+      line-height: 1.8;
+      margin-top: 120px;
+      padding: 20px;
+      border: 1px solid rgba(201,168,76,0.2);
+      background: rgba(27,26,46,0.6);
+    }
+
+    .print-instructions strong {
+      color: #C9A84C;
+    }
+
+    .print-btn {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 12px 32px;
+      background: #C9A84C;
+      color: #1B1A2E;
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .print-btn:hover {
+      background: #B8924A;
+    }
+  }
+
+  @media print {
+    body { background: transparent; width: 3.5in; }
+    h1, .preview-label, .print-instructions, .print-btn, .screen-only { display: none !important; }
+    .card { transform: none; margin: 0; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="screen-only">MINDSHIFT — Business Card</h1>
+<p class="preview-label screen-only">Print-Ready · 3.5" × 2" · Dark Navy / Gold / Cherry Blossom</p>
+
+<!-- ═══════════════════════════════════════════════════
+     FRONT CARD
+═══════════════════════════════════════════════════ -->
+<p class="preview-label screen-only">— FRONT —</p>
+<div class="card card-front">
+  <div class="border-frame"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Cherry blossom watermark top-right -->
+  <svg class="blossom-deco" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(50,50)">
+      <ellipse transform="rotate(0)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <ellipse transform="rotate(72)" cx="0" cy="-22" rx="12" ry="20" fill="#FBDCE5"/>
+      <ellipse transform="rotate(144)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <ellipse transform="rotate(216)" cx="0" cy="-22" rx="12" ry="20" fill="#FBDCE5"/>
+      <ellipse transform="rotate(288)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <circle cx="0" cy="0" r="10" fill="#C9A84C"/>
+    </g>
+  </svg>
+
+  <!-- Logo + wordmark left column -->
+  <div class="front-left">
+    <svg class="logo-seal" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer octagon -->
+      <polygon points="150,18 218,40 268,100 278,170 248,240 185,278 115,278 52,240 22,170 32,100 82,40"
+        fill="none" stroke="#C9A84C" stroke-width="4"/>
+      <polygon points="150,22 215,43 263,101 273,169 244,237 183,274 117,274 56,237 27,169 37,101 85,43"
+        fill="#14132A"/>
+      <!-- Orbital ring -->
+      <circle cx="150" cy="150" r="108" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.4"/>
+      <!-- Orbital petals — alternating pink/teal, 10 petals -->
+      <ellipse transform="translate(150,42) rotate(0,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#F4A5B8"/>
+      <ellipse transform="translate(214.6,68.4) rotate(36,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#7ECDC0"/>
+      <ellipse transform="translate(254.6,131) rotate(72,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#F4A5B8"/>
+      <ellipse transform="translate(254.6,169) rotate(108,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#7ECDC0"/>
+      <ellipse transform="translate(214.6,231.6) rotate(144,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#F4A5B8"/>
+      <ellipse transform="translate(150,258) rotate(180,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#7ECDC0"/>
+      <ellipse transform="translate(85.4,231.6) rotate(216,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#F4A5B8"/>
+      <ellipse transform="translate(45.4,169) rotate(252,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#7ECDC0"/>
+      <ellipse transform="translate(45.4,131) rotate(288,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#F4A5B8"/>
+      <ellipse transform="translate(85.4,68.4) rotate(324,0,0)" cx="0" cy="0" rx="7" ry="11" fill="#7ECDC0"/>
+      <!-- Inner shield -->
+      <polygon points="150,76 194,101 194,201 150,226 106,201 106,101" fill="#111022" stroke="#C9A84C" stroke-width="2"/>
+      <!-- 5-petal blossom -->
+      <g transform="translate(150,150)">
+        <ellipse transform="rotate(0)" cx="0" cy="-26" rx="14" ry="22" fill="#F4A5B8" opacity="0.95"/>
+        <ellipse transform="rotate(72)" cx="0" cy="-26" rx="14" ry="22" fill="#FBDCE5" opacity="0.95"/>
+        <ellipse transform="rotate(144)" cx="0" cy="-26" rx="14" ry="22" fill="#F4A5B8" opacity="0.95"/>
+        <ellipse transform="rotate(216)" cx="0" cy="-26" rx="14" ry="22" fill="#FBDCE5" opacity="0.95"/>
+        <ellipse transform="rotate(288)" cx="0" cy="-26" rx="14" ry="22" fill="#F4A5B8" opacity="0.95"/>
+        <circle cx="0" cy="0" r="12" fill="#C9A84C"/>
+        <circle cx="0" cy="0" r="6" fill="#B8924A"/>
+      </g>
+      <!-- M monogram -->
+      <text x="150" y="224" font-family="Georgia,serif" font-size="20" font-weight="700"
+        fill="#C9A84C" text-anchor="middle" letter-spacing="2">M</text>
+    </svg>
+    <div class="wordmark">MINDSHIFT</div>
+    <div class="wordmark-sub">心の転換</div>
+  </div>
+
+  <!-- Vertical divider -->
+  <div class="front-divider"></div>
+
+  <!-- Name + title right column -->
+  <div class="front-right">
+    <div class="card-name">Makayla Francisco</div>
+    <div class="card-title">
+      Fourth Year Psychology Graduate<br>
+      Mindset Coach &nbsp;·&nbsp; Future Author
+    </div>
+    <div class="card-tagline">Psychology · Sustainability · AI</div>
+  </div>
+
+  <!-- Gradient accent bar bottom -->
+  <div class="front-accent-bar"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     BACK CARD
+═══════════════════════════════════════════════════ -->
+<p class="preview-label screen-only">— BACK —</p>
+<div class="card card-back">
+  <div class="border-frame"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Watermark blossom -->
+  <svg class="back-watermark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(50,50)">
+      <ellipse transform="rotate(0)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <ellipse transform="rotate(72)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <ellipse transform="rotate(144)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <ellipse transform="rotate(216)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <ellipse transform="rotate(288)" cx="0" cy="-22" rx="12" ry="20" fill="#F4A5B8"/>
+      <circle cx="0" cy="0" r="10" fill="#C9A84C"/>
+    </g>
+  </svg>
+
+  <div class="back-content">
+    <div class="back-name">Makayla Francisco</div>
+    <div class="back-title">Fourth Year Psychology Graduate &nbsp;·&nbsp; Mindset Coach &nbsp;·&nbsp; Future Author</div>
+    <div class="back-divider"></div>
+
+    <div class="contact-grid">
+      <div class="contact-item"><span>Email</span>makayla@mindshift.ca</div>
+      <div class="contact-item"><span>Phone</span>+1 (705) 555-0199</div>
+      <div class="contact-item"><span>Location</span>Peterborough, Ontario &nbsp;·&nbsp; Virtual Worldwide</div>
+    </div>
+
+    <div class="back-url">franciscoderek7.github.io/mindshift-makayla</div>
+
+    <div class="back-social">
+      <div class="back-social-item">PayPal</div>
+      <div class="back-social-item" style="color:#C9A84C; opacity:0.4;">·</div>
+      <div class="back-social-item">Facebook</div>
+      <div class="back-social-item" style="color:#C9A84C; opacity:0.4;">·</div>
+      <div class="back-social-item">LinkedIn</div>
+      <div class="back-social-item" style="color:#C9A84C; opacity:0.4;">·</div>
+      <div class="back-social-item">X</div>
+    </div>
+
+    <div class="back-kokoro">心の転換 · KOKORO NO TENKAN</div>
+  </div>
+
+  <div class="back-accent-bar"></div>
+</div>
+
+<!-- Screen-only print instructions -->
+<div class="print-instructions screen-only">
+  <strong>Print Instructions for Makayla</strong><br><br>
+  File: <strong>print-card.html</strong> — open in Chrome or Edge<br>
+  Go to <strong>File → Print</strong> (or Ctrl+P / Cmd+P)<br>
+  Set paper size to <strong>3.5 × 2 inches</strong> (custom)<br>
+  Set margins to <strong>None</strong><br>
+  Enable <strong>Background graphics</strong><br>
+  Scale: <strong>100%</strong> (do not fit to page)<br><br>
+  For a professional print shop: <strong>save as PDF</strong>,<br>
+  specify <strong>16pt card stock</strong> with<br>
+  <strong>soft-touch matte laminate</strong> — exactly like the design.<br><br>
+  Front and back print on separate pages automatically.
+  <br><br>
+  <a href="javascript:window.print()" class="print-btn">PRINT / SAVE AS PDF</a>
+</div>
+
+</body>
+</html>
