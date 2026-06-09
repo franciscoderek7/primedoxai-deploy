@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head><title>OmniaGuard Icon Generator</title></head>
+<body style="background:#111;color:#eee;font-family:sans-serif;padding:20px">
+<h2>OmniaGuard Extension Icons</h2>
+<p>Right-click each image and "Save As" with the filename shown. Save into the <code>icons/</code> folder.</p>
+
+<canvas id="c16" width="16" height="16" style="display:none"></canvas>
+<canvas id="c48" width="48" height="48" style="display:none"></canvas>
+<canvas id="c128" width="128" height="128" style="display:none"></canvas>
+
+<div style="display:flex;gap:20px;margin-top:20px;align-items:flex-end">
+  <div>
+    <img id="img16" style="image-rendering:pixelated;width:32px;height:32px;border:1px solid #333">
+    <div style="font-size:11px;margin-top:4px">icon16.png</div>
+  </div>
+  <div>
+    <img id="img48" style="image-rendering:pixelated;width:96px;height:96px;border:1px solid #333">
+    <div style="font-size:11px;margin-top:4px">icon48.png</div>
+  </div>
+  <div>
+    <img id="img128" style="image-rendering:pixelated;width:128px;height:128px;border:1px solid #333">
+    <div style="font-size:11px;margin-top:4px">icon128.png</div>
+  </div>
+</div>
+
+<p style="margin-top:20px;font-size:12px;color:#888">Or: load the extension without icons — Chrome will use a default placeholder. The extension works fully either way.</p>
+
+<script>
+function drawShield(ctx, size) {
+  const s = size;
+  ctx.clearRect(0,0,s,s);
+  const pad = s * 0.08;
+  ctx.fillStyle = '#00d4b4';
+  ctx.beginPath();
+  ctx.moveTo(s/2, pad);
+  ctx.lineTo(s - pad, pad + s*0.18);
+  ctx.lineTo(s - pad, s*0.55);
+  ctx.quadraticCurveTo(s - pad, s*0.85, s/2, s - pad);
+  ctx.quadraticCurveTo(pad, s*0.85, pad, s*0.55);
+  ctx.lineTo(pad, pad + s*0.18);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#0a9f8a';
+  ctx.lineWidth = s * 0.04;
+  ctx.stroke();
+  ctx.strokeStyle = '#0a0f1a';
+  ctx.lineWidth = s * 0.1;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(s*0.33, s*0.5);
+  ctx.lineTo(s*0.46, s*0.63);
+  ctx.lineTo(s*0.68, s*0.37);
+  ctx.stroke();
+}
+
+const sizes = [16,48,128];
+sizes.forEach(sz => {
+  const c = document.getElementById('c'+sz);
+  drawShield(c.getContext('2d'), sz);
+  const img = document.getElementById('img'+sz);
+  img.src = c.toDataURL('image/png');
+  img.download = 'icon'+sz+'.png';
+  img.style.cursor='pointer';
+  img.title = 'Right-click → Save As → icon'+sz+'.png';
+  c.toBlob(blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'icon'+sz+'.png';
+    img.onclick = () => a.click();
+  });
+});
+</script>
+</body>
+</html>

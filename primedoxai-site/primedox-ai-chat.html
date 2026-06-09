@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeDox AI — Legal Intelligence System</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0d14;--panel:#0d1120;--border:rgba(99,102,241,0.15);
+    --accent:#6366f1;--accent2:#818cf8;--text:#e2e8f0;--muted:#64748b;
+    --user:#1e1b4b;--ai:#0d1628;--green:#10b981;--gold:#f59e0b;
+  }
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;overflow:hidden}
+
+  /* SIDEBAR */
+  .sidebar{width:260px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+  .sidebar-header{padding:16px;border-bottom:1px solid var(--border)}
+  .sidebar-logo{display:flex;align-items:center;gap:10px}
+  .sidebar-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .sidebar-logo-text h1{font-size:14px;font-weight:700;color:var(--accent2);letter-spacing:0.02em}
+  .sidebar-logo-text p{font-size:10px;color:var(--muted);margin-top:1px}
+  .sidebar-section{padding:12px 12px 4px;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:600}
+  .sidebar-btn{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;border-radius:6px;margin:0 8px 2px;transition:background 0.15s;font-size:12px;color:#94a3b8;border:none;background:none;width:calc(100% - 16px);text-align:left}
+  .sidebar-btn:hover,.sidebar-btn.active{background:rgba(99,102,241,0.12);color:var(--accent2)}
+  .sidebar-btn .icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+  .sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid var(--border)}
+  .sidebar-user{font-size:11px;color:var(--muted)}
+  .sidebar-user strong{color:var(--text);display:block}
+
+  /* MAIN */
+  .main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .topbar{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--panel);flex-shrink:0}
+  .topbar-title{font-size:14px;font-weight:600;color:var(--accent2)}
+  .topbar-sub{font-size:11px;color:var(--muted)}
+  .tier-badge{padding:3px 8px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:0.05em;background:rgba(245,158,11,0.1);color:var(--gold);border:1px solid rgba(245,158,11,0.3)}
+
+  /* CHAT */
+  .chat-wrap{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+  .chat-wrap::-webkit-scrollbar{width:4px}
+  .chat-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+  .msg{display:flex;gap:12px;max-width:100%}
+  .msg.user{flex-direction:row-reverse}
+  .msg-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-start;margin-top:2px}
+  .msg.ai .msg-avatar{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .msg.user .msg-avatar{background:#312e81}
+  .msg-bubble{padding:12px 14px;border-radius:12px;max-width:calc(100% - 60px);font-size:13px;line-height:1.6}
+  .msg.ai .msg-bubble{background:var(--ai);border:1px solid var(--border);color:var(--text)}
+  .msg.user .msg-bubble{background:var(--user);color:#c7d2fe}
+  .msg-bubble h3{font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:8px}
+  .msg-bubble h4{font-size:12px;font-weight:700;color:var(--gold);margin:10px 0 4px}
+  .msg-bubble ul,.msg-bubble ol{padding-left:18px;margin:6px 0}
+  .msg-bubble li{margin-bottom:4px;font-size:12px}
+  .msg-bubble code{background:rgba(99,102,241,0.15);padding:1px 5px;border-radius:3px;font-size:11px;font-family:monospace;color:var(--accent2)}
+  .msg-bubble p{margin-bottom:6px}
+  .msg-bubble p:last-child{margin-bottom:0}
+  .msg-bubble .doc-output{background:#050810;border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:14px;margin-top:10px;font-family:'Courier New',monospace;font-size:11px;line-height:1.7;color:#cbd5e1;white-space:pre-wrap;max-height:400px;overflow-y:auto}
+  .msg-bubble .doc-output::-webkit-scrollbar{width:3px}
+  .msg-bubble .doc-output::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.3);border-radius:2px}
+  .copy-btn{margin-top:8px;padding:5px 12px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:var(--accent2);border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.15s}
+  .copy-btn:hover{background:rgba(99,102,241,0.3)}
+  .quick-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .chip{padding:5px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);color:var(--accent2);border-radius:16px;font-size:11px;cursor:pointer;transition:all 0.15s}
+  .chip:hover{background:rgba(99,102,241,0.2)}
+  .typing{display:flex;gap:4px;align-items:center;padding:4px 0}
+  .typing span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:0.2s}
+  .typing span:nth-child(3){animation-delay:0.4s}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+  /* INPUT */
+  .input-area{padding:16px 20px;border-top:1px solid var(--border);background:var(--panel);flex-shrink:0}
+  .input-row{display:flex;gap:8px;align-items:flex-end}
+  .input-box{flex:1;background:#0a0d14;border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:13px;resize:none;min-height:42px;max-height:140px;font-family:inherit;line-height:1.5;outline:none;transition:border-color 0.2s}
+  .input-box:focus{border-color:var(--accent)}
+  .input-box::placeholder{color:var(--muted)}
+  .send-btn{width:40px;height:40px;border-radius:10px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s;color:white}
+  .send-btn:hover{background:var(--accent2)}
+  .send-btn:disabled{background:#1e293b;cursor:not-allowed}
+  .input-hint{font-size:10px;color:var(--muted);margin-top:6px;text-align:center}
+
+  /* DOC PANEL */
+  .doc-panel{width:320px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+  .doc-panel h2{padding:14px 16px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);border-bottom:1px solid var(--border)}
+  .doc-item{padding:10px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.03);transition:background 0.15s}
+  .doc-item:hover{background:rgba(99,102,241,0.06)}
+  .doc-item-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+  .doc-item-sub{font-size:11px;color:var(--muted)}
+  .upgrade-panel{margin:12px;background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(129,140,248,0.05));border:1px solid rgba(99,102,241,0.25);border-radius:8px;padding:14px}
+  .upgrade-panel h3{font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  .upgrade-panel p{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+  .upgrade-panel a{display:block;text-align:center;padding:8px;background:var(--accent);color:white;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none}
+  .upgrade-panel a:hover{background:var(--accent2)}
+
+  @media(max-width:900px){.doc-panel{display:none}}
+  @media(max-width:600px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">⚖️</div>
+      <div class="sidebar-logo-text">
+        <h1>PrimeDox AI</h1>
+        <p>Legal Intelligence System</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">Knowledge Vault</div>
+  <button class="sidebar-btn active" onclick="setMode('chat')"><span class="icon">💬</span>Chat</button>
+  <button class="sidebar-btn" onclick="quickPrompt('List all Charter sections I can use in a cannabis case')"><span class="icon">📜</span>Charter Rights</button>
+  <button class="sidebar-btn" onclick="quickPrompt('Explain the BENO-X framework step by step')"><span class="icon">🛡️</span>BENO-X Framework</button>
+  <button class="sidebar-btn" onclick="quickPrompt('Summarize the key cannabis case law in Canada')"><span class="icon">🌿</span>Cannabis Case Law</button>
+  <button class="sidebar-btn" onclick="quickPrompt('What are Pintea accommodations and how do I request them?')"><span class="icon">♿</span>Pintea Accommodations</button>
+
+  <div class="sidebar-section">Document Generator</div>
+  <button class="sidebar-btn" onclick="quickPrompt('Generate a Notice of Constitutional Question')"><span class="icon">📋</span>Notice of Const. Question</button>
+  <button class="sidebar-btn" onclick="quickPrompt('Draft a Charter s.8 unreasonable search motion')"><span class="icon">⚖️</span>Charter Motion</button>
+  <button class="sidebar-btn" onclick="quickPrompt('Generate a Pintea accommodation request letter')"><span class="icon">📨</span>Accommodation Request</button>
+  <button class="sidebar-btn" onclick="quickPrompt('Draft a sworn affidavit template for a cannabis possession case')"><span class="icon">📝</span>Affidavit Template</button>
+  <button class="sidebar-btn" onclick="quickPrompt('Generate a demand letter for return of seized property')"><span class="icon">📬</span>Demand Letter</button>
+
+  <div class="sidebar-section">Case Strategy</div>
+  <button class="sidebar-btn" onclick="quickPrompt('What are the strongest constitutional arguments for a cannabis possession charge?')"><span class="icon">🎯</span>Defense Strategy</button>
+  <button class="sidebar-btn" onclick="quickPrompt('How do I cross-examine a police officer who searched without a warrant?')"><span class="icon">🔍</span>Cross-Examination</button>
+  <button class="sidebar-btn" onclick="quickPrompt('How do I file a Garofoli application to exclude evidence?')"><span class="icon">🚫</span>Evidence Exclusion</button>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <strong>Doc Weedlaw</strong>
+      Free Tier — 10 queries/mo
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CHAT -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">PrimeDox AI — Legal Intelligence</div>
+      <div class="topbar-sub">Cannabis Law · Charter Rights · BENO-X Framework · Document Generation</div>
+    </div>
+    <a href="https://primedoxai.com" style="text-decoration:none"><span class="tier-badge">UPGRADE PRO</span></a>
+  </div>
+
+  <div class="chat-wrap" id="chatWrap">
+    <!-- Welcome message -->
+    <div class="msg ai">
+      <div class="msg-avatar">⚖️</div>
+      <div class="msg-bubble">
+        <h3>PrimeDox AI — Activated</h3>
+        <p>I am your constitutional law intelligence system, trained on 25+ years of cannabis case law, Charter jurisprudence, and the BENO-X self-defense framework.</p>
+        <h4>What I can do for you:</h4>
+        <ul>
+          <li>Draft legal documents (motions, affidavits, demand letters, NCQs)</li>
+          <li>Research Charter sections and case law precedents</li>
+          <li>Build constitutional arguments (s.7, s.8, s.9, s.10, s.11, s.15)</li>
+          <li>Apply the BENO-X framework to your specific case</li>
+          <li>Prepare cross-examination questions for police witnesses</li>
+          <li>Guide you through Pintea accommodation requests</li>
+        </ul>
+        <div class="quick-chips">
+          <div class="chip" onclick="quickPrompt('Draft a Notice of Constitutional Question')">Draft NCQ</div>
+          <div class="chip" onclick="quickPrompt('Explain the BENO-X framework')">BENO-X</div>
+          <div class="chip" onclick="quickPrompt('Charter s.8 search and seizure arguments')">s.8 Arguments</div>
+          <div class="chip" onclick="quickPrompt('How to argue medical necessity in cannabis cases')">Medical Necessity</div>
+          <div class="chip" onclick="quickPrompt('Summarize R. v. Parker')">R. v. Parker</div>
+          <div class="chip" onclick="quickPrompt('How do I represent myself in court?')">Self-Represent</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <textarea class="input-box" id="inputBox" placeholder="Ask about case law, draft a document, build a Charter argument..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="input-hint">PrimeDox AI · Knowledge Vault v1.0 · Not legal advice — for educational and self-advocacy use</div>
+  </div>
+</div>
+
+<!-- DOC TEMPLATES PANEL -->
+<div class="doc-panel">
+  <h2>Document Templates</h2>
+
+  <div class="doc-item" onclick="quickPrompt('Generate a complete Notice of Constitutional Question for an Ontario court, cannabis possession, Charter ss.7 and 15')">
+    <div class="doc-item-title">Notice of Constitutional Question</div>
+    <div class="doc-item-sub">Form 4F · Ontario Rules of Civil Procedure</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft a motion to exclude evidence under Charter s.24(2) — unreasonable search, cannabis case')">
+    <div class="doc-item-title">s.24(2) Evidence Exclusion Motion</div>
+    <div class="doc-item-sub">Garofoli Application · Charter remedy</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft a Pintea v. Ion accommodation request for a self-represented litigant in Ontario Superior Court')">
+    <div class="doc-item-title">Pintea Accommodation Request</div>
+    <div class="doc-item-sub">SCC 2017 — Unrepresented litigants</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft a sworn affidavit for a cannabis possession case in Ontario, first-person, with blank [BRACKET] placeholders')">
+    <div class="doc-item-title">Affidavit — Cannabis Possession</div>
+    <div class="doc-item-sub">Ontario Form · First-person sworn statement</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Write a demand letter to police for return of seized cannabis property under s.490 Criminal Code')">
+    <div class="doc-item-title">Demand Letter — Return of Property</div>
+    <div class="doc-item-sub">s.490 Criminal Code · Police demand</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft a voir dire application to challenge admissibility of police testimony')">
+    <div class="doc-item-title">Voir Dire Application</div>
+    <div class="doc-item-sub">Pre-trial admissibility hearing</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Write a Charter s.11(b) delay motion — case has been pending more than 30 months')">
+    <div class="doc-item-title">s.11(b) Delay Motion</div>
+    <div class="doc-item-sub">Jordan framework · Unreasonable delay</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft a BENO-X framework application for a cannabis sovereignty defense')">
+    <div class="doc-item-title">BENO-X Sovereignty Application</div>
+    <div class="doc-item-sub">BENO-X Framework · Constitutional defense</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Write a medical necessity defense argument for cannabis use under the Canadian Charter')">
+    <div class="doc-item-title">Medical Necessity Defense</div>
+    <div class="doc-item-sub">R. v. Parker · R. v. Smith · Medical evidence</div>
+  </div>
+
+  <div class="upgrade-panel">
+    <h3>PrimeDox AI Pro</h3>
+    <p>Unlimited queries, full document generation with your case details, voice input, PDF export.</p>
+    <a href="https://www.paypal.com/paypalme/derekfrancisco/49" target="_blank">Upgrade — $49/mo →</a>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// KNOWLEDGE BASE — 25+ years of Doc Weedlaw vault
+// ═══════════════════════════════════════════════
+
+const KB = {
+
+  // ── CHARTER RIGHTS ──────────────────────────
+  's7': {
+    title: 'Charter s.7 — Life, Liberty and Security of the Person',
+    content: `**Section 7** of the Canadian Charter of Rights and Freedoms states:
+"Everyone has the right to life, liberty and security of the person and the right not to be deprived thereof except in accordance with the principles of fundamental justice."
+
+**Application to cannabis cases:**
+- Possession charges deprive liberty (imprisonment risk) and security (bodily autonomy)
+- R. v. Parker (2000 ONCA): Prohibition on medical cannabis violates s.7 — access to medicine is a liberty interest
+- R. v. Smith (2015 SCC): Restricting cannabis to dried form only violates s.7 — arbitrary and overbroad
+- Medical necessity: courts recognize therapeutic cannabis use as fundamental justice interest
+- The state must demonstrate ANY restriction on liberty is NOT arbitrary, overbroad, or grossly disproportionate
+
+**Standard argument structure:**
+1. Identify the liberty/security interest at stake
+2. Show deprivation is NOT in accordance with fundamental justice (arbitrary, overbroad, or grossly disproportionate)
+3. Argue s.1 justification fails (or don't justify at all — shift burden to Crown)`
+  },
+
+  's8': {
+    title: 'Charter s.8 — Unreasonable Search and Seizure',
+    content: `**Section 8** protects against unreasonable search and seizure.
+
+**Key principles from case law:**
+- Hunter v. Southam (1984 SCC): Requires prior authorization (warrant), issued by neutral party, on reasonable grounds
+- R. v. Collins (1987 SCC): Search is reasonable if: (1) authorized by law, (2) law itself reasonable, (3) manner of search reasonable
+- R. v. Tessling (2004 SCC): Reasonable expectation of privacy is contextual
+- R. v. Spencer (2014 SCC): Online privacy has high reasonable expectation
+
+**Warrant requirements:**
+- Must be issued by a judicial officer
+- Must be based on sworn information showing reasonable grounds to believe
+- Must describe what can be searched and seized
+- Warrantless searches presumptively unreasonable
+
+**Challenging a search:**
+- Was there a warrant? If no — presumptively unreasonable
+- Was the information to obtain (ITO) sufficient?
+- Was the officer's belief reasonable on the facts?
+- Was the search conducted in a reasonable manner?
+
+**Remedy: s.24(2) exclusion**
+If search violates s.8 → apply to exclude evidence under s.24(2) (Collins/Grant test)`
+  },
+
+  's9': {
+    title: 'Charter s.9 — Arbitrary Detention',
+    content: `**Section 9**: Everyone has the right not to be arbitrarily detained or imprisoned.
+
+**Key cases:**
+- R. v. Grant (2009 SCC): Three-part test for arbitrary detention — (1) physical/psychological compulsion, (2) arbitrary (no just cause), (3) no clear legal authority
+- R. v. Mann (2004 SCC): Police must have reasonable grounds for investigative detention
+- R. v. Hufsky (1988 SCC): Random traffic stops constitutional only with legislative authority (R.T.O.s)
+
+**What constitutes detention:**
+- Physical restraint
+- Psychological compulsion where reasonable person would not feel free to leave
+- "Surrender of liberty" — not just voluntary assistance
+
+**Challenging arbitrary detention:**
+- No observable criminal conduct? Detention arbitrary.
+- Officer acting on "hunch" not reasonable grounds?
+- Cannot detain to fish for evidence
+
+**Remedy:** s.24(2) exclusion of all evidence obtained during unlawful detention`
+  },
+
+  's10': {
+    title: 'Charter s.10 — Rights on Arrest or Detention',
+    content: `**Section 10** rights apply on arrest or detention:
+(a) Right to be informed promptly of reasons
+(b) Right to retain and instruct counsel without delay and be informed of that right
+(c) Right to habeas corpus
+
+**Critical timing — s.10(b):**
+- Police must IMMEDIATELY inform of right to counsel upon detention
+- Must CEASE questioning until counsel consulted (R. v. Bartle, 1994 SCC)
+- Must inform of Legal Aid availability (R. v. Brydges, 1990 SCC)
+- Must hold off on breath/blood demand until counsel consulted
+
+**Common police violations:**
+- Failing to inform of right to counsel at time of detention (not arrest — DETENTION triggers it)
+- Continuing to question after s.10(b) invoked
+- Failing to inform of Legal Aid / duty counsel availability
+- Not providing reasonable opportunity to contact counsel
+
+**Remedy:** All evidence obtained in violation of s.10(b) subject to s.24(2) exclusion`
+  },
+
+  's11b': {
+    title: 'Charter s.11(b) — Right to Be Tried Within Reasonable Time',
+    content: `**Section 11(b)**: Any person charged with an offence has the right to be tried within a reasonable time.
+
+**The Jordan Framework (R. v. Jordan, 2016 SCC 27):**
+
+Presumptive Ceilings:
+- **18 months** from charge to end of trial for cases in Provincial Court
+- **30 months** for cases in Superior Court (after preliminary inquiry if any)
+
+Periods excluded from ceiling:
+- Delay caused by defence
+- Exceptional circumstances beyond Crown's control (e.g., illness, acts of nature)
+- If case is markedly complex, ceiling may be extended
+
+**If ceiling exceeded:**
+- Presumed to be unreasonable
+- Crown must rebut with exceptional circumstances
+- If Crown cannot rebut → STAY OF PROCEEDINGS (case dismissed)
+
+**How to bring an 11(b) application:**
+1. Calculate total elapsed time from charge to projected trial end
+2. Subtract defence delay
+3. Compare to applicable ceiling (18 or 30 months)
+4. If exceeded: bring pre-trial application for stay
+
+**This is one of the most powerful weapons available — many cannabis cases dismissed for delay.**`
+  },
+
+  's15': {
+    title: 'Charter s.15 — Equality Rights',
+    content: `**Section 15**: Every individual is equal before and under the law and has the right to equal protection and benefit of the law without discrimination based on race, national or ethnic origin, colour, religion, sex, age, or mental or physical disability.
+
+**Application to cannabis:**
+- Disparate enforcement: Black and Indigenous people charged at higher rates for cannabis possession
+- R. v. Morris (2021 ONCA): Systemic anti-Black racism as a mitigating factor
+- Racial profiling in stops/searches is an s.15 (and s.9) violation
+- Can argue the law as applied creates discriminatory outcome
+
+**Proving racial profiling:**
+- Statistical evidence of differential enforcement
+- Officer's conduct consistent with racial targeting
+- Unexplained deviation from standard practice
+- "Circumstantial inference" standard (R. v. Brown, 2003 ONCA)
+
+**The Gladue factors (R. v. Gladue, 1999 SCC):**
+- Indigenous accused: sentencing must consider systemic factors
+- Historical disadvantage, colonialism, intergenerational trauma
+- Courts MUST obtain Gladue report and consider it`
+  },
+
+  // ── CASE LAW ──────────────────────────────────
+  'parker': {
+    title: 'R. v. Parker (2000 ONCA)',
+    content: `**R. v. Parker, 2000 ONCA 3**
+Court of Appeal for Ontario — Justice Rosenberg
+
+**Facts:** Terry Parker had epilepsy and used cannabis to control seizures. Charged with possession and cultivation. He argued prohibition violated his Charter rights.
+
+**Held:** The prohibition on medical cannabis in the Controlled Drugs and Substances Act (CDSA) violated **s.7** of the Charter (life, liberty, and security) and was not saved by s.1.
+
+**Key holdings:**
+1. Access to medicine is a liberty interest protected by s.7
+2. A person facing a choice between medicine and criminality faces unconstitutional state coercion
+3. The complete prohibition was arbitrary (no medical exemption) — violated fundamental justice
+4. Government given 12 months to amend legislation
+
+**Legacy:**
+- Led directly to the Medical Marihuana Access Regulations (MMAR, 2001)
+- First constitutional victory for medical cannabis in Canada
+- Established "medical necessity" as a viable Charter defense
+- STILL GOOD LAW — foundational precedent for all medical cannabis Charter arguments`
+  },
+
+  'smith': {
+    title: 'R. v. Smith (2015 SCC 34)',
+    content: `**R. v. Smith, 2015 SCC 34**
+Supreme Court of Canada — unanimous
+
+**Facts:** Owen Smith produced cannabis products (cookies, oils) for medical cannabis patients. Charged under CDSA. Argued restriction to "dried marihuana" only violated Charter.
+
+**Held:** The restriction limiting medical cannabis to only dried herb violated **s.7** of the Charter. It was overbroad — restricting cannabis to a single form had no connection to the law's objective of public health/safety.
+
+**Key holdings:**
+1. Patients have the right to choose the safest and most effective form of their medicine
+2. Restricting medicine to an inferior delivery method (smoking) violates s.7
+3. "Overbreadth" as a principle of fundamental justice: law goes beyond what is needed to achieve its objective
+4. No s.1 justification — arbitrary restriction fails minimum impairment
+
+**Strategic value:**
+- Apply whenever client faces charges for cannabis extracts, edibles, oils, concentrates
+- Argue restriction to specific form/method is overbroad
+- Supports harm reduction arguments (oils/edibles safer than smoking)
+- Foundational for medical necessity arguments`
+  },
+
+  'mernagh': {
+    title: 'R. v. Mernagh (2013 ONCA)',
+    content: `**R. v. Mernagh, 2013 ONCA 67**
+Court of Appeal for Ontario
+
+**Facts:** Matt Mernagh had fibromyalgia, scoliosis, and other conditions. Could not get a physician to sign his medical cannabis exemption (MMAR). Grew cannabis himself and was charged.
+
+**Trial decision (struck down MMAR):** Declared the entire MMAR unconstitutional — physicians gatekeeping access created an inaccessible system.
+
+**Court of Appeal:** Narrowed the finding. Did not strike MMAR. Found Mernagh himself had constitutional exemption on medical necessity.
+
+**Key principles:**
+1. Access to medical cannabis is constitutionally protected (Parker reaffirmed)
+2. A scheme that is practically inaccessible may still violate s.7
+3. Medical necessity defense: must show (a) genuine medical need, (b) no reasonable legal alternative, (c) cannabis effective for condition
+
+**Medical necessity defense elements (from Mernagh + earlier cases):**
+1. Imminent peril or harm
+2. Absence of a reasonable legal alternative
+3. Proportionality between harm avoided and harm done
+4. Accused must not have created the emergency themselves`
+  },
+
+  'jordan': {
+    title: 'R. v. Jordan (2016 SCC 27)',
+    content: `**R. v. Jordan, 2016 SCC 27**
+Supreme Court of Canada — majority decision (5-4)
+
+**Facts:** Charges from December 2008, trial concluded February 2013 — over 49 months. Jordan brought s.11(b) application.
+
+**Held:** New framework for s.11(b) replacing the old Morin balancing test.
+
+**The Jordan Framework:**
+- Provincial/territorial court: **18-month presumptive ceiling**
+- Superior court (after prelim): **30-month presumptive ceiling**
+- Time calculated from charge to actual or anticipated end of trial
+
+**Above ceiling = presumptively unreasonable**
+Crown can rebut if: (1) exceptional circumstances, or (2) defence waived or caused significant delay
+
+**Transitional cases** (at time of decision): apply old Morin test + Jordan framework
+
+**Below ceiling:** Defence can still argue delay was unreasonable under the circumstances (for older cases)
+
+**CRITICAL FOR CANNABIS PRACTITIONERS:**
+Pre-2018 cannabis charges routinely took 3-5 years to get to trial. Jordan is your most powerful weapon for stays. Calculate days immediately upon retention.`
+  },
+
+  'grant': {
+    title: 'R. v. Grant (2009 SCC 32)',
+    content: `**R. v. Grant, 2009 SCC 32**
+Supreme Court of Canada — replaced Collins/Stillman framework
+
+**Facts:** Police detained Grant and found a loaded firearm. Questions about whether Charter violations should exclude evidence.
+
+**The Grant Test for s.24(2) — three-part balancing:**
+
+**Line 1: Seriousness of Charter-infringing conduct**
+- Deliberate vs. inadvertent breach?
+- Good faith vs. willful violation?
+- Systemic or isolated?
+→ More serious = exclusion more likely
+
+**Line 2: Impact of breach on Charter-protected interests**
+- How seriously did the violation impact the accused?
+- Privacy interest affected? Bodily integrity?
+→ Greater impact = exclusion more likely
+
+**Line 3: Society's interest in adjudication on the merits**
+- How reliable is the evidence?
+- Serious crime? Critical evidence?
+→ Society's interest = admission more likely
+
+**Balancing:** Weigh all three. No single factor determinative.
+
+**Practical application:**
+- Unreasonable search for cannabis: typically meets threshold for exclusion under Grant
+- Particularly if deliberate/systemic police conduct
+- If evidence excluded → case collapses (usually)
+
+**Also from Grant:** Three-part test for when "detention" occurs under s.9/s.10`
+  },
+
+  // ── BENO-X FRAMEWORK ─────────────────────────
+  'benox': {
+    title: 'BENO-X Framework — Constitutional Self-Defense System',
+    content: `**BENO-X Framework** — Developed by Derek Francisco (Doc Weedlaw)
+
+The BENO-X (Bodily Autonomy, Essential Rights, Natural Law, Override, eXemption) framework is a structured constitutional self-defense methodology for cannabis possession and cultivation charges.
+
+**The 5 Pillars:**
+
+**B — Bodily Autonomy (s.7 Charter)**
+- The right to control what goes into your body is a fundamental liberty interest
+- State cannot criminalize personal medical or recreational choices without justification
+- Argument: "The state has no jurisdiction over my body's chemistry"
+- Citation: Parker (medical access), Smith (form restriction)
+
+**E — Essential Rights (ss. 8, 9, 10)**
+- Enforcement rights: be informed of reasons (s.10a), right to counsel (s.10b)
+- Freedom from arbitrary search (s.8) — challenge every search
+- Freedom from arbitrary detention (s.9) — what were the objective grounds?
+
+**N — Natural Law / Religious Freedom (s.2)**
+- s.2(a): Freedom of religion, conscience, belief
+- Religious cannabis use (Rastafarian, spiritual traditions, ceremonial)
+- Natural law argument: no human-made law can override natural/God-given right to plant medicine
+- Argument: "Cannabis is a natural plant. My relationship with it is a matter of conscience."
+
+**O — Override Mechanism (s.24, s.52)**
+- s.24(1): Court can grant "such remedy as the court considers appropriate and just in the circumstances"
+- s.24(2): Exclusion of evidence obtained in Charter breach
+- s.52(1): Laws inconsistent with Constitution are of no force or effect
+- Constitutional exemption: courts can grant individual exemptions from unconstitutional laws (Parker principle)
+
+**X — eXemption Strategy**
+- Medical necessity defense (Mernagh standard)
+- Religious exemption application
+- Personal use / minimal harm argument
+- Mitigation: age, health, no criminal record, community ties
+
+**BENO-X Application Process:**
+1. Document ALL rights at time of arrest/detention
+2. Invoke counsel immediately — do not speak
+3. File Notice of Constitutional Question (FORM 4F)
+4. Bring pre-trial motions: s.8 (search), s.9 (detention), s.10 (counsel)
+5. If delay exceeds 18/30 months → Jordan application
+6. If motions fail → BENO-X defense at trial
+7. Appeal equipped with full Charter record`
+  },
+
+  // ── PINTEA ───────────────────────────────────
+  'pintea': {
+    title: 'Pintea v. Ion (2017 SCC 23) — Self-Represented Litigants',
+    content: `**Pintea v. Ion, 2017 SCC 23**
+Supreme Court of Canada — per curiam (unanimous, 5 paragraphs)
+
+**Holding:** The Supreme Court formally endorsed the **National Self-Represented Litigants Project (NSRLP) Guidelines** for judges dealing with unrepresented litigants.
+
+**What courts MUST do for self-represented litigants:**
+1. Explain court procedures clearly
+2. Advise of procedural options available
+3. Provide information about how to access court services
+4. Adjust the degree of formality in proceedings
+5. Be patient and allow litigants to present their case
+
+**What this means for you:**
+- If you are self-represented, CITE PINTEA in every motion/application
+- Judges cannot hold lack of legal training against you
+- You can request the judge explain any procedure you don't understand
+- You can request extensions to research legal issues
+- The court has an obligation to ensure a fair process, not just formal compliance
+
+**Accommodation request template opening:**
+"Your Honour, pursuant to Pintea v. Ion [2017] 1 SCR 1024, I respectfully request reasonable accommodation as a self-represented litigant. Specifically, I request [accommodation]."
+
+**Common accommodations to request:**
+- Extension of time to prepare materials
+- Explanation of procedural requirements before penalizing non-compliance
+- Permission to ask clarifying questions about process during hearing
+- Access to court resources (forms, guides, duty counsel)`
+  },
+
+  // ── DOCUMENTS ────────────────────────────────
+  'ncq': {
+    title: 'Notice of Constitutional Question — Template',
+    doc: true,
+    content: `ONTARIO SUPERIOR COURT OF JUSTICE
+(NOTICE OF CONSTITUTIONAL QUESTION — Rule 4.11 of the Rules of Criminal Procedure)
+
+Court File No.: [COURT FILE NUMBER]
+
+IN THE MATTER OF: [HER/HIS/HIS] MAJESTY THE KING (Respondent)
+                  — and —
+                  [YOUR FULL LEGAL NAME] (Applicant/Accused)
+
+NOTICE OF CONSTITUTIONAL QUESTION
+
+TO: THE ATTORNEY GENERAL OF ONTARIO
+    720 Bay Street, 11th Floor
+    Toronto, Ontario M7A 2S9
+
+TO: THE ATTORNEY GENERAL OF CANADA
+    Department of Justice Canada
+    130 King Street West, Suite 3400
+    Toronto, Ontario M5X 1K6
+
+The Applicant, [YOUR FULL LEGAL NAME], pursuant to Section 109(1)(b) of the Courts of Justice Act, RSO 1990, c C.43, hereby gives notice that the Applicant intends to question the constitutional validity and/or applicability of the following provisions:
+
+PROVISIONS QUESTIONED:
+1. Section [SECTION] of the [STATUTE NAME], [STATUTE CITATION], on the grounds that it violates:
+   (a) Section 7 of the Canadian Charter of Rights and Freedoms (right to life, liberty and security of the person);
+   (b) Section [ADDITIONAL CHARTER SECTION] of the Canadian Charter of Rights and Freedoms;
+
+CONSTITUTIONAL PROVISIONS RELIED UPON:
+1. Sections 7, 8, 9, 10, 11(b), 15 of the Canadian Charter of Rights and Freedoms
+2. Section 24(1) and 24(2) of the Canadian Charter of Rights and Freedoms
+3. Section 52(1) of the Constitution Act, 1982
+
+GROUNDS:
+1. The Applicant is charged with [CHARGE] under [STATUTE AND SECTION].
+2. [BRIEF STATEMENT OF FACTS — e.g., "On [DATE], police searched the Applicant's vehicle without a warrant and seized [QUANTITY] grams of cannabis."]
+3. The impugned provision(s) violate the Applicant's constitutional rights in the following manner:
+   (a) [SPECIFIC VIOLATION — e.g., "The prohibition operates to deprive the Applicant of liberty (facing imprisonment) and security of the person (forced to choose between medicine and criminality), contrary to fundamental justice (arbitrary/overbroad)."]
+4. The violations are not saved by Section 1 of the Charter because:
+   (a) The Crown cannot demonstrate the objective is pressing and substantial;
+   (b) The means employed are not rationally connected to the objective;
+   (c) The restriction does not minimally impair the Applicant's rights; and/or
+   (d) The effects are disproportionate to the objective.
+
+RELIEF SOUGHT:
+1. A declaration that [STATUTE SECTION] is of no force or effect pursuant to s.52(1) of the Constitution Act, 1982; or alternatively,
+2. A remedy pursuant to s.24(1) of the Charter, including [SPECIFIC REMEDY]; and/or
+3. Exclusion of evidence pursuant to s.24(2) of the Charter.
+
+DATE: [DATE]
+
+SIGNED: ___________________________
+         [YOUR FULL LEGAL NAME]
+         Self-Represented Litigant
+         [ADDRESS FOR SERVICE]
+         [PHONE/EMAIL]`
+  },
+
+  's8motion': {
+    title: 'Charter s.8 Garofoli Application — Template',
+    doc: true,
+    content: `ONTARIO SUPERIOR COURT OF JUSTICE
+APPLICATION TO EXCLUDE EVIDENCE
+(Charter s.24(2) — Garofoli Application)
+
+Court File No.: [COURT FILE NUMBER]
+
+IN THE MATTER OF: HIS MAJESTY THE KING v. [YOUR FULL LEGAL NAME]
+
+APPLICATION TO QUASH WARRANT AND EXCLUDE EVIDENCE
+(Section 24(2) of the Canadian Charter of Rights and Freedoms)
+
+APPLICANT'S POSITION:
+
+The Applicant submits that the search warrant issued on [DATE OF WARRANT] was issued without jurisdiction and/or without reasonable and probable grounds, thereby violating the Applicant's rights under s.8 of the Canadian Charter of Rights and Freedoms.
+
+FACTS:
+1. On [DATE], at approximately [TIME], at [LOCATION], officers of [POLICE SERVICE] executed a search warrant.
+2. The warrant was issued by [JUSTICE OF THE PEACE] on [DATE OF ITO].
+3. The Information to Obtain (ITO) sworn by [OFFICER NAME/BADGE#] contained the following material misstatements and/or omissions: [DESCRIBE PROBLEMS WITH ITO].
+4. Without the misstatements/omissions, the warrant should not have been issued.
+
+LEGAL PRINCIPLES (Garofoli):
+1. The standard on review: whether there is still sufficient reliable information to sustain the warrant (R. v. Garofoli [1990] 2 SCR 1421).
+2. The issuing justice must be satisfied there is reasonable probable grounds to believe the offence has been committed and that evidence will be found.
+3. "Reasonable grounds" requires more than suspicion — must be credibly-based probability.
+
+APPLICATION OF PRINCIPLES:
+[ARGUE WHY ITO WAS INSUFFICIENT — E.G.:]
+- Stale information (information was more than [X] weeks/months old)
+- Unreliable informant (unproven, unconfirmed tip)
+- Police observations insufficient (e.g., only smelled cannabis — not sufficient for cultivation search)
+- Material non-disclosure (officer failed to disclose exculpatory information)
+
+GRANT TEST (s.24(2)) — IF WARRANT UPHELD:
+Even if the warrant is upheld, the evidence should be excluded under s.24(2):
+
+Line 1 — Seriousness of Charter breach:
+[DESCRIBE SERIOUSNESS OF POLICE CONDUCT]
+
+Line 2 — Impact on Charter-protected interests:
+[DESCRIBE PRIVACY INTEREST VIOLATED — HOME SEARCH = HIGHEST EXPECTATION]
+
+Line 3 — Society's interest:
+[ARGUE THAT EXCLUSION SERVES LONG-TERM REPUTE OF JUSTICE SYSTEM]
+
+CONCLUSION:
+The Applicant respectfully requests that this Honourable Court:
+(a) Quash the search warrant; and/or
+(b) Exclude all evidence obtained in the search pursuant to s.24(2) of the Charter.
+
+DATE: [DATE]
+SIGNED: ___________________________
+         [YOUR FULL LEGAL NAME]`
+  },
+
+  'pintea_letter': {
+    title: 'Pintea Accommodation Request Letter',
+    doc: true,
+    content: `[DATE]
+
+VIA EMAIL AND COURT FILING
+
+To: The Honourable Justice [JUDGE'S NAME / OR: "The Presiding Justice"]
+    [COURT ADDRESS]
+    [CITY, PROVINCE, POSTAL CODE]
+
+RE: [YOUR NAME] v. His Majesty the King
+    Court File No.: [FILE NUMBER]
+    Next Appearance: [DATE AND TIME]
+
+FORMAL REQUEST FOR ACCOMMODATION — SELF-REPRESENTED LITIGANT
+(Pursuant to Pintea v. Ion, 2017 SCC 23)
+
+Your Honour,
+
+I am [YOUR NAME], the self-represented Applicant/Accused in the above-captioned matter. I write pursuant to the Supreme Court of Canada's direction in Pintea v. Ion, 2017 SCC 23, which adopted the National Self-Represented Litigants Project's Guides to judges dealing with unrepresented parties.
+
+Pursuant to Pintea, I respectfully request the following accommodations at the upcoming hearing on [DATE]:
+
+1. PROCEDURAL GUIDANCE
+   I respectfully request that the Court explain any procedural requirement before applying any sanction or adverse consequence for non-compliance, as I am unfamiliar with formal courtroom procedure.
+
+2. EXTENSION OF TIME
+   I request [X] additional days/weeks to prepare my [MOTION/RESPONSE/SUBMISSIONS], as I have not had access to duty counsel and require additional time to research the applicable legal principles.
+
+3. CLARIFYING QUESTIONS
+   I request permission to ask the Court clarifying questions about process and procedure during the hearing.
+
+4. [ANY OTHER SPECIFIC ACCOMMODATION — E.G.:]
+   I request permission to refer to written notes during my submissions.
+
+I submit that these accommodations are reasonable, will not prejudice the Crown, and are necessary to ensure a fair hearing consistent with the principles of natural justice and the directions of the Supreme Court of Canada.
+
+I thank the Court for its consideration.
+
+Respectfully submitted,
+
+___________________________
+[YOUR FULL LEGAL NAME]
+Self-Represented
+[ADDRESS]
+[PHONE / EMAIL]
+
+cc: Crown Attorney [NAME OR OFFICE], via email/fax`
+  },
+
+  'affidavit': {
+    title: 'Affidavit Template — Cannabis Possession Case',
+    doc: true,
+    content: `ONTARIO SUPERIOR COURT OF JUSTICE
+
+Court File No.: [COURT FILE NUMBER]
+
+IN THE MATTER OF: HIS MAJESTY THE KING v. [YOUR FULL NAME]
+
+AFFIDAVIT OF [YOUR FULL NAME]
+
+I, [YOUR FULL LEGAL NAME], of the [CITY/TOWN] of [CITY], in the Province of Ontario, MAKE OATH AND SAY AS FOLLOWS:
+
+1. I am the Accused/Applicant in this proceeding. As such, I have personal knowledge of the matters herein deposed to, except where stated to be upon information and belief, in which case I verily believe them to be true.
+
+2. On [DATE OF INCIDENT], at approximately [TIME], I was located at [LOCATION — be specific but do not use private home address if privacy concern].
+
+3. At [TIME], [OFFICER'S NAME AND BADGE NUMBER, OR "a male police officer who identified himself as Officer [X]"] approached me and [DESCRIBE EXACTLY WHAT HAPPENED — e.g., "asked me to stop," "opened my car door," "entered my property without my consent"].
+
+4. At no time did I consent to the search of [MY VEHICLE / MY PERSON / MY RESIDENCE / etc.].
+
+5. The officer did not present me with a search warrant prior to conducting the search. [OR: "The officer presented a search warrant which I was not given time to review."]
+
+6. Upon being detained, I immediately invoked my right to silence and my right to counsel, stating words to the effect of: "I want a lawyer."
+
+7. [CONTINUE WITH RELEVANT FACTS — describe the sequence of events, what was said, what was seized, any medical condition relevant to possession, etc.]
+
+8. I have been diagnosed with [MEDICAL CONDITION, IF APPLICABLE] and use cannabis for therapeutic purposes, specifically to [DESCRIBE THERAPEUTIC USE — e.g., "manage chronic pain," "control seizures," "reduce anxiety"]. I have been using cannabis for this purpose since approximately [DATE/YEAR].
+
+9. At no time have I possessed, produced, or distributed cannabis for any purpose other than [PERSONAL USE / MEDICAL USE / etc.].
+
+SWORN BEFORE ME at the [CITY/TOWN]
+of [CITY], in the Province of Ontario,
+this [DAY] day of [MONTH], [YEAR]
+
+
+___________________________                    ___________________________
+Commissioner for Taking Affidavits              [YOUR FULL LEGAL NAME]
+(or Notary Public)
+
+NOTE: This affidavit must be sworn before a Commissioner of Oaths, Notary Public, or lawyer. Many courthouses have Commissioners available. Banks often have them free for account holders.`
+  },
+
+  'demand_letter': {
+    title: 'Demand Letter — Return of Seized Property',
+    doc: true,
+    content: `[DATE]
+
+VIA REGISTERED MAIL AND EMAIL
+
+[CHIEF OF POLICE NAME]
+[POLICE SERVICE NAME]
+[ADDRESS]
+
+RE: DEMAND FOR RETURN OF SEIZED PROPERTY
+    Incident Report No.: [REPORT NUMBER]
+    Date of Seizure: [DATE]
+    Seized Items: [DESCRIPTION OF ITEMS]
+
+Dear Chief [NAME],
+
+This letter constitutes formal notice of my demand for the immediate return of property seized from me on [DATE OF SEIZURE] by officers of your service.
+
+BACKGROUND:
+On [DATE], at approximately [TIME], officers of [POLICE SERVICE] seized the following items from [MY VEHICLE / MY RESIDENCE / MY PERSON]:
+
+1. [ITEM 1 — be specific: quantity, description, estimated value]
+2. [ITEM 2]
+3. [ITEM 3]
+
+LEGAL BASIS FOR RETURN:
+Pursuant to Section 490 of the Criminal Code of Canada, property seized pursuant to the Code must be detained only as long as is necessary. Specifically:
+
+Section 490(9): Where property is no longer required for proceedings and the lawful owner is known, the court shall return the property to its owner.
+
+Section 490(5): The detention of anything seized must not exceed 3 months except upon application to a judge.
+
+GROUNDS FOR RETURN:
+1. The charges against me have been [stayed / withdrawn / are expected to be resolved without need for the seized property as evidence]; OR
+2. The property is required for my medical treatment and its continued seizure constitutes an ongoing s.7 Charter violation; OR
+3. [OTHER GROUNDS]
+
+DEMAND:
+I hereby demand that [POLICE SERVICE NAME] return all seized property to me within fourteen (14) days of receipt of this letter.
+
+If the property is not returned within fourteen (14) days, I will bring an application before the Ontario Superior Court of Justice for an order for its return, and will seek costs against [POLICE SERVICE NAME].
+
+Please direct your response to:
+
+[YOUR FULL NAME]
+[EMAIL / PHONE]
+[ADDRESS FOR SERVICE]
+
+Dated: [DATE]
+
+___________________________
+[YOUR FULL LEGAL NAME]`
+  }
+};
+
+// ═══════════════════════════════════════════════
+// RESPONSE ENGINE — keyword matching + generation
+// ═══════════════════════════════════════════════
+
+function findResponse(query) {
+  const q = query.toLowerCase();
+
+  // Document requests
+  if ((q.includes('notice') && q.includes('constitutional')) || q.includes('ncq') || (q.includes('form') && q.includes('4f'))) {
+    return docResponse(KB.ncq);
+  }
+  if (q.includes('garofoli') || (q.includes('s.8') && (q.includes('motion') || q.includes('exclude'))) || (q.includes('search') && q.includes('exclude'))) {
+    return docResponse(KB.s8motion);
+  }
+  if (q.includes('pintea') && (q.includes('letter') || q.includes('request') || q.includes('accommodation'))) {
+    return docResponse(KB.pintea_letter);
+  }
+  if (q.includes('affidavit')) {
+    return docResponse(KB.affidavit);
+  }
+  if (q.includes('demand letter') || (q.includes('return') && q.includes('seized')) || q.includes('s.490') || q.includes('490')) {
+    return docResponse(KB.demand_letter);
+  }
+
+  // Knowledge queries
+  if (q.includes('beno-x') || q.includes('benox') || q.includes('beno x')) return kbResponse(KB.benox);
+  if (q.includes('pintea') || q.includes('self-represented') || q.includes('self represented') || q.includes('unrepresented')) return kbResponse(KB.pintea);
+  if (q.includes('parker') || q.includes('r. v. parker') || q.includes('rv parker')) return kbResponse(KB.parker);
+  if (q.includes('smith') && !q.includes('cross')) return kbResponse(KB.smith);
+  if (q.includes('mernagh') || q.includes('medical necessity')) return kbResponse(KB.mernagh);
+  if (q.includes('jordan') || q.includes('11(b)') || q.includes('s.11(b)') || q.includes('delay') || q.includes('18 month') || q.includes('30 month')) return kbResponse(KB.s11b);
+  if (q.includes('grant') && q.includes('24')) return kbResponse(KB.grant);
+  if (q.includes('s.7') || (q.includes('section 7') && q.includes('charter')) || q.includes('liberty') || q.includes('security of the person')) return kbResponse(KB.s7);
+  if (q.includes('s.8') || (q.includes('section 8') && q.includes('charter')) || q.includes('search') || q.includes('seizure') || q.includes('warrant')) return kbResponse(KB.s8);
+  if (q.includes('s.9') || (q.includes('section 9') && q.includes('charter')) || q.includes('arbitrary detention') || q.includes('detained')) return kbResponse(KB.s9);
+  if (q.includes('s.10') || (q.includes('section 10') && q.includes('charter')) || q.includes('right to counsel') || q.includes('counsel') || q.includes('lawyer')) return kbResponse(KB.s10);
+  if (q.includes('s.15') || (q.includes('section 15') && q.includes('charter')) || q.includes('equality') || q.includes('racial') || q.includes('gladue') || q.includes('indigenous')) return kbResponse(KB.s15);
+
+  // General Charter overview
+  if (q.includes('charter') || q.includes('constitutional')) {
+    return {
+      type: 'knowledge',
+      title: 'Charter of Rights — Cannabis Defense Overview',
+      body: `The Canadian Charter of Rights and Freedoms is your primary weapon in cannabis defense. Here are the key sections and their applications:\n\n**Section 7 — Life, Liberty, Security**\nRight to life, liberty and security — protects medical access and bodily autonomy. See R. v. Parker, R. v. Smith.\n\n**Section 8 — Search and Seizure**\nUnreasonable search and seizure — challenge every warrantless search. Requires warrant, neutral judge, reasonable grounds.\n\n**Section 9 — Arbitrary Detention**\nRight not to be arbitrarily detained. Police need objective grounds for investigative detention.\n\n**Section 10 — Rights on Arrest**\nRight to counsel — must be informed immediately. Police must stop questioning until counsel reached.\n\n**Section 11(b) — Trial Within Reasonable Time**\nJordan framework: 18-month ceiling (Provincial Court), 30-month (Superior Court). Exceeded? Stay of proceedings.\n\n**Section 15 — Equality**\nRacial profiling, discriminatory enforcement, Gladue factors for Indigenous accused.\n\n**Remedies:**\n- s.24(1): Any just remedy the court considers appropriate\n- s.24(2): Exclusion of evidence (Grant test)\n- s.52(1): Declaration of unconstitutionality\n\nWhich section do you want to explore? Ask me to explain any section or generate documents.`,
+      chips: [
+        'Explain s.7 in detail', 'Explain s.8 in detail', 'Jordan s.11(b) delay',
+        'Generate Charter motion', 'BENO-X framework'
+      ]
+    };
+  }
+
+  // Cannabis case law overview
+  if (q.includes('case law') || q.includes('precedent') || q.includes('cases') || q.includes('cannabis law') || q.includes('summarize')) {
+    return {
+      type: 'knowledge',
+      title: 'Key Cannabis Case Law in Canada',
+      body: `Here are the landmark cannabis cases you need to know:\n\n**R. v. Parker (2000 ONCA)**\nFoundation of medical cannabis rights. CDSA prohibition violated s.7 — led to MMAR. Still good law for medical access arguments.\n\n**R. v. Mernagh (2013 ONCA)**\nMedical necessity defense. Cannot criminalize a person who has no reasonable legal alternative to cannabis.\n\n**R. v. Smith (2015 SCC 34)**\nRestricting cannabis to dried form only violates s.7 — overbroad. Applies to any restriction on form/method.\n\n**R. v. Jordan (2016 SCC 27)**\nRight to timely trial — 18/30 month ceilings. Exceeded = stay of proceedings. Most powerful weapon for pre-2022 charges.\n\n**R. v. Grant (2009 SCC 32)**\nTest for excluding evidence under s.24(2). Three-part balancing: (1) seriousness of breach, (2) impact on accused, (3) society's interest.\n\n**R. v. Brown (2003 ONCA)**\nRacial profiling — circumstantial evidence standard. Unexplained deviation from usual policing = racial profiling inference.\n\n**R. v. Gladue (1999 SCC)**\nIndigenous accused: systemic factors must be considered in sentencing.\n\nWhich case would you like me to explain in full?`,
+      chips: ['R. v. Parker detail', 'R. v. Smith detail', 'Jordan framework', 'BENO-X application']
+    };
+  }
+
+  // Cross-examination
+  if (q.includes('cross-examin') || q.includes('cross examine')) {
+    return {
+      type: 'knowledge',
+      title: 'Cross-Examination of Police Officer — Cannabis Search',
+      body: `**Cross-Examination Framework for Police Officer (Warrantless Search)**\n\nObjective: Establish that officer lacked reasonable grounds, violated your Charter rights, or acted in bad faith.\n\n**Opening questions — establish the timeline:**\n1. "Officer, at what time exactly did you first observe my client?"\n2. "And at that time, what specific observations caused you concern?"\n3. "Would you agree that observing someone in a vehicle is not, by itself, grounds for detention?"\n\n**Grounds for search — the critical sequence:**\n4. "You did not have a search warrant, correct?"\n5. "What exactly did you smell/see/observe that you say gave you grounds to search?"\n6. "You're aware that you must have reasonable and probable grounds BEFORE searching, not formed after?"\n7. "The smell of cannabis alone — did you know at the time this is not grounds for arrest or search in Ontario?"\n\n**The tip or information:**\n8. "If you received a tip: Who provided this information? When? How was it verified?"\n9. "You'd agree that an unconfirmed tip from an unknown person is not reasonable grounds, correct?"\n10. "Did you conduct any independent investigation to verify this tip before approaching my client?"\n\n**s.10 rights:**\n11. "When did you first advise my client of their right to counsel?"\n12. "You'd agree that the right to counsel arises at detention, not just formal arrest?"\n13. "Did my client invoke their right to counsel? What exactly did they say?"\n14. "And after they invoked counsel, you continued asking questions, did you not?"\n\n**Key goal:** Each "yes" from the officer on a violation is a s.24(2) building block. You need deliberate or systemic misconduct for exclusion.`,
+      chips: ['Generate cross-exam for drug dog case', 's.10 right to counsel arguments', 'Draft voir dire application']
+    };
+  }
+
+  // Self-representation
+  if (q.includes('self-represent') || q.includes('represent myself') || q.includes('no lawyer') || q.includes('duty counsel') || q.includes('how do i')) {
+    return {
+      type: 'knowledge',
+      title: 'Self-Representation in Ontario Courts — Your Rights',
+      body: `**Representing Yourself in Ontario Criminal Court**\n\nYou have the absolute right to represent yourself in any Canadian court.\n\n**Step 1: Get organized**\n- Request full disclosure immediately (police notes, ITO, all evidence Crown intends to use)\n- Crown must provide all disclosure FREE OF CHARGE\n- If Crown refuses: apply to trial judge for disclosure order\n\n**Step 2: Invoke Pintea**\n- At every court appearance, state: "I am a self-represented litigant and I request the court's guidance pursuant to Pintea v. Ion"\n- This requires the judge to explain procedures and be patient with you\n\n**Step 3: Duty Counsel**\n- Duty counsel is FREE at most courthouses\n- Can advise you on procedure, review Crown's disclosure, advise on motions\n- Available most court days — arrive early and ask at the desk\n- Legal Aid Ontario: 1-800-668-8258\n\n**Step 4: File your motions**\n- Notice of Constitutional Question (NCQ) — if raising Charter arguments\n- Pre-trial disclosure application — if Crown withholds anything\n- Pintea accommodation request — before any scheduled hearing\n- Jordan calculation — count your days from charge date NOW\n\n**Step 5: At trial**\n- Opening statement: state your Charter arguments clearly\n- Cross-examine police: focus on grounds, search, rights advising\n- No obligation to testify — silence cannot be held against you\n- Closing argument: summarize Charter violations, request remedy\n\n**Key phrase:** "Your Honour, I am proceeding pursuant to the BENO-X constitutional self-defense framework, relying on Charter sections 7, 8, 9, 10, 11(b), and 15."`,
+      chips: ['Pintea accommodation letter', 'Generate NCQ document', 'Jordan delay calculation', 'BENO-X full framework']
+    };
+  }
+
+  // Default — no match
+  return {
+    type: 'default',
+    title: 'PrimeDox AI — Query Received',
+    body: `I understand you're asking about: **"${query}"**\n\nI can help you with this. My knowledge vault covers:\n\n- **Charter sections** (s.7 liberty, s.8 search, s.9 detention, s.10 counsel, s.11(b) delay, s.15 equality)\n- **Cannabis case law** (Parker, Smith, Mernagh, Jordan, Grant, Brown, Gladue)\n- **BENO-X framework** — full constitutional self-defense system\n- **Pintea accommodations** — self-represented litigant rights\n- **Document generation** — NCQ, motions, affidavits, demand letters\n\nTo get the most precise answer, try asking me something like:\n- "Explain s.8 unreasonable search"\n- "Generate a Notice of Constitutional Question"\n- "What is the BENO-X framework?"\n- "How do I apply Jordan s.11(b) to my case?"\n\nWhat specifically do you need?`,
+    chips: ['Charter overview', 'BENO-X framework', 'Generate NCQ', 'Cannabis case law summary']
+  };
+}
+
+function kbResponse(entry) {
+  return { type: 'knowledge', title: entry.title, body: entry.content };
+}
+
+function docResponse(entry) {
+  return { type: 'doc', title: entry.title, body: entry.content };
+}
+
+// ═══════════════════════════════════════════════
+// CHAT ENGINE
+// ═══════════════════════════════════════════════
+
+let queryCount = 0;
+const FREE_LIMIT = 10;
+
+function renderMessage(role, content) {
+  const wrap = document.getElementById('chatWrap');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  if (role === 'ai') {
+    div.innerHTML = `<div class="msg-avatar">⚖️</div><div class="msg-bubble" id="msg-${Date.now()}"></div>`;
+    wrap.appendChild(div);
+    const bubble = div.querySelector('.msg-bubble');
+    bubble.innerHTML = content;
+  } else {
+    div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${escHtml(content)}</div>`;
+    wrap.appendChild(div);
+  }
+  wrap.scrollTop = wrap.scrollHeight;
+  return div;
+}
+
+function renderTyping() {
+  const wrap = document.getElementById('chatWrap');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = 'typing-indicator';
+  div.innerHTML = `<div class="msg-avatar">⚖️</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+  return div;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatResponse(res) {
+  if (res.type === 'doc') {
+    const escaped = res.body.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const id = 'doc-' + Date.now();
+    return `<h3>${res.title}</h3>
+<p style="font-size:11px;color:#f59e0b;margin-bottom:8px">⚠️ Template document — replace all [BRACKETED] fields with your specific information. Not legal advice.</p>
+<div class="doc-output" id="${id}">${escaped}</div>
+<button class="copy-btn" onclick="copyDoc('${id}')">📋 Copy Document</button>`;
+  }
+
+  if (res.type === 'knowledge' || res.type === 'default') {
+    let html = `<h3>${res.title}</h3>`;
+    const lines = res.body.split('\n');
+    let inList = false;
+    for (const line of lines) {
+      if (!line.trim()) { if (inList) { html += '</ul>'; inList = false; } html += '<br>'; continue; }
+      if (line.startsWith('**') && line.endsWith('**') && !line.slice(2,-2).includes('**')) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<h4>${line.slice(2,-2)}</h4>`;
+      } else if (line.startsWith('- ')) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += `<li>${mdInline(line.slice(2))}</li>`;
+      } else if (line.match(/^\d+\. /)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += `<li>${mdInline(line.replace(/^\d+\. /,''))}</li>`;
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<p>${mdInline(line)}</p>`;
+      }
+    }
+    if (inList) html += '</ul>';
+    if (res.chips) {
+      html += '<div class="quick-chips">';
+      res.chips.forEach(c => { html += `<div class="chip" onclick="quickPrompt('${c.replace(/'/g,"\\'")}'">${c}</div>`; });
+      html += '</div>';
+    }
+    return html;
+  }
+  return `<p>${escHtml(res.body)}</p>`;
+}
+
+function mdInline(s) {
+  return s
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.+?)`/g, '<code>$1</code>');
+}
+
+function copyDoc(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    const btn = el.nextElementSibling;
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = '📋 Copy Document', 2000); }
+  }).catch(() => {
+    const sel = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+}
+
+function sendMessage() {
+  const box = document.getElementById('inputBox');
+  const q = box.value.trim();
+  if (!q) return;
+  if (queryCount >= FREE_LIMIT) {
+    renderMessage('ai', `<h3>Free Tier Limit Reached</h3><p>You've used all ${FREE_LIMIT} free queries. Upgrade to PrimeDox AI Pro for unlimited access.</p><a href="https://www.paypal.com/paypalme/derekfrancisco/49" target="_blank" style="display:inline-block;margin-top:8px;padding:8px 16px;background:#6366f1;color:white;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600">Upgrade to Pro — $49/mo →</a>`);
+    box.value = '';
+    return;
+  }
+  queryCount++;
+  box.value = '';
+  box.style.height = '42px';
+  renderMessage('user', q);
+  const typing = renderTyping();
+  document.getElementById('sendBtn').disabled = true;
+  setTimeout(() => {
+    typing.remove();
+    const res = findResponse(q);
+    const html = formatResponse(res);
+    renderMessage('ai', html);
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('inputBox').focus();
+  }, 600 + Math.random() * 400);
+}
+
+function quickPrompt(text) {
+  document.getElementById('inputBox').value = text;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el) {
+  el.style.height = '42px';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+</script>
+</body>
+</html>

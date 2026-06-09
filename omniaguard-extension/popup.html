@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OmniaGuard Shield</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 320px;
+    background: #0a0f1a;
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 13px;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #0d2137 0%, #0a1628 100%);
+    padding: 16px;
+    border-bottom: 1px solid rgba(0,212,180,0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #00d4b4, #00a8c6);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo svg { color: #0a0f1a; }
+
+  .header-text h1 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #00d4b4;
+    letter-spacing: 0.02em;
+  }
+
+  .header-text p {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 1px;
+  }
+
+  .status-bar {
+    padding: 12px 16px;
+    background: rgba(16,185,129,0.08);
+    border-bottom: 1px solid rgba(16,185,129,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-bar.danger {
+    background: rgba(239,68,68,0.08);
+    border-bottom-color: rgba(239,68,68,0.2);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(16,185,129,0.6);
+    animation: pulse-dot 2s infinite;
+  }
+
+  .status-dot.danger { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .status-text { font-size: 12px; font-weight: 600; color: #10b981; }
+  .status-text.danger { color: #ef4444; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .stat-box {
+    background: #0d1526;
+    padding: 12px 8px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: #00d4b4;
+    display: block;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-num.danger { color: #ef4444; }
+
+  .stat-label {
+    font-size: 10px;
+    color: #475569;
+    margin-top: 3px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .section {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .section-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #475569;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  .toggle-label { font-size: 12px; color: #94a3b8; }
+
+  .toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .toggle input { display: none; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #1e293b;
+    border-radius: 10px;
+    transition: 0.3s;
+  }
+
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    left: 3px;
+    top: 3px;
+    background: #475569;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+
+  .toggle input:checked + .toggle-slider { background: #00d4b4; }
+  .toggle input:checked + .toggle-slider::before {
+    transform: translateX(16px);
+    background: white;
+  }
+
+  .lifetime {
+    padding: 10px 16px;
+    background: rgba(0,212,180,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0,212,180,0.1);
+  }
+
+  .lifetime-label { font-size: 11px; color: #475569; }
+  .lifetime-num { font-size: 14px; font-weight: 700; color: #00d4b4; }
+
+  .upgrade-cta {
+    margin: 12px 16px;
+    background: linear-gradient(135deg, #00d4b4, #0099cc);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: opacity 0.2s;
+  }
+
+  .upgrade-cta:hover { opacity: 0.9; }
+
+  .upgrade-cta-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0a0f1a;
+    display: block;
+  }
+
+  .upgrade-cta-sub {
+    font-size: 11px;
+    color: rgba(10,15,26,0.7);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .footer {
+    padding: 8px 16px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-brand { font-size: 10px; color: #334155; font-weight: 600; letter-spacing: 0.05em; }
+  .footer-link { font-size: 10px; color: #475569; text-decoration: none; }
+  .footer-link:hover { color: #00d4b4; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7L12 2z" fill="currentColor"/>
+      <path d="M9 12l2 2 4-4" stroke="#0a0f1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </div>
+  <div class="header-text">
+    <h1>OmniaGuard Shield</h1>
+    <p>Threat Intelligence &amp; Tracker Blocking</p>
+  </div>
+</div>
+
+<div class="status-bar" id="statusBar">
+  <div class="status-dot" id="statusDot"></div>
+  <span class="status-text" id="statusText">Active Protection</span>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-box">
+    <span class="stat-num" id="statBlocked">0</span>
+    <span class="stat-label">Blocked</span>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num" id="statTrackers">0</span>
+    <span class="stat-label">Trackers</span>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num" id="statMalware" style="color:#ef4444">0</span>
+    <span class="stat-label">Threats</span>
+  </div>
+</div>
+
+<div class="lifetime">
+  <span class="lifetime-label">All-time trackers blocked</span>
+  <span class="lifetime-num" id="lifetimeNum">—</span>
+</div>
+
+<div class="section">
+  <div class="section-title">Protection Settings</div>
+  <div class="toggle-row">
+    <span class="toggle-label">Block Trackers &amp; Analytics</span>
+    <label class="toggle"><input type="checkbox" id="toggleTrackers" checked><span class="toggle-slider"></span></label>
+  </div>
+  <div class="toggle-row">
+    <span class="toggle-label">Block Malicious Sites</span>
+    <label class="toggle"><input type="checkbox" id="toggleMalware" checked><span class="toggle-slider"></span></label>
+  </div>
+  <div class="toggle-row">
+    <span class="toggle-label">Show Page Badge</span>
+    <label class="toggle"><input type="checkbox" id="toggleBadge" checked><span class="toggle-slider"></span></label>
+  </div>
+</div>
+
+<a href="mailto:contact@omniaguard.com?subject=OmniaGuard%20Shield%20%E2%80%94%20Upgrade%20to%20Full%20VPN&body=I'd%20like%20to%20upgrade%20my%20OmniaGuard%20protection%20to%20include%20VPN%20coverage." class="upgrade-cta" target="_blank">
+  <span class="upgrade-cta-title">Upgrade to OmniaGuard VPN</span>
+  <span class="upgrade-cta-sub">Full network protection — from $9.99/mo</span>
+</a>
+
+<div class="footer">
+  <span class="footer-brand">OMNIAGUARD.COM</span>
+  <a href="https://omniaguard.com" class="footer-link" target="_blank">Request Security Audit →</a>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
