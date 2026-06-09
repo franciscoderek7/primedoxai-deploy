@@ -53,7 +53,7 @@
       color: '#6c63ff',
       accent: '#4b43cc',
       greeting: "OmniaGuard here. What's your threat surface? I can help you find the right protection tier.",
-      consultLink: 'mailto:contact@omniaguard.com?subject=OmniaGuard%20Inquiry',
+      consultLink: 'mailto:omniaguard1@gmail.com?subject=OmniaGuard%20Inquiry',
       consultLabel: 'Contact Sales',
     },
     'cleanswarm': {
@@ -113,7 +113,7 @@
     { kw: ['paypal', 'payment', 'pay', 'interac', 'etransfer', 'e-transfer'],
       answer: "All products can be purchased via PayPal or Interac e-Transfer. Send to <strong>franciscoderek7@gmail.com</strong> with the product name in the subject." },
     { kw: ['contact', 'email', 'reach', 'talk to', 'speak'],
-      answer: "Best way to reach us: reply directly to your welcome email, or send to <strong>franciscoderek7@gmail.com</strong>. For OmniaGuard: contact@omniaguard.com." },
+      answer: "Best way to reach us: reply directly to your welcome email, or send to <strong>franciscoderek7@gmail.com</strong>. For OmniaGuard: omniaguard1@gmail.com." },
     { kw: ['hello', 'hi', 'hey', 'start', 'help', 'what can you do'],
       answer: null } // triggers default greeting repeat
   ];
