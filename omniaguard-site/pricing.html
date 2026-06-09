@@ -989,7 +989,7 @@
     <h2>Enterprise Partnership Program</h2>
     <p class="partner-sub">Looking for deeper integration, reseller agreements, or a custom security solution? Our enterprise team will craft a bespoke protection framework for your organization.</p>
 
-    <form action="mailto:omniaguard1@gmail.com" method="post" enctype="text/plain">
+    <form id="pricing-contact-form" onsubmit="return handlePricingForm(event)">
       <div class="form-row">
         <div class="form-group">
           <label for="company-name">Company Name</label>
@@ -1317,6 +1317,21 @@
   </button>
 </div>
 
+<script>
+function handlePricingForm(e){
+  e.preventDefault();
+  var f=e.target;
+  var name=f.querySelector('input[type=text],input[name=name]');
+  var email=f.querySelector('input[type=email]');
+  var msg=f.querySelector('textarea');
+  var body=encodeURIComponent((name?'Name: '+name.value+'
+':'')+(email?'Email: '+email.value+'
+':'')+(msg?'
+'+msg.value:''));
+  window.location.href='mailto:omniaguard1@gmail.com?subject=OmniaGuard%20Pricing%20Inquiry&body='+body;
+  return false;
+}
+</script>
 <script>window.REVEREND_SITE='omniaguard';</script>
 <script src="reverend-ai.js"></script>
 </body>
