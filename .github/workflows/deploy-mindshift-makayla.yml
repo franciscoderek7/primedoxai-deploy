@@ -1,0 +1,51 @@
+name: Deploy MindShift by Michaella
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mindshift-makayla/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone mindshift-makayla repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/mindshift-makayla.git /tmp/mindshift-makayla
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cp mindshift-makayla/index.html /tmp/mindshift-makayla/index.html
+          if [ -d "mindshift-makayla/assets" ]; then
+            mkdir -p /tmp/mindshift-makayla/assets
+            cp -r mindshift-makayla/assets/. /tmp/mindshift-makayla/assets/
+          fi
+          echo "Files copied"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/mindshift-makayla
+          git config user.email "deploy@mindshiftbymakayla.com"
+          git config user.name "MindShift Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: MindShift by Michaella @ ${{ github.sha }}" \
+            || echo "Nothing to commit"
+          git push origin main
+          echo "Deployed — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "  MINDSHIFT BY MICHAELLA DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/mindshift-makayla"
+          echo "  Cherry blossoms: active"
+          echo "================================================"
