@@ -1,0 +1,77 @@
+name: Deploy Doc Weedlaw to docweedlaw.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docweedlaw-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop A identity (Derek Francisco visible — cannabis OK)
+        run: |
+          # docweedlaw is Loop A — Derek Francisco identity expected
+          # Guard: no private personal addresses, no API keys
+          ADDR_LEAK=$(grep -rn "705-307-8080\|Kent St W\|K9V 2Z8\|sk_live_\|sk_test_" docweedlaw-site/ --include="*.html" | wc -l)
+          if [ "$ADDR_LEAK" -gt 0 ]; then
+            echo "FAIL: Private address or API key found in docweedlaw-site"
+            grep -rn "705-307-8080\|Kent St W\|K9V 2Z8\|sk_live_\|sk_test_" docweedlaw-site/ --include="*.html"
+            exit 1
+          fi
+          echo "PASS: Loop A identity verified — Derek Francisco visible, no private addresses"
+
+      - name: Clone docweedlaw repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/docweedlaw.git /tmp/docweedlaw
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe old files
+        run: |
+          find /tmp/docweedlaw -mindepth 1 -not -path '/tmp/docweedlaw/.git*' -delete
+          echo "Clean slate"
+
+      - name: Copy site files
+        run: |
+          cd docweedlaw-site
+          for f in *.html; do [ -f "$f" ] && cp "$f" /tmp/docweedlaw/"$f" && echo "  copied $f"; done
+          for ext in jpg jpeg png webp gif svg js css ico; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/docweedlaw/"$f" && echo "  copied $f"; done
+          done
+          echo "docweedlaw.com" > /tmp/docweedlaw/CNAME
+          touch /tmp/docweedlaw/.nojekyll
+          echo "All Doc Weedlaw files copied"
+
+      - name: Commit and push to docweedlaw repo
+        run: |
+          cd /tmp/docweedlaw
+          git config user.email "deploy@docweedlaw.com"
+          git config user.name "Doc Weedlaw Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: docweedlaw.com
+          Loop: A (Derek Francisco — personal brand)
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/docweedlaw — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "  DOC WEEDLAW DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/docweedlaw (main)"
+          echo "  CNAME: docweedlaw.com"
+          echo "  Loop: A (Derek Francisco personal brand)"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo "  Check: https://docweedlaw.com"
+          echo "================================================"

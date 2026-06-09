@@ -1,0 +1,88 @@
+name: Deploy Kiaros to kiaros.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'kiaros-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop B identity (anonymous — no Derek name, no cannabis)
+        run: |
+          DEREK_LEAK=$(grep -rn "Derek Francisco\|franciscoderek7\|Doc Weedlaw\|CCLDR" kiaros-site/ --include="*.html" | wc -l)
+          if [ "$DEREK_LEAK" -gt 0 ]; then
+            echo "FAIL: Derek Francisco identity leaked in Loop B Kiaros site"
+            grep -rn "Derek Francisco\|franciscoderek7\|Doc Weedlaw\|CCLDR" kiaros-site/ --include="*.html"
+            exit 1
+          fi
+
+          CANNABIS_LEAK=$(grep -rn "cannabis\|marijuana\|weed" kiaros-site/ --include="*.html" -i | wc -l)
+          if [ "$CANNABIS_LEAK" -gt 0 ]; then
+            echo "FAIL: Cannabis content found in Loop B Kiaros site"
+            grep -rn "cannabis\|marijuana\|weed" kiaros-site/ --include="*.html" -i
+            exit 1
+          fi
+
+          PERSONAL_LEAK=$(grep -rn "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8" kiaros-site/ --include="*.html" | wc -l)
+          if [ "$PERSONAL_LEAK" -gt 0 ]; then
+            echo "FAIL: Personal info found in Loop B site"
+            exit 1
+          fi
+          echo "PASS: Loop B identity isolated — anonymous, zero cannabis, zero personal info"
+
+      - name: Clone kiaros repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/kiaros.git /tmp/kiaros
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe old files
+        run: |
+          find /tmp/kiaros -mindepth 1 -not -path '/tmp/kiaros/.git*' -delete
+          echo "Clean slate"
+
+      - name: Copy site files
+        run: |
+          cd kiaros-site
+          for f in *.html; do [ -f "$f" ] && cp "$f" /tmp/kiaros/"$f" && echo "  copied $f"; done
+          for ext in jpg jpeg png webp gif svg js css ico; do
+            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/kiaros/"$f" && echo "  copied $f"; done
+          done
+          echo "kiaros.com" > /tmp/kiaros/CNAME
+          touch /tmp/kiaros/.nojekyll
+          echo "All Kiaros files copied"
+
+      - name: Commit and push to kiaros repo
+        run: |
+          cd /tmp/kiaros
+          git config user.email "deploy@kiaros.com"
+          git config user.name "Kiaros Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: kiaros.com
+          Loop: B (anonymous — no Derek Francisco, no cannabis)
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/kiaros — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "  KIAROS DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/kiaros (main)"
+          echo "  CNAME: kiaros.com"
+          echo "  Loop: B (anonymous — no Derek Francisco, no cannabis)"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo "  Check: https://kiaros.com"
+          echo "================================================"

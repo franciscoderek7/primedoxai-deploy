@@ -56,6 +56,12 @@ jobs:
           for ext in jpg jpeg png webp gif svg js css; do
             for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/cleanswarm/"$f" && echo "  copied $f"; done
           done
+          # Copy assets/ subdirectory (logo.svg, favicon.svg, etc.)
+          if [ -d assets ]; then
+            mkdir -p /tmp/cleanswarm/assets
+            cp -r assets/. /tmp/cleanswarm/assets/
+            echo "  copied assets/ directory"
+          fi
           echo "cleanswarm.ca" > /tmp/cleanswarm/CNAME
           touch /tmp/cleanswarm/.nojekyll
           echo "All CleanSwarm files copied"

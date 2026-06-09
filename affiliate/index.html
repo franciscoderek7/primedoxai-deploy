@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Affiliate Program — Francisco Holdings Inc. | 20% Commission</title>
+<meta name="description" content="Earn 20% recurring commission on every referral. Promote CCLDR, PrimeDox AI, OmniaGuard, and more.">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0a0a0a;--surface:#111;--border:#1e1e1e;
+    --gold:#c9a84c;--gold-dim:#9a7a2e;
+    --text:#e5e5e5;--muted:#888;--dim:#555;
+    --green:#27ae60;--cyan:#00d4ff;
+  }
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6}
+  a{color:var(--gold);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* NAV */
+  nav{background:#0d0d0d;border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .nav-brand{font-weight:800;font-size:16px;color:var(--gold)}
+  .nav-links{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap}
+  .nav-links a{font-size:13px;color:var(--muted)}
+  .nav-links a:hover{color:var(--gold)}
+
+  /* HERO */
+  .hero{text-align:center;padding:72px 24px 56px;max-width:700px;margin:0 auto}
+  .hero-badge{display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);color:var(--gold);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:.8px;margin-bottom:24px;text-transform:uppercase}
+  .hero h1{font-size:clamp(32px,6vw,54px);font-weight:900;line-height:1.1;margin-bottom:20px}
+  .hero h1 span{color:var(--gold)}
+  .hero p{font-size:18px;color:var(--muted);max-width:540px;margin:0 auto 32px}
+  .cta-primary{display:inline-block;background:var(--gold);color:#111;font-weight:800;font-size:16px;padding:15px 36px;border-radius:10px;letter-spacing:.3px;transition:background .2s}
+  .cta-primary:hover{background:#e8c060;text-decoration:none}
+
+  /* STATS */
+  .stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;padding:32px 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#0d0d0d}
+  .stat{text-align:center}
+  .stat-n{font-size:36px;font-weight:900;color:var(--gold)}
+  .stat-l{font-size:13px;color:var(--muted);margin-top:4px}
+
+  /* SECTION */
+  section{padding:64px 24px}
+  .container{max-width:960px;margin:0 auto}
+  h2{font-size:clamp(24px,4vw,36px);font-weight:800;margin-bottom:12px}
+  .section-sub{color:var(--muted);font-size:16px;max-width:560px;margin-bottom:48px}
+
+  /* HOW IT WORKS */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+  .step{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px 24px}
+  .step-n{font-size:32px;font-weight:900;color:var(--gold);opacity:.7;margin-bottom:12px}
+  .step h3{font-size:17px;font-weight:700;margin-bottom:8px}
+  .step p{font-size:14px;color:var(--muted)}
+
+  /* PRODUCTS */
+  .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .product-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;transition:border-color .2s}
+  .product-card:hover{border-color:var(--gold-dim)}
+  .prod-icon{font-size:28px;margin-bottom:12px}
+  .prod-name{font-size:16px;font-weight:700;margin-bottom:4px}
+  .prod-desc{font-size:13px;color:var(--muted);margin-bottom:14px}
+  .prod-tiers{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .prod-tiers li{display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;background:#161616;border-radius:6px}
+  .prod-tiers .tier-name{color:var(--text)}
+  .prod-tiers .tier-comm{color:var(--green);font-weight:700}
+
+  /* SIGNUP FORM */
+  .signup-section{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:640px;margin:0 auto}
+  @media(max-width:600px){.signup-section{padding:32px 20px}}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+  .form-group{display:flex;flex-direction:column;gap:6px}
+  .form-group label{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.3px}
+  .form-group input,.form-group select,.form-group textarea{background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s;font-family:inherit}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold)}
+  .form-group textarea{resize:vertical;min-height:90px}
+  .form-group.full{grid-column:1/-1}
+  .form-submit{width:100%;margin-top:8px;background:var(--gold);color:#111;font-weight:800;font-size:16px;padding:14px;border:none;border-radius:10px;cursor:pointer;letter-spacing:.3px;transition:background .2s}
+  .form-submit:hover{background:#e8c060}
+  .form-note{font-size:12px;color:var(--dim);text-align:center;margin-top:14px}
+
+  /* CALC */
+  .calc-box{background:#0d0d0d;border:1px solid var(--border);border-radius:14px;padding:32px;max-width:560px;margin:0 auto}
+  .calc-row{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+  .calc-row label{font-size:14px;color:var(--muted);min-width:160px}
+  .calc-row select{background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:9px 12px;color:var(--text);font-size:14px;flex:1;min-width:180px}
+  .calc-result{text-align:center;padding:20px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:12px}
+  .calc-result .big{font-size:42px;font-weight:900;color:var(--gold)}
+  .calc-result .sub{font-size:14px;color:var(--muted);margin-top:4px}
+
+  /* FIRST AFFILIATE */
+  .featured{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(39,174,96,.06));border:1px solid var(--gold-dim);border-radius:16px;padding:32px;display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap}
+  .featured-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--green));display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+  .featured-body h3{font-size:18px;font-weight:800;margin-bottom:6px}
+  .featured-body p{font-size:14px;color:var(--muted)}
+  .featured-badge{display:inline-block;background:rgba(39,174,96,.15);border:1px solid rgba(39,174,96,.4);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;margin-bottom:10px;letter-spacing:.6px}
+
+  /* FAQ */
+  .faq{display:flex;flex-direction:column;gap:16px;max-width:680px}
+  .faq-item{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .faq-q{padding:18px 20px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--surface)}
+  .faq-q:hover{background:#161616}
+  .faq-a{padding:0 20px;max-height:0;overflow:hidden;font-size:14px;color:var(--muted);transition:max-height .3s,padding .3s}
+  .faq-item.open .faq-a{padding:16px 20px;max-height:300px}
+  .faq-item.open .faq-arrow{transform:rotate(180deg)}
+  .faq-arrow{transition:transform .3s}
+
+  /* SUCCESS */
+  #signup-success{display:none;text-align:center;padding:40px 24px}
+  #signup-success .success-icon{font-size:56px;margin-bottom:16px}
+  #signup-success h3{font-size:24px;font-weight:800;margin-bottom:10px}
+  #signup-success p{color:var(--muted);font-size:16px;max-width:440px;margin:0 auto 24px}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;font-size:13px;color:var(--dim)}
+  footer a{color:var(--dim)}
+  footer a:hover{color:var(--muted)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Francisco Holdings Inc.</div>
+  <div class="nav-links">
+    <a href="https://franciscoholdingsinc.com">FH Home</a>
+    <a href="https://ccldr.net">CCLDR</a>
+    <a href="https://primedoxai.com">PrimeDox AI</a>
+    <a href="https://omniaguard.com">OmniaGuard</a>
+    <a href="#signup">Apply Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Affiliate Program</div>
+  <h1>Earn <span>20% Commission</span><br>On Every Sale You Refer</h1>
+  <p>Partner with the Francisco Holdings empire. Promote legal defense education, AI tools, and enterprise security — earn recurring commissions for life.</p>
+  <a href="#signup" class="cta-primary">Apply as an Affiliate →</a>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">20%</div><div class="stat-l">Commission Rate</div></div>
+  <div class="stat"><div class="stat-n">6</div><div class="stat-l">Products to Promote</div></div>
+  <div class="stat"><div class="stat-n">$1,499</div><div class="stat-l">Highest Single Sale</div></div>
+  <div class="stat"><div class="stat-n">$300</div><div class="stat-l">Max Per Referral</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="container">
+    <h2>How It Works</h2>
+    <p class="section-sub">Four steps from signup to your first payout. No experience required.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <h3>Apply</h3>
+        <p>Fill out the form below. We review applications within 24 hours and send your unique referral code via email.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <h3>Share</h3>
+        <p>Share your referral link on social media, email, or direct outreach. Your code is tracked in the URL parameter.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <h3>Earn</h3>
+        <p>When someone purchases using your link, you earn 20% of the sale price. Tracked by your affiliate code.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">04</div>
+        <h3>Get Paid</h3>
+        <p>Payouts via PayPal or Interac e-Transfer monthly, on the 1st. Minimum payout: $50 CAD.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMISSION CALCULATOR -->
+<section style="background:#0d0d0d;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <h2>Commission Calculator</h2>
+    <p class="section-sub">See what you can earn per referral.</p>
+    <div class="calc-box">
+      <div class="calc-row">
+        <label>Product</label>
+        <select id="calc-product" onchange="updateCalc()">
+          <option value="149">Weedlaw Warrior — $149</option>
+          <option value="499">Weedlaw Professional — $499</option>
+          <option value="999">Weedlaw Elite — $999</option>
+          <option value="1499">Weedlaw Sovereign — $1,499</option>
+          <option value="49">PrimeDox Starter — $49/mo</option>
+          <option value="199">PrimeDox Elite — $199/mo</option>
+          <option value="499b">PrimeDox Enterprise — $499/mo</option>
+          <option value="500">FH Consulting Session — $500</option>
+          <option value="1500">FH Monthly Retainer — $1,500/mo</option>
+          <option value="499c">OmniaGuard Sentinel — $499/mo</option>
+          <option value="1499b">OmniaGuard Guardian — $1,499/mo</option>
+          <option value="399">CleanSwarm Starter — $399/mo</option>
+          <option value="999b">CleanSwarm Growth — $999/mo</option>
+          <option value="2499">CleanSwarm Scale — $2,499/mo</option>
+        </select>
+      </div>
+      <div class="calc-row">
+        <label>Referrals per month</label>
+        <select id="calc-volume" onchange="updateCalc()">
+          <option value="1">1 referral</option>
+          <option value="3">3 referrals</option>
+          <option value="5">5 referrals</option>
+          <option value="10">10 referrals</option>
+          <option value="25">25 referrals</option>
+        </select>
+      </div>
+      <div class="calc-result">
+        <div class="big" id="calc-result">$29.80</div>
+        <div class="sub" id="calc-sub">per month at 20% commission × 1 referral</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section>
+  <div class="container">
+    <h2>Products You Can Promote</h2>
+    <p class="section-sub">Six brands. Multiple tiers. 20% on every single one.</p>
+    <div class="products">
+
+      <div class="product-card">
+        <div class="prod-icon">⚖️</div>
+        <div class="prod-name">CCLDR / Weedlaw Education</div>
+        <div class="prod-desc">Cannabis constitutional defense courses. High-intent buyers facing charges.</div>
+        <ul class="prod-tiers">
+          <li><span class="tier-name">Warrior — $149</span><span class="tier-comm">$29.80</span></li>
+          <li><span class="tier-name">Professional — $499</span><span class="tier-comm">$99.80</span></li>
+          <li><span class="tier-name">Elite — $999</span><span class="tier-comm">$199.80</span></li>
+          <li><span class="tier-name">Sovereign — $1,499</span><span class="tier-comm">$299.80</span></li>
+        </ul>
+      </div>
+
+      <div class="product-card">
+        <div class="prod-icon">🤖</div>
+        <div class="prod-name">PrimeDox AI</div>
+        <div class="prod-desc">AI document automation for legal and business filings.</div>
+        <ul class="prod-tiers">
+          <li><span class="tier-name">Starter — $49/mo</span><span class="tier-comm">$9.80/mo</span></li>
+          <li><span class="tier-name">Elite — $199/mo</span><span class="tier-comm">$39.80/mo</span></li>
+          <li><span class="tier-name">Enterprise — $499/mo</span><span class="tier-comm">$99.80/mo</span></li>
+        </ul>
+      </div>
+
+      <div class="product-card">
+        <div class="prod-icon">🏛️</div>
+        <div class="prod-name">Francisco Holdings Consulting</div>
+        <div class="prod-desc">Executive strategy sessions for founders and entrepreneurs.</div>
+        <ul class="prod-tiers">
+          <li><span class="tier-name">Session — $500</span><span class="tier-comm">$100.00</span></li>
+          <li><span class="tier-name">Monthly Retainer — $1,500</span><span class="tier-comm">$300.00/mo</span></li>
+        </ul>
+      </div>
+
+      <div class="product-card">
+        <div class="prod-icon">🛡️</div>
+        <div class="prod-name">OmniaGuard</div>
+        <div class="prod-desc">Enterprise AI security monitoring and active defense.</div>
+        <ul class="prod-tiers">
+          <li><span class="tier-name">Sentinel — $499/mo</span><span class="tier-comm">$99.80/mo</span></li>
+          <li><span class="tier-name">Guardian — $1,499/mo</span><span class="tier-comm">$299.80/mo</span></li>
+          <li><span class="tier-name">Fortress — $4,999/mo</span><span class="tier-comm">$999.80/mo</span></li>
+        </ul>
+      </div>
+
+      <div class="product-card">
+        <div class="prod-icon">🐝</div>
+        <div class="prod-name">CleanSwarm</div>
+        <div class="prod-desc">AI-powered document cleanup and data extraction at scale.</div>
+        <ul class="prod-tiers">
+          <li><span class="tier-name">Starter — $399/mo</span><span class="tier-comm">$79.80/mo</span></li>
+          <li><span class="tier-name">Growth — $999/mo</span><span class="tier-comm">$199.80/mo</span></li>
+          <li><span class="tier-name">Scale — $2,499/mo</span><span class="tier-comm">$499.80/mo</span></li>
+        </ul>
+      </div>
+
+      <div class="product-card">
+        <div class="prod-icon">🌿</div>
+        <div class="prod-name">ZPrimeDox HQ</div>
+        <div class="prod-desc">Private strategic HQ portal access for qualified members.</div>
+        <ul class="prod-tiers">
+          <li><span class="tier-name">Monthly Access — $99/mo</span><span class="tier-comm">$19.80/mo</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FIRST AFFILIATE SPOTLIGHT -->
+<section style="background:#0d0d0d;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <h2>Our First Affiliate</h2>
+    <p class="section-sub">Gemma Fusco leads the way.</p>
+    <div class="featured">
+      <div class="featured-avatar">G</div>
+      <div class="featured-body">
+        <div class="featured-badge">FOUNDING AFFILIATE</div>
+        <h3>Gemma Fusco</h3>
+        <p>Gemma is our founding affiliate partner — the first in the Francisco Holdings affiliate network. Her referrals go to CCLDR and PrimeDox AI. Founding affiliates receive priority payout processing and direct access to new product launches before public announcement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP FORM -->
+<section id="signup">
+  <div class="container">
+    <h2>Apply as an Affiliate</h2>
+    <p class="section-sub">Takes 2 minutes. Approved in 24 hours. Your link is emailed same day.</p>
+
+    <div class="signup-section">
+      <div id="signup-form-inner">
+        <form id="affiliate-form" onsubmit="submitAffiliate(event)">
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>FIRST NAME</label>
+              <input type="text" name="first_name" placeholder="Gemma" required>
+            </div>
+            <div class="form-group">
+              <label>LAST NAME</label>
+              <input type="text" name="last_name" placeholder="Fusco" required>
+            </div>
+
+            <div class="form-group full">
+              <label>EMAIL ADDRESS</label>
+              <input type="email" name="email" placeholder="you@email.com" required>
+            </div>
+
+            <div class="form-group">
+              <label>PHONE (OPTIONAL)</label>
+              <input type="tel" name="phone" placeholder="705-000-0000">
+            </div>
+            <div class="form-group">
+              <label>PREFERRED PAYOUT</label>
+              <select name="payout">
+                <option value="paypal">PayPal</option>
+                <option value="interac">Interac e-Transfer</option>
+              </select>
+            </div>
+
+            <div class="form-group full">
+              <label>WHICH PRODUCTS WILL YOU PROMOTE?</label>
+              <select name="products">
+                <option value="all">All products</option>
+                <option value="ccldr">CCLDR / Weedlaw Education</option>
+                <option value="primedox">PrimeDox AI</option>
+                <option value="omniaguard">OmniaGuard</option>
+                <option value="fh">Francisco Holdings Consulting</option>
+                <option value="cleanswarm">CleanSwarm</option>
+              </select>
+            </div>
+
+            <div class="form-group full">
+              <label>HOW WILL YOU PROMOTE? (platforms, audience)</label>
+              <textarea name="promo_method" placeholder="e.g. Instagram (15K followers in cannabis/legal niche), email list of 2,000 Canadian professionals, LinkedIn network of founders..."></textarea>
+            </div>
+
+            <div class="form-group full">
+              <label>ANYTHING ELSE? (optional)</label>
+              <textarea name="notes" placeholder="Do you have an existing audience, referral network, or special partnership idea?"></textarea>
+            </div>
+
+          </div>
+
+          <button type="submit" class="form-submit">Submit Affiliate Application →</button>
+          <p class="form-note">Applications reviewed within 24 hours. Your referral code and tracking link will be emailed on approval.</p>
+        </form>
+      </div>
+
+      <div id="signup-success">
+        <div class="success-icon">✅</div>
+        <h3>Application Received</h3>
+        <p>We'll review your application within 24 hours. Your referral code and personalized tracking link will be emailed to you on approval.</p>
+        <p style="color:var(--muted);font-size:14px;margin-top:8px">Questions? Email <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:#0d0d0d;border-top:1px solid var(--border)">
+  <div class="container">
+    <h2>Frequently Asked Questions</h2>
+    <p class="section-sub">Everything you need to know before applying.</p>
+    <div class="faq">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How is my referral tracked?
+          <span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">Your unique referral code is added as a URL parameter (e.g. <code>?ref=YOURCODE</code>) on all product links. When a customer clicks your link and purchases within 30 days, the sale is attributed to you.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          When and how do I get paid?
+          <span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">Payouts are processed on the 1st of every month for the prior month's commissions. Minimum payout is $50 CAD. Choose PayPal or Interac e-Transfer when you apply.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is the 20% rate recurring for subscriptions?
+          <span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">Yes — for monthly subscription products (PrimeDox AI, OmniaGuard, CleanSwarm, FH Retainer), you earn 20% every month the customer stays subscribed. Lifetime recurring commission.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can I promote all products at once?
+          <span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">Yes. One referral link per product, all managed under your single affiliate account. You'll receive tracking links for each product on approval.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do I need to be in Canada?
+          <span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">No. Affiliates can be anywhere in the world. However, CCLDR and Weedlaw Education are specifically relevant to Canadian audiences (Canadian Charter of Rights).</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is there an affiliate dashboard?
+          <span class="faq-arrow">▾</span>
+        </div>
+        <div class="faq-a">Currently we operate a manual tracking system. You'll receive a monthly commission statement by email on the 28th of each month showing your referrals and payout amount. A self-serve dashboard is coming in Q3 2026.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Francisco Holdings Inc. | Affiliate Program | <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></p>
+  <p style="margin-top:8px">© 2026 Francisco Holdings Inc. All rights reserved.</p>
+</footer>
+
+<script>
+// Commission Calculator
+var PRICES = {
+  '149':1490,'499':4990,'999':9990,'1499':14990,
+  '49':490,'199':1990,'499b':4990,
+  '500':5000,'1500':15000,
+  '499c':4990,'1499b':14990,
+  '399':3990,'999b':9990,'2499':24990
+};
+function updateCalc(){
+  var prod = document.getElementById('calc-product').value;
+  var vol = parseInt(document.getElementById('calc-volume').value,10);
+  var price = PRICES[prod] || 0;
+  var comm = Math.round(price * 0.20) / 100;
+  var total = (comm * vol).toFixed(2);
+  document.getElementById('calc-result').textContent = '$' + (comm * vol).toFixed(2);
+  document.getElementById('calc-sub').textContent = 'per month at 20% commission ($' + comm.toFixed(2) + ') × ' + vol + ' referral' + (vol > 1 ? 's' : '');
+}
+updateCalc();
+
+// FAQ toggle
+function toggleFaq(el){
+  var item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// Form submission (mailto fallback — no server needed)
+function submitAffiliate(e){
+  e.preventDefault();
+  var form = document.getElementById('affiliate-form');
+  var data = new FormData(form);
+  var first = data.get('first_name') || '';
+  var last = data.get('last_name') || '';
+  var email = data.get('email') || '';
+  var phone = data.get('phone') || 'N/A';
+  var payout = data.get('payout') || '';
+  var products = data.get('products') || '';
+  var promo = data.get('promo_method') || '';
+  var notes = data.get('notes') || '';
+
+  var subject = encodeURIComponent('Affiliate Application — ' + first + ' ' + last);
+  var body = encodeURIComponent([
+    'AFFILIATE APPLICATION',
+    '====================',
+    'Name: ' + first + ' ' + last,
+    'Email: ' + email,
+    'Phone: ' + phone,
+    'Payout preference: ' + payout,
+    'Products: ' + products,
+    '',
+    'Promotion method:',
+    promo,
+    '',
+    'Additional notes:',
+    notes,
+    '',
+    '-- Submitted via affiliate/index.html'
+  ].join('\n'));
+
+  window.location.href = 'mailto:franciscoderek7@gmail.com?subject=' + subject + '&body=' + body;
+
+  // Show success
+  document.getElementById('signup-form-inner').style.display = 'none';
+  document.getElementById('signup-success').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
