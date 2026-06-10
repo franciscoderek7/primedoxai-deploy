@@ -1,0 +1,51 @@
+name: Deploy Vault Velocity Auto
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'vault-velocity-auto/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone vaultvelocityauto repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/vaultvelocityauto.git /tmp/vaultvelocityauto
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Copy site files
+        run: |
+          cp vault-velocity-auto/index.html /tmp/vaultvelocityauto/index.html
+          if [ -f "vault-velocity-auto/CNAME" ]; then
+            cp vault-velocity-auto/CNAME /tmp/vaultvelocityauto/CNAME
+          fi
+          echo "vaultvelocityauto.com" > /tmp/vaultvelocityauto/CNAME
+          echo "Files copied"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/vaultvelocityauto
+          git config user.email "deploy@vaultvelocityauto.com"
+          git config user.name "VVA Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: Vault Velocity Auto @ ${{ github.sha }}" \
+            || echo "Nothing to commit"
+          git push origin main
+          echo "Deployed — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "  VAULT VELOCITY AUTO DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/vaultvelocityauto"
+          echo "  Domain: vaultvelocityauto.com"
+          echo "================================================"
