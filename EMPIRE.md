@@ -416,5 +416,26 @@ Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgen
 
 ---
 
-*Updated: 2026-06-11 | Session: Francisco Revenue Sprint | Builder: Claude*
+## 15. SESSION LOG — June 11 (Continued)
+
+### Fixes Applied
+| File | Change | Status |
+|------|--------|--------|
+| techpetcage-site/index.html | Added CSS for .pay-options, .pay-btn, .pay-stripe, .pay-paypal, .pay-interac, .pay-email, .pay-options-dark payment button styles | ✅ COMMITTED |
+| francisco-holdings-site/index.html | Fixed 4 "Begin the Conversation" buttons — contact@franciscoholdings.com → franciscoderek7@gmail.com | ✅ COMMITTED |
+| francisco-holdings-site/index.html | Changed --pink: #e8a0b8 → --green: #2E8B5A (empire green palette alignment) | ✅ COMMITTED |
+| francisco-holdings-site/index.html | Added dead-link JS fix — converts co-link[href="#"] to mailto:franciscoderek7@gmail.com with company name in subject; wires live sites (OmniaGuard, CCLDR, PrimeDox AI, TechPetCage) to their real URLs | ✅ COMMITTED |
+
+### Stripe Placeholders — TechPetCage Membership (Still Needed)
+| Placeholder | Plan | Monthly Price |
+|-------------|------|--------------|
+| STRIPE_LINK_TPC_BASIC | Basic Plan | $19 CAD/mo |
+| STRIPE_LINK_TPC_PRO | Pro Plan | $49 CAD/mo |
+| STRIPE_LINK_TPC_KENNEL | Kennel Plan | $149 CAD/mo |
+
+→ Create at dashboard.stripe.com → Payment Links → paste `buy.stripe.com/xxx` to Claude for immediate wiring
+
+---
+
+*Updated: 2026-06-11 | Session: Francisco Revenue Sprint (cont.) | Builder: Claude*
 *Source of truth for the Francisco Holdings empire. Update after every deployment.*
