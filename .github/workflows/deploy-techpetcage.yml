@@ -1,0 +1,33 @@
+name: Deploy TechPetCage Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'techpetcage-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Clone target repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/techpetcage.git /tmp/techpetcage
+
+      - name: Copy site files
+        run: |
+          cp -r techpetcage-site/. /tmp/techpetcage/
+          echo "techpetcage.com" > /tmp/techpetcage/CNAME
+
+      - name: Deploy to GitHub Pages
+        run: |
+          cd /tmp/techpetcage
+          git config user.email "deploy@techpetcage.com"
+          git config user.name "TechPetCage Deploy Bot"
+          git add -A
+          git diff --cached --quiet || git commit -m "deploy: TechPetCage @ ${{ github.sha }}"
+          git push origin main
