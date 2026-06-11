@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechPetCage Admin — Revenue Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --emerald: #0A3D2E;
+      --emerald-mid: #1B5E45;
+      --gold: #D4AF37;
+      --gold-dark: #B8860B;
+      --charcoal: #1A1A1A;
+      --white: #FFFFFF;
+      --off-white: #F8F9FA;
+      --text: #2D2D2D;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --blue: #3b82f6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--off-white);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ===================== LOGIN GATE ===================== */
+    #login-gate {
+      position: fixed;
+      inset: 0;
+      background: var(--emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    #login-gate.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+
+    .login-logo {
+      margin-bottom: 8px;
+    }
+
+    .login-logo .shield-icon {
+      font-size: 48px;
+      line-height: 1;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .login-logo-text {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: -0.3px;
+    }
+
+    .login-headline {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      margin-top: 6px;
+      margin-bottom: 32px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .login-input {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 14px;
+    }
+
+    .login-input::placeholder { color: rgba(255,255,255,0.35); }
+    .login-input:focus { border-color: var(--gold); }
+
+    .login-input.error {
+      border-color: var(--danger);
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+
+    .login-btn {
+      width: 100%;
+      background: var(--gold);
+      color: var(--emerald);
+      border: none;
+      border-radius: 8px;
+      padding: 13px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.2px;
+    }
+
+    .login-btn:hover { background: var(--gold-dark); color: var(--white); }
+    .login-btn:active { transform: scale(0.98); }
+
+    .login-error {
+      font-size: 13px;
+      color: var(--danger);
+      margin-top: 10px;
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    /* ===================== DASHBOARD ===================== */
+    #dashboard {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #dashboard.visible { display: flex; }
+
+    /* Header */
+    .site-header {
+      background: var(--charcoal);
+      border-bottom: 2px solid var(--gold);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 28px;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.3px;
+    }
+
+    .header-logo span { color: var(--gold); }
+
+    .header-badge {
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.3);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    #live-clock {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.3px;
+    }
+
+    .admin-pill {
+      background: rgba(27,94,69,0.6);
+      border: 1px solid rgba(27,94,69,1);
+      color: #6ee7b7;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .logout-btn {
+      background: transparent;
+      border: 1px solid rgba(239,68,68,0.4);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239,68,68,0.1);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .header-sub {
+      background: rgba(0,0,0,0.15);
+      text-align: center;
+      padding: 5px;
+      font-size: 12px;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 28px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ===================== KPI CARDS ===================== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 22px 18px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .kpi-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .kpi-card.gold::before { background: var(--gold); }
+    .kpi-card.blue::before { background: var(--blue); }
+    .kpi-card.emerald::before { background: var(--emerald-mid); }
+
+    .kpi-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .kpi-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--charcoal);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .kpi-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--success);
+      background: rgba(34,197,94,0.08);
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-top: 10px;
+    }
+
+    /* ===================== CHART ===================== */
+    .chart-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .chart-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .chart-total {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .chart-total strong {
+      color: var(--emerald);
+      font-weight: 800;
+    }
+
+    .chart-area {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 180px;
+      padding: 0 8px;
+      border-bottom: 2px solid var(--border);
+      position: relative;
+    }
+
+    /* Y-axis labels */
+    .y-axis {
+      position: absolute;
+      left: -8px;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+
+    .y-label {
+      font-size: 10px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 100%;
+      flex: 1;
+      padding-left: 32px;
+    }
+
+    .bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .bar-spacer {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 52px;
+      background: var(--gold);
+      border-radius: 4px 4px 0 0;
+      transition: background 0.2s, height 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      height: 0;
+    }
+
+    .bar-wrap:hover .bar { background: var(--emerald-mid); }
+
+    .bar-tooltip {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--charcoal);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+
+    .bar-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: var(--charcoal);
+    }
+
+    .bar-wrap:hover .bar-tooltip { opacity: 1; }
+
+    .chart-x-axis {
+      display: flex;
+      gap: 10px;
+      padding: 8px 8px 0;
+      padding-left: 40px;
+    }
+
+    .x-label {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ===================== ORDERS TABLE ===================== */
+    .table-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .table-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .orders-table th {
+      background: var(--off-white);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .orders-table td {
+      padding: 13px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .orders-table tr:last-child td { border-bottom: none; }
+    .orders-table tr:hover td { background: rgba(212,175,55,0.03); }
+
+    .order-num {
+      font-weight: 700;
+      color: var(--emerald);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .order-amount {
+      font-weight: 700;
+      color: var(--charcoal);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .status-delivered { background: rgba(34,197,94,0.12); color: #16a34a; }
+    .status-shipped   { background: rgba(59,130,246,0.12); color: #2563eb; }
+    .status-processing { background: rgba(245,158,11,0.12); color: #d97706; }
+    .status-active    { background: rgba(10,61,46,0.1); color: var(--emerald); }
+
+    .channel-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .ch-direct   { background: rgba(212,175,55,0.15); color: var(--gold-dark); }
+    .ch-google   { background: rgba(59,130,246,0.12); color: #2563eb; }
+    .ch-facebook { background: rgba(99,102,241,0.12); color: #6366f1; }
+    .ch-organic  { background: rgba(34,197,94,0.1); color: #16a34a; }
+    .ch-email    { background: rgba(239,68,68,0.1); color: #dc2626; }
+    .ch-tiktok   { background: rgba(236,72,153,0.1); color: #db2777; }
+
+    /* ===================== TWO-COL GRID ===================== */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .panel-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .panel-body { padding: 18px 22px; }
+
+    /* ===================== TOP PRODUCTS ===================== */
+    .product-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .product-row:last-child { margin-bottom: 0; }
+
+    .rank-badge {
+      font-size: 18px;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .product-info { flex: 1; min-width: 0; }
+
+    .product-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .product-right {
+      text-align: right;
+      min-width: 72px;
+    }
+
+    .product-rev {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--charcoal);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-wrap {
+      margin-top: 4px;
+      height: 5px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 10px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.34, 1.1, 0.64, 1);
+    }
+
+    /* ===================== CHANNEL BREAKDOWN ===================== */
+    .channel-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .channel-row:last-child { margin-bottom: 0; }
+
+    .channel-name {
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 100px;
+      color: var(--text);
+    }
+
+    .channel-bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .channel-bar {
+      height: 100%;
+      background: var(--emerald-mid);
+      border-radius: 10px;
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.34, 1.1, 0.64, 1);
+    }
+
+    .channel-stats {
+      min-width: 100px;
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .channel-pct {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ===================== MEMBERSHIP ===================== */
+    .membership-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .mem-card {
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .mem-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .mem-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--charcoal);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mem-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .mrr-highlight {
+      background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-mid) 100%);
+      color: var(--white);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mrr-label { font-size: 12px; font-weight: 600; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .mrr-amount { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .mrr-detail { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+
+    /* ===================== STRIPE PANEL ===================== */
+    .stripe-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--emerald-mid);
+      border-radius: 12px;
+      margin-bottom: 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .stripe-header {
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stripe-icon {
+      font-size: 20px;
+    }
+
+    .stripe-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stripe-body { padding: 22px 24px; }
+
+    .stripe-body p { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+
+    .option-block { margin-bottom: 20px; }
+
+    .option-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .option-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .option-list li {
+      font-size: 13px;
+      color: var(--muted);
+      padding: 3px 0 3px 16px;
+      position: relative;
+    }
+
+    .option-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--gold-dark);
+    }
+
+    .code-block {
+      background: var(--charcoal);
+      border-radius: 8px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin-top: 8px;
+    }
+
+    .code-block pre {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #e2e8f0;
+      white-space: pre;
+    }
+
+    .code-block .comment { color: #6b7280; }
+    .code-block .keyword { color: #c792ea; }
+    .code-block .string  { color: #a3e635; }
+    .code-block .fn      { color: #7dd3fc; }
+
+    /* ===================== QUICK ACTIONS ===================== */
+    .actions-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .action-btn.primary {
+      background: var(--gold);
+      color: var(--emerald);
+    }
+
+    .action-btn.primary:hover { background: var(--gold-dark); color: var(--white); }
+
+    .action-btn.secondary {
+      background: var(--white);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    .action-btn.secondary:hover { border-color: var(--gold); color: var(--gold-dark); }
+
+    .action-btn.outline {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+    }
+
+    .action-btn.outline:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ===================== FOOTER ===================== */
+    .site-footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 14px 24px;
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .site-footer strong { color: rgba(255,255,255,0.6); }
+  </style>
+</head>
+<body>
+
+<!-- ===================== LOGIN GATE ===================== -->
+<div id="login-gate">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="shield-icon">🛡️</span>
+      <div class="login-logo-text">TechPetCage Admin</div>
+    </div>
+    <div class="login-headline">Admin Access Required</div>
+    <input
+      type="password"
+      id="password-input"
+      class="login-input"
+      placeholder="Enter admin password"
+      autocomplete="current-password"
+    >
+    <button class="login-btn" onclick="attemptLogin()">Enter Dashboard</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div id="dashboard">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="header-logo">Tech<span>Pet</span>Cage</div>
+        <div class="header-badge">Revenue Dashboard</div>
+      </div>
+      <div class="header-right">
+        <div id="live-clock">--:--:-- --</div>
+        <div class="admin-pill">● Admin</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+  <div class="header-sub" id="last-updated">Last updated: —</div>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card gold">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Total Revenue</div>
+            <div class="kpi-value" id="kpi-revenue">$0</div>
+            <div class="kpi-sub">This month (June 2026)</div>
+          </div>
+          <div class="kpi-icon">💰</div>
+        </div>
+        <div class="kpi-change">↑ +23.4% vs last month</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Orders</div>
+            <div class="kpi-value" id="kpi-orders">0</div>
+            <div class="kpi-sub">This month</div>
+          </div>
+          <div class="kpi-icon">📦</div>
+        </div>
+        <div class="kpi-change">↑ +18 vs last month</div>
+      </div>
+      <div class="kpi-card emerald">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Conversion Rate</div>
+            <div class="kpi-value" id="kpi-conv">0%</div>
+            <div class="kpi-sub">Visitors → Buyers</div>
+          </div>
+          <div class="kpi-icon">🎯</div>
+        </div>
+        <div class="kpi-change">↑ +0.4% vs last month</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-top">
+          <div>
+            <div class="kpi-label">Avg. Order Value</div>
+            <div class="kpi-value" id="kpi-aov">$0</div>
+            <div class="kpi-sub">Per transaction</div>
+          </div>
+          <div class="kpi-icon">📊</div>
+        </div>
+        <div class="kpi-change">↑ +$6.40 vs last month</div>
+      </div>
+    </div>
+
+    <!-- Revenue Bar Chart -->
+    <div class="chart-section">
+      <div class="chart-header">
+        <div class="chart-title">Revenue — Last 7 Days</div>
+        <div class="chart-total">This week: <strong>$3,847.50</strong></div>
+      </div>
+      <div class="chart-area">
+        <div class="y-axis">
+          <div class="y-label">$900</div>
+          <div class="y-label">$600</div>
+          <div class="y-label">$300</div>
+          <div class="y-label">$0</div>
+        </div>
+        <div class="chart-bars" id="chart-bars">
+          <!-- Bars injected by JS -->
+        </div>
+      </div>
+      <div class="chart-x-axis" id="chart-x-axis">
+        <!-- X labels injected by JS -->
+      </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="table-section">
+      <div class="table-header">Recent Orders — Last 30 Days</div>
+      <div style="overflow-x:auto;">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Product</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Channel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="order-num">#TPC-1047</span></td>
+              <td>AI Smart Collar GPS+</td>
+              <td><span class="order-amount">$149.00</span></td>
+              <td><span class="status-pill status-delivered">Delivered</span></td>
+              <td>Jun 11</td>
+              <td><span class="channel-badge ch-direct">Direct</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1046</span></td>
+              <td>PetRest Smart Bed</td>
+              <td><span class="order-amount">$179.00</span></td>
+              <td><span class="status-pill status-shipped">Shipped</span></td>
+              <td>Jun 11</td>
+              <td><span class="channel-badge ch-google">Google</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1045</span></td>
+              <td>Premium Membership</td>
+              <td><span class="order-amount">$9.99</span></td>
+              <td><span class="status-pill status-active">Active</span></td>
+              <td>Jun 11</td>
+              <td><span class="channel-badge ch-organic">Organic</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1044</span></td>
+              <td>AutoFeeder Pro HD</td>
+              <td><span class="order-amount">$89.00</span></td>
+              <td><span class="status-pill status-delivered">Delivered</span></td>
+              <td>Jun 10</td>
+              <td><span class="channel-badge ch-facebook">Facebook</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1043</span></td>
+              <td>LaserBot AI Toy (×2)</td>
+              <td><span class="order-amount">$99.00</span></td>
+              <td><span class="status-pill status-delivered">Delivered</span></td>
+              <td>Jun 10</td>
+              <td><span class="channel-badge ch-direct">Direct</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1042</span></td>
+              <td>HydroFountain Pro</td>
+              <td><span class="order-amount">$29.00</span></td>
+              <td><span class="status-pill status-delivered">Delivered</span></td>
+              <td>Jun 10</td>
+              <td><span class="channel-badge ch-tiktok">TikTok</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1041</span></td>
+              <td>PetFence GPS Pro</td>
+              <td><span class="order-amount">$199.00</span></td>
+              <td><span class="status-pill status-processing">Processing</span></td>
+              <td>Jun 9</td>
+              <td><span class="channel-badge ch-google">Google</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1040</span></td>
+              <td>VitaBand Pet Monitor</td>
+              <td><span class="order-amount">$129.00</span></td>
+              <td><span class="status-pill status-shipped">Shipped</span></td>
+              <td>Jun 9</td>
+              <td><span class="channel-badge ch-email">Email</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1039</span></td>
+              <td>VIP Membership</td>
+              <td><span class="order-amount">$29.99</span></td>
+              <td><span class="status-pill status-active">Active</span></td>
+              <td>Jun 9</td>
+              <td><span class="channel-badge ch-direct">Direct</span></td>
+            </tr>
+            <tr>
+              <td><span class="order-num">#TPC-1038</span></td>
+              <td>MicroTrack GPS Cat</td>
+              <td><span class="order-amount">$39.00</span></td>
+              <td><span class="status-pill status-delivered">Delivered</span></td>
+              <td>Jun 8</td>
+              <td><span class="channel-badge ch-facebook">Facebook</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Two-column: Top Products + Channel Breakdown -->
+    <div class="two-col">
+
+      <!-- Top Products -->
+      <div class="panel">
+        <div class="panel-header">Top Products — Revenue Leaderboard</div>
+        <div class="panel-body">
+
+          <div class="product-row">
+            <div class="rank-badge">🥇</div>
+            <div class="product-info">
+              <div class="product-name">AI Smart Collar GPS+</div>
+              <div class="product-meta">12 units sold</div>
+              <div class="progress-wrap"><div class="progress-bar" data-width="100"></div></div>
+            </div>
+            <div class="product-right">
+              <div class="product-rev">$1,788.00</div>
+            </div>
+          </div>
+
+          <div class="product-row">
+            <div class="rank-badge">🥈</div>
+            <div class="product-info">
+              <div class="product-name">PetRest Smart Bed</div>
+              <div class="product-meta">8 units sold</div>
+              <div class="progress-wrap"><div class="progress-bar" data-width="80"></div></div>
+            </div>
+            <div class="product-right">
+              <div class="product-rev">$1,432.00</div>
+            </div>
+          </div>
+
+          <div class="product-row">
+            <div class="rank-badge">🥉</div>
+            <div class="product-info">
+              <div class="product-name">PetFence GPS Pro</div>
+              <div class="product-meta">7 units sold</div>
+              <div class="progress-wrap"><div class="progress-bar" data-width="78"></div></div>
+            </div>
+            <div class="product-right">
+              <div class="product-rev">$1,393.00</div>
+            </div>
+          </div>
+
+          <div class="product-row">
+            <div class="rank-badge">4️⃣</div>
+            <div class="product-info">
+              <div class="product-name">AutoFeeder Pro HD</div>
+              <div class="product-meta">11 units sold</div>
+              <div class="progress-wrap"><div class="progress-bar" data-width="55"></div></div>
+            </div>
+            <div class="product-right">
+              <div class="product-rev">$979.00</div>
+            </div>
+          </div>
+
+          <div class="product-row">
+            <div class="rank-badge">5️⃣</div>
+            <div class="product-info">
+              <div class="product-name">VitaBand Pet Monitor</div>
+              <div class="product-meta">6 units sold</div>
+              <div class="progress-wrap"><div class="progress-bar" data-width="43"></div></div>
+            </div>
+            <div class="product-right">
+              <div class="product-rev">$774.00</div>
+            </div>
+          </div>
+
+          <div class="product-row">
+            <div class="rank-badge">6️⃣</div>
+            <div class="product-info">
+              <div class="product-name">LaserBot AI Toy</div>
+              <div class="product-meta">9 units sold</div>
+              <div class="progress-wrap"><div class="progress-bar" data-width="30"></div></div>
+            </div>
+            <div class="product-right">
+              <div class="product-rev">$531.00</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Channel Breakdown -->
+      <div class="panel">
+        <div class="panel-header">Revenue by Channel</div>
+        <div class="panel-body">
+
+          <div class="channel-row">
+            <div class="channel-name">Direct</div>
+            <div class="channel-bar-wrap"><div class="channel-bar" data-width="34"></div></div>
+            <div class="channel-stats"><span class="channel-pct">34%</span> · $1,308</div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Google Ads</div>
+            <div class="channel-bar-wrap"><div class="channel-bar" data-width="28"></div></div>
+            <div class="channel-stats"><span class="channel-pct">28%</span> · $1,077</div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Facebook Ads</div>
+            <div class="channel-bar-wrap"><div class="channel-bar" data-width="18"></div></div>
+            <div class="channel-stats"><span class="channel-pct">18%</span> · $693</div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Organic SEO</div>
+            <div class="channel-bar-wrap"><div class="channel-bar" data-width="12"></div></div>
+            <div class="channel-stats"><span class="channel-pct">12%</span> · $462</div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">Email</div>
+            <div class="channel-bar-wrap"><div class="channel-bar" data-width="5"></div></div>
+            <div class="channel-stats"><span class="channel-pct">5%</span> · $192</div>
+          </div>
+          <div class="channel-row">
+            <div class="channel-name">TikTok Ads</div>
+            <div class="channel-bar-wrap"><div class="channel-bar" data-width="3"></div></div>
+            <div class="channel-stats"><span class="channel-pct">3%</span> · $115</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Membership Metrics -->
+    <div class="panel" style="margin-bottom:28px;">
+      <div class="panel-header">Membership Metrics — Recurring Revenue</div>
+      <div class="panel-body">
+        <div class="mrr-highlight">
+          <div>
+            <div class="mrr-label">Monthly Recurring Revenue (MRR)</div>
+            <div class="mrr-amount">$169.89</div>
+            <div class="mrr-detail">Projected ARR: $2,038.68</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:13px;opacity:0.7;margin-bottom:4px;">Churn (30-day)</div>
+            <div style="font-size:24px;font-weight:800;color:#6ee7b7;">0%</div>
+            <div style="font-size:11px;opacity:0.6;">New — no churn yet</div>
+          </div>
+        </div>
+        <div class="membership-grid">
+          <div class="mem-card">
+            <div class="mem-label">Premium Members</div>
+            <div class="mem-value">8</div>
+            <div class="mem-sub">$9.99/mo each · $79.92/mo total</div>
+          </div>
+          <div class="mem-card">
+            <div class="mem-label">VIP Members</div>
+            <div class="mem-value">3</div>
+            <div class="mem-sub">$29.99/mo each · $89.97/mo total</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stripe Integration Panel -->
+    <div class="stripe-panel">
+      <div class="stripe-header">
+        <div class="stripe-icon">⚡</div>
+        <div class="stripe-title">Connect Live Stripe Data</div>
+      </div>
+      <div class="stripe-body">
+        <p>To replace this demo data with real Stripe revenue, choose one of the options below.</p>
+
+        <div class="option-block">
+          <div class="option-title">Option A — Vercel Deployment (recommended)</div>
+          <ul class="option-list">
+            <li>Deploy to Vercel: <code style="background:var(--off-white);padding:1px 6px;border-radius:4px;font-size:12px;">npm i -g vercel &amp;&amp; vercel</code></li>
+            <li>Set environment variable: <code style="background:var(--off-white);padding:1px 6px;border-radius:4px;font-size:12px;">STRIPE_SECRET_KEY=sk_live_xxx</code></li>
+            <li>Create <code style="background:var(--off-white);padding:1px 6px;border-radius:4px;font-size:12px;">/api/revenue.js</code> (code below)</li>
+            <li>This dashboard will auto-fetch real data on load</li>
+          </ul>
+        </div>
+
+        <div class="option-block">
+          <div class="option-title">Option B — Stripe Dashboard (immediate, no code)</div>
+          <ul class="option-list">
+            <li>Go to <strong>dashboard.stripe.com</strong> → Reports</li>
+            <li>All revenue, orders, and metrics are live there</li>
+            <li>No code needed for Stripe's built-in analytics</li>
+          </ul>
+        </div>
+
+        <div class="option-block">
+          <div class="option-title">Option C — Stripe Sigma (advanced SQL queries)</div>
+          <ul class="option-list">
+            <li>dashboard.stripe.com → Sigma</li>
+            <li>SQL-like queries on your full Stripe transaction history</li>
+            <li>Export to Google Sheets or connect to Looker Studio</li>
+          </ul>
+        </div>
+
+        <div class="option-title" style="margin-bottom:8px;">Vercel Serverless Function — <code style="font-size:12px;background:var(--off-white);padding:1px 6px;border-radius:4px;">/api/revenue.js</code></div>
+        <div class="code-block">
+<pre><span class="comment">// /api/revenue.js — Vercel Serverless Function
+// Deploy to Vercel, set STRIPE_SECRET_KEY env var</span>
+<span class="keyword">import</span> Stripe <span class="keyword">from</span> <span class="string">'stripe'</span>;
+<span class="keyword">const</span> stripe = <span class="keyword">new</span> <span class="fn">Stripe</span>(process.env.STRIPE_SECRET_KEY);
+
+<span class="keyword">export default async function</span> <span class="fn">handler</span>(req, res) {
+  <span class="keyword">const</span> now = Math.<span class="fn">floor</span>(Date.<span class="fn">now</span>() / 1000);
+  <span class="keyword">const</span> thirtyDaysAgo = now - (30 * 24 * 60 * 60);
+
+  <span class="keyword">const</span> [charges, subscriptions] = <span class="keyword">await</span> Promise.<span class="fn">all</span>([
+    stripe.charges.<span class="fn">list</span>({ created: { gte: thirtyDaysAgo }, limit: 100 }),
+    stripe.subscriptions.<span class="fn">list</span>({ status: <span class="string">'active'</span>, limit: 100 })
+  ]);
+
+  <span class="keyword">const</span> revenue = charges.data
+    .<span class="fn">filter</span>(c => c.paid &amp;&amp; !c.refunded)
+    .<span class="fn">reduce</span>((sum, c) => sum + c.amount, 0) / 100;
+
+  res.<span class="fn">json</span>({
+    revenue: revenue.<span class="fn">toFixed</span>(2),
+    orders: charges.data.length,
+    mrr: subscriptions.data.<span class="fn">reduce</span>(
+      (sum, s) => sum + s.items.data[0].price.unit_amount, 0
+    ) / 100,
+    charges: charges.data.<span class="fn">slice</span>(0, 10)
+  });
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section-title">Quick Actions</div>
+    <div class="actions-row">
+      <a href="https://dashboard.stripe.com" target="_blank" rel="noopener" class="action-btn primary">
+        ⚡ Open Stripe Dashboard →
+      </a>
+      <a href="https://analytics.google.com" target="_blank" rel="noopener" class="action-btn secondary">
+        📈 View Google Analytics →
+      </a>
+      <a href="mailto:franciscoderek7@gmail.com?subject=TechPetCage%20Revenue%20Report" class="action-btn secondary">
+        ✉️ Email Report
+      </a>
+      <button class="action-btn outline" onclick="window.location.reload()">
+        🔄 Refresh Data
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    TechPetCage Admin Dashboard · <strong>Francisco Holdings Inc.</strong> · Data refreshed: <span id="footer-ts">—</span> · Admin session active
+  </footer>
+
+</div><!-- /#dashboard -->
+
+<script>
+  /* ============================================================
+     CONSTANTS
+  ============================================================ */
+  const ADMIN_PASSWORD = 'empire2026';
+  const SESSION_KEY    = 'tpc_admin_auth';
+
+  /* ============================================================
+     LOGIN GATE
+  ============================================================ */
+  function init() {
+    if (sessionStorage.getItem(SESSION_KEY) === '1') {
+      showDashboard(true);
+    }
+
+    // Allow Enter key on password input
+    document.getElementById('password-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') attemptLogin();
+    });
+  }
+
+  function attemptLogin() {
+    const input = document.getElementById('password-input');
+    const errorEl = document.getElementById('login-error');
+    const val = input.value;
+
+    if (val === ADMIN_PASSWORD) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      errorEl.textContent = '';
+      const gate = document.getElementById('login-gate');
+      gate.classList.add('fade-out');
+      setTimeout(() => {
+        gate.style.display = 'none';
+        showDashboard(false);
+      }, 500);
+    } else {
+      input.classList.remove('error');
+      void input.offsetWidth; // reflow to restart animation
+      input.classList.add('error');
+      errorEl.textContent = 'Invalid credentials. Please try again.';
+      input.value = '';
+      setTimeout(() => input.classList.remove('error'), 600);
+    }
+  }
+
+  function showDashboard(skipGate) {
+    if (skipGate) {
+      document.getElementById('login-gate').style.display = 'none';
+    }
+    const dash = document.getElementById('dashboard');
+    dash.classList.add('visible');
+
+    // Kick off all dashboard logic
+    startClock();
+    setTimestamps();
+    animateKPIs();
+    buildChart();
+    animateProgressBars();
+  }
+
+  function logout() {
+    sessionStorage.removeItem(SESSION_KEY);
+    window.location.reload();
+  }
+
+  /* ============================================================
+     LIVE CLOCK
+  ============================================================ */
+  function startClock() {
+    function tick() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2,'0');
+      const m = String(now.getMinutes()).padStart(2,'0');
+      const s = String(now.getSeconds()).padStart(2,'0');
+      const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+      const h12 = now.getHours() % 12 || 12;
+      document.getElementById('live-clock').textContent =
+        String(h12).padStart(2,'0') + ':' + m + ':' + s + ' ' + ampm;
+    }
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  /* ============================================================
+     TIMESTAMPS
+  ============================================================ */
+  function setTimestamps() {
+    const now = new Date();
+    const opts = {
+      weekday: 'short', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: true
+    };
+    const ts = now.toLocaleString('en-CA', opts);
+    document.getElementById('last-updated').textContent = 'Last updated: ' + ts;
+    document.getElementById('footer-ts').textContent = ts;
+  }
+
+  /* ============================================================
+     KPI COUNTER ANIMATIONS
+  ============================================================ */
+  function animateKPIs() {
+    animateCounter('kpi-revenue', 0, 3847.50, 1500, v => '$' + v.toFixed(2));
+    animateCounter('kpi-orders',  0, 47,      1500, v => Math.floor(v).toString());
+    animateCounter('kpi-conv',    0, 2.8,     1500, v => v.toFixed(1) + '%');
+    animateCounter('kpi-aov',     0, 81.86,   1500, v => '$' + v.toFixed(2));
+  }
+
+  function animateCounter(id, from, to, duration, formatter) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const start = performance.now();
+
+    function easeOut(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function step(now) {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const value = from + (to - from) * easeOut(t);
+      el.textContent = formatter(value);
+      if (t < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  /* ============================================================
+     REVENUE BAR CHART
+  ============================================================ */
+  const chartData = [
+    { day: 'Mon', date: 'Jun 5',  revenue: 312.50 },
+    { day: 'Tue', date: 'Jun 6',  revenue: 489.00 },
+    { day: 'Wed', date: 'Jun 7',  revenue: 267.50 },
+    { day: 'Thu', date: 'Jun 8',  revenue: 634.00 },
+    { day: 'Fri', date: 'Jun 9',  revenue: 891.50 },
+    { day: 'Sat', date: 'Jun 10', revenue: 723.00 },
+    { day: 'Sun', date: 'Jun 11', revenue: 530.00 }
+  ];
+
+  function buildChart() {
+    const maxRev = Math.max(...chartData.map(d => d.revenue));
+    const barsEl = document.getElementById('chart-bars');
+    const xEl    = document.getElementById('chart-x-axis');
+
+    barsEl.innerHTML = '';
+    xEl.innerHTML = '';
+
+    chartData.forEach(d => {
+      const pct = (d.revenue / maxRev) * 100;
+
+      // Bar column
+      const wrap = document.createElement('div');
+      wrap.className = 'bar-wrap';
+
+      const spacer = document.createElement('div');
+      spacer.className = 'bar-spacer';
+
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = '0';
+
+      const tooltip = document.createElement('div');
+      tooltip.className = 'bar-tooltip';
+      tooltip.textContent = '$' + d.revenue.toFixed(2);
+
+      bar.appendChild(tooltip);
+      spacer.appendChild(bar);
+      wrap.appendChild(spacer);
+      barsEl.appendChild(wrap);
+
+      // X-axis label
+      const xLabel = document.createElement('div');
+      xLabel.className = 'x-label';
+      xLabel.innerHTML = '<strong>' + d.day + '</strong><br>' + d.date;
+      xEl.appendChild(xLabel);
+
+      // Animate bar after a short delay
+      setTimeout(() => {
+        bar.style.height = pct + '%';
+      }, 150);
+    });
+  }
+
+  /* ============================================================
+     PROGRESS BAR ANIMATIONS (Products + Channels)
+  ============================================================ */
+  function animateProgressBars() {
+    // Use IntersectionObserver to trigger on visibility
+    const bars = document.querySelectorAll('.progress-bar, .channel-bar');
+
+    function triggerBars() {
+      bars.forEach(bar => {
+        const target = bar.getAttribute('data-width') || '0';
+        setTimeout(() => {
+          bar.style.width = target + '%';
+        }, 200);
+      });
+    }
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            triggerBars();
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.1 });
+      const firstBar = document.querySelector('.progress-bar');
+      if (firstBar) observer.observe(firstBar);
+    } else {
+      // Fallback: just trigger after delay
+      setTimeout(triggerBars, 400);
+    }
+  }
+
+  /* ============================================================
+     BOOT
+  ============================================================ */
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
