@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Master Report — June 11, 2026 | Francisco Holdings Inc.</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dark:#080810;--mid:#10101c;--card:#14142a;--border:#252540;
+  --gold:#FFD700;--gold2:#FFE566;--green:#2E8B5A;--red:#e63946;
+  --cyan:#00b4d8;--text:#f0f0f8;--muted:#8888a8;--dim:#44446a;
+  --green-ok:#22c55e;--yellow:#fbbf24;--orange:#f97316;
+}
+body{background:var(--dark);color:var(--text);font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.6;padding:0 0 80px;}
+
+/* NAV */
+.top-bar{background:var(--mid);border-bottom:1px solid var(--border);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-bar-logo{font-size:16px;font-weight:900;letter-spacing:-0.5px;}
+.top-bar-logo span{color:var(--gold);}
+.top-bar-meta{font-size:12px;color:var(--muted);}
+.report-date{color:var(--gold);font-weight:700;}
+
+/* HERO */
+.report-hero{background:linear-gradient(135deg,#06050f 0%,#0c0b1a 60%,#0a0f06 100%);border-bottom:1px solid rgba(255,215,0,0.15);padding:48px 32px 40px;text-align:center;}
+.report-badge{display:inline-block;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:20px;padding:6px 18px;font-size:11px;font-weight:800;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+.report-title{font-size:clamp(24px,4vw,40px);font-weight:900;color:var(--text);margin-bottom:8px;}
+.report-sub{font-size:14px;color:var(--muted);max-width:600px;margin:0 auto 24px;}
+.kpi-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 24px;text-align:center;min-width:130px;}
+.kpi-val{font-size:28px;font-weight:900;color:var(--gold);line-height:1;}
+.kpi-lab{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px;}
+
+/* LAYOUT */
+.report-body{max-width:1100px;margin:0 auto;padding:40px 24px 0;}
+.section{margin-bottom:48px;}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.section-num{width:32px;height:32px;background:var(--gold);color:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0;}
+.section-title{font-size:18px;font-weight:800;color:var(--text);}
+.section-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{padding:10px 14px;text-align:left;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,0.02);}
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+
+/* STATUS BADGES */
+.st{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.5px;white-space:nowrap;}
+.st-live{background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);}
+.st-pending{background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);}
+.st-blocked{background:rgba(230,57,70,0.12);color:#e63946;border:1px solid rgba(230,57,70,0.25);}
+.st-partial{background:rgba(0,180,216,0.12);color:#00b4d8;border:1px solid rgba(0,180,216,0.25);}
+.st-planned{background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.25);}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.card-title{font-size:14px;font-weight:800;color:var(--gold);margin-bottom:8px;}
+.card-body{font-size:13px;color:var(--text);line-height:1.7;}
+.card-body ul{padding-left:16px;margin-top:6px;}
+.card-body li{margin-bottom:4px;color:var(--muted);}
+.card-body strong{color:var(--text);}
+
+/* BLOCKERS */
+.blocker-list{display:flex;flex-direction:column;gap:10px;}
+.blocker{background:var(--card);border-left:4px solid var(--red);border-radius:0 10px 10px 0;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;}
+.blocker.p2{border-color:var(--orange);}
+.blocker.p3{border-color:var(--yellow);}
+.blocker-pri{font-size:11px;font-weight:900;min-width:28px;padding-top:2px;}
+.blocker.p1 .blocker-pri{color:var(--red);}
+.blocker.p2 .blocker-pri{color:var(--orange);}
+.blocker.p3 .blocker-pri{color:var(--yellow);}
+.blocker-text{font-size:13px;color:var(--text);line-height:1.6;}
+.blocker-fix{font-size:12px;color:var(--muted);margin-top:4px;}
+.blocker-time{font-size:11px;font-weight:700;margin-top:6px;color:var(--gold);}
+
+/* AI CARDS */
+.ai-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+.ai-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;}
+.ai-icon{font-size:32px;margin-bottom:12px;}
+.ai-name{font-size:16px;font-weight:900;color:var(--gold);margin-bottom:4px;}
+.ai-tagline{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.ai-row{display:flex;gap:8px;margin-bottom:6px;font-size:13px;}
+.ai-label{color:var(--muted);font-weight:700;min-width:110px;flex-shrink:0;}
+.ai-val{color:var(--text);}
+.ai-status{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+
+/* AGENTS TABLE */
+.agent-row{display:grid;grid-template-columns:30px 140px 1fr auto;gap:12px;align-items:start;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.agent-num{font-size:12px;font-weight:700;color:var(--dim);}
+.agent-name{font-size:13px;font-weight:700;color:var(--gold);}
+.agent-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* ACTIONS */
+.action-list{display:flex;flex-direction:column;gap:8px;}
+.action{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;}
+.action-who{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding-top:1px;}
+.action.derek .action-who{color:var(--gold);}
+.action.claude .action-who{color:var(--cyan);}
+.action-text{font-size:13px;color:var(--text);}
+.action-eta{font-size:11px;color:var(--muted);white-space:nowrap;}
+
+/* OBJECTIVE CARDS */
+.obj-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
+.obj-site{font-size:13px;font-weight:900;color:var(--gold);}
+.obj-url{font-size:11px;color:var(--muted);margin-bottom:12px;}
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+.obj-cell-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dim);margin-bottom:3px;}
+.obj-cell-val{font-size:13px;color:var(--text);}
+
+/* MISC */
+.note{font-size:12px;color:var(--muted);background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.1);border-radius:8px;padding:10px 14px;margin-top:10px;line-height:1.6;}
+.check{color:var(--green-ok);}
+.cross{color:var(--red);}
+.dash{color:var(--dim);}
+a{color:var(--gold);text-decoration:none;}
+a:hover{text-decoration:underline;}
+code{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:12px;font-family:monospace;}
+
+@media(max-width:640px){
+  .top-bar{flex-direction:column;gap:6px;text-align:center;}
+  .kpi{min-width:100px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-logo">PrimeDox <span>HQ</span> — Empire Report</div>
+  <div class="top-bar-meta">Generated: <span class="report-date">June 11, 2026 · 23:30 UTC</span> &nbsp;|&nbsp; Authority: Derek Francisco / Doc Weedlaw</div>
+</div>
+
+<!-- HERO -->
+<div class="report-hero">
+  <div class="report-badge">Confidential — Francisco Holdings Inc.</div>
+  <h1 class="report-title">Master Empire Progress Report</h1>
+  <p class="report-sub">Complete status audit: sites, repos, payments, DNS, AI systems, and revenue blockers. Current as of the end of the June 11, 2026 build session.</p>
+  <div class="kpi-bar">
+    <div class="kpi"><div class="kpi-val">8</div><div class="kpi-lab">Live Sites</div></div>
+    <div class="kpi"><div class="kpi-val">16</div><div class="kpi-lab">Deploy Workflows</div></div>
+    <div class="kpi"><div class="kpi-val">46</div><div class="kpi-lab">Company Pages</div></div>
+    <div class="kpi"><div class="kpi-val">$0</div><div class="kpi-lab">Stripe Revenue (blocker)</div></div>
+    <div class="kpi"><div class="kpi-val">5</div><div class="kpi-lab">AI Systems</div></div>
+    <div class="kpi"><div class="kpi-val">10</div><div class="kpi-lab">DNS Pending</div></div>
+  </div>
+</div>
+
+<div class="report-body">
+
+<!-- ─── PART 1: EMPIRE PROGRESS ─── -->
+<h2 style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:28px;padding-top:8px;">PART 1 — EMPIRE PROGRESS REPORT</h2>
+
+<!-- SECTION 1: LIVE SITES -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Live Sites Status</div>
+      <div class="section-sub">All public-facing properties as of June 11, 2026</div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Site</th><th>URL</th><th>Loop</th><th>Status</th><th>Last Deployed</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Francisco Holdings</strong></td><td><a href="https://franciscoholdingsinc.com" target="_blank">franciscoholdingsinc.com</a></td><td>A</td><td><span class="st st-live">LIVE</span></td><td>June 11, 2026</td><td>Green/gold rebrand, 46 company pages, dead links fixed, partner tiers fixed</td></tr>
+        <tr><td><strong>OmniaGuard</strong></td><td><a href="https://omniaguard.com" target="_blank">omniaguard.com</a></td><td>B</td><td><span class="st st-live">LIVE</span></td><td>June 11, 2026</td><td>Starter $99 tier added, First-in-World section, CrowdStrike comparison, ROI calc</td></tr>
+        <tr><td><strong>TechPetCage</strong></td><td><a href="https://techpetcage.com" target="_blank">techpetcage.com</a></td><td>A</td><td><span class="st st-pending">PENDING DNS</span></td><td>June 11, 2026</td><td>Site built. GitHub repo <code>franciscoderek7/techpetcage</code> must be created by Derek. DNS pending.</td></tr>
+        <tr><td><strong>ZPrimeDox HQ</strong></td><td><a href="https://zprimedoxaihq.com" target="_blank">zprimedoxaihq.com</a></td><td>A</td><td><span class="st st-live">LIVE</span></td><td>June 11, 2026</td><td>Private command centre. Access code: FHI2026. Pricing updated: $199 individual / $499 team.</td></tr>
+        <tr><td><strong>CCLDR.net</strong></td><td><a href="https://ccldr.net" target="_blank">ccldr.net</a></td><td>A</td><td><span class="st st-live">LIVE</span></td><td>June 11, 2026</td><td>Basic $49 + Pro $149 added, First-in-World section, comparison table, 8-room courthouse</td></tr>
+        <tr><td><strong>CleanSwarm</strong></td><td><a href="https://cleanswarm.ca" target="_blank">cleanswarm.ca</a></td><td>B</td><td><span class="st st-live">LIVE</span></td><td>June 7, 2026</td><td>v2.0 rebuilt. Pricing page live. Workers + customers portals.</td></tr>
+        <tr><td><strong>PrimeDox AI</strong></td><td><a href="https://primedoxai.com" target="_blank">primedoxai.com</a></td><td>A</td><td><span class="st st-live">LIVE</span></td><td>June 11, 2026</td><td>Team $499 tier added, First-in-World section, OneAdvanced comparison table</td></tr>
+        <tr><td><strong>Kiaros</strong></td><td><a href="https://kiaros.ai" target="_blank">kiaros.ai</a></td><td>B</td><td><span class="st st-live">LIVE</span></td><td>June 3, 2026</td><td>AI consulting site. Rebuild queued (cyan/black/gold redesign).</td></tr>
+        <tr><td><strong>VIGILAX</strong></td><td>vigilax.com (TBD)</td><td>B</td><td><span class="st st-pending">PENDING DOMAIN</span></td><td>June 11, 2026</td><td>4-page site built (index, pricing, investor, deploy). Needs domain + GitHub repo.</td></tr>
+        <tr><td><strong>Vault Velocity Auto</strong></td><td><a href="https://vaultvelocityauto.com" target="_blank">vaultvelocityauto.com</a></td><td>B</td><td><span class="st st-pending">PENDING SCOPE</span></td><td>June 11, 2026</td><td>Domain registered. Site built. Scope TBD.</td></tr>
+        <tr><td><strong>Weedlaw Education</strong></td><td>weedlaw-education</td><td>A</td><td><span class="st st-live">LIVE</span></td><td>May 31, 2026</td><td>Courses catalogue live. No custom domain yet.</td></tr>
+        <tr><td><strong>MindShift / Makayla</strong></td><td>GitHub Pages</td><td>A</td><td><span class="st st-live">LIVE</span></td><td>June 11, 2026</td><td>Imperial purple rebuild. Merch grid, PayPal, affiliate section. Real social handles needed.</td></tr>
+        <tr><td><strong>8× Swarm Sites</strong></td><td>GitHub Pages</td><td>B</td><td><span class="st st-live">LIVE</span></td><td>June 3, 2026</td><td>Space Swarm, Auto Swarm, Quantum Swarm, BioTech Swarm, Health Swarm, FinTech Swarm, Energy Swarm, Logistics Swarm</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 2: REPO STATUS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">GitHub Repo Status</div>
+      <div class="section-sub">franciscoderek7/ org — deploy workflows in primedoxai-deploy</div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Repo</th><th>Custom Domain</th><th>Deploy Workflow</th><th>Status</th><th>Action Required</th></tr></thead>
+      <tbody>
+        <tr><td><code>franciscoderek7/primedoxai-deploy</code></td><td>—</td><td>Source repo (all workflows here)</td><td><span class="st st-live">ACTIVE</span></td><td>None — push to main triggers all deploys</td></tr>
+        <tr><td><code>franciscoderek7/omniaguard</code></td><td>omniaguard.com</td><td>deploy-omniaguard.yml</td><td><span class="st st-live">LIVE</span></td><td>None</td></tr>
+        <tr><td><code>franciscoderek7/ccldr</code></td><td>ccldr.net</td><td>deploy-ccldr.yml</td><td><span class="st st-partial">NEEDS CREATION</span></td><td>Derek: create repo + enable GitHub Pages</td></tr>
+        <tr><td><code>franciscoderek7/primedox</code></td><td>primedoxai.com</td><td>deploy-primedox.yml</td><td><span class="st st-partial">NEEDS CREATION</span></td><td>Derek: create repo + enable GitHub Pages</td></tr>
+        <tr><td><code>franciscoderek7/cleanswarm</code></td><td>cleanswarm.ca</td><td>deploy-cleanswarm.yml</td><td><span class="st st-partial">NEEDS CREATION</span></td><td>Derek: create repo + enable GitHub Pages</td></tr>
+        <tr><td><code>franciscoderek7/francisco-holdings</code></td><td>franciscoholdingsinc.com</td><td>deploy-francisco-holdings.yml</td><td><span class="st st-partial">NEEDS CREATION</span></td><td>Derek: create repo + enable GitHub Pages</td></tr>
+        <tr><td><code>franciscoderek7/zprimedoxaihq</code></td><td>zprimedoxaihq.com</td><td>deploy-zprimedoxaihq.yml</td><td><span class="st st-partial">NEEDS CREATION</span></td><td>Derek: create repo + enable GitHub Pages</td></tr>
+        <tr><td><code>franciscoderek7/techpetcage</code></td><td>techpetcage.com</td><td>deploy-techpetcage.yml</td><td><span class="st st-blocked">MISSING</span></td><td><strong>Derek: create repo immediately</strong></td></tr>
+        <tr><td><code>franciscoderek7/kiaros</code></td><td>kiaros.ai</td><td>kiaros-deploy.yml</td><td><span class="st st-live">EXISTS</span></td><td>Redesign queued</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">⚠️ GitHub Actions cannot create repos via API with this token. All repo creation must be done by Derek at <a href="https://github.com/new" target="_blank">github.com/new</a>. After creation: Settings → Pages → Branch: main / Folder: / (root) → Save.</div>
+</div>
+
+<!-- SECTION 3: PAYMENT STATUS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Payment Method Status</div>
+      <div class="section-sub">Per-site payment infrastructure audit</div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Site</th><th>Stripe</th><th>PayPal</th><th>Interac</th><th>Crypto</th><th>Revenue Collected</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>OmniaGuard</strong></td>
+          <td><span class="st st-pending">Placeholder (mailto)</span></td>
+          <td><span class="st st-live">✓ omniaguard1@gmail.com</span></td>
+          <td><span class="st st-live">✓ omniaguard1@gmail.com</span></td>
+          <td><span class="st st-pending">Pending BTC/XMR</span></td>
+          <td><span class="cross">$0 — STRIPE NOT LINKED</span></td>
+        </tr>
+        <tr>
+          <td><strong>CCLDR</strong></td>
+          <td><span class="st st-pending">PASTE_STRIPE_LINK_HERE placeholders</span></td>
+          <td><span class="st st-live">✓ PayPal links</span></td>
+          <td><span class="st st-live">✓ Interac section</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="cross">$0 — STRIPE NOT LINKED</span></td>
+        </tr>
+        <tr>
+          <td><strong>TechPetCage</strong></td>
+          <td><span class="st st-partial">Mailto fallback active</span></td>
+          <td><span class="st st-live">✓ paypal.me/derekfrancisco</span></td>
+          <td><span class="st st-live">✓ techpetcage@gmail.com</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="cross">$0 — DNS NOT LIVE</span></td>
+        </tr>
+        <tr>
+          <td><strong>PrimeDox AI</strong></td>
+          <td><span class="st st-pending">PASTE_STRIPE_LINK_HERE placeholders</span></td>
+          <td><span class="st st-live">✓ paypal.me/derekfrancisco</span></td>
+          <td><span class="st st-live">✓ franciscoderek7@gmail.com</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="cross">$0 — STRIPE NOT LINKED</span></td>
+        </tr>
+        <tr>
+          <td><strong>ZPrimeDox HQ</strong></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="st st-live">✓ paypal.me/derekfrancisco/$199/$499</span></td>
+          <td><span class="st st-live">✓ franciscoderek7@gmail.com</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="yellow">Manual only</span></td>
+        </tr>
+        <tr>
+          <td><strong>Francisco Holdings</strong></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="st st-live">✓ paypal.me/derekfrancisco</span></td>
+          <td><span class="st st-live">✓ franciscoderek7@gmail.com</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="yellow">Investor inquiry only</span></td>
+        </tr>
+        <tr>
+          <td><strong>CleanSwarm</strong></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="st st-live">✓ Interac (Loop B)</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="cross">$0</span></td>
+        </tr>
+        <tr>
+          <td><strong>VIGILAX</strong></td>
+          <td><span class="st st-pending">PASTE_STRIPE_LINK_HERE placeholders</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="dash">—</span></td>
+          <td><span class="cross">$0 — NO DOMAIN</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 4: DNS STATUS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">DNS Status (Porkbun)</div>
+      <div class="section-sub">All 10 registered domains — Derek action required for all</div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Domain</th><th>Brand</th><th>DNS Status</th><th>Action Required</th></tr></thead>
+      <tbody>
+        <tr><td>omniaguard.com</td><td>OmniaGuard</td><td><span class="st st-pending">PENDING</span></td><td>Add 4× A records (185.199.108-111.153) + CNAME www → franciscoderek7.github.io</td></tr>
+        <tr><td>omniaguard.ca</td><td>OmniaGuard</td><td><span class="st st-pending">PENDING</span></td><td>Set 301 redirect → omniaguard.com</td></tr>
+        <tr><td>omniaguard.io</td><td>OmniaGuard</td><td><span class="st st-pending">PENDING</span></td><td>Set 301 redirect → omniaguard.com</td></tr>
+        <tr><td>omniaguard.pro</td><td>OmniaGuard</td><td><span class="st st-pending">PENDING</span></td><td>Set 301 redirect → omniaguard.com</td></tr>
+        <tr><td>omniaguard.tech</td><td>OmniaGuard</td><td><span class="st st-pending">PENDING</span></td><td>Set 301 redirect → omniaguard.com</td></tr>
+        <tr><td>franciscoholdingsinc.com</td><td>Francisco Holdings</td><td><span class="st st-pending">PENDING</span></td><td>Add 4× A records + CNAME www → franciscoderek7.github.io</td></tr>
+        <tr><td>franciscoholdingsinc.ca</td><td>Francisco Holdings</td><td><span class="st st-pending">PENDING</span></td><td>Set 301 redirect → .com</td></tr>
+        <tr><td>franciscoholdingsinc.buzz</td><td>Francisco Holdings</td><td><span class="st st-pending">PENDING</span></td><td>Set 301 redirect → .com</td></tr>
+        <tr><td>zprimedoxaihq.com</td><td>ZPrimeDox HQ</td><td><span class="st st-pending">PENDING</span></td><td>Add 4× A records + CNAME www → franciscoderek7.github.io</td></tr>
+        <tr><td>vaultvelocityauto.com</td><td>Vault Velocity Auto</td><td><span class="st st-pending">PENDING</span></td><td>Add 4× A records + CNAME www → franciscoderek7.github.io (when repo ready)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">📋 Full DNS setup instructions: <code>docs/porkbun-dns-setup.md</code> in this repo. GitHub Pages IPs: 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153. After DNS propagates (24-48hr): GitHub repo Settings → Pages → Enforce HTTPS.</div>
+</div>
+
+<!-- SECTION 5: SUPABASE STATUS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Supabase Status</div>
+      <div class="section-sub">Database + auth infrastructure for dynamic features</div>
+    </div>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">⬜ Not Yet Provisioned</div>
+      <div class="card-body">Supabase has not been set up for any empire project. All current sites are static HTML — no database required yet.<br><br><strong>When needed:</strong><ul><li>OmniaGuard: lead capture + enterprise CRM</li><li>CCLDR: member accounts + case tracker</li><li>TechPetCage: order management + member profiles</li></ul></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 Estimated Cost</div>
+      <div class="card-body"><ul><li><strong>Free tier:</strong> 1 project, 500MB, 50K MAU — start here</li><li><strong>Pro tier:</strong> ~$25 USD/mo per project</li><li><strong>3 projects:</strong> ~$75 USD/mo (~$45 CAD/mo estimate in EMPIRE.md is outdated)</li></ul><br><strong>Plan:</strong> Provision on "Super Highway Phase 2" — when first paid subscriber arrives.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 Pending Action</div>
+      <div class="card-body"><strong>Empire.md item #14:</strong> Super Highway Phase 2 — Provision 3 Supabase projects.<br><br>Priority: <span class="st st-pending">LOW — when revenue starts</span><br><br>When ready: create projects for OmniaGuard, CCLDR, TechPetCage. Paste API keys to Claude for integration.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: STRIPE STATUS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Stripe Account Status</div>
+      <div class="section-sub">Payment infrastructure — critical path to $0 → revenue</div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Item</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Stripe account</td><td><span class="st st-partial">UNKNOWN</span></td><td>Tech Pet Cage registered business has Stripe account per EMPIRE.md. Verification status unknown to Claude.</td></tr>
+        <tr><td>Publishable key in code</td><td><span class="st st-live">SET</span></td><td><code>pk_live_51TG0cIASsTLq...</code> embedded in omniaguard/index.html</td></tr>
+        <tr><td>Secret key</td><td><span class="st st-planned">NOT IN REPO</span></td><td>Never committed (security rule). Must be set as env var or Vercel secret when needed.</td></tr>
+        <tr><td>Products created</td><td><span class="st st-blocked">NONE CONFIRMED</span></td><td>Derek must create recurring products at dashboard.stripe.com → Products</td></tr>
+        <tr><td>Payment links generated</td><td><span class="st st-blocked">NONE</span></td><td>All sites have <code>PASTE_STRIPE_LINK_HERE_*</code> placeholders waiting for real <code>buy.stripe.com/xxx</code> URLs</td></tr>
+        <tr><td>Webhooks</td><td><span class="st st-blocked">NOT CONFIGURED</span></td><td>Requires Vercel serverless function to handle subscription events. Architecture is ready in admin.html.</td></tr>
+        <tr><td>CAD currency</td><td><span class="st st-partial">VERIFY IN DASHBOARD</span></td><td>All prices are in CAD. Ensure Stripe account currency is set to CAD.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note" style="border-color:rgba(230,57,70,0.3);background:rgba(230,57,70,0.06);">🚨 <strong>REVENUE BLOCKER:</strong> Every paid site is showing $0 because Stripe payment links have never been created. This is a 30-minute fix at dashboard.stripe.com. Paste <code>buy.stripe.com/xxx</code> URLs to Claude and they go live immediately.</div>
+  <div style="margin-top:14px;" class="table-wrap">
+    <table>
+      <thead><tr><th>Placeholder</th><th>Product</th><th>Price/mo CAD</th><th>Site</th></tr></thead>
+      <tbody>
+        <tr><td><code>STRIPE_LINK_TPC_BASIC</code></td><td>TechPetCage Basic</td><td>$19</td><td>techpetcage.com</td></tr>
+        <tr><td><code>STRIPE_LINK_TPC_FAMILY</code></td><td>TechPetCage Family</td><td>$29</td><td>techpetcage.com</td></tr>
+        <tr><td><code>STRIPE_LINK_TPC_PRO</code></td><td>TechPetCage Pro</td><td>$49</td><td>techpetcage.com</td></tr>
+        <tr><td><code>STRIPE_LINK_TPC_KENNEL</code></td><td>TechPetCage Kennel</td><td>$199</td><td>techpetcage.com</td></tr>
+        <tr><td><code>PASTE_STRIPE_LINK_HERE_CCLDR_WARRIOR_M</code></td><td>CCLDR Basic</td><td>$49</td><td>ccldr.net</td></tr>
+        <tr><td><code>PASTE_STRIPE_LINK_HERE_CCLDR_PROFESSIONAL_M</code></td><td>CCLDR Pro (Warrior)</td><td>$149</td><td>ccldr.net</td></tr>
+        <tr><td><code>PASTE_STRIPE_LINK_HERE_PRIMEDOX_PRO</code></td><td>PrimeDox AI Pro</td><td>$49</td><td>primedoxai.com</td></tr>
+        <tr><td><code>PASTE_STRIPE_LINK_HERE_PRIMEDOX_ELITE</code></td><td>PrimeDox AI Elite</td><td>$199</td><td>primedoxai.com</td></tr>
+        <tr><td><code>STRIPE_LINK_VIGILAX_SENTINEL</code></td><td>VIGILAX Sentinel</td><td>$299</td><td>vigilax.com</td></tr>
+        <tr><td><code>STRIPE_LINK_VIGILAX_WARDEN</code></td><td>VIGILAX Warden</td><td>$899</td><td>vigilax.com</td></tr>
+        <tr><td><code>STRIPE_LINK_VIGILAX_ARCHON</code></td><td>VIGILAX Archon</td><td>$2,499</td><td>vigilax.com</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 7: BLOCKERS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Revenue Blockers — Priority Order</div>
+      <div class="section-sub">Everything standing between now and $1 in recurring revenue</div>
+    </div>
+  </div>
+  <div class="blocker-list">
+    <div class="blocker p1">
+      <div class="blocker-pri">P1</div>
+      <div>
+        <div class="blocker-text">🚨 <strong>Stripe payment links never created.</strong> Every site with a paid tier shows placeholder text or mailto fallback. Zero automated payments are possible.</div>
+        <div class="blocker-fix">Fix: dashboard.stripe.com → Products → Create 11 recurring products → Copy buy.stripe.com/xxx → Paste to Claude</div>
+        <div class="blocker-time">⏱ 30 min — Derek action only</div>
+      </div>
+    </div>
+    <div class="blocker p1">
+      <div class="blocker-pri">P1</div>
+      <div>
+        <div class="blocker-text">🚨 <strong>DNS not configured for any domain.</strong> All 10 Porkbun domains return MISSING for A records. Sites are only accessible via GitHub Pages .io URLs — no custom domain is live.</div>
+        <div class="blocker-fix">Fix: Porkbun DNS → add 4× A records + CNAME per domain. See docs/porkbun-dns-setup.md</div>
+        <div class="blocker-time">⏱ 45 min setup + 24-48hr propagation — Derek action only</div>
+      </div>
+    </div>
+    <div class="blocker p1">
+      <div class="blocker-pri">P1</div>
+      <div>
+        <div class="blocker-text">🚨 <strong>5 GitHub repos not created</strong> (ccldr, primedox, cleanswarm, francisco-holdings, zprimedoxaihq). Deploy workflows exist but have nowhere to push to. Sites cannot deploy to GitHub Pages.</div>
+        <div class="blocker-fix">Fix: github.com/new → create each repo → Settings → Pages → main / root → Save</div>
+        <div class="blocker-time">⏱ 15 min — Derek action only</div>
+      </div>
+    </div>
+    <div class="blocker p2">
+      <div class="blocker-pri">P2</div>
+      <div>
+        <div class="blocker-text">⚠️ <strong>TechPetCage GitHub repo missing.</strong> <code>franciscoderek7/techpetcage</code> does not exist. The deploy workflow cannot run. Site sits in primedoxai-deploy but can't go to techpetcage.com.</div>
+        <div class="blocker-fix">Fix: Create repo at github.com/new, enable GitHub Pages, push from main will auto-deploy</div>
+        <div class="blocker-time">⏱ 5 min — Derek action only</div>
+      </div>
+    </div>
+    <div class="blocker p2">
+      <div class="blocker-pri">P2</div>
+      <div>
+        <div class="blocker-text">⚠️ <strong>BTC and XMR wallet addresses not provided.</strong> OmniaGuard pricing.html has Bitcoin + Monero payment sections that are placeholders. Crypto payments are a competitive differentiator but blocked.</div>
+        <div class="blocker-fix">Fix: Generate BTC/XMR wallet addresses → paste to Claude → wired in &lt;5 min</div>
+        <div class="blocker-time">⏱ 10 min when wallets ready</div>
+      </div>
+    </div>
+    <div class="blocker p2">
+      <div class="blocker-pri">P2</div>
+      <div>
+        <div class="blocker-text">⚠️ <strong>Email automation not set up.</strong> 15 email sequences (5 per brand: OmniaGuard, CCLDR, PrimeDox) are written and committed. They're sitting in content-marketing/email-sequences/ doing nothing.</div>
+        <div class="blocker-fix">Fix: Import into Mailchimp or ConvertKit. Connect assessment/lead forms to automation triggers.</div>
+        <div class="blocker-time">⏱ 2-3 hours — Derek action (Mailchimp account needed)</div>
+      </div>
+    </div>
+    <div class="blocker p3">
+      <div class="blocker-pri">P3</div>
+      <div>
+        <div class="blocker-text">ℹ️ <strong>VIGILAX has no domain or repo.</strong> 4-page site is built and committed but has no deployment target or URL. The $299-2,499/mo product is invisible.</div>
+        <div class="blocker-fix">Fix: Register vigilax.com (or .io) → create GitHub repo → wire deploy workflow</div>
+        <div class="blocker-time">⏱ 30 min + DNS propagation</div>
+      </div>
+    </div>
+    <div class="blocker p3">
+      <div class="blocker-pri">P3</div>
+      <div>
+        <div class="blocker-text">ℹ️ <strong>No analytics active anywhere.</strong> GA4, Facebook Pixel, Microsoft Clarity, Tawk.to placeholders are commented out in TechPetCage. No visibility into traffic or conversion.</div>
+        <div class="blocker-fix">Fix: Paste GA4 Measurement ID, Pixel ID, Clarity Project ID to Claude → uncommented and live in &lt;10 min</div>
+        <div class="blocker-time">⏱ 10 min when IDs available</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PART 2: AI ECOSYSTEM AUDIT ─── -->
+<h2 style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:28px;padding-top:32px;border-top:1px solid var(--border);">PART 2 — AI ECOSYSTEM AUDIT</h2>
+
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">A</div>
+    <div>
+      <div class="section-title">AI Systems Inventory</div>
+      <div class="section-sub">Every AI layer in the Francisco Holdings empire</div>
+    </div>
+  </div>
+  <div class="ai-grid">
+
+    <div class="ai-card">
+      <div class="ai-icon">🧠</div>
+      <div class="ai-name">PrimeDox AI</div>
+      <div class="ai-tagline">Sovereign AI Document Intelligence — Derek's AI persona</div>
+      <div class="ai-row"><div class="ai-label">What it is:</div><div class="ai-val">Derek's sovereign AI twin. Processes documents, maps constitutional arguments, drafts legal responses, and acts as the intelligence layer across the empire.</div></div>
+      <div class="ai-row"><div class="ai-label">What it does:</div><div class="ai-val">Document intelligence, Charter section mapping, BENO-X defense framework automation, 12-Appearance Method workflow, AI legal drafting assistant.</div></div>
+      <div class="ai-row"><div class="ai-label">Who uses it:</div><div class="ai-val">Derek (private via zprimedoxaihq.com) + public subscribers (primedoxai.com). CCLDR members use it for defense drafting.</div></div>
+      <div class="ai-row"><div class="ai-label">Lives at:</div><div class="ai-val">primedoxai.com (public) · zprimedoxaihq.com (private HQ)</div></div>
+      <div class="ai-row"><div class="ai-label">Pricing:</div><div class="ai-val">Free → Pro $49 → Elite $199 → Team $499 → Sovereign $999 → Imperium $9,999/mo CAD</div></div>
+      <div class="ai-status"><span class="st st-live">LIVE</span> — Sites built, pricing updated, First-in-World positioning added. <strong>Stripe links needed.</strong></div>
+    </div>
+
+    <div class="ai-card">
+      <div class="ai-icon">👁️</div>
+      <div class="ai-name">SoulStack</div>
+      <div class="ai-tagline">Observer AI — watches the empire, flags anomalies, reports up</div>
+      <div class="ai-row"><div class="ai-label">What it is:</div><div class="ai-val">The intelligence layer that monitors all empire sites and AI agents. Sits in the authority chain between OmniaGuard and Claude — it observes, it doesn't act.</div></div>
+      <div class="ai-row"><div class="ai-label">What it does:</div><div class="ai-val">Passive monitoring of agent behavior, anomaly detection, compliance flagging, cross-brand bleed detection, authority chain enforcement reporting.</div></div>
+      <div class="ai-row"><div class="ai-label">Where it lives:</div><div class="ai-val">Conceptually in the authority chain. No public-facing site yet. soulstack.ai domain not registered (needs Cloudflare, ~$80 USD/yr).</div></div>
+      <div class="ai-row"><div class="ai-label">Current status:</div><div class="ai-val">Architected in CLAUDE.md. No code deployed. Domain unregistered. Revenue model: B2B SaaS AI governance layer.</div></div>
+      <div class="ai-status"><span class="st st-planned">PLANNED</span> — Architecture defined. Domain registration + site build pending. Company stub page live at /companies/soulstack.html.</div>
+    </div>
+
+    <div class="ai-card">
+      <div class="ai-icon">🔐</div>
+      <div class="ai-name">VIGILAX</div>
+      <div class="ai-tagline">Commercial AI Security Product — OmniaGuard's attack-layer deployment</div>
+      <div class="ai-row"><div class="ai-label">What it is:</div><div class="ai-val">A standalone commercial AI security product. Think of OmniaGuard as the brand/company, VIGILAX as the deployable product/SDK. It's the tool enterprises actually install.</div></div>
+      <div class="ai-row"><div class="ai-label">What it does:</div><div class="ai-val">AI threat detection SDK for enterprise deployments. 4 tiers: Sentinel $299/mo, Warden $899/mo, Archon $2,499/mo, Sovereign (custom). Prompt injection prevention, agent contamination detection.</div></div>
+      <div class="ai-row"><div class="ai-label">Deployment:</div><div class="ai-val">4-page site built (index.html, pricing.html, investor.html, deploy.html). No domain registered yet. Placeholder Stripe links.</div></div>
+      <div class="ai-row"><div class="ai-label">Revenue model:</div><div class="ai-val">Monthly SaaS. $299–2,499/mo + custom enterprise. Target: SMB to Fortune 500. <strong>Loop B — no Derek identity.</strong></div></div>
+      <div class="ai-status"><span class="st st-pending">SITE BUILT — NO DOMAIN</span> — Highest-value product in the empire by unit price. Register vigilax.com to unlock.</div>
+    </div>
+
+    <div class="ai-card">
+      <div class="ai-icon">🌊</div>
+      <div class="ai-name">Kiaros (not "Kliaxo")</div>
+      <div class="ai-tagline">AI Consulting — The brand Derek was trying to name</div>
+      <div class="ai-row"><div class="ai-label">What it is:</div><div class="ai-val">"Kliaxo" is a mis-remembering of <strong>Kiaros</strong> — the AI consulting brand in the Francisco Holdings empire. Not a typo of any other name.</div></div>
+      <div class="ai-row"><div class="ai-label">What it does:</div><div class="ai-val">B2B AI consulting, implementation, and deployment services. Helps enterprises integrate AI agents into their operations. Positioned as the "human advisory layer" of the empire.</div></div>
+      <div class="ai-row"><div class="ai-label">Where it lives:</div><div class="ai-val">kiaros.ai — live site. Loop B (anonymous — no Derek identity). Deploy workflow: kiaros-deploy.yml.</div></div>
+      <div class="ai-row"><div class="ai-label">Current status:</div><div class="ai-val">Site is live. Redesign queued — new spec: Cyan #00D4FF + Black + Gold theme.</div></div>
+      <div class="ai-status"><span class="st st-live">LIVE</span> at kiaros.ai — redesign in backlog (item #8 in EMPIRE.md pending actions).</div>
+    </div>
+
+    <div class="ai-card" style="grid-column:1/-1;">
+      <div class="ai-icon">🤖</div>
+      <div class="ai-name">Agent Swarm Technologies</div>
+      <div class="ai-tagline">14-Agent Multi-Agent Orchestration Platform</div>
+      <div class="ai-row"><div class="ai-label">What it is:</div><div class="ai-val">The multi-agent orchestration layer of the empire. 14 specialized AI agents deployed in coordinated layers, each with a domain-specific function. The "nervous system" connecting all Francisco Holdings companies.</div></div>
+      <div class="ai-row"><div class="ai-label">Where it runs:</div><div class="ai-val">Conceptually embedded in PrimeDox HQ. Public-facing: agent-swarm-tech-site/ (GitHub Pages). Referenced in FH main site Agent Swarm section.</div></div>
+      <div class="ai-row"><div class="ai-label">Orchestration:</div><div class="ai-val">Operates under SoulStack observation layer. OmniaGuard security layer wraps all agents. Authority chain enforced: PrimeDox → PrimeDocs → SoulStack → OmniaGuard → Agents.</div></div>
+
+      <div style="margin-top:16px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">The 14 Named Agent Heroes</div>
+        <div class="agent-row" style="font-size:11px;color:var(--dim);font-weight:700;border-bottom:1px solid var(--border);padding-bottom:6px;">
+          <div>#</div><div>Name</div><div>Function</div><div>Status</div>
+        </div>
+        <div class="agent-row"><div class="agent-num">01</div><div class="agent-name">PrimeDocs</div><div class="agent-desc">Document intelligence + override/backup authority layer. Activated by PrimeDox only. Constitutional drafting, FOI requests, legal document generation.</div><div><span class="st st-live">Active</span></div></div>
+        <div class="agent-row"><div class="agent-num">02</div><div class="agent-name">SoulStack</div><div class="agent-desc">Observer and anomaly detection. Watches all agent behavior. Reports unauthorized actions up the chain. Never initiates — only observes.</div><div><span class="st st-live">Active</span></div></div>
+        <div class="agent-row"><div class="agent-num">03</div><div class="agent-name">OmniaGuard</div><div class="agent-desc">Security enforcement agent. Blocks unauthorized actions, detects prompt injection, enforces Loop A/B separation, guards all site deployments.</div><div><span class="st st-live">Active</span></div></div>
+        <div class="agent-row"><div class="agent-num">04</div><div class="agent-name">VIGILAX</div><div class="agent-desc">External deployment of OmniaGuard's security layer. The commercial product version of the security agent. Monitors enterprise client AI deployments.</div><div><span class="st st-partial">Site Built</span></div></div>
+        <div class="agent-row"><div class="agent-num">05</div><div class="agent-name">LexMind</div><div class="agent-desc">Legal intelligence agent. Charter argument mapping, case law search, precedent analysis. Powers CCLDR's AI defense drafting.</div><div><span class="st st-planned">Planned</span></div></div>
+        <div class="agent-row"><div class="agent-num">06</div><div class="agent-name">Doc Weedlaw AI</div><div class="agent-desc">Derek's cannabis legal persona agent. BENO-X framework automation, 12-Appearance Method orchestration, live at zprimedoxaihq.com/doc-weedlaw-ai.html.</div><div><span class="st st-live">Active</span></div></div>
+        <div class="agent-row"><div class="agent-num">07</div><div class="agent-name">FintechSwarm</div><div class="agent-desc">Financial intelligence agent. Payment processing oversight, fraud detection signals, revenue tracking across empire properties.</div><div><span class="st st-planned">Planned</span></div></div>
+        <div class="agent-row"><div class="agent-num">08</div><div class="agent-name">HealthSwarm</div><div class="agent-desc">Population health AI. TechPetCage pet health monitoring backend. Medical and wellness data analysis across empire health properties.</div><div><span class="st st-planned">Planned</span></div></div>
+        <div class="agent-row"><div class="agent-num">09</div><div class="agent-name">LogisticsSwarm</div><div class="agent-desc">Supply chain and last-mile delivery AI. Powers TechPetCage Job Shipping driver system. Route optimization and delivery coordination.</div><div><span class="st st-planned">Planned</span></div></div>
+        <div class="agent-row"><div class="agent-num">10</div><div class="agent-name">CleanSwarm AI</div><div class="agent-desc">Operations AI for commercial cleaning. Dispatch scheduling, job assignment, route optimization for CleanSwarm enterprise clients.</div><div><span class="st st-partial">Site Live</span></div></div>
+        <div class="agent-row"><div class="agent-num">11</div><div class="agent-name">DefenseSwarm</div><div class="agent-desc">National security intelligence agent. Government and defense sector AI. Classified protocol handling. BENO-X constitutional overlay for government applications.</div><div><span class="st st-planned">Planned</span></div></div>
+        <div class="agent-row"><div class="agent-num">12</div><div class="agent-name">Space Swarm</div><div class="agent-desc">Satellite telemetry and orbital logistics AI. Frontier division. Monitors space operations intelligence for defense and commercial satellite clients.</div><div><span class="st st-partial">Site Live</span></div></div>
+        <div class="agent-row"><div class="agent-num">13</div><div class="agent-name">Quantum Swarm</div><div class="agent-desc">Quantum-assisted reasoning layer. Post-classical computing intelligence. Applied to OmniaGuard's 14-layer security consensus architecture.</div><div><span class="st st-partial">Site Live</span></div></div>
+        <div class="agent-row"><div class="agent-num">14</div><div class="agent-name">Empire.OS</div><div class="agent-desc">Master orchestration agent. Coordinates all 13 agents. Lives at zprimedoxaihq.com/empire-os.html. Derek's private command layer for the entire empire.</div><div><span class="st st-live">Active</span></div></div>
+      </div>
+      <div class="ai-status" style="margin-top:16px;"><span class="st st-partial">PARTIAL</span> — Architecture defined. Agents 1, 2, 3, 6, 14 actively operational. Agents 4-13 need code/deployment. OmniaGuard is the security perimeter; Empire.OS is the brain.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- AI INTEGRATION ROADMAP -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">B</div>
+    <div>
+      <div class="section-title">AI Integration Roadmap</div>
+      <div class="section-sub">Which AI connects to which platform, in priority order</div>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Integration</th><th>Connects</th><th>Benefit</th><th>Tech Required</th><th>Timeline</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Stripe → All sites</strong></td><td>Stripe payment links → code</td><td>$0 → revenue immediately</td><td>30 min on dashboard.stripe.com</td><td><span class="st st-blocked">NOW</span></td></tr>
+        <tr><td>2</td><td><strong>PrimeDox AI → CCLDR</strong></td><td>primedoxai.com ↔ ccldr.net</td><td>CCLDR Pro members get AI defense drafting</td><td>Shared API key, cross-domain auth</td><td><span class="st st-pending">2 weeks</span></td></tr>
+        <tr><td>3</td><td><strong>OmniaGuard → All agent sites</strong></td><td>omniaguard.com SDK → all swarm sites</td><td>Real security enforcement, not just branding</td><td>OmniaGuard SDK deploy + API keys</td><td><span class="st st-pending">1 month</span></td></tr>
+        <tr><td>4</td><td><strong>Mailchimp/ConvertKit → Lead forms</strong></td><td>All lead capture forms → email automation</td><td>15 email sequences activate, nurture → revenue</td><td>Mailchimp account + webhook IDs</td><td><span class="st st-pending">1 week</span></td></tr>
+        <tr><td>5</td><td><strong>Supabase → CCLDR member accounts</strong></td><td>CCLDR pricing → user auth → courthouse rooms</td><td>Paid tiers gate courthouse rooms properly</td><td>Supabase project + auth library</td><td><span class="st st-planned">Phase 2</span></td></tr>
+        <tr><td>6</td><td><strong>Supabase → TechPetCage orders</strong></td><td>TechPetCage → order DB → Job Shipping</td><td>Real order management, driver dispatch automation</td><td>Supabase project + serverless functions</td><td><span class="st st-planned">Phase 2</span></td></tr>
+        <tr><td>7</td><td><strong>Empire.OS → full agent mesh</strong></td><td>zprimedoxaihq.com/empire-os.html → all agents</td><td>Unified command over all 14 agents from one screen</td><td>Agent API endpoints + webhook mesh</td><td><span class="st st-planned">Phase 3</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── PART 3: PLATFORM OBJECTIVES ─── -->
+<h2 style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:28px;padding-top:32px;border-top:1px solid var(--border);">PART 3 — MAIN OBJECTIVES PER PLATFORM</h2>
+
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">C</div>
+    <div>
+      <div class="section-title">Platform Objectives</div>
+      <div class="section-sub">Purpose, customer, revenue model, phase, and next milestone per site</div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">🛡️ OmniaGuard</div>
+    <div class="obj-url">omniaguard.com · Loop B</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">Enterprise AI security — stop prompt injection before it costs $4.45M</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Solo devs ($99), SMBs ($499), Mid-market ($1,999), Enterprise ($4,999), Gov ($24,999)</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">Monthly SaaS + SDK license. $99–$99,999/mo CAD</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-live">LIVE</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. Create Stripe links for all 5 tiers. 2. Register BTC/XMR wallets. 3. First paying customer.</div></div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">🐾 TechPetCage</div>
+    <div class="obj-url">techpetcage.com · Loop A</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">Canada's #1 AI pet tech marketplace — quantum energy wellness + AI health monitoring</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Canadian pet owners, multi-pet families, breeders, shelters, kennels</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">Membership subscription $19–$199/mo + product sales + Job Shipping driver fees</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-pending">PENDING DNS + REPO</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. Create github.com/franciscoderek7/techpetcage. 2. Set DNS. 3. Stripe links for 4 tiers.</div></div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">⚖️ CCLDR.net</div>
+    <div class="obj-url">ccldr.net · Loop A · Doc Weedlaw</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">First AI-powered constitutional cannabis defense — 200+ victories, BENO-X automated</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Canadians charged under cannabis laws who can't afford $300–500/hr lawyers</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">Education subscription: Basic $49/mo, Pro $149/mo, Elite $999/mo, Sovereign $1,499/mo</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-live">LIVE</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. Create Stripe links for Basic + Pro tiers. 2. Wire courthouse gating to member tiers. 3. Email automation activate.</div></div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">🏛️ Francisco Holdings Inc.</div>
+    <div class="obj-url">franciscoholdingsinc.com · Loop A</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">Parent holding company — investor relations, credibility, empire architecture showcase</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Institutional investors, VCs, family offices, sovereign wealth funds ($100K–$1M+)</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">Investment capital, partner revenue share, advisory fees, FH agency services</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-live">LIVE</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. Set DNS. 2. Activate "Invest Now" → #investors funnel. 3. First investor inquiry captured.</div></div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">🧠 PrimeDox AI</div>
+    <div class="obj-url">primedoxai.com · Loop A</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">Sovereign AI document intelligence — Derek's AI, BENO-X framework, Charter mapping, 14 heroes</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Individuals, legal teams, enterprise clients needing Charter-aware AI document tools</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">Tiered SaaS: Free → Pro $49 → Elite $199 → Team $499 → Sovereign $999 → Imperium $9,999/mo</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-live">LIVE</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. Stripe links for Pro + Elite. 2. Connect to CCLDR member auth. 3. First paying subscriber.</div></div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">🔐 VIGILAX</div>
+    <div class="obj-url">vigilax.com (TBD) · Loop B</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">Commercial AI security SDK — the deployable product of OmniaGuard's security tech</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Enterprise AI teams, Fortune 500 DevOps, government AI deployments</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">SaaS: Sentinel $299 → Warden $899 → Archon $2,499 → Sovereign (custom) /mo CAD</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-pending">SITE BUILT — NO DOMAIN</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. Register vigilax.com. 2. Create GitHub repo. 3. Stripe links. 4. First enterprise trial.</div></div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">🧹 CleanSwarm</div>
+    <div class="obj-url">cleanswarm.ca · Loop B</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">AI dispatch + ops platform for commercial cleaning businesses. Job assignment, scheduling, invoicing.</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Commercial cleaning companies in Ontario/Canada looking to scale with AI operations</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">Per-job SaaS fee + monthly platform subscription. Interac payments (Loop B — no PayPal).</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-live">LIVE</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. DNS for cleanswarm.ca. 2. First cleaning company onboarded. 3. Interac payment received.</div></div>
+    </div>
+  </div>
+
+  <div class="obj-card">
+    <div class="obj-site">🔒 ZPrimeDox HQ</div>
+    <div class="obj-url">zprimedoxaihq.com · Loop A · PRIVATE</div>
+    <div class="obj-grid">
+      <div><div class="obj-cell-label">Purpose</div><div class="obj-cell-val">Derek's private AI command center. Empire.OS, legal tracker, action queue, all dashboards in one lock-gated HQ.</div></div>
+      <div><div class="obj-cell-label">Target Customer</div><div class="obj-cell-val">Derek (primary). Optional: senior trusted team members.</div></div>
+      <div><div class="obj-cell-label">Revenue Model</div><div class="obj-cell-val">$199/mo individual access + $499/mo team access (paywall on lock screen)</div></div>
+      <div><div class="obj-cell-label">Phase</div><div class="obj-cell-val"><span class="st st-live">LIVE</span></div></div>
+      <div><div class="obj-cell-label">Next Milestone</div><div class="obj-cell-val">1. DNS setup. 2. Change access code from default FHI2026 to secure code. 3. Wire Empire.OS to live agent APIs.</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- IMMEDIATE ACTIONS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-num">D</div>
+    <div>
+      <div class="section-title">Immediate Action Queue</div>
+      <div class="section-sub">Ordered by revenue impact. Derek actions vs. Claude actions.</div>
+    </div>
+  </div>
+  <div class="action-list">
+    <div class="action derek">
+      <div class="action-who">Derek</div>
+      <div>
+        <div class="action-text"><strong>Create Stripe payment links</strong> — 11 products across OmniaGuard, CCLDR, TechPetCage, PrimeDox AI, VIGILAX</div>
+        <div class="blocker-fix" style="font-size:12px;color:var(--muted);margin-top:4px;">dashboard.stripe.com → Products → Create → Monthly recurring → CAD → Copy buy.stripe.com/xxx → Paste here</div>
+      </div>
+      <div class="action-eta">30 min · $0 → revenue</div>
+    </div>
+    <div class="action derek">
+      <div class="action-who">Derek</div>
+      <div>
+        <div class="action-text"><strong>Create 6 GitHub repos</strong> — ccldr, primedox, cleanswarm, francisco-holdings, zprimedoxaihq, techpetcage</div>
+        <div class="blocker-fix" style="font-size:12px;color:var(--muted);margin-top:4px;">github.com/new → each repo → Settings → Pages → main / root → Save</div>
+      </div>
+      <div class="action-eta">15 min · sites go live</div>
+    </div>
+    <div class="action derek">
+      <div class="action-who">Derek</div>
+      <div>
+        <div class="action-text"><strong>Configure DNS in Porkbun</strong> — all 10 domains need A records + CNAME pointing to GitHub Pages</div>
+        <div class="blocker-fix" style="font-size:12px;color:var(--muted);margin-top:4px;">See docs/porkbun-dns-setup.md for exact records per domain</div>
+      </div>
+      <div class="action-eta">45 min + 24-48hr propagation</div>
+    </div>
+    <div class="action derek">
+      <div class="action-who">Derek</div>
+      <div>
+        <div class="action-text"><strong>Provide BTC + XMR wallet addresses</strong> for OmniaGuard crypto payment section</div>
+      </div>
+      <div class="action-eta">10 min · 5 payment methods</div>
+    </div>
+    <div class="action derek">
+      <div class="action-who">Derek</div>
+      <div>
+        <div class="action-text"><strong>Set up email automation</strong> — import 15 email sequences from content-marketing/email-sequences/ into Mailchimp or ConvertKit</div>
+      </div>
+      <div class="action-eta">2-3 hrs · lead nurture live</div>
+    </div>
+    <div class="action derek">
+      <div class="action-who">Derek</div>
+      <div>
+        <div class="action-text"><strong>Register vigilax.com</strong> (~$12 USD at Porkbun) — highest-value product in empire has no live URL</div>
+      </div>
+      <div class="action-eta">5 min · $2,499/mo product live</div>
+    </div>
+    <div class="action claude" style="border-color:var(--cyan);">
+      <div class="action-who" style="color:var(--cyan);">Claude</div>
+      <div>
+        <div class="action-text"><strong>Wire Stripe URLs</strong> when Derek pastes buy.stripe.com/xxx links — all 11 placeholders replaced in &lt;10 min</div>
+      </div>
+      <div class="action-eta">10 min · on receipt</div>
+    </div>
+    <div class="action claude" style="border-color:var(--cyan);">
+      <div class="action-who" style="color:var(--cyan);">Claude</div>
+      <div>
+        <div class="action-text"><strong>Wire BTC/XMR addresses</strong> into OmniaGuard pricing.html crypto section — immediately when addresses provided</div>
+      </div>
+      <div class="action-eta">5 min · on receipt</div>
+    </div>
+    <div class="action claude" style="border-color:var(--cyan);">
+      <div class="action-who" style="color:var(--cyan);">Claude</div>
+      <div>
+        <div class="action-text"><strong>Inject analytics IDs</strong> (GA4 Measurement ID, Facebook Pixel, Clarity Project ID) into all sites when provided</div>
+      </div>
+      <div class="action-eta">10 min · on receipt</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);text-align:center;">
+  <div style="font-size:12px;color:var(--dim);">Francisco Holdings Inc. — Master Report · June 11, 2026</div>
+  <div style="font-size:11px;color:var(--dim);margin-top:4px;">Authority: Derek Francisco (PrimeDox) · Generated by Claude (Builder/Executor layer)</div>
+  <div style="font-size:11px;color:var(--dim);margin-top:4px;">This document is confidential. Do not share outside the authority chain.</div>
+</div>
+
+</div><!-- /report-body -->
+</body>
+</html>
