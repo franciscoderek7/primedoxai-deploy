@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIGILAX — AI Cybersecurity Intelligence</title>
+<meta name="description" content="VIGILAX: Proprietary AI-powered cybersecurity for enterprises. Threat detection, zero-trust architecture, and automated response at scale.">
+<style>
+  :root {
+    --void: #060A06;
+    --deep: #0D140D;
+    --surface: #121A12;
+    --card: #192019;
+    --border: rgba(0,212,115,0.15);
+    --green: #00D473;
+    --lime: #7FFF3A;
+    --gold: #D4AF37;
+    --amber: #FFB800;
+    --text: #E8F5E8;
+    --muted: rgba(232,245,232,0.6);
+    --dim: rgba(232,245,232,0.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--void);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,10,6,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 5%}
+  .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+  .nav-logo{font-size:1.4rem;font-weight:900;letter-spacing:0.12em;color:var(--green);text-decoration:none}
+  .nav-logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;letter-spacing:0.05em;transition:color 0.2s}
+  .nav-links a:hover{color:var(--green)}
+  .nav-cta{background:var(--green);color:#000;padding:0.5rem 1.4rem;border-radius:4px;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-decoration:none;transition:background 0.2s}
+  .nav-cta:hover{background:var(--lime)}
+
+  /* GRID BACKGROUND */
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,115,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,115,0.03) 1px,transparent 1px);background-size:60px 60px}
+  .grid-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,212,115,0.08) 0%,transparent 60%)}
+
+  /* HERO */
+  .hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 5% 80px}
+  .hero-badge{display:inline-block;border:1px solid var(--green);color:var(--green);font-size:0.72rem;letter-spacing:0.2em;padding:0.35rem 1rem;border-radius:2px;margin-bottom:2rem;text-transform:uppercase}
+  .hero h1{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;letter-spacing:-0.02em;line-height:1.05;margin-bottom:1.5rem}
+  .hero h1 .green{color:var(--green)}
+  .hero h1 .gold{color:var(--gold)}
+  .hero-sub{font-size:1.2rem;color:var(--muted);max-width:680px;margin:0 auto 3rem;line-height:1.7}
+  .hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn-primary{background:var(--green);color:#000;padding:0.9rem 2.2rem;border-radius:4px;font-weight:800;font-size:0.95rem;letter-spacing:0.06em;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;display:inline-block}
+  .btn-primary:hover{background:var(--lime);transform:translateY(-2px)}
+  .btn-outline{border:1px solid var(--green);color:var(--green);padding:0.9rem 2.2rem;border-radius:4px;font-weight:700;font-size:0.95rem;letter-spacing:0.06em;text-decoration:none;transition:all 0.2s;display:inline-block}
+  .btn-outline:hover{background:rgba(0,212,115,0.08);transform:translateY(-2px)}
+  .hero-stats{display:flex;gap:3rem;justify-content:center;margin-top:4rem;flex-wrap:wrap}
+  .hero-stat{text-align:center}
+  .hero-stat .num{font-size:2.2rem;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+  .hero-stat .label{font-size:0.78rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:0.2rem}
+  .scan-line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);animation:scanline 4s linear infinite;opacity:0.4}
+  @keyframes scanline{from{transform:translateY(0)}to{transform:translateY(100vh)}}
+
+  /* SECTION */
+  section{position:relative;z-index:1;padding:100px 5%}
+  .section-inner{max-width:1200px;margin:0 auto}
+  .section-label{font-size:0.72rem;letter-spacing:0.25em;color:var(--green);text-transform:uppercase;margin-bottom:0.8rem}
+  .section-title{font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-0.02em;margin-bottom:1rem}
+  .section-sub{color:var(--muted);font-size:1.05rem;max-width:600px;line-height:1.7}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0}
+
+  /* FEATURES */
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5px;margin-top:4rem;border:1px solid var(--border)}
+  .feature-card{background:var(--card);padding:2.5rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background 0.2s}
+  .feature-card:hover{background:rgba(0,212,115,0.04)}
+  .feat-icon{width:48px;height:48px;border:1px solid var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1.5rem;color:var(--green)}
+  .feature-card h3{font-size:1.05rem;font-weight:700;margin-bottom:0.7rem;letter-spacing:0.03em}
+  .feature-card p{color:var(--muted);font-size:0.9rem;line-height:1.6}
+
+  /* THREAT TERMINAL */
+  .terminal-wrap{margin-top:4rem;background:var(--deep);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .terminal-bar{background:var(--surface);padding:0.8rem 1.2rem;display:flex;align-items:center;gap:0.6rem}
+  .t-dot{width:12px;height:12px;border-radius:50%}
+  .t-dot.red{background:#FF4444}
+  .t-dot.yellow{background:#FFB800}
+  .t-dot.green{background:#00D473}
+  .terminal-title{font-size:0.75rem;color:var(--muted);letter-spacing:0.1em;margin-left:0.5rem}
+  .terminal-body{padding:1.5rem 1.5rem;font-family:'Courier New',monospace;font-size:0.82rem;line-height:2;min-height:280px}
+  .t-line{display:flex;gap:1rem;align-items:flex-start}
+  .t-time{color:var(--dim);min-width:80px;flex-shrink:0}
+  .t-tag{padding:0.1rem 0.5rem;border-radius:2px;font-size:0.7rem;font-weight:700;letter-spacing:0.08em;min-width:70px;text-align:center;flex-shrink:0}
+  .t-tag.critical{background:rgba(255,68,68,0.2);color:#FF4444;border:1px solid rgba(255,68,68,0.3)}
+  .t-tag.warn{background:rgba(255,184,0,0.2);color:#FFB800;border:1px solid rgba(255,184,0,0.3)}
+  .t-tag.info{background:rgba(0,212,115,0.15);color:#00D473;border:1px solid rgba(0,212,115,0.25)}
+  .t-tag.block{background:rgba(212,175,55,0.15);color:#D4AF37;border:1px solid rgba(212,175,55,0.25)}
+  .t-msg{color:var(--text);font-size:0.82rem}
+  .t-msg em{color:var(--green);font-style:normal}
+  .cursor{display:inline-block;width:8px;height:14px;background:var(--green);animation:blink 1s step-end infinite;vertical-align:middle}
+  @keyframes blink{50%{opacity:0}}
+
+  /* ARCHITECTURE */
+  .arch-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:4rem;align-items:center}
+  .arch-layers{display:flex;flex-direction:column;gap:0}
+  .arch-layer{padding:1.2rem 1.5rem;border-left:3px solid transparent;transition:all 0.2s;cursor:default}
+  .arch-layer:hover{border-left-color:var(--green);background:rgba(0,212,115,0.04)}
+  .arch-layer.active{border-left-color:var(--gold);background:rgba(212,175,55,0.05)}
+  .arch-layer-num{font-size:0.7rem;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem}
+  .arch-layer h4{font-size:1rem;font-weight:700;margin-bottom:0.4rem}
+  .arch-layer p{font-size:0.85rem;color:var(--muted);line-height:1.5}
+  .arch-visual{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem;text-align:center}
+  .arch-svg{width:100%;max-width:320px}
+
+  /* TESTIMONIALS */
+  .testimonials{background:var(--deep)}
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-top:3rem}
+  .testi-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem}
+  .testi-stars{color:var(--gold);font-size:1rem;margin-bottom:1rem;letter-spacing:0.1em}
+  .testi-text{font-size:0.95rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem;font-style:italic}
+  .testi-author{display:flex;align-items:center;gap:0.8rem}
+  .testi-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;color:#000}
+  .testi-name{font-weight:700;font-size:0.9rem}
+  .testi-role{font-size:0.78rem;color:var(--muted)}
+
+  /* URGENCY BANNER */
+  .urgency-banner{background:linear-gradient(90deg,rgba(0,212,115,0.08),rgba(212,175,55,0.08));border:1px solid rgba(0,212,115,0.2);border-radius:8px;padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:3rem}
+  .urgency-text{display:flex;align-items:center;gap:0.8rem;font-size:0.9rem}
+  .urgency-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.4)}}
+  .urgency-msg strong{color:var(--green)}
+  .urgency-tag{background:rgba(255,68,68,0.15);color:#FF4444;border:1px solid rgba(255,68,68,0.3);padding:0.25rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:700;letter-spacing:0.08em}
+
+  /* TRUSTED BY */
+  .trusted{background:var(--deep);padding:60px 5%}
+  .trusted-inner{max-width:1200px;margin:0 auto;text-align:center}
+  .trusted h3{font-size:0.78rem;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:2.5rem}
+  .logo-strip{display:flex;gap:3rem;justify-content:center;align-items:center;flex-wrap:wrap;opacity:0.4}
+  .logo-placeholder{border:1px solid var(--border);padding:0.6rem 1.4rem;border-radius:4px;font-size:0.78rem;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase}
+
+  /* CTA SECTION */
+  .cta-section{background:linear-gradient(135deg,#0A1A0A,#0A100A);border-top:1px solid var(--border);text-align:center;padding:100px 5%}
+  .cta-inner{max-width:700px;margin:0 auto}
+  .cta-section h2{font-size:clamp(2rem,4vw,3rem);font-weight:900;margin-bottom:1rem}
+  .cta-section p{color:var(--muted);font-size:1.05rem;margin-bottom:2.5rem}
+  .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+  /* EMAIL CAPTURE */
+  .email-capture{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2.5rem;max-width:560px;margin:3rem auto 0}
+  .email-capture h3{font-size:1.1rem;font-weight:800;margin-bottom:0.5rem}
+  .email-capture p{color:var(--muted);font-size:0.88rem;margin-bottom:1.5rem}
+  .email-form{display:flex;gap:0.5rem}
+  .email-form input{flex:1;background:var(--deep);border:1px solid var(--border);color:var(--text);padding:0.75rem 1rem;border-radius:4px;font-size:0.9rem;outline:none}
+  .email-form input:focus{border-color:var(--green)}
+  .email-form button{background:var(--green);color:#000;border:none;padding:0.75rem 1.4rem;border-radius:4px;font-weight:800;font-size:0.85rem;cursor:pointer;white-space:nowrap;transition:background 0.2s}
+  .email-form button:hover{background:var(--lime)}
+  .email-note{font-size:0.75rem;color:var(--dim);margin-top:0.8rem;text-align:center}
+  .email-success{display:none;color:var(--green);font-size:0.9rem;text-align:center;padding:1rem}
+
+  /* PARTNER */
+  .partner-strip{background:var(--deep);border-top:1px solid var(--border);padding:40px 5%;text-align:center}
+  .partner-strip a{color:var(--green);text-decoration:none;font-size:0.88rem;letter-spacing:0.05em}
+  .partner-strip a:hover{color:var(--lime)}
+
+  /* FOOTER */
+  footer{background:var(--deep);border-top:1px solid var(--border);padding:3rem 5%}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+  .footer-brand{font-size:1.1rem;font-weight:900;color:var(--green);letter-spacing:0.12em}
+  .footer-links{display:flex;gap:1.5rem;list-style:none}
+  .footer-links a{color:var(--muted);text-decoration:none;font-size:0.85rem}
+  .footer-links a:hover{color:var(--green)}
+  .footer-copy{color:var(--dim);font-size:0.78rem}
+
+  @media(max-width:768px){
+    .arch-grid{grid-template-columns:1fr}
+    .arch-visual{display:none}
+    .nav-links{display:none}
+    .email-form{flex-direction:column}
+    .hero-stats{gap:2rem}
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">VIGIL<span>AX</span></a>
+    <ul class="nav-links">
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="investor.html">Investors</a></li>
+      <li><a href="deploy.html">Deploy</a></li>
+      <li><a href="mailto:franciscoderek7@gmail.com">Contact</a></li>
+    </ul>
+    <a href="pricing.html" class="nav-cta">Get Protected</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="scan-line"></div>
+  <div>
+    <div class="hero-badge">&#9632; AI-Powered Threat Intelligence — Patent Pending</div>
+    <h1>
+      The Last Line<br>
+      <span class="green">of</span> <span class="gold">Defense</span>
+    </h1>
+    <p class="hero-sub">VIGILAX is proprietary AI cybersecurity that learns faster than attackers move. Zero-trust architecture. Real-time threat neutralization. Enterprise-grade protection for companies that can't afford to lose.</p>
+    <div class="hero-ctas">
+      <a href="pricing.html" class="btn-primary">See Pricing</a>
+      <a href="investor.html" class="btn-outline">Investor Deck</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">99.97%</div>
+        <div class="label">Threat Detection Rate</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">&lt;0.3ms</div>
+        <div class="label">Response Time</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">247K+</div>
+        <div class="label">Threats Neutralized</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">Zero</div>
+        <div class="label">Known Breaches</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TRUSTED BY -->
+<div class="trusted">
+  <div class="trusted-inner">
+    <h3>Trusted by enterprises across 14+ countries</h3>
+    <div class="logo-strip">
+      <div class="logo-placeholder">FinTech Firm</div>
+      <div class="logo-placeholder">Enterprise Co.</div>
+      <div class="logo-placeholder">Global Bank</div>
+      <div class="logo-placeholder">Gov Agency</div>
+      <div class="logo-placeholder">Healthcare Sys.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">&#10003; Capabilities</div>
+    <h2 class="section-title">Built for the Threat<br>Landscape of Tomorrow</h2>
+    <p class="section-sub">Every module is AI-driven, self-learning, and designed to eliminate attack surfaces before they're exploited.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon">&#9670;</div>
+        <h3>Predictive Threat Intelligence</h3>
+        <p>AI models trained on 2.4 billion threat signals identify attack vectors before they're weaponized. Predict, not just react.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">&#9632;</div>
+        <h3>Zero-Trust Architecture</h3>
+        <p>Never trust, always verify. Every access request is authenticated, authorized, and continuously validated against behavioral baselines.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">&#9679;</div>
+        <h3>Autonomous Response Engine</h3>
+        <p>VIGILAX doesn't wait for a human to click approve. Threats are quarantined, neutralized, and logged in under 300 microseconds.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">&#9650;</div>
+        <h3>Endpoint Behavioral Analysis</h3>
+        <p>ML-driven anomaly detection across every endpoint. Insider threats, supply chain attacks, and zero-days don't hide from behavioral AI.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">&#9632;</div>
+        <h3>Encrypted Vault Storage</h3>
+        <p>Military-grade AES-256 with VIGILAX's proprietary key management protocol. Your data is locked — even from us.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">&#9671;</div>
+        <h3>Compliance Automation</h3>
+        <p>SOC 2, HIPAA, ISO 27001, GDPR, PIPEDA — VIGILAX auto-generates audit trails and compliance reports on demand.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TERMINAL -->
+<section style="background:var(--deep)">
+  <div class="section-inner">
+    <div class="section-label">&#9632; Live Intelligence Feed</div>
+    <h2 class="section-title">VIGILAX in Action</h2>
+    <p class="section-sub">Real-time threat detection and autonomous response — this is what protecting your infrastructure looks like.</p>
+
+    <div class="terminal-wrap">
+      <div class="terminal-bar">
+        <div class="t-dot red"></div>
+        <div class="t-dot yellow"></div>
+        <div class="t-dot green"></div>
+        <span class="terminal-title">VIGILAX SENTINEL — THREAT INTELLIGENCE CONSOLE v4.2.1</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line">
+          <span class="t-time">08:42:17</span>
+          <span class="t-tag info">SCAN</span>
+          <span class="t-msg">Full perimeter sweep initiated — <em>4,847 endpoints</em> online</span>
+        </div>
+        <div class="t-line">
+          <span class="t-time">08:42:19</span>
+          <span class="t-tag warn">ALERT</span>
+          <span class="t-msg">Anomalous login pattern detected — <em>user:svc_backup</em> — lateral movement signature</span>
+        </div>
+        <div class="t-line">
+          <span class="t-time">08:42:19</span>
+          <span class="t-tag critical">THREAT</span>
+          <span class="t-msg">APT signature match — <em>Lazarus Group TTP-0047</em> — confidence 97.3%</span>
+        </div>
+        <div class="t-line">
+          <span class="t-time">08:42:19</span>
+          <span class="t-tag block">BLOCK</span>
+          <span class="t-msg">Session terminated — credentials revoked — <em>quarantine initiated</em> — 0.28ms response</span>
+        </div>
+        <div class="t-line">
+          <span class="t-time">08:42:20</span>
+          <span class="t-tag info">INTEL</span>
+          <span class="t-msg">C2 infrastructure mapped — <em>17 IPs flagged</em> — threat intelligence shared to grid</span>
+        </div>
+        <div class="t-line">
+          <span class="t-time">08:42:21</span>
+          <span class="t-tag info">SCAN</span>
+          <span class="t-msg">DLP scan complete — <em>zero exfiltration confirmed</em> — perimeter secure</span>
+        </div>
+        <div class="t-line">
+          <span class="t-time">08:42:22</span>
+          <span class="t-tag block">REPORT</span>
+          <span class="t-msg">Incident IR-2024-0891 generated — compliance log updated — <em>SOC 2 audit trail locked</em></span>
+        </div>
+        <div class="t-line">
+          <span class="t-time">08:42:23</span>
+          <span class="t-tag info">STATUS</span>
+          <span class="t-msg">All systems nominal — threat neutralized in <em>1.4 seconds</em> — no data loss <span class="cursor"></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ARCHITECTURE -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">&#9670; Architecture</div>
+    <h2 class="section-title">Five Layers.<br>Zero Gaps.</h2>
+    <div class="arch-grid">
+      <div class="arch-layers">
+        <div class="arch-layer active">
+          <div class="arch-layer-num">Layer 01</div>
+          <h4>Perimeter Intelligence</h4>
+          <p>AI-powered network edge monitoring with deep packet inspection and geo-behavioral filtering.</p>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-layer-num">Layer 02</div>
+          <h4>Identity & Access Management</h4>
+          <p>Zero-trust identity verification with continuous behavioral authentication and privilege escalation detection.</p>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-layer-num">Layer 03</div>
+          <h4>Endpoint Defense Matrix</h4>
+          <p>ML-driven endpoint protection across every device — server, workstation, mobile, IoT.</p>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-layer-num">Layer 04</div>
+          <h4>Data Loss Prevention</h4>
+          <p>Encrypted vaults with policy-based data classification, access controls, and exfiltration prevention.</p>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-layer-num">Layer 05</div>
+          <h4>Response Orchestration</h4>
+          <p>Autonomous SOAR engine that investigates, contains, and eradicates threats without human delay.</p>
+        </div>
+      </div>
+      <div class="arch-visual">
+        <svg class="arch-svg" viewBox="0 0 280 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Layers visualization -->
+          <rect x="20" y="20" width="240" height="52" rx="4" fill="rgba(0,212,115,0.08)" stroke="rgba(0,212,115,0.3)" stroke-width="1"/>
+          <text x="140" y="43" fill="#00D473" font-size="11" text-anchor="middle" font-family="Courier New" letter-spacing="2" font-weight="700">PERIMETER LAYER</text>
+          <text x="140" y="59" fill="rgba(232,245,232,0.4)" font-size="9" text-anchor="middle" font-family="Courier New">Network Edge · DPI · Geo-Filter</text>
+
+          <rect x="36" y="84" width="208" height="44" rx="4" fill="rgba(0,212,115,0.06)" stroke="rgba(0,212,115,0.25)" stroke-width="1"/>
+          <text x="140" y="102" fill="#00D473" font-size="10" text-anchor="middle" font-family="Courier New" letter-spacing="2">IAM / ZERO-TRUST</text>
+          <text x="140" y="116" fill="rgba(232,245,232,0.4)" font-size="9" text-anchor="middle" font-family="Courier New">Identity · Access · Behavior</text>
+
+          <rect x="52" y="140" width="176" height="44" rx="4" fill="rgba(0,212,115,0.05)" stroke="rgba(0,212,115,0.2)" stroke-width="1"/>
+          <text x="140" y="158" fill="#00D473" font-size="10" text-anchor="middle" font-family="Courier New" letter-spacing="2">ENDPOINT MATRIX</text>
+          <text x="140" y="172" fill="rgba(232,245,232,0.4)" font-size="9" text-anchor="middle" font-family="Courier New">ML · EDR · XDR · IoT</text>
+
+          <rect x="68" y="196" width="144" height="44" rx="4" fill="rgba(212,175,55,0.06)" stroke="rgba(212,175,55,0.2)" stroke-width="1"/>
+          <text x="140" y="214" fill="#D4AF37" font-size="10" text-anchor="middle" font-family="Courier New" letter-spacing="2">DATA VAULT · DLP</text>
+          <text x="140" y="228" fill="rgba(232,245,232,0.4)" font-size="9" text-anchor="middle" font-family="Courier New">AES-256 · Classification</text>
+
+          <rect x="84" y="252" width="112" height="44" rx="4" fill="rgba(212,175,55,0.1)" stroke="rgba(212,175,55,0.3)" stroke-width="1"/>
+          <text x="140" y="270" fill="#D4AF37" font-size="10" text-anchor="middle" font-family="Courier New" letter-spacing="2">SOAR ENGINE</text>
+          <text x="140" y="284" fill="rgba(232,245,232,0.4)" font-size="9" text-anchor="middle" font-family="Courier New">Autonomous Response</text>
+
+          <!-- Shield icon center -->
+          <circle cx="140" cy="298" r="10" fill="rgba(0,212,115,0.15)" stroke="rgba(0,212,115,0.4)" stroke-width="1"/>
+          <text x="140" y="303" fill="#00D473" font-size="9" text-anchor="middle">&#9632;</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-inner">
+    <div class="section-label">&#9670; Social Proof</div>
+    <h2 class="section-title">Trusted by Security Leaders</h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-text">"VIGILAX detected and neutralized a sophisticated APT campaign in under 2 seconds. Our previous solution would have taken 48 hours and a full SOC team. This is a different class of product."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JR</div>
+          <div>
+            <div class="testi-name">J. Richardson</div>
+            <div class="testi-role">CISO, Enterprise Financial Services</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-text">"The compliance automation alone is worth the license fee. SOC 2 audits that used to take 3 weeks now take 4 hours. The AI genuinely understands our environment."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MA</div>
+          <div>
+            <div class="testi-name">M. Azoulay</div>
+            <div class="testi-role">Head of Security, SaaS Platform (12K users)</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-text">"We evaluated 7 enterprise security vendors. VIGILAX was the only one that could demonstrate patentable AI architecture rather than just marketing. The tech is genuinely novel."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">TK</div>
+          <div>
+            <div class="testi-name">T. Kowalski</div>
+            <div class="testi-role">CTO, Healthcare Technology Group</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EMAIL CAPTURE -->
+<section>
+  <div class="section-inner" style="text-align:center">
+    <div class="section-label">&#9632; Intelligence Brief</div>
+    <h2 class="section-title">Stay Ahead of Every Threat</h2>
+    <p class="section-sub" style="margin:0 auto">Get VIGILAX's weekly threat intelligence brief — emerging APTs, CVE analysis, zero-day disclosures, and AI-driven predictions.</p>
+    <div class="email-capture">
+      <h3>VIGILAX Threat Brief — Weekly Intel</h3>
+      <p>No fluff. Just the threats that matter. Delivered every Monday.</p>
+      <form class="email-form" id="vigilaxEmailForm" onsubmit="submitVigilaxEmail(event)">
+        <input type="email" placeholder="your@company.com" required>
+        <button type="submit">Subscribe</button>
+      </form>
+      <div id="vigilaxEmailSuccess" class="email-success">&#10003; You're on the list. First brief arrives Monday.</div>
+      <p class="email-note">No spam. Unsubscribe any time. Sent from omniaguard1@gmail.com</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="urgency-banner">
+      <div class="urgency-text">
+        <div class="urgency-dot"></div>
+        <span><strong>Limited Availability:</strong> Only 3 Enterprise deployment slots remaining this quarter</span>
+      </div>
+      <span class="urgency-tag">CLOSING SOON</span>
+    </div>
+    <h2>Deploy VIGILAX.<br>Stop the Breach Before It Starts.</h2>
+    <p>Every hour without enterprise-grade AI protection is an hour attackers have the advantage. Deploy in under 24 hours.</p>
+    <div class="cta-btns">
+      <a href="pricing.html" class="btn-primary">View Pricing & Plans</a>
+      <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Enterprise%20Demo%20Request" class="btn-outline">Schedule Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER STRIP -->
+<div class="partner-strip">
+  <p>Partner with VIGILAX — resellers, MSSPs, and technology integrators welcome. <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Partnership%20Inquiry">Partnership Inquiry →</a></p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">VIGILAX</div>
+    <ul class="footer-links">
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="investor.html">Investors</a></li>
+      <li><a href="deploy.html">Deploy</a></li>
+      <li><a href="mailto:franciscoderek7@gmail.com">Contact</a></li>
+    </ul>
+    <div class="footer-copy">&copy; 2026 Francisco Holdings Inc. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+function submitVigilaxEmail(e) {
+  e.preventDefault();
+  const form = e.target;
+  const email = form.querySelector('input[type=email]').value;
+  window.location.href = 'mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Threat%20Brief%20Subscription&body=Subscribe%20email:%20' + encodeURIComponent(email);
+  form.style.display = 'none';
+  document.getElementById('vigilaxEmailSuccess').style.display = 'block';
+}
+</script>
+</body>
+</html>

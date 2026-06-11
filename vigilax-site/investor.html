@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIGILAX — Investor Relations</title>
+<meta name="description" content="VIGILAX: Patent-pending AI cybersecurity. Investment opportunity in the $300B+ enterprise security market.">
+<style>
+  :root {
+    --void: #060A06;
+    --deep: #0D140D;
+    --surface: #121A12;
+    --card: #192019;
+    --border: rgba(0,212,115,0.15);
+    --green: #00D473;
+    --lime: #7FFF3A;
+    --gold: #D4AF37;
+    --amber: #FFB800;
+    --text: #E8F5E8;
+    --muted: rgba(232,245,232,0.6);
+    --dim: rgba(232,245,232,0.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--void);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,115,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,115,0.03) 1px,transparent 1px);background-size:60px 60px}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,10,6,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 5%}
+  .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+  .nav-logo{font-size:1.4rem;font-weight:900;letter-spacing:0.12em;color:var(--green);text-decoration:none}
+  .nav-logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;letter-spacing:0.05em;transition:color 0.2s}
+  .nav-links a:hover{color:var(--green)}
+  .nav-cta{background:var(--gold);color:#000;padding:0.5rem 1.4rem;border-radius:4px;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-decoration:none;transition:background 0.2s}
+  .nav-cta:hover{background:var(--amber)}
+
+  section{position:relative;z-index:1;padding:100px 5%}
+  .section-inner{max-width:1200px;margin:0 auto}
+  .section-label{font-size:0.72rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:0.8rem}
+  .section-title{font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-0.02em;margin-bottom:1rem}
+  .section-sub{color:var(--muted);font-size:1.05rem;max-width:600px;line-height:1.7}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);position:relative;z-index:1}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:140px 5% 80px}
+  .hero-badge{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:0.72rem;letter-spacing:0.2em;padding:0.35rem 1rem;border-radius:2px;margin-bottom:2rem;text-transform:uppercase}
+  .hero h1{font-size:clamp(2.8rem,7vw,5rem);font-weight:900;letter-spacing:-0.02em;line-height:1.05;margin-bottom:1.5rem}
+  .hero h1 .green{color:var(--green)}
+  .hero h1 .gold{color:var(--gold)}
+  .hero-sub{font-size:1.2rem;color:var(--muted);max-width:640px;margin:0 auto 3rem;line-height:1.7}
+  .hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn{padding:0.9rem 2.2rem;border-radius:4px;font-weight:800;font-size:0.95rem;letter-spacing:0.06em;text-decoration:none;transition:all 0.2s;display:inline-block}
+  .btn-gold{background:var(--gold);color:#000}
+  .btn-gold:hover{background:var(--amber);transform:translateY(-2px)}
+  .btn-outline{border:1px solid var(--gold);color:var(--gold);background:transparent}
+  .btn-outline:hover{background:rgba(212,175,55,0.08);transform:translateY(-2px)}
+  .btn-green{background:var(--green);color:#000}
+  .btn-green:hover{background:var(--lime);transform:translateY(-2px)}
+
+  /* MARKET STATS */
+  .market-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:3rem}
+  .market-stat{background:var(--card);padding:2rem;text-align:center}
+  .market-stat .num{font-size:2.4rem;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums;line-height:1}
+  .market-stat .label{font-size:0.78rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:0.4rem}
+  .market-stat .sub{font-size:0.72rem;color:var(--dim);margin-top:0.3rem}
+
+  /* INVESTMENT THESIS */
+  .thesis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem}
+  .thesis-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem}
+  .thesis-card .thesis-num{font-size:2rem;font-weight:900;color:var(--gold);opacity:0.3;margin-bottom:0.8rem}
+  .thesis-card h3{font-size:1.05rem;font-weight:700;margin-bottom:0.6rem;color:var(--green)}
+  .thesis-card p{font-size:0.88rem;color:var(--muted);line-height:1.6}
+
+  /* FINANCIALS */
+  .financials{background:var(--deep)}
+  .fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:3rem}
+  .fin-table{width:100%;border-collapse:collapse}
+  .fin-table td{padding:0.9rem 0;border-bottom:1px solid rgba(0,212,115,0.08);font-size:0.88rem}
+  .fin-table td:first-child{color:var(--muted)}
+  .fin-table td:last-child{text-align:right;font-weight:700;color:var(--green)}
+  .fin-table td.gold-val:last-child{color:var(--gold)}
+  .fin-table tr:last-child td{border-bottom:none}
+  .revenue-bars{display:flex;flex-direction:column;gap:1rem}
+  .rev-bar{display:flex;flex-direction:column;gap:0.4rem}
+  .rev-label{display:flex;justify-content:space-between;font-size:0.82rem}
+  .rev-label span:first-child{color:var(--muted)}
+  .rev-label span:last-child{color:var(--gold);font-weight:700}
+  .bar-track{height:8px;background:rgba(0,212,115,0.08);border-radius:4px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width 1.5s ease}
+
+  /* IP TABLE */
+  .ip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:3rem}
+  .ip-card{background:var(--card);border:1px solid rgba(212,175,55,0.15);border-radius:8px;padding:1.8rem}
+  .ip-card h4{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:0.5rem}
+  .ip-card p{font-size:0.85rem;color:var(--muted);line-height:1.5}
+  .ip-status{display:inline-block;background:rgba(0,212,115,0.12);color:var(--green);border:1px solid rgba(0,212,115,0.2);padding:0.2rem 0.6rem;border-radius:20px;font-size:0.7rem;font-weight:700;letter-spacing:0.1em;margin-bottom:0.8rem}
+
+  /* TEAM */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:3rem}
+  .team-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem;text-align:center}
+  .team-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:#000;margin:0 auto 1rem}
+  .team-name{font-size:1rem;font-weight:800;margin-bottom:0.3rem}
+  .team-role{font-size:0.78rem;color:var(--green);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.7rem}
+  .team-bio{font-size:0.85rem;color:var(--muted);line-height:1.5}
+
+  /* CTA */
+  .investor-cta{background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(0,212,115,0.05));border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:4rem;text-align:center}
+  .investor-cta h2{font-size:2.2rem;font-weight:900;color:var(--gold);margin-bottom:1rem}
+  .investor-cta p{color:var(--muted);font-size:1rem;max-width:600px;margin:0 auto 2.5rem;line-height:1.7}
+  .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+  /* PARTNER */
+  .partner-strip{background:var(--deep);border-top:1px solid var(--border);padding:30px 5%;text-align:center;position:relative;z-index:1}
+  .partner-strip a{color:var(--gold);text-decoration:none;font-size:0.88rem}
+  .partner-strip a:hover{color:var(--amber)}
+
+  footer{background:var(--deep);border-top:1px solid var(--border);padding:3rem 5%;position:relative;z-index:1}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+  .footer-brand{font-size:1.1rem;font-weight:900;color:var(--green);letter-spacing:0.12em}
+  .footer-links{display:flex;gap:1.5rem;list-style:none}
+  .footer-links a{color:var(--muted);text-decoration:none;font-size:0.85rem}
+  .footer-links a:hover{color:var(--green)}
+  .footer-copy{color:var(--dim);font-size:0.78rem}
+
+  @media(max-width:900px){.market-grid{grid-template-columns:1fr 1fr}.fin-grid{grid-template-columns:1fr}}
+  @media(max-width:600px){.market-grid{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">VIGIL<span>AX</span></a>
+    <ul class="nav-links">
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="investor.html" style="color:var(--gold)">Investors</a></li>
+      <li><a href="deploy.html">Deploy</a></li>
+      <li><a href="mailto:franciscoderek7@gmail.com">Contact</a></li>
+    </ul>
+    <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Investor%20Inquiry" class="nav-cta">Schedule Demo</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-badge">&#9670; Investor Relations — Confidential</div>
+    <h1>
+      <span class="gold">$300B</span> Market.<br>
+      <span class="green">Zero</span> Dominant AI Player.
+    </h1>
+    <p class="hero-sub">VIGILAX is patent-pending AI cybersecurity designed to capture the enterprise security market that legacy vendors can't protect. The technology is novel. The timing is now.</p>
+    <div class="hero-ctas">
+      <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Investor%20Demo%20Request" class="btn btn-gold">Schedule Demo</a>
+      <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Investor%20Package%20Request" class="btn btn-outline">Request Investor Package</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MARKET -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">&#9670; Market Opportunity</div>
+    <h2 class="section-title">The Numbers That Matter</h2>
+    <div class="market-grid">
+      <div class="market-stat">
+        <div class="num">$300B+</div>
+        <div class="label">Global Cybersecurity Market</div>
+        <div class="sub">2026 — growing 13% CAGR</div>
+      </div>
+      <div class="market-stat">
+        <div class="num">$10.5T</div>
+        <div class="label">Annual Cybercrime Cost</div>
+        <div class="sub">By 2025 — Cybersecurity Ventures</div>
+      </div>
+      <div class="market-stat">
+        <div class="num">60%</div>
+        <div class="label">SMBs Fail After Breach</div>
+        <div class="sub">Within 6 months of a major attack</div>
+      </div>
+      <div class="market-stat">
+        <div class="num">4.4M</div>
+        <div class="label">Cybersecurity Jobs Unfilled</div>
+        <div class="sub">AI automation is the only solution</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INVESTMENT THESIS -->
+<section style="background:var(--deep)">
+  <div class="section-inner">
+    <div class="section-label">&#9670; Why VIGILAX Wins</div>
+    <h2 class="section-title">The Investment Thesis</h2>
+    <p class="section-sub">Four compounding advantages that create a defensible moat in an industry desperate for AI-native solutions.</p>
+    <div class="thesis-grid">
+      <div class="thesis-card">
+        <div class="thesis-num">01</div>
+        <h3>Patentable Core Technology</h3>
+        <p>VIGILAX's threat prediction engine and autonomous response orchestration represent genuinely novel AI architecture — not a wrapper on existing security tools. Patent-pending status creates IP moat.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="thesis-num">02</div>
+        <h3>AI-Native Architecture</h3>
+        <p>Legacy vendors (CrowdStrike, Palo Alto, Splunk) built ML on top of rules-based systems. VIGILAX built AI-first from day one — 10x faster response, 10x lower false positive rate.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="thesis-num">03</div>
+        <h3>White-Label Licensing Upside</h3>
+        <p>Sovereign tier includes full IP assignment options. MSSPs, government contractors, and Fortune 500 security teams can license VIGILAX's engine under their own brand — creating B2B2B revenue at enterprise scale.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="thesis-num">04</div>
+        <h3>Compliance Automation Wave</h3>
+        <p>SOC 2, HIPAA, GDPR enforcement is accelerating globally. VIGILAX automates compliance reporting that currently costs enterprises $500K–$2M annually. The ROI is immediate and measurable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- IP ASSETS -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">&#9670; Intellectual Property</div>
+    <h2 class="section-title">Patent-Pending AI Engine</h2>
+    <p class="section-sub">VIGILAX's core innovations are not replicable with off-the-shelf components. This is proprietary architecture built from first principles.</p>
+    <div class="ip-grid">
+      <div class="ip-card">
+        <div class="ip-status">PATENT PENDING</div>
+        <h4>Predictive Threat Vectoring (PTV)</h4>
+        <p>AI model architecture that predicts attack vectors 6–72 hours before they are weaponized, based on dark web intelligence and behavioral pattern matching across 2.4B+ signals.</p>
+      </div>
+      <div class="ip-card">
+        <div class="ip-status">PATENT PENDING</div>
+        <h4>Autonomous Response Orchestration (ARO)</h4>
+        <p>Self-directed incident response engine that investigates, contains, and eradicates threats in under 300ms — without human in the loop. First-of-kind SOAR AI architecture.</p>
+      </div>
+      <div class="ip-card">
+        <div class="ip-status">TRADE SECRET</div>
+        <h4>Behavioral Identity Baseline (BIB)</h4>
+        <p>Continuous identity verification using ML-trained behavioral models per user, device, and application — identifies insider threats and account takeovers in real time.</p>
+      </div>
+      <div class="ip-card">
+        <div class="ip-status">PATENT PENDING</div>
+        <h4>Zero-Trust Policy Engine (ZTPE)</h4>
+        <p>Dynamic policy generation and enforcement at the network edge — AI-generated zero-trust rules that adapt in real time to changing threat landscapes without manual configuration.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FINANCIALS -->
+<section class="financials">
+  <div class="section-inner">
+    <div class="section-label">&#9670; Financial Projections</div>
+    <h2 class="section-title">Revenue Model</h2>
+    <div class="fin-grid">
+      <div>
+        <h3 style="font-size:1.1rem;margin-bottom:1.5rem;color:var(--gold)">Unit Economics (Warden Plan)</h3>
+        <table class="fin-table">
+          <tr><td>Monthly Recurring Revenue (per customer)</td><td>$899 CAD</td></tr>
+          <tr><td>Annual contract value</td><td class="gold-val">$10,788 CAD</td></tr>
+          <tr><td>Customer acquisition cost (target)</td><td>$1,200 CAD</td></tr>
+          <tr><td>Payback period</td><td>&lt;45 days</td></tr>
+          <tr><td>Gross margin (SaaS delivery)</td><td class="gold-val">82%</td></tr>
+          <tr><td>Average customer lifetime (projected)</td><td>4.2 years</td></tr>
+          <tr><td>LTV:CAC ratio (target)</td><td class="gold-val">38:1</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3 style="font-size:1.1rem;margin-bottom:1.5rem;color:var(--gold)">Revenue Projections</h3>
+        <div class="revenue-bars">
+          <div class="rev-bar">
+            <div class="rev-label"><span>Year 1 — Sentinel + Warden early adopters</span><span>$180K ARR</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:12%"></div></div>
+          </div>
+          <div class="rev-bar">
+            <div class="rev-label"><span>Year 2 — Enterprise expansion + Archon launch</span><span>$780K ARR</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:35%"></div></div>
+          </div>
+          <div class="rev-bar">
+            <div class="rev-label"><span>Year 3 — Sovereign licensing + white-label</span><span>$2.4M ARR</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
+          </div>
+          <div class="rev-bar">
+            <div class="rev-label"><span>Year 5 — Full enterprise + MSSP channels</span><span>$12M ARR</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+          </div>
+        </div>
+        <p style="font-size:0.75rem;color:var(--dim);margin-top:1.2rem">Projections based on comparable SaaS cybersecurity growth curves. Not a guarantee.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEAM -->
+<section>
+  <div class="section-inner">
+    <div class="section-label">&#9670; Leadership</div>
+    <h2 class="section-title">Built by Operators</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">DF</div>
+        <div class="team-name">Derek Francisco</div>
+        <div class="team-role">Founder & Chief Architect</div>
+        <p class="team-bio">Founder of Francisco Holdings Inc., a 45+ company empire. Builder of OmniaGuard, VIGILAX, and the AI-first security stack. 15+ years building enterprise systems from the ground up.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">AI</div>
+        <div class="team-name">AI Research Division</div>
+        <div class="team-role">Threat Intelligence Engine</div>
+        <p class="team-bio">Proprietary AI research team developing VIGILAX's patent-pending threat prediction and autonomous response architecture. Focused on novel ML approaches to cybersecurity automation.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">EC</div>
+        <div class="team-name">Enterprise Advisors</div>
+        <div class="team-role">Strategic Counsel</div>
+        <p class="team-bio">Network of enterprise CISO advisors, legal technology specialists, and B2B SaaS growth operators supporting VIGILAX's go-to-market strategy. [Expanding — contact for current roster]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INVESTOR CTA -->
+<section>
+  <div class="section-inner">
+    <div class="investor-cta">
+      <h2>Invest in the Future of Cybersecurity</h2>
+      <p>VIGILAX is seeking strategic investors for its Series A — enterprise sales expansion, patent filing, and white-label channel development. This is a proprietary AI engine in a $300B+ market with no dominant AI-native player.</p>
+      <div class="cta-btns">
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Series%20A%20Investor%20Inquiry" class="btn btn-gold">Schedule Investor Demo</a>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Investor%20Package%20Request" class="btn btn-outline">Request Full Investor Package</a>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20NDA%20Request" class="btn btn-green">Sign NDA First</a>
+      </div>
+      <p style="font-size:0.75rem;color:var(--dim);margin-top:2rem">This page is for accredited investors only. All financial projections are forward-looking statements. Past performance does not guarantee future results.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER STRIP -->
+<div class="partner-strip">
+  <p>Partner with VIGILAX — MSSPs, resellers, and technology integrators. <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Partnership%20Inquiry">Partnership Inquiry →</a></p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">VIGILAX</div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="deploy.html">Deploy</a></li>
+      <li><a href="mailto:franciscoderek7@gmail.com">Contact</a></li>
+    </ul>
+    <div class="footer-copy">&copy; 2026 Francisco Holdings Inc. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// Animate bar fills on scroll
+const bars = document.querySelectorAll('.bar-fill');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.width = entry.target.dataset.width || entry.target.style.width;
+    }
+  });
+}, { threshold: 0.3 });
+bars.forEach(bar => observer.observe(bar));
+</script>
+</body>
+</html>

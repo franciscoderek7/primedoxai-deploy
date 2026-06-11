@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechPackCage.com — Complete WooCommerce Launch Guide</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:      #1B4D1B;
+    --green-dark: #0A1A0F;
+    --green-mid:  #2E6B2E;
+    --gold:       #D4AF37;
+    --gold-light: #f0d97a;
+    --text:       #1a1a1a;
+    --text-muted: #555;
+    --border:     #d0d0c0;
+    --bg-light:   #f8f8f0;
+    --bg-white:   #ffffff;
+    --code-bg:    #1e1e2e;
+    --code-text:  #cdd6f4;
+  }
+
+  html { font-size: 15px; }
+
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    background: var(--bg-light);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ===== LAYOUT ===== */
+  .page-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+
+  /* ===== PRINT BUTTON ===== */
+  .print-btn {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    background: var(--gold);
+    color: var(--green-dark);
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 999;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--gold-light); }
+
+  /* ===== MASTHEAD ===== */
+  .masthead {
+    background: var(--green-dark);
+    color: #fff;
+    padding: 40px 36px 32px;
+    margin: 0 -24px 40px;
+    border-bottom: 4px solid var(--gold);
+  }
+  .masthead .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .masthead h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .masthead .subtitle {
+    font-size: 1rem;
+    color: #b0c8b0;
+    font-weight: 400;
+  }
+  .masthead .meta {
+    margin-top: 16px;
+    font-size: 0.82rem;
+    color: #778a77;
+  }
+
+  /* ===== TABLE OF CONTENTS ===== */
+  .toc {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+  }
+  .toc h3 {
+    color: var(--green);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .toc ol {
+    padding-left: 20px;
+    columns: 2;
+    column-gap: 32px;
+  }
+  .toc ol li { margin-bottom: 6px; break-inside: avoid; }
+  .toc a { color: var(--green); text-decoration: none; font-size: 0.9rem; }
+  .toc a:hover { color: var(--gold); text-decoration: underline; }
+
+  /* ===== SECTION BLOCKS ===== */
+  .section {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--green);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-number {
+    background: var(--gold);
+    color: var(--green-dark);
+    font-size: 1rem;
+    font-weight: 800;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .section-body { padding: 28px; }
+
+  /* ===== CALLOUT / NOTE BOX ===== */
+  .callout {
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.92rem;
+  }
+  .callout-gold {
+    background: #fdf8e1;
+    border: 1px solid var(--gold);
+    border-left: 4px solid var(--gold);
+    color: #5a4800;
+  }
+  .callout-green {
+    background: #edf7ed;
+    border: 1px solid var(--green);
+    border-left: 4px solid var(--green);
+    color: var(--green-dark);
+  }
+
+  /* ===== TABLES ===== */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  table thead th {
+    background: var(--green);
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  table tbody tr:nth-child(even) { background: #f5f5ec; }
+  table tbody tr:nth-child(odd)  { background: #fff; }
+  table tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table tfoot td {
+    background: var(--green-dark);
+    color: var(--gold);
+    font-weight: 700;
+    padding: 10px 14px;
+    border: none;
+  }
+  .cost-cell { font-weight: 700; color: var(--green); white-space: nowrap; }
+  .free-tag {
+    display: inline-block;
+    background: #2ecc71;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== WEEK ROADMAP ===== */
+  .week-block { margin-bottom: 32px; }
+  .week-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .week-badge {
+    background: var(--gold);
+    color: var(--green-dark);
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 5px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .week-title { font-size: 1.05rem; font-weight: 700; color: var(--green); }
+  .week-sub { font-size: 0.82rem; color: var(--text-muted); }
+
+  .step-list { list-style: none; padding: 0; }
+  .step-list > li {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid #eeeed8;
+  }
+  .step-list > li:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    background: var(--green);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-title {
+    font-weight: 700;
+    color: var(--green-dark);
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+  .step-title .cost-pill {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .step-content ul { padding-left: 18px; margin-top: 4px; font-size: 0.88rem; }
+  .step-content ul li { margin-bottom: 4px; }
+  .step-content p { font-size: 0.88rem; margin-bottom: 4px; }
+
+  kbd {
+    display: inline-block;
+    background: var(--green-dark);
+    color: var(--gold);
+    font-size: 0.78rem;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 3px;
+    border: 1px solid #3a5a3a;
+    white-space: nowrap;
+  }
+
+  .path {
+    font-family: 'Courier New', monospace;
+    font-size: 0.83rem;
+    background: #f0f0e8;
+    color: var(--green-dark);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid #d4d4b8;
+    white-space: nowrap;
+  }
+
+  .ns-block {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    padding: 12px 16px;
+    border-radius: 5px;
+    margin: 8px 0;
+    display: inline-block;
+    line-height: 1.8;
+  }
+
+  /* ===== CODE BLOCKS ===== */
+  .code-wrap {
+    background: var(--code-bg);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .code-label {
+    background: #2a2a3e;
+    color: #7a8ec0;
+    font-size: 0.72rem;
+    font-family: 'Courier New', monospace;
+    padding: 6px 14px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #3a3a52;
+  }
+  pre {
+    margin: 0;
+    overflow-x: auto;
+    padding: 20px;
+  }
+  pre code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.83rem;
+    color: var(--code-text);
+    line-height: 1.65;
+    white-space: pre;
+  }
+  .inline-code {
+    background: #f0f0e8;
+    color: #2a2a1a;
+    font-family: 'Courier New', monospace;
+    font-size: 0.82rem;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #d4d4b8;
+  }
+
+  /* ===== CALCULATOR ===== */
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 560px) { .calc-grid { grid-template-columns: 1fr; } }
+  .calc-field label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .calc-field input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--text);
+    background: #fff;
+    transition: border-color 0.2s;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+  }
+  .calc-field input:focus {
+    border-color: var(--gold);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+  }
+
+  .calc-results {
+    background: var(--green-dark);
+    color: #fff;
+    border-radius: 8px;
+    padding: 22px 24px;
+    margin-top: 4px;
+  }
+  .calc-results h4 {
+    color: var(--gold);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #2e4a2e;
+    padding-bottom: 8px;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+  }
+  @media (max-width: 560px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-row { display: flex; flex-direction: column; }
+  .result-label {
+    font-size: 0.75rem;
+    color: #8aaa8a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .result-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--gold);
+    font-family: 'Courier New', monospace;
+  }
+  .result-value.highlight { color: #5dde85; font-size: 1.3rem; }
+  .calc-note {
+    margin-top: 14px;
+    font-size: 0.78rem;
+    color: #7a9a7a;
+    border-top: 1px solid #2e4a2e;
+    padding-top: 10px;
+  }
+
+  /* ===== CHECKLIST ===== */
+  .checklist-group { margin-bottom: 24px; }
+  .checklist-group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+  }
+  .check-list { list-style: none; padding: 0; }
+  .check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .check-list li:hover { background: #f0f0e0; }
+  .check-list li input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: var(--green);
+    cursor: pointer;
+  }
+  .check-list li label {
+    font-size: 0.88rem;
+    color: var(--text);
+    cursor: pointer;
+    line-height: 1.5;
+  }
+  .check-list li.checked label {
+    text-decoration: line-through;
+    color: #999;
+  }
+
+  /* ===== INSTR PARA ===== */
+  .instr-para {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  /* ===== ACTIVATION STEPS ===== */
+  .activation-steps {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0;
+    counter-reset: act;
+  }
+  .activation-steps li {
+    counter-increment: act;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid #eeeed8;
+    font-size: 0.88rem;
+  }
+  .activation-steps li:last-child { border-bottom: none; }
+  .activation-steps li::before {
+    content: counter(act);
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--gold);
+    color: var(--green-dark);
+    font-weight: 800;
+    font-size: 0.78rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* ===== FOOTER ===== */
+  .site-footer {
+    background: var(--green-dark);
+    color: #8a9a8a;
+    text-align: center;
+    padding: 22px 24px;
+    margin: 0 -24px;
+    border-top: 3px solid var(--gold);
+    font-size: 0.82rem;
+  }
+  .site-footer strong { color: var(--gold); }
+
+  /* ===== PRINT STYLES ===== */
+  @media print {
+    .print-btn { display: none !important; }
+    body { background: #fff !important; font-size: 11pt; }
+    .masthead {
+      background: #fff !important;
+      border: 2px solid #000;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .masthead h1 { color: #1B4D1B !important; }
+    .masthead .subtitle, .masthead .meta, .masthead .badge { color: #333 !important; }
+    .section { border: 1px solid #ccc; page-break-inside: avoid; margin-bottom: 20px; }
+    .section-header {
+      background: #1B4D1B !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .section-number {
+      background: #D4AF37 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .toc { border: 1px solid #ccc; }
+    table thead th {
+      background: #1B4D1B !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    table tfoot td {
+      background: #0A1A0F !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .week-badge {
+      background: #D4AF37 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .step-num {
+      background: #1B4D1B !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .code-wrap { border: 1px solid #ccc; page-break-inside: avoid; }
+    .code-wrap pre { background: #f5f5f5 !important; }
+    .code-wrap pre code { color: #000 !important; }
+    .code-label { background: #e0e0e0 !important; color: #333 !important; }
+    .calc-results {
+      background: #f5f5f5 !important;
+      color: #000 !important;
+      border: 1px solid #ccc;
+    }
+    .result-value { color: #1B4D1B !important; }
+    .checklist-group-title {
+      background: #1B4D1B !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .callout-gold { background: #fffdf0 !important; }
+    .site-footer {
+      background: #f5f5f5 !important;
+      color: #333 !important;
+    }
+    a { color: inherit !important; text-decoration: none !important; }
+    .toc { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Print Guide</button>
+
+<div class="page-wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <div class="masthead">
+    <div class="badge">Francisco Holdings Inc.</div>
+    <h1>TechPackCage.com &mdash; Complete WooCommerce Launch Guide</h1>
+    <div class="subtitle">Cheapest Path to Revenue &mdash; Francisco Holdings Inc.</div>
+    <div class="meta">Pet Tech Dropshipping &nbsp;|&nbsp; WooCommerce + AliDropship &nbsp;|&nbsp; v1.0 &nbsp;|&nbsp; 2026</div>
+  </div>
+
+  <!-- ===== TABLE OF CONTENTS ===== -->
+  <div class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#s1">Total Launch Cost Breakdown</a></li>
+      <li><a href="#s2">4-Week Launch Roadmap</a></li>
+      <li><a href="#s3">Essential Plugin Stack</a></li>
+      <li><a href="#s4">TechPackCage Brand CSS</a></li>
+      <li><a href="#s5">Real-Time Profit Calculator</a></li>
+      <li><a href="#s6">Custom Shipping PHP Integration</a></li>
+      <li><a href="#s7">Pre-Launch Checklist</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== SECTION 1: COST BREAKDOWN ===== -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2>Total Launch Cost Breakdown</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Provider</th>
+              <th>Cost</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Domain (TechPackCage.com)</td>
+              <td>Namecheap</td>
+              <td class="cost-cell">$10.98/year</td>
+              <td>.com standard rate</td>
+            </tr>
+            <tr>
+              <td>Web Hosting</td>
+              <td>Hostinger Business Shared</td>
+              <td class="cost-cell">$3.99/month<br><small style="font-weight:400;color:#777">($47.88/yr)</small></td>
+              <td>Includes 1-click WordPress install</td>
+            </tr>
+            <tr>
+              <td>WooCommerce Plugin</td>
+              <td>WordPress.org</td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Core ecommerce functionality</td>
+            </tr>
+            <tr>
+              <td>Astra Theme (free tier)</td>
+              <td>WordPress.org</td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Fastest free WooCommerce theme</td>
+            </tr>
+            <tr>
+              <td>AliDropship Plugin</td>
+              <td>AliDropship.com</td>
+              <td class="cost-cell">$89.00 one-time</td>
+              <td>Imports products from AliExpress automatically</td>
+            </tr>
+            <tr>
+              <td>SSL Certificate</td>
+              <td>Let's Encrypt via Hostinger</td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Auto-renews, included in all Hostinger plans</td>
+            </tr>
+            <tr>
+              <td>CDN &amp; DDoS Protection</td>
+              <td>Cloudflare (free tier)</td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Dramatically speeds up site globally</td>
+            </tr>
+            <tr>
+              <td>Payment Processing</td>
+              <td>Stripe</td>
+              <td class="cost-cell">2.9% + $0.30/txn</td>
+              <td>No monthly fee; only pay when you sell</td>
+            </tr>
+            <tr>
+              <td>Email Marketing</td>
+              <td>Mailchimp (free tier)</td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Up to 500 contacts free</td>
+            </tr>
+            <tr>
+              <td>SEO Plugin</td>
+              <td>Yoast SEO (free)</td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Core SEO optimization</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"><strong>TOTAL FIRST YEAR</strong></td>
+              <td><strong>~$148 + txn fees</strong></td>
+              <td>Excludes ad spend</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="callout callout-gold">
+        <strong>Francisco Holdings cost optimization:</strong> Total first-year investment under $150 before ad spend. Break-even at approximately 6&ndash;8 sales depending on average order value.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: LAUNCH ROADMAP ===== -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <h2>4-Week Launch Roadmap</h2>
+    </div>
+    <div class="section-body">
+
+      <!-- WEEK 1 -->
+      <div class="week-block">
+        <div class="week-label">
+          <span class="week-badge">Week 1</span>
+          <div>
+            <div class="week-title">Foundation</div>
+            <div class="week-sub">Days 1&ndash;7</div>
+          </div>
+        </div>
+        <ul class="step-list">
+          <li>
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Register Domain <span class="cost-pill">$10.98</span></div>
+              <ul>
+                <li>Go to <span class="inline-code">namecheap.com</span> &rarr; click <kbd>Domain Search</kbd> &rarr; type <span class="inline-code">TechPackCage.com</span> &rarr; <kbd>Add to Cart</kbd> &rarr; <kbd>Checkout</kbd></li>
+                <li>Enable <strong>WhoisGuard Privacy</strong> (FREE with Namecheap) during checkout</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Sign Up for Hosting <span class="cost-pill">$3.99/mo</span></div>
+              <ul>
+                <li>Go to <span class="inline-code">hostinger.com</span> &rarr; click <kbd>Hosting</kbd> &rarr; select <strong>Business Shared Hosting</strong></li>
+                <li>During signup, choose <strong>"I already have a domain"</strong> &rarr; enter <span class="inline-code">TechPackCage.com</span></li>
+                <li>Complete payment &rarr; access hPanel dashboard</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Point Domain to Hostinger</div>
+              <ul>
+                <li>In Namecheap Dashboard &rarr; <kbd>Domain List</kbd> &rarr; TechPackCage.com &rarr; <kbd>Manage</kbd> &rarr; <kbd>Nameservers</kbd> &rarr; <strong>Custom DNS</strong></li>
+                <li>Enter Hostinger nameservers:</li>
+              </ul>
+              <div class="ns-block">ns1.hostinger.com<br>ns2.hostinger.com</div>
+              <ul>
+                <li>Wait 24&ndash;48 hours for DNS propagation. Verify at: <span class="inline-code">whatsmydns.net</span></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Install WordPress</div>
+              <ul>
+                <li>Login to Hostinger hPanel &rarr; <kbd>Website</kbd> &rarr; <kbd>Auto Installer</kbd> &rarr; <strong>WordPress</strong></li>
+                <li>Fill in: Site Name <span class="inline-code">TechPackCage</span>, Admin Username, Strong Password, Email</li>
+                <li>Click <kbd>Install</kbd> &rarr; wait 2&ndash;3 minutes</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Install WooCommerce</div>
+              <ul>
+                <li>Login to WordPress Admin at <span class="inline-code">yourdomain.com/wp-admin</span></li>
+                <li>Go to: <kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">WooCommerce</span> &rarr; <kbd>Install Now</kbd> &rarr; <kbd>Activate</kbd></li>
+                <li>Complete WooCommerce Setup Wizard: store location, currency (CAD or USD), payment methods</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">Install Astra Theme</div>
+              <ul>
+                <li>Go to: <kbd>Appearance</kbd> &rarr; <kbd>Themes</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">Astra</span> &rarr; <kbd>Install</kbd> &rarr; <kbd>Activate</kbd></li>
+                <li>Go to: <kbd>Appearance</kbd> &rarr; <kbd>Astra Options</kbd> &rarr; import <strong>"Shop"</strong> starter template</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">Set Up Cloudflare CDN</div>
+              <ul>
+                <li>Go to <span class="inline-code">cloudflare.com</span> &rarr; Create account &rarr; <kbd>Add Site</kbd> &rarr; enter <span class="inline-code">TechPackCage.com</span></li>
+                <li>Cloudflare scans DNS &rarr; click <kbd>Continue</kbd> &rarr; select <strong>Free plan</strong></li>
+                <li>Replace Namecheap nameservers with Cloudflare nameservers (format: <span class="inline-code">arlo.ns.cloudflare.com</span>)</li>
+                <li>In Cloudflare: <kbd>SSL/TLS</kbd> &rarr; set to <strong>"Full (Strict)"</strong></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">8</div>
+            <div class="step-content">
+              <div class="step-title">Enable SSL</div>
+              <ul>
+                <li>In Hostinger hPanel &rarr; <kbd>SSL</kbd> &rarr; <kbd>Let's Encrypt</kbd> &rarr; click <kbd>Enable</kbd> next to TechPackCage.com</li>
+                <li>Wait 10 minutes &rarr; verify <span class="inline-code">https://</span> works in browser</li>
+                <li>In WordPress: <kbd>Settings</kbd> &rarr; <kbd>General</kbd> &rarr; change both URLs to <span class="inline-code">https://</span></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- WEEK 2 -->
+      <div class="week-block">
+        <div class="week-label">
+          <span class="week-badge">Week 2</span>
+          <div>
+            <div class="week-title">Products</div>
+            <div class="week-sub">Days 8&ndash;14</div>
+          </div>
+        </div>
+        <ul class="step-list">
+          <li>
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Purchase AliDropship Plugin <span class="cost-pill">$89 one-time</span></div>
+              <ul>
+                <li>Go to <span class="inline-code">alidropship.com</span> &rarr; click <kbd>Get AliDropship</kbd> &rarr; $89 one-time (lifetime license)</li>
+                <li>Download the plugin <span class="inline-code">.zip</span> file from your account dashboard</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Install AliDropship</div>
+              <ul>
+                <li>WordPress Admin &rarr; <kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; <kbd>Upload Plugin</kbd> &rarr; choose <span class="inline-code">.zip</span> &rarr; <kbd>Install Now</kbd> &rarr; <kbd>Activate</kbd></li>
+                <li>AliDropship dashboard will appear in the left sidebar</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Import First Products</div>
+              <ul>
+                <li><kbd>AliDropship</kbd> &rarr; <kbd>Products</kbd> &rarr; <kbd>Search Products</kbd> &rarr; type <span class="inline-code">GPS dog tracker</span></li>
+                <li>Browse results &rarr; click <kbd>Import</kbd> on desired products</li>
+                <li>Set title, description, images before importing</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Configure Pricing Rules</div>
+              <ul>
+                <li><kbd>AliDropship</kbd> &rarr; <kbd>Settings</kbd> &rarr; <kbd>Pricing Rules</kbd></li>
+                <li>Set <strong>Multiplier:</strong> <span class="inline-code">2.5</span> (sells at 2.5&times; supplier cost)</li>
+                <li>Set <strong>Minimum Profit:</strong> <span class="inline-code">$8.00</span></li>
+                <li>Set <strong>Cents:</strong> <span class="inline-code">.99</span> (makes prices end in .99)</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Create Product Categories</div>
+              <ul>
+                <li><kbd>WooCommerce</kbd> &rarr; <kbd>Products</kbd> &rarr; <kbd>Categories</kbd></li>
+                <li>Create these 15 categories: GPS Trackers, Smart Feeders, Pet Cameras, Smart Collars, Health Monitors, Pet Toys, Water Fountains, Training Devices, Grooming Tech, Pet Carriers, Safety Gear, Sleep Tech, Travel Accessories, Smart Doors, Bark Control</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">Configure Shipping Zones</div>
+              <ul>
+                <li><kbd>WooCommerce</kbd> &rarr; <kbd>Settings</kbd> &rarr; <kbd>Shipping</kbd> &rarr; <kbd>Shipping Zones</kbd> &rarr; <kbd>Add Zone</kbd></li>
+                <li>Zone: <strong>"Canada"</strong> &rarr; Regions: Canada &rarr; add Flat Rate ($5.99) and Free Shipping ($50+ threshold)</li>
+                <li>Zone: <strong>"United States"</strong> &rarr; Regions: United States &rarr; add Flat Rate ($7.99) and Free Shipping ($75+)</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">Set Minimum for Free Shipping</div>
+              <ul>
+                <li><kbd>WooCommerce</kbd> &rarr; <kbd>Settings</kbd> &rarr; <kbd>Shipping</kbd> &rarr; Canada &rarr; <kbd>Free Shipping</kbd> &rarr; edit</li>
+                <li>Minimum order amount: <span class="inline-code">50.00</span></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- WEEK 3 -->
+      <div class="week-block">
+        <div class="week-label">
+          <span class="week-badge">Week 3</span>
+          <div>
+            <div class="week-title">Payments &amp; Marketing</div>
+            <div class="week-sub">Days 15&ndash;21</div>
+          </div>
+        </div>
+        <ul class="step-list">
+          <li>
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Connect Stripe</div>
+              <ul>
+                <li><kbd>WooCommerce</kbd> &rarr; <kbd>Settings</kbd> &rarr; <kbd>Payments</kbd> &rarr; <kbd>Stripe</kbd> &rarr; <kbd>Enable</kbd> &rarr; <kbd>Set Up</kbd></li>
+                <li>Go to <span class="inline-code">dashboard.stripe.com</span> &rarr; <kbd>Developers</kbd> &rarr; <kbd>API Keys</kbd> &rarr; copy Publishable key and Secret key</li>
+                <li>Paste keys into WooCommerce Stripe settings &rarr; <kbd>Save</kbd></li>
+                <li>Enable <strong>"Test Mode"</strong> first &rarr; run a test order &rarr; then disable test mode</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Enable PayPal</div>
+              <ul>
+                <li><kbd>WooCommerce</kbd> &rarr; <kbd>Settings</kbd> &rarr; <kbd>Payments</kbd> &rarr; <kbd>PayPal Standard</kbd> &rarr; <kbd>Enable</kbd> &rarr; <kbd>Set Up</kbd></li>
+                <li>Enter PayPal email address &rarr; <kbd>Save</kbd></li>
+                <li>Recommended: Upgrade to <strong>PayPal Commerce Platform</strong> for better checkout</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Install Yoast SEO</div>
+              <ul>
+                <li><kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">Yoast SEO</span> &rarr; <kbd>Install</kbd> &rarr; <kbd>Activate</kbd></li>
+                <li><kbd>SEO</kbd> &rarr; <kbd>General</kbd> &rarr; run Configuration Wizard</li>
+                <li>Set site type: <strong>Online Store</strong>, enable breadcrumbs</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Install Mailchimp</div>
+              <ul>
+                <li><kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">Mailchimp for WooCommerce</span> &rarr; <kbd>Install</kbd> &rarr; <kbd>Activate</kbd></li>
+                <li>Connect to Mailchimp account at <span class="inline-code">mailchimp.com</span></li>
+                <li>Enable: sync customers, enable abandoned cart emails</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Install Abandoned Cart Plugin</div>
+              <ul>
+                <li><kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">WooCommerce Abandoned Cart Lite</span> &rarr; <kbd>Install</kbd> &rarr; <kbd>Activate</kbd></li>
+                <li>Settings: send reminder after 1 hour, 24 hours, 72 hours</li>
+                <li>Include 10% discount coupon in 72-hour email</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <div class="step-title">Install Social Proof Plugin</div>
+              <ul>
+                <li><kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">Sales Pop by Beeketing</span> &rarr; <kbd>Install</kbd> &rarr; <kbd>Activate</kbd></li>
+                <li>Shows popup notifications of recent purchases to build trust</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <div class="step-title">Set Up Facebook Pixel</div>
+              <ul>
+                <li>Go to <span class="inline-code">business.facebook.com</span> &rarr; <kbd>Events Manager</kbd> &rarr; <kbd>Connect Data Sources</kbd> &rarr; <kbd>Web</kbd></li>
+                <li>Choose <strong>"Facebook Pixel"</strong> &rarr; <kbd>Create Pixel</kbd> &rarr; name <span class="inline-code">TechPackCage</span></li>
+                <li>Install: <kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">PixelYourSite</span> &rarr; <kbd>Install</kbd> &rarr; enter Pixel ID</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- WEEK 4 -->
+      <div class="week-block">
+        <div class="week-label">
+          <span class="week-badge">Week 4</span>
+          <div>
+            <div class="week-title">Launch</div>
+            <div class="week-sub">Days 22&ndash;28</div>
+          </div>
+        </div>
+        <ul class="step-list">
+          <li>
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Full Checkout Test</div>
+              <ul>
+                <li><kbd>WooCommerce</kbd> &rarr; <kbd>Settings</kbd> &rarr; <kbd>Payments</kbd> &rarr; <kbd>Stripe</kbd> &rarr; enable <strong>Test Mode</strong></li>
+                <li>Add product to cart &rarr; checkout &rarr; use test card:</li>
+              </ul>
+              <div class="ns-block">Card: 4242 4242 4242 4242&nbsp;&nbsp;|&nbsp;&nbsp;Exp: any future date&nbsp;&nbsp;|&nbsp;&nbsp;CVV: 123</div>
+              <ul>
+                <li>Verify order appears in <kbd>WooCommerce</kbd> &rarr; <kbd>Orders</kbd></li>
+                <li><strong>Disable test mode</strong> before going live</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Test Order Routing</div>
+              <ul>
+                <li>Place live test order (refund immediately after)</li>
+                <li>Verify AliDropship sends order to supplier</li>
+                <li>Check: <kbd>AliDropship</kbd> &rarr; <kbd>Orders</kbd> &rarr; confirm status updates</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Google Analytics 4</div>
+              <ul>
+                <li>Go to <span class="inline-code">analytics.google.com</span> &rarr; <kbd>Create Account</kbd> &rarr; Property: <span class="inline-code">TechPackCage.com</span></li>
+                <li>Set up Data Stream &rarr; <kbd>Web</kbd> &rarr; enter TechPackCage.com URL</li>
+                <li>Copy Measurement ID (format: <span class="inline-code">G-XXXXXXXX</span>)</li>
+                <li><kbd>Plugins</kbd> &rarr; <kbd>Add New</kbd> &rarr; search <span class="inline-code">MonsterInsights</span> &rarr; <kbd>Install</kbd> &rarr; connect to GA4</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Launch Facebook Ads</div>
+              <ul>
+                <li>Go to <span class="inline-code">business.facebook.com</span> &rarr; <kbd>Ads Manager</kbd> &rarr; <kbd>Create Campaign</kbd></li>
+                <li>Objective: <strong>Conversions &rarr; Purchase</strong></li>
+                <li>Audience: pet owners, age 25&ndash;55, interests: dogs, cats, pets, pet accessories</li>
+                <li>Budget: <strong>$5/day</strong> to start &rarr; scale winners to <strong>$20/day</strong></li>
+                <li>Ad format: Single image or carousel of top 3 products</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Announce &amp; Go Live</div>
+              <ul>
+                <li>Remove any "Coming Soon" or maintenance mode pages</li>
+                <li>Post announcement to all Francisco Holdings social channels</li>
+                <li>Send launch email to existing list with <strong>15% launch discount code</strong></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: PLUGIN STACK ===== -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <h2>Essential Plugin Stack</h2>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Plugin Name</th>
+              <th>Cost</th>
+              <th>Purpose</th>
+              <th>Where to Get</th>
+              <th>Key Setting</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>WooCommerce</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Core ecommerce engine</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Enable guest checkout</td>
+            </tr>
+            <tr>
+              <td><strong>AliDropship</strong></td>
+              <td class="cost-cell">$89 one-time</td>
+              <td>Product import &amp; order automation</td>
+              <td><span class="path">alidropship.com</span></td>
+              <td>Pricing multiplier: 2.5x</td>
+            </tr>
+            <tr>
+              <td><strong>Astra Pro</strong> (optional)</td>
+              <td class="cost-cell">$59/yr</td>
+              <td>Premium theme features</td>
+              <td><span class="path">wpastra.com</span></td>
+              <td>Import Shop template</td>
+            </tr>
+            <tr>
+              <td><strong>Yoast SEO</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Search engine optimization</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Enable breadcrumbs</td>
+            </tr>
+            <tr>
+              <td><strong>Mailchimp for WooCommerce</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Email marketing sync</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Enable abandoned cart</td>
+            </tr>
+            <tr>
+              <td><strong>WooCommerce Abandoned Cart Lite</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Recover lost sales</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>3 email sequence</td>
+            </tr>
+            <tr>
+              <td><strong>PixelYourSite</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Facebook/Google pixel</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Enable WooCommerce events</td>
+            </tr>
+            <tr>
+              <td><strong>MonsterInsights</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Google Analytics 4</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Enhanced ecommerce tracking</td>
+            </tr>
+            <tr>
+              <td><strong>WooCommerce Stripe Gateway</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Stripe payments</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Enable Apple/Google Pay</td>
+            </tr>
+            <tr>
+              <td><strong>Smush Image Compression</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Speed optimization</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Auto-compress on upload</td>
+            </tr>
+            <tr>
+              <td><strong>WP Rocket</strong> (optional)</td>
+              <td class="cost-cell">$59/yr</td>
+              <td>Page caching &amp; speed</td>
+              <td><span class="path">wp-rocket.me</span></td>
+              <td>Enable lazy loading</td>
+            </tr>
+            <tr>
+              <td><strong>WPForms Lite</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Contact forms</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Create support form</td>
+            </tr>
+            <tr>
+              <td><strong>GDPR Cookie Consent</strong></td>
+              <td class="cost-cell"><span class="free-tag">FREE</span></td>
+              <td>Legal compliance</td>
+              <td><span class="path">wordpress.org/plugins</span></td>
+              <td>Block until accepted</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: BRAND CSS ===== -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <h2>TechPackCage Brand CSS &mdash; WooCommerce Customization</h2>
+    </div>
+    <div class="section-body">
+      <p class="instr-para">Add this CSS to: <kbd>WordPress Admin</kbd> &rarr; <kbd>Appearance</kbd> &rarr; <kbd>Customize</kbd> &rarr; <kbd>Additional CSS</kbd> &rarr; paste entire block &rarr; <kbd>Publish</kbd></p>
+
+      <div class="code-wrap">
+        <div class="code-label">CSS &mdash; Appearance / Customize / Additional CSS</div>
+        <pre><code>:root {
+  --forest: #0A1A0F;
+  --gold: #D4AF37;
+  --green: #1B4D1B;
+  --bright: #4CAF50;
+  --text-light: #F5F5DC;
+  --bg-dark: #0D1B0F;
+}
+
+/* === GLOBAL BODY &amp; LINKS === */
+body.woocommerce, body.woocommerce-page {
+  background-color: #f8f8f0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+a { color: var(--green); }
+a:hover { color: var(--gold); }
+
+/* === HEADER === */
+.site-header, header.site-header {
+  background-color: var(--forest) !important;
+  border-bottom: 3px solid var(--gold);
+}
+.site-header .site-title a,
+.site-header .site-title a:hover {
+  color: var(--gold) !important;
+  text-decoration: none;
+}
+
+/* === PRIMARY NAVIGATION === */
+.main-navigation,
+.ast-main-header-bar-wrap {
+  background-color: var(--green) !important;
+}
+.main-navigation ul li a,
+.ast-primary-menu > li > a {
+  color: var(--text-light) !important;
+  font-weight: 500;
+}
+.main-navigation ul li a:hover,
+.ast-primary-menu > li > a:hover {
+  color: var(--gold) !important;
+}
+
+/* === WOOCOMMERCE BUTTONS === */
+.woocommerce a.button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit,
+.woocommerce .button,
+.wc-block-components-button {
+  background-color: var(--gold) !important;
+  color: var(--forest) !important;
+  font-weight: 700 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease;
+}
+.woocommerce a.button:hover,
+.woocommerce button.button:hover,
+.woocommerce input.button:hover,
+.woocommerce #respond input#submit:hover,
+.woocommerce .button:hover,
+.wc-block-components-button:hover {
+  background-color: var(--bright) !important;
+  color: #fff !important;
+}
+
+/* ADD TO CART */
+.woocommerce .add_to_cart_button,
+.woocommerce .single_add_to_cart_button,
+button.add_to_cart_button {
+  background-color: var(--gold) !important;
+  color: var(--forest) !important;
+  font-weight: 700 !important;
+  padding: 12px 24px !important;
+}
+
+/* CHECKOUT BUTTON */
+.woocommerce .checkout-button,
+.woocommerce a.checkout-button {
+  background-color: var(--green) !important;
+  color: #fff !important;
+  font-size: 1.1em !important;
+  padding: 14px 28px !important;
+}
+.woocommerce .checkout-button:hover {
+  background-color: var(--bright) !important;
+}
+
+/* === PRODUCT CARDS === */
+.woocommerce ul.products li.product {
+  border: 1px solid #e0e0c8;
+  border-radius: 8px;
+  padding: 16px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  background: #fff;
+}
+.woocommerce ul.products li.product:hover {
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+.woocommerce ul.products li.product .woocommerce-loop-product__title {
+  color: var(--forest);
+  font-weight: 600;
+}
+.woocommerce ul.products li.product .price {
+  color: var(--green) !important;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+/* === PRODUCT PAGE === */
+.woocommerce div.product .product_title {
+  color: var(--forest);
+  font-weight: 700;
+}
+.woocommerce div.product p.price,
+.woocommerce div.product span.price {
+  color: var(--green) !important;
+  font-size: 1.5em !important;
+  font-weight: 700;
+}
+
+/* === CART &amp; CHECKOUT === */
+.woocommerce-cart table.cart,
+.woocommerce-checkout #order_review {
+  border: 1px solid #d4d4c0;
+  border-radius: 8px;
+}
+.woocommerce table.shop_table thead {
+  background-color: var(--green);
+  color: #fff;
+}
+.woocommerce table.shop_table thead th {
+  color: #fff !important;
+  font-weight: 600;
+}
+
+/* === SALE BADGES === */
+.woocommerce span.onsale {
+  background-color: var(--gold) !important;
+  color: var(--forest) !important;
+  font-weight: 700;
+}
+
+/* === FORM FIELDS === */
+.woocommerce-input-wrapper input,
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea {
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+.woocommerce form .form-row input.input-text:focus,
+.woocommerce form .form-row textarea:focus {
+  border-color: var(--gold) !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+}
+
+/* === NOTICES === */
+.woocommerce-message {
+  border-top-color: var(--bright) !important;
+}
+.woocommerce-error {
+  border-top-color: #c0392b !important;
+}
+
+/* === FOOTER === */
+.site-footer {
+  background-color: var(--forest) !important;
+  color: #ccc !important;
+  border-top: 3px solid var(--gold);
+}
+.site-footer a { color: var(--gold) !important; }</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: PROFIT CALCULATOR ===== -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <h2>Real-Time Profit Calculator</h2>
+    </div>
+    <div class="section-body">
+      <div class="calc-grid">
+        <div class="calc-field">
+          <label for="supplierCost">Supplier Cost ($)</label>
+          <input type="number" id="supplierCost" value="14.99" min="0" step="0.01">
+        </div>
+        <div class="calc-field">
+          <label for="markup">Markup Multiplier</label>
+          <input type="number" id="markup" value="2.5" min="1" step="0.1">
+        </div>
+        <div class="calc-field">
+          <label for="units">Monthly Units (optional)</label>
+          <input type="number" id="units" value="50" min="0" step="1">
+        </div>
+      </div>
+
+      <div class="calc-results">
+        <h4>Calculated Results</h4>
+        <div class="result-grid">
+          <div class="result-row">
+            <span class="result-label">Sell Price</span>
+            <span class="result-value" id="rSellPrice">&mdash;</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Gross Profit / Sale</span>
+            <span class="result-value" id="rGrossProfit">&mdash;</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Stripe Fee / Sale</span>
+            <span class="result-value" id="rStripeFee">&mdash;</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Net Profit / Sale</span>
+            <span class="result-value highlight" id="rNetProfit">&mdash;</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Net Margin %</span>
+            <span class="result-value" id="rMargin">&mdash;</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Monthly Revenue</span>
+            <span class="result-value" id="rMonthlyRev">&mdash;</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Monthly Net Profit</span>
+            <span class="result-value highlight" id="rMonthlyNet">&mdash;</span>
+          </div>
+        </div>
+        <div class="calc-note">
+          Stripe fee = 2.9% + $0.30 per transaction. CAD/USD depends on store currency setting.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: CUSTOM SHIPPING PHP ===== -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-number">6</div>
+      <h2>Custom Shipping Method &mdash; WooCommerce PHP Integration</h2>
+    </div>
+    <div class="section-body">
+      <p class="instr-para">To add Job Shipping or any custom carrier as a WooCommerce shipping method, create a small custom plugin with a shipping method class. This gives full control over rates, thresholds, and labels without relying on third-party shipping plugins.</p>
+
+      <div class="callout callout-green">
+        <strong>File path:</strong> Create folder <span class="path">/wp-content/plugins/techpackcage-shipping/</span> and place the file below inside it as <span class="path">techpackcage-shipping.php</span>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">PHP &mdash; /wp-content/plugins/techpackcage-shipping/techpackcage-shipping.php</div>
+        <pre><code>&lt;?php
+/**
+ * Plugin Name: TechPackCage Custom Shipping
+ * Description: Adds Job Shipping and custom rates to WooCommerce
+ * Version: 1.0.0
+ * Author: Francisco Holdings Inc.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+function techpackcage_shipping_init() {
+    if ( ! class_exists( 'WC_Shipping_Method' ) ) return;
+
+    class TechPackCage_Shipping_Method extends WC_Shipping_Method {
+
+        public function __construct( $instance_id = 0 ) {
+            $this-&gt;id                 = 'techpackcage_shipping';
+            $this-&gt;instance_id        = absint( $instance_id );
+            $this-&gt;method_title       = __( 'TechPackCage Shipping', 'woocommerce' );
+            $this-&gt;method_description = __( 'Custom Job Shipping rates for TechPackCage.com', 'woocommerce' );
+            $this-&gt;supports           = array( 'shipping-zones', 'instance-settings' );
+            $this-&gt;init();
+        }
+
+        public function init() {
+            $this-&gt;init_form_fields();
+            $this-&gt;init_settings();
+            $this-&gt;title          = $this-&gt;get_option( 'title', 'Standard Shipping' );
+            $this-&gt;base_rate      = (float) $this-&gt;get_option( 'base_rate', 5.99 );
+            $this-&gt;free_threshold = (float) $this-&gt;get_option( 'free_threshold', 50.00 );
+
+            add_action( 'woocommerce_update_options_shipping_' . $this-&gt;id,
+                        array( $this, 'process_admin_options' ) );
+        }
+
+        public function init_form_fields() {
+            $this-&gt;instance_form_fields = array(
+                'title' =&gt; array(
+                    'title'   =&gt; __( 'Method Title' ),
+                    'type'    =&gt; 'text',
+                    'default' =&gt; 'Standard Shipping',
+                ),
+                'base_rate' =&gt; array(
+                    'title'       =&gt; __( 'Base Shipping Rate ($)' ),
+                    'type'        =&gt; 'price',
+                    'default'     =&gt; '5.99',
+                    'description' =&gt; 'Flat rate charged when order is below free shipping threshold',
+                ),
+                'free_threshold' =&gt; array(
+                    'title'       =&gt; __( 'Free Shipping Minimum ($)' ),
+                    'type'        =&gt; 'price',
+                    'default'     =&gt; '50.00',
+                    'description' =&gt; 'Orders at or above this amount get free shipping',
+                ),
+            );
+        }
+
+        public function calculate_shipping( $package = array() ) {
+            $cart_total = WC()-&gt;cart-&gt;get_cart_contents_total();
+
+            if ( $cart_total &gt;= $this-&gt;free_threshold ) {
+                $rate = array(
+                    'id'    =&gt; $this-&gt;get_rate_id(),
+                    'label' =&gt; 'Free Shipping',
+                    'cost'  =&gt; 0,
+                );
+            } else {
+                $rate = array(
+                    'id'    =&gt; $this-&gt;get_rate_id(),
+                    'label' =&gt; $this-&gt;title,
+                    'cost'  =&gt; $this-&gt;base_rate,
+                );
+            }
+
+            $this-&gt;add_rate( $rate );
+        }
+    }
+}
+add_action( 'woocommerce_shipping_init', 'techpackcage_shipping_init' );
+
+function add_techpackcage_shipping_method( $methods ) {
+    $methods['techpackcage_shipping'] = 'TechPackCage_Shipping_Method';
+    return $methods;
+}
+add_filter( 'woocommerce_shipping_methods', 'add_techpackcage_shipping_method' );</code></pre>
+      </div>
+
+      <p class="instr-para" style="margin-top:16px;"><strong>Activation steps:</strong></p>
+      <ol class="activation-steps">
+        <li>Upload folder <span class="path">techpackcage-shipping/</span> to <span class="path">/wp-content/plugins/</span></li>
+        <li><kbd>WP Admin</kbd> &rarr; <kbd>Plugins</kbd> &rarr; <kbd>Activate</kbd> "TechPackCage Custom Shipping"</li>
+        <li><kbd>WooCommerce</kbd> &rarr; <kbd>Settings</kbd> &rarr; <kbd>Shipping</kbd> &rarr; <kbd>Shipping Zones</kbd> &rarr; <kbd>Add Zone</kbd> &rarr; <kbd>Add Shipping Method</kbd> &rarr; select <strong>"TechPackCage Shipping"</strong></li>
+        <li>Configure base rate and free shipping threshold in zone settings</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 7: LAUNCH CHECKLIST ===== -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-number">7</div>
+      <h2>Pre-Launch Checklist</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">Legal</div>
+        <ul class="check-list">
+          <li><input type="checkbox" id="l1"><label for="l1">Business registered (Francisco Holdings Inc.)</label></li>
+          <li><input type="checkbox" id="l2"><label for="l2">Privacy Policy page created (use WP Privacy Policy template)</label></li>
+          <li><input type="checkbox" id="l3"><label for="l3">Terms &amp; Conditions page created</label></li>
+          <li><input type="checkbox" id="l4"><label for="l4">Return/Refund Policy published (15-day returns)</label></li>
+          <li><input type="checkbox" id="l5"><label for="l5">GDPR/CASL cookie consent active</label></li>
+          <li><input type="checkbox" id="l6"><label for="l6">No personal contact details exposed publicly</label></li>
+          <li><input type="checkbox" id="l7"><label for="l7">Stripe merchant account fully verified</label></li>
+          <li><input type="checkbox" id="l8"><label for="l8">PayPal business account verified</label></li>
+        </ul>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">Technical</div>
+        <ul class="check-list">
+          <li><input type="checkbox" id="t1"><label for="t1">Domain pointing correctly (HTTPS working)</label></li>
+          <li><input type="checkbox" id="t2"><label for="t2">SSL certificate active and auto-renewing</label></li>
+          <li><input type="checkbox" id="t3"><label for="t3">WordPress updated to latest version</label></li>
+          <li><input type="checkbox" id="t4"><label for="t4">All plugins updated</label></li>
+          <li><input type="checkbox" id="t5"><label for="t5">WooCommerce setup wizard completed</label></li>
+          <li><input type="checkbox" id="t6"><label for="t6">Cloudflare CDN active and caching enabled</label></li>
+          <li><input type="checkbox" id="t7"><label for="t7">Site speed tested (Google PageSpeed Insights &gt; 80)</label></li>
+          <li><input type="checkbox" id="t8"><label for="t8">404 page customized</label></li>
+          <li><input type="checkbox" id="t9"><label for="t9">Sitemap generated (Yoast SEO)</label></li>
+          <li><input type="checkbox" id="t10"><label for="t10">Robots.txt configured</label></li>
+        </ul>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">Products</div>
+        <ul class="check-list">
+          <li><input type="checkbox" id="p1"><label for="p1">Minimum 50 products imported</label></li>
+          <li><input type="checkbox" id="p2"><label for="p2">All products have descriptions (no AliExpress template text)</label></li>
+          <li><input type="checkbox" id="p3"><label for="p3">All product images compressed</label></li>
+          <li><input type="checkbox" id="p4"><label for="p4">Pricing rules applied (2.5x multiplier)</label></li>
+          <li><input type="checkbox" id="p5"><label for="p5">Categories organized and named correctly</label></li>
+          <li><input type="checkbox" id="p6"><label for="p6">Featured products set on homepage</label></li>
+          <li><input type="checkbox" id="p7"><label for="p7">Product reviews enabled</label></li>
+        </ul>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">Payments</div>
+        <ul class="check-list">
+          <li><input type="checkbox" id="pay1"><label for="pay1">Stripe live mode enabled (test mode OFF)</label></li>
+          <li><input type="checkbox" id="pay2"><label for="pay2">PayPal connected and tested</label></li>
+          <li><input type="checkbox" id="pay3"><label for="pay3">Test transaction processed and refunded</label></li>
+          <li><input type="checkbox" id="pay4"><label for="pay4">Tax rates configured for Canada and US</label></li>
+          <li><input type="checkbox" id="pay5"><label for="pay5">Currency set correctly (CAD or USD)</label></li>
+          <li><input type="checkbox" id="pay6"><label for="pay6">Order confirmation emails working</label></li>
+        </ul>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">Marketing</div>
+        <ul class="check-list">
+          <li><input type="checkbox" id="m1"><label for="m1">Google Analytics 4 property created and tracking</label></li>
+          <li><input type="checkbox" id="m2"><label for="m2">Facebook Pixel installed and verified in Events Manager</label></li>
+          <li><input type="checkbox" id="m3"><label for="m3">Email capture form on homepage</label></li>
+          <li><input type="checkbox" id="m4"><label for="m4">Welcome email sequence set up in Mailchimp (3 emails)</label></li>
+          <li><input type="checkbox" id="m5"><label for="m5">Abandoned cart recovery emails enabled</label></li>
+          <li><input type="checkbox" id="m6"><label for="m6">Social proof plugin active</label></li>
+          <li><input type="checkbox" id="m7"><label for="m7">Launch discount code created (15% off &mdash; LAUNCH15)</label></li>
+        </ul>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">SEO</div>
+        <ul class="check-list">
+          <li><input type="checkbox" id="seo1"><label for="seo1">Yoast SEO configured with store info</label></li>
+          <li><input type="checkbox" id="seo2"><label for="seo2">Homepage meta title and description set</label></li>
+          <li><input type="checkbox" id="seo3"><label for="seo3">Product category pages have descriptions</label></li>
+          <li><input type="checkbox" id="seo4"><label for="seo4">Blog section started (aim for 2 posts before launch)</label></li>
+          <li><input type="checkbox" id="seo5"><label for="seo5">Google Search Console property created</label></li>
+          <li><input type="checkbox" id="seo6"><label for="seo6">Sitemap submitted to Google Search Console</label></li>
+        </ul>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">Operations</div>
+        <ul class="check-list">
+          <li><input type="checkbox" id="o1"><label for="o1">AliDropship auto-order fulfillment tested</label></li>
+          <li><input type="checkbox" id="o2"><label for="o2">Supplier communications verified (email notifications working)</label></li>
+          <li><input type="checkbox" id="o3"><label for="o3">Shipping zones configured for CA and US</label></li>
+          <li><input type="checkbox" id="o4"><label for="o4">Free shipping threshold set ($50 CA / $75 US)</label></li>
+          <li><input type="checkbox" id="o5"><label for="o5">Order notification emails to admin working</label></li>
+          <li><input type="checkbox" id="o6"><label for="o6">Customer service email monitored (support@techpackcage.com)</label></li>
+        </ul>
+      </div>
+
+      <div class="callout callout-gold">
+        <strong>Tip:</strong> Checked items persist in your browser via localStorage. Reload the page and your progress is saved.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="site-footer">
+    <strong>TechPackCage.com &mdash; Complete WooCommerce Launch Guide</strong> &nbsp;|&nbsp;
+    Francisco Holdings Inc. &nbsp;|&nbsp; v1.0 &nbsp;|&nbsp; 2026
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+(function () {
+  /* ===== PROFIT CALCULATOR ===== */
+  function fmt(n) { return '$' + n.toFixed(2); }
+
+  function calc() {
+    var cost   = parseFloat(document.getElementById('supplierCost').value) || 0;
+    var mult   = parseFloat(document.getElementById('markup').value)       || 1;
+    var units  = parseFloat(document.getElementById('units').value)        || 0;
+
+    var sell     = cost * mult;
+    var gross    = sell - cost;
+    var stripe   = (sell * 0.029) + 0.30;
+    var net      = gross - stripe;
+    var margin   = sell > 0 ? (net / sell) * 100 : 0;
+    var mthRev   = sell * units;
+    var mthNet   = net  * units;
+
+    document.getElementById('rSellPrice').textContent   = fmt(sell);
+    document.getElementById('rGrossProfit').textContent = fmt(gross);
+    document.getElementById('rStripeFee').textContent   = fmt(stripe);
+    document.getElementById('rNetProfit').textContent   = fmt(net);
+    document.getElementById('rMargin').textContent      = margin.toFixed(1) + '%';
+    document.getElementById('rMonthlyRev').textContent  = fmt(mthRev);
+    document.getElementById('rMonthlyNet').textContent  = fmt(mthNet);
+  }
+
+  ['supplierCost', 'markup', 'units'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) { el.addEventListener('input', calc); el.addEventListener('change', calc); }
+  });
+  calc();
+
+  /* ===== CHECKLIST PERSISTENCE ===== */
+  var boxes = document.querySelectorAll('.check-list input[type="checkbox"]');
+
+  function saveAll() {
+    var state = {};
+    boxes.forEach(function (cb) { state[cb.id] = cb.checked; });
+    try { localStorage.setItem('tpc_guide_checklist', JSON.stringify(state)); } catch (e) {}
+  }
+
+  function loadAll() {
+    var raw;
+    try { raw = localStorage.getItem('tpc_guide_checklist'); } catch (e) {}
+    if (!raw) return;
+    var state;
+    try { state = JSON.parse(raw); } catch (e) { return; }
+    boxes.forEach(function (cb) {
+      if (state[cb.id]) {
+        cb.checked = true;
+        var li = cb.closest('li');
+        if (li) li.classList.add('checked');
+      }
+    });
+  }
+
+  boxes.forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      var li = cb.closest('li');
+      if (li) li.classList.toggle('checked', cb.checked);
+      saveAll();
+    });
+  });
+
+  loadAll();
+})();
+</script>
+</body>
+</html>

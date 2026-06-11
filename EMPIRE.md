@@ -336,5 +336,85 @@ Claude                         — Builder/executor — acts on direct PrimeDox 
 
 ---
 
-*Updated: 2026-06-08 | Session: Francisco Revenue Sprint | Builder: Claude*
+---
+
+## 14. JUNE 11, 2026 BUILD SESSION — MONETIZATION ACCELERATION + TECHPACKCAGE COMPLETE
+
+### Session Overview
+Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgency banners, email capture, court print package, CCLDR case tracker, and complete TechPackCage.com launch stack.
+
+### VIGILAX — 4-Page Commercial Site ✅
+| File | Description | Status |
+|------|-------------|--------|
+| vigilax-site/index.html | Landing page (hero + terminal + SVG architecture diagram + testimonials + email capture) | ✅ COMMITTED |
+| vigilax-site/pricing.html | 4-tier pricing (Sentinel $299, Warden $899, Archon $2,499, Sovereign custom) + urgency banner | ✅ COMMITTED |
+| vigilax-site/investor.html | Investor relations ($300B market, IP assets, Y1-Y5 projections, Derek Francisco team) | ✅ COMMITTED |
+| vigilax-site/deploy.html | Purchase + 5-step deployment guide + 24hr SLA guarantee | ✅ COMMITTED |
+
+**VIGILAX is Loop B: no Derek Francisco identity, no cannabis, no paypal.me/derekfrancisco**
+
+### Monetization Additions ✅
+| Site | Addition | Status |
+|------|----------|--------|
+| OmniaGuard pricing.html | Urgency banner (pulse dot) + VIGILAX upsell section + email capture | ✅ COMMITTED |
+| Francisco Holdings services.html | Urgency banner (20% off Q2) + partner strip + social proof | ✅ COMMITTED |
+| MindShift/Makayla index.html | Merchandise grid (4 items, PayPal.me links) + affiliate section + donations + newsletter | ✅ COMMITTED |
+
+### Court Package — June 11, 2026 ✅
+| File | Description | Status |
+|------|-------------|--------|
+| court-print-package-june11.html | Printable doc: priority list 1-11, Dylan's 5 affidavit questions, exhibits checklist, instructions, library email template, June 17 deadline note | ✅ COMMITTED |
+| ccldr-site/denby-case.html | Public case tracker: timeline, criminal counts, civil demands, documents table | ✅ COMMITTED |
+
+### TechPackCage.com — Full Launch Stack ✅
+| File | Description | Status |
+|------|-------------|--------|
+| techpackcage-site/index.html | Full landing page — 15 categories, 8 product cards, Job Shipping section, email capture, social proof popup | ✅ COMMITTED |
+| techpackcage-site/woocommerce-theme.css | Complete WooCommerce CSS — green/gold empire branding, all selectors, CSS variables | ✅ COMMITTED |
+| techpackcage-site/warehouse-dashboard.html | Virtual warehouse — login gate (empire2026), order pipeline, revenue chart, supplier panel, inventory alerts, leaderboard | ✅ COMMITTED |
+| techpackcage-site/setup-guide.html | WooCommerce launch guide — ~$148 CAD cost breakdown, 4-week plan, profit calculator, Job Shipping PHP, launch checklist | ✅ COMMITTED |
+| .github/workflows/deploy-techpackcage.yml | Auto-deploy → franciscoderek7/techpackcage on push to main | ✅ COMMITTED |
+
+### TechPackCage Derek Action Required
+1. Buy domain `techpackcage.com` at Namecheap (~$10.98 CAD)
+2. Buy Hostinger hosting (~$3.99/mo = $47.88/yr)
+3. Install WordPress + WooCommerce (free)
+4. Buy AliDropship plugin ($89 one-time) at alidropship.com
+5. Paste `woocommerce-theme.css` into Appearance → Customize → Additional CSS
+6. Create GitHub repo `franciscoderek7/techpackcage` (enables deploy workflow)
+7. Set DNS: techpackcage.com A-record → GitHub Pages IP, CNAME www → techpackcage.github.io
+
+### Stripe Placeholders — Need Real URLs (REVENUE BLOCKER)
+| Placeholder | Product | Price |
+|-------------|---------|-------|
+| STRIPE_LINK_VIGILAX_SENTINEL | VIGILAX Sentinel | $299/mo |
+| STRIPE_LINK_VIGILAX_WARDEN | VIGILAX Warden | $899/mo |
+| STRIPE_LINK_VIGILAX_ARCHON | VIGILAX Archon | $2,499/mo |
+| STRIPE_LINK_FH_STARTER | FH Agency Starter | TBD |
+| STRIPE_LINK_FH_GROWTH | FH Agency Growth | TBD |
+| STRIPE_LINK_FH_ENTERPRISE | FH Agency Enterprise | TBD |
+
+→ Create at dashboard.stripe.com → Payment Links → paste `buy.stripe.com/xxx` to Claude
+
+### Critical Dates
+| Date | Event | Status |
+|------|-------|--------|
+| June 11, 2026 | Court appearance | Court package READY at court-print-package-june11.html |
+| June 17, 2026 | CPL + Default Motion hearing | Dylan Affidavit needed — questions pending |
+
+### Pending Actions Added
+| # | Action | Owner | Status |
+|---|--------|-------|--------|
+| 20 | Paste real Stripe payment link URLs (6 placeholders) | Derek → Claude | PENDING — REVENUE BLOCKER |
+| 21 | Dylan's 5 affidavit questions answers | Derek | PENDING — June 17 deadline |
+| 22 | Create GitHub repo franciscoderek7/techpackcage | Derek | PENDING |
+| 23 | TechPackCage domain + hosting purchase (~$148 CAD) | Derek | PENDING |
+| 24 | Makayla real social handles (FB/LinkedIn/X/IG/PayPal) | Derek → Claude | PENDING |
+| 25 | BTC + XMR wallet addresses for OmniaGuard | Derek → Claude | PENDING |
+| 26 | Formspree ID for OmniaGuard contact.html | Derek → Claude | PENDING |
+| 27 | First 10 Job Shipping drivers (Lindsay/Oshawa/Toronto) | Derek | PENDING |
+
+---
+
+*Updated: 2026-06-11 | Session: Francisco Revenue Sprint | Builder: Claude*
 *Source of truth for the Francisco Holdings empire. Update after every deployment.*

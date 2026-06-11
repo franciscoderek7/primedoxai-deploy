@@ -541,7 +541,7 @@
     <h2 class="sec-title">Request Your Cleaning</h2>
     <p class="sec-sub">Fill in the details below and we'll confirm your booking within 2 hours.</p>
     <div class="form-card">
-      <form action="mailto:book@cleanswarm.ca" method="post" enctype="text/plain">
+      <form id="booking-form" onsubmit="return handleCleanswarmForm(event)">
         <input type="hidden" name="subject" value="Booking Request"/>
         <div class="form-grid">
           <div class="form-group">
@@ -697,7 +697,20 @@
   <p>© 2026 <span class="c">CleanSwarm</span> &nbsp;|&nbsp; <a href="mailto:info@cleanswarm.ca">info@cleanswarm.ca</a></p>
 </footer>
 
-<script>window.REVEREND_SITE='cleanswarm';</script>
+<script>
+function handleCleanswarmForm(e){
+  e.preventDefault();
+  var f=e.target, name=f.querySelector("[name=name],[name=Name],input[type=text]"), email=f.querySelector("[name=email],[name=Email],input[type=email]"), msg=f.querySelector("textarea");
+  var body=encodeURIComponent((name?
+"Name: "+name.value+"
+":"")+(email?"Email: "+email.value+"
+":"")+(msg?"
+"+msg.value:""));
+  window.location.href="mailto:derek@franciscoholdings.com?subject=CleanSwarm%20Booking%20Inquiry&body="+body;
+  return false;
+}
+</script>
+<script>window.REVEREND_SITE="cleanswarm";</script>
 <script src="reverend-ai.js"></script>
 </body>
 </html>

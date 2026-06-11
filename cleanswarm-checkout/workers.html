@@ -479,7 +479,7 @@
   <h2 class="sec-title" style="text-align:center;max-width:600px;margin:0 auto 10px">Start Your Application</h2>
   <p class="sec-sub" style="text-align:center;margin:0 auto">Takes 5 minutes. Our team reviews all applications within 1 business day.</p>
   <div class="form-card">
-    <form action="mailto:workers@cleanswarm.ca" method="post" enctype="text/plain">
+    <form id="workers-form" onsubmit="return handleWorkersForm(event)">
       <div class="form-grid">
         <div class="form-group">
           <label for="w-name">Full Name *</label>
@@ -597,7 +597,19 @@ function toggleFAQ(btn){
   if(!isOpen) item.classList.add('open');
 }
 </script>
-<script>window.REVEREND_SITE='cleanswarm';</script>
+<script>
+function handleWorkersForm(e){
+  e.preventDefault();
+  var f=e.target, name=f.querySelector("[name=name],[name=Name],input[type=text]"), email=f.querySelector("[name=email],[name=Email],input[type=email]"), msg=f.querySelector("textarea");
+  var body=encodeURIComponent((name?"Name: "+name.value+"
+":"")+(email?"Email: "+email.value+"
+":"")+(msg?"
+"+msg.value:""));
+  window.location.href="mailto:derek@franciscoholdings.com?subject=CleanSwarm%20Worker%20Application&body="+body;
+  return false;
+}
+</script>
+<script>window.REVEREND_SITE="cleanswarm";</script>
 <script src="reverend-ai.js"></script>
 </body>
 </html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIGILAX Deploy — Purchase License & Deploy</title>
+<meta name="description" content="Deploy VIGILAX AI cybersecurity in under 24 hours. Purchase your license and get protected.">
+<style>
+  :root {
+    --void: #060A06;
+    --deep: #0D140D;
+    --surface: #121A12;
+    --card: #192019;
+    --border: rgba(0,212,115,0.15);
+    --green: #00D473;
+    --lime: #7FFF3A;
+    --gold: #D4AF37;
+    --amber: #FFB800;
+    --text: #E8F5E8;
+    --muted: rgba(232,245,232,0.6);
+    --dim: rgba(232,245,232,0.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--void);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,115,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,115,0.03) 1px,transparent 1px);background-size:60px 60px}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,10,6,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 5%}
+  .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+  .nav-logo{font-size:1.4rem;font-weight:900;letter-spacing:0.12em;color:var(--green);text-decoration:none}
+  .nav-logo span{color:var(--gold)}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;letter-spacing:0.05em;transition:color 0.2s}
+  .nav-links a:hover{color:var(--green)}
+  .nav-cta{background:var(--green);color:#000;padding:0.5rem 1.4rem;border-radius:4px;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-decoration:none;transition:background 0.2s}
+  .nav-cta:hover{background:var(--lime)}
+
+  section{position:relative;z-index:1;padding:100px 5%}
+  .section-inner{max-width:1100px;margin:0 auto}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);position:relative;z-index:1}
+
+  /* HERO */
+  .hero{padding:140px 5% 80px;text-align:center}
+  .hero-badge{display:inline-block;border:1px solid var(--green);color:var(--green);font-size:0.72rem;letter-spacing:0.2em;padding:0.35rem 1rem;border-radius:2px;margin-bottom:2rem;text-transform:uppercase}
+  .hero h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:900;letter-spacing:-0.02em;margin-bottom:1rem}
+  .hero h1 .green{color:var(--green)}
+  .hero-sub{color:var(--muted);font-size:1.1rem;max-width:600px;margin:0 auto 3rem;line-height:1.7}
+
+  /* URGENCY */
+  .urgency-bar{background:linear-gradient(90deg,rgba(0,212,115,0.1),rgba(0,212,115,0.05));border:1px solid rgba(0,212,115,0.2);border-radius:8px;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;max-width:700px;margin:0 auto 4rem}
+  .urgency-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.4)}}
+  .urgency-msg{font-size:0.88rem}
+  .urgency-msg strong{color:var(--green)}
+
+  /* PURCHASE CARDS */
+  .purchase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:0}
+  .purchase-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2.5rem;position:relative;transition:all 0.2s}
+  .purchase-card:hover{border-color:rgba(0,212,115,0.3)}
+  .purchase-card.featured{border-color:rgba(0,212,115,0.35);background:linear-gradient(180deg,rgba(0,212,115,0.07) 0%,var(--card) 50%)}
+  .pc-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#000;font-size:0.65rem;font-weight:800;letter-spacing:0.15em;padding:0.25rem 0.9rem;border-radius:20px;white-space:nowrap}
+  .pc-name{font-size:1.1rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:0.4rem}
+  .pc-price{font-size:2.4rem;font-weight:900;line-height:1;margin-bottom:0.2rem}
+  .pc-per{font-size:0.78rem;color:var(--muted);margin-bottom:1.5rem}
+  .pc-cta{display:block;width:100%;padding:0.9rem;border-radius:4px;font-weight:800;font-size:0.9rem;letter-spacing:0.06em;text-align:center;text-decoration:none;transition:all 0.2s;margin-bottom:0.8rem;cursor:pointer;border:none}
+  .pc-cta.green{background:var(--green);color:#000}
+  .pc-cta.green:hover{background:var(--lime)}
+  .pc-cta.outline{background:transparent;color:var(--green);border:1px solid var(--green)}
+  .pc-cta.outline:hover{background:rgba(0,212,115,0.08)}
+  .pc-cta.gold{background:var(--gold);color:#000}
+  .pc-cta.gold:hover{background:var(--amber)}
+  .pc-consult{display:block;width:100%;padding:0.65rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--muted);font-size:0.82rem;text-align:center;text-decoration:none;transition:all 0.2s}
+  .pc-consult:hover{border-color:var(--green);color:var(--green)}
+  .pc-features{list-style:none;margin-top:1.5rem}
+  .pc-features li{padding:0.45rem 0;font-size:0.85rem;color:var(--muted);display:flex;align-items:flex-start;gap:0.5rem;border-bottom:1px solid rgba(0,212,115,0.05)}
+  .pc-features li::before{content:'→';color:var(--green);font-weight:700;flex-shrink:0;font-size:0.75rem;margin-top:0.15rem}
+
+  /* DEPLOY STEPS */
+  .steps{background:var(--deep)}
+  .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:3rem;position:relative}
+  .step-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:2rem;text-align:center}
+  .step-num{width:48px;height:48px;border-radius:50%;background:rgba(0,212,115,0.1);border:1px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;color:var(--green);margin:0 auto 1rem}
+  .step-card h4{font-size:1rem;font-weight:700;margin-bottom:0.5rem}
+  .step-card p{font-size:0.84rem;color:var(--muted);line-height:1.5}
+  .step-time{font-size:0.72rem;color:var(--green);font-weight:700;letter-spacing:0.1em;margin-top:0.6rem}
+
+  /* REQUIREMENTS */
+  .req-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3rem;align-items:start}
+  .req-list{list-style:none}
+  .req-list li{padding:0.7rem 0;border-bottom:1px solid rgba(0,212,115,0.08);font-size:0.88rem;display:flex;align-items:flex-start;gap:0.7rem}
+  .req-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+  .req-list li.optional::before{content:'○';color:var(--gold)}
+  .req-list li span{color:var(--muted)}
+  .req-list li strong{color:var(--text)}
+
+  /* GUARANTEE */
+  .guarantee{background:linear-gradient(135deg,rgba(0,212,115,0.06),rgba(212,175,55,0.04));border:1px solid rgba(0,212,115,0.15);border-radius:8px;padding:3rem;text-align:center;margin-top:4rem}
+  .guarantee h3{font-size:1.4rem;font-weight:900;color:var(--green);margin-bottom:0.8rem}
+  .guarantee p{color:var(--muted);font-size:0.92rem;max-width:560px;margin:0 auto}
+
+  /* CTA */
+  .deploy-cta{text-align:center;margin-top:4rem}
+  .deploy-cta h2{font-size:2rem;font-weight:900;margin-bottom:1rem}
+  .deploy-cta p{color:var(--muted);margin-bottom:2rem}
+  .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn{padding:0.9rem 2rem;border-radius:4px;font-weight:800;font-size:0.9rem;letter-spacing:0.06em;text-decoration:none;transition:all 0.2s;display:inline-block}
+  .btn-green{background:var(--green);color:#000}
+  .btn-green:hover{background:var(--lime)}
+  .btn-outline{border:1px solid var(--green);color:var(--green);background:transparent}
+  .btn-outline:hover{background:rgba(0,212,115,0.08)}
+
+  /* PARTNER */
+  .partner-strip{background:var(--deep);border-top:1px solid var(--border);padding:30px 5%;text-align:center;position:relative;z-index:1}
+  .partner-strip a{color:var(--green);text-decoration:none;font-size:0.88rem}
+  .partner-strip a:hover{color:var(--lime)}
+
+  footer{background:var(--deep);border-top:1px solid var(--border);padding:3rem 5%;position:relative;z-index:1}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+  .footer-brand{font-size:1.1rem;font-weight:900;color:var(--green);letter-spacing:0.12em}
+  .footer-links{display:flex;gap:1.5rem;list-style:none}
+  .footer-links a{color:var(--muted);text-decoration:none;font-size:0.85rem}
+  .footer-links a:hover{color:var(--green)}
+  .footer-copy{color:var(--dim);font-size:0.78rem}
+
+  @media(max-width:768px){.req-grid{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">VIGIL<span>AX</span></a>
+    <ul class="nav-links">
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="investor.html">Investors</a></li>
+      <li><a href="deploy.html" style="color:var(--green)">Deploy</a></li>
+      <li><a href="mailto:franciscoderek7@gmail.com">Contact</a></li>
+    </ul>
+    <a href="STRIPE_LINK_VIGILAX_WARDEN" class="nav-cta">Purchase License</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">&#9632; Deploy in Under 24 Hours</div>
+  <h1>Purchase License.<br><span class="green">Deploy. Protected.</span></h1>
+  <p class="hero-sub">One purchase. Guided onboarding. AI protection live within hours. No complex setup. No professional services fees. No surprises.</p>
+
+  <div class="urgency-bar">
+    <div class="urgency-dot"></div>
+    <span class="urgency-msg"><strong>LIMITED TIME: 20% off all plans</strong> — Expires June 30, 2026. Use at checkout.</span>
+  </div>
+</section>
+
+<section style="position:relative;z-index:1;padding-top:0;padding-bottom:80px">
+  <div class="section-inner">
+    <div class="purchase-grid">
+      <div class="purchase-card">
+        <div class="pc-name">Sentinel</div>
+        <div class="pc-price">$299<span style="font-size:1.1rem;font-weight:400">/mo</span></div>
+        <div class="pc-per">Up to 50 endpoints · Monthly billing</div>
+        <a href="STRIPE_LINK_VIGILAX_SENTINEL" class="pc-cta outline">Purchase License →</a>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Sentinel%20Consultation" class="pc-consult">Book Consultation First</a>
+        <ul class="pc-features">
+          <li>Instant license delivery</li>
+          <li>Guided setup wizard (2hrs)</li>
+          <li>48hr email support</li>
+          <li>Monthly threat reports</li>
+          <li>Standard compliance dashboard</li>
+        </ul>
+      </div>
+
+      <div class="purchase-card featured">
+        <div class="pc-badge">MOST DEPLOYED</div>
+        <div class="pc-name">Warden</div>
+        <div class="pc-price">$899<span style="font-size:1.1rem;font-weight:400">/mo</span></div>
+        <div class="pc-per">Up to 250 endpoints · Monthly billing</div>
+        <a href="STRIPE_LINK_VIGILAX_WARDEN" class="pc-cta green">Purchase License →</a>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Warden%20Consultation" class="pc-consult">Book Consultation First</a>
+        <ul class="pc-features">
+          <li>Priority onboarding (4hr response)</li>
+          <li>Dedicated setup call included</li>
+          <li>AI threat intelligence activated</li>
+          <li>Zero-trust policy auto-config</li>
+          <li>SOC 2 + HIPAA compliance tools</li>
+          <li>Weekly threat intelligence brief</li>
+        </ul>
+      </div>
+
+      <div class="purchase-card">
+        <div class="pc-name">Archon</div>
+        <div class="pc-price">$2,499<span style="font-size:1.1rem;font-weight:400">/mo</span></div>
+        <div class="pc-per">Up to 1,000 endpoints · Monthly billing</div>
+        <a href="STRIPE_LINK_VIGILAX_ARCHON" class="pc-cta outline">Purchase License →</a>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Archon%20Consultation" class="pc-consult">Book Consultation First</a>
+        <ul class="pc-features">
+          <li>3-day enterprise deployment sprint</li>
+          <li>Dedicated security analyst</li>
+          <li>SOAR full automation setup</li>
+          <li>Custom threat playbooks written</li>
+          <li>24/7 support + forensics tools</li>
+        </ul>
+      </div>
+
+      <div class="purchase-card" style="border-color:rgba(212,175,55,0.2)">
+        <div class="pc-name" style="color:var(--gold)">Sovereign</div>
+        <div class="pc-price" style="color:var(--gold);font-size:2rem">Custom</div>
+        <div class="pc-per">Unlimited endpoints · Custom contract</div>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Sovereign%20Purchase%20Inquiry" class="pc-cta gold">Request Pricing →</a>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Sovereign%20Demo" class="pc-consult" style="border-color:rgba(212,175,55,0.2);color:var(--gold)">Schedule Demo</a>
+        <ul class="pc-features">
+          <li>On-site deployment team</li>
+          <li>Air-gapped option available</li>
+          <li>Custom AI model training</li>
+          <li>White-label licensing available</li>
+          <li>IP assignment option</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DEPLOY STEPS -->
+<section class="steps">
+  <div class="section-inner">
+    <div style="font-size:0.72rem;letter-spacing:0.25em;color:var(--green);text-transform:uppercase;margin-bottom:0.8rem">Deployment Process</div>
+    <h2 style="font-size:2.4rem;font-weight:900;margin-bottom:1rem">From Purchase to Protected</h2>
+    <p style="color:var(--muted);max-width:560px;margin-bottom:0">Sentinel & Warden plans are fully operational within 24 hours. No professional services required.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h4>Purchase License</h4>
+        <p>Complete checkout via Stripe. License key delivered instantly to your email.</p>
+        <div class="step-time">⏱ 2 minutes</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h4>Onboarding Call</h4>
+        <p>Book your guided setup session. Our team configures your environment profile and threat baseline.</p>
+        <div class="step-time">⏱ 1–2 hours</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h4>Agent Deployment</h4>
+        <p>VIGILAX agents deploy to your endpoints via our installer. Zero downtime. Silent operation.</p>
+        <div class="step-time">⏱ 30 minutes</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h4>AI Calibration</h4>
+        <p>VIGILAX's behavioral AI learns your network baseline. First threat detections begin within hours.</p>
+        <div class="step-time">⏱ 4–8 hours</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">5</div>
+        <h4>Go Live</h4>
+        <p>Full protection active. Threat intelligence console live. Compliance dashboard populated.</p>
+        <div class="step-time">⏱ Within 24 hours</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REQUIREMENTS -->
+<section>
+  <div class="section-inner">
+    <div style="font-size:0.72rem;letter-spacing:0.25em;color:var(--green);text-transform:uppercase;margin-bottom:0.8rem">System Requirements</div>
+    <h2 style="font-size:2.4rem;font-weight:900;margin-bottom:0.5rem">What You Need to Deploy</h2>
+    <div class="req-grid">
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--green);margin-bottom:1rem">Required</h3>
+        <ul class="req-list">
+          <li><div><strong>Operating Systems</strong><br><span>Windows 10/11/Server 2019+, macOS 12+, Ubuntu 20.04+, RHEL 8+</span></div></li>
+          <li><div><strong>Network Access</strong><br><span>Outbound HTTPS (443) to VIGILAX cloud intelligence endpoints</span></div></li>
+          <li><div><strong>Admin Privileges</strong><br><span>Local admin or domain admin required for agent deployment</span></div></li>
+          <li><div><strong>Memory</strong><br><span>Minimum 4GB RAM per monitored endpoint (8GB recommended)</span></div></li>
+          <li><div><strong>Disk Space</strong><br><span>2GB for agent installation + log storage per endpoint</span></div></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:1rem">Optional / Enhanced</h3>
+        <ul class="req-list">
+          <li class="optional"><div><strong>SIEM Integration</strong><br><span>Splunk, Microsoft Sentinel, IBM QRadar — optional but recommended for Archon+</span></div></li>
+          <li class="optional"><div><strong>Active Directory / Azure AD</strong><br><span>Enables zero-trust identity features on Warden+</span></div></li>
+          <li class="optional"><div><strong>Cloud Platform API Access</strong><br><span>AWS, Azure, GCP — enables cloud workload protection</span></div></li>
+          <li class="optional"><div><strong>MDM / EDM Solution</strong><br><span>Intune, Jamf — streamlines mobile and managed device enrollment</span></div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guarantee">
+      <h3>&#9632; The VIGILAX Deployment Guarantee</h3>
+      <p>If VIGILAX is not fully operational and actively detecting threats within 24 hours of purchase (Sentinel/Warden) or 72 hours (Archon), you receive a full refund — no questions asked. We guarantee the deployment, not just the software.</p>
+    </div>
+
+    <div class="deploy-cta">
+      <h2>Ready to Deploy?</h2>
+      <p>Choose your plan and get protected in under 24 hours.</p>
+      <div class="cta-btns">
+        <a href="STRIPE_LINK_VIGILAX_WARDEN" class="btn btn-green">Purchase Warden — $899/mo</a>
+        <a href="pricing.html" class="btn btn-outline">Compare All Plans</a>
+        <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Deployment%20Questions" class="btn btn-outline" style="border-color:var(--gold);color:var(--gold)">Ask a Question</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER STRIP -->
+<div class="partner-strip">
+  <p>Become a VIGILAX deployment partner — MSSPs and systems integrators. <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Deployment%20Partner%20Inquiry">Partner Program →</a></p>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">VIGILAX</div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="investor.html">Investors</a></li>
+      <li><a href="mailto:franciscoderek7@gmail.com">Contact</a></li>
+    </ul>
+    <div class="footer-copy">&copy; 2026 Francisco Holdings Inc. All rights reserved.</div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Status Dashboard — Francisco Holdings Inc.</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#060810;color:#e0e4f0;line-height:1.6;}
+.header{background:linear-gradient(135deg,#0a0f1e,#0d1428);border-bottom:1px solid rgba(212,175,55,0.2);padding:32px 5%;}
+.header h1{font-size:28px;font-weight:900;color:#D4AF37;letter-spacing:0.08em;}
+.header p{color:#6a7a99;font-size:14px;margin-top:6px;}
+.header-meta{display:flex;gap:24px;margin-top:16px;flex-wrap:wrap;}
+.meta-item{font-size:12px;color:#4a5a78;letter-spacing:0.1em;}
+.meta-item span{color:#D4AF37;}
+.container{max-width:1400px;margin:0 auto;padding:40px 5%;}
+.audit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-bottom:48px;}
+.site-card{background:#0d1120;border:1px solid rgba(255,255,255,0.06);overflow:hidden;}
+.site-header{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;}
+.site-name{font-size:17px;font-weight:700;color:#fff;}
+.site-url{font-size:12px;color:#00D4FF;margin-top:2px;}
+.badge{font-size:10px;letter-spacing:0.15em;font-weight:700;padding:5px 12px;text-transform:uppercase;}
+.badge-live{background:rgba(0,200,100,0.12);color:#00CC66;border:1px solid rgba(0,200,100,0.3);}
+.badge-pending{background:rgba(255,165,0,0.1);color:#FFA500;border:1px solid rgba(255,165,0,0.25);}
+.badge-broken{background:rgba(255,60,60,0.1);color:#FF4444;border:1px solid rgba(255,60,60,0.25);}
+.badge-fixed{background:rgba(0,212,255,0.1);color:#00D4FF;border:1px solid rgba(0,212,255,0.2);}
+.site-body{padding:20px 24px;}
+.check-list{list-style:none;}
+.check-list li{font-size:13px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:flex-start;gap:10px;}
+.check-list li:last-child{border-bottom:none;}
+.chk{flex-shrink:0;margin-top:2px;}
+.ok{color:#00CC66;}
+.fix{color:#00D4FF;}
+.warn{color:#FFA500;}
+.err{color:#FF4444;}
+.action-needed{background:rgba(255,165,0,0.05);border:1px solid rgba(255,165,0,0.15);padding:12px 16px;margin-top:16px;font-size:12px;color:#FFA500;line-height:1.7;}
+.action-needed strong{color:#FFD700;display:block;margin-bottom:4px;}
+.section-title{font-size:13px;letter-spacing:0.2em;color:#00D4FF;text-transform:uppercase;margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid rgba(0,212,255,0.15);}
+.payment-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.payment-table th{font-size:11px;letter-spacing:0.1em;color:#6a7a99;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);}
+.payment-table td{font-size:13px;color:#c0c8d8;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.payment-table tr:last-child td{border-bottom:none;}
+.td-green{color:#00CC66;}
+.td-orange{color:#FFA500;}
+.td-blue{color:#00D4FF;}
+.td-red{color:#FF4444;}
+.master-summary{background:#0a0f1e;border:1px solid rgba(212,175,55,0.2);padding:32px;margin-top:48px;}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin:24px 0;}
+.sum-box{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);padding:20px;text-align:center;}
+.sum-num{font-size:36px;font-weight:900;line-height:1;}
+.sum-label{font-size:11px;color:#6a7a99;letter-spacing:0.1em;text-transform:uppercase;margin-top:6px;}
+.priority-list{margin-top:32px;}
+.priority-item{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.priority-num{width:28px;height:28px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#D4AF37;flex-shrink:0;}
+.priority-text h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;}
+.priority-text p{font-size:12px;color:#6a7a99;line-height:1.6;}
+.priority-urgent{border-left:3px solid #FF4444;padding-left:14px;}
+.priority-high{border-left:3px solid #FFA500;padding-left:14px;}
+.priority-med{border-left:3px solid #00D4FF;padding-left:14px;}
+.fix-log{margin-top:48px;}
+.fix-item{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
+.fix-tag{font-size:10px;letter-spacing:0.12em;padding:3px 8px;font-weight:700;flex-shrink:0;height:fit-content;margin-top:2px;}
+.tag-fixed{background:rgba(0,212,255,0.12);color:#00D4FF;border:1px solid rgba(0,212,255,0.2);}
+.tag-security{background:rgba(255,48,48,0.1);color:#FF4444;border:1px solid rgba(255,48,48,0.2);}
+.tag-derek{background:rgba(212,175,55,0.1);color:#D4AF37;border:1px solid rgba(212,175,55,0.2);}
+.fix-desc{color:#c0c8d8;}
+.fix-file{color:#6a7a99;font-size:12px;margin-top:2px;}
+footer{border-top:1px solid rgba(255,255,255,0.06);padding:24px 5%;text-align:center;font-size:12px;color:#3a4458;margin-top:60px;}
+@media(max-width:900px){.audit-grid{grid-template-columns:1fr;}.summary-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ EMPIRE STATUS DASHBOARD</h1>
+  <p>Francisco Holdings Inc. — Digital Empire Audit Report</p>
+  <div class="header-meta">
+    <div class="meta-item">Generated: <span>2026-06-10</span></div>
+    <div class="meta-item">Sites Audited: <span>5 Priority Sites</span></div>
+    <div class="meta-item">Files Fixed: <span>7</span></div>
+    <div class="meta-item">Branch: <span>claude/francisco-revenue-sprint-MEva6</span></div>
+    <div class="meta-item">CEO: <span>Derek Francisco (Doc Weedlaw)</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- AUDIT GRID -->
+  <div class="section-title">Site-by-Site Audit</div>
+  <div class="audit-grid">
+
+    <!-- OMNIAGUARD -->
+    <div class="site-card">
+      <div class="site-header">
+        <div>
+          <div class="site-name">🛡️ OmniaGuard</div>
+          <div class="site-url">omniaguard.com</div>
+        </div>
+        <span class="badge badge-fixed">FIXED</span>
+      </div>
+      <div class="site-body">
+        <ul class="check-list">
+          <li><span class="chk ok">✓</span><span>index.html loads, nav works, Formspree contact form functional</span></li>
+          <li><span class="chk fix">→</span><span>pricing.html: Stripe placeholders replaced with mailto fallbacks (4 tiers)</span></li>
+          <li><span class="chk fix">→</span><span>pricing.html: PayPal placeholders → omniaguard1@gmail.com</span></li>
+          <li><span class="chk fix">→</span><span>pricing.html: Privacy Policy + ToS dead links → privacy-policy.html + mailto</span></li>
+          <li><span class="chk fix">→</span><span>pay.html: Loop B violation fixed — paypal.me/derekfrancisco removed (5 links)</span></li>
+          <li><span class="chk fix">→</span><span>index.html: BTC/XMR placeholder wallet addresses patched to contact flow</span></li>
+          <li><span class="chk warn">⚠</span><span>contact.html: Formspree ID still 'YOUR_FORM_ID' — <strong>Derek must create at formspree.io</strong></span></li>
+          <li><span class="chk warn">⚠</span><span>Stripe buy links needed: 4 tiers → get from stripe.com dashboard</span></li>
+          <li><span class="chk warn">⚠</span><span>BTC/XMR wallet addresses needed from Derek</span></li>
+          <li><span class="chk ok">✓</span><span>Mobile responsive, HTTPS (omniaguard.com live)</span></li>
+          <li><span class="chk ok">✓</span><span>All external links open in new tab</span></li>
+          <li><span class="chk ok">✓</span><span>Interac e-Transfer flow intact (omniaguard1@gmail.com)</span></li>
+        </ul>
+        <div class="action-needed">
+          <strong>Derek — Action Required:</strong>
+          1. formspree.io → sign in with omniaguard1@gmail.com → New Form → paste ID into contact.html line ~526<br>
+          2. Stripe dashboard → create 4 payment links → paste buy.stripe.com URLs into pricing.html<br>
+          3. Provide BTC + XMR wallet addresses for index.html crypto payment modal
+        </div>
+      </div>
+    </div>
+
+    <!-- FRANCISCO HOLDINGS -->
+    <div class="site-card">
+      <div class="site-header">
+        <div>
+          <div class="site-name">🏛️ Francisco Holdings Inc.</div>
+          <div class="site-url">franciscoholdingsinc.com</div>
+        </div>
+        <span class="badge badge-fixed">FIXED</span>
+      </div>
+      <div class="site-body">
+        <ul class="check-list">
+          <li><span class="chk fix">→</span><span>All 35+ company "Visit →" dead links fixed — live domains linked, others show "Coming Soon"</span></li>
+          <li><span class="chk ok">✓</span><span>OmniaGuard → https://omniaguard.com</span></li>
+          <li><span class="chk ok">✓</span><span>CCLDR → https://ccldr.net</span></li>
+          <li><span class="chk ok">✓</span><span>PrimeDox AI → https://primedoxai.com</span></li>
+          <li><span class="chk ok">✓</span><span>CleanSwarm → https://cleanswarm.com (when domain live)</span></li>
+          <li><span class="chk ok">✓</span><span>Vault Velocity Auto → https://vaultvelocityauto.com</span></li>
+          <li><span class="chk ok">✓</span><span>Francisco Holdings → https://franciscoholdingsinc.com (self-links fixed)</span></li>
+          <li><span class="chk ok">✓</span><span>Investor CTA → leads to investors.html</span></li>
+          <li><span class="chk warn">⚠</span><span>HTTPS: Awaiting TLS certificate provisioning on GitHub Pages</span></li>
+          <li><span class="chk warn">⚠</span><span>21+ companies still show "Coming Soon" — domains not yet registered</span></li>
+        </ul>
+        <div class="action-needed">
+          <strong>Derek — Action Required:</strong>
+          Once franciscoholdingsinc.com shows green padlock in GitHub Pages settings:<br>
+          Settings → Pages → Check "Enforce HTTPS" → Save
+        </div>
+      </div>
+    </div>
+
+    <!-- ZPRIMEDOXAIHQ -->
+    <div class="site-card">
+      <div class="site-header">
+        <div>
+          <div class="site-name">🤖 zPrimeDox AI HQ</div>
+          <div class="site-url">zprimedoxaihq.com</div>
+        </div>
+        <span class="badge badge-pending">PENDING DNS</span>
+      </div>
+      <div class="site-body">
+        <ul class="check-list">
+          <li><span class="chk ok">✓</span><span>Site files exist: index.html, empire-os.html, revenue-dashboard.html, doc-weedlaw-ai.html</span></li>
+          <li><span class="chk ok">✓</span><span>Password-protected lock screen on index.html</span></li>
+          <li><span class="chk warn">⚠</span><span>DNS not yet resolving — GitHub Pages awaiting certificate</span></li>
+          <li><span class="chk warn">⚠</span><span>Internal links to subpages need verification once live</span></li>
+          <li><span class="chk warn">⚠</span><span>Some legal doc placeholders need filling (Affidavit of Service)</span></li>
+        </ul>
+        <div class="action-needed">
+          <strong>Derek — Action Required:</strong>
+          1. Confirm Porkbun/Cloudflare DNS A records point to GitHub Pages IPs (185.199.108-111.153)<br>
+          2. Wait for green check in GitHub Pages settings<br>
+          3. Enable Enforce HTTPS
+        </div>
+      </div>
+    </div>
+
+    <!-- MINDSHIFT MAKAYLA -->
+    <div class="site-card">
+      <div class="site-header">
+        <div>
+          <div class="site-name">🌸 MindShift by Makayla</div>
+          <div class="site-url">franciscoderek7.github.io/mindshift-makayla</div>
+        </div>
+        <span class="badge badge-fixed">UPDATED</span>
+      </div>
+      <div class="site-body">
+        <ul class="check-list">
+          <li><span class="chk fix">→</span><span>Complete luxury rebuild: imperial purple, Japanese aesthetic, bonsai SVG hero art</span></li>
+          <li><span class="chk fix">→</span><span>Cherry blossom canvas: 70 petals, purple/pink/gold palette, physics animation</span></li>
+          <li><span class="chk fix">→</span><span>PayPal linked: paypal.me/derekfrancisco</span></li>
+          <li><span class="chk fix">→</span><span>Social links added: Facebook, LinkedIn, X/Twitter, Instagram</span></li>
+          <li><span class="chk fix">→</span><span>Bike riding section: SVG wheel art + moving meditation quote</span></li>
+          <li><span class="chk fix">→</span><span>Eco manifesto: biodegradable, carbon neutral, 1% for planet</span></li>
+          <li><span class="chk fix">→</span><span>Print-ready business card: print-card.html created</span></li>
+          <li><span class="chk fix">→</span><span>Brand seal SVG: assets/logo.svg created</span></li>
+          <li><span class="chk ok">✓</span><span>Honest credentials — no false therapist/neuroscientist claims</span></li>
+          <li><span class="chk ok">✓</span><span>Dad's message from Derek Francisco</span></li>
+          <li><span class="chk ok">✓</span><span>Digital shop: 4 products + 3 coaching tiers</span></li>
+          <li><span class="chk warn">⚠</span><span>Social handles are placeholder — <strong>Makayla to confirm real handles</strong></span></li>
+          <li><span class="chk warn">⚠</span><span>makayla@mindshift.ca email — domain not yet registered</span></li>
+        </ul>
+        <div class="action-needed">
+          <strong>Derek/Makayla — Action Required:</strong>
+          1. Confirm real social media handles (Facebook, LinkedIn, X, Instagram, PayPal)<br>
+          2. Register mindshift.ca domain when ready<br>
+          3. Replace (705) 555-0199 with Makayla's real or Google Voice number
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VIGILAX STATUS -->
+  <div class="section-title">VIGILAX — Status</div>
+  <div class="site-card" style="margin-bottom:48px;">
+    <div class="site-header">
+      <div>
+        <div class="site-name">⚡ VIGILAX</div>
+        <div class="site-url">vigilax.html · vigilax-pricing.html · vigilax-investor.html · vigilax-deploy.html</div>
+      </div>
+      <span class="badge badge-pending">FILES IN WORKTREE</span>
+    </div>
+    <div class="site-body">
+      <ul class="check-list">
+        <li><span class="chk warn">⚠</span><span>VIGILAX pages found only in .claude/worktrees/ — not in main branch</span></li>
+        <li><span class="chk warn">⚠</span><span>These appear to be from a previous agent build that wasn't merged</span></li>
+        <li><span class="chk warn">⚠</span><span>Need Derek to confirm: should VIGILAX be a separate site or part of OmniaGuard?</span></li>
+        <li><span class="chk warn">⚠</span><span>Stripe checkout on vigilax-pricing.html needs live Stripe keys</span></li>
+        <li><span class="chk warn">⚠</span><span>$32M ARR pitch deck on vigilax-investor.html needs Derek review</span></li>
+      </ul>
+      <div class="action-needed">
+        <strong>Derek — Clarification Needed:</strong>
+        Tell me: should VIGILAX be its own GitHub Pages site, or integrated into omniaguard.com?<br>
+        Once confirmed, I'll copy the files to the right directory and wire up payment links.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT MATRIX -->
+  <div class="section-title">Payment Flow Matrix</div>
+  <div class="site-card" style="margin-bottom:48px;">
+    <div class="site-body">
+      <table class="payment-table">
+        <tr>
+          <th>Site</th><th>Method</th><th>Tier / Amount</th><th>Status</th><th>Destination</th>
+        </tr>
+        <tr><td>OmniaGuard</td><td>Stripe</td><td>Sentinel $49/mo</td><td class="td-orange">⚠ Needs Stripe Link</td><td>omniaguard1@gmail.com</td></tr>
+        <tr><td>OmniaGuard</td><td>Stripe</td><td>Pro $199/mo</td><td class="td-orange">⚠ Needs Stripe Link</td><td>omniaguard1@gmail.com</td></tr>
+        <tr><td>OmniaGuard</td><td>Stripe</td><td>Elite $999/mo</td><td class="td-orange">⚠ Needs Stripe Link</td><td>omniaguard1@gmail.com</td></tr>
+        <tr><td>OmniaGuard</td><td>Stripe</td><td>Enterprise custom</td><td class="td-orange">⚠ Needs Stripe Link</td><td>omniaguard1@gmail.com</td></tr>
+        <tr><td>OmniaGuard</td><td>Interac / Wire</td><td>All tiers</td><td class="td-green">✓ ACTIVE</td><td>omniaguard1@gmail.com</td></tr>
+        <tr><td>OmniaGuard</td><td>PayPal (pay.html)</td><td>$499–$15,000/mo</td><td class="td-blue">→ Fixed (Loop B)</td><td>omniaguard1@gmail.com</td></tr>
+        <tr><td>OmniaGuard</td><td>Crypto BTC/XMR</td><td>Any tier</td><td class="td-orange">⚠ Wallet needed</td><td>omniaguard1@gmail.com</td></tr>
+        <tr><td>CCLDR</td><td>Stripe</td><td>Warrior $149 – Sovereign $1,499</td><td class="td-orange">⚠ Needs Stripe Links</td><td>docweedlaw@gmail.com</td></tr>
+        <tr><td>CleanSwarm</td><td>Stripe</td><td>$399–$2,499 CAD/mo</td><td class="td-orange">⚠ Needs Stripe Links</td><td>derek@franciscoholdings.com</td></tr>
+        <tr><td>Vault Velocity Auto</td><td>Wire / Email</td><td>$50K deposit</td><td class="td-green">✓ ACTIVE (mailto)</td><td>vault@vaultvelocityauto.com</td></tr>
+        <tr><td>MindShift Makayla</td><td>PayPal</td><td>Products $9–$22</td><td class="td-green">✓ ACTIVE (mailto)</td><td>makayla@mindshift.ca</td></tr>
+        <tr><td>MindShift Makayla</td><td>Programs</td><td>$99–$999 CAD/mo</td><td class="td-green">✓ ACTIVE (mailto)</td><td>makayla@mindshift.ca</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- MASTER SUMMARY -->
+  <div class="master-summary">
+    <div class="section-title">Master Summary</div>
+    <div class="summary-grid">
+      <div class="sum-box"><div class="sum-num" style="color:#00CC66;">2</div><div class="sum-label">Sites Live + Fixed</div></div>
+      <div class="sum-box"><div class="sum-num" style="color:#FFA500;">2</div><div class="sum-label">Sites Pending DNS</div></div>
+      <div class="sum-box"><div class="sum-num" style="color:#00D4FF;">7</div><div class="sum-label">Files Fixed This Session</div></div>
+      <div class="sum-box"><div class="sum-num" style="color:#FF4444;">1</div><div class="sum-label">Loop B Violations Fixed</div></div>
+    </div>
+
+    <!-- FIX LOG -->
+    <div class="fix-log">
+      <div class="section-title">Fix Log — This Session</div>
+      <div class="fix-item"><span class="fix-tag tag-security">SECURITY</span><div><div class="fix-desc">Loop B violation: removed paypal.me/derekfrancisco from OmniaGuard pay.html (5 payment links). OmniaGuard is anonymous brand — personal PayPal must not appear.</div><div class="fix-file">omniaguard-site/pay.html</div></div></div>
+      <div class="fix-item"><span class="fix-tag tag-fixed">FIXED</span><div><div class="fix-desc">Replaced all 4 Stripe placeholder links (PASTE_STRIPE_LINK_*) with mailto fallbacks → omniaguard1@gmail.com</div><div class="fix-file">omniaguard-site/pricing.html</div></div></div>
+      <div class="fix-item"><span class="fix-tag tag-fixed">FIXED</span><div><div class="fix-desc">Replaced all 4 PayPal placeholders (PASTE_PAYPAL_ME_LINK_HERE) with omniaguard1@gmail.com mailto</div><div class="fix-file">omniaguard-site/pricing.html</div></div></div>
+      <div class="fix-item"><span class="fix-tag tag-fixed">FIXED</span><div><div class="fix-desc">Dead footer links fixed: Privacy Policy → privacy-policy.html, Terms → mailto contact</div><div class="fix-file">omniaguard-site/pricing.html</div></div></div>
+      <div class="fix-item"><span class="fix-tag tag-fixed">FIXED</span><div><div class="fix-desc">BTC/XMR placeholder wallet addresses patched — now route to contact flow</div><div class="fix-file">omniaguard-site/index.html</div></div></div>
+      <div class="fix-item"><span class="fix-tag tag-fixed">FIXED</span><div><div class="fix-desc">All 35+ company "Visit →" dead links (#) updated — 7 live domains linked, 28 show "Coming Soon" indicator</div><div class="fix-file">francisco-holdings-site/index.html</div></div></div>
+      <div class="fix-item"><span class="fix-tag tag-fixed">FIXED</span><div><div class="fix-desc">PayPal + social links added to MindShift Makayla: paypal.me/derekfrancisco, Facebook, LinkedIn, X, Instagram (placeholder handles — Makayla to confirm)</div><div class="fix-file">mindshift-makayla/index.html</div></div></div>
+    </div>
+
+    <!-- PRIORITY ACTION LIST -->
+    <div class="priority-list" style="margin-top:32px;">
+      <div class="section-title">Derek's Priority Action List</div>
+
+      <div class="priority-item priority-urgent">
+        <div class="priority-num">1</div>
+        <div class="priority-text">
+          <h4>🔴 Stripe Payment Links — Revenue Blocker</h4>
+          <p>Go to dashboard.stripe.com → Payment Links → Create 4 for OmniaGuard (Sentinel $49, Pro $199, Elite $999, Enterprise custom) + 4 for CCLDR (Warrior $149, Professional $499, Elite $999, Sovereign $1,499) + 3 for CleanSwarm. Paste buy.stripe.com/xxx URLs to me and I'll wire them in immediately.</p>
+        </div>
+      </div>
+
+      <div class="priority-item priority-urgent">
+        <div class="priority-num">2</div>
+        <div class="priority-text">
+          <h4>🔴 Formspree ID — Contact Forms Broken</h4>
+          <p>Go to formspree.io → sign in with omniaguard1@gmail.com → New Form → copy the ID (e.g. "xpwzybkv") → send to me. I'll paste it into omniaguard-site/contact.html in 30 seconds.</p>
+        </div>
+      </div>
+
+      <div class="priority-item priority-high">
+        <div class="priority-num">3</div>
+        <div class="priority-text">
+          <h4>🟡 MERGE FEATURE BRANCH → MAIN</h4>
+          <p>On GitHub: franciscoderek7/primedoxai-deploy → Pull requests → claude/francisco-revenue-sprint-MEva6 → Merge. This triggers all 10+ deploy workflows: OmniaGuard, MindShift, VaultVelocity, CleanSwarm, CCLDR all deploy simultaneously. Also permanently fixes the stop hook.</p>
+        </div>
+      </div>
+
+      <div class="priority-item priority-high">
+        <div class="priority-num">4</div>
+        <div class="priority-text">
+          <h4>🟡 Enable HTTPS on franciscoholdingsinc.com + zprimedoxaihq.com</h4>
+          <p>Both are waiting for GitHub Pages to finish TLS provisioning. Once you see the green checkmark in Settings → Pages → Custom Domain, check "Enforce HTTPS" and save. Takes 24-48 hours after DNS propagation.</p>
+        </div>
+      </div>
+
+      <div class="priority-item priority-med">
+        <div class="priority-num">5</div>
+        <div class="priority-text">
+          <h4>🔵 VIGILAX Direction Needed</h4>
+          <p>VIGILAX pages exist in an agent worktree. Tell me: standalone site at vigilax.com, or integrated into omniaguard.com/vigilax? Once decided, I'll wire it in properly with live Stripe links.</p>
+        </div>
+      </div>
+
+      <div class="priority-item priority-med">
+        <div class="priority-num">6</div>
+        <div class="priority-text">
+          <h4>🔵 Makayla's Real Social Handles</h4>
+          <p>Current placeholders: facebook.com/makayla.francisco, linkedin.com/in/makayla-francisco, x.com/MakaylaShift, instagram.com/makaylashift. Tell me her real handles and I'll update them in 2 minutes.</p>
+        </div>
+      </div>
+
+      <div class="priority-item priority-med">
+        <div class="priority-num">7</div>
+        <div class="priority-text">
+          <h4>🔵 BTC / XMR Wallet Addresses</h4>
+          <p>OmniaGuard index.html has a crypto payment modal. Paste your BTC and XMR addresses to me and I'll hardcode them in immediately so the modal works.</p>
+        </div>
+      </div>
+
+      <div class="priority-item priority-med">
+        <div class="priority-num">8</div>
+        <div class="priority-text">
+          <h4>🔵 JUNE 17 — CRITICAL LITIGATION DEADLINE</h4>
+          <p>Denby case: CPL + Default Motion must be filed. This is in the master-progress-report.html under Court/Litigation. Do not let the site build distract from this deadline.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Francisco Holdings Inc. Empire Status Dashboard — Generated 2026-06-10 — Branch: claude/francisco-revenue-sprint-MEva6</footer>
+</body>
+</html>

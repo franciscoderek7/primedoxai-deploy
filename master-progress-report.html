@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRANCISCO HOLDINGS — MASTER PROGRESS REPORT · 2026-06-09 (AUDIT v2)</title>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold2: #E8C97A;
+    --dark: #0D0C1A;
+    --dark2: #141320;
+    --dark3: #1B1A2E;
+    --white: #F0EEF8;
+    --muted: #8A8099;
+    --green: #4CAF7A;
+    --amber: #E8B84C;
+    --red: #E85C4C;
+    --blue: #4CB8E8;
+    --pink: #F4A5B8;
+    --teal: #7ECDC0;
+    --border: rgba(201,168,76,0.2);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--dark);
+    color: var(--white);
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 2rem;
+  }
+
+  /* ── HEADER ── */
+  .report-header {
+    border: 2px solid var(--gold);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    background: var(--dark2);
+    position: relative;
+  }
+  .report-header::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(201,168,76,0.2);
+    pointer-events: none;
+  }
+  .report-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .report-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .report-meta {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+  }
+  .report-meta span { color: var(--muted); }
+  .report-meta strong { color: var(--gold); }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+  .toc-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+  }
+  .toc a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.78rem;
+    padding: 0.15rem 0;
+    display: block;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--gold); }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--border);
+    background: var(--dark2);
+  }
+  .section-header {
+    background: var(--dark3);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-icon { font-size: 1.1rem; }
+  .section-title-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .section-body { padding: 1.25rem 1.5rem; }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+  th {
+    text-align: left;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(201,168,76,0.06);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(201,168,76,0.03); }
+
+  /* ── LINKS ── */
+  a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+  a:hover { color: var(--gold2); text-decoration: underline; }
+  .link-block {
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  /* ── STATUS BADGES ── */
+  .badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .badge-live { background: rgba(76,175,122,0.15); color: var(--green); border: 1px solid rgba(76,175,122,0.3); }
+  .badge-pending { background: rgba(232,184,76,0.15); color: var(--amber); border: 1px solid rgba(232,184,76,0.3); }
+  .badge-critical { background: rgba(232,92,76,0.15); color: var(--red); border: 1px solid rgba(232,92,76,0.3); }
+  .badge-dns { background: rgba(76,184,232,0.15); color: var(--blue); border: 1px solid rgba(76,184,232,0.3); }
+  .badge-built { background: rgba(126,205,192,0.15); color: var(--teal); border: 1px solid rgba(126,205,192,0.3); }
+  .badge-placeholder { background: rgba(138,128,153,0.15); color: var(--muted); border: 1px solid rgba(138,128,153,0.3); }
+
+  /* ── NOTES ── */
+  .note {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 0.2rem;
+  }
+  .note.critical { color: var(--red); font-style: normal; font-weight: 700; }
+  .note.action { color: var(--amber); font-style: normal; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1rem 0;
+  }
+
+  /* ── PLACEHOLDER NOTICE ── */
+  .placeholder-notice {
+    background: rgba(232,184,76,0.06);
+    border: 1px solid rgba(232,184,76,0.25);
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    color: var(--amber);
+    margin-bottom: 0.5rem;
+  }
+  .placeholder-notice strong { color: var(--gold); }
+
+  /* ── FOOTER ── */
+  .report-footer {
+    border: 1px solid var(--border);
+    background: var(--dark2);
+    padding: 1rem 1.5rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .report-footer strong { color: var(--gold); }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; color: black; padding: 1cm; }
+    .section { border: 1px solid #ccc; background: white; }
+    .section-header { background: #f5f5f5; border-bottom: 1px solid #ccc; }
+    .section-title-text { color: #333; }
+    th { color: #333; border-bottom: 1px solid #ccc; }
+    td { border-bottom: 1px solid #eee; }
+    a { color: #333; }
+    .badge-live { background: #e8f5e9; color: #2e7d32; border-color: #2e7d32; }
+    .badge-pending { background: #fff8e1; color: #f57f17; border-color: #f57f17; }
+    .badge-critical { background: #ffebee; color: #c62828; border-color: #c62828; }
+    .toc, .report-header, .report-footer { background: white; border-color: #ccc; }
+    .report-header::before { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    .toc-grid { grid-template-columns: repeat(2, 1fr); }
+    body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+  <div class="report-title">Francisco Holdings Inc.</div>
+  <div class="report-sub">Master Progress Report — Empire Link Directory</div>
+  <div class="report-meta">
+    <span><strong>Date:</strong> June 9, 2026 — Audit v2</span>
+    <span><strong>Authority:</strong> PrimeDox (Derek Francisco)</span>
+    <span><strong>Classification:</strong> Private — USB Copy</span>
+    <span><strong>Builder:</strong> Claude (Session MEva6)</span>
+    <span><strong>Last Audit:</strong> June 9, 2026 — Phase 1+2 Complete</span>
+  </div>
+</div>
+
+<!-- AUDIT RESULTS BANNER -->
+<div class="section" style="border-color:rgba(76,175,122,0.4);margin-bottom:1rem;">
+  <div class="section-header" style="background:rgba(76,175,122,0.08);border-color:rgba(76,175,122,0.3);">
+    <span class="section-icon">✅</span>
+    <span class="section-title-text" style="color:var(--green);">Phase 1+2 Audit — Completed June 9, 2026</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead><tr><th>Issue Found</th><th>Files Affected</th><th>Fix Applied</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>contact@omniaguard.com bouncing (554 Relay denied)</strong></td><td>20 files</td><td>→ omniaguard1@gmail.com across all files. Formspree fetch handler on contact.html</td><td><span class="badge badge-live">Fixed ✓</span></td></tr>
+        <tr><td><strong>contact.html form — mailto action (broke on mobile)</strong></td><td>contact.html</td><td>Replaced with Formspree JS fetch + mailto fallback. Button shows loading/success/error states.</td><td><span class="badge badge-live">Fixed ✓</span></td></tr>
+        <tr><td><strong>pricing.html — dead mailto form action</strong></td><td>omniaguard-site/pricing.html</td><td>JS handler → omniaguard1@gmail.com</td><td><span class="badge badge-live">Fixed ✓</span></td></tr>
+        <tr><td><strong>cleanswarm customers + workers — dead mailto form</strong></td><td>2 files</td><td>JS handlers → derek@franciscoholdings.com</td><td><span class="badge badge-live">Fixed ✓</span></td></tr>
+        <tr><td><strong>ccldr pricing.html — dead mailto form action</strong></td><td>1 file</td><td>Removed dead action attribute</td><td><span class="badge badge-live">Fixed ✓</span></td></tr>
+        <tr><td><strong>Empty href="tel:" links</strong></td><td>contact.html</td><td>Removed blank phone links (rendered nothing)</td><td><span class="badge badge-live">Fixed ✓</span></td></tr>
+        <tr><td><strong>Missing meta descriptions</strong></td><td>5 omniaguard pages</td><td>Added to payment-cancel, payment-success, privacy-policy, android-security</td><td><span class="badge badge-live">Fixed ✓</span></td></tr>
+        <tr>
+          <td><strong>FORMSPREE SETUP REQUIRED</strong></td>
+          <td>contact.html line ~525</td>
+          <td>Go to formspree.io → login with omniaguard1@gmail.com → New Form → copy ID → paste into <code>const FORMSPREE_ID = 'YOUR_FORM_ID'</code></td>
+          <td><span class="badge badge-critical">Derek Action</span></td>
+        </tr>
+        <tr>
+          <td><strong>Placeholder URLs in v2/v3 pages (not main index)</strong></td>
+          <td>omniaguard-v2.html, omniaguard-v3.html, primedoxai-v2.html, primedox-v3.html</td>
+          <td>These are archived backup versions, NOT the live pages. No action needed unless you're using them.</td>
+          <td><span class="badge badge-pending">Low Priority</span></td>
+        </tr>
+        <tr>
+          <td><strong>Stripe dashboard access loop (2FA issue)</strong></td>
+          <td>External — Stripe account</td>
+          <td>Cannot fix from code. Go to: stripe.com/support → "Can't access my account" → use backup codes or identity verification</td>
+          <td><span class="badge badge-critical">Derek Action</span></td>
+        </tr>
+        <tr>
+          <td><strong>73 pages missing og:image meta</strong></td>
+          <td>Multiple sites</td>
+          <td>Low priority — sites not yet on custom domains. Will add during final deploy pass.</td>
+          <td><span class="badge badge-pending">Pending</span></td>
+        </tr>
+        <tr>
+          <td><strong>Missing GitHub repos (8 sites can't deploy)</strong></td>
+          <td>ccldr, primedox, cleanswarm, francisco-holdings, zprimedoxaihq, docweedlaw, weedlaw-education, beno-x</td>
+          <td>Create each at github.com/new — see GitHub Repos section below</td>
+          <td><span class="badge badge-critical">Derek Action</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">Contents</div>
+  <div class="toc-grid">
+    <a href="#court">⚖️ Court &amp; Litigation</a>
+    <a href="#websites">🌐 Websites &amp; Live URLs</a>
+    <a href="#github">📁 GitHub Repositories</a>
+    <a href="#payment">💰 Payment &amp; Finance</a>
+    <a href="#omniaguard-pages">🛡️ OmniaGuard Pages</a>
+    <a href="#ccldr-pages">⚖️ CCLDR Pages</a>
+    <a href="#social">📱 Social &amp; Communication</a>
+    <a href="#business-reg">🏢 Business Registrations</a>
+    <a href="#domains">🌍 Domain Registry</a>
+    <a href="#workflows">⚙️ Deploy Workflows</a>
+    <a href="#pending">🔴 Pending Actions</a>
+    <a href="#stripe">💳 Stripe Payment Links</a>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 1: COURT & LITIGATION
+=========================== -->
+<div class="section" id="court">
+  <div class="section-header">
+    <span class="section-icon">⚖️</span>
+    <span class="section-title-text">Court &amp; Litigation</span>
+  </div>
+  <div class="section-body">
+    <div class="placeholder-notice">
+      ⚠️ <strong>ACTION REQUIRED:</strong> Fill in actual Ontario Superior Court file numbers below. Check court-prep/ and legal-filings/ in the repo for current drafts.
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Case</th>
+          <th>Amount</th>
+          <th>File #</th>
+          <th>Next Date</th>
+          <th>Status</th>
+          <th>Links &amp; Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Francisco v. Attorney General of Canada</strong><br>(Health Canada / Cannabis Act Challenge)</td>
+          <td style="color:var(--gold)">$35,000,000</td>
+          <td><span class="badge badge-placeholder">TBD — add file #</span></td>
+          <td>TBD</td>
+          <td><span class="badge badge-pending">Active</span></td>
+          <td>
+            <a href="https://www.ontariocourts.ca/scj/" target="_blank">Ontario Superior Court →</a><br>
+            <a href="https://canlii.org" target="_blank">CanLII Case Search →</a><br>
+            <span class="note">FOI requests drafted — 6 provincial + medical + CRU + Ombudsman</span>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Francisco v. Denby</strong><br>(Default Judgment + New Claim)</td>
+          <td style="color:var(--gold)">$3,300,000</td>
+          <td><span class="badge badge-placeholder">TBD — add file #</span></td>
+          <td style="color:var(--red);font-weight:700">JUNE 17, 2026</td>
+          <td><span class="badge badge-critical">Critical</span></td>
+          <td>
+            <a href="https://www.ontariocourts.ca/scj/" target="_blank">Ontario Superior Court →</a><br>
+            <span class="note critical">⚠️ CRITICAL: Certificate of Pending Litigation (CPL) + Default Motion due JUNE 17</span><br>
+            <span class="note">Docs in repo: legal-filings/ — affidavit-of-service, motion-default, CPL, writ</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <hr class="divider">
+    <table>
+      <thead>
+        <tr><th>Legal Document</th><th>File Location (Repo)</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Affidavit of Service</td><td><code>legal-filings/document-6-affidavit-of-service.md</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+        <tr><td>Notice of Motion — Default Judgment</td><td><code>legal-filings/document-7a-notice-of-motion-default.md</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+        <tr><td>Affidavit in Support — Default</td><td><code>legal-filings/document-7b-affidavit-default-judgment.md</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+        <tr><td>Draft Order — Default Judgment</td><td><code>legal-filings/document-7c-draft-order-default.md</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+        <tr><td>Certificate of Pending Litigation (CPL)</td><td><code>legal-filings/document-cpl-certificate-pending-litigation.md</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+        <tr><td>Statement of Claim</td><td><code>legal-filings/statement-of-claim.txt</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+        <tr><td>Sheriff Instruction Letter</td><td><code>legal-filings/sheriff-instruction-letter.txt</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+        <tr><td>Writ of Seizure and Sale</td><td><code>legal-filings/writ-seizure-sale.txt</code></td><td><span class="badge badge-built">Drafted</span></td></tr>
+      </tbody>
+    </table>
+    <hr class="divider">
+    <p class="note action">⚡ Court links: <a href="https://www.ontario.ca/page/service-ontario" target="_blank">ServiceOntario →</a> &nbsp;|&nbsp; <a href="https://www.ontario.ca/page/online-court-filing" target="_blank">Ontario Court Filing →</a> &nbsp;|&nbsp; <a href="https://www.canlii.org/en/" target="_blank">CanLII →</a></p>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 2: WEBSITES & LIVE URLs
+=========================== -->
+<div class="section" id="websites">
+  <div class="section-header">
+    <span class="section-icon">🌐</span>
+    <span class="section-title-text">Websites &amp; Live URLs</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead>
+        <tr>
+          <th>Brand</th>
+          <th>Custom Domain</th>
+          <th>GitHub Pages URL</th>
+          <th>Loop</th>
+          <th>Status</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>OmniaGuard</strong></td>
+          <td><a href="https://omniaguard.com" target="_blank">omniaguard.com</a></td>
+          <td><a href="https://franciscoderek7.github.io/omniaguard" target="_blank">…/omniaguard</a></td>
+          <td>B</td>
+          <td><span class="badge badge-live">Live</span></td>
+          <td>DNS pending Porkbun A+CNAME</td>
+        </tr>
+        <tr>
+          <td><strong>MindShift — Makayla</strong></td>
+          <td><a href="https://mindshift-makayla.com" target="_blank">mindshift-makayla.com</a></td>
+          <td><a href="https://franciscoderek7.github.io/mindshift-makayla" target="_blank">…/mindshift-makayla</a></td>
+          <td>A</td>
+          <td><span class="badge badge-live">Live</span></td>
+          <td>Deployed June 9. DNS TBD.</td>
+        </tr>
+        <tr>
+          <td><strong>CCLDR</strong></td>
+          <td><a href="https://ccldr.net" target="_blank">ccldr.net</a></td>
+          <td><a href="https://franciscoderek7.github.io/ccldr" target="_blank">…/ccldr</a></td>
+          <td>A</td>
+          <td><span class="badge badge-pending">Needs Deploy</span></td>
+          <td>Repo create → merge → DNS</td>
+        </tr>
+        <tr>
+          <td><strong>PrimeDox AI</strong></td>
+          <td><a href="https://primedoxai.com" target="_blank">primedoxai.com</a></td>
+          <td><a href="https://franciscoderek7.github.io/primedox" target="_blank">…/primedox</a></td>
+          <td>A</td>
+          <td><span class="badge badge-pending">Needs Deploy</span></td>
+          <td>Repo create → merge → DNS</td>
+        </tr>
+        <tr>
+          <td><strong>CleanSwarm</strong></td>
+          <td><a href="https://cleanswarm.ca" target="_blank">cleanswarm.ca</a></td>
+          <td><a href="https://franciscoderek7.github.io/cleanswarm" target="_blank">…/cleanswarm</a></td>
+          <td>B</td>
+          <td><span class="badge badge-pending">Needs Deploy</span></td>
+          <td>Repo create → merge → DNS</td>
+        </tr>
+        <tr>
+          <td><strong>Francisco Holdings Inc.</strong></td>
+          <td><a href="https://franciscoholdingsinc.com" target="_blank">franciscoholdingsinc.com</a></td>
+          <td><a href="https://franciscoderek7.github.io/francisco-holdings" target="_blank">…/francisco-holdings</a></td>
+          <td>A</td>
+          <td><span class="badge badge-pending">Needs Deploy</span></td>
+          <td>Repo create → merge → DNS</td>
+        </tr>
+        <tr>
+          <td><strong>ZPrimeDoxAI HQ</strong></td>
+          <td><a href="https://zprimedoxaihq.com" target="_blank">zprimedoxaihq.com</a></td>
+          <td><a href="https://franciscoderek7.github.io/zprimedoxaihq" target="_blank">…/zprimedoxaihq</a></td>
+          <td>A</td>
+          <td><span class="badge badge-pending">Needs Deploy</span></td>
+          <td>Private HQ. Access code: FHI2026</td>
+        </tr>
+        <tr>
+          <td><strong>Kiaros</strong></td>
+          <td><a href="https://kiaros.ai" target="_blank">kiaros.ai</a></td>
+          <td><a href="https://franciscoderek7.github.io/kiaros" target="_blank">…/kiaros</a></td>
+          <td>B</td>
+          <td><span class="badge badge-live">Live</span></td>
+          <td>DNS pending</td>
+        </tr>
+        <tr>
+          <td><strong>Doc WeedLaw</strong></td>
+          <td><span class="badge badge-placeholder">TBD — domain pending</span></td>
+          <td><a href="https://franciscoderek7.github.io/docweedlaw" target="_blank">…/docweedlaw</a></td>
+          <td>A</td>
+          <td><span class="badge badge-pending">Needs Repo</span></td>
+          <td>Repo creation pending</td>
+        </tr>
+        <tr>
+          <td><strong>Weedlaw Education</strong></td>
+          <td><span class="badge badge-placeholder">TBD</span></td>
+          <td><a href="https://franciscoderek7.github.io/weedlaw-education" target="_blank">…/weedlaw-education</a></td>
+          <td>A</td>
+          <td><span class="badge badge-pending">Needs Repo</span></td>
+          <td>Deploy workflow built</td>
+        </tr>
+        <tr>
+          <td><strong>Vault Velocity Auto</strong></td>
+          <td><a href="https://vaultvelocityauto.com" target="_blank">vaultvelocityauto.com</a></td>
+          <td><a href="https://franciscoderek7.github.io/vaultvelocityauto" target="_blank">…/vaultvelocityauto</a></td>
+          <td>B</td>
+          <td><span class="badge badge-pending">Needs Repo</span></td>
+          <td>Domain registered, scope TBD</td>
+        </tr>
+        <tr>
+          <td><strong>Beno-X</strong></td>
+          <td><span class="badge badge-placeholder">TBD</span></td>
+          <td><a href="https://franciscoderek7.github.io/beno-x" target="_blank">…/beno-x</a></td>
+          <td>B</td>
+          <td><span class="badge badge-pending">Needs Repo</span></td>
+          <td>Deploy workflow built</td>
+        </tr>
+        <tr>
+          <td><strong>MindShift Business</strong> (Derek)</td>
+          <td><span class="badge badge-placeholder">TBD</span></td>
+          <td>—</td>
+          <td>A</td>
+          <td><span class="badge badge-built">Built</span></td>
+          <td><code>mindshift-business/index.html</code> — no deploy workflow yet</td>
+        </tr>
+        <tr>
+          <td><strong>SoulStack</strong></td>
+          <td><a href="https://soulstack.ai" target="_blank">soulstack.ai</a></td>
+          <td>—</td>
+          <td>B</td>
+          <td><span class="badge badge-pending">Pending</span></td>
+          <td>Domain not yet registered (~$80 CAD/yr Cloudflare)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+    <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;">Agent Swarm Sites (GitHub Pages — Built, Deployed)</p>
+    <table>
+      <thead>
+        <tr><th>Site</th><th>GitHub Pages URL</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Space Swarm</td><td><a href="https://franciscoderek7.github.io/space-swarm-site" target="_blank">…/space-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Auto Swarm (AV Intelligence)</td><td><a href="https://franciscoderek7.github.io/auto-swarm-site" target="_blank">…/auto-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Quantum Swarm</td><td><a href="https://franciscoderek7.github.io/quantum-swarm-site" target="_blank">…/quantum-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Biotech Swarm</td><td><a href="https://franciscoderek7.github.io/biotech-swarm-site" target="_blank">…/biotech-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Health Swarm (Clinical AI)</td><td><a href="https://franciscoderek7.github.io/health-swarm-site" target="_blank">…/health-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>FinTech Swarm</td><td><a href="https://franciscoderek7.github.io/fintech-swarm-site" target="_blank">…/fintech-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Energy Swarm (Renewables AI)</td><td><a href="https://franciscoderek7.github.io/energy-swarm-site" target="_blank">…/energy-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Logistics Swarm</td><td><a href="https://franciscoderek7.github.io/logistics-swarm-site" target="_blank">…/logistics-swarm-site</a></td><td><span class="badge badge-live">Live</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 3: GITHUB REPOSITORIES
+=========================== -->
+<div class="section" id="github">
+  <div class="section-header">
+    <span class="section-icon">📁</span>
+    <span class="section-title-text">GitHub Repositories</span>
+  </div>
+  <div class="section-body">
+    <p class="note action" style="margin-bottom:1rem;">⚡ GitHub account: <a href="https://github.com/franciscoderek7" target="_blank">github.com/franciscoderek7</a></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Repo</th>
+          <th>GitHub URL</th>
+          <th>Pages URL</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>primedoxai-deploy</strong> (source)</td>
+          <td><a href="https://github.com/franciscoderek7/primedoxai-deploy" target="_blank">github.com/…/primedoxai-deploy</a></td>
+          <td>Source only — no Pages</td>
+          <td><span class="badge badge-live">Active</span></td>
+        </tr>
+        <tr>
+          <td><strong>omniaguard</strong></td>
+          <td><a href="https://github.com/franciscoderek7/omniaguard" target="_blank">github.com/…/omniaguard</a></td>
+          <td><a href="https://franciscoderek7.github.io/omniaguard" target="_blank">Pages: live</a></td>
+          <td><span class="badge badge-live">Live</span></td>
+        </tr>
+        <tr>
+          <td><strong>mindshift-makayla</strong></td>
+          <td><a href="https://github.com/franciscoderek7/mindshift-makayla" target="_blank">github.com/…/mindshift-makayla</a></td>
+          <td><a href="https://franciscoderek7.github.io/mindshift-makayla" target="_blank">Pages: live</a></td>
+          <td><span class="badge badge-live">Live</span></td>
+        </tr>
+        <tr>
+          <td><strong>ccldr</strong></td>
+          <td><a href="https://github.com/franciscoderek7/ccldr" target="_blank">github.com/…/ccldr</a></td>
+          <td><a href="https://franciscoderek7.github.io/ccldr" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>primedox</strong></td>
+          <td><a href="https://github.com/franciscoderek7/primedox" target="_blank">github.com/…/primedox</a></td>
+          <td><a href="https://franciscoderek7.github.io/primedox" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>cleanswarm</strong></td>
+          <td><a href="https://github.com/franciscoderek7/cleanswarm" target="_blank">github.com/…/cleanswarm</a></td>
+          <td><a href="https://franciscoderek7.github.io/cleanswarm" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>francisco-holdings</strong></td>
+          <td><a href="https://github.com/franciscoderek7/francisco-holdings" target="_blank">github.com/…/francisco-holdings</a></td>
+          <td><a href="https://franciscoderek7.github.io/francisco-holdings" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>zprimedoxaihq</strong></td>
+          <td><a href="https://github.com/franciscoderek7/zprimedoxaihq" target="_blank">github.com/…/zprimedoxaihq</a></td>
+          <td><a href="https://franciscoderek7.github.io/zprimedoxaihq" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>kiaros</strong></td>
+          <td><a href="https://github.com/franciscoderek7/kiaros" target="_blank">github.com/…/kiaros</a></td>
+          <td><a href="https://franciscoderek7.github.io/kiaros" target="_blank">Pages: live</a></td>
+          <td><span class="badge badge-live">Live</span></td>
+        </tr>
+        <tr>
+          <td><strong>docweedlaw</strong></td>
+          <td><a href="https://github.com/franciscoderek7/docweedlaw" target="_blank">github.com/…/docweedlaw</a></td>
+          <td><a href="https://franciscoderek7.github.io/docweedlaw" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>weedlaw-education</strong></td>
+          <td><a href="https://github.com/franciscoderek7/weedlaw-education" target="_blank">github.com/…/weedlaw-education</a></td>
+          <td><a href="https://franciscoderek7.github.io/weedlaw-education" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>vaultvelocityauto</strong></td>
+          <td><a href="https://github.com/franciscoderek7/vaultvelocityauto" target="_blank">github.com/…/vaultvelocityauto</a></td>
+          <td><a href="https://franciscoderek7.github.io/vaultvelocityauto" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+        <tr>
+          <td><strong>beno-x</strong></td>
+          <td><a href="https://github.com/franciscoderek7/beno-x" target="_blank">github.com/…/beno-x</a></td>
+          <td><a href="https://franciscoderek7.github.io/beno-x" target="_blank">Pages: pending</a></td>
+          <td><span class="badge badge-pending">Create repo</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <hr class="divider">
+    <p class="note action">⚡ To activate all pending repos: (1) Create repo at github.com/new — name exactly as shown above, (2) Enable Pages (branch: main, root: /), (3) Merge <code>claude/francisco-revenue-sprint-MEva6</code> → <code>main</code> in primedoxai-deploy to trigger all deploy workflows.</p>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 4: PAYMENT & FINANCE
+=========================== -->
+<div class="section" id="payment">
+  <div class="section-header">
+    <span class="section-icon">💰</span>
+    <span class="section-title-text">Payment &amp; Finance</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead>
+        <tr><th>Service</th><th>URL</th><th>Status</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Stripe Dashboard</strong></td>
+          <td><a href="https://dashboard.stripe.com" target="_blank">dashboard.stripe.com</a></td>
+          <td><span class="badge badge-live">Active</span></td>
+          <td>Publishable key set in omniaguard/index.html. Acct: Tech Pack Cage</td>
+        </tr>
+        <tr>
+          <td><strong>Stripe — Payment Links</strong></td>
+          <td><a href="https://dashboard.stripe.com/payment-links" target="_blank">dashboard.stripe.com/payment-links</a></td>
+          <td><span class="badge badge-critical">12 Needed</span></td>
+          <td>See Stripe section below — 12 buy.stripe.com links needed</td>
+        </tr>
+        <tr>
+          <td><strong>Stripe — Customers</strong></td>
+          <td><a href="https://dashboard.stripe.com/customers" target="_blank">dashboard.stripe.com/customers</a></td>
+          <td><span class="badge badge-live">Active</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>PayPal — Derek</strong></td>
+          <td><a href="https://paypal.me/derekfrancisco" target="_blank">paypal.me/derekfrancisco</a></td>
+          <td><span class="badge badge-live">Active</span></td>
+          <td>Loop A only — CCLDR, FH, PrimeDox</td>
+        </tr>
+        <tr>
+          <td><strong>PayPal — Makayla</strong></td>
+          <td><a href="https://paypal.me/makaylaffrancisco" target="_blank">paypal.me/makaylaffrancisco</a></td>
+          <td><span class="badge badge-placeholder">Confirm handle</span></td>
+          <td>MindShift by Makayla — confirm actual PayPal handle</td>
+        </tr>
+        <tr>
+          <td><strong>Interac e-Transfer</strong></td>
+          <td><span class="badge badge-placeholder">Add email here</span></td>
+          <td><span class="badge badge-live">Active</span></td>
+          <td>Used on CCLDR, PrimeDox for CDN clients</td>
+        </tr>
+        <tr>
+          <td><strong>Supabase</strong></td>
+          <td><a href="https://supabase.com/dashboard" target="_blank">supabase.com/dashboard</a></td>
+          <td><span class="badge badge-pending">Pending</span></td>
+          <td>~$45/mo — Super Highway Phase 2 (3 projects needed)</td>
+        </tr>
+        <tr>
+          <td><strong>Revenue Dashboard</strong></td>
+          <td><span class="note">Repo: <code>revenue-dashboard/</code></span></td>
+          <td><span class="badge badge-built">Built</span></td>
+          <td>Internal ZPrimeDoxAI HQ view</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 4B: STRIPE PAYMENT LINKS NEEDED
+=========================== -->
+<div class="section" id="stripe">
+  <div class="section-header">
+    <span class="section-icon">💳</span>
+    <span class="section-title-text">Stripe Payment Links — Action Required</span>
+  </div>
+  <div class="section-body">
+    <div class="placeholder-notice">
+      ⚠️ <strong>Derek Action:</strong> Go to <a href="https://dashboard.stripe.com/payment-links" target="_blank">dashboard.stripe.com/payment-links</a> → Create each link → Paste the <code>buy.stripe.com/xxx</code> URL to Claude.
+    </div>
+    <table>
+      <thead>
+        <tr><th>Product</th><th>Brand</th><th>Price</th><th>buy.stripe.com Link</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sentinel</td><td>OmniaGuard</td><td>$499/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>Guardian</td><td>OmniaGuard</td><td>$2,499/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>Warden</td><td>OmniaGuard</td><td>$5,000/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>Protector</td><td>OmniaGuard</td><td>$10,000/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>Warrior</td><td>CCLDR</td><td>$149/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>Professional</td><td>CCLDR</td><td>$499/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>Elite</td><td>CCLDR</td><td>$999/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>Sovereign</td><td>CCLDR</td><td>$1,499/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-critical">Needed</span></td></tr>
+        <tr><td>CCC Grow</td><td>CCC</td><td>$99/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-pending">Needed</span></td></tr>
+        <tr><td>CCC Harvest</td><td>CCC</td><td>$299/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-pending">Needed</span></td></tr>
+        <tr><td>CCC Empire</td><td>CCC</td><td>$999/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-pending">Needed</span></td></tr>
+        <tr><td>CleanSwarm Worker</td><td>CleanSwarm</td><td>$500/mo CAD</td><td><span class="badge badge-placeholder">PASTE HERE</span></td><td><span class="badge badge-pending">Needed</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 5: OMNIAGUARD PAGES
+=========================== -->
+<div class="section" id="omniaguard-pages">
+  <div class="section-header">
+    <span class="section-icon">🛡️</span>
+    <span class="section-title-text">OmniaGuard — All Pages</span>
+  </div>
+  <div class="section-body">
+    <p class="note" style="margin-bottom:0.75rem;">Base URL: <a href="https://omniaguard.com" target="_blank">omniaguard.com</a> — GitHub Pages: <a href="https://franciscoderek7.github.io/omniaguard" target="_blank">franciscoderek7.github.io/omniaguard</a></p>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>URL (omniaguard.com)</th><th>GitHub Pages URL</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Home</td><td><a href="https://omniaguard.com" target="_blank">omniaguard.com/</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/" target="_blank">…/omniaguard/</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Pricing</td><td><a href="https://omniaguard.com/pricing.html" target="_blank">/pricing.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/pricing.html" target="_blank">…/pricing.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Shield Network</td><td><a href="https://omniaguard.com/shield-network.html" target="_blank">/shield-network.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/shield-network.html" target="_blank">…/shield-network.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Assessment Tool</td><td><a href="https://omniaguard.com/assessment.html" target="_blank">/assessment.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/assessment.html" target="_blank">…/assessment.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Threat Dashboard</td><td><a href="https://omniaguard.com/threat-dashboard.html" target="_blank">/threat-dashboard.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/threat-dashboard.html" target="_blank">…/threat-dashboard.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Investor</td><td><a href="https://omniaguard.com/investor.html" target="_blank">/investor.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/investor.html" target="_blank">…/investor.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>About</td><td><a href="https://omniaguard.com/about.html" target="_blank">/about.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/about.html" target="_blank">…/about.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Contact</td><td><a href="https://omniaguard.com/contact.html" target="_blank">/contact.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/contact.html" target="_blank">…/contact.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Intelligence</td><td><a href="https://omniaguard.com/intelligence.html" target="_blank">/intelligence.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/intelligence.html" target="_blank">…/intelligence.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Ecosystem</td><td><a href="https://omniaguard.com/ecosystem.html" target="_blank">/ecosystem.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/ecosystem.html" target="_blank">…/ecosystem.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>VPN</td><td><a href="https://omniaguard.com/vpn.html" target="_blank">/vpn.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/vpn.html" target="_blank">…/vpn.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Solutions</td><td><a href="https://omniaguard.com/solutions.html" target="_blank">/solutions.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/solutions.html" target="_blank">…/solutions.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Docs</td><td><a href="https://omniaguard.com/docs.html" target="_blank">/docs.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/docs.html" target="_blank">…/docs.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Install Guide</td><td><a href="https://omniaguard.com/install-guide.html" target="_blank">/install-guide.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/install-guide.html" target="_blank">…/install-guide.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Security SDK Roadmap</td><td><a href="https://omniaguard.com/security-sdk-roadmap.html" target="_blank">/security-sdk-roadmap.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/security-sdk-roadmap.html" target="_blank">…/security-sdk-roadmap.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Pay Portal</td><td><a href="https://omniaguard.com/pay.html" target="_blank">/pay.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/pay.html" target="_blank">…/pay.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Privacy Policy</td><td><a href="https://omniaguard.com/privacy-policy.html" target="_blank">/privacy-policy.html</a></td><td><a href="https://franciscoderek7.github.io/omniaguard/privacy-policy.html" target="_blank">…/privacy-policy.html</a></td><td><span class="badge badge-live">Live</span></td></tr>
+        <tr><td>Chrome Extension</td><td colspan="2">Chrome Web Store — Publisher: <span class="badge badge-placeholder">Update after approval</span></td><td><span class="badge badge-pending">Submitted</span></td></tr>
+        <tr>
+          <td colspan="4" style="color:var(--amber);font-size:0.72rem;padding-top:0.75rem;">
+            ⚠️ <strong>VIGILAX pages (vigilax.html, vigilax-pricing.html, vigilax-investor.html, vigilax-deploy.html) — not found in repo.</strong> If these are planned, tell Claude and they will be built. They may be under a different brand name in the repo.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 6: CCLDR PAGES
+=========================== -->
+<div class="section" id="ccldr-pages">
+  <div class="section-header">
+    <span class="section-icon">🌿</span>
+    <span class="section-title-text">CCLDR — All Pages</span>
+  </div>
+  <div class="section-body">
+    <p class="note" style="margin-bottom:0.75rem;">Base URL: <a href="https://ccldr.net" target="_blank">ccldr.net</a> — GitHub Pages: <a href="https://franciscoderek7.github.io/ccldr" target="_blank">franciscoderek7.github.io/ccldr</a> (pending repo creation)</p>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>File</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Home</td><td><code>ccldr-site/index.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Virtual Courthouse — Lobby</td><td><code>ccldr-site/lobby.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Courtroom (Active Cases)</td><td><code>ccldr-site/courtroom.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Library (Case Law)</td><td><code>ccldr-site/library.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Clerk's Office (Filing Guide)</td><td><code>ccldr-site/clerks-office.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Classroom (Courses)</td><td><code>ccldr-site/classroom.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Judge's Chambers (AI Justices)</td><td><code>ccldr-site/judges-chambers.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Boardroom (Case Strategy)</td><td><code>ccldr-site/boardroom.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Records Room (Templates)</td><td><code>ccldr-site/records-room.html</code> (check filename)</td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Practice Courtroom (AI Trial Sim)</td><td><code>ccldr-site/practice-courtroom.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Constitution (7 Articles)</td><td><code>ccldr-site/constitution.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Justices (7 AI Justices)</td><td><code>ccldr-site/justices.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Blockchain Court</td><td><code>ccldr-site/blockchain-court.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>DAO (People's Jury)</td><td><code>ccldr-site/dao.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Treaty (Global Cannabis)</td><td><code>ccldr-site/treaty.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Warrior Network</td><td><code>ccldr-site/warrior-network.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Courses Catalogue</td><td><code>ccldr-site/courses.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Pricing</td><td><code>ccldr-site/pricing.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Charged? (Defense)</td><td><code>ccldr-site/charged.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Defense</td><td><code>ccldr-site/defense.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+        <tr><td>Login</td><td><code>ccldr-site/login.html</code></td><td><span class="badge badge-built">Built</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 7: SOCIAL & COMMUNICATION
+=========================== -->
+<div class="section" id="social">
+  <div class="section-header">
+    <span class="section-icon">📱</span>
+    <span class="section-title-text">Social &amp; Communication</span>
+  </div>
+  <div class="section-body">
+    <div class="placeholder-notice">
+      ⚠️ <strong>Update with actual handles/URLs.</strong> Placeholders based on naming patterns — confirm each before printing.
+    </div>
+    <table>
+      <thead>
+        <tr><th>Platform</th><th>Brand / Person</th><th>URL</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Facebook</strong></td><td>Derek Francisco / Doc WeedLaw</td><td><a href="https://facebook.com/docweedlaw" target="_blank">facebook.com/docweedlaw</a></td><td><span class="badge badge-placeholder">Confirm</span></td></tr>
+        <tr><td><strong>Facebook</strong></td><td>CCLDR</td><td><a href="https://facebook.com/ccldrnet" target="_blank">facebook.com/ccldrnet</a></td><td><span class="badge badge-placeholder">Confirm</span></td></tr>
+        <tr><td><strong>Facebook</strong></td><td>Makayla Francisco / MindShift</td><td><a href="https://facebook.com/makaylaffrancisco" target="_blank">facebook.com/makaylaffrancisco</a></td><td><span class="badge badge-placeholder">Confirm</span></td></tr>
+        <tr><td><strong>LinkedIn</strong></td><td>Derek Francisco</td><td><a href="https://linkedin.com/in/derek-francisco" target="_blank">linkedin.com/in/derek-francisco</a></td><td><span class="badge badge-placeholder">Confirm</span></td></tr>
+        <tr><td><strong>LinkedIn</strong></td><td>Makayla Francisco</td><td><a href="https://linkedin.com/in/makaylaffrancisco" target="_blank">linkedin.com/in/makaylaffrancisco</a></td><td><span class="badge badge-placeholder">Confirm</span></td></tr>
+        <tr><td><strong>X (Twitter)</strong></td><td>Doc WeedLaw</td><td><a href="https://x.com/docweedlaw" target="_blank">x.com/docweedlaw</a></td><td><span class="badge badge-placeholder">Confirm</span></td></tr>
+        <tr><td><strong>X (Twitter)</strong></td><td>Makayla MindShift</td><td><a href="https://x.com/makaylafmindshift" target="_blank">x.com/makaylafmindshift</a></td><td><span class="badge badge-placeholder">Confirm</span></td></tr>
+        <tr><td><strong>GitHub</strong></td><td>franciscoderek7</td><td><a href="https://github.com/franciscoderek7" target="_blank">github.com/franciscoderek7</a></td><td><span class="badge badge-live">Confirmed</span></td></tr>
+        <tr><td><strong>Chrome Web Store</strong></td><td>OmniaGuard (publisher: docweedlaw)</td><td><a href="https://chrome.google.com/webstore/developer/dashboard" target="_blank">developer dashboard</a></td><td><span class="badge badge-pending">Submitted</span></td></tr>
+      </tbody>
+    </table>
+    <hr class="divider">
+    <p style="font-size:0.72rem;color:var(--muted);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;">Email Accounts</p>
+    <table>
+      <thead>
+        <tr><th>Email</th><th>Brand</th><th>Loop</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><a href="mailto:contact@omniaguard.com">contact@omniaguard.com</a></td><td>OmniaGuard</td><td>B</td></tr>
+        <tr><td><a href="mailto:security@omniaguard.com">security@omniaguard.com</a></td><td>OmniaGuard</td><td>B</td></tr>
+        <tr><td><a href="mailto:derek@ccldr.net">derek@ccldr.net</a></td><td>CCLDR</td><td>A</td></tr>
+        <tr><td><a href="mailto:derek@primedoxai.com">derek@primedoxai.com</a></td><td>PrimeDox AI</td><td>A</td></tr>
+        <tr><td><a href="mailto:makayla@mindshift.ca">makayla@mindshift.ca</a></td><td>MindShift — Makayla</td><td>A</td></tr>
+        <tr><td><a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></td><td>Personal / GitHub</td><td>A</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 8: BUSINESS REGISTRATIONS
+=========================== -->
+<div class="section" id="business-reg">
+  <div class="section-header">
+    <span class="section-icon">🏢</span>
+    <span class="section-title-text">Business Registrations</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead>
+        <tr><th>Service</th><th>URL</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ONBIS / Ontario Business Registry</strong></td>
+          <td><a href="https://www.ontario.ca/page/ontario-business-registry" target="_blank">ontario.ca/page/ontario-business-registry</a></td>
+          <td>Corporate search + registration</td>
+        </tr>
+        <tr>
+          <td><strong>ServiceOntario — Business Names</strong></td>
+          <td><a href="https://www.ontario.ca/page/service-ontario" target="_blank">ontario.ca/page/service-ontario</a></td>
+          <td>Business name registration</td>
+        </tr>
+        <tr>
+          <td><strong>Canada Revenue Agency (CRA)</strong></td>
+          <td><a href="https://www.canada.ca/en/revenue-agency.html" target="_blank">canada.ca/en/revenue-agency</a></td>
+          <td>HST, payroll, corporate tax</td>
+        </tr>
+        <tr>
+          <td><strong>Industry Canada — NUANS</strong></td>
+          <td><a href="https://www.ic.gc.ca/app/scr/cc/CorporationsCanada/fdrlCrpSrch.html" target="_blank">ic.gc.ca — Corporations Canada</a></td>
+          <td>Federal corp search</td>
+        </tr>
+        <tr>
+          <td><strong>Francisco Holdings Inc.</strong></td>
+          <td><span class="badge badge-placeholder">Add ONBIS # here</span></td>
+          <td>Parent holding company — Ontario Inc.</td>
+        </tr>
+        <tr>
+          <td><strong>Tech Pack Cage</strong></td>
+          <td><span class="badge badge-placeholder">Add registration # here</span></td>
+          <td>Stripe account entity — active</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 9: DOMAIN REGISTRY
+=========================== -->
+<div class="section" id="domains">
+  <div class="section-header">
+    <span class="section-icon">🌍</span>
+    <span class="section-title-text">Domain Registry — Porkbun</span>
+  </div>
+  <div class="section-body">
+    <p class="note action" style="margin-bottom:0.75rem;">⚡ Registrar: <a href="https://porkbun.com/account/domainsSpeedy" target="_blank">porkbun.com — Domain Management</a> &nbsp;|&nbsp; <a href="https://porkbun.com/account/domainsSpeedy" target="_blank">DNS Settings →</a></p>
+    <table>
+      <thead>
+        <tr><th>Domain</th><th>Brand</th><th>Loop</th><th>DNS Status</th><th>DNS Action Needed</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>omniaguard.com</strong></td><td>OmniaGuard</td><td>B</td><td><span class="badge badge-pending">Pending</span></td><td>A record → 185.199.108–111.153 + CNAME www → franciscoderek7.github.io</td></tr>
+        <tr><td>omniaguard.ca</td><td>OmniaGuard</td><td>B</td><td><span class="badge badge-pending">Pending</span></td><td>301 redirect → omniaguard.com</td></tr>
+        <tr><td>omniaguard.io</td><td>OmniaGuard</td><td>B</td><td><span class="badge badge-pending">Pending</span></td><td>301 redirect → omniaguard.com</td></tr>
+        <tr><td>omniaguard.pro</td><td>OmniaGuard</td><td>B</td><td><span class="badge badge-pending">Pending</span></td><td>301 redirect → omniaguard.com</td></tr>
+        <tr><td>omniaguard.tech</td><td>OmniaGuard</td><td>B</td><td><span class="badge badge-pending">Pending</span></td><td>301 redirect → omniaguard.com</td></tr>
+        <tr><td><strong>franciscoholdingsinc.com</strong></td><td>Francisco Holdings</td><td>A</td><td><span class="badge badge-pending">Pending</span></td><td>A record + CNAME → francisco-holdings GitHub Pages</td></tr>
+        <tr><td>franciscoholdingsinc.ca</td><td>Francisco Holdings</td><td>A</td><td><span class="badge badge-pending">Pending</span></td><td>301 → .com</td></tr>
+        <tr><td>franciscoholdingsinc.buzz</td><td>Francisco Holdings</td><td>A</td><td><span class="badge badge-pending">Pending</span></td><td>301 → .com</td></tr>
+        <tr><td><strong>vaultvelocityauto.com</strong></td><td>Vault Velocity Auto</td><td>B</td><td><span class="badge badge-pending">Pending</span></td><td>Set when site is ready</td></tr>
+        <tr><td><strong>zprimedoxaihq.com</strong></td><td>ZPrimeDoxAI HQ</td><td>A</td><td><span class="badge badge-pending">Pending</span></td><td>A record + CNAME → zprimedoxaihq GitHub Pages</td></tr>
+      </tbody>
+    </table>
+    <hr class="divider">
+    <p class="note" style="margin-bottom:0.4rem;"><strong style="color:var(--gold)">GitHub Pages IPs (A records):</strong></p>
+    <p class="note">185.199.108.153 &nbsp;|&nbsp; 185.199.109.153 &nbsp;|&nbsp; 185.199.110.153 &nbsp;|&nbsp; 185.199.111.153</p>
+    <p class="note" style="margin-top:0.4rem;"><strong style="color:var(--gold)">CNAME value:</strong> franciscoderek7.github.io</p>
+    <p class="note" style="margin-top:0.4rem;">Full DNS guide: <code>docs/porkbun-dns-setup.md</code> in the repo.</p>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 10: DEPLOY WORKFLOWS
+=========================== -->
+<div class="section" id="workflows">
+  <div class="section-header">
+    <span class="section-icon">⚙️</span>
+    <span class="section-title-text">GitHub Actions Deploy Workflows</span>
+  </div>
+  <div class="section-body">
+    <p class="note action" style="margin-bottom:0.75rem;">⚡ All workflows in <code>.github/workflows/</code> — trigger on merge to main OR workflow_dispatch. Secret required: <code>DEPLOY_TOKEN</code></p>
+    <table>
+      <thead>
+        <tr><th>Workflow File</th><th>Deploys To</th><th>Target Repo</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>deploy-omniaguard.yml</code></td><td>omniaguard.com</td><td>franciscoderek7/omniaguard</td><td><span class="badge badge-live">Active</span></td></tr>
+        <tr><td><code>deploy-mindshift-makayla.yml</code></td><td>mindshift-makayla.com</td><td>franciscoderek7/mindshift-makayla</td><td><span class="badge badge-live">Active</span></td></tr>
+        <tr><td><code>deploy-ccldr.yml</code></td><td>ccldr.net</td><td>franciscoderek7/ccldr</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-primedox.yml</code></td><td>primedoxai.com</td><td>franciscoderek7/primedox</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-cleanswarm.yml</code></td><td>cleanswarm.ca</td><td>franciscoderek7/cleanswarm</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-francisco-holdings.yml</code></td><td>franciscoholdingsinc.com</td><td>franciscoderek7/francisco-holdings</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-zprimedoxaihq.yml</code></td><td>zprimedoxaihq.com</td><td>franciscoderek7/zprimedoxaihq</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-kiaros.yml</code> / <code>kiaros-deploy.yml</code></td><td>kiaros.ai</td><td>franciscoderek7/kiaros</td><td><span class="badge badge-live">Active</span></td></tr>
+        <tr><td><code>deploy-docweedlaw.yml</code></td><td>TBD — docweedlaw domain</td><td>franciscoderek7/docweedlaw</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-weedlaw-education.yml</code></td><td>TBD</td><td>franciscoderek7/weedlaw-education</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-vaultvelocityauto.yml</code></td><td>vaultvelocityauto.com</td><td>franciscoderek7/vaultvelocityauto</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+        <tr><td><code>deploy-beno-x.yml</code></td><td>TBD</td><td>franciscoderek7/beno-x</td><td><span class="badge badge-pending">Needs repo</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ===========================
+     SECTION 11: PENDING ACTIONS
+=========================== -->
+<div class="section" id="pending">
+  <div class="section-header">
+    <span class="section-icon">🔴</span>
+    <span class="section-title-text">Pending Actions — Derek Must Complete</span>
+  </div>
+  <div class="section-body">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Action</th><th>Where</th><th>Priority</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>JUNE 17 CRITICAL — Denby litigation</strong><br>File: Affidavit of Service + Default Motion + CPL + Writ</td>
+          <td><a href="https://www.ontariocourts.ca/scj/" target="_blank">Ontario Superior Court</a></td>
+          <td><span class="badge badge-critical">Critical</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Create 8 GitHub repos: ccldr, primedox, cleanswarm, francisco-holdings, zprimedoxaihq, docweedlaw, weedlaw-education, vaultvelocityauto, beno-x</td>
+          <td><a href="https://github.com/new" target="_blank">github.com/new</a></td>
+          <td><span class="badge badge-critical">Critical</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Merge <code>claude/francisco-revenue-sprint-MEva6</code> → <code>main</code> on primedoxai-deploy to trigger all 10 deploy workflows</td>
+          <td><a href="https://github.com/franciscoderek7/primedoxai-deploy/branches" target="_blank">primedoxai-deploy branches</a></td>
+          <td><span class="badge badge-critical">Critical</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Set DNS A records + CNAME for all 10 Porkbun domains (see docs/porkbun-dns-setup.md)</td>
+          <td><a href="https://porkbun.com/account/domainsSpeedy" target="_blank">porkbun.com</a></td>
+          <td><span class="badge badge-critical">Critical</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Create 12 Stripe Payment Links (4 OmniaGuard + 4 CCLDR + 3 CCC + 1 CleanSwarm) — paste buy.stripe.com URLs to Claude</td>
+          <td><a href="https://dashboard.stripe.com/payment-links/create" target="_blank">dashboard.stripe.com</a></td>
+          <td><span class="badge badge-critical">Critical</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Add DEPLOY_TOKEN secret to each new GitHub repo (Settings → Secrets → New repository secret → DEPLOY_TOKEN)</td>
+          <td>Each new GitHub repo → Settings → Secrets</td>
+          <td><span class="badge badge-critical">Critical</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Update Makayla's social handles (Facebook, LinkedIn, X, PayPal) with actual URLs — send to Claude to update site</td>
+          <td>MindShift site</td>
+          <td><span class="badge badge-pending">High</span></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Confirm actual social handles for Derek (Facebook, LinkedIn, X)</td>
+          <td>Social accounts</td>
+          <td><span class="badge badge-pending">High</span></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Railway URL for PrimeDox AI backend — wire into primedox-ai-chat.html</td>
+          <td>Railway dashboard → send URL to Claude</td>
+          <td><span class="badge badge-pending">High</span></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Load email sequences into Mailchimp or ConvertKit (content-marketing/email-sequences/)</td>
+          <td>Email platform</td>
+          <td><span class="badge badge-pending">Medium</span></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>Register soulstack.ai domain (~$80 CAD/yr Cloudflare)</td>
+          <td><a href="https://cloudflare.com" target="_blank">cloudflare.com</a></td>
+          <td><span class="badge badge-pending">Medium</span></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>Add BTC + XMR wallet addresses to relevant sites</td>
+          <td>Send wallet addresses to Claude</td>
+          <td><span class="badge badge-pending">Medium</span></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>Add actual ONBIS / corporate registration numbers to this document</td>
+          <td>ONBIS / ServiceOntario records</td>
+          <td><span class="badge badge-pending">Medium</span></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>FOI requests — 6 provincial + medical + CRU + Ombudsman</td>
+          <td>Provincial courts + Health Canada</td>
+          <td><span class="badge badge-pending">Medium</span></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>Chrome Web Store — OmniaGuard extension publisher name decision (docweedlaw vs. separate account)</td>
+          <td><a href="https://chrome.google.com/webstore/developer/dashboard" target="_blank">Chrome Developer Dashboard</a></td>
+          <td><span class="badge badge-pending">Medium</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<div class="report-footer">
+  <strong>FRANCISCO HOLDINGS INC. — MASTER PROGRESS REPORT</strong><br>
+  Generated: June 9, 2026 · Builder: Claude (Session MEva6) · Authority: PrimeDox — Derek Francisco<br>
+  Source repo: <a href="https://github.com/franciscoderek7/primedoxai-deploy" target="_blank">franciscoderek7/primedoxai-deploy</a> · Branch: <code>claude/francisco-revenue-sprint-MEva6</code><br>
+  <span style="color:var(--muted);">PRIVATE — For USB archive use only. Update placeholder fields before sharing.</span>
+</div>
+
+</body>
+</html>
