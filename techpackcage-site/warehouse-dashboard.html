@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechPackCage — Admin Dashboard</title>
+<style>
+  :root {
+    --forest: #0A1A0F;
+    --gold: #D4AF37;
+    --green: #1B4D1B;
+    --bright: #4CAF50;
+    --dark2: #0F2415;
+    --dark3: #162D1C;
+    --text: #E8E8E0;
+    --muted: #8A9E8A;
+    --border: #2A4A2A;
+    --card-bg: #111E15;
+    --amber: #F59E0B;
+    --blue: #3B82F6;
+    --red: #EF4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--forest);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--forest); }
+  ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--bright); }
+
+  /* LOGIN GATE */
+  #login-gate {
+    position: fixed; inset: 0;
+    background: var(--forest);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+    background-image: radial-gradient(ellipse at 50% 50%, #1B4D1B22 0%, transparent 70%);
+  }
+  #login-gate.hidden { display: none; }
+  .login-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 40px;
+    width: 100%; max-width: 400px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    text-align: center;
+  }
+  .login-logo { font-size: 28px; font-weight: 800; color: var(--gold); letter-spacing: 1px; margin-bottom: 4px; }
+  .login-subtitle { color: var(--muted); font-size: 13px; margin-bottom: 32px; }
+  .login-box label { display: block; text-align: left; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .login-box input[type="password"] {
+    width: 100%; padding: 12px 16px;
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 15px;
+    outline: none; transition: border-color 0.2s; margin-bottom: 20px;
+  }
+  .login-box input[type="password"]:focus { border-color: var(--gold); }
+  .btn-login {
+    width: 100%; padding: 13px;
+    background: var(--gold); color: var(--forest);
+    font-size: 15px; font-weight: 700; border: none;
+    border-radius: 8px; cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-login:hover { background: #e8c547; transform: translateY(-1px); }
+  #login-error { color: var(--red); font-size: 13px; margin-top: 14px; min-height: 18px; }
+
+  /* DASHBOARD */
+  #dashboard { display: none; min-height: 100vh; }
+  #dashboard.visible { display: block; }
+
+  /* HEADER */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--dark2); border-bottom: 1px solid var(--border);
+    padding: 0 24px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  }
+  .header-left { display: flex; flex-direction: column; }
+  .header-logo { font-size: 20px; font-weight: 800; color: var(--gold); letter-spacing: 1px; line-height: 1.2; }
+  .header-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .admin-badge {
+    background: var(--green); color: var(--bright);
+    font-size: 11px; font-weight: 700; padding: 4px 10px;
+    border-radius: 20px; letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid var(--bright);
+  }
+  #live-clock { color: var(--muted); font-size: 12px; text-align: right; line-height: 1.5; min-width: 155px; }
+  .btn-logout {
+    padding: 7px 16px; background: transparent;
+    border: 1px solid var(--border); color: var(--muted);
+    border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;
+  }
+  .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+  /* MAIN */
+  main { padding: 24px; max-width: 1600px; margin: 0 auto; }
+
+  /* STAT CARDS */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 22px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden; cursor: default;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .stat-card:hover { border-color: var(--gold); box-shadow: 0 0 18px rgba(212,175,55,0.15); }
+  .stat-card:hover::before { opacity: 1; }
+  .stat-card.alert { border-color: rgba(245,158,11,0.3); }
+  .stat-card.alert::before { background: linear-gradient(90deg, var(--amber), transparent); }
+  .stat-card.alert:hover { border-color: var(--amber); box-shadow: 0 0 18px rgba(245,158,11,0.15); }
+  .stat-info { display: flex; flex-direction: column; }
+  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 800; color: var(--text); line-height: 1; margin-bottom: 6px; }
+  .stat-card.alert .stat-value { color: var(--amber); }
+  .stat-sub { font-size: 12px; color: var(--bright); }
+  .stat-icon { font-size: 28px; opacity: 0.6; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 15px; font-weight: 700; color: var(--gold);
+    margin-bottom: 14px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-title span { color: var(--muted); font-size: 12px; font-weight: 400; }
+
+  /* MAIN GRID */
+  .main-grid { display: grid; grid-template-columns: 60% 1fr; gap: 20px; align-items: start; }
+  .left-col { display: flex; flex-direction: column; gap: 20px; }
+  .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { border-color: #3A5A3A; box-shadow: 0 0 12px rgba(76,175,80,0.08); }
+
+  /* TABLES */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th {
+    text-align: left; padding: 8px 10px; color: var(--muted);
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--border); font-weight: 600;
+  }
+  .data-table td { padding: 9px 10px; border-bottom: 1px solid #1A2E1A; vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tbody tr { transition: background 0.15s; }
+  .data-table tbody tr:hover { background: #162D1C; }
+  .data-table tbody tr.low-stock { background: rgba(245,158,11,0.05); }
+  .data-table tbody tr.critical-stock { background: rgba(239,68,68,0.05); }
+
+  /* STATUS PILLS */
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .pill-processing { background: #F59E0B; color: #1A0F00; }
+  .pill-shipped { background: #3B82F6; color: #fff; }
+  .pill-delivered { background: #4CAF50; color: #fff; }
+  .pill-cancelled { background: #EF4444; color: #fff; }
+  .pill-active { background: rgba(76,175,80,0.2); color: var(--bright); border: 1px solid var(--bright); }
+  .pill-review { background: rgba(245,158,11,0.2); color: var(--amber); border: 1px solid var(--amber); }
+
+  /* ACTION LINKS */
+  .action-links { display: flex; gap: 10px; }
+  .action-link {
+    color: var(--gold); background: none; border: none; cursor: pointer;
+    font-size: 12px; text-decoration: underline;
+    text-decoration-color: transparent; transition: text-decoration-color 0.15s; padding: 0;
+  }
+  .action-link:hover { text-decoration-color: var(--gold); }
+
+  /* FILTER */
+  .filter-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .filter-row label { font-size: 12px; color: var(--muted); }
+  select.filter-select {
+    background: var(--dark3); border: 1px solid var(--border);
+    color: var(--text); padding: 5px 10px; border-radius: 6px;
+    font-size: 13px; outline: none; cursor: pointer; transition: border-color 0.2s;
+  }
+  select.filter-select:focus { border-color: var(--gold); }
+
+  /* 7-DAY BAR CHART */
+  .bar-chart-wrap {
+    display: flex; align-items: flex-end; gap: 10px;
+    height: 160px; padding: 0 4px;
+  }
+  .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; gap: 5px; }
+  .bar-label-top { font-size: 10px; color: var(--gold); text-align: center; white-space: nowrap; opacity: 0; transition: opacity 0.3s 0.5s; font-weight: 600; }
+  .bar-label-top.visible { opacity: 1; }
+  .bar {
+    width: 100%; background: linear-gradient(to top, var(--gold), #e8c547);
+    border-radius: 4px 4px 0 0; transform-origin: bottom;
+    transform: scaleY(0); transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .bar.highest { background: linear-gradient(to top, var(--bright), #76d97c); }
+  .bar.animated { transform: scaleY(1); }
+  .bar-day { font-size: 11px; color: var(--muted); }
+
+  /* SUPPLIER GRID */
+  .supplier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .supplier-card {
+    background: var(--dark3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .supplier-card:hover { border-color: var(--gold); box-shadow: 0 0 10px rgba(212,175,55,0.1); }
+  .supplier-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
+  .supplier-meta { font-size: 11px; color: var(--muted); line-height: 1.9; }
+  .supplier-meta span { color: var(--text); font-weight: 600; }
+  .star { color: var(--gold); }
+
+  /* INVENTORY ALERTS */
+  .alert-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
+    background: var(--dark3); border: 1px solid var(--border); transition: border-color 0.2s;
+  }
+  .alert-item:last-child { margin-bottom: 0; }
+  .alert-item:hover { border-color: var(--amber); }
+  .alert-item.critical:hover { border-color: var(--red); }
+  .alert-left { display: flex; align-items: center; gap: 10px; }
+  .alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .alert-dot.low { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+  .alert-dot.critical-dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .alert-product { font-size: 13px; color: var(--text); font-weight: 500; }
+  .alert-units { font-size: 11px; color: var(--muted); }
+  .alert-right { display: flex; align-items: center; gap: 8px; }
+  .alert-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.5px; }
+  .alert-badge.low { background: rgba(245,158,11,0.15); color: var(--amber); }
+  .alert-badge.critical { background: rgba(239,68,68,0.15); color: var(--red); }
+  .btn-reorder {
+    padding: 5px 12px; background: transparent;
+    border: 1px solid var(--gold); color: var(--gold);
+    border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-reorder:hover { background: var(--gold); color: var(--forest); }
+
+  /* TOP PRODUCTS */
+  .top-product-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .top-product-item:last-child { border-bottom: none; }
+  .rank-badge { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+  .rank-1 { background: var(--gold); color: var(--forest); }
+  .rank-2 { background: #C0C0C0; color: #111; }
+  .rank-3 { background: #CD7F32; color: #fff; }
+  .rank-other { background: var(--dark3); color: var(--muted); border: 1px solid var(--border); }
+  .top-product-info { flex: 1; min-width: 0; }
+  .top-product-name { font-size: 12px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-product-units { font-size: 11px; color: var(--muted); }
+  .top-product-revenue { font-size: 13px; font-weight: 700; color: var(--bright); text-align: right; white-space: nowrap; }
+  .trend { font-size: 11px; font-weight: 700; text-align: right; }
+  .trend.up { color: var(--bright); }
+  .trend.down { color: var(--red); }
+
+  /* HORIZONTAL BAR CHART */
+  .h-bar-chart { margin-top: 4px; }
+  .h-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .h-bar-row:last-child { margin-bottom: 0; }
+  .h-bar-name { width: 105px; font-size: 12px; color: var(--muted); text-align: right; flex-shrink: 0; }
+  .h-bar-track { flex: 1; background: var(--dark3); border-radius: 4px; height: 18px; overflow: hidden; }
+  .h-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--gold), #e8c547);
+    border-radius: 4px; width: 0;
+    transition: width 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    display: flex; align-items: center; justify-content: flex-end; padding-right: 8px;
+  }
+  .h-bar-fill-label { font-size: 10px; font-weight: 700; color: var(--forest); white-space: nowrap; }
+  .h-bar-value { width: 60px; font-size: 12px; font-weight: 700; color: var(--text); text-align: right; flex-shrink: 0; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 20px;
+    border-top: 1px solid var(--border); color: var(--muted);
+    font-size: 11px; letter-spacing: 0.5px; margin-top: 24px;
+  }
+  footer span { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div id="login-gate">
+  <div class="login-box">
+    <div class="login-logo">TechPackCage</div>
+    <div class="login-subtitle">Admin Login — Warehouse Dashboard</div>
+    <label for="pw-input">Password</label>
+    <input type="password" id="pw-input" placeholder="Enter admin password" autocomplete="current-password">
+    <button class="btn-login" onclick="attemptLogin()">Login</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+  <header>
+    <div class="header-left">
+      <div class="header-logo">TechPackCage</div>
+      <div class="header-sub">Virtual Warehouse Dashboard</div>
+    </div>
+    <div class="header-right">
+      <div class="admin-badge">Admin</div>
+      <div id="live-clock"></div>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">Today's Revenue</div>
+          <div class="stat-value" id="stat-revenue">$0.00</div>
+          <div class="stat-sub">+23% vs yesterday</div>
+        </div>
+        <div class="stat-icon">💵</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">Orders Today</div>
+          <div class="stat-value" id="stat-orders">0</div>
+          <div class="stat-sub">8 pending fulfillment</div>
+        </div>
+        <div class="stat-icon">📦</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">Active Products</div>
+          <div class="stat-value" id="stat-products">0</div>
+          <div class="stat-sub">47 added this week</div>
+        </div>
+        <div class="stat-icon">🏷️</div>
+      </div>
+      <div class="stat-card alert">
+        <div class="stat-info">
+          <div class="stat-label">Low Stock Alerts</div>
+          <div class="stat-value" id="stat-alerts">0</div>
+          <div class="stat-sub" style="color:var(--amber)">Reorder recommended</div>
+        </div>
+        <div class="stat-icon">⚠️</div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="main-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="left-col">
+
+        <!-- ORDER PIPELINE -->
+        <div class="card">
+          <div class="section-title">Recent Orders (Last 10) <span>Live feed</span></div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order #</th><th>Product</th><th>Customer City</th>
+                  <th>Supplier</th><th>Status</th><th>Profit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#7841</td><td>SmartPaw GPS Tracker Pro</td><td>Toronto, ON</td>
+                  <td>AliExpress</td><td><span class="pill pill-shipped">Shipped</span></td>
+                  <td style="color:var(--bright);font-weight:700">$18.40</td>
+                </tr>
+                <tr>
+                  <td>#7840</td><td>AutoFeed Pet Dispenser 6L</td><td>Vancouver, BC</td>
+                  <td>Spocket</td><td><span class="pill pill-delivered">Delivered</span></td>
+                  <td style="color:var(--bright);font-weight:700">$22.15</td>
+                </tr>
+                <tr>
+                  <td>#7839</td><td>PetCam 1080p Indoor</td><td>Calgary, AB</td>
+                  <td>AliExpress</td><td><span class="pill pill-processing">Processing</span></td>
+                  <td style="color:var(--bright);font-weight:700">$15.80</td>
+                </tr>
+                <tr>
+                  <td>#7838</td><td>LED Safety Dog Collar</td><td>Oshawa, ON</td>
+                  <td>Syncee</td><td><span class="pill pill-delivered">Delivered</span></td>
+                  <td style="color:var(--bright);font-weight:700">$9.60</td>
+                </tr>
+                <tr>
+                  <td>#7837</td><td>Smart Water Fountain 3L</td><td>Ottawa, ON</td>
+                  <td>AliExpress</td><td><span class="pill pill-shipped">Shipped</span></td>
+                  <td style="color:var(--bright);font-weight:700">$12.90</td>
+                </tr>
+                <tr>
+                  <td>#7836</td><td>GPS Cat Tracker Mini</td><td>Mississauga, ON</td>
+                  <td>Spocket</td><td><span class="pill pill-processing">Processing</span></td>
+                  <td style="color:var(--bright);font-weight:700">$16.70</td>
+                </tr>
+                <tr>
+                  <td>#7835</td><td>Automatic Laser Cat Toy</td><td>Regina, SK</td>
+                  <td>AliExpress</td><td><span class="pill pill-cancelled">Cancelled</span></td>
+                  <td style="color:var(--muted)">$0.00</td>
+                </tr>
+                <tr>
+                  <td>#7834</td><td>Pet Health Monitor Clip</td><td>Victoria, BC</td>
+                  <td>Syncee</td><td><span class="pill pill-delivered">Delivered</span></td>
+                  <td style="color:var(--bright);font-weight:700">$21.30</td>
+                </tr>
+                <tr>
+                  <td>#7833</td><td>SmartPaw GPS Tracker Pro</td><td>Halifax, NS</td>
+                  <td>AliExpress</td><td><span class="pill pill-shipped">Shipped</span></td>
+                  <td style="color:var(--bright);font-weight:700">$18.40</td>
+                </tr>
+                <tr>
+                  <td>#7832</td><td>Dog Training E-Collar</td><td>Winnipeg, MB</td>
+                  <td>Direct China</td><td><span class="pill pill-delivered">Delivered</span></td>
+                  <td style="color:var(--bright);font-weight:700">$27.50</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRODUCT CATALOG -->
+        <div class="card">
+          <div class="section-title">Product Catalog <span>2,413 active</span></div>
+          <div class="filter-row">
+            <label for="cat-filter">Filter by Category:</label>
+            <select class="filter-select" id="cat-filter" onchange="filterCatalog()">
+              <option value="all">All</option>
+              <option value="GPS/Tracking">GPS/Tracking</option>
+              <option value="Feeders">Feeders</option>
+              <option value="Cameras">Cameras</option>
+              <option value="Toys">Toys</option>
+              <option value="Collars">Collars</option>
+              <option value="Health">Health</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Product</th><th>Category</th><th>Cost</th>
+                  <th>Sell Price</th><th>Margin%</th><th>Stock</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="catalog-body">
+                <tr data-cat="GPS/Tracking">
+                  <td>SmartPaw GPS Tracker Pro</td><td>GPS/Tracking</td>
+                  <td>$14.99</td><td>$44.99</td>
+                  <td style="color:var(--bright)">67%</td><td>234</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+                <tr data-cat="Feeders">
+                  <td>AutoFeed Pet Dispenser 6L</td><td>Feeders</td>
+                  <td>$18.50</td><td>$52.99</td>
+                  <td style="color:var(--bright)">65%</td><td>89</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+                <tr data-cat="Cameras">
+                  <td>PetCam 1080p Indoor</td><td>Cameras</td>
+                  <td>$16.20</td><td>$47.99</td>
+                  <td style="color:var(--bright)">66%</td><td>156</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+                <tr data-cat="Collars">
+                  <td>LED Safety Dog Collar</td><td>Collars</td>
+                  <td>$4.80</td><td>$16.99</td>
+                  <td style="color:var(--bright)">72%</td><td>412</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+                <tr data-cat="Feeders" class="low-stock">
+                  <td>Smart Water Fountain 3L</td><td>Feeders</td>
+                  <td>$11.40</td><td>$32.99</td>
+                  <td style="color:var(--bright)">65%</td>
+                  <td style="color:var(--amber);font-weight:700">43 ⚠️</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+                <tr data-cat="GPS/Tracking" class="low-stock">
+                  <td>GPS Cat Tracker Mini</td><td>GPS/Tracking</td>
+                  <td>$12.00</td><td>$34.99</td>
+                  <td style="color:var(--bright)">66%</td>
+                  <td style="color:var(--amber);font-weight:700">67 ⚠️</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+                <tr data-cat="Toys" class="low-stock">
+                  <td>Automatic Laser Cat Toy</td><td>Toys</td>
+                  <td>$6.30</td><td>$19.99</td>
+                  <td style="color:var(--bright)">68%</td>
+                  <td style="color:var(--amber);font-weight:700">28 ⚠️</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+                <tr data-cat="Health" class="critical-stock">
+                  <td>Pet Health Monitor Clip</td><td>Health</td>
+                  <td>$19.80</td><td>$59.99</td>
+                  <td style="color:var(--bright)">67%</td>
+                  <td style="color:var(--red);font-weight:700">8 🔴</td>
+                  <td><div class="action-links"><button class="action-link">Edit</button><button class="action-link">Reorder</button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PROFIT BY CATEGORY -->
+        <div class="card">
+          <div class="section-title">Profit Breakdown by Category <span>This month</span></div>
+          <div class="h-bar-chart" id="h-bar-chart">
+            <div class="h-bar-row">
+              <div class="h-bar-name">GPS/Tracking</div>
+              <div class="h-bar-track"><div class="h-bar-fill" data-pct="38"><span class="h-bar-fill-label">38%</span></div></div>
+              <div class="h-bar-value">$3,847</div>
+            </div>
+            <div class="h-bar-row">
+              <div class="h-bar-name">Cameras</div>
+              <div class="h-bar-track"><div class="h-bar-fill" data-pct="22"><span class="h-bar-fill-label">22%</span></div></div>
+              <div class="h-bar-value">$2,190</div>
+            </div>
+            <div class="h-bar-row">
+              <div class="h-bar-name">Feeders</div>
+              <div class="h-bar-track"><div class="h-bar-fill" data-pct="19"><span class="h-bar-fill-label">19%</span></div></div>
+              <div class="h-bar-value">$1,890</div>
+            </div>
+            <div class="h-bar-row">
+              <div class="h-bar-name">Collars</div>
+              <div class="h-bar-track"><div class="h-bar-fill" data-pct="11"><span class="h-bar-fill-label">11%</span></div></div>
+              <div class="h-bar-value">$1,102</div>
+            </div>
+            <div class="h-bar-row">
+              <div class="h-bar-name">Health</div>
+              <div class="h-bar-track"><div class="h-bar-fill" data-pct="6"><span class="h-bar-fill-label">6%</span></div></div>
+              <div class="h-bar-value">$630</div>
+            </div>
+            <div class="h-bar-row">
+              <div class="h-bar-name">Toys</div>
+              <div class="h-bar-track"><div class="h-bar-fill" data-pct="4"><span class="h-bar-fill-label">4%</span></div></div>
+              <div class="h-bar-value">$401</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /left-col -->
+
+      <!-- RIGHT COLUMN -->
+      <div class="right-col">
+
+        <!-- 7-DAY REVENUE CHART -->
+        <div class="card">
+          <div class="section-title">7-Day Revenue <span>Sat highest</span></div>
+          <div class="bar-chart-wrap" id="bar-chart">
+            <div class="bar-col">
+              <div class="bar-label-top" id="lbl-0">$612</div>
+              <div class="bar" id="bar-0" style="height:71px" data-delay="0"></div>
+              <div class="bar-day">Mon</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-label-top" id="lbl-1">$834</div>
+              <div class="bar" id="bar-1" style="height:97px" data-delay="80"></div>
+              <div class="bar-day">Tue</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-label-top" id="lbl-2">$1,041</div>
+              <div class="bar" id="bar-2" style="height:121px" data-delay="160"></div>
+              <div class="bar-day">Wed</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-label-top" id="lbl-3">$758</div>
+              <div class="bar" id="bar-3" style="height:88px" data-delay="240"></div>
+              <div class="bar-day">Thu</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-label-top" id="lbl-4">$1,187</div>
+              <div class="bar" id="bar-4" style="height:138px" data-delay="320"></div>
+              <div class="bar-day">Fri</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-label-top" id="lbl-5">$1,389</div>
+              <div class="bar highest" id="bar-5" style="height:160px" data-delay="400"></div>
+              <div class="bar-day" style="color:var(--bright);font-weight:700">Sat ★</div>
+            </div>
+            <div class="bar-col">
+              <div class="bar-label-top" id="lbl-6">$1,248</div>
+              <div class="bar" id="bar-6" style="height:145px" data-delay="480"></div>
+              <div class="bar-day">Sun</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUPPLIER PANEL -->
+        <div class="card">
+          <div class="section-title">Supplier Network <span>4 connected</span></div>
+          <div class="supplier-grid">
+            <div class="supplier-card">
+              <div class="supplier-name">AliExpress Direct <span class="pill pill-active">Active</span></div>
+              <div class="supplier-meta">
+                Products: <span>847</span><br>
+                Avg Ship: <span>10 days</span><br>
+                Rating: <span class="star">★</span> <span>4.7</span>
+              </div>
+            </div>
+            <div class="supplier-card">
+              <div class="supplier-name">Spocket US/EU <span class="pill pill-active">Active</span></div>
+              <div class="supplier-meta">
+                Products: <span>312</span><br>
+                Avg Ship: <span>5 days</span><br>
+                Rating: <span class="star">★</span> <span>4.9</span>
+              </div>
+            </div>
+            <div class="supplier-card">
+              <div class="supplier-name">Syncee Global <span class="pill pill-active">Active</span></div>
+              <div class="supplier-meta">
+                Products: <span>198</span><br>
+                Avg Ship: <span>12 days</span><br>
+                Rating: <span class="star">★</span> <span>4.5</span>
+              </div>
+            </div>
+            <div class="supplier-card">
+              <div class="supplier-name">Direct China <span class="pill pill-review">Review</span></div>
+              <div class="supplier-meta">
+                Products: <span>156</span><br>
+                Avg Ship: <span>14 days</span><br>
+                Rating: <span class="star">★</span> <span>4.3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVENTORY ALERTS -->
+        <div class="card">
+          <div class="section-title">Low Stock Alerts <span style="color:var(--amber)">7 items</span></div>
+          <div class="alert-item critical">
+            <div class="alert-left">
+              <div class="alert-dot critical-dot"></div>
+              <div>
+                <div class="alert-product">Pet Health Monitor Clip</div>
+                <div class="alert-units">8 units remaining</div>
+              </div>
+            </div>
+            <div class="alert-right">
+              <span class="alert-badge critical">CRITICAL</span>
+              <button class="btn-reorder" onclick="reorderItem(this)">Reorder</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-left">
+              <div class="alert-dot low"></div>
+              <div>
+                <div class="alert-product">Smart Water Fountain 3L</div>
+                <div class="alert-units">43 units remaining</div>
+              </div>
+            </div>
+            <div class="alert-right">
+              <span class="alert-badge low">LOW</span>
+              <button class="btn-reorder" onclick="reorderItem(this)">Reorder</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-left">
+              <div class="alert-dot low"></div>
+              <div>
+                <div class="alert-product">Automatic Laser Cat Toy</div>
+                <div class="alert-units">28 units remaining</div>
+              </div>
+            </div>
+            <div class="alert-right">
+              <span class="alert-badge low">LOW</span>
+              <button class="btn-reorder" onclick="reorderItem(this)">Reorder</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-left">
+              <div class="alert-dot low"></div>
+              <div>
+                <div class="alert-product">GPS Cat Tracker Mini</div>
+                <div class="alert-units">67 units remaining</div>
+              </div>
+            </div>
+            <div class="alert-right">
+              <span class="alert-badge low">LOW</span>
+              <button class="btn-reorder" onclick="reorderItem(this)">Reorder</button>
+            </div>
+          </div>
+          <div class="alert-item critical">
+            <div class="alert-left">
+              <div class="alert-dot critical-dot"></div>
+              <div>
+                <div class="alert-product">Paw Print Pet Camera</div>
+                <div class="alert-units">19 units remaining</div>
+              </div>
+            </div>
+            <div class="alert-right">
+              <span class="alert-badge critical">CRITICAL</span>
+              <button class="btn-reorder" onclick="reorderItem(this)">Reorder</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-left">
+              <div class="alert-dot low"></div>
+              <div>
+                <div class="alert-product">Auto Treat Dispenser</div>
+                <div class="alert-units">55 units remaining</div>
+              </div>
+            </div>
+            <div class="alert-right">
+              <span class="alert-badge low">LOW</span>
+              <button class="btn-reorder" onclick="reorderItem(this)">Reorder</button>
+            </div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-left">
+              <div class="alert-dot low"></div>
+              <div>
+                <div class="alert-product">USB Pet Heating Pad</div>
+                <div class="alert-units">31 units remaining</div>
+              </div>
+            </div>
+            <div class="alert-right">
+              <span class="alert-badge low">LOW</span>
+              <button class="btn-reorder" onclick="reorderItem(this)">Reorder</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOP PRODUCTS -->
+        <div class="card">
+          <div class="section-title">Top Products This Month <span>by revenue</span></div>
+          <div class="top-product-item">
+            <div class="rank-badge rank-1">1</div>
+            <div class="top-product-info">
+              <div class="top-product-name">SmartPaw GPS Tracker Pro</div>
+              <div class="top-product-units">184 units sold</div>
+            </div>
+            <div>
+              <div class="top-product-revenue">$8,278.16</div>
+              <div class="trend up">↑ +34%</div>
+            </div>
+          </div>
+          <div class="top-product-item">
+            <div class="rank-badge rank-2">2</div>
+            <div class="top-product-info">
+              <div class="top-product-name">AutoFeed Pet Dispenser 6L</div>
+              <div class="top-product-units">97 units sold</div>
+            </div>
+            <div>
+              <div class="top-product-revenue">$5,140.03</div>
+              <div class="trend up">↑ +21%</div>
+            </div>
+          </div>
+          <div class="top-product-item">
+            <div class="rank-badge rank-3">3</div>
+            <div class="top-product-info">
+              <div class="top-product-name">PetCam 1080p Indoor</div>
+              <div class="top-product-units">83 units sold</div>
+            </div>
+            <div>
+              <div class="top-product-revenue">$3,983.17</div>
+              <div class="trend up">↑ +18%</div>
+            </div>
+          </div>
+          <div class="top-product-item">
+            <div class="rank-badge rank-other">4</div>
+            <div class="top-product-info">
+              <div class="top-product-name">LED Safety Dog Collar</div>
+              <div class="top-product-units">201 units sold</div>
+            </div>
+            <div>
+              <div class="top-product-revenue">$3,414.99</div>
+              <div class="trend down">↓ -4%</div>
+            </div>
+          </div>
+          <div class="top-product-item">
+            <div class="rank-badge rank-other">5</div>
+            <div class="top-product-info">
+              <div class="top-product-name">Pet Health Monitor Clip</div>
+              <div class="top-product-units">52 units sold</div>
+            </div>
+            <div>
+              <div class="top-product-revenue">$3,119.48</div>
+              <div class="trend up">↑ +12%</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /right-col -->
+    </div><!-- /main-grid -->
+  </main>
+
+  <footer>
+    <span>TechPackCage Virtual Warehouse v1.0</span> | Francisco Holdings Inc. | Admin Session Active
+  </footer>
+
+</div><!-- /dashboard -->
+
+<script>
+  // SESSION CHECK — restore on refresh
+  (function() {
+    if (sessionStorage.getItem('tpc_auth') === '1') {
+      showDashboard(false);
+    }
+  })();
+
+  // LOGIN
+  function attemptLogin() {
+    var pw = document.getElementById('pw-input').value;
+    if (pw === 'empire2026') {
+      sessionStorage.setItem('tpc_auth', '1');
+      showDashboard(true);
+    } else {
+      document.getElementById('login-error').textContent = 'Invalid credentials';
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-input').focus();
+    }
+  }
+
+  document.getElementById('pw-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') attemptLogin();
+  });
+
+  function showDashboard(animate) {
+    document.getElementById('login-gate').classList.add('hidden');
+    document.getElementById('dashboard').classList.add('visible');
+    initDashboard(animate !== false);
+  }
+
+  function logout() {
+    sessionStorage.removeItem('tpc_auth');
+    document.getElementById('login-gate').classList.remove('hidden');
+    document.getElementById('dashboard').classList.remove('visible');
+    document.getElementById('pw-input').value = '';
+    document.getElementById('login-error').textContent = '';
+  }
+
+  // LIVE CLOCK
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+  function updateClock() {
+    var now = new Date();
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var date = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ' ' + now.getFullYear();
+    var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    document.getElementById('live-clock').innerHTML = date + '<br>' + h + ':' + pad(m) + ':' + pad(s) + ' ' + ampm;
+  }
+
+  // STAT COUNTER ANIMATION
+  function animateCounter(elId, target, isFloat, duration) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      var current = target * ease;
+      if (isFloat) {
+        el.textContent = '$' + current.toFixed(2);
+      } else {
+        el.textContent = Math.floor(current).toLocaleString();
+      }
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // BAR CHART ANIMATION
+  function animateBars() {
+    var bars = document.querySelectorAll('#bar-chart .bar');
+    var labels = document.querySelectorAll('#bar-chart .bar-label-top');
+    bars.forEach(function(bar, i) {
+      var delay = parseInt(bar.getAttribute('data-delay')) || 0;
+      setTimeout(function() {
+        bar.classList.add('animated');
+        if (labels[i]) labels[i].classList.add('visible');
+      }, delay + 150);
+    });
+  }
+
+  // HORIZONTAL BAR ANIMATION
+  function animateHBars() {
+    var fills = document.querySelectorAll('.h-bar-fill');
+    fills.forEach(function(fill, i) {
+      var pct = parseInt(fill.getAttribute('data-pct')) || 0;
+      setTimeout(function() {
+        fill.style.width = pct + '%';
+      }, i * 130 + 300);
+    });
+  }
+
+  // CATEGORY FILTER
+  function filterCatalog() {
+    var val = document.getElementById('cat-filter').value;
+    var rows = document.querySelectorAll('#catalog-body tr');
+    rows.forEach(function(row) {
+      row.style.display = (val === 'all' || row.getAttribute('data-cat') === val) ? '' : 'none';
+    });
+  }
+
+  // REORDER BUTTON FEEDBACK
+  function reorderItem(btn) {
+    if (btn.disabled) return;
+    btn.textContent = 'Queued!';
+    btn.style.background = 'var(--bright)';
+    btn.style.color = 'var(--forest)';
+    btn.style.borderColor = 'var(--bright)';
+    btn.disabled = true;
+    setTimeout(function() {
+      btn.textContent = 'Reorder';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.disabled = false;
+    }, 3000);
+  }
+
+  // INIT
+  var clockInterval = null;
+  function initDashboard(animate) {
+    if (clockInterval) clearInterval(clockInterval);
+    updateClock();
+    clockInterval = setInterval(updateClock, 1000);
+    if (animate) {
+      setTimeout(function() {
+        animateCounter('stat-revenue', 1247.83, true, 1200);
+        animateCounter('stat-orders', 34, false, 800);
+        animateCounter('stat-products', 2413, false, 1000);
+        animateCounter('stat-alerts', 7, false, 600);
+      }, 80);
+      animateBars();
+      animateHBars();
+    } else {
+      document.getElementById('stat-revenue').textContent = '$1,247.83';
+      document.getElementById('stat-orders').textContent = '34';
+      document.getElementById('stat-products').textContent = '2,413';
+      document.getElementById('stat-alerts').textContent = '7';
+      document.querySelectorAll('.bar').forEach(function(b) { b.classList.add('animated'); });
+      document.querySelectorAll('.bar-label-top').forEach(function(l) { l.classList.add('visible'); });
+      document.querySelectorAll('.h-bar-fill').forEach(function(f) {
+        f.style.width = (parseInt(f.getAttribute('data-pct')) || 0) + '%';
+      });
+    }
+  }
+</script>
+</body>
+</html>
