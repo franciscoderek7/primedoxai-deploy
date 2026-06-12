@@ -163,11 +163,90 @@
   /* ===== FOOTER ===== */
   footer { border-top: 1px solid var(--border); padding: 16px 24px; font-size: 11px; color: var(--dim); text-align: center; }
 
+  /* ===== APP LAUNCHER ===== */
+  .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .app-tile { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: all 0.2s; position: relative; overflow: hidden; }
+  .app-tile::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transition: transform 0.2s; transform-origin: left; }
+  .app-tile:hover::before { transform: scaleX(1); }
+  .app-tile:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+  .app-tile-icon { font-size: 30px; margin-bottom: 10px; }
+  .app-tile-name { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+  .app-tile-domain { font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: monospace; }
+  .app-tile-desc { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .app-tile-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .app-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .ab-legal { background: rgba(46,158,107,0.15); color: var(--green); border: 1px solid rgba(46,158,107,0.3); }
+  .ab-cyber { background: rgba(230,57,70,0.12); color: #f87171; border: 1px solid rgba(230,57,70,0.3); }
+  .ab-safety { background: rgba(74,108,247,0.12); color: var(--blue); border: 1px solid rgba(74,108,247,0.3); }
+  .ab-gig { background: rgba(124,58,237,0.12); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+  .ab-edu { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+  .ab-biz { background: rgba(0,180,216,0.12); color: var(--cyan); border: 1px solid rgba(0,180,216,0.3); }
+  .app-btn-row { display: flex; gap: 7px; }
+  .app-launch { background: var(--gold); color: #111; border: none; padding: 6px 13px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+  .app-launch:hover { background: var(--gold2); }
+  .app-preview { background: var(--mid); border: 1px solid var(--border); color: var(--muted); padding: 6px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+  .app-preview:hover { border-color: var(--gold); color: var(--gold); }
+  .hub-node { background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(46,158,107,0.08)); border: 2px solid rgba(201,168,76,0.4); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; }
+  .hub-node-icon { font-size: 40px; flex-shrink: 0; }
+  .hub-node-title { font-size: 17px; font-weight: 900; color: var(--gold); margin-bottom: 3px; }
+  .hub-node-sub { font-size: 12px; color: var(--muted); }
+  .hub-arrow { text-align: center; font-size: 24px; color: var(--gold); margin: -4px 0 12px; opacity: 0.6; }
+
+  /* ===== IFRAME PANEL ===== */
+  .ifr-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 499; display: none; }
+  .ifr-overlay.open { display: block; }
+  .ifr-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 72%; max-width: 1200px; background: var(--mid); border-left: 2px solid var(--gold); z-index: 500; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s cubic-bezier(.4,0,.2,1); box-shadow: -24px 0 80px rgba(0,0,0,0.8); }
+  .ifr-panel.open { transform: translateX(0); }
+  .ifr-bar { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--dark); gap: 12px; }
+  .ifr-bar-title { font-size: 14px; font-weight: 700; flex: 1; display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .ifr-bar-url { font-size: 11px; color: var(--muted); font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ifr-bar-btns { display: flex; gap: 7px; flex-shrink: 0; }
+  .ifr-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
+  .ifr-btn:hover { color: var(--text); border-color: var(--gold); }
+  .ifr-close-btn { background: rgba(230,57,70,0.12); border: 1px solid rgba(230,57,70,0.3); color: #f87171; padding: 5px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+  .ifr-close-btn:hover { background: rgba(230,57,70,0.25); }
+  #app-iframe { flex: 1; border: none; width: 100%; background: #fff; }
+  .ifr-fallback { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 40px; text-align: center; }
+  .ifr-fallback-icon { font-size: 48px; }
+  .ifr-fallback-title { font-size: 18px; font-weight: 800; color: var(--gold); }
+  .ifr-fallback-sub { font-size: 13px; color: var(--muted); max-width: 380px; line-height: 1.6; }
+  .ifr-fallback-btn { background: var(--gold); color: #111; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; display: inline-block; }
+
+  /* ===== AI ROUTER ===== */
+  .router-hero { background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(46,158,107,0.08), rgba(74,108,247,0.08)); border: 1px solid rgba(201,168,76,0.25); border-radius: 12px; padding: 22px 24px; margin-bottom: 22px; }
+  .router-hero-title { font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 4px; }
+  .router-hero-sub { font-size: 13px; color: var(--muted); }
+  .router-query-row { display: flex; gap: 10px; margin-bottom: 22px; }
+  .router-input { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 11px 16px; border-radius: 8px; font-size: 14px; outline: none; }
+  .router-input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,168,76,0.15); }
+  .router-go { background: var(--gold); color: #111; border: none; padding: 11px 22px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 14px; white-space: nowrap; }
+  .router-go:hover { background: var(--gold2); }
+  .router-adapters-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+  .radapter { background: var(--card); border: 2px solid var(--border); border-radius: 10px; padding: 14px 8px; text-align: center; transition: all 0.3s; cursor: pointer; }
+  .radapter:hover { border-color: rgba(201,168,76,0.4); }
+  .radapter.routing { border-color: var(--green); background: rgba(46,158,107,0.08); animation: radpt-pulse 0.8s ease-in-out infinite; }
+  .radapter.selected { border-color: var(--gold); background: rgba(201,168,76,0.07); box-shadow: 0 0 14px rgba(201,168,76,0.2); }
+  @keyframes radpt-pulse { 0%,100%{box-shadow:0 0 0 rgba(46,158,107,0)} 50%{box-shadow:0 0 20px rgba(46,158,107,0.5)} }
+  .radapter-icon { font-size: 24px; margin-bottom: 6px; }
+  .radapter-name { font-size: 11px; font-weight: 700; line-height: 1.3; }
+  .radapter-spec { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .radapter-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; margin-top: 6px; animation: blink 2s infinite; }
+  .router-resp { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; min-height: 90px; font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; font-family: monospace; }
+  .router-log-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; max-height: 180px; overflow-y: auto; }
+  .rlog-label { font-size: 10px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .rlog { font-size: 11px; color: var(--muted); padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: monospace; }
+  .rlog:last-child { border-bottom: none; }
+  .rlog .ts { color: var(--dim); }
+  .rlog .radpt { color: var(--gold); font-weight: 700; }
+  .rlog .ok { color: var(--green); }
+
   @media (max-width: 900px) {
     .hq { grid-template-columns: 1fr; }
     aside { display: none; }
     .metrics { grid-template-columns: repeat(2, 1fr); }
     .payment-grid { grid-template-columns: 1fr; }
+    .router-adapters-grid { grid-template-columns: repeat(3, 1fr); }
+    .ifr-panel { width: 100%; }
   }
 </style>
 </head>
@@ -214,6 +293,8 @@
       <div class="nav-group-label">Command Center</div>
       <a class="nav-link active" onclick="showView('dashboard')"><span class="nav-link-icon">⚡</span>Dashboard</a>
       <a class="nav-link" onclick="showView('actions')"><span class="nav-link-icon">✅</span>Action Queue</a>
+      <a class="nav-link" onclick="showView('apps')"><span class="nav-link-icon">🚀</span>App Launcher</a>
+      <a class="nav-link" onclick="showView('router')"><span class="nav-link-icon">🧠</span>AI Router</a>
       <a class="nav-link" onclick="showView('legal')"><span class="nav-link-icon">⚖️</span>Legal Tracker</a>
       <a class="nav-link" onclick="window.location.href='empire-os.html'" style="border-left:2px solid #D4AF37;background:rgba(212,175,55,.07);color:#D4AF37;font-weight:700;"><span class="nav-link-icon">🏛️</span>Empire.OS</a>
       <a class="nav-link" onclick="window.location.href='doc-weedlaw-ai.html'" style="border-left:2px solid #FFD700;background:rgba(255,215,0,.06);color:#FFD700;font-weight:700;"><span class="nav-link-icon">🤖</span>Doc Weedlaw AI</a>
@@ -630,12 +711,223 @@
       </div>
     </div>
 
+
+    <!-- ====== APP LAUNCHER ====== -->
+    <div class="view" id="view-apps">
+      <div class="section-hdr"><div class="section-title">App Launcher — Connected Empire</div></div>
+
+      <div class="hub-node">
+        <div class="hub-node-icon">🧠</div>
+        <div>
+          <div class="hub-node-title">zPrimeDox AI HQ — Central Brain</div>
+          <div class="hub-node-sub">One AI model · One API · One dashboard · Your proprietary IP layer · zprimedoxaihq.com</div>
+        </div>
+      </div>
+      <div class="hub-arrow">↓ Routes queries to specialized adapters ↓</div>
+
+      <div class="app-grid">
+
+        <div class="app-tile">
+          <div class="app-tile-icon">⚖️</div>
+          <div class="app-tile-name">PrimeDox AI</div>
+          <div class="app-tile-domain">primedoxai.com</div>
+          <div class="app-tile-desc">Sovereign AI document intelligence. Legal research, document drafting, constitutional case strategy. BENO-X Charter mapping engine.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-legal">Legal</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('PrimeDox AI','https://primedoxai.com')">Preview</button>
+              <a class="app-launch" href="https://primedoxai.com" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-tile">
+          <div class="app-tile-icon">🌿</div>
+          <div class="app-tile-name">CCLDR</div>
+          <div class="app-tile-domain">ccldr.net</div>
+          <div class="app-tile-desc">Cannabis constitutional law defense. AI-powered BENO-X framework. 200+ victories. Canada's first sovereign cannabis legal AI.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-legal">Cannabis Law</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('CCLDR','https://ccldr.net')">Preview</button>
+              <a class="app-launch" href="https://ccldr.net" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-tile">
+          <div class="app-tile-icon">🔐</div>
+          <div class="app-tile-name">VIGILAX</div>
+          <div class="app-tile-domain">vigilax.com</div>
+          <div class="app-tile-desc">AI cybersecurity platform. Threat detection, incident response, real-time monitoring. Enterprise SOC-as-a-service with AI-powered analysis.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-cyber">Cybersecurity</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('VIGILAX','https://vigilax.com')">Preview</button>
+              <a class="app-launch" href="https://vigilax.com" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-tile">
+          <div class="app-tile-icon">🛡️</div>
+          <div class="app-tile-name">OmniaGuard</div>
+          <div class="app-tile-domain">omniaguard.com</div>
+          <div class="app-tile-desc">First responder support and public safety AI. 14-layer consensus security. Zero prompt injection guarantee. AI-powered crime analysis.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-safety">Public Safety</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('OmniaGuard','https://omniaguard.com')">Preview</button>
+              <a class="app-launch" href="https://omniaguard.com" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-tile">
+          <div class="app-tile-icon">🧹</div>
+          <div class="app-tile-name">CleanSwarm</div>
+          <div class="app-tile-domain">cleanswarm.ca</div>
+          <div class="app-tile-desc">AI-powered workforce and gig economy platform. Job matching, cleaning industry automation, ESG carbon tracking, business audit tools.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-gig">Work / Gig</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('CleanSwarm','https://cleanswarm.ca')">Preview</button>
+              <a class="app-launch" href="https://cleanswarm.ca" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-tile">
+          <div class="app-tile-icon">📚</div>
+          <div class="app-tile-name">Weedlaw Education</div>
+          <div class="app-tile-domain">weedlaw-education.com</div>
+          <div class="app-tile-desc">Cannabis law courses, certifications, and legal training. Advocacy tools, case law database, constitutional defense curriculum.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-edu">Education</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('Weedlaw Education','https://weedlaw-education.com')">Preview</button>
+              <a class="app-launch" href="https://weedlaw-education.com" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-tile">
+          <div class="app-tile-icon">🏢</div>
+          <div class="app-tile-name">Francisco Holdings Inc.</div>
+          <div class="app-tile-domain">franciscoholdingsinc.com</div>
+          <div class="app-tile-desc">Empire management hub. Cross-company intelligence, investor relations, 46-company portfolio, consulting tiers, and strategic partnerships.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-biz">Business</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('Francisco Holdings Inc.','https://franciscoholdingsinc.com')">Preview</button>
+              <a class="app-launch" href="https://franciscoholdingsinc.com" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-tile">
+          <div class="app-tile-icon">🚗</div>
+          <div class="app-tile-name">Vault Velocity Auto</div>
+          <div class="app-tile-domain">vaultvelocityauto.com</div>
+          <div class="app-tile-desc">Workflow automation SaaS for automotive and asset sales. AI agents for deal flow, financing, shipping, and auction management.</div>
+          <div class="app-tile-footer">
+            <span class="app-badge ab-biz">Automation</span>
+            <div class="app-btn-row">
+              <button class="app-preview" onclick="openApp('Vault Velocity Auto','https://vaultvelocityauto.com')">Preview</button>
+              <a class="app-launch" href="https://vaultvelocityauto.com" target="_blank">Launch ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ====== AI ROUTER ====== -->
+    <div class="view" id="view-router">
+      <div class="section-hdr"><div class="section-title">AI Router — zPrimeDox Central Brain</div></div>
+
+      <div class="router-hero">
+        <div class="router-hero-title">🧠 Query Router — Concept Engine</div>
+        <div class="router-hero-sub">User Query → zPrimeDox HQ Router → Specialized Adapter → Response. Type any query below — the router selects the optimal adapter based on topic classification.</div>
+      </div>
+
+      <div class="router-query-row">
+        <input class="router-input" type="text" id="router-query" placeholder="Enter a query, e.g. 'draft a cannabis defense argument' or 'analyze this threat log'…" onkeydown="if(event.key==='Enter')routeQuery()" />
+        <button class="router-go" onclick="routeQuery()">Route →</button>
+      </div>
+
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);margin-bottom:10px;">Active Adapters</div>
+      <div class="router-adapters-grid">
+        <div class="radapter" id="radpt-primedox" onclick="openApp('PrimeDox AI','https://primedoxai.com')">
+          <div class="radapter-icon">⚖️</div>
+          <div class="radapter-name">PrimeDox AI</div>
+          <div class="radapter-spec">Legal</div>
+          <div><span class="radapter-dot"></span></div>
+        </div>
+        <div class="radapter" id="radpt-ccldr" onclick="openApp('CCLDR','https://ccldr.net')">
+          <div class="radapter-icon">🌿</div>
+          <div class="radapter-name">CCLDR</div>
+          <div class="radapter-spec">Cannabis Law</div>
+          <div><span class="radapter-dot"></span></div>
+        </div>
+        <div class="radapter" id="radpt-vigilax" onclick="openApp('VIGILAX','https://vigilax.com')">
+          <div class="radapter-icon">🔐</div>
+          <div class="radapter-name">VIGILAX</div>
+          <div class="radapter-spec">Cybersecurity</div>
+          <div><span class="radapter-dot"></span></div>
+        </div>
+        <div class="radapter" id="radpt-omniaguard" onclick="openApp('OmniaGuard','https://omniaguard.com')">
+          <div class="radapter-icon">🛡️</div>
+          <div class="radapter-name">OmniaGuard</div>
+          <div class="radapter-spec">Public Safety</div>
+          <div><span class="radapter-dot"></span></div>
+        </div>
+        <div class="radapter" id="radpt-cleanswarm" onclick="openApp('CleanSwarm','https://cleanswarm.ca')">
+          <div class="radapter-icon">🧹</div>
+          <div class="radapter-name">CleanSwarm</div>
+          <div class="radapter-spec">Workforce</div>
+          <div><span class="radapter-dot"></span></div>
+        </div>
+      </div>
+
+      <div class="router-resp" id="router-resp">Awaiting query — type above and click <strong style="color:var(--gold);">Route →</strong></div>
+
+      <div class="router-log-wrap">
+        <div class="rlog-label">Routing Log</div>
+        <div id="router-log">
+          <div class="rlog"><span class="ts">00:00:00</span> — Router initialized · 5 adapters online · <span class="ok">READY</span></div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
 <footer>© 2026 Derek Francisco / Francisco Holdings Inc. · PrimeDox HQ — zprimedoxaihq.com · Private Command Center</footer>
 
 </div><!-- end hq-content -->
+
+<!-- ===== IFRAME PANEL ===== -->
+<div class="ifr-overlay" id="ifr-overlay" onclick="closeApp()"></div>
+<div class="ifr-panel" id="ifr-panel">
+  <div class="ifr-bar">
+    <div class="ifr-bar-title">
+      <span id="ifr-panel-name">App</span>
+      <span class="ifr-bar-url" id="ifr-panel-url"></span>
+    </div>
+    <div class="ifr-bar-btns">
+      <a href="#" target="_blank" class="ifr-btn" id="ifr-open-full">Open Full Screen ↗</a>
+      <button class="ifr-close-btn" onclick="closeApp()">✕ Close</button>
+    </div>
+  </div>
+  <iframe id="app-iframe" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-top-navigation-by-user-activation"></iframe>
+  <div class="ifr-fallback" id="ifr-fallback" style="display:none;">
+    <div class="ifr-fallback-icon">🔗</div>
+    <div class="ifr-fallback-title" id="ifr-fallback-name">App</div>
+    <div class="ifr-fallback-sub">This app is best viewed directly. Click below to open it in a new tab — it opens in full screen with all features available.</div>
+    <a href="#" target="_blank" class="ifr-fallback-btn" id="ifr-fallback-link">Open App Full Screen ↗</a>
+  </div>
+</div>
 
 <script>
   const LOCK_CODE = 'FHI2026'; // Change this to your preferred access code
@@ -693,6 +985,125 @@
     document.getElementById('view-' + id).classList.add('active');
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     event.target.closest('.nav-link').classList.add('active');
+  }
+
+  // App Launcher / Iframe Panel
+  function openApp(name, url) {
+    const panel = document.getElementById('ifr-panel');
+    const overlay = document.getElementById('ifr-overlay');
+    const iframe = document.getElementById('app-iframe');
+    const fallback = document.getElementById('ifr-fallback');
+
+    document.getElementById('ifr-panel-name').textContent = name;
+    document.getElementById('ifr-panel-url').textContent = url;
+    document.getElementById('ifr-open-full').href = url;
+    document.getElementById('ifr-fallback-name').textContent = name;
+    document.getElementById('ifr-fallback-link').href = url;
+
+    iframe.style.display = 'block';
+    fallback.style.display = 'none';
+    iframe.src = url;
+
+    panel.classList.add('open');
+    overlay.classList.add('open');
+
+    // Detect iframe block after 3s: if we can't read contentDocument, show fallback
+    iframe._timer = setTimeout(function() {
+      try {
+        // Cross-origin: throws. If blocked by X-Frame-Options the iframe shows error page.
+        // We check if contentDocument is accessible (same-origin only).
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!doc || !doc.body || doc.body.innerHTML === '') {
+          showIframeFallback(name, url);
+        }
+      } catch(e) {
+        // Cross-origin — iframe may still show content if server allows it.
+        // Don't force fallback; let browser handle it.
+      }
+    }, 3500);
+  }
+
+  function showIframeFallback(name, url) {
+    document.getElementById('app-iframe').style.display = 'none';
+    document.getElementById('ifr-fallback').style.display = 'flex';
+    document.getElementById('ifr-fallback-name').textContent = name;
+    document.getElementById('ifr-fallback-link').href = url;
+  }
+
+  function closeApp() {
+    const iframe = document.getElementById('app-iframe');
+    clearTimeout(iframe._timer);
+    iframe.src = '';
+    document.getElementById('ifr-panel').classList.remove('open');
+    document.getElementById('ifr-overlay').classList.remove('open');
+    document.getElementById('ifr-fallback').style.display = 'none';
+    iframe.style.display = 'block';
+  }
+
+  // AI Router
+  const ADAPTER_MAP = {
+    'primedox': { id: 'radpt-primedox', name: 'PrimeDox AI', url: 'https://primedoxai.com', spec: 'Legal Research & Document Intelligence' },
+    'ccldr':    { id: 'radpt-ccldr',    name: 'CCLDR',       url: 'https://ccldr.net',       spec: 'Cannabis Constitutional Defense' },
+    'vigilax':  { id: 'radpt-vigilax',  name: 'VIGILAX',     url: 'https://vigilax.com',     spec: 'Cybersecurity & Threat Detection' },
+    'omniaguard':{ id: 'radpt-omniaguard', name: 'OmniaGuard', url: 'https://omniaguard.com', spec: 'Public Safety & First Responder AI' },
+    'cleanswarm':{ id: 'radpt-cleanswarm', name: 'CleanSwarm', url: 'https://cleanswarm.ca',  spec: 'Workforce & Gig Economy AI' },
+  };
+
+  const ROUTE_RULES = [
+    { keywords: ['cannabis','weed','marijuana','charge','dispensary','cds','cdsa','section 7','section 9'], adapter: 'ccldr' },
+    { keywords: ['cyber','threat','hack','malware','breach','intrusion','soc','incident','log','firewall','phishing'], adapter: 'vigilax' },
+    { keywords: ['crime','police','first responder','public safety','911','dispatch','evidence','surveillance'], adapter: 'omniaguard' },
+    { keywords: ['clean','gig','worker','job','sweep','mop','janitor','workforce','employment','contractor'], adapter: 'cleanswarm' },
+    { keywords: ['legal','draft','document','court','affidavit','charter','constitution','section 8','section 12','claim','defense'], adapter: 'primedox' },
+  ];
+
+  function routeQuery() {
+    const query = (document.getElementById('router-query').value || '').trim();
+    if (!query) return;
+
+    const q = query.toLowerCase();
+    let adapterKey = 'primedox';
+    for (const rule of ROUTE_RULES) {
+      if (rule.keywords.some(k => q.includes(k))) { adapterKey = rule.adapter; break; }
+    }
+    const adapter = ADAPTER_MAP[adapterKey];
+
+    // Animate adapters
+    Object.values(ADAPTER_MAP).forEach(a => {
+      const el = document.getElementById(a.id);
+      el.classList.remove('routing', 'selected');
+    });
+    document.getElementById(adapter.id).classList.add('routing');
+
+    const resp = document.getElementById('router-resp');
+    resp.innerHTML = '<span style="color:var(--muted);">⟳ Routing query to <strong style="color:var(--gold);">' + adapter.name + '</strong> adapter...</span>';
+
+    setTimeout(function() {
+      document.getElementById(adapter.id).classList.remove('routing');
+      document.getElementById(adapter.id).classList.add('selected');
+
+      resp.innerHTML =
+        '→ <strong style="color:var(--gold);">Adapter Selected:</strong> ' + adapter.name + '<br>' +
+        '→ <strong style="color:var(--muted);">Specialty:</strong> ' + adapter.spec + '<br>' +
+        '→ <strong style="color:var(--muted);">Query:</strong> "' + query.substring(0, 80) + (query.length > 80 ? '…' : '') + '"<br>' +
+        '→ <span style="color:var(--green);">✓ Ready — click adapter above to launch, or:</span> ' +
+        '<a href="' + adapter.url + '" target="_blank" style="color:var(--gold);font-weight:700;">' + adapter.name + ' →</a> &nbsp;' +
+        '<button onclick="openApp(\'' + adapter.name + '\',\'' + adapter.url + '\')" style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);padding:3px 10px;border-radius:5px;font-size:12px;cursor:pointer;">Preview in HQ</button>';
+
+      addRouterLog(query, adapter.name);
+      document.getElementById('router-query').value = '';
+    }, 900);
+  }
+
+  function addRouterLog(query, adapterName) {
+    const log = document.getElementById('router-log');
+    const now = new Date().toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const entry = document.createElement('div');
+    entry.className = 'rlog';
+    const short = query.length > 45 ? query.substring(0, 45) + '…' : query;
+    entry.innerHTML = '<span class="ts">' + now + '</span> — "' + short + '" → <span class="radpt">' + adapterName + '</span> <span class="ok">✓ 900ms</span>';
+    log.appendChild(entry);
+    log.parentElement.scrollTop = log.parentElement.scrollHeight;
   }
 </script>
 <script>window.REVEREND_SITE='primedox';</script>
