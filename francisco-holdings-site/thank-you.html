@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You — Francisco Holdings Inc.</title>
+<link rel="manifest" href="/manifest.json">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#08060A;--gold:#C9A84C;--gold-b:#E8C876;
+  --cream:#EAD9BC;--text:#D8CCBA;--muted:rgba(216,204,186,0.5);
+}
+body{
+  font-family:'Georgia',serif;
+  background:var(--black);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.container{max-width:680px;width:100%;text-align:center}
+.seal{font-size:3rem;margin-bottom:1.5rem;filter:drop-shadow(0 0 16px rgba(201,168,76,0.5))}
+h1{
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  color:var(--cream);
+  font-weight:400;
+  margin-bottom:0.5rem;
+  font-style:italic;
+}
+.product-name{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:0.65rem;
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:2rem;
+}
+.welcome-text{
+  font-size:1.05rem;
+  color:var(--muted);
+  line-height:1.8;
+  margin-bottom:3rem;
+}
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent);
+  margin:0 auto 2.5rem;
+  max-width:400px;
+}
+.upsell-label{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:0.6rem;
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+  color:rgba(201,168,76,0.5);
+  margin-bottom:1.5rem;
+}
+.upsell-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+  margin-bottom:2.5rem;
+}
+.upsell-card{
+  background:linear-gradient(135deg,rgba(201,168,76,0.07),rgba(201,168,76,0.02));
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:10px;
+  padding:20px 16px;
+  text-decoration:none;
+  transition:all 0.25s;
+  display:block;
+}
+.upsell-card:hover{
+  border-color:rgba(201,168,76,0.45);
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(0,0,0,0.4);
+}
+.upsell-icon{font-size:1.6rem;margin-bottom:8px;display:block}
+.upsell-name{
+  font-size:0.9rem;
+  color:var(--cream);
+  font-family:'Georgia',serif;
+  margin-bottom:4px;
+}
+.upsell-desc{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:0.68rem;
+  color:var(--muted);
+  line-height:1.5;
+  margin-bottom:12px;
+}
+.upsell-price{
+  font-family:'Georgia',serif;
+  font-size:1rem;
+  color:var(--gold-b);
+}
+.upsell-arrow{
+  font-size:0.65rem;
+  color:rgba(201,168,76,0.5);
+  font-family:'Inter',system-ui,sans-serif;
+  letter-spacing:0.15em;
+  margin-top:8px;
+  display:block;
+}
+.back-link{
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:0.7rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:rgba(201,168,76,0.4);
+  text-decoration:none;
+  transition:color 0.2s;
+}
+.back-link:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="seal" id="ty-seal">⚜</div>
+  <h1 id="ty-headline">Welcome to the Empire.</h1>
+  <div class="product-name" id="ty-product">Francisco Holdings Inc.</div>
+  <p class="welcome-text" id="ty-message">
+    Your purchase is confirmed. You've just joined something that was built to last
+    longer than any single market, any single government, any single era.
+    Check your email for next steps.
+  </p>
+
+  <div class="divider"></div>
+  <div class="upsell-label">Complete Your Empire Stack</div>
+
+  <div class="upsell-grid" id="upsell-grid">
+    <!-- Populated by JS based on ?product= param -->
+  </div>
+
+  <a href="https://franciscoholdingsinc.com" class="back-link">← Return to Francisco Holdings</a>
+</div>
+
+<script>
+const UPSELL_MAP = {
+  primedox: {
+    seal:'◈', headline:'PrimeDox AI Activated.',
+    product:'PRIMEDOX AI — SOVEREIGN INTELLIGENCE',
+    message:'Your AI legal engine is live. Every query you run builds the knowledge graph. The more you use it, the smarter it gets.',
+    upsells:[
+      {icon:'🛡',name:'OmniaGuard',desc:'Your AI is smart. Now protect it. Constitutional compliance built into every public safety decision.',price:'From $299/mo',href:'https://omniaguard.com'},
+      {icon:'👁',name:'VIGILAX',desc:'The cybersecurity shield that thinks. Protect your empire\'s digital infrastructure.',price:'From $199/mo',href:'https://vigilax.com'},
+      {icon:'📜',name:'Weedlaw Education',desc:'Get the legal education to back your AI. 22 years of constitutional firepower.',price:'From $297',href:'https://weedlaweducation.com'},
+    ]
+  },
+  omniaguard: {
+    seal:'🛡', headline:'OmniaGuard Online.',
+    product:'OMNIAGUARD — SENTINEL ACTIVATED',
+    message:'Your constitutional AI security is active. Every action checked against the Charter before execution.',
+    upsells:[
+      {icon:'◈',name:'PrimeDox AI',desc:'The legal brain to match your security shield. AI-powered constitutional law for your whole operation.',price:'From $99/mo',href:'https://zprimedoxaihq.com'},
+      {icon:'👁',name:'VIGILAX',desc:'OmniaGuard guards the field. VIGILAX guards the digital layer. Complete coverage.',price:'From $199/mo',href:'https://vigilax.com'},
+      {icon:'⚖',name:'CCLDR',desc:'The legal education platform. Know every law your security team enforces.',price:'From $297',href:'https://ccldr.net'},
+    ]
+  },
+  vigilax: {
+    seal:'👁', headline:'VIGILAX Shield Active.',
+    product:'VIGILAX — THREAT CONTAINMENT LIVE',
+    message:'Your cybersecurity AI is deployed. MITRE ATT&CK mapped. PIPEDA compliant. Watching everything.',
+    upsells:[
+      {icon:'🛡',name:'OmniaGuard',desc:'VIGILAX protects the digital layer. OmniaGuard protects the physical layer. Complete empire security.',price:'From $299/mo',href:'https://omniaguard.com'},
+      {icon:'◈',name:'PrimeDox AI',desc:'When VIGILAX flags a breach, PrimeDox drafts the legal response. Pair them.',price:'From $99/mo',href:'https://zprimedoxaihq.com'},
+      {icon:'⚜',name:'FH Enterprise',desc:'Full empire security package. Law, cyber, safety, strategy — all under one roof.',price:'Custom',href:'https://franciscoholdingsinc.com/#boardroom'},
+    ]
+  },
+  weedlaw: {
+    seal:'📜', headline:'Course Access Granted.',
+    product:'WEEDLAW EDUCATION — ENROLLED',
+    message:'22 years of Doc Weedlaw\'s constitutional jurisprudence is now yours. Your first module unlocks immediately.',
+    upsells:[
+      {icon:'⚖',name:'CCLDR',desc:'Put your education to work. CCLDR is the action platform — real cases, real documents, real outcomes.',price:'From $299',href:'https://ccldr.net'},
+      {icon:'◈',name:'PrimeDox AI',desc:'The AI that knows everything you just learned. Let it do the work. You do the strategy.',price:'From $99/mo',href:'https://zprimedoxaihq.com'},
+      {icon:'⚜',name:'Boardroom Session',desc:'Book a private strategy session with Doc. 1:1. Your case. Your empire.',price:'From $499/hr',href:'https://franciscoholdingsinc.com/#boardroom'},
+    ]
+  },
+  vault: {
+    seal:'🏎', headline:'Fleet Order Confirmed.',
+    product:'VAULT VELOCITY AUTO — ACQUISITION INITIATED',
+    message:'Your luxury asset acquisition is in motion. Expect contact from our brokerage team within 24 hours.',
+    upsells:[
+      {icon:'⚜',name:'Empire Partner',desc:'Vehicles are assets. So is everything else we build. Join the empire as a full partner.',price:'From $2,500',href:'https://franciscoholdingsinc.com/#penthouse'},
+      {icon:'🛡',name:'OmniaGuard',desc:'Protect the empire that owns the fleet. Security AI for everything you\'ve built.',price:'From $299/mo',href:'https://omniaguard.com'},
+      {icon:'◈',name:'PrimeDox AI',desc:'Structure your acquisitions legally. Every deal documented, every contract bulletproof.',price:'From $99/mo',href:'https://zprimedoxaihq.com'},
+    ]
+  },
+  default: {
+    seal:'⚜', headline:'Welcome to the Empire.',
+    product:'FRANCISCO HOLDINGS INC.',
+    message:'Your transaction is confirmed. You\'ve just joined an empire built to outlast everything.',
+    upsells:[
+      {icon:'◈',name:'PrimeDox AI',desc:'Constitutional AI intelligence. Legal power on demand.',price:'From $99/mo',href:'https://zprimedoxaihq.com'},
+      {icon:'🛡',name:'OmniaGuard',desc:'Public safety AI with Charter compliance built in.',price:'From $299/mo',href:'https://omniaguard.com'},
+      {icon:'👁',name:'VIGILAX',desc:'Enterprise cybersecurity that thinks.',price:'From $199/mo',href:'https://vigilax.com'},
+    ]
+  }
+};
+
+const params = new URLSearchParams(window.location.search);
+const product = params.get('product') || 'default';
+const d = UPSELL_MAP[product] || UPSELL_MAP.default;
+
+document.getElementById('ty-seal').textContent = d.seal;
+document.getElementById('ty-headline').textContent = d.headline;
+document.getElementById('ty-product').textContent = d.product;
+document.getElementById('ty-message').textContent = d.message;
+
+const grid = document.getElementById('upsell-grid');
+grid.innerHTML = d.upsells.map(u => `
+  <a class="upsell-card" href="${u.href}">
+    <span class="upsell-icon">${u.icon}</span>
+    <div class="upsell-name">${u.name}</div>
+    <div class="upsell-desc">${u.desc}</div>
+    <div class="upsell-price">${u.price}</div>
+    <span class="upsell-arrow">EXPLORE →</span>
+  </a>
+`).join('');
+</script>
+</body>
+</html>
