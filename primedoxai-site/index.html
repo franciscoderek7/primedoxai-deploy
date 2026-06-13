@@ -239,9 +239,9 @@
        LEFT PANEL — AI ROSTER
     ============================================================ */
     #left-panel {
-      width: 38%;
-      min-width: 280px;
-      max-width: 420px;
+      width: 62%;
+      min-width: 320px;
+      max-width: 700px;
       display: flex;
       flex-direction: column;
       background: #08080e;
@@ -402,13 +402,13 @@
     .upgrade-btns a:hover { opacity: 0.85; }
 
     .btn-pro {
-      background: linear-gradient(135deg, #1a5c9a, #2473b5);
-      color: #b8d8ff;
+      background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+      color: var(--gold-light);
     }
 
     .btn-elite {
-      background: linear-gradient(135deg, #7a2a8c, #a33db0);
-      color: #eebdff;
+      background: linear-gradient(135deg, var(--burgundy), #9b3944);
+      color: var(--platinum);
     }
 
     .upgrade-note {
@@ -865,49 +865,76 @@
        KNOWLEDGE BASE
     ============================================================ */
     var KB = [
-      {
-        patterns: [/beno[\s\-]?x?/i, /5[\s-]?pillar/i],
-        response: 'The BENO-X Framework is a 5-pillar constitutional defense: <strong>B</strong>reach identification, <strong>E</strong>vidence exclusion, <strong>N</strong>egotiation leverage, <strong>O</strong>n-record defense, <strong>X</strong>-multiplier. Used in 200+ cannabis cases to exclude evidence and stay charges.',
-        route: null
-      },
-      {
-        patterns: [/cannabis charge/i, /weed charge/i, /possession/i, /arrested/i, /stopped by police/i],
-        response: "If you're facing a cannabis charge — time matters. BENO-X lets you build a constitutional defense using Charter breaches. Evidence can be excluded. Charges can be stayed. The sooner you act, the stronger your position.",
-        route: { label: '→ ccldr.net', url: 'https://ccldr.net' }
-      },
-      {
-        patterns: [/\bcharge\b/i, /\barrested\b/i, /\bstopped\b/i, /\bweedlaw\b/i, /\bweed\b/i, /\bcannabis\b/i, /\bmarijuana\b/i],
-        response: "Cannabis charge or Charter issue detected. BENO-X constitutional defense has a proven track record across 200+ cases. The framework identifies Charter breaches that can exclude evidence and stay charges.",
-        route: { label: '→ ccldr.net', url: 'https://ccldr.net' }
-      },
-      {
-        patterns: [/\brights\b/i, /\bcharter\b/i, /section 10/i, /\bdetain/i, /\blawyer\b/i, /right to counsel/i],
-        response: 'Under s.10 Canadian Charter:<br>✓ Know why you’re detained<br>✓ Speak to a lawyer immediately<br>✓ Remain silent until then<br><br><strong>Say ONLY:</strong> <em>“I’d like to speak to a lawyer.”</em>',
-        route: null
-      },
-      {
-        patterns: [/\bprice\b/i, /\bcost\b/i, /\btier\b/i, /how much/i, /\bpricing\b/i, /\bplan\b/i, /\$49/i, /\$199/i],
-        response: 'PrimeDox AI Pricing:<br>🟢 <strong>Free</strong> — 10 msg/day · 5 docs/mo<br>🔵 <strong>Pro</strong> — $49/mo (unlimited msgs, 50 docs)<br>🟣 <strong>Elite</strong> — $199/mo (full API + priority support)<br><br>First 14 days free. No auto-billing.',
-        route: null
-      },
-      {
-        patterns: [/\bsecurity\b/i, /\bthreat\b/i, /\benterprise security\b/i, /\bomniaguard\b/i, /\bcybersecurity\b/i, /\bfirewall\b/i, /\bhack\b/i, /\bbreach\b/i],
-        response: 'OmniaGuard provides 14-layer AI security for enterprise environments.<br><br>Tiers:<br>🔵 <strong>Sentinel</strong> — $499/mo · SMB protection<br>🟣 <strong>Warden</strong> — $2,499/mo · Mid-enterprise<br>🔴 <strong>Archon</strong> — $9,999/mo · Full deployment',
-        route: { label: '→ omniaguard.com', url: 'https://omniaguard.com' }
-      },
-      {
-        patterns: [/\binvest\b/i, /\binvestor\b/i, /\bpartner\b/i, /\brevenue\b/i, /\bconsulting\b/i, /\bfounder\b/i, /\bboardroom\b/i, /\bequity\b/i],
-        response: 'Francisco Holdings investor tiers:<br>🏢 <strong>Floor</strong> — $50K minimum<br>🏙️ <strong>Suite</strong> — $250K strategic<br>🏰 <strong>Penthouse</strong> — $1M full partnership<br><br>Book a boardroom session to discuss terms.',
-        route: { label: '→ franciscoholdingsinc.com/boardroom', url: 'https://franciscoholdingsinc.com/boardroom' }
-      },
-      {
-        patterns: [/\bdocument\b/i, /\bpdf\b/i, /\bfiling\b/i, /\btemplate\b/i, /\bdraft\b/i, /\bcontract\b/i, /\bform\b/i],
-        response: 'PrimeDox AI handles constitutional documents, legal templates, court filings, and PDF drafting. The BENO-X Document Suite includes pre-built Charter challenge templates optimized for Canadian courts.',
-        route: { label: '→ PrimeDox AI Chat', url: 'primedox-ai-chat.html' }
-      },
+      // ── Greeting ──────────────────────────────────────────────────
       {
         isGreeting: true,
         patterns: [/^\s*hi\s*$/i, /^\s*hello\s*$/i, /^\s*hey\s*$/i, /^\s*yo\s*$/i, /^\s*sup\s*$/i, /^good (morning|afternoon|evening)/i]
+      },
+      // ── Show everything / full roster ─────────────────────────────
+      {
+        patterns: [/\beverything\b/i, /\ball\b/i, /show me/i, /services/i, /what can you/i, /what do you/i],
+        response: ‘🏛️ <strong>Empire AI Roster — Full Specialist Access:</strong><br><br>’ +
+          ‘⚖️ <strong>Doc Weedlaw AI</strong> — Cannabis Charter Defense · ccldr.net · docweedla@gmail.com<br>’ +
+          ‘🛡️ <strong>OmniaGuard</strong> — Enterprise AI Security · omniaguard.com · omniaguard1@gmail.com<br>’ +
+          ‘🤖 <strong>PrimeDox AI</strong> — Document Automation · Free / $49 / $199<br>’ +
+          ‘🐝 <strong>CleanSwarm AI</strong> — Document Cleanup · cleanswarm.ca<br>’ +
+          ‘🐾 <strong>TechPet AI</strong> — Pet Monitoring · $19/$49/$149/mo<br>’ +
+          ‘🔒 <strong>VIGILAX</strong> — Enterprise Threat Response · By engagement only’,
+        route: { label: ‘→ Francisco Holdings — Full Empire’, url: ‘https://franciscoholdingsinc.com’ }
+      },
+      // ── Legal / Cannabis / Court / CCLDR ─────────────────────────
+      {
+        patterns: [/legal doc/i, /\bcourt\b/i, /\bcharge\b/i, /\barrested\b/i, /\bstopped\b/i, /\bweedlaw\b/i, /\bcannabis\b/i, /\bmarijuana\b/i, /\bweed\b/i, /\bpossession\b/i, /ccldr/i, /\bcharter\b/i, /beno[\s\-]?x?/i, /5[\s-]?pillar/i],
+        response: ‘Routing to <strong>CCLDR — Canadian Cannabis Legal Defense Resource</strong>.<br><br>’ +
+          ‘Visit: <a href=”https://ccldr.net” target=”_blank” rel=”noopener” style=”color:var(--gold-light)”>ccldr.net</a> (when live) or Floor 2: BENO-X/Weedlaw.<br>’ +
+          ‘📧 Email: <strong>docweedla@gmail.com</strong>’,
+        route: { label: ‘→ ccldr.net’, url: ‘https://ccldr.net’ }
+      },
+      // ── Cybersecurity / OmniaGuard / Hack ────────────────────────
+      {
+        patterns: [/cybersecurity/i, /\bomniaguard\b/i, /\bsecurity\b/i, /\bhack\b/i, /\bthreat\b/i, /\bbreach\b/i, /\bfirewall\b/i, /enterprise security/i, /\bmalware\b/i, /\bransomware\b/i],
+        response: ‘Routing to <strong>OmniaGuard — Enterprise AI Security</strong>.<br><br>’ +
+          ‘Tiers: 🔵 Sentinel $499/mo · 🟣 Warden $2,499/mo · 🔴 Archon $9,999/mo<br><br>’ +
+          ‘Visit: <a href=”https://omniaguard.com” target=”_blank” rel=”noopener” style=”color:var(--gold-light)”>omniaguard.com</a> or Floor 1.<br>’ +
+          ‘📧 Email: <strong>omniaguard1@gmail.com</strong>’,
+        route: { label: ‘→ omniaguard.com’, url: ‘https://omniaguard.com’ }
+      },
+      // ── Invest / Partner / Money ──────────────────────────────────
+      {
+        patterns: [/\binvest\b/i, /\binvestor\b/i, /\bpartner\b/i, /\bmoney\b/i, /\bfund\b/i, /\bequity\b/i, /\bboardroom\b/i, /\bfounder\b/i, /\bventure\b/i],
+        response: ‘Elevator to <strong>Floor 8 — The Boardroom</strong>.<br><br>’ +
+          ‘🏢 Floor — $50K · 🏙️ Suite — $250K · 🏰 Penthouse — $1M · 💎 Custom<br><br>’ +
+          ‘Visit: <a href=”https://franciscoholdingsinc.com” target=”_blank” rel=”noopener” style=”color:var(--gold-light)”>franciscoholdingsinc.com</a> Floor 8.<br>’ +
+          ‘📧 Email: <strong>franciscoderek7@gmail.com</strong>’,
+        route: { label: ‘→ Floor 8: Boardroom’, url: ‘https://franciscoholdingsinc.com’ }
+      },
+      // ── Business / Automation / Documents / AI Help ──────────────
+      {
+        patterns: [/\bbusiness\b/i, /automation/i, /\bdocument\b/i, /\bpdf\b/i, /\bfiling\b/i, /\btemplate\b/i, /\bdraft\b/i, /ai help/i, /\bcontract\b/i, /\bform\b/i],
+        response: ‘<strong>PrimeDox AI Pro</strong> — Document automation starts at $49/mo.<br><br>’ +
+          ‘🟢 Free — 10 msg/day · 5 docs/mo<br>’ +
+          ‘🔵 Pro — $49/mo · Unlimited chat, BENO-X, all templates<br>’ +
+          ‘🟣 Elite — $199/mo · Priority + 30% affiliate commission<br><br>’ +
+          ‘Floor 3 — or start your free trial here.’,
+        route: { label: ‘→ Start Free Trial’, url: ‘primedox-ai-chat.html’ }
+      },
+      // ── CCLDR pricing ─────────────────────────────────────────────
+      {
+        patterns: [/warrior/i, /\bccldr price/i, /legal price/i, /defense price/i, /weedlaw price/i],
+        response: ‘CCLDR Tiers:<br>⚔️ <strong>Warrior</strong> — $99 · BENO-X starter kit<br>📋 <strong>Pro</strong> — $299 · Full BENO-X + templates<br>🌟 <strong>Elite</strong> — $999 · 2 strategy calls + support<br>👑 <strong>Sovereign</strong> — $1,499 · Full retainer · unlimited access’,
+        route: { label: ‘→ docweedla@gmail.com’, url: ‘mailto:docweedla@gmail.com?subject=CCLDR%20Inquiry’ }
+      },
+      // ── Rights / Lawyer ───────────────────────────────────────────
+      {
+        patterns: [/\brights\b/i, /section 10/i, /\bdetain/i, /\blawyer\b/i, /right to counsel/i],
+        response: ‘Under s.10 Canadian Charter:<br>✓ Know why you\’re detained<br>✓ Speak to a lawyer immediately<br>✓ Remain silent until then<br><br><strong>Say ONLY:</strong> <em>”I\’d like to speak to a lawyer.”</em>’,
+        route: null
+      },
+      // ── Pricing (PrimeDox) ────────────────────────────────────────
+      {
+        patterns: [/\bprice\b/i, /\bcost\b/i, /\btier\b/i, /how much/i, /\bpricing\b/i, /\bplan\b/i],
+        response: ‘PrimeDox AI Pricing:<br>🟢 <strong>Free</strong> — 10 msg/day · 5 docs/mo<br>🔵 <strong>Pro</strong> — $49/mo · Unlimited msgs, all case law<br>🟣 <strong>Elite</strong> — $199/mo · Priority support + 30% affiliate<br><br>First 14 days free. No auto-billing. No credit card.’,
+        route: { label: ‘→ Start Free’, url: ‘primedox-ai-chat.html’ }
       }
     ];
 
@@ -1038,7 +1065,7 @@
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         if (btn.dataset.contact) {
-          addAiMessage('VIGILAX is available by direct engagement only. To initiate contact with our threat response team:<br><br>📧 <strong>franciscoderek7@gmail.com</strong><br><br>State your organization name and nature of threat in your first message.', null);
+          addAiMessage('VIGILAX is available by direct engagement only. To initiate contact with our threat response team:<br><br>📧 <strong>vigilax@franciscoholdingsinc.com</strong><br><br>State your organization name and nature of threat in your first message.', null);
           return;
         }
         var url = btn.dataset.url;
