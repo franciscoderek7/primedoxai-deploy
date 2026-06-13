@@ -1663,10 +1663,55 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+  /* ===== FREE TRIAL SYSTEM ===== */
+  .trial-banner{background:linear-gradient(90deg,rgba(39,174,96,.12),rgba(0,180,216,.08));border-bottom:1px solid rgba(39,174,96,.3);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;flex-wrap:wrap}
+  .trial-banner-left{display:flex;align-items:center;gap:10px}
+  .trial-dot{width:8px;height:8px;background:#27ae60;border-radius:50%;animation:tdpulse 1.5s infinite;flex-shrink:0}
+  @keyframes tdpulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .trial-banner-text{color:#c8f5d8}
+  .trial-banner-text strong{color:#27ae60}
+  .trial-banner-cta{background:#27ae60;color:#000;font-weight:800;padding:6px 16px;border-radius:6px;text-decoration:none;font-size:12px;white-space:nowrap;display:inline-block}
+  .trial-banner-cta:hover{background:#2ecc71}
+  .trial-dismiss{background:none;border:none;color:rgba(200,245,216,.35);cursor:pointer;font-size:20px;padding:0 4px;line-height:1}
+  .trial-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+  .trial-box{background:#0d0d1a;border:1px solid rgba(39,174,96,.4);border-radius:16px;padding:40px 36px;width:100%;max-width:480px;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 40px rgba(39,174,96,.1)}
+  .trial-close-btn{position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.3);font-size:22px;cursor:pointer;line-height:1;padding:4px}
+  .trial-close-btn:hover{color:rgba(255,255,255,.7)}
+  .trial-icon-lg{font-size:2.8rem;text-align:center;margin-bottom:12px}
+  .trial-title{font-size:1.5rem;font-weight:900;color:#f0f0f8;text-align:center;margin-bottom:6px}
+  .trial-brand{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(39,174,96,.7);text-align:center;margin-bottom:20px}
+  .trial-input{width:100%;background:#181828;border:1px solid #252538;border-radius:8px;padding:12px 14px;color:#f0f0f8;font-size:15px;outline:none;margin-bottom:10px;font-family:inherit;box-sizing:border-box}
+  .trial-input:focus{border-color:#27ae60}
+  .trial-select{width:100%;background:#181828;border:1px solid #252538;border-radius:8px;padding:12px 14px;color:#f0f0f8;font-size:14px;outline:none;margin-bottom:16px;font-family:inherit;cursor:pointer;box-sizing:border-box}
+  .trial-select:focus{border-color:#27ae60}
+  .trial-submit-btn{width:100%;background:#27ae60;color:#000;font-weight:800;border:none;padding:14px;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;transition:background .2s}
+  .trial-submit-btn:hover{background:#2ecc71}
+  .trial-submit-btn:disabled{background:#1a4a2a;color:#5a8a6a;cursor:not-allowed}
+  .trial-fine{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:10px}
+  .trial-err{font-size:12px;color:#e63946;margin-bottom:8px;display:none}
+  .trial-success-wrap{text-align:center;padding:16px 0}
+  .trial-success-icon{font-size:3rem;margin-bottom:12px}
+  .trial-success-title{font-size:1.3rem;font-weight:900;color:#27ae60;margin-bottom:8px}
+  .trial-success-sub{font-size:13px;color:rgba(200,245,216,.7);line-height:1.6;margin-bottom:22px}
+  .trial-upgrade-cta{display:block;background:linear-gradient(135deg,#27ae60,#00b4d8);color:#000;font-weight:800;padding:12px 28px;border-radius:8px;text-decoration:none;font-size:14px;width:fit-content;margin:0 auto 10px}
+  .trial-upgrade-cta:hover{opacity:.9}
   </style>
 </head>
 
 <body>
+
+<!-- ===== TRIAL STATUS BANNER (shown to returning trial users) ===== -->
+<div id="trial-banner" class="trial-banner" style="display:none;">
+  <div class="trial-banner-left">
+    <div class="trial-dot"></div>
+    <span class="trial-banner-text"><strong>PrimeDox AI Trial Active</strong> — <span id="trial-time-left">24h 00m remaining</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="#pricing" class="trial-banner-cta">Upgrade to Pro — $49/mo</a>
+    <button class="trial-dismiss" onclick="document.getElementById('trial-banner').style.display='none'" title="Dismiss">×</button>
+  </div>
+</div>
 
   <!-- ============================================================
        NAVBAR
@@ -1686,7 +1731,7 @@
 
         <div class="nav-right">
           <span class="nav-status">🤖 22 Companies | 392 AI Agents Under Management</span>
-          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Free+Start" class="btn btn-primary">Start Free →</a>
+          <a href="#" onclick="openTrialModal();return false;" class="btn btn-primary">Start Free Trial →</a>
         </div>
 
         <button class="hamburger" id="hamburgerBtn" aria-label="Toggle mobile menu" aria-expanded="false">
@@ -1717,7 +1762,7 @@
     <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
     <a href="#frameworks" onclick="closeMobileNav()">Integrations</a>
     <a href="#contact" onclick="closeMobileNav()">Contact</a>
-    <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Free+Start" class="btn btn-primary" onclick="closeMobileNav()">Start Free →</a>
+    <a href="#" onclick="openTrialModal();closeMobileNav();return false;" class="btn btn-primary">Start Free Trial →</a>
   </div>
 
   <!-- ============================================================
@@ -1746,11 +1791,11 @@
           </p>
 
           <div class="hero-ctas">
-            <a href="https://paypal.me/derekfrancisco/99CAD" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:1rem;padding:15px 30px;background:#27ae60;border-color:#27ae60;">
-              💳 Emergency Defense — $99 →
+            <a href="#" onclick="openTrialModal();return false;" class="btn btn-primary" style="font-size:1rem;padding:15px 30px;background:#27ae60;border-color:#27ae60;">
+              ⚡ Start 24-Hour Free Trial →
             </a>
-            <a href="#pricing" class="btn btn-outline" style="font-size:1rem;padding:15px 30px;">
-              See All Plans →
+            <a href="https://paypal.me/derekfrancisco/99CAD" target="_blank" rel="noopener" class="btn btn-outline" style="font-size:1rem;padding:15px 30px;">
+              💳 Emergency Defense — $99
             </a>
           </div>
 
@@ -2836,6 +2881,114 @@
     try { window.open('mailto:franciscoderek7@gmail.com?subject=PrimeDox+Lead+%E2%80%94+'+encodeURIComponent(email)+'&body=New+subscriber:+'+encodeURIComponent(email), '_blank'); } catch(err){}
   }
   </script>
+
+<!-- ===== FREE TRIAL MODAL ===== -->
+<div id="trial-modal" class="trial-overlay" style="display:none;" onclick="if(event.target===this)closeTrialModal()">
+  <div class="trial-box">
+    <button class="trial-close-btn" onclick="closeTrialModal()">✕</button>
+    <div class="trial-icon-lg">⚡</div>
+    <div class="trial-title">Start Your Free 24-Hour Trial</div>
+    <div class="trial-brand">PrimeDox AI by Francisco Holdings · No Credit Card</div>
+    <div id="trial-form-wrap">
+      <div class="trial-err" id="trial-err">Please enter a valid email address.</div>
+      <input type="email" class="trial-input" id="trial-email" placeholder="your@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')submitTrial()" />
+      <select class="trial-select" id="trial-situation">
+        <option value="">What brings you here? (optional)</option>
+        <option value="cannabis-charge">Cannabis charge or arrest</option>
+        <option value="legal-documents">Need legal documents drafted</option>
+        <option value="charter-rights">Charter rights violation</option>
+        <option value="civil-dispute">Civil dispute or claim</option>
+        <option value="research">Legal research &amp; analysis</option>
+        <option value="other">Other / Just exploring</option>
+      </select>
+      <button class="trial-submit-btn" id="trial-submit-btn" onclick="submitTrial()">Activate 24-Hour Free Trial →</button>
+      <div class="trial-fine">No payment required. PIPEDA compliant. Unsubscribe anytime.</div>
+    </div>
+    <div id="trial-success-wrap" class="trial-success-wrap" style="display:none;">
+      <div class="trial-success-icon">✅</div>
+      <div class="trial-success-title">Trial Activated!</div>
+      <div class="trial-success-sub">Check your inbox — access instructions are on the way.<br>Your 24-hour trial with PrimeDox AI starts now.</div>
+      <a href="#pricing" class="trial-upgrade-cta" onclick="closeTrialModal()">Upgrade to Pro — $49/mo →</a>
+      <a href="#" onclick="closeTrialModal();return false;" style="font-size:12px;color:rgba(255,255,255,.3);display:block;margin-top:8px;">Continue with free trial</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== FREE TRIAL SYSTEM ===== */
+(function(){
+  var TRIAL_KEY = 'primedox_trial_v1';
+  var TRIAL_MS = 24 * 60 * 60 * 1000;
+  /* To enable email delivery: create a free Formspree form at formspree.io and replace YOUR_FORM_ID */
+  var FORMSPREE = 'https://formspree.io/f/YOUR_FORM_ID';
+
+  function getTrialData(){ try{ return JSON.parse(localStorage.getItem(TRIAL_KEY)); }catch(e){ return null; } }
+  function isExpired(d){ return !d || (Date.now()-d.start)>=TRIAL_MS; }
+
+  window.openTrialModal = function(){
+    var d = getTrialData();
+    if(d && !isExpired(d)){ showBanner(d); return; }
+    document.getElementById('trial-form-wrap').style.display = 'block';
+    document.getElementById('trial-success-wrap').style.display = 'none';
+    document.getElementById('trial-email').value = '';
+    document.getElementById('trial-situation').value = '';
+    document.getElementById('trial-err').style.display = 'none';
+    var btn = document.getElementById('trial-submit-btn');
+    btn.disabled = false; btn.textContent = 'Activate 24-Hour Free Trial →';
+    document.getElementById('trial-modal').style.display = 'flex';
+    setTimeout(function(){ document.getElementById('trial-email').focus(); }, 80);
+  };
+
+  window.closeTrialModal = function(){
+    document.getElementById('trial-modal').style.display = 'none';
+  };
+
+  window.submitTrial = function(){
+    var email = (document.getElementById('trial-email').value||'').trim();
+    var errEl = document.getElementById('trial-err');
+    errEl.style.display = 'none';
+    if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      errEl.style.display = 'block';
+      document.getElementById('trial-email').focus();
+      return;
+    }
+    var situation = document.getElementById('trial-situation').value;
+    var data = { email:email, start:Date.now(), situation:situation };
+    try{ localStorage.setItem(TRIAL_KEY, JSON.stringify(data)); }catch(e){}
+    var btn = document.getElementById('trial-submit-btn');
+    btn.disabled = true; btn.textContent = 'Activating…';
+    fetch(FORMSPREE, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({ email:email, situation:situation||'Not specified', product:'PrimeDox AI Free Trial', source:location.hostname, ts:new Date().toISOString() })
+    }).catch(function(){}).finally(function(){
+      document.getElementById('trial-form-wrap').style.display = 'none';
+      document.getElementById('trial-success-wrap').style.display = 'block';
+      showBanner(data);
+    });
+  };
+
+  function showBanner(data){
+    var banner = document.getElementById('trial-banner');
+    var timeEl = document.getElementById('trial-time-left');
+    if(!banner||!timeEl) return;
+    function tick(){
+      var rem = TRIAL_MS-(Date.now()-data.start);
+      if(rem<=0){ timeEl.textContent='Trial expired'; clearInterval(t); return; }
+      var h=Math.floor(rem/3600000), m=Math.floor((rem%3600000)/60000);
+      timeEl.textContent = h+'h '+String(m).padStart(2,'0')+'m remaining';
+    }
+    banner.style.display = 'flex';
+    tick();
+    var t = setInterval(tick, 60000);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var d = getTrialData();
+    if(d && !isExpired(d)) showBanner(d);
+  });
+})();
+</script>
 <script>window.REVEREND_SITE='primedox';</script>
 <script src="reverend-ai.js"></script>
 </body>
