@@ -3,2840 +3,1236 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="PrimeDox AI — Derek Francisco's AI clone. Cannabis Charter defense, BENO-X analysis, legal document drafting, and constitutional self-defense tools built on 20+ years of real litigation expertise." />
-  <meta name="keywords" content="PrimeDox AI, ZPrimeDox, cannabis Charter defense, constitutional AI, BENO-X analyzer, cannabis legal defense, Section 7 Charter, Derek Francisco" />
-  <meta property="og:title" content="PrimeDox AI — Derek Francisco's AI Clone" />
-  <meta property="og:description" content="The AI clone of Derek Francisco. Cannabis defense, BENO-X analysis, document drafting — available 24/7." />
-  <meta property="og:type" content="website" />
-  <title>PrimeDox AI — Derek Francisco's AI Clone</title>
+  <meta name="description" content="PrimeDox HQ — AI Concierge Command Center. Derek Francisco's Empire AI Roster. Cannabis defense, enterprise security, document AI." />
+  <title>PrimeDox HQ — AI Concierge Command Center</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- GSAP 3.12.2 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
   <style>
     /* ============================================================
        CSS VARIABLES
     ============================================================ */
     :root {
-      --bg:      #07080f;
-      --bg2:     #0d0e1c;
-      --card:    #111320;
-      --border:  rgba(0, 212, 255, 0.15);
-      --cyan:    #00d4ff;
-      --purple:  #7b2fbe;
-      --gold:    #ffd700;
-      --green:   #00a86b;
-      --white:   #f1f5f9;
-      --muted:   #8892a4;
-      --radius:  12px;
-      --radius-lg: 20px;
-      --shadow:  0 8px 32px rgba(0, 0, 0, 0.6);
-      --glow-cyan: 0 0 24px rgba(0, 212, 255, 0.25);
-      --glow-purple: 0 0 24px rgba(123, 47, 190, 0.35);
-      --transition: 0.25s ease;
+      --emerald:       #0A5C36;
+      --emerald-light: #1A8A50;
+      --gold:          #D4AF37;
+      --gold-light:    #F0CC60;
+      --platinum:      #E2E2E2;
+      --platinum-mid:  #ABABAB;
+      --platinum-dark: #787878;
+      --burgundy:      #722F37;
+      --dark:          #06060A;
+      --charcoal:      #111118;
+      --border-gold:   rgba(212,175,55,0.3);
+      --border-emerald: rgba(10,92,54,0.6);
     }
 
     /* ============================================================
        RESET & BASE
     ============================================================ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--dark);
+      color: var(--platinum);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow: hidden;
     }
-
-    html {
-      scroll-behavior: smooth;
-      font-size: 16px;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--white);
-      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a {
-      color: var(--cyan);
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-
-    a:hover { color: #33ddff; }
-
-    img { max-width: 100%; }
-
-    ul { list-style: none; }
 
     /* ============================================================
-       UTILITY CLASSES
+       LOCK SCREEN
     ============================================================ */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .section-label {
-      display: inline-flex;
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--dark);
+      display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--cyan);
-      background: rgba(0, 212, 255, 0.08);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 6px 16px;
-      margin-bottom: 20px;
+      justify-content: center;
+      z-index: 9999;
     }
 
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
-      line-height: 1.2;
+    #lock-screen.hidden {
+      display: none;
+    }
+
+    .lock-modal {
+      background: var(--charcoal);
+      border: 1px solid var(--emerald-light);
+      border-radius: 12px;
+      padding: 48px 40px;
+      width: 360px;
+      max-width: 90vw;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(10,92,54,0.4), 0 0 120px rgba(10,92,54,0.15);
+    }
+
+    .lock-icon {
+      font-size: 42px;
       margin-bottom: 16px;
-      letter-spacing: -0.5px;
+      display: block;
     }
 
-    .gradient-text {
-      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+    .lock-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
     }
 
-    .section-sub {
-      font-size: 1.1rem;
-      color: var(--muted);
-      max-width: 640px;
-      line-height: 1.7;
+    .lock-subtitle {
+      color: var(--platinum-dark);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
     }
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    .lock-input {
+      width: 100%;
+      background: #0a0a0f;
+      border: 1px solid var(--border-gold);
+      border-radius: 6px;
+      color: var(--platinum);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 12px 16px;
+      text-align: center;
+      letter-spacing: 3px;
+      outline: none;
+      transition: border-color 0.2s;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--glow-cyan);
-      border-color: rgba(0, 212, 255, 0.35);
+    .lock-input:focus {
+      border-color: var(--emerald-light);
+      box-shadow: 0 0 12px rgba(26,138,80,0.3);
     }
 
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 26px;
-      border-radius: 100px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
+    .lock-btn {
+      margin-top: 16px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
       border: none;
-      transition: all var(--transition);
-      text-decoration: none;
-      white-space: nowrap;
+      border-radius: 6px;
+      color: var(--gold-light);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 13px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      text-transform: uppercase;
     }
 
-    .btn-primary {
-      background: var(--cyan);
-      color: #07080f;
+    .lock-btn:hover { opacity: 0.9; }
+    .lock-btn:active { transform: scale(0.98); }
+
+    .lock-error {
+      margin-top: 10px;
+      color: #e05050;
+      font-size: 12px;
+      min-height: 18px;
+      letter-spacing: 0.5px;
     }
 
-    .btn-primary:hover {
-      background: #33ddff;
-      color: #07080f;
-      box-shadow: var(--glow-cyan);
-      transform: translateY(-2px);
+    .lock-badge {
+      margin-top: 20px;
+      color: var(--platinum-dark);
+      font-size: 10px;
+      letter-spacing: 1px;
     }
 
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    .lock-badge .dot-green { color: #22c55e; }
+
+    /* ============================================================
+       MAIN APP
+    ============================================================ */
+    #main-app {
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    .btn-outline:hover {
-      border-color: var(--cyan);
-      color: var(--cyan);
-      transform: translateY(-2px);
-    }
-
-    .btn-purple {
-      background: var(--purple);
-      color: var(--white);
-    }
-
-    .btn-purple:hover {
-      background: #9336e0;
-      box-shadow: var(--glow-purple);
-      transform: translateY(-2px);
-    }
-
-    .btn-gold {
-      background: var(--gold);
-      color: #07080f;
-    }
-
-    .btn-gold:hover {
-      background: #ffe040;
-      transform: translateY(-2px);
-    }
-
-    /* Divider glow line */
-    .glow-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      opacity: 0.3;
-      margin: 0;
+    #main-app.visible {
+      display: flex;
     }
 
     /* ============================================================
-       BACKGROUND EFFECTS
+       TOP HEADER
     ============================================================ */
-    .bg-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-    }
-
-    .bg-radial-cyan {
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
-      pointer-events: none;
-      border-radius: 50%;
-    }
-
-    .bg-radial-purple {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(123,47,190,0.1) 0%, transparent 70%);
-      pointer-events: none;
-      border-radius: 50%;
-    }
-
-    /* ============================================================
-       NAVBAR
-    ============================================================ */
-    #navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      background: rgba(7, 8, 15, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      transition: background var(--transition);
-    }
-
-    .nav-inner {
+    #top-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 68px;
-      gap: 24px;
-    }
-
-    .nav-logo {
-      font-size: 1.3rem;
-      font-weight: 900;
-      color: var(--white);
-      letter-spacing: -0.5px;
+      padding: 10px 20px;
+      background: #08080f;
+      border-bottom: 1px solid var(--border-gold);
       flex-shrink: 0;
-      text-decoration: none;
+      gap: 12px;
     }
 
-    .nav-logo span {
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
+    .header-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      font-size: 0.88rem;
-      font-weight: 500;
-      padding: 8px 14px;
-      border-radius: 8px;
-      transition: all var(--transition);
-      text-decoration: none;
-    }
-
-    .nav-links a:hover {
-      color: var(--white);
-      background: rgba(255,255,255,0.06);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-shrink: 0;
-    }
-
-    .nav-status {
-      font-size: 0.75rem;
-      color: var(--cyan);
-      background: rgba(0,212,255,0.08);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 5px 14px;
+      letter-spacing: 2px;
       white-space: nowrap;
     }
 
-    /* Hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      padding: 8px;
+    .header-center {
+      color: var(--platinum-dark);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-align: center;
+      text-transform: uppercase;
+      flex: 1;
+    }
+
+    .header-exit-btn {
       background: transparent;
-      border: none;
-      color: var(--white);
+      border: 1px solid var(--border-gold);
+      border-radius: 6px;
+      color: var(--platinum-mid);
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      padding: 6px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.2s, color 0.2s;
     }
 
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: all var(--transition);
-    }
-
-    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-    /* Mobile nav drawer */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      top: 68px;
-      left: 0;
-      right: 0;
-      background: rgba(13, 14, 28, 0.98);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      z-index: 999;
-      padding: 20px 24px 28px;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .mobile-nav.open { display: flex; }
-
-    .mobile-nav a {
-      color: var(--muted);
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 12px 16px;
-      border-radius: 10px;
-      display: block;
-      transition: all var(--transition);
-      text-decoration: none;
-    }
-
-    .mobile-nav a:hover {
-      color: var(--white);
-      background: rgba(255,255,255,0.06);
-    }
-
-    .mobile-nav .btn {
-      margin-top: 12px;
-      width: 100%;
-      justify-content: center;
+    .header-exit-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
     }
 
     /* ============================================================
-       HERO
+       TWO-PANEL LAYOUT
     ============================================================ */
-    #hero {
-      position: relative;
-      padding: 148px 0 100px;
-      overflow: hidden;
-      text-align: center;
-    }
-
-    .hero-bg-cyan {
-      top: -100px;
-      left: 50%;
-      transform: translateX(-60%);
-    }
-
-    .hero-bg-purple {
-      top: 100px;
-      right: -200px;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--cyan);
-      background: rgba(0, 212, 255, 0.08);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 8px 20px;
-      margin-bottom: 28px;
-    }
-
-    .hero-headline {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      font-weight: 900;
-      line-height: 1.08;
-      letter-spacing: -1.5px;
-      margin-bottom: 24px;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: var(--muted);
-      max-width: 700px;
-      margin: 0 auto 40px;
-      line-height: 1.75;
-    }
-
-    .hero-ctas {
+    #panels {
       display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 52px;
-    }
-
-    .hero-authority {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 215, 0, 0.06);
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      border-radius: 100px;
-      padding: 10px 24px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--gold);
-      margin-bottom: 32px;
-    }
-
-    .trust-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 24px;
-    }
-
-    .trust-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--muted);
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 100px;
-      padding: 6px 14px;
-    }
-
-    .hero-disclaimer {
-      font-size: 0.75rem;
-      color: rgba(136, 146, 164, 0.6);
-      font-style: italic;
-    }
-
-    /* Hero stats strip */
-    .hero-stats {
-      display: flex;
-      justify-content: center;
-      gap: 0;
-      flex-wrap: wrap;
-      margin-top: 64px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      background: var(--card);
-      overflow: hidden;
-    }
-
-    .hero-stat {
       flex: 1;
-      min-width: 160px;
-      padding: 28px 24px;
-      text-align: center;
-      border-right: 1px solid var(--border);
+      overflow: hidden;
     }
 
-    .hero-stat:last-child { border-right: none; }
-
-    .hero-stat-num {
-      font-size: 1.9rem;
-      font-weight: 900;
-      color: var(--cyan);
-      display: block;
-      line-height: 1;
-      margin-bottom: 6px;
+    /* ============================================================
+       LEFT PANEL — AI ROSTER
+    ============================================================ */
+    #left-panel {
+      width: 38%;
+      min-width: 280px;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      background: #08080e;
+      border-right: 1px solid var(--border-gold);
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .hero-stat-label {
-      font-size: 0.75rem;
-      color: var(--muted);
+    .roster-header {
+      background: linear-gradient(135deg, var(--emerald), #073d24);
+      padding: 14px 18px;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(212,175,55,0.2);
+    }
+
+    .roster-header h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+
+    .roster-header p {
+      color: rgba(226,226,226,0.55);
+      font-size: 10px;
+      margin-top: 3px;
       letter-spacing: 0.5px;
     }
 
-    /* ============================================================
-       FEATURES
-    ============================================================ */
-    #features {
-      position: relative;
-      padding: 100px 0;
-      background: var(--bg2);
-    }
-
-    .features-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 24px;
-    }
-
-    .feature-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-    }
-
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--glow-cyan);
-      border-color: rgba(0, 212, 255, 0.35);
-    }
-
-    .feature-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(123,47,190,0.15));
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-
-    .feature-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--white);
-    }
-
-    .feature-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .feature-tag {
-      display: inline-block;
-      margin-top: 16px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--cyan);
-      background: rgba(0,212,255,0.08);
-      border: 1px solid rgba(0,212,255,0.15);
-      border-radius: 100px;
-      padding: 4px 12px;
-    }
-
-    /* ============================================================
-       BENO-X TOOL
-    ============================================================ */
-    #beno-x {
-      position: relative;
-      padding: 100px 0;
-      background: var(--bg);
-      overflow: hidden;
-    }
-
-    .benox-bg-purple {
-      bottom: -100px;
-      left: -150px;
-    }
-
-    .benox-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
-    }
-
-    .benox-info {
-      padding-top: 12px;
-    }
-
-    .benox-info p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.75;
-      margin-bottom: 20px;
-    }
-
-    .benox-list {
-      margin: 0;
+    .roster-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-    }
-
-    .benox-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.88rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .benox-list li::before {
-      content: "⚡";
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .benox-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 36px;
-      box-shadow: var(--shadow);
-    }
-
-    .benox-card-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .benox-card-sub {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
-
-    .benox-question {
-      margin-bottom: 20px;
-      padding: 18px 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      transition: border-color var(--transition);
-    }
-
-    .benox-question:hover { border-color: var(--border); }
-
-    .benox-question label {
-      font-size: 0.88rem;
-      color: var(--white);
-      line-height: 1.5;
-      display: block;
-      margin-bottom: 14px;
-      font-weight: 500;
-    }
-
-    .benox-radios {
-      display: flex;
-      gap: 12px;
-    }
-
-    .benox-radio {
-      flex: 1;
-      position: relative;
-    }
-
-    .benox-radio input[type="radio"] {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .benox-radio-label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 16px;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all var(--transition);
-      color: var(--muted);
-    }
-
-    .benox-radio input[type="radio"]:checked + .benox-radio-label {
-      border-color: var(--cyan);
-      color: var(--cyan);
-      background: rgba(0,212,255,0.08);
-    }
-
-    .benox-radio-label:hover {
-      border-color: rgba(0,212,255,0.4);
-      color: var(--white);
-    }
-
-    .benox-submit {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
-      color: var(--white);
-      border: none;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all var(--transition);
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 8px;
     }
 
-    .benox-submit:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,212,255,0.3);
-    }
+    .roster-scroll::-webkit-scrollbar { width: 4px; }
+    .roster-scroll::-webkit-scrollbar-track { background: transparent; }
+    .roster-scroll::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 2px; }
 
-    .benox-disclaimer {
-      font-size: 0.72rem;
-      color: rgba(136,146,164,0.6);
-      text-align: center;
-      margin-top: 16px;
-      font-style: italic;
-    }
-
-    /* ============================================================
-       PRICING
-    ============================================================ */
-    #pricing {
-      padding: 100px 0;
-      background: var(--bg2);
-      position: relative;
-    }
-
-    .pricing-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
-      gap: 24px;
-      align-items: start;
-    }
-
-    .pricing-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 36px 30px;
+    /* Specialist cards */
+    .spec-card {
+      background: var(--charcoal);
+      border: 1px solid var(--border-gold);
+      border-radius: 8px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
       display: flex;
-      flex-direction: column;
-      position: relative;
-      transition: transform var(--transition), box-shadow var(--transition);
+      align-items: center;
+      gap: 12px;
     }
 
-    .pricing-card:hover {
-      transform: translateY(-5px);
+    .spec-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(212,175,55,0.2);
+      transform: translateY(-1px);
     }
 
-    .pricing-card.popular {
-      border-color: var(--purple);
-      box-shadow: 0 0 40px rgba(123,47,190,0.25);
+    .spec-card.active {
+      border-color: var(--emerald-light);
+      box-shadow: 0 0 16px rgba(26,138,80,0.3);
+      background: #0d1a11;
     }
 
-    .popular-badge {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--purple);
-      color: var(--white);
-      font-size: 0.7rem;
+    .spec-avatar {
+      font-size: 24px;
+      flex-shrink: 0;
+      width: 36px;
+      text-align: center;
+    }
+
+    .spec-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .spec-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 5px 18px;
-      border-radius: 100px;
-      white-space: nowrap;
-    }
-
-    .pricing-tier-icon {
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-    }
-
-    .pricing-tier-name {
-      font-size: 1.15rem;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .pricing-price {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: var(--cyan);
-      line-height: 1;
-      margin: 16px 0 4px;
-    }
-
-    .pricing-price sup {
-      font-size: 1rem;
-      font-weight: 700;
-      vertical-align: top;
-      margin-top: 8px;
-      display: inline-block;
-    }
-
-    .pricing-period {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
-
-    .pricing-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 24px;
-    }
-
-    .pricing-features {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 28px;
-    }
-
-    .pricing-features li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-
-    .pricing-features li::before {
-      content: "✓";
-      color: var(--green);
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .pricing-cta {
-      display: block;
-      text-align: center;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      transition: all var(--transition);
-      text-decoration: none;
-    }
-
-    .pricing-cta-free {
-      background: rgba(0,212,255,0.1);
-      color: var(--cyan);
-      border: 1px solid var(--border);
-    }
-
-    .pricing-cta-free:hover {
-      background: rgba(0,212,255,0.2);
-      color: var(--cyan);
-      border-color: var(--cyan);
-    }
-
-    .pricing-cta-pro {
-      background: var(--cyan);
-      color: #07080f;
-    }
-
-    .pricing-cta-pro:hover {
-      background: #33ddff;
-      color: #07080f;
-      box-shadow: var(--glow-cyan);
-    }
-
-    .pricing-cta-elite {
-      background: var(--purple);
-      color: var(--white);
-    }
-
-    .pricing-cta-elite:hover {
-      background: #9336e0;
-      box-shadow: var(--glow-purple);
-    }
-
-    .pricing-cta-sovereign {
-      background: var(--gold);
-      color: #07080f;
-    }
-
-    .pricing-cta-sovereign:hover {
-      background: #ffe040;
-    }
-
-    .pricing-card.sovereign { border-color: rgba(255,215,0,0.3); }
-
-    /* ============================================================
-       FRAMEWORKS
-    ============================================================ */
-    #frameworks {
-      padding: 100px 0;
-      background: var(--bg);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .frameworks-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .frameworks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 24px;
-      margin-bottom: 60px;
-    }
-
-    .framework-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 28px;
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-      transition: all var(--transition);
-    }
-
-    .framework-card:hover {
-      border-color: rgba(0,212,255,0.35);
-      transform: translateY(-3px);
-      box-shadow: var(--glow-cyan);
-    }
-
-    .framework-icon {
-      width: 48px;
-      height: 48px;
-      flex-shrink: 0;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-    }
-
-    .framework-icon.cyan-bg {
-      background: rgba(0,212,255,0.12);
-      border: 1px solid rgba(0,212,255,0.2);
-    }
-
-    .framework-icon.purple-bg {
-      background: rgba(123,47,190,0.15);
-      border: 1px solid rgba(123,47,190,0.25);
-    }
-
-    .framework-icon.gold-bg {
-      background: rgba(255,215,0,0.1);
-      border: 1px solid rgba(255,215,0,0.2);
-    }
-
-    .framework-icon.green-bg {
-      background: rgba(0,168,107,0.12);
-      border: 1px solid rgba(0,168,107,0.2);
-    }
-
-    .framework-body {}
-
-    .framework-name {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--white);
-    }
-
-    .framework-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .framework-link {
-      font-size: 0.78rem;
-      color: var(--cyan);
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 10px;
-    }
-
-    /* Integration pipeline visual */
-    .pipeline {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 40px;
-      text-align: center;
-    }
-
-    .pipeline-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 32px;
-      color: var(--white);
-    }
-
-    .pipeline-nodes {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0;
-    }
-
-    .pipeline-node {
-      text-align: center;
-      padding: 16px 20px;
-    }
-
-    .pipeline-node-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(123,47,190,0.1));
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin: 0 auto 10px;
-    }
-
-    .pipeline-node-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.5px;
-    }
-
-    .pipeline-node-sub {
-      font-size: 0.65rem;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .pipeline-arrow {
-      font-size: 1.2rem;
-      color: var(--cyan);
-      opacity: 0.5;
-      margin: 0 4px;
-    }
-
-    /* ============================================================
-       CONTACT
-    ============================================================ */
-    #contact {
-      padding: 100px 0;
-      background: var(--bg2);
-      position: relative;
-    }
-
-    .contact-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    .contact-info-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-
-    .contact-info-sub {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.7;
-      margin-bottom: 36px;
-    }
-
-    .contact-methods {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .contact-method {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 18px 20px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      transition: all var(--transition);
-      text-decoration: none;
-      color: var(--white);
-    }
-
-    .contact-method:hover {
-      border-color: var(--cyan);
-      transform: translateX(4px);
-      color: var(--white);
-    }
-
-    .contact-method-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 11px;
-      background: rgba(0,212,255,0.1);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .contact-method-body {}
-
-    .contact-method-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--muted);
+      color: var(--platinum);
       margin-bottom: 2px;
     }
 
-    .contact-method-value {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: var(--white);
+    .spec-tagline {
+      color: var(--platinum-dark);
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Contact Form */
-    .contact-form-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 40px;
+    .route-btn {
+      background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+      border: none;
+      border-radius: 4px;
+      color: var(--gold-light);
+      font-size: 9px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 5px 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: opacity 0.2s;
     }
 
-    .contact-form-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 6px;
+    .route-btn:hover { opacity: 0.85; }
+
+    /* Upgrade panel */
+    .upgrade-panel {
+      flex-shrink: 0;
+      border-top: 1px solid var(--border-gold);
+      padding: 14px;
+      background: #07070d;
     }
 
-    .contact-form-sub {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
+    .upgrade-tier-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--platinum-dark);
       margin-bottom: 8px;
+    }
+
+    .upgrade-tier-label span {
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    .upgrade-btns {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .upgrade-btns a {
+      flex: 1;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      padding: 7px 4px;
+      font-size: 9px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      transition: opacity 0.2s;
+    }
+
+    .upgrade-btns a:hover { opacity: 0.85; }
+
+    .btn-pro {
+      background: linear-gradient(135deg, #1a5c9a, #2473b5);
+      color: #b8d8ff;
+    }
+
+    .btn-elite {
+      background: linear-gradient(135deg, #7a2a8c, #a33db0);
+      color: #eebdff;
+    }
+
+    .upgrade-note {
+      font-size: 9px;
+      color: var(--platinum-dark);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .soulstack-badge {
+      font-size: 9px;
+      color: var(--platinum-dark);
       letter-spacing: 0.5px;
     }
 
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      padding: 12px 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      color: var(--white);
-      font-size: 0.9rem;
-      font-family: inherit;
-      transition: border-color var(--transition);
-      outline: none;
-    }
-
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
-      border-color: var(--cyan);
-      background: rgba(0,212,255,0.04);
-    }
-
-    .form-select { cursor: pointer; }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .form-submit {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
-      color: var(--white);
-      border: none;
-      border-radius: 10px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-
-    .form-submit:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,212,255,0.3);
-    }
+    .soulstack-badge .dot-green { color: #22c55e; }
 
     /* ============================================================
-       FOOTER
+       RIGHT PANEL — CHAT
     ============================================================ */
-    #footer {
-      background: #050609;
-      border-top: 1px solid var(--border);
-      padding: 64px 0 32px;
-    }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 48px;
-      padding-bottom: 48px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 32px;
-    }
-
-    .footer-brand-logo {
-      font-size: 1.35rem;
-      font-weight: 900;
-      color: var(--white);
-      margin-bottom: 14px;
-    }
-
-    .footer-brand-logo span {
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .footer-brand-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
-
-    .footer-empire-badge {
-      font-size: 0.72rem;
-      color: var(--muted);
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 8px;
-      padding: 8px 12px;
-      display: inline-block;
-    }
-
-    .footer-col-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 18px;
-    }
-
-    .footer-col-links {
+    #right-panel {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      overflow: hidden;
+      background: var(--dark);
     }
 
-    .footer-col-links a {
-      font-size: 0.85rem;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color var(--transition);
-    }
-
-    .footer-col-links a:hover { color: var(--white); }
-
-    .footer-bottom {
+    .chat-header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border-gold);
+      flex-shrink: 0;
+      background: #09090f;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-copyright {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .footer-disclaimer {
-      font-size: 0.75rem;
-      color: rgba(136,146,164,0.5);
-      font-style: italic;
-      text-align: right;
-      max-width: 500px;
-    }
-
-    /* ============================================================
-       FAQ ACCORDION
-    ============================================================ */
-    #faq {
-      padding: 100px 0;
-      background: var(--bg);
-    }
-
-    .faq-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
-    .faq-list {
-      max-width: 800px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
       gap: 12px;
     }
 
-    .faq-item {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: border-color var(--transition);
+    .chat-header-avatar {
+      font-size: 22px;
     }
 
-    .faq-item.open { border-color: rgba(0,212,255,0.35); }
-
-    .faq-question {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 20px 24px;
-      background: transparent;
-      border: none;
-      color: var(--white);
-      font-size: 0.95rem;
-      font-weight: 600;
-      text-align: left;
-      cursor: pointer;
-      font-family: inherit;
+    .chat-header-info h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold-light);
     }
 
-    .faq-chevron {
-      font-size: 0.7rem;
-      color: var(--cyan);
-      flex-shrink: 0;
-      transition: transform var(--transition);
+    .chat-header-info p {
+      font-size: 10px;
+      color: var(--platinum-dark);
+      margin-top: 1px;
     }
 
-    .faq-item.open .faq-chevron { transform: rotate(180deg); }
-
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s ease, padding var(--transition);
-      padding: 0 24px;
-    }
-
-    .faq-item.open .faq-answer {
-      max-height: 400px;
-      padding: 0 24px 20px;
-    }
-
-    .faq-answer p {
-      font-size: 0.88rem;
-      color: var(--muted);
-      line-height: 1.75;
-    }
-
-    /* ============================================================
-       AUTHORITY STRIP (between sections)
-    ============================================================ */
-    .authority-strip {
-      background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(123,47,190,0.06));
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 36px 0;
-      text-align: center;
-    }
-
-    .authority-strip-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .authority-strip-text {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .authority-strip-text span {
-      color: var(--cyan);
-    }
-
-    .authority-avatar {
-      width: 44px;
-      height: 44px;
+    .chat-status-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
+      background: #22c55e;
+      box-shadow: 0 0 6px #22c55e;
+      margin-left: auto;
       flex-shrink: 0;
     }
 
-    /* ============================================================
-       RESPONSIVE
-    ============================================================ */
-    @media (max-width: 1024px) {
-      .footer-top {
-        grid-template-columns: 1fr 1fr;
-        gap: 36px;
-      }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 2px; }
+
+    /* Messages */
+    .msg {
+      display: flex;
+      flex-direction: column;
+      max-width: 80%;
+    }
+
+    .msg.ai {
+      align-self: flex-start;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .msg.ai .msg-bubble {
+      background: var(--charcoal);
+      border: 1px solid var(--border-emerald);
+      color: var(--platinum);
+      border-radius: 10px 10px 10px 2px;
+    }
+
+    .msg.user .msg-bubble {
+      background: linear-gradient(135deg, var(--emerald), #0a6e3f);
+      color: var(--platinum);
+      border-radius: 10px 10px 2px 10px;
+    }
+
+    .msg-label {
+      font-size: 9px;
+      color: var(--platinum-dark);
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .msg.user .msg-label {
+      text-align: right;
+    }
+
+    /* Routing suggestion */
+    .route-suggestion {
+      display: inline-block;
+      margin-top: 8px;
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.35);
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-size: 11px;
+      color: var(--gold-light);
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .route-suggestion:hover {
+      background: rgba(212,175,55,0.22);
+    }
+
+    /* Chat input area */
+    .chat-input-wrap {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-gold);
+      flex-shrink: 0;
+      background: #09090f;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: var(--charcoal);
+      border: 1px solid var(--border-gold);
+      border-radius: 8px;
+      color: var(--platinum);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 10px 14px;
+      resize: none;
+      outline: none;
+      min-height: 42px;
+      max-height: 120px;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input:focus {
+      border-color: var(--emerald-light);
+    }
+
+    .chat-input::placeholder {
+      color: var(--platinum-dark);
+    }
+
+    .send-btn {
+      background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+      border: none;
+      border-radius: 8px;
+      color: var(--gold-light);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 11px 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .send-btn:hover { opacity: 0.9; }
+    .send-btn:active { transform: scale(0.96); }
+
+    .chat-footer-note {
+      text-align: center;
+      font-size: 9px;
+      color: var(--platinum-dark);
+      padding: 6px 20px;
+      background: #09090f;
+      border-top: 1px solid rgba(212,175,55,0.1);
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       MOBILE RESPONSIVE
+    ============================================================ */
     @media (max-width: 768px) {
-      .nav-links,
-      .nav-status {
+      html, body { overflow: auto; }
+
+      #main-app {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      #panels {
+        flex-direction: column;
+        overflow: visible;
+      }
+
+      #left-panel {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-gold);
+        max-height: none;
+        overflow: visible;
+      }
+
+      .roster-scroll {
+        max-height: 380px;
+        overflow-y: auto;
+      }
+
+      #right-panel {
+        height: 70vh;
+        min-height: 500px;
+      }
+
+      .chat-messages {
+        height: calc(70vh - 180px);
+      }
+
+      .header-center {
         display: none;
       }
-
-      .hamburger { display: flex; }
-
-      #hero { padding: 120px 0 80px; }
-
-      .hero-stats {
-        flex-direction: column;
-      }
-
-      .hero-stat { border-right: none; border-bottom: 1px solid var(--border); }
-      .hero-stat:last-child { border-bottom: none; }
-
-      .benox-wrapper {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .contact-wrapper {
-        grid-template-columns: 1fr;
-        gap: 48px;
-      }
-
-      .footer-top {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .footer-disclaimer { text-align: center; }
-
-      .pipeline-nodes {
-        gap: 8px;
-      }
-
-      .pipeline-arrow { display: none; }
-    }
-
-    @media (max-width: 480px) {
-      .features-grid,
-      .frameworks-grid,
-      .pricing-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-ctas {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .hero-ctas .btn {
-        justify-content: center;
-      }
-
-      .benox-card { padding: 24px 20px; }
     }
 
     /* ============================================================
-       HERO SPLIT LAYOUT WITH ROBOT IMAGE
+       UTILITY
     ============================================================ */
-    #hero {
-      text-align: left;
-    }
-
-    .hero-split {
-      display: grid;
-      grid-template-columns: 1fr 480px;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .hero-robot-img {
-      width: 100%;
-      max-width: 480px;
-      border-radius: 16px;
-      box-shadow: 0 0 40px rgba(0, 212, 255, 0.45), 0 0 80px rgba(0, 212, 255, 0.2);
-      display: block;
-    }
-
-    .hero-ctas {
-      justify-content: flex-start;
-    }
-
-    .hero-authority,
-    .trust-bar,
-    .hero-disclaimer {
-      text-align: left;
-    }
-
-    .hero-stats {
-      margin-top: 64px;
-    }
-
-    /* Strategic Vision Banner */
-    .strategic-banner {
-      width: 100%;
-      max-width: 900px;
-      margin: 48px auto 0;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
-      display: block;
-    }
-
-    .strategic-banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 16px;
-    }
-
-    /* Command Force Section */
-    #command-force {
-      padding: 100px 0;
-      background: var(--bg);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .command-force-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
-    .command-force-visual {
+    .typing-indicator {
       display: flex;
-      justify-content: center;
+      gap: 4px;
+      padding: 4px 0;
     }
 
-    .command-force-img {
-      width: 100%;
-      max-width: 900px;
-      border-radius: 16px;
-      box-shadow: 0 0 60px rgba(123, 47, 190, 0.35), 0 0 30px rgba(0, 212, 255, 0.15);
-      display: block;
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--emerald-light);
+      animation: typingBounce 1.2s infinite;
     }
 
-    .command-force-caption {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 0.88rem;
-      color: var(--muted);
-      font-style: italic;
-    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
-    @media (max-width: 900px) {
-      .hero-split {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-robot-img {
-        max-width: 100%;
-        order: -1;
-      }
-
-      #hero { text-align: center; }
-
-      .hero-ctas,
-      .hero-authority,
-      .trust-bar,
-      .hero-disclaimer {
-        justify-content: center;
-        text-align: center;
-      }
-    }
-
-    /* ============================================================
-       SCROLL ANIMATIONS
-    ============================================================ */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
     }
   </style>
 </head>
-
 <body>
 
   <!-- ============================================================
-       NAVBAR
+       LOCK SCREEN
   ============================================================ -->
-  <nav id="navbar" role="navigation" aria-label="Primary navigation">
-    <div class="container">
-      <div class="nav-inner">
-        <a href="#" class="nav-logo">⚡ <span>PrimeDox AI</span> <small style="font-size:10px;font-weight:600;color:#7b2fbe;letter-spacing:1px;vertical-align:middle;">by Derek Francisco</small></a>
-
-        <ul class="nav-links" role="list">
-          <li><a href="#features">Features</a></li>
-          <li><a href="#frameworks">Frameworks</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#frameworks">Integrations</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-
-        <div class="nav-right">
-          <span class="nav-status">🤖 22 Companies | 392 AI Agents Under Management</span>
-          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Free+Start" class="btn btn-primary">Start Free →</a>
-        </div>
-
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle mobile menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- URGENCY BAR -->
-  <div id="pd-urgency" style="background:linear-gradient(90deg,#070812,#0b0b1e,#070812);border-bottom:1px solid rgba(0,212,255,0.2);padding:9px 16px;text-align:center;font-size:13px;color:#7a8a9a;position:relative;z-index:998;">
-    <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;">
-      <span style="width:7px;height:7px;border-radius:50%;background:#00d4ff;display:inline-block;animation:pdpulse 2s infinite;flex-shrink:0;"></span>
-      <strong style="color:#f1f5f9;">Emergency defense slots closing tonight.</strong>
-      Offer expires in: <strong id="pd-countdown" style="color:#00d4ff;font-family:monospace;letter-spacing:1px;">--:--:--</strong>
-      <a href="#pricing" style="color:#ffd700;font-weight:800;text-decoration:none;margin-left:4px;">Get Help Now →</a>
-      <a href="#" onclick="document.getElementById('pd-urgency').style.display='none';return false;" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#3a4a5a;font-size:18px;line-height:1;text-decoration:none;">&times;</a>
-    </span>
-  </div>
-  <style>@keyframes pdpulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
-
-  <!-- Mobile nav drawer -->
-  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
-    <a href="#features" onclick="closeMobileNav()">Features</a>
-    <a href="#frameworks" onclick="closeMobileNav()">Frameworks</a>
-    <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
-    <a href="#frameworks" onclick="closeMobileNav()">Integrations</a>
-    <a href="#contact" onclick="closeMobileNav()">Contact</a>
-    <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Free+Start" class="btn btn-primary" onclick="closeMobileNav()">Start Free →</a>
-  </div>
-
-  <!-- ============================================================
-       HERO
-  ============================================================ -->
-  <section id="hero">
-    <div class="bg-grid"></div>
-    <div class="bg-radial-cyan hero-bg-cyan"></div>
-    <div class="bg-radial-purple hero-bg-purple"></div>
-
-    <div class="container" style="position:relative;z-index:1;">
-
-      <div class="hero-split">
-        <!-- Left: text content -->
-        <div class="hero-content">
-          <div class="hero-eyebrow">
-            ⚡ Derek Francisco's AI Clone — Available 24/7
-          </div>
-
-          <h1 class="hero-headline">
-            <span class="gradient-text">PrimeDox AI</span><br />Thinks. Defends. Wins.
-          </h1>
-
-          <p class="hero-sub">
-            The AI clone of Derek Francisco. 20+ years of cannabis Charter defense expertise, BENO-X framework, and constitutional self-defense — encoded into an AI you can access any time. Draft documents, analyze charges, build your defense.
-          </p>
-
-          <div class="hero-ctas">
-            <a href="https://paypal.me/derekfrancisco/99CAD" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:1rem;padding:15px 30px;background:#27ae60;border-color:#27ae60;">
-              💳 Emergency Defense — $99 →
-            </a>
-            <a href="#pricing" class="btn btn-outline" style="font-size:1rem;padding:15px 30px;">
-              See All Plans →
-            </a>
-          </div>
-
-          <div class="hero-authority">
-            ⚡ Powered by Derek Francisco — 20+ Years Charter Litigation | 392-Company AI Empire
-          </div>
-
-          <div class="trust-bar">
-            <span class="trust-badge">⚖️ BENO-X Framework</span>
-            <span class="trust-badge">🛡️ OmniaGuard Security</span>
-            <span class="trust-badge">👁️ SoulStack Monitored</span>
-            <span class="trust-badge">🌿 Cannabis Charter Defense</span>
-          </div>
-
-          <p class="hero-disclaimer">For educational purposes. Not legal representation.</p>
-        </div>
-
-        <!-- Right: silver/red combat robot -->
-        <div class="hero-robot-wrap fade-up">
-          <img src="robot-silver-red.jpg" alt="SoulStack AI Command Mech — Red-Eyed Silver Combat Robot" class="hero-robot-img" />
-        </div>
-      </div>
-
-      <!-- Strategic Vision Banner -->
-      <div class="strategic-banner fade-up">
-        <img src="strategic-vision.webp" alt="Strategic Vision &amp; Growth — PrimeDox AI" />
-      </div>
-
-      <div class="hero-stats fade-up">
-        <div class="hero-stat">
-          <span class="hero-stat-num">20+</span>
-          <div class="hero-stat-label">Years Charter Litigation</div>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">392</span>
-          <div class="hero-stat-label">AI Agents Under Management</div>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">22</span>
-          <div class="hero-stat-label">Francisco Holdings Companies</div>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">12</span>
-          <div class="hero-stat-label">Appearance Weedlaw Timeline</div>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">6</span>
-          <div class="hero-stat-label">Weedlaw Quintinity Periods</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="glow-divider"></div>
-
-  <!-- ============================================================
-       FEATURES
-  ============================================================ -->
-  <section id="features">
-    <div class="container">
-      <div class="features-header">
-        <div class="section-label">⚙️ Platform Features</div>
-        <h2 class="section-title">Everything You Need to<br /><span class="gradient-text">Defend Your Rights</span></h2>
-        <p class="section-sub" style="margin:0 auto;">
-          PrimeDox AI packages two decades of Canadian cannabis Charter defense knowledge into a suite of precision AI tools — from case law to court-ready documents.
-        </p>
-      </div>
-
-      <div class="features-grid">
-
-        <div class="feature-card fade-up">
-          <div class="feature-icon">⚖️</div>
-          <h3 class="feature-title">Constitutional Research</h3>
-          <p class="feature-desc">
-            AI-powered search across 20+ years of Charter cannabis case law. Parker, Smith, Allard, and every major precedent instantly accessible. Surface the exact argument you need in seconds.
-          </p>
-          <span class="feature-tag">Charter s.7 · s.12 · s.15</span>
-        </div>
-
-        <div class="feature-card fade-up">
-          <div class="feature-icon">📄</div>
-          <h3 class="feature-title">Document Drafting</h3>
-          <p class="feature-desc">
-            Generate s.7/s.12/s.15 Charter argument templates, BENO-X defense frameworks, and court-ready document outlines. Every template is grounded in real Canadian precedents.
-          </p>
-          <span class="feature-tag">BENO-X · Court-Ready</span>
-        </div>
-
-        <div class="feature-card fade-up">
-          <div class="feature-icon">🔍</div>
-          <h3 class="feature-title">Case Analysis</h3>
-          <p class="feature-desc">
-            Feed your charge sheet — PrimeDox AI identifies applicable defenses, relevant precedents, and procedural opportunities. Know your options before your first appearance.
-          </p>
-          <span class="feature-tag">Charge Analysis · Precedent Match</span>
-        </div>
-
-        <div class="feature-card fade-up">
-          <div class="feature-icon">📅</div>
-          <h3 class="feature-title">12-Appearance Timeline Generator</h3>
-          <p class="feature-desc">
-            Input your court dates — receive a strategic appearance-by-appearance action plan based on the Weedlaw Quintinity framework. Every hearing mapped to the right motion.
-          </p>
-          <span class="feature-tag">Weedlaw Quintinity · Court Strategy</span>
-        </div>
-
-        <div class="feature-card fade-up">
-          <div class="feature-icon">🧪</div>
-          <h3 class="feature-title">BENO-X Analyzer</h3>
-          <p class="feature-desc">
-            Answer 5 questions about your exemption status — receive a full BENO-X Bad Exemption analysis with applicable Charter arguments. Understand your constitutional position immediately.
-          </p>
-          <span class="feature-tag">BENO-X · Exemption Analysis</span>
-        </div>
-
-        <div class="feature-card fade-up">
-          <div class="feature-icon">🤖</div>
-          <h3 class="feature-title">Agent Swarm Management</h3>
-          <p class="feature-desc">
-            Oversee all 22+ Francisco Holdings companies from one command center. OmniaGuard, SoulStack, and PrimeDox AI operating under one unified interface with full visibility.
-          </p>
-          <span class="feature-tag">OmniaGuard · SoulStack · PrimeDox AI</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Authority Strip -->
-  <div class="authority-strip">
-    <div class="container">
-      <div class="authority-strip-inner">
-        <div class="authority-avatar">⚡</div>
-        <div class="authority-strip-text">
-          Built by <span>Derek Francisco</span> — Cannabis Charter Litigant, AI Architect, Founder of Francisco Holdings Inc.
-        </div>
-        <div class="authority-avatar">🌿</div>
+  <div id="lock-screen">
+    <div class="lock-modal">
+      <span class="lock-icon">&#127963;</span>
+      <div class="lock-title">PRIMEDOX HQ</div>
+      <div class="lock-subtitle">AI Concierge Command Center</div>
+      <input
+        class="lock-input"
+        id="lock-input"
+        type="password"
+        placeholder="&#183; &#183; &#183; &#183; &#183; &#183; &#183; &#183; &#183; &#183;"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="lock-btn" id="lock-btn">ENTER HQ</button>
+      <div class="lock-error" id="lock-error"></div>
+      <div class="lock-badge">
+        OmniaGuard Secured &nbsp;&middot;&nbsp; <span class="dot-green">&#9679;</span> SoulStack Monitoring Active
       </div>
     </div>
   </div>
 
   <!-- ============================================================
-       BENO-X TOOL
+       MAIN APPLICATION
   ============================================================ -->
-  <section id="beno-x">
-    <div class="bg-radial-purple benox-bg-purple"></div>
+  <div id="main-app">
 
-    <div class="container" style="position:relative;z-index:1;">
-      <div class="benox-wrapper">
+    <!-- TOP HEADER -->
+    <header id="top-header">
+      <div class="header-logo">&#127963; PRIMEDOX HQ</div>
+      <div class="header-center">Agent Swarm &nbsp;&middot;&nbsp; SoulStack Monitoring &nbsp;&middot;&nbsp; OmniaGuard Secured</div>
+      <button class="header-exit-btn" id="exit-btn">&#128275; Exit HQ</button>
+    </header>
 
-        <!-- Info column -->
-        <div class="benox-info fade-up">
-          <div class="section-label">🧪 BENO-X Framework</div>
-          <h2 class="section-title">Is Your Cannabis<br /><span class="gradient-text">Exemption Valid?</span></h2>
-          <p>
-            The BENO-X (Bad Exemption — No Exemption) framework is Derek Francisco's constitutional analytical tool for challenging unlawful cannabis exemption denials under Canadian law.
-          </p>
-          <p>
-            If you were denied a medical cannabis authorization and subsequently charged, the Charter may provide significant protections. Answer 5 questions to receive your BENO-X analysis.
-          </p>
-          <ul class="benox-list">
-            <li>Grounded in Parker (2000), Smith (2015), and Allard (2016) precedents</li>
-            <li>Applies ss.315–316 of the Cannabis Regulations directly to your situation</li>
-            <li>Identifies applicable Charter sections: s.7 life/liberty, s.12 cruel treatment</li>
-            <li>Generates a preliminary framework for your legal consultation</li>
-            <li>Instant educational analysis — no account required</li>
-          </ul>
-          <div style="margin-top:32px;">
-            <a href="#pricing" class="btn btn-primary">Unlock Full Analyzer →</a>
-          </div>
+    <!-- TWO-PANEL LAYOUT -->
+    <div id="panels">
+
+      <!-- LEFT PANEL: AI ROSTER -->
+      <aside id="left-panel">
+        <div class="roster-header">
+          <h2>Empire AI Roster</h2>
+          <p>Select a specialist to route your query</p>
         </div>
 
-        <!-- Interactive form -->
-        <div class="benox-card fade-up">
-          <div class="benox-card-title">⚡ BENO-X Analyzer</div>
-          <p class="benox-card-sub">Answer 5 questions — receive your constitutional analysis</p>
+        <div class="roster-scroll" id="roster-scroll">
 
-          <form id="benoxForm" onsubmit="submitBenox(event)">
-
-            <div class="benox-question">
-              <label for="q1">1. Did you apply for a medical cannabis authorization under Cannabis Regulations ss.315–316?</label>
-              <div class="benox-radios">
-                <div class="benox-radio">
-                  <input type="radio" name="q1" id="q1y" value="Yes" required />
-                  <label class="benox-radio-label" for="q1y">✓ Yes</label>
-                </div>
-                <div class="benox-radio">
-                  <input type="radio" name="q1" id="q1n" value="No" />
-                  <label class="benox-radio-label" for="q1n">✗ No</label>
-                </div>
-              </div>
+          <!-- Card 1: Doc Weedlaw AI -->
+          <div class="spec-card" data-id="weedlaw"
+            data-greeting="Doc Weedlaw AI is online. Cannabis Charter defense, BENO-X analysis, and constitutional strategy — 200+ cases of precedent. What charge or rights issue are you facing?">
+            <div class="spec-avatar">&#9878;&#65039;</div>
+            <div class="spec-info">
+              <div class="spec-name">Doc Weedlaw AI</div>
+              <div class="spec-tagline">Cannabis Charter Defense &middot; 200+ cases</div>
             </div>
+            <button class="route-btn" data-url="https://ccldr.net">Route &#8594;</button>
+          </div>
 
-            <div class="benox-question">
-              <label for="q2">2. Was your application denied without written reasons?</label>
-              <div class="benox-radios">
-                <div class="benox-radio">
-                  <input type="radio" name="q2" id="q2y" value="Yes" required />
-                  <label class="benox-radio-label" for="q2y">✓ Yes</label>
-                </div>
-                <div class="benox-radio">
-                  <input type="radio" name="q2" id="q2n" value="No" />
-                  <label class="benox-radio-label" for="q2n">✗ No</label>
-                </div>
-              </div>
+          <!-- Card 2: OmniaGuard -->
+          <div class="spec-card" data-id="omniaguard"
+            data-greeting="OmniaGuard online. 14-layer enterprise AI security architecture. Threat detection, access control, and compliance monitoring at scale. What is your security challenge?">
+            <div class="spec-avatar">&#128737;&#65039;</div>
+            <div class="spec-info">
+              <div class="spec-name">OmniaGuard</div>
+              <div class="spec-tagline">14-Layer Enterprise AI Security</div>
             </div>
+            <button class="route-btn" data-url="https://omniaguard.com">Route &#8594;</button>
+          </div>
 
-            <div class="benox-question">
-              <label for="q3">3. Does your medical condition meet the criteria under MMAR ss.4/5?</label>
-              <div class="benox-radios">
-                <div class="benox-radio">
-                  <input type="radio" name="q3" id="q3y" value="Yes" required />
-                  <label class="benox-radio-label" for="q3y">✓ Yes</label>
-                </div>
-                <div class="benox-radio">
-                  <input type="radio" name="q3" id="q3n" value="No" />
-                  <label class="benox-radio-label" for="q3n">✗ No</label>
-                </div>
-              </div>
+          <!-- Card 3: PrimeDox AI -->
+          <div class="spec-card active" data-id="primedox"
+            data-greeting="Welcome to PrimeDox AI Concierge. I&#8217;m Derek Francisco&#8217;s AI clone &#8212; 20 years of cannabis Charter defense, constitutional strategy, and empire building compressed into this interface. What challenge are you facing?">
+            <div class="spec-avatar">&#129302;</div>
+            <div class="spec-info">
+              <div class="spec-name">PrimeDox AI</div>
+              <div class="spec-tagline">Derek Francisco&#8217;s AI Clone &middot; BENO-X</div>
             </div>
+            <button class="route-btn" data-url="primedox-ai-chat.html">Route &#8594;</button>
+          </div>
 
-            <div class="benox-question">
-              <label for="q4">4. Were you arrested or charged after a denial you believe was unlawful?</label>
-              <div class="benox-radios">
-                <div class="benox-radio">
-                  <input type="radio" name="q4" id="q4y" value="Yes" required />
-                  <label class="benox-radio-label" for="q4y">✓ Yes</label>
-                </div>
-                <div class="benox-radio">
-                  <input type="radio" name="q4" id="q4n" value="No" />
-                  <label class="benox-radio-label" for="q4n">✗ No</label>
-                </div>
-              </div>
+          <!-- Card 4: CleanSwarm AI -->
+          <div class="spec-card" data-id="cleanswarm"
+            data-greeting="CleanSwarm AI ready. AI-powered document cleanup, formatting, and batch processing. Upload your documents and let the swarm handle the heavy lifting. What do you need cleaned?">
+            <div class="spec-avatar">&#128029;</div>
+            <div class="spec-info">
+              <div class="spec-name">CleanSwarm AI</div>
+              <div class="spec-tagline">AI-Powered Document Cleanup</div>
             </div>
+            <button class="route-btn" data-url="https://cleanswarm.ca">Route &#8594;</button>
+          </div>
 
-            <div class="benox-question">
-              <label for="q5">5. Do you have documentation of your medical need?</label>
-              <div class="benox-radios">
-                <div class="benox-radio">
-                  <input type="radio" name="q5" id="q5y" value="Yes" required />
-                  <label class="benox-radio-label" for="q5y">✓ Yes</label>
-                </div>
-                <div class="benox-radio">
-                  <input type="radio" name="q5" id="q5n" value="No" />
-                  <label class="benox-radio-label" for="q5n">✗ No</label>
-                </div>
-              </div>
+          <!-- Card 5: TechPet AI -->
+          <div class="spec-card" data-id="techpet"
+            data-greeting="TechPet AI connected. Smart pet monitoring systems powered by AI &#8212; health tracking, behavior analysis, and alert systems. How can we help monitor your pet?">
+            <div class="spec-avatar">&#128062;</div>
+            <div class="spec-info">
+              <div class="spec-name">TechPet AI</div>
+              <div class="spec-tagline">Smart Pet Monitoring Systems</div>
             </div>
+            <button class="route-btn" data-url="https://franciscoholdingsinc.com">Route &#8594;</button>
+          </div>
 
-            <button type="submit" class="benox-submit">
-              Analyze My BENO-X Status →
-            </button>
-
-            <p class="benox-disclaimer">
-              This analysis is educational only. Consult a lawyer for legal advice. Not legal representation.
-            </p>
-          </form>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="glow-divider"></div>
-
-  <!-- ============================================================
-       PRICING
-  ============================================================ -->
-  <section id="pricing">
-    <div class="container">
-      <div class="pricing-header">
-        <div class="section-label">💳 Pricing</div>
-        <h2 class="section-title">Choose Your<br /><span class="gradient-text">Defense Level</span></h2>
-        <p class="section-sub" style="margin:0 auto;">
-          From emergency access to full sovereign integration — every tier includes Derek Francisco's constitutional defense frameworks.
-        </p>
-      </div>
-
-      <div class="pricing-grid">
-
-        <!-- Emergency Defense $99 -->
-        <div class="pricing-card fade-up">
-          <div class="pricing-tier-icon">🚨</div>
-          <div class="pricing-tier-name">Emergency Defense</div>
-          <div class="pricing-price"><sup>$</sup>99</div>
-          <div class="pricing-period">one-time CAD — instant access</div>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li>BENO-X framework — full overview</li>
-            <li>3 canonical case summaries (Parker, Smith, Allard)</li>
-            <li>Emergency Charter rights reference card</li>
-            <li>Section 8 &amp; 9 challenge templates</li>
-            <li>Step-by-step first-appearance guide</li>
-          </ul>
-          <a href="https://paypal.me/derekfrancisco/99CAD" target="_blank" rel="noopener" class="pricing-cta pricing-cta-free" style="background:#27ae60;color:#fff;border-color:#27ae60;">
-            💳 Pay $99 via PayPal →
-          </a>
-          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Emergency+Defense+%E2%80%94+%2499&body=I%20want%20Emergency%20Defense%20access%20at%20%2499%20one-time.%20Sending%20Interac%20e-transfer." style="display:block;text-align:center;margin-top:8px;font-size:12px;color:#7b8a9a;text-decoration:none;">💸 Pay via Interac instead</a>
-        </div>
-
-        <!-- Document Prep (one-time, $99) -->
-        <div class="pricing-card fade-up">
-          <div class="pricing-tier-icon">📄</div>
-          <div class="pricing-tier-name">Educational Document Prep</div>
-          <div class="pricing-price"><sup>$</sup>99</div>
-          <div class="pricing-period">one-time CAD — flat fee</div>
-          <div class="pricing-divider"></div>
-          <p style="font-size:12.5px;color:var(--gray,#8892a4);line-height:1.6;margin:0 0 14px;">
-            <strong>You draft, you file. We educate, you execute.</strong> A self-help walkthrough of the constitutional frameworks and document structure for your situation — built for people who want to understand the process and prepare their own paperwork.
-          </p>
-          <ul class="pricing-features">
-            <li>Step-by-step framework walkthrough for your situation</li>
-            <li>Annotated document templates (you complete &amp; file them)</li>
-            <li>Charter / case-law reference sheet for your scenario</li>
-            <li>2-hour turnaround on the educational package</li>
-            <li>Email follow-up for clarifying questions (1 round)</li>
-          </ul>
-          <p style="font-size:11px;color:var(--gray,#8892a4);line-height:1.5;margin:0 0 14px;border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;">
-            ⚖ <strong>Educational resource only — not legal advice or representation.</strong> This is a self-help document-prep walkthrough, not a substitute for a licensed lawyer. For anything time-sensitive or high-stakes, consult one.
-          </p>
-          <a href="#" onclick="docPrepPay();return false;" class="pricing-cta pricing-cta-pro">
-            Get My Document Prep — $99 →
-          </a>
-        </div>
-
-        <!-- Pro -->
-        <div class="pricing-card fade-up">
-          <div class="pricing-tier-icon">🔵</div>
-          <div class="pricing-tier-name">Pro</div>
-          <div class="pricing-price"><sup>$</sup>49</div>
-          <div class="pricing-period">per month CAD — cancel anytime</div>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li>Everything in Emergency Defense</li>
-            <li>Full BENO-X analyzer tool</li>
-            <li>12-Appearance timeline generator</li>
-            <li>All 12 case summaries</li>
-            <li>Charter argument templates</li>
-            <li>Email support (48hr response)</li>
-          </ul>
-          <a href="https://paypal.me/derekfrancisco/49CAD" target="_blank" rel="noopener" class="pricing-cta pricing-cta-pro">
-            💳 Pay $49/mo via PayPal →
-          </a>
-          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Pro+%E2%80%94+%2449%2Fmo&body=I%20want%20PrimeDox%20AI%20Pro%20at%20%2449%2Fmo.%20Sending%20Interac%20e-transfer." style="display:block;text-align:center;margin-top:8px;font-size:12px;color:#7b8a9a;text-decoration:none;">💸 Pay via Interac instead</a>
-        </div>
-
-        <!-- Elite (Most Popular) -->
-        <div class="pricing-card popular fade-up">
-          <div class="popular-badge">MOST POPULAR</div>
-          <div class="pricing-tier-icon">🟣</div>
-          <div class="pricing-tier-name">Elite</div>
-          <div class="pricing-price"><sup>$</sup>199</div>
-          <div class="pricing-period">per month CAD — cancel anytime</div>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li>Everything in Pro</li>
-            <li>Document drafting (unlimited)</li>
-            <li>Case analysis (10/month)</li>
-            <li>Weedlaw Quintinity full framework</li>
-            <li>Moore Amplification methodology</li>
-            <li>Priority support (24hr response)</li>
-          </ul>
-          <a href="https://paypal.me/derekfrancisco/199CAD" target="_blank" rel="noopener" class="pricing-cta pricing-cta-elite">
-            💳 Pay $199/mo via PayPal →
-          </a>
-          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Elite+%E2%80%94+%24199%2Fmo&body=I%20want%20PrimeDox%20AI%20Elite%20at%20%24199%2Fmo.%20Sending%20Interac%20e-transfer." style="display:block;text-align:center;margin-top:8px;font-size:12px;color:#7b8a9a;text-decoration:none;">💸 Pay via Interac instead</a>
-        </div>
-
-        <!-- Enterprise $499/mo -->
-        <div class="pricing-card fade-up" style="border-color:rgba(0,212,255,0.35);">
-          <div class="pricing-tier-icon">🏢</div>
-          <div class="pricing-tier-name">Enterprise</div>
-          <div class="pricing-price"><sup>$</sup>499</div>
-          <div class="pricing-period">per month CAD</div>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li>Everything in Elite</li>
-            <li>Dedicated AI agent instance</li>
-            <li>Priority document processing</li>
-            <li>Team access (up to 5 users)</li>
-            <li>Monthly strategy call with PrimeDox AI</li>
-            <li>Custom BENO-X workflow templates</li>
-          </ul>
-          <a href="https://paypal.me/derekfrancisco/499CAD" target="_blank" rel="noopener" class="pricing-cta" style="background:linear-gradient(135deg,#00d4ff,#0077cc);color:#fff;border-color:#00d4ff;">
-            💳 Pay $499/mo via PayPal →
-          </a>
-          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Enterprise+%E2%80%94+%24499%2Fmo&body=I%20want%20PrimeDox%20AI%20Enterprise%20at%20%24499%2Fmo.%20Sending%20Interac%20e-transfer." style="display:block;text-align:center;margin-top:8px;font-size:12px;color:#7b8a9a;text-decoration:none;">💸 Pay via Interac instead</a>
-        </div>
-
-        <!-- Sovereign -->
-        <div class="pricing-card sovereign fade-up">
-          <div class="pricing-tier-icon">👑</div>
-          <div class="pricing-tier-name">Sovereign</div>
-          <div class="pricing-price" style="font-size:1.6rem;color:var(--gold);">Custom</div>
-          <div class="pricing-period">Contact for pricing — enterprise ready</div>
-          <div class="pricing-divider"></div>
-          <ul class="pricing-features">
-            <li>Everything in Elite</li>
-            <li>Unlimited case analysis</li>
-            <li>Direct Derek Francisco educational consultation (monthly)</li>
-            <li>White-label framework licensing</li>
-            <li>Custom AI agent integration</li>
-            <li>OmniaGuard + SoulStack integration</li>
-          </ul>
-          <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Sovereign+%E2%80%94+Custom+Pricing&body=I%20want%20PrimeDox%20AI%20Sovereign%20(custom%20enterprise)%20pricing.%0A%0ACompany%3A%0AUse%20case%3A%0AContact%3A" class="pricing-cta pricing-cta-sovereign">
-            📧 Contact for Sovereign →
-          </a>
-        </div>
-
-      </div>
-
-      <p style="text-align:center;margin-top:28px;font-size:0.78rem;color:var(--muted);font-style:italic;">
-        All prices in Canadian dollars. PrimeDox AI is an educational platform and AI tool. Not a law firm. Not legal representation.
-      </p>
-
-    </div>
-  </section>
-
-  <!-- ============================================================
-       FRAMEWORK INTEGRATIONS
-  ============================================================ -->
-  <section id="frameworks">
-    <div class="container">
-      <div class="frameworks-header">
-        <div class="section-label">🔗 Integrations & Frameworks</div>
-        <h2 class="section-title">The Full <span class="gradient-text">Francisco Empire</span><br />Behind Every Analysis</h2>
-        <p class="section-sub" style="margin:0 auto;">
-          PrimeDox AI is not a standalone tool — it is the central intelligence layer connecting every component of the Francisco Holdings constitutional defense ecosystem.
-        </p>
-      </div>
-
-      <div class="frameworks-grid">
-
-        <div class="framework-card fade-up">
-          <div class="framework-icon cyan-bg">🌿</div>
-          <div class="framework-body">
-            <div class="framework-name">CCLDR.net — Weedlaw Education</div>
-            <div class="framework-desc">
-              The Canadian Cannabis Legal Defense Resource. PrimeDox AI draws its case law database and educational frameworks directly from Derek Francisco's CCLDR knowledge base — updated continuously.
+          <!-- Card 6: VIGILAX -->
+          <div class="spec-card" data-id="vigilax"
+            data-greeting="VIGILAX Enterprise Threat Response. This service is available by direct engagement only. To initiate contact with our threat response team, use the contact channel below.">
+            <div class="spec-avatar">&#128274;</div>
+            <div class="spec-info">
+              <div class="spec-name">VIGILAX</div>
+              <div class="spec-tagline">Enterprise Threat Response</div>
             </div>
-            <a href="https://ccldr.net" target="_blank" rel="noopener noreferrer" class="framework-link">Visit CCLDR.net →</a>
-          </div>
-        </div>
-
-        <div class="framework-card fade-up">
-          <div class="framework-icon cyan-bg">🛡️</div>
-          <div class="framework-body">
-            <div class="framework-name">OmniaGuard — AI Security Layer</div>
-            <div class="framework-desc">
-              Every PrimeDox AI interaction is routed through OmniaGuard's security infrastructure. No hallucinated legal arguments, no data leakage, no unauthorized AI outputs. Your queries stay protected.
-            </div>
-            <a href="https://omniaguard.com" target="_blank" rel="noopener noreferrer" class="framework-link">Visit OmniaGuard.com →</a>
-          </div>
-        </div>
-
-        <div class="framework-card fade-up">
-          <div class="framework-icon purple-bg">👁️</div>
-          <div class="framework-body">
-            <div class="framework-name">SoulStack — Ethical AI Monitor</div>
-            <div class="framework-desc">
-              SoulStack observes all PrimeDox AI outputs for ethical alignment. Legal education AI carries responsibility — SoulStack ensures every analysis meets Derek Francisco's ethical standards.
-            </div>
-            <a href="https://soulstack.ai" target="_blank" rel="noopener noreferrer" class="framework-link">Visit SoulStack.ai →</a>
-          </div>
-        </div>
-
-        <div class="framework-card fade-up">
-          <div class="framework-icon gold-bg">⚖️</div>
-          <div class="framework-body">
-            <div class="framework-name">Weedlaw Quintinity — Defense Strategy</div>
-            <div class="framework-desc">
-              The full 6-period cannabis Charter defense strategy developed by Derek Francisco. Covers pre-charge through appeal — each period mapped to specific constitutional arguments and procedural steps.
-            </div>
-            <a href="#pricing" class="framework-link">Access via Elite/Sovereign →</a>
-          </div>
-        </div>
-
-        <div class="framework-card fade-up">
-          <div class="framework-icon green-bg">📅</div>
-          <div class="framework-body">
-            <div class="framework-name">12-Appearance Timeline Framework</div>
-            <div class="framework-desc">
-              Derek Francisco's court strategy framework mapping each of your 12 scheduled appearances to a specific legal action — from bail review through constitutional challenge. No appearance wasted.
-            </div>
-            <a href="#pricing" class="framework-link">Access via Pro/Elite →</a>
-          </div>
-        </div>
-
-        <div class="framework-card fade-up">
-          <div class="framework-icon purple-bg">🤖</div>
-          <div class="framework-body">
-            <div class="framework-name">Francisco Holdings Multi-Agent Infrastructure</div>
-            <div class="framework-desc">
-              PrimeDox AI commands 392 AI agents across 22 Francisco Holdings companies. The same infrastructure that powers OmniaGuard, SoulStack, and Kiaros is what backs your constitutional defense analysis.
-            </div>
-            <a href="#contact" class="framework-link">Enterprise inquiry →</a>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Integration pipeline visual -->
-      <div class="pipeline fade-up">
-        <div class="pipeline-title">⚡ How It All Connects</div>
-        <div class="pipeline-nodes">
-          <div class="pipeline-node">
-            <div class="pipeline-node-icon">🌿</div>
-            <div class="pipeline-node-label">CCLDR.net</div>
-            <div class="pipeline-node-sub">Case Law DB</div>
-          </div>
-          <div class="pipeline-arrow">→</div>
-          <div class="pipeline-node">
-            <div class="pipeline-node-icon">⚡</div>
-            <div class="pipeline-node-label">PrimeDox AI</div>
-            <div class="pipeline-node-sub">Core Engine</div>
-          </div>
-          <div class="pipeline-arrow">→</div>
-          <div class="pipeline-node">
-            <div class="pipeline-node-icon">🛡️</div>
-            <div class="pipeline-node-label">OmniaGuard</div>
-            <div class="pipeline-node-sub">Security Layer</div>
-          </div>
-          <div class="pipeline-arrow">→</div>
-          <div class="pipeline-node">
-            <div class="pipeline-node-icon">👁️</div>
-            <div class="pipeline-node-label">SoulStack</div>
-            <div class="pipeline-node-sub">Ethics Monitor</div>
-          </div>
-          <div class="pipeline-arrow">→</div>
-          <div class="pipeline-node">
-            <div class="pipeline-node-icon">📄</div>
-            <div class="pipeline-node-label">Your Analysis</div>
-            <div class="pipeline-node-sub">Court-Ready Output</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="glow-divider"></div>
-
-  <!-- ============================================================
-       COMMAND FORCE
-  ============================================================ -->
-  <section id="command-force">
-    <div class="bg-radial-purple" style="top:-80px;right:-180px;"></div>
-    <div class="container" style="position:relative;z-index:1;">
-      <div class="command-force-header fade-up">
-        <div class="section-label">🤖 Command Force</div>
-        <h2 class="section-title">The Agent <span class="gradient-text">Command Force</span></h2>
-        <p class="section-sub" style="margin:0 auto;">
-          PrimeDox AI commands a full squad of AI agents — each built for a specific mission. Together they form an unstoppable defense intelligence network covering 22 Francisco Holdings companies.
-        </p>
-      </div>
-      <div class="command-force-visual fade-up">
-        <img src="robot-squad.jpg" alt="PrimeDox AI — Command Force: Three AI Agent Squad" class="command-force-img" />
-      </div>
-      <p class="command-force-caption fade-up">
-        The PrimeDox AI Command Force — 392 agents, 22 companies, one unified mission: defend your constitutional rights.
-      </p>
-    </div>
-  </section>
-
-  <div class="glow-divider"></div>
-
-  <!-- ============================================================
-       FAQ
-  ============================================================ -->
-  <section id="faq">
-    <div class="container">
-      <div class="faq-header">
-        <div class="section-label">❓ Frequently Asked</div>
-        <h2 class="section-title">Common <span class="gradient-text">Questions</span></h2>
-      </div>
-
-      <div class="faq-list">
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Is PrimeDox AI a law firm or legal representation?
-            <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">
-            <p>No. PrimeDox AI is an educational platform only. All content — including BENO-X analyses, case summaries, Charter argument templates, and timeline frameworks — is provided for educational and informational purposes. Nothing on this platform constitutes legal advice or creates a lawyer-client relationship. Always consult a licensed lawyer for your specific situation.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            What is the BENO-X framework?
-            <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">
-            <p>BENO-X stands for "Bad Exemption — No Exemption." It is a constitutional analysis framework developed by Derek Francisco to evaluate situations where a cannabis medical exemption was denied — and whether that denial may constitute a violation of Charter rights under s.7 (life, liberty, and security of the person) or s.12 (cruel and unusual treatment). The framework draws on Parker (2000), Smith (2015), and Allard (2016) as foundational precedents.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            What is the Weedlaw Quintinity?
-            <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">
-            <p>The Weedlaw Quintinity is Derek Francisco's 6-period cannabis Charter defense strategy. Each period corresponds to a distinct phase of the legal process — from pre-charge through appeal — with specific constitutional arguments, procedural steps, and strategic objectives mapped to each phase. The full framework is available to Elite and Sovereign subscribers.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            How does the 12-Appearance Timeline Generator work?
-            <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">
-            <p>You enter your scheduled court dates and charge details. PrimeDox AI maps each appearance to a specific recommended action — from initial remand through constitutional motions — based on Derek Francisco's Weedlaw Quintinity framework and 20+ years of cannabis Charter litigation experience. The output is a sequential action plan you can take to your counsel for review.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Who is Derek Francisco?
-            <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">
-            <p>Derek Francisco is the founder of Francisco Holdings Inc. and the creator of PrimeDox AI. With 20+ years of experience in Canadian cannabis Charter defense, Derek developed the BENO-X framework, the Weedlaw Quintinity, and the 12-Appearance Timeline methodology — now encoded into the PrimeDox AI platform. Derek also manages 22 Francisco Holdings companies operating across AI infrastructure, security, ethical monitoring, and cannabis legal education.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            What is OmniaGuard and how does it protect my queries?
-            <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">
-            <p>OmniaGuard is the AI security infrastructure layer for the Francisco Holdings empire. All PrimeDox AI queries are routed through OmniaGuard to prevent hallucinated legal outputs, protect user data, and ensure no unauthorized AI behavior. OmniaGuard is a separate Francisco Holdings product — it exists to make AI interactions safe and accountable.</p>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question" onclick="toggleFaq(this)">
-            Can I cancel my subscription at any time?
-            <span class="faq-chevron">▼</span>
-          </button>
-          <div class="faq-answer">
-            <p>Yes. Pro and Elite subscriptions can be cancelled at any time with no penalty. Simply email franciscoderek7@gmail.com with your cancellation request. Sovereign contracts have custom terms discussed during enrollment.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       CONTACT
-  ============================================================ -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-wrapper">
-
-        <!-- Info -->
-        <div class="fade-up">
-          <div class="section-label">📬 Contact</div>
-          <h2 class="contact-info-title">Education &amp;<br /><span class="gradient-text">Enrollment Inquiries</span></h2>
-          <p class="contact-info-sub">
-            Reach Derek Francisco's team directly for BENO-X consultations, enrollment questions, Sovereign pricing, and framework licensing.
-          </p>
-
-          <div class="contact-methods">
-            <a href="mailto:franciscoderek7@gmail.com" class="contact-method">
-              <div class="contact-method-icon">✉️</div>
-              <div class="contact-method-body">
-                <div class="contact-method-label">Email</div>
-                <div class="contact-method-value">franciscoderek7@gmail.com</div>
-              </div>
-            </a>
-            <a href="mailto:franciscoderek7@gmail.com" class="contact-method">
-              <div class="contact-method-icon">✉️</div>
-              <div class="contact-method-body">
-                <div class="contact-method-label">Email</div>
-                <div class="contact-method-value">franciscoderek7@gmail.com</div>
-              </div>
-            </a>
-            <a href="https://t.me/OmniguardSec_bot" target="_blank" rel="noopener noreferrer" class="contact-method">
-              <div class="contact-method-icon">✈️</div>
-              <div class="contact-method-body">
-                <div class="contact-method-label">Telegram</div>
-                <div class="contact-method-value">@OmniguardSec_bot</div>
-              </div>
-            </a>
+            <button class="route-btn" data-contact="true">Contact &#8594;</button>
           </div>
 
-          <div style="margin-top:32px;padding:20px;background:rgba(0,212,255,0.05);border:1px solid var(--border);border-radius:var(--radius);">
-            <div style="font-size:0.8rem;font-weight:700;color:var(--cyan);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">PrimeDox AI by Derek Francisco</div>
-            <div style="font-size:0.85rem;color:var(--muted);line-height:1.6;">
-              Francisco Holdings Inc. — Building the AI infrastructure and constitutional defense tools that protect cannabis Canadians.
-            </div>
+        </div><!-- /roster-scroll -->
+
+        <!-- UPGRADE PANEL -->
+        <div class="upgrade-panel">
+          <div class="upgrade-tier-label">CURRENT TIER: <span>FREE</span> &mdash; 10 msg/day</div>
+          <div class="upgrade-btns">
+            <a href="https://paypal.me/derekfrancisco/49CAD" target="_blank" rel="noopener noreferrer" class="btn-pro">&#128179; Pro &mdash; $49/mo &#8594;</a>
+            <a href="https://paypal.me/derekfrancisco/199CAD" target="_blank" rel="noopener noreferrer" class="btn-elite">&#128081; Elite &mdash; $199/mo &#8594;</a>
           </div>
+          <div class="upgrade-note">First 14 days free. No auto-billing.</div>
+          <div class="soulstack-badge">SoulStack AI &mdash; Monitoring Active <span class="dot-green">&#9679;</span></div>
         </div>
+      </aside>
 
-        <!-- Contact form -->
-        <div class="contact-form-card fade-up">
-          <div class="contact-form-title">Send a Message</div>
-          <p class="contact-form-sub">We respond within 24 hours on business days.</p>
-
-          <form id="contactForm" onsubmit="submitContact(event)">
-            <div class="form-group">
-              <label class="form-label" for="cf-name">Full Name</label>
-              <input class="form-input" type="text" id="cf-name" name="name" placeholder="Your name" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="cf-email">Email Address</label>
-              <input class="form-input" type="email" id="cf-email" name="email" placeholder="you@example.com" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="cf-subject">Subject</label>
-              <select class="form-select" id="cf-subject" name="subject" required>
-                <option value="" disabled selected>Select a subject</option>
-                <option value="BENO-X Consultation">BENO-X Consultation</option>
-                <option value="Pro Enrollment">Pro Enrollment ($49/mo)</option>
-                <option value="Elite Enrollment">Elite Enrollment ($199/mo)</option>
-                <option value="Sovereign Pricing">Sovereign Pricing (Custom)</option>
-                <option value="Framework Licensing">Framework Licensing</option>
-                <option value="General Inquiry">General Inquiry</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="cf-message">Message</label>
-              <textarea class="form-textarea" id="cf-message" name="message" placeholder="Tell us about your situation or question..."></textarea>
-            </div>
-            <button type="submit" class="form-submit">Send Message →</button>
-          </form>
-
-          <p style="font-size:0.72rem;color:rgba(136,146,164,0.5);text-align:center;margin-top:16px;font-style:italic;">
-            For educational inquiries only. Not legal representation.
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="glow-divider"></div>
-
-  <!-- ============================================================
-       FOOTER
-  ============================================================ -->
-  <footer id="footer">
-    <div class="container">
-      <div class="footer-top">
-
-        <!-- Brand -->
-        <div>
-          <div class="footer-brand-logo">⚡ <span>PrimeDox AI</span></div>
-          <p class="footer-brand-desc">
-            Your Constitutional AI Defense Partner. AI-powered cannabis Charter defense tools built on 20+ years of Derek Francisco's litigation expertise and the Francisco Holdings multi-agent infrastructure.
-          </p>
-          <div class="footer-empire-badge">
-            🤖 A Francisco Holdings Inc. Company | Derek Francisco
+      <!-- RIGHT PANEL: CHAT -->
+      <main id="right-panel">
+        <div class="chat-header">
+          <div class="chat-header-avatar" id="chat-avatar">&#129302;</div>
+          <div class="chat-header-info">
+            <h3 id="chat-name">PRIMEDOX AI</h3>
+            <p id="chat-desc">Derek Francisco&#8217;s AI Clone &middot; BENO-X Framework</p>
           </div>
+          <div class="chat-status-dot"></div>
         </div>
 
-        <!-- Platform links -->
-        <div>
-          <div class="footer-col-title">Platform</div>
-          <ul class="footer-col-links">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#beno-x">BENO-X Analyzer</a></li>
-            <li><a href="#frameworks">Frameworks</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#faq">FAQ</a></li>
-          </ul>
+        <div class="chat-messages" id="chat-messages">
+          <!-- Messages injected by JS -->
         </div>
 
-        <!-- Empire links -->
-        <div>
-          <div class="footer-col-title">The Empire</div>
-          <ul class="footer-col-links">
-            <li><a href="https://omniaguard.com" target="_blank" rel="noopener noreferrer">OmniaGuard.com</a></li>
-            <li><a href="https://soulstack.ai" target="_blank" rel="noopener noreferrer">SoulStack.ai</a></li>
-            <li><a href="https://ccldr.net" target="_blank" rel="noopener noreferrer">CCLDR.net</a></li>
-            <li><a href="https://franciscoholdings.com" target="_blank" rel="noopener noreferrer">Francisco Holdings</a></li>
-          </ul>
+        <div class="chat-input-wrap">
+          <textarea
+            class="chat-input"
+            id="chat-input"
+            placeholder="Ask PrimeDox AI anything &#8212; cannabis defense, security, documents, investing..."
+            rows="1"
+            maxlength="1000"
+          ></textarea>
+          <button class="send-btn" id="send-btn">SEND</button>
         </div>
 
-        <!-- Contact -->
-        <div>
-          <div class="footer-col-title">Contact</div>
-          <ul class="footer-col-links">
-            <li><a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></li>
-            <li><a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a></li>
-            <li><a href="https://t.me/OmniguardSec_bot" target="_blank" rel="noopener noreferrer">Telegram Bot</a></li>
-            <li><a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox+AI+Sovereign+Enrollment">Sovereign Access</a></li>
-          </ul>
+        <div class="chat-footer-note">
+          OmniaGuard Secured &nbsp;&middot;&nbsp; SoulStack Monitored &nbsp;&middot;&nbsp; zprimedoxaihq.com
         </div>
+      </main>
 
-      </div>
+    </div><!-- /panels -->
+  </div><!-- /main-app -->
 
-      <div class="footer-bottom">
-        <div class="footer-copyright">
-          © 2024–2026 PrimeDox AI — Constitutional AI Defense Partner<br />
-          A Francisco Holdings Inc. Company | Derek Francisco<br />
-          Powered by the Francisco Holdings Multi-Agent Infrastructure
-        </div>
-        <div class="footer-disclaimer">
-          For educational purposes only. Not legal representation. PrimeDox AI does not provide legal advice and does not create a lawyer-client relationship. Consult a licensed attorney for your specific situation.
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ============================================================
-       JAVASCRIPT
-  ============================================================ -->
   <script>
-    // ============================================================
-    // EDUCATIONAL DOCUMENT PREP — $99 PAYMENT ROUTING (PayPal + Interac)
-    // ============================================================
-    function docPrepPay() {
-      window.open('https://www.paypal.me/derekfrancisco/99cad', '_blank', 'noopener');
-      var existing = document.getElementById('docprep-toast');
-      if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
-      var t = document.createElement('div');
-      t.id = 'docprep-toast';
-      t.style.cssText = 'position:fixed;bottom:24px;right:24px;left:auto;max-width:380px;background:#0d1120;border:1px solid rgba(0,212,255,0.3);border-radius:14px;padding:20px 22px;z-index:99999;font-size:13px;color:#cbd3e0;box-shadow:0 16px 48px rgba(0,0,0,0.6);line-height:1.6;font-family:inherit;';
-      t.innerHTML = '<strong style="color:#00d4ff;display:block;margin-bottom:6px;font-size:14px;">PayPal opening — $99 CAD</strong>'
-        + 'Prefer Interac e-Transfer? Send <strong style="color:#fff">$99 CAD</strong> to <strong style="color:#fff">franciscoderek7@gmail.com</strong> with "Document Prep" in the message. Your educational package arrives within 2 hours of confirmed payment.'
-        + '<div style="margin-top:12px;display:flex;gap:8px;">'
-        + '<a href="mailto:franciscoderek7@gmail.com?subject=' + encodeURIComponent('Educational Document Prep — $99 — Receipt') + '&body=' + encodeURIComponent('Hi,\n\nI just sent payment for the $99 Educational Document Prep package.\n\nPayment method: [PayPal / Interac]\nMy situation (brief): [e.g. cannabis possession charge, civil dispute, etc.]\n\nPlease send my walkthrough package.') + '" style="flex:1;text-align:center;background:rgba(0,200,83,0.1);border:1px solid rgba(0,200,83,0.35);color:#00c853;padding:9px 12px;border-radius:8px;text-decoration:none;font-weight:700;font-size:12px;">Email Receipt →</a>'
-        + '<button onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#8892a4;padding:9px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;">Dismiss</button>'
-        + '</div>';
-      document.body.appendChild(t);
-    }
+  (function () {
+    'use strict';
 
-    // ============================================================
-    // MOBILE NAV
-    // ============================================================
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileNav = document.getElementById('mobileNav');
+    /* ============================================================
+       CONSTANTS
+    ============================================================ */
+    var CORRECT_PASSWORD = 'FRANCISCO2025';
+    var SESSION_KEY = 'hq_auth';
 
-    hamburgerBtn.addEventListener('click', function () {
-      const isOpen = mobileNav.classList.toggle('open');
-      hamburgerBtn.classList.toggle('open', isOpen);
-      hamburgerBtn.setAttribute('aria-expanded', isOpen.toString());
-    });
-
-    function closeMobileNav() {
-      mobileNav.classList.remove('open');
-      hamburgerBtn.classList.remove('open');
-      hamburgerBtn.setAttribute('aria-expanded', 'false');
-    }
-
-    // Close on outside click
-    document.addEventListener('click', function (e) {
-      if (!hamburgerBtn.contains(e.target) && !mobileNav.contains(e.target)) {
-        closeMobileNav();
+    /* ============================================================
+       KNOWLEDGE BASE
+    ============================================================ */
+    var KB = [
+      {
+        patterns: [/beno[\s\-]?x?/i, /5[\s-]?pillar/i],
+        response: 'The BENO-X Framework is a 5-pillar constitutional defense: <strong>B</strong>reach identification, <strong>E</strong>vidence exclusion, <strong>N</strong>egotiation leverage, <strong>O</strong>n-record defense, <strong>X</strong>-multiplier. Used in 200+ cannabis cases to exclude evidence and stay charges.',
+        route: null
+      },
+      {
+        patterns: [/cannabis charge/i, /weed charge/i, /possession/i, /arrested/i, /stopped by police/i],
+        response: "If you're facing a cannabis charge — time matters. BENO-X lets you build a constitutional defense using Charter breaches. Evidence can be excluded. Charges can be stayed. The sooner you act, the stronger your position.",
+        route: { label: '→ ccldr.net', url: 'https://ccldr.net' }
+      },
+      {
+        patterns: [/\bcharge\b/i, /\barrested\b/i, /\bstopped\b/i, /\bweedlaw\b/i, /\bweed\b/i, /\bcannabis\b/i, /\bmarijuana\b/i],
+        response: "Cannabis charge or Charter issue detected. BENO-X constitutional defense has a proven track record across 200+ cases. The framework identifies Charter breaches that can exclude evidence and stay charges.",
+        route: { label: '→ ccldr.net', url: 'https://ccldr.net' }
+      },
+      {
+        patterns: [/\brights\b/i, /\bcharter\b/i, /section 10/i, /\bdetain/i, /\blawyer\b/i, /right to counsel/i],
+        response: 'Under s.10 Canadian Charter:<br>✓ Know why you’re detained<br>✓ Speak to a lawyer immediately<br>✓ Remain silent until then<br><br><strong>Say ONLY:</strong> <em>“I’d like to speak to a lawyer.”</em>',
+        route: null
+      },
+      {
+        patterns: [/\bprice\b/i, /\bcost\b/i, /\btier\b/i, /how much/i, /\bpricing\b/i, /\bplan\b/i, /\$49/i, /\$199/i],
+        response: 'PrimeDox AI Pricing:<br>🟢 <strong>Free</strong> — 10 msg/day · 5 docs/mo<br>🔵 <strong>Pro</strong> — $49/mo (unlimited msgs, 50 docs)<br>🟣 <strong>Elite</strong> — $199/mo (full API + priority support)<br><br>First 14 days free. No auto-billing.',
+        route: null
+      },
+      {
+        patterns: [/\bsecurity\b/i, /\bthreat\b/i, /\benterprise security\b/i, /\bomniaguard\b/i, /\bcybersecurity\b/i, /\bfirewall\b/i, /\bhack\b/i, /\bbreach\b/i],
+        response: 'OmniaGuard provides 14-layer AI security for enterprise environments.<br><br>Tiers:<br>🔵 <strong>Sentinel</strong> — $499/mo · SMB protection<br>🟣 <strong>Warden</strong> — $2,499/mo · Mid-enterprise<br>🔴 <strong>Archon</strong> — $9,999/mo · Full deployment',
+        route: { label: '→ omniaguard.com', url: 'https://omniaguard.com' }
+      },
+      {
+        patterns: [/\binvest\b/i, /\binvestor\b/i, /\bpartner\b/i, /\brevenue\b/i, /\bconsulting\b/i, /\bfounder\b/i, /\bboardroom\b/i, /\bequity\b/i],
+        response: 'Francisco Holdings investor tiers:<br>🏢 <strong>Floor</strong> — $50K minimum<br>🏙️ <strong>Suite</strong> — $250K strategic<br>🏰 <strong>Penthouse</strong> — $1M full partnership<br><br>Book a boardroom session to discuss terms.',
+        route: { label: '→ franciscoholdingsinc.com/boardroom', url: 'https://franciscoholdingsinc.com/boardroom' }
+      },
+      {
+        patterns: [/\bdocument\b/i, /\bpdf\b/i, /\bfiling\b/i, /\btemplate\b/i, /\bdraft\b/i, /\bcontract\b/i, /\bform\b/i],
+        response: 'PrimeDox AI handles constitutional documents, legal templates, court filings, and PDF drafting. The BENO-X Document Suite includes pre-built Charter challenge templates optimized for Canadian courts.',
+        route: { label: '→ PrimeDox AI Chat', url: 'primedox-ai-chat.html' }
+      },
+      {
+        isGreeting: true,
+        patterns: [/^\s*hi\s*$/i, /^\s*hello\s*$/i, /^\s*hey\s*$/i, /^\s*yo\s*$/i, /^\s*sup\s*$/i, /^good (morning|afternoon|evening)/i]
       }
-    });
+    ];
 
-    // ============================================================
-    // NAVBAR SCROLL EFFECT
-    // ============================================================
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > 40) {
-        navbar.style.background = 'rgba(7, 8, 15, 0.97)';
+    var FALLBACK_RESPONSE = 'For a full answer, the fastest path is speaking directly with our team.<br><br>📧 Email: <strong>franciscoderek7@gmail.com</strong>';
+
+    /* ============================================================
+       SPECIALIST CONFIG
+    ============================================================ */
+    var SPECIALISTS = {
+      weedlaw: {
+        name: 'DOC WEEDLAW AI',
+        desc: 'Cannabis Charter Defense · 200+ Cases',
+        avatar: '⚖️'
+      },
+      omniaguard: {
+        name: 'OMNIAGUARD',
+        desc: '14-Layer Enterprise AI Security',
+        avatar: '🛡️'
+      },
+      primedox: {
+        name: 'PRIMEDOX AI',
+        desc: "Derek Francisco’s AI Clone · BENO-X Framework",
+        avatar: '🤖'
+      },
+      cleanswarm: {
+        name: 'CLEANSWARM AI',
+        desc: 'AI-Powered Document Cleanup',
+        avatar: '🐝'
+      },
+      techpet: {
+        name: 'TECHPET AI',
+        desc: 'Smart Pet Monitoring Systems',
+        avatar: '🐾'
+      },
+      vigilax: {
+        name: 'VIGILAX',
+        desc: 'Enterprise Threat Response · Contact Only',
+        avatar: '🔒'
+      }
+    };
+
+    /* ============================================================
+       STATE
+    ============================================================ */
+    var activeSpecialist = 'primedox';
+    var currentGreeting = "Welcome to PrimeDox AI Concierge. I’m Derek Francisco’s AI clone — 20 years of cannabis Charter defense, constitutional strategy, and empire building compressed into this interface. What challenge are you facing?";
+
+    /* ============================================================
+       ELEMENTS
+    ============================================================ */
+    var lockScreen   = document.getElementById('lock-screen');
+    var mainApp      = document.getElementById('main-app');
+    var lockInput    = document.getElementById('lock-input');
+    var lockBtn      = document.getElementById('lock-btn');
+    var lockError    = document.getElementById('lock-error');
+    var exitBtn      = document.getElementById('exit-btn');
+    var chatMessages = document.getElementById('chat-messages');
+    var chatInput    = document.getElementById('chat-input');
+    var sendBtn      = document.getElementById('send-btn');
+    var chatAvatar   = document.getElementById('chat-avatar');
+    var chatName     = document.getElementById('chat-name');
+    var chatDesc     = document.getElementById('chat-desc');
+
+    /* ============================================================
+       AUTH
+    ============================================================ */
+    function unlock() {
+      var val = lockInput.value.trim();
+      if (val === CORRECT_PASSWORD) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        lockScreen.classList.add('hidden');
+        mainApp.classList.add('visible');
+        initChat();
+        animateCards();
       } else {
-        navbar.style.background = 'rgba(7, 8, 15, 0.85)';
+        lockError.textContent = 'Access denied. Invalid credentials.';
+        lockInput.value = '';
+        lockInput.focus();
+        if (window.gsap) {
+          gsap.fromTo('.lock-modal', { x: -10 }, { x: 10, duration: 0.08, repeat: 4, yoyo: true, ease: 'none' });
+        }
+        setTimeout(function () { lockError.textContent = ''; }, 3000);
       }
+    }
+
+    function checkSession() {
+      if (sessionStorage.getItem(SESSION_KEY) === '1') {
+        lockScreen.classList.add('hidden');
+        mainApp.classList.add('visible');
+        initChat();
+        animateCards();
+      }
+    }
+
+    lockBtn.addEventListener('click', unlock);
+    lockInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') unlock();
     });
 
-    // ============================================================
-    // SMOOTH SCROLL (fallback for older browsers)
-    // ============================================================
-    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-      anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        const target = document.querySelector(targetId);
-        if (!target) return;
-        e.preventDefault();
-        const navHeight = navbar.offsetHeight;
-        const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 16;
-        window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    exitBtn.addEventListener('click', function () {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    });
+
+    /* ============================================================
+       GSAP CARD ANIMATIONS
+    ============================================================ */
+    function animateCards() {
+      if (!window.gsap) return;
+      var cards = document.querySelectorAll('.spec-card');
+      gsap.fromTo(cards,
+        { opacity: 0, x: -20 },
+        { opacity: 1, x: 0, duration: 0.4, stagger: 0.08, ease: 'power2.out' }
+      );
+    }
+
+    /* ============================================================
+       SPECIALIST ROUTING
+    ============================================================ */
+    document.querySelectorAll('.spec-card').forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (e.target.classList.contains('route-btn')) return;
+        selectSpecialist(card);
       });
     });
 
-    // ============================================================
-    // BENO-X FORM — builds mailto body from answers
-    // ============================================================
-    function submitBenox(e) {
-      e.preventDefault();
-      const form = document.getElementById('benoxForm');
+    document.querySelectorAll('.route-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (btn.dataset.contact) {
+          addAiMessage('VIGILAX is available by direct engagement only. To initiate contact with our threat response team:<br><br>📧 <strong>franciscoderek7@gmail.com</strong><br><br>State your organization name and nature of threat in your first message.', null);
+          return;
+        }
+        var url = btn.dataset.url;
+        if (url) {
+          if (url.startsWith('http')) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+          } else {
+            window.location.href = url;
+          }
+        }
+      });
+    });
 
-      var answers = {};
-      var questions = [
-        { name: 'q1', text: 'Applied under Cannabis Regs ss.315-316' },
-        { name: 'q2', text: 'Denied without written reasons' },
-        { name: 'q3', text: 'Medical condition meets MMAR ss.4/5' },
-        { name: 'q4', text: 'Arrested/charged after unlawful denial' },
-        { name: 'q5', text: 'Has documentation of medical need' }
-      ];
+    function selectSpecialist(card) {
+      document.querySelectorAll('.spec-card').forEach(function (c) {
+        c.classList.remove('active');
+      });
+      card.classList.add('active');
 
-      var missingAnswers = false;
-      for (var i = 0; i < questions.length; i++) {
-        var q = questions[i];
-        var selected = form.querySelector('input[name="' + q.name + '"]:checked');
-        if (!selected) {
-          missingAnswers = true;
+      var id       = card.dataset.id;
+      var greeting = card.dataset.greeting;
+      var spec     = SPECIALISTS[id];
+
+      activeSpecialist = id;
+      currentGreeting  = greeting;
+
+      chatAvatar.textContent = spec.avatar;
+      chatName.textContent   = spec.name;
+      chatDesc.textContent   = spec.desc;
+
+      clearMessages();
+      addAiMessage(greeting, null);
+
+      chatInput.placeholder = 'Ask ' + spec.name + ' anything…';
+    }
+
+    /* ============================================================
+       CHAT LOGIC
+    ============================================================ */
+    function initChat() {
+      addAiMessage(currentGreeting, null);
+    }
+
+    function clearMessages() {
+      chatMessages.innerHTML = '';
+    }
+
+    function addAiMessage(html, route) {
+      var wrapper = document.createElement('div');
+      wrapper.className = 'msg ai';
+
+      var label = document.createElement('div');
+      label.className = 'msg-label';
+      label.textContent = 'PRIMEDOX AI · ' + getTime();
+
+      var bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = html;
+
+      if (route) {
+        var link = document.createElement('a');
+        link.className = 'route-suggestion';
+        link.href = route.url;
+        if (route.url.startsWith('http')) {
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+        }
+        link.textContent = route.label;
+        bubble.appendChild(document.createElement('br'));
+        bubble.appendChild(link);
+      }
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(bubble);
+      chatMessages.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function addUserMessage(text) {
+      var wrapper = document.createElement('div');
+      wrapper.className = 'msg user';
+
+      var label = document.createElement('div');
+      label.className = 'msg-label';
+      label.textContent = 'YOU · ' + getTime();
+
+      var bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.textContent = text;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(bubble);
+      chatMessages.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function showTyping() {
+      var wrapper = document.createElement('div');
+      wrapper.className = 'msg ai';
+      wrapper.id = 'typing-indicator';
+
+      var bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+
+      wrapper.appendChild(bubble);
+      chatMessages.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function removeTyping() {
+      var el = document.getElementById('typing-indicator');
+      if (el) el.remove();
+    }
+
+    function scrollToBottom() {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function getTime() {
+      var d = new Date();
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+
+    /* ============================================================
+       KEYWORD MATCHING
+    ============================================================ */
+    function getResponse(text) {
+      var i, entry;
+
+      // Check greeting patterns first
+      for (i = 0; i < KB.length; i++) {
+        entry = KB[i];
+        if (entry.isGreeting) {
+          if (entry.patterns.some(function (p) { return p.test(text); })) {
+            return { response: currentGreeting, route: null };
+          }
           break;
         }
-        answers[q.name] = selected.value;
       }
 
-      if (missingAnswers) {
-        alert('Please answer all 5 questions before submitting your BENO-X analysis.');
-        return;
-      }
-
-      var yesCount = 0;
-      for (var key in answers) {
-        if (answers[key] === 'Yes') yesCount++;
-      }
-
-      var body = 'BENO-X ANALYZER SUBMISSION\n\n';
-      body += '===== RESPONSES =====\n\n';
-
-      var questionTexts = [
-        'Q1: Applied for medical cannabis authorization under Cannabis Regs ss.315-316',
-        'Q2: Application denied without written reasons',
-        'Q3: Medical condition meets MMAR ss.4/5 criteria',
-        'Q4: Arrested or charged after a denial believed unlawful',
-        'Q5: Has documentation of medical need'
-      ];
-
-      var qKeys = ['q1', 'q2', 'q3', 'q4', 'q5'];
-      for (var j = 0; j < questionTexts.length; j++) {
-        body += questionTexts[j] + '\n';
-        body += 'Answer: ' + answers[qKeys[j]] + '\n\n';
-      }
-
-      body += '===== PRELIMINARY ASSESSMENT =====\n\n';
-
-      if (yesCount >= 4) {
-        body += 'STRONG BENO-X INDICATORS PRESENT (' + yesCount + '/5 YES responses)\n\n';
-        body += 'Your responses suggest potential BENO-X (Bad Exemption) grounds. Key Charter sections to explore:\n';
-        body += '- Section 7: Life, liberty, and security of the person\n';
-        body += '- Section 12: Protection against cruel and unusual treatment\n';
-        body += '- Section 15: Equal protection and benefit of the law\n\n';
-        body += 'Relevant precedents: R. v. Parker (2000), Canada v. Smith (2015), Allard v. Canada (2016)\n\n';
-      } else if (yesCount >= 2) {
-        body += 'SOME BENO-X INDICATORS PRESENT (' + yesCount + '/5 YES responses)\n\n';
-        body += 'Your responses indicate some potential constitutional grounds. Further review recommended.\n\n';
-      } else {
-        body += 'LIMITED BENO-X INDICATORS (' + yesCount + '/5 YES responses)\n\n';
-        body += 'Your responses show limited BENO-X indicators. A full consultation would clarify whether other defenses apply.\n\n';
-      }
-
-      body += '===== NEXT STEPS =====\n\n';
-      body += 'Reply to this email to discuss your situation further.\n';
-      body += 'For full BENO-X analysis, upgrade to the Pro tier ($49/mo CAD).\n\n';
-      body += '--- Educational purposes only. Not legal advice. ---\n';
-      body += 'PrimeDox AI | franciscoholdings.com';
-
-      var subject = 'BENO-X Analysis Request — ' + yesCount + '/5 YES Indicators';
-      var mailto = 'mailto:franciscoderek7@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-
-      window.location.href = mailto;
-    }
-
-    // ============================================================
-    // CONTACT FORM — builds mailto
-    // ============================================================
-    function submitContact(e) {
-      e.preventDefault();
-      var form = document.getElementById('contactForm');
-      var name = document.getElementById('cf-name').value.trim();
-      var email = document.getElementById('cf-email').value.trim();
-      var subject = document.getElementById('cf-subject').value;
-      var message = document.getElementById('cf-message').value.trim();
-
-      if (!name || !email || !subject) {
-        alert('Please fill in all required fields.');
-        return;
-      }
-
-      var body = 'PrimeDox AI Contact Form Submission\n\n';
-      body += 'Name: ' + name + '\n';
-      body += 'Email: ' + email + '\n';
-      body += 'Subject: ' + subject + '\n\n';
-      body += 'Message:\n' + (message || '(No message provided)') + '\n\n';
-      body += '---\nSent via PrimeDox AI contact form';
-
-      var mailto = 'mailto:franciscoderek7@gmail.com?subject=' + encodeURIComponent('PrimeDox AI — ' + subject) + '&body=' + encodeURIComponent(body);
-      window.location.href = mailto;
-    }
-
-    // ============================================================
-    // FAQ ACCORDION
-    // ============================================================
-    function toggleFaq(btn) {
-      var item = btn.closest('.faq-item');
-      var isOpen = item.classList.contains('open');
-
-      // Close all
-      document.querySelectorAll('.faq-item.open').forEach(function (openItem) {
-        openItem.classList.remove('open');
-        openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
-      });
-
-      // Open clicked if it was closed
-      if (!isOpen) {
-        item.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-      }
-    }
-
-    // ============================================================
-    // SCROLL FADE-IN ANIMATIONS
-    // ============================================================
-    var fadeElements = document.querySelectorAll('.fade-up');
-
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+      // Match knowledge base
+      for (i = 0; i < KB.length; i++) {
+        entry = KB[i];
+        if (entry.isGreeting) continue;
+        if (entry.patterns.some(function (p) { return p.test(text); })) {
+          return { response: entry.response, route: entry.route };
         }
-      });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -40px 0px'
+      }
+
+      return { response: FALLBACK_RESPONSE, route: null };
+    }
+
+    /* ============================================================
+       SEND MESSAGE
+    ============================================================ */
+    function sendMessage() {
+      var text = chatInput.value.trim();
+      if (!text) return;
+
+      addUserMessage(text);
+      chatInput.value = '';
+      chatInput.style.height = 'auto';
+
+      showTyping();
+
+      var delay = 600 + Math.random() * 600;
+      setTimeout(function () {
+        removeTyping();
+        var result = getResponse(text);
+        addAiMessage(result.response, result.route);
+      }, delay);
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+
+    chatInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
     });
 
-    fadeElements.forEach(function (el) {
-      observer.observe(el);
+    chatInput.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
 
-    // Stagger card animations
-    document.querySelectorAll('.features-grid .feature-card, .pricing-grid .pricing-card, .frameworks-grid .framework-card').forEach(function (card, i) {
-      card.style.transitionDelay = (i * 60) + 'ms';
-    });
+    /* ============================================================
+       INIT
+    ============================================================ */
+    checkSession();
+
+  }());
   </script>
-
-
-  <!-- EMAIL CAPTURE -->
-  <section style="background:var(--bg2);border-top:1px solid var(--border);padding:52px 20px;">
-    <div class="container" style="max-width:540px;margin:0 auto;text-align:center;">
-      <div style="font-size:11px;font-weight:900;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:12px;">🎁 FREE RESOURCE</div>
-      <h2 style="font-size:clamp(20px,4vw,28px);font-weight:900;color:var(--white);margin-bottom:10px;">Get the Cannabis Defense Emergency Checklist — Free</h2>
-      <p style="font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;">Used in 200+ real cases. Know your rights before you ever need them. Instant download.</p>
-      <form id="pd-email-form" onsubmit="pdEmailSubmit(event)" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;">
-        <input type="email" id="pd-email-field" placeholder="your@email.com" required style="flex:1;min-width:220px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
-        <button type="submit" style="background:var(--cyan);color:#000;border:none;border-radius:10px;padding:13px 22px;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;font-family:inherit;">Send Me the Checklist →</button>
-      </form>
-      <div id="pd-email-success" style="display:none;color:var(--cyan);font-weight:700;font-size:15px;padding:12px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.2);border-radius:10px;margin-bottom:10px;"></div>
-      <p style="font-size:11px;color:var(--muted);">No spam. Unsubscribe anytime. Educational content only.</p>
-    </div>
-  </section>
-
-  <script>
-  // PrimeDox urgency countdown
-  function pdUpdateCountdown() {
-    var el = document.getElementById('pd-countdown');
-    if (!el) return;
-    var now = new Date(), midnight = new Date();
-    midnight.setHours(23,59,59,0);
-    var diff = midnight - now;
-    if (diff <= 0) { el.textContent = '00:00:00'; return; }
-    var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-    el.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-  }
-  setInterval(pdUpdateCountdown, 1000); pdUpdateCountdown();
-
-  // PrimeDox email capture
-  function pdEmailSubmit(e) {
-    e.preventDefault();
-    var email = document.getElementById('pd-email-field').value;
-    document.getElementById('pd-email-form').style.display = 'none';
-    var s = document.getElementById('pd-email-success');
-    s.style.display = 'block';
-    s.textContent = '✓ Got it! Sending emergency checklist to ' + email;
-    try { window.open('mailto:franciscoderek7@gmail.com?subject=PrimeDox+Lead+%E2%80%94+'+encodeURIComponent(email)+'&body=New+subscriber:+'+encodeURIComponent(email), '_blank'); } catch(err){}
-  }
-  </script>
-<script>window.REVEREND_SITE='primedox';</script>
-<script src="reverend-ai.js"></script>
 </body>
 </html>
