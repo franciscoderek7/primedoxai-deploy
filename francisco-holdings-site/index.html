@@ -2246,32 +2246,41 @@ function fhEmailSubmit(e) {
 <script src="reverend-ai.js"></script>
 <script>
 (function(){
-  var liveUrls = {
-    'OmniaGuard': 'https://omniaguard.com',
-    'CCLDR': 'https://ccldr.net',
-    'PrimeDox AI': 'https://primedoxai.com',
-    'TechPetCage': 'https://techpetcage.com',
-    'Tech Pet Cage': 'https://techpetcage.com',
-    'TechPet Innovations': 'https://techpetcage.com',
-    'CleanSwarm': 'https://cleanswarm.ca'
+  var urlMap = {
+    'OmniaGuard':              'https://omniaguard.com',
+    'OmniaShield':             'https://omniaguard.com',
+    'VIGILAX':                 'https://vigilax.com',
+    'CCLDR':                   'https://ccldr.net',
+    'PrimeDox AI':             'https://primedoxai.com',
+    'Vault Velocity Auto':     'https://vaultvelocityauto.com',
+    'Tech Pet Cage':           'https://techpetcage.com',
+    'TechPet Innovations':     'https://techpetcage.com',
+    'CleanSwarm':              'https://cleanswarm.com',
+    'Francisco Holdings Inc.': 'https://franciscoholdingsinc.com',
+    'Empire Hub':              'https://empirehub.ca',
+    'Weedlaw Trinity':         'https://ccldr.net',
+    'Doc Weedlaw Media':       'https://ccldr.net',
+    'Weedlaw Defense Network': 'https://ccldr.net',
+    'Agent Swarm Tech':        'https://franciscoderek7.github.io/agent-swarm-tech',
+    'BENO-X Institute':        'https://franciscoderek7.github.io/beno-x',
+    'AeroShield':              'https://franciscoderek7.github.io/aero-shield'
   };
-  function toSlug(name) {
-    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  }
   document.querySelectorAll('.co-link[href="#"]').forEach(function(link){
     var card = link.closest('.co-card');
     if (!card) return;
     var nameEl = card.querySelector('.co-name');
     if (!nameEl) return;
     var name = nameEl.textContent.trim();
-    if (liveUrls[name]) {
-      link.href = liveUrls[name];
+    if (urlMap[name]) {
+      link.href = urlMap[name];
       link.target = '_blank';
       link.rel = 'noopener';
     } else {
-      link.href = '/companies/' + toSlug(name) + '.html';
+      link.outerHTML = '<span class="co-link" style="opacity:0.35;cursor:default;pointer-events:none;">Coming Soon</span>';
     }
   });
+  var navLogo = document.querySelector('.nav-logo[href="#"]');
+  if (navLogo) { navLogo.href = '#hero'; }
 })();
 </script>
 </body>
