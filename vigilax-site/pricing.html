@@ -137,6 +137,8 @@
     .nav-links{display:none}
   }
 </style>
+<script src="https://js.stripe.com/v3/"></script>
+<script>var stripePublicKey="pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz";</script>
 </head>
 <body>
 <div class="grid-bg"></div>
@@ -181,7 +183,7 @@
         <div class="plan-tagline">Startups & small teams</div>
         <div class="plan-price">$299<span style="font-size:1.2rem;font-weight:400">/mo</span></div>
         <div class="plan-per">CAD · up to 50 endpoints · billed monthly</div>
-        <a href="https://franciscoholdingsinc.com/#boardroom" class="plan-cta outline">Purchase License</a>
+        <button class="plan-cta outline" onclick="vigilaxCheckout(this,"sentinel")">Purchase License</button>
         <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Sentinel%20Consultation" class="plan-consult">Book Consultation</a>
         <ul class="plan-features">
           <li>Up to 50 endpoint protection</li>
@@ -201,7 +203,7 @@
         <div class="plan-tagline">Growing businesses</div>
         <div class="plan-price">$899<span style="font-size:1.2rem;font-weight:400">/mo</span></div>
         <div class="plan-per">CAD · up to 250 endpoints · billed monthly</div>
-        <a href="https://franciscoholdingsinc.com/#boardroom" class="plan-cta primary">Purchase License</a>
+        <button class="plan-cta primary" onclick="vigilaxCheckout(this,"warden")">Purchase License</button>
         <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Warden%20Consultation" class="plan-consult">Book Consultation</a>
         <ul class="plan-features">
           <li>Up to 250 endpoint protection</li>
@@ -222,7 +224,7 @@
         <div class="plan-tagline">Enterprise teams</div>
         <div class="plan-price">$2,499<span style="font-size:1.2rem;font-weight:400">/mo</span></div>
         <div class="plan-per">CAD · up to 1,000 endpoints · billed monthly</div>
-        <a href="https://franciscoholdingsinc.com/#boardroom" class="plan-cta outline">Purchase License</a>
+        <button class="plan-cta outline" onclick="vigilaxCheckout(this,"archon")">Purchase License</button>
         <a href="mailto:franciscoderek7@gmail.com?subject=VIGILAX%20Archon%20Consultation" class="plan-consult">Book Consultation</a>
         <ul class="plan-features">
           <li>Up to 1,000 endpoints</li>
@@ -364,5 +366,25 @@
     <div class="footer-copy">&copy; 2026 Francisco Holdings Inc. All rights reserved.</div>
   </div>
 </footer>
+<script>
+/* VIGILAX Payment Links — paste buy.stripe.com URLs when available */
+var VIGILAX_LINKS = {
+  sentinel: '', /* buy.stripe.com/xxx — Sentinel $299/mo */
+  warden:   '', /* buy.stripe.com/xxx — Warden $899/mo  */
+  archon:   '', /* buy.stripe.com/xxx — Archon $2,499/mo */
+};
+function vigilaxCheckout(btn, tier) {
+  var link = VIGILAX_LINKS[tier];
+  if (link && link.indexOf('buy.stripe.com') !== -1) {
+    window.location.href = link;
+    return;
+  }
+  /* Fallback: boardroom consultation */
+  btn.textContent = 'Redirecting to Consultation…';
+  setTimeout(function() {
+    window.location.href = 'https://franciscoholdingsinc.com/#boardroom';
+  }, 600);
+}
+</script>
 </body>
 </html>
