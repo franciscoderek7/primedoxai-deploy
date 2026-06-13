@@ -1,0 +1,80 @@
+name: Deploy zPrimeDox AI HQ (Next.js) to zprimedoxaihq.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'zprimedoxaihq-nextjs/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: zprimedoxaihq-nextjs/package-lock.json
+
+      - name: Install dependencies
+        working-directory: zprimedoxaihq-nextjs
+        run: npm ci
+
+      - name: Build Next.js static export
+        working-directory: zprimedoxaihq-nextjs
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Clone zprimedoxaihq deploy repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/zprimedoxaihq.git /tmp/zprimedoxaihq-deploy
+
+      - name: Wipe old files (preserve .git)
+        run: |
+          find /tmp/zprimedoxaihq-deploy -mindepth 1 -not -path '/tmp/zprimedoxaihq-deploy/.git*' -delete
+
+      - name: Copy built output
+        run: |
+          cp -r zprimedoxaihq-nextjs/dist/. /tmp/zprimedoxaihq-deploy/
+          echo "zprimedoxaihq.com" > /tmp/zprimedoxaihq-deploy/CNAME
+          touch /tmp/zprimedoxaihq-deploy/.nojekyll
+
+      - name: Commit and push to deploy repo
+        run: |
+          cd /tmp/zprimedoxaihq-deploy
+          git config user.email "noreply@anthropic.com"
+          git config user.name "Claude"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: Next.js build from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: zprimedoxaihq.com
+          Type: Next.js static export (output: export)
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+
+      - name: Summary
+        run: |
+          echo "================================================"
+          echo "  ZPRIMEDOXAIHQ NEXT.JS DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/zprimedoxaihq (main)"
+          echo "  CNAME: zprimedoxaihq.com"
+          echo "  Framework: Next.js 14 static export"
+          echo "  Live in: ~2 minutes"
+          echo "  URL: https://zprimedoxaihq.com"
+          echo "================================================"
+          echo ""
+          echo "  REQUIRED SECRETS (add in repo settings):"
+          echo "  - DEPLOY_TOKEN (already set)"
+          echo "  - NEXT_PUBLIC_SUPABASE_URL"
+          echo "  - NEXT_PUBLIC_SUPABASE_ANON_KEY"
+          echo "================================================"
