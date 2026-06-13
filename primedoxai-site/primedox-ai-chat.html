@@ -131,8 +131,12 @@
 
   <div class="sidebar-footer">
     <div class="sidebar-user">
-      <strong>Doc Weedlaw</strong>
-      Free Tier — 10 queries/mo
+      <strong>PrimeDox AI</strong>
+      Free — 10 msg/day · 5 docs/mo
+      <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px;">
+        <a href="https://paypal.me/derekfrancisco/49CAD" target="_blank" style="display:block;text-align:center;padding:5px 10px;background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.4);border-radius:5px;color:#818cf8;font-size:10px;font-weight:700;text-decoration:none;">Pro — $49/mo →</a>
+        <a href="https://paypal.me/derekfrancisco/199CAD" target="_blank" style="display:block;text-align:center;padding:5px 10px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:5px;color:#f59e0b;font-size:10px;font-weight:700;text-decoration:none;">Elite — $199/mo →</a>
+      </div>
     </div>
   </div>
 </div>
@@ -144,7 +148,7 @@
       <div class="topbar-title">PrimeDox AI — Legal Intelligence</div>
       <div class="topbar-sub">Cannabis Law · Charter Rights · BENO-X Framework · Document Generation</div>
     </div>
-    <a href="https://primedoxai.com" style="text-decoration:none"><span class="tier-badge">UPGRADE PRO</span></a>
+    <a href="#" onclick="document.querySelector('.upgrade-panel').scrollIntoView({behavior:'smooth'});return false;" style="text-decoration:none"><span class="tier-badge">FREE TIER</span></a>
   </div>
 
   <div class="chat-wrap" id="chatWrap">
@@ -152,22 +156,23 @@
     <div class="msg ai">
       <div class="msg-avatar">⚖️</div>
       <div class="msg-bubble">
-        <h3>PrimeDox AI — Activated</h3>
-        <p>I am your constitutional law intelligence system, trained on 25+ years of cannabis case law, Charter jurisprudence, and the BENO-X self-defense framework.</p>
-        <h4>What I can do for you:</h4>
+        <h3>Derek Francisco — Here. Let's Work.</h3>
+        <p>I've been fighting cannabis Charter cases for over 20 years. I built BENO-X. I've sat across from Crown counsel, I've argued before judges, I've been exactly where you are. That's what's in this system — not generic legal information, but real strategy from real battles.</p>
+        <p>Tell me what's happening with your case and I'll tell you exactly where to start. No runaround. No upsell. If you've got a charge in front of you, time is the one thing you can't get back — so let's move.</p>
+        <h4>What I can do right now:</h4>
         <ul>
-          <li>Draft legal documents (motions, affidavits, demand letters, NCQs)</li>
-          <li>Research Charter sections and case law precedents</li>
-          <li>Build constitutional arguments (s.7, s.8, s.9, s.10, s.11, s.15)</li>
-          <li>Apply the BENO-X framework to your specific case</li>
-          <li>Prepare cross-examination questions for police witnesses</li>
-          <li>Guide you through Pintea accommodation requests</li>
+          <li>Draft legal documents — NCQs, affidavits, s.8 motions, demand letters</li>
+          <li>Break down Charter sections so you can actually use them</li>
+          <li>Build your BENO-X constitutional defense argument</li>
+          <li>Identify every procedural angle in your case (s.11(b) delay, Jordan, Garofoli)</li>
+          <li>Prep your cross-examination of police witnesses</li>
+          <li>Walk you through Pintea — your rights as a self-represented person</li>
         </ul>
         <div class="quick-chips">
-          <div class="chip" onclick="quickPrompt('Draft a Notice of Constitutional Question')">Draft NCQ</div>
+          <div class="chip" onclick="quickPrompt('I just got charged — what do I do first?')">Just Charged</div>
           <div class="chip" onclick="quickPrompt('Explain the BENO-X framework')">BENO-X</div>
-          <div class="chip" onclick="quickPrompt('Charter s.8 search and seizure arguments')">s.8 Arguments</div>
-          <div class="chip" onclick="quickPrompt('How to argue medical necessity in cannabis cases')">Medical Necessity</div>
+          <div class="chip" onclick="quickPrompt('Draft a Notice of Constitutional Question')">Draft NCQ</div>
+          <div class="chip" onclick="quickPrompt('Charter s.8 search and seizure arguments')">s.8 Search</div>
           <div class="chip" onclick="quickPrompt('Summarize R. v. Parker')">R. v. Parker</div>
           <div class="chip" onclick="quickPrompt('How do I represent myself in court?')">Self-Represent</div>
         </div>
@@ -228,9 +233,11 @@
   </div>
 
   <div class="upgrade-panel">
-    <h3>PrimeDox AI Pro</h3>
-    <p>Unlimited queries, full document generation with your case details, voice input, PDF export.</p>
-    <a href="https://www.paypal.com/paypalme/derekfrancisco/49" target="_blank">Upgrade — $49/mo →</a>
+    <h3>Upgrade Your Access</h3>
+    <p style="margin-bottom:8px;">You're on the Free tier — 10 messages/day, 5 docs/month.</p>
+    <a href="https://paypal.me/derekfrancisco/49CAD" target="_blank" style="margin-bottom:6px;">Pro — $49/mo · Unlimited msgs →</a>
+    <a href="https://paypal.me/derekfrancisco/199CAD" target="_blank" style="display:block;text-align:center;padding:8px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.35);color:#f59e0b;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;">Elite — $199/mo · Full framework →</a>
+    <p style="font-size:10px;color:#475569;margin-top:8px;text-align:center;">First 14 days free. No auto-bill.</p>
   </div>
 </div>
 
@@ -940,11 +947,21 @@ function findResponse(query) {
     };
   }
 
+  // Just charged / what to do first
+  if (q.includes('just charged') || q.includes('just got charged') || q.includes('what do i do first') || q.includes('i was just') || q.includes('i just got')) {
+    return {
+      type: 'knowledge',
+      title: 'You Just Got Charged — Here\'s Your First 48 Hours',
+      body: `This is the most important window you have. Do not waste it.\n\n**Hour 1 — Say Nothing**\nYou have already invoked your right to silence, correct? If not, do it now. "I am invoking my right to silence and I want a lawyer." Nothing else. No explaining, no defending yourself to police — nothing.\n\n**Hours 2-24 — Get Your Disclosure**\nCall the Crown attorney's office and demand full disclosure: police notes, Information to Obtain (ITO) for any warrant, body cam footage, dispatch records. This is your right. It's free. They must provide it.\n\n**Simultaneously — Count Your Days**\nThe day you were charged is Day 0. You now have a clock running. The Jordan framework (R. v. Jordan 2016 SCC) gives you 18 months in Provincial Court, 30 months in Superior Court. If they exceed that — your case gets stayed. Start counting NOW.\n\n**Before Your First Appearance — File This**\n- Request an adjournment to review disclosure (standard, you'll get it)\n- Consider filing a Notice of Constitutional Question (NCQ) if any of these happened:\n  → Police searched without a warrant\n  → You weren't told your right to a lawyer immediately\n  → You were detained without reasonable grounds\n\n**The BENO-X Quick-Check:**\nB — Was there a Breach? (unlawful search, arbitrary detention, no counsel rights)\nE — Can Evidence be excluded? (s.24(2) Grant test)\nN — Any delay for a Jordan application?\nO — What Override remedy is available? (stay, exclusion, constitutional exemption)\nX — What eXemption applies? (medical necessity, religious, personal)\n\nTell me the specifics of your charge and I'll map your exact defense.`,
+      chips: ['Generate NCQ document', 'Charter s.8 search arguments', 'Jordan delay calculation', 'Draft affidavit template']
+    };
+  }
+
   // Default — no match
   return {
     type: 'default',
-    title: 'PrimeDox AI — Query Received',
-    body: `I understand you're asking about: **"${query}"**\n\nI can help you with this. My knowledge vault covers:\n\n- **Charter sections** (s.7 liberty, s.8 search, s.9 detention, s.10 counsel, s.11(b) delay, s.15 equality)\n- **Cannabis case law** (Parker, Smith, Mernagh, Jordan, Grant, Brown, Gladue)\n- **BENO-X framework** — full constitutional self-defense system\n- **Pintea accommodations** — self-represented litigant rights\n- **Document generation** — NCQ, motions, affidavits, demand letters\n\nTo get the most precise answer, try asking me something like:\n- "Explain s.8 unreasonable search"\n- "Generate a Notice of Constitutional Question"\n- "What is the BENO-X framework?"\n- "How do I apply Jordan s.11(b) to my case?"\n\nWhat specifically do you need?`,
+    title: 'PrimeDox AI — Derek Francisco Here',
+    body: `I hear you — you're asking about: **"${query}"**\n\nLet me be direct: I may not have a canned response for that exact wording, but I almost certainly have the substance you need. Try rephrasing with one of these:\n\n- **If you're facing a charge**: "I just got charged" or "Charter s.8 search" or "s.9 arbitrary detention"\n- **For documents**: "Generate a Notice of Constitutional Question" or "Draft affidavit" or "Demand letter for property return"\n- **For framework**: "Explain BENO-X" or "Jordan delay calculation" or "Medical necessity defense"\n- **For case law**: "R. v. Parker", "R. v. Smith", "R. v. Jordan", "R. v. Grant"\n- **For self-rep rights**: "Pintea accommodation" or "How do I represent myself"\n\nOr just tell me what happened — your charge, the circumstances, what the police did — and I'll build your strategy from there. That's what I'm here for.`,
     chips: ['Charter overview', 'BENO-X framework', 'Generate NCQ', 'Cannabis case law summary']
   };
 }
@@ -962,7 +979,7 @@ function docResponse(entry) {
 // ═══════════════════════════════════════════════
 
 let queryCount = 0;
-const FREE_LIMIT = 10;
+const FREE_LIMIT = 10; // 10 messages/day free tier
 
 function renderMessage(role, content) {
   const wrap = document.getElementById('chatWrap');
@@ -1064,7 +1081,7 @@ function sendMessage() {
   const q = box.value.trim();
   if (!q) return;
   if (queryCount >= FREE_LIMIT) {
-    renderMessage('ai', `<h3>Free Tier Limit Reached</h3><p>You've used all ${FREE_LIMIT} free queries. Upgrade to PrimeDox AI Pro for unlimited access.</p><a href="https://www.paypal.com/paypalme/derekfrancisco/49" target="_blank" style="display:inline-block;margin-top:8px;padding:8px 16px;background:#6366f1;color:white;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600">Upgrade to Pro — $49/mo →</a>`);
+    renderMessage('ai', `<h3>Daily Free Limit Reached</h3><p>You've used all ${FREE_LIMIT} free messages today. Comes back tomorrow — or upgrade to Pro for unlimited access.</p><div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;"><a href="https://paypal.me/derekfrancisco/49CAD" target="_blank" style="display:block;text-align:center;padding:9px 16px;background:#6366f1;color:white;border-radius:6px;text-decoration:none;font-size:12px;font-weight:700">Pro — $49/mo · Unlimited →</a><a href="https://paypal.me/derekfrancisco/199CAD" target="_blank" style="display:block;text-align:center;padding:9px 16px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#f59e0b;border-radius:6px;text-decoration:none;font-size:12px;font-weight:700">Elite — $199/mo · Full Framework →</a></div><p style="font-size:11px;color:#64748b;margin-top:8px;">First 14 days free. No auto-bill. Cancel anytime.</p>`);
     box.value = '';
     return;
   }
