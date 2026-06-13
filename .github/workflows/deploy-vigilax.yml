@@ -1,0 +1,62 @@
+name: Deploy VIGILAX to vigilax.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'vigilax-site/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify Loop B identity (anonymous — no Derek name, no cannabis)
+        run: |
+          LEAKS=$(grep -rn "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8\|derek@francisco\|Doc Weedlaw\|cannabis\|weed\|marijuana" vigilax-site/ --include="*.html" | wc -l)
+          if [ "$LEAKS" -gt "0" ]; then
+            echo "LOOP B BLEED DETECTED — aborting deploy"
+            grep -rn "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8\|derek@francisco\|Doc Weedlaw\|cannabis\|weed\|marijuana" vigilax-site/ --include="*.html"
+            exit 1
+          fi
+          echo "Loop B identity check passed — no personal info, no cannabis bleed"
+
+      - name: Clone vigilax repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/vigilax.git /tmp/vigilax
+          git config --global user.email "deploy@franciscoholdings.com"
+          git config --global user.name "Francisco Empire Deploy"
+
+      - name: Wipe old files
+        run: |
+          cd /tmp/vigilax
+          find . -maxdepth 1 -not -name '.git' -not -name '.' -not -name 'CNAME' -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Copy site files
+        run: |
+          cp -r vigilax-site/. /tmp/vigilax/
+
+      - name: Commit and push to vigilax repo
+        run: |
+          cd /tmp/vigilax
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy"
+          else
+            git commit -m "Deploy VIGILAX — $(date -u '+%Y-%m-%d %H:%M UTC')
+
+          Triggered by: push to franciscoderek7/primedoxai-deploy main
+          Source: vigilax-site/
+          Target: franciscoderek7/vigilax → vigilax.com"
+            git push origin main
+            echo "Pushed to franciscoderek7/vigilax — live in ~2 minutes"
+          fi
+
+      - name: Summary
+        run: |
+          echo "Deploy complete"
+          echo "  Repo: franciscoderek7/vigilax (main)"
+          echo "  Domain: vigilax.com"
+          echo "  Pages: $(ls vigilax-site/*.html | wc -l) HTML files"
