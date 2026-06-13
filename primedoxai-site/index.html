@@ -805,14 +805,14 @@
 
         </div><!-- /roster-scroll -->
 
-        <!-- UPGRADE PANEL -->
-        <div class="upgrade-panel">
-          <div class="upgrade-tier-label">CURRENT TIER: <span>FREE</span> &mdash; 10 msg/day</div>
+        <!-- UPGRADE PANEL — PrimeDox AI subscription only -->
+        <div class="upgrade-panel" id="upgrade-panel">
+          <div class="upgrade-tier-label">PRIMEDOX AI &mdash; <span>FREE PLAN</span> &mdash; 10 msg/day</div>
           <div class="upgrade-btns">
             <a href="https://paypal.me/derekfrancisco/49CAD" target="_blank" rel="noopener noreferrer" class="btn-pro">&#128179; Pro &mdash; $49/mo &#8594;</a>
             <a href="https://paypal.me/derekfrancisco/199CAD" target="_blank" rel="noopener noreferrer" class="btn-elite">&#128081; Elite &mdash; $199/mo &#8594;</a>
           </div>
-          <div class="upgrade-note">First 14 days free. No auto-billing.</div>
+          <div class="upgrade-note">PrimeDox AI only. Enterprise security pricing: ask in chat.</div>
           <div class="soulstack-badge">SoulStack AI &mdash; Monitoring Active <span class="dot-green">&#9679;</span></div>
         </div>
       </aside>
@@ -887,7 +887,7 @@
       },
       // ── Legal / Cannabis / Court / CCLDR ─────────────────────────
       {
-        patterns: [/legal doc/i, /\bcourt\b/i, /\bcharge\b/i, /\barrested\b/i, /\bstopped\b/i, /\bweedlaw\b/i, /\bcannabis\b/i, /\bmarijuana\b/i, /\bweed\b/i, /\bpossession\b/i, /ccldr/i, /\bcharter\b/i, /beno[\s\-]?x?/i, /5[\s-]?pillar/i],
+        patterns: [/\blegal\b/i, /legal doc/i, /legal help/i, /legal question/i, /\bcourt\b/i, /\bcharge\b/i, /\barrested\b/i, /\bstopped\b/i, /\bweedlaw\b/i, /\bcannabis\b/i, /\bmarijuana\b/i, /\bweed\b/i, /\bpossession\b/i, /ccldr/i, /\bcharter\b/i, /beno[\s\-]?x?/i, /5[\s-]?pillar/i, /drug charge/i, /\bpot\b/i, /\b420\b/i],
         response: ‘Routing to <strong>CCLDR — Canadian Cannabis Legal Defense Resource</strong>.<br><br>’ +
           ‘Visit: <a href=”https://franciscoderek7.github.io/Ccldr-net/” target=”_blank” rel=”noopener” style=”color:var(--gold-light)”>franciscoderek7.github.io/Ccldr-net/</a><br>’ +
           ‘<em style=”font-size:11px;color:var(--platinum-dark)”>Custom domain ccldr.net — 60-day hold, coming soon.</em><br><br>’ +
@@ -896,7 +896,22 @@
       },
       // ── CleanSwarm PHYSICAL cleaning ─────────────────────────────
       {
-        patterns: [/jet clean/i, /skyscraper clean/i, /building clean/i, /office clean/i, /house clean/i, /home clean/i, /facility clean/i, /yacht clean/i, /plane clean/i, /aircraft clean/i, /commercial clean/i, /residential clean/i],
+        patterns: [
+          // Standalone luxury/marine/vehicle terms → always physical cleaning
+          /\bprivate\s+jet\b/i, /\bjets?\b/i, /\byachts?\b/i, /\bboats?\b/i, /\bplanes?\b/i,
+          // Compound: noun + clean/cleaned/cleaning (handles plurals + past tense)
+          /\bjets?\s*(clean|wash|detail|wipe)/i, /clean\s*(my\s*)?\bjet\b/i,
+          /\byachts?\s*(clean|wash|detail|wipe)/i, /clean\s*(my\s*)?\byacht\b/i,
+          /\bboats?\s*(clean|wash|detail|wipe)/i, /clean\s*(my\s*)?\bboat\b/i,
+          /\bplanes?\s*(clean|wash|detail|wipe)/i, /clean\s*(my\s*)?\bplane\b/i,
+          /\bskyscraper\b/i, /\bskyscrapers?\s*(clean|wash)/i,
+          /\bbuildings?\s*(clean|wash|detail)/i, /clean\s*(my\s*)?\bbuilding\b/i,
+          /\boffice\s*(clean|wash|detail)/i, /clean\s*(my\s*)?\boffice\b/i,
+          /\bhouse\s*(clean|wash|detail)/i, /clean\s*(my\s*)?\bhouse\b/i,
+          /\bhome\s*(clean|wash|detail)/i, /clean\s*(my\s*)?\bhome\b/i,
+          /\bfacility\s*(clean|wash)/i, /\bcommercial\s*clean/i, /\bresidential\s*clean/i,
+          /\baircraft\s*(clean|wash|detail)/i, /\bmarine\s*clean/i, /\bvessel\s*(clean|wash)/i
+        ],
         response: '<strong>CleanSwarm AI — Physical Cleaning Intelligence</strong><br><br>' +
           'We handle:<br>' +
           '✈️ Private jets & aircraft · 🏢 Skyscrapers & commercial buildings · 🏠 Residential & office cleaning<br>' +
@@ -916,12 +931,23 @@
           '📧 <strong>hello@cleanswarm.ca</strong>',
         route: { label: '→ cleanswarm.ca', url: 'https://cleanswarm.ca' }
       },
+      // ── Mobile Security ───────────────────────────────────────────
+      {
+        patterns: [/\bcell phone\b/i, /\bsmartphone\b/i, /\bios\b/i, /\bandroid\b/i, /\biphone\b/i, /mobile (security|protect|hack|threat|device)/i, /phone (hacked|compromised|secure|protect)/i, /device (monitor|protect|hack|secure)/i, /mobile sentinel/i, /mobile guardian/i],
+        response: ‘Routing to <strong>OmniaGuard — Mobile Security</strong>.<br><br>’ +
+          ‘📱 <strong>Mobile Sentinel</strong> — $99/mo · Device monitoring + real-time threat alerts<br>’ +
+          ‘🔒 <strong>Mobile Guardian</strong> — $299/mo · Active threat defense + incident response<br><br>’ +
+          ‘📧 Email: <strong>omniaguard1@gmail.com</strong>’,
+        route: { label: ‘→ omniaguard.com (Mobile)’, url: ‘https://omniaguard.com’ }
+      },
       // ── Cybersecurity / OmniaGuard / Hack ────────────────────────
       {
-        patterns: [/cybersecurity/i, /\bomniaguard\b/i, /\bsecurity\b/i, /\bhack\b/i, /\bthreat\b/i, /\bbreach\b/i, /\bfirewall\b/i, /enterprise security/i, /\bmalware\b/i, /\bransomware\b/i],
+        patterns: [/cybersecurity/i, /\bomniaguard\b/i, /\bsecurity\b/i, /\bhack\b/i, /\bthreat\b/i, /\bbreach\b/i, /\bfirewall\b/i, /enterprise security/i, /\bmalware\b/i, /\bransomware\b/i, /\bvigilax\b/i, /data breach/i, /\bphish/i, /\bspyware\b/i],
         response: ‘Routing to <strong>OmniaGuard — Enterprise AI Security</strong>.<br><br>’ +
-          ‘Tiers: 🔵 Sentinel $499/mo · 🟣 Warden $2,499/mo · 🔴 Archon $9,999/mo<br><br>’ +
-          ‘Visit: <a href=”https://omniaguard.com” target=”_blank” rel=”noopener” style=”color:var(--gold-light)”>omniaguard.com</a> or Floor 1.<br>’ +
+          ‘🔵 <strong>Sentinel</strong> — $499/mo · Threat detection + access control<br>’ +
+          ‘🟣 <strong>Warden</strong> — $2,499/mo · Full enterprise monitoring + compliance<br>’ +
+          ‘🔴 <strong>Archon</strong> — $9,999/mo · Sovereign-level AI security architecture<br><br>’ +
+          ‘Visit: <a href=”https://omniaguard.com” target=”_blank” rel=”noopener” style=”color:var(--gold-light)”>omniaguard.com</a><br>’ +
           ‘📧 Email: <strong>omniaguard1@gmail.com</strong>’,
         route: { label: ‘→ omniaguard.com’, url: ‘https://omniaguard.com’ }
       },
@@ -968,6 +994,8 @@
     ];
 
     var FALLBACK_RESPONSE = 'For a full answer, the fastest path is speaking directly with our team.<br><br>📧 Email: <strong>franciscoderek7@gmail.com</strong>';
+
+    var NEED_MORE = '<br><br><em style="font-size:11px;color:var(--platinum-dark)">Need something else? I can route you to cannabis defense, enterprise security, document automation, physical cleaning, or our full 45-floor empire.</em>';
 
     /* ============================================================
        SPECIALIST CONFIG
@@ -1125,6 +1153,12 @@
       chatName.textContent   = spec.name;
       chatDesc.textContent   = spec.desc;
 
+      // Hide PrimeDox upgrade panel for enterprise security specialists
+      var upgradePanel = document.getElementById('upgrade-panel');
+      if (upgradePanel) {
+        upgradePanel.style.display = (id === 'omniaguard' || id === 'vigilax') ? 'none' : '';
+      }
+
       clearMessages();
       addAiMessage(greeting, null);
 
@@ -1241,11 +1275,11 @@
         entry = KB[i];
         if (entry.isGreeting) continue;
         if (entry.patterns.some(function (p) { return p.test(text); })) {
-          return { response: entry.response, route: entry.route };
+          return { response: entry.response + NEED_MORE, route: entry.route };
         }
       }
 
-      return { response: FALLBACK_RESPONSE, route: null };
+      return { response: FALLBACK_RESPONSE + NEED_MORE, route: null };
     }
 
     /* ============================================================
