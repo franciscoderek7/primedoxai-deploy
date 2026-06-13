@@ -32,11 +32,13 @@ jobs:
       - name: Wipe old files
         run: |
           cd /tmp/vigilax
-          find . -maxdepth 1 -not -name '.git' -not -name '.' -not -name 'CNAME' -exec rm -rf {} + 2>/dev/null || true
+          find . -maxdepth 1 -not -name '.git' -not -name '.' -exec rm -rf {} + 2>/dev/null || true
 
       - name: Copy site files
         run: |
           cp -r vigilax-site/. /tmp/vigilax/
+          echo "vigilax.com" > /tmp/vigilax/CNAME
+          touch /tmp/vigilax/.nojekyll
 
       - name: Commit and push to vigilax repo
         run: |
