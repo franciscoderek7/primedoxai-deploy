@@ -293,6 +293,36 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
   .price-card{min-width:unset}
   #minimap{bottom:60px}
 }
+
+/* ── ELEVATOR DOORS ─────────────────────── */
+#el-door-left, #el-door-right {
+  position: fixed; top: 0; bottom: 0; width: 50.5%; z-index: 8000;
+  background: linear-gradient(180deg,#05050A 0%,#0A0A14 50%,#05050A 100%);
+  pointer-events: none; display: flex; align-items: center;
+}
+#el-door-left { left: 0; transform: translateX(-100%); border-right: 1px solid var(--gold); justify-content: flex-end; }
+#el-door-right { right: 0; transform: translateX(100%); border-left: 1px solid var(--gold); justify-content: flex-start; }
+.el-door-label { padding: 0 28px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 3px; opacity: 0.5; }
+#el-door-floor { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 8001; font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; color: var(--gold); letter-spacing: 4px; pointer-events: none; opacity: 0; text-shadow: 0 0 40px rgba(212,175,55,0.6); }
+
+/* ── CITY SKYLINE CANVAS ────────────────── */
+#city-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ── CONCIERGE DESK ─────────────────────── */
+.concierge-desk { display: flex; align-items: flex-start; gap: 20px; background: linear-gradient(135deg,rgba(212,175,55,0.07),rgba(16,185,129,0.04)); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 24px; margin: 2rem auto; max-width: 700px; text-align: left; }
+.cd-avatar { font-size: 3rem; flex-shrink: 0; }
+.cd-name { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 2px; margin-bottom: 4px; }
+.cd-greeting { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 14px; line-height: 1.6; }
+.cd-routes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.cd-btn { border: none; border-radius: 6px; font-size: 11px; font-weight: 700; padding: 7px 13px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; transition: opacity 0.2s; }
+.cd-btn:hover { opacity: 0.8; }
+.cd-btn-sec { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+.cd-btn-gold { background: var(--gold); color: #111; }
+.cd-query-row { display: flex; gap: 8px; }
+.cd-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.2); border-radius: 6px; padding: 9px 13px; color: #fff; font-size: 13px; outline: none; }
+.cd-input:focus { border-color: var(--gold); }
+.cd-send { background: var(--gold); color: #111; border: none; padding: 9px 16px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+@media (max-width: 600px) { .concierge-desk { flex-direction: column; } .cd-routes { gap: 6px; } .cd-btn { font-size: 10px; padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -387,8 +417,9 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
 
   <!-- LOBBY -->
   <section class="floor-section" id="floor-0" data-floor="0" style="border-top:none">
+    <canvas id="city-canvas"></canvas>
     <canvas id="three-canvas"></canvas>
-    <div class="lobby-content" style="position:relative;z-index:1;padding:80px 5% 60px;text-align:center">
+    <div class="lobby-content" style="position:relative;z-index:2;padding:80px 5% 60px;text-align:center">
       <div class="lobby-monogram">FRANCISCO<br>HOLDINGS INC.</div>
       <div class="lobby-sub">45 Divisions &nbsp;·&nbsp; AI-First Empire &nbsp;·&nbsp; Dubai-Level Ambition &nbsp;·&nbsp; Phoenix Dominion</div>
       <div class="lobby-stats">
@@ -415,6 +446,27 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
         <div class="arr-legend">
           <span><span class="arr-dot" style="background:var(--gold)"></span>Historical</span>
           <span><span class="arr-dot" style="background:var(--emerald);border:1px dashed var(--emerald-bright)"></span>Projected</span>
+        </div>
+      </div>
+
+      <!-- Concierge Desk -->
+      <div class="concierge-desk" id="lobby-concierge">
+        <div class="cd-avatar">🤖</div>
+        <div style="flex:1;min-width:0">
+          <div class="cd-name">PrimeDox AI Concierge</div>
+          <div class="cd-greeting">Welcome to Phoenix Tower. 45 divisions. One empire. How may I direct you?</div>
+          <div class="cd-routes">
+            <button onclick="goToFloor(1)" class="cd-btn cd-btn-sec">🛡️ Security → F1</button>
+            <button onclick="goToFloor(2)" class="cd-btn cd-btn-sec">⚖️ Legal → F2</button>
+            <button onclick="goToFloor(6)" class="cd-btn cd-btn-sec">🐾 Pet Tech → F6</button>
+            <button onclick="goToFloor(8)" class="cd-btn cd-btn-gold">🏛️ Boardroom → F8</button>
+            <button onclick="goToFloor(10)" class="cd-btn cd-btn-sec">⏱️ AI Scheduling → F10</button>
+            <button onclick="goToFloor(21)" class="cd-btn cd-btn-sec">🤖 Agent Swarm → F21</button>
+          </div>
+          <div class="cd-query-row">
+            <input id="cd-query" class="cd-input" type="text" placeholder="Tell me what you need and I'll find your floor…" onkeydown="if(event.key==='Enter')conciergeRoute()" />
+            <button onclick="conciergeRoute()" class="cd-send">Route Me →</button>
+          </div>
         </div>
       </div>
 
@@ -1259,16 +1311,104 @@ function updateElevatorDisplay(n) {
   if (activeFSheet) activeFSheet.classList.add('active');
 }
 
+/* ── Elevator Audio ─────────────────────── */
+function pingDing() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    [880, 1100].forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      osc.connect(gain);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.start(ctx.currentTime + i * 0.14);
+      osc.stop(ctx.currentTime + 0.5);
+    });
+  } catch(e) {}
+}
+
+/* ── Elevator Door Animation ────────────── */
+function elevatorDoorClose(callback) {
+  var dL = document.getElementById('el-door-left');
+  var dR = document.getElementById('el-door-right');
+  if (!dL || !window.gsap) { if (callback) callback(); return; }
+  gsap.timeline({ onComplete: callback })
+    .to(dL, { x: 0, duration: 0.35, ease: 'power3.inOut' }, 0)
+    .to(dR, { x: 0, duration: 0.35, ease: 'power3.inOut' }, 0);
+}
+
+function elevatorDoorOpen(n) {
+  var dL = document.getElementById('el-door-left');
+  var dR = document.getElementById('el-door-right');
+  var flEl = document.getElementById('el-door-floor');
+  if (!dL || !window.gsap) return;
+  var label = n === 0 ? 'LOBBY' : 'FLOOR ' + n;
+  if (flEl) { flEl.textContent = label; gsap.fromTo(flEl, {opacity:0.9},{opacity:0,duration:0.6,delay:0.25}); }
+  gsap.timeline({ delay: 0.1 })
+    .to(dL, { x: '-100%', duration: 0.45, ease: 'power3.inOut' }, 0)
+    .to(dR, { x: '100%', duration: 0.45, ease: 'power3.inOut' }, 0);
+  pingDing();
+  if (n > 0 && FLOORS[n-1]) PhoenixGame.toast('Floor ' + n + ' — ' + FLOORS[n-1].name);
+  else if (n === 0) PhoenixGame.toast('Welcome back to the Lobby');
+}
+
+/* ── Cascading Floor Number ─────────────── */
+function cascadeFloorNumber(target) {
+  var el = document.getElementById('el-current');
+  if (!el) return;
+  var i = 0, steps = 14;
+  var iv = setInterval(function() {
+    i++;
+    el.textContent = i < steps ? 'F' + (Math.floor(Math.random() * 44) + 1) : (target === 0 ? 'LOBBY' : 'F' + target);
+    if (i >= steps) clearInterval(iv);
+  }, 38);
+}
+
+/* ── Concierge Route Logic ──────────────── */
+window.conciergeRoute = function() {
+  var q = ((document.getElementById('cd-query') || {}).value || '').toLowerCase().trim();
+  if (!q) return;
+  var rules = [
+    {k:['security','vpn','cyber','hack','virus','antivirus','omniaguard'],f:1},
+    {k:['legal','cannabis','weed','charter','court','defense','cdsa','beno'],f:2},
+    {k:['primedox','ai','document automation'],f:3},
+    {k:['ccldr','case track','affidavit','motion','template'],f:4},
+    {k:['cleaning','cleanswarm','gig','workforce','janitor'],f:5},
+    {k:['pet','dog','cat','gps collar','feeder','tracker'],f:6},
+    {k:['vigilax','surveillance','stalker','opsec','spy'],f:7},
+    {k:['invest','boardroom','partner','equity','dynasty','fund'],f:8},
+    {k:['car','auto','vehicle','financing','torque','vault velocity'],f:9},
+    {k:['schedule','calendar','meeting','kiaros','booking','time'],f:10},
+    {k:['package','packaging','shipping','supply chain','techpack'],f:11},
+    {k:['mindshift','coaching','mindset','maya','transformation'],f:12},
+  ];
+  for (var i = 0; i < rules.length; i++) {
+    if (rules[i].k.some(function(k){ return q.includes(k); })) {
+      goToFloor(rules[i].f);
+      document.getElementById('cd-query').value = '';
+      return;
+    }
+  }
+  PhoenixGame.toast('Showing all 45 floors — scroll or use the directory below');
+  document.getElementById('cd-query').value = '';
+};
+
 window.goToFloor = function(n) {
-  updateElevatorDisplay(n);
   var target = document.getElementById('floor-' + n);
   if (!target) return;
-  target.scrollIntoView({ behavior: 'smooth' });
-  if (n >= 1) PhoenixGame.visitFloor(n);
-  PhoenixGame.updateMinimapCurrent(n);
+  updateElevatorDisplay(n);
+  cascadeFloorNumber(n);
   var flash = document.getElementById('el-shaft-flash');
-  if (flash && window.gsap) { gsap.fromTo(flash, {opacity:0.6}, {opacity:0, duration:0.6}); }
-  if (window.gsap) { gsap.fromTo('#el-current', {scale:1.3, color:'var(--gold)'}, {scale:1, color:'var(--platinum-mid)', duration:0.4}); }
+  if (flash && window.gsap) { gsap.fromTo(flash, {opacity:0.7}, {opacity:0, duration:0.5}); }
+  elevatorDoorClose(function() {
+    target.scrollIntoView({ behavior: 'instant' });
+    elevatorDoorOpen(n);
+    if (n >= 1) PhoenixGame.visitFloor(n);
+    PhoenixGame.updateMinimapCurrent(n);
+  });
 };
 
 window.goFloorDelta = function(delta) {
@@ -1347,6 +1487,80 @@ document.addEventListener('keydown', function(e) {
     W = section.offsetWidth; H = section.offsetHeight;
     camera.aspect = W/H; camera.updateProjectionMatrix();
     renderer.setSize(W, H);
+  });
+})();
+
+/* ── City Skyline Canvas 2D ─────────────── */
+(function initCitySkyline() {
+  var canvas = document.getElementById('city-canvas');
+  var section = document.getElementById('floor-0');
+  if (!canvas || !section) return;
+  var W = canvas.width = section.offsetWidth;
+  var H = canvas.height = section.offsetHeight;
+  var ctx = canvas.getContext('2d');
+  var tick = 0;
+
+  function genBuildings(w, h) {
+    var bs = [], count = Math.max(20, Math.floor(w / 16));
+    for (var i = 0; i < count; i++) {
+      var bW = 10 + Math.random() * 28;
+      var bH = 50 + Math.random() * (h * 0.52);
+      var x = (i / count) * w + (Math.random() * (w / count * 0.5));
+      var windows = [];
+      var wC = Math.max(1, Math.floor(bW / 7));
+      var wR = Math.max(1, Math.floor(bH / 11));
+      for (var r = 0; r < wR; r++) {
+        for (var c = 0; c < wC; c++) {
+          windows.push({ r: r, c: c, lit: Math.random() > 0.38, blink: Math.random() > 0.93 });
+        }
+      }
+      bs.push({ x: x, w: bW, h: bH, windows: windows, antenna: bH > h * 0.32 });
+    }
+    return bs;
+  }
+
+  var buildings = genBuildings(W, H);
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, 'rgba(4,4,12,0.95)');
+    grad.addColorStop(1, 'rgba(8,8,20,0.98)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    buildings.forEach(function(b) {
+      var y = H - b.h;
+      ctx.fillStyle = '#080810';
+      ctx.fillRect(b.x, y, b.w, b.h);
+      ctx.strokeStyle = 'rgba(212,175,55,0.06)';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(b.x, y, b.w, b.h);
+
+      b.windows.forEach(function(w) {
+        var lit = w.blink ? (Math.sin(tick * 0.04 + w.r * 1.7 + b.x * 0.1) > 0.6) : w.lit;
+        ctx.fillStyle = lit ? 'rgba(212,175,55,0.55)' : 'rgba(255,255,255,0.03)';
+        ctx.fillRect(b.x + w.c * 7 + 1, y + w.r * 11 + 3, 5, 7);
+      });
+
+      if (b.antenna) {
+        var blink = Math.sin(tick * 0.025 + b.x) > 0;
+        ctx.strokeStyle = 'rgba(212,175,55,0.25)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(b.x + b.w / 2, y); ctx.lineTo(b.x + b.w / 2, y - 18); ctx.stroke();
+        ctx.fillStyle = blink ? 'rgba(255,60,60,0.9)' : 'rgba(255,60,60,0.12)';
+        ctx.beginPath(); ctx.arc(b.x + b.w / 2, y - 18, 2, 0, Math.PI * 2); ctx.fill();
+      }
+    });
+    tick++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  window.addEventListener('resize', function() {
+    W = canvas.width = section.offsetWidth;
+    H = canvas.height = section.offsetHeight;
+    buildings = genBuildings(W, H);
   });
 })();
 
@@ -1569,6 +1783,11 @@ document.addEventListener('keydown', function(e) {
 window.addEventListener('load', function(){ PhoenixGame.boot(); });
 </script>
 <div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
+
+<!-- Elevator Doors (animate closed/open on floor change) -->
+<div id="el-door-left"><div class="el-door-label">PHOENIX TOWER</div></div>
+<div id="el-door-right"><div class="el-door-label">FRANCISCO HOLDINGS INC.</div></div>
+<div id="el-door-floor">LOBBY</div>
 
 <!-- PrimeDox AI Concierge — Routes to floor specialists -->
 <script>window.PRIMEDOX_API_URL = '';</script>
