@@ -3,7 +3,7 @@
 
 ---
 
-## OMNIGUARD WORKFLOWS
+## OmniaGuard WORKFLOWS
 
 ### Starter ($99/yr) — VPN + Password Manager
 **Customer pays via PayPal → You get email → Do this:**
