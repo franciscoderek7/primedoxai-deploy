@@ -1,14 +1,14 @@
-/* OmniaGuard Service Worker v1 */
-const CACHE_NAME = 'omniaguard-v1';
+/* OmniaGuard Service Worker v2 */
+const CACHE_NAME = 'omniaguard-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/vault.html',
+  '/data-broker.html',
   '/threat-dashboard.html',
-  '/primedox-portal.html',
   '/install-guide.html',
   '/offline.html',
   '/omniaguard-logo.png',
-  '/robot-350.jpg',
   '/manifest.json'
 ];
 
