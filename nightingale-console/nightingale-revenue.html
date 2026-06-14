@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#D4AF37">
+<title>Nightingale — Revenue Dashboard</title>
+<link rel="manifest" href="nightingale-manifest.json">
+<link rel="stylesheet" href="nightingale-mobile.css">
+<style>
+:root {
+  --gold:#D4AF37; --emerald:#10B981; --red:#EF4444; --orange:#F59E0B;
+  --bg:#05050A; --bg2:#0D0D1A; --bg3:#13131F; --border:#1E1E30;
+  --text:#E8E8F0; --muted:#6B7280;
+  --font-body:'Inter',system-ui,sans-serif; --font-mono:'Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;overflow-x:hidden;}
+
+/* ── LOCK SCREEN ── */
+#lockScreen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.lock-eagle{font-size:56px;margin-bottom:16px;}
+.lock-title{font-size:22px;font-weight:700;color:var(--gold);letter-spacing:3px;margin-bottom:4px;}
+.lock-sub{font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:32px;}
+#lockInput{width:100%;max-width:320px;padding:14px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:18px;font-family:var(--font-mono);letter-spacing:4px;text-align:center;text-transform:uppercase;outline:none;margin-bottom:12px;}
+#lockInput:focus{border-color:var(--gold);}
+#lockBtn{width:100%;max-width:320px;padding:14px;background:var(--gold);color:#0a0a1a;font-size:14px;font-weight:700;letter-spacing:2px;border:none;border-radius:8px;cursor:pointer;min-height:44px;}
+#lockErr{color:var(--red);font-size:12px;margin-top:8px;min-height:16px;text-align:center;}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.shake{animation:shake 0.4s ease;}
+
+/* ── HUD ── */
+.hud{position:sticky;top:0;z-index:100;height:52px;background:rgba(5,5,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px;}
+.hud-back{color:var(--gold);font-size:20px;text-decoration:none;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;}
+.hud-title{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--gold);flex:1;}
+.hud-badge{font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 7px;border-radius:3px;background:rgba(16,185,129,0.15);color:var(--emerald);border:1px solid rgba(16,185,129,0.3);}
+.hud-clock{font-size:11px;color:var(--muted);font-family:var(--font-mono);text-align:right;}
+
+/* ── CONTENT ── */
+#appWrap{display:none;padding-bottom:80px;}
+.content{padding:12px;}
+
+/* ── EMPIRE TOTAL CARD ── */
+.empire-card{background:var(--bg2);border:1px solid var(--gold);border-radius:12px;padding:20px;margin-bottom:16px;text-align:center;}
+.empire-label{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--muted);margin-bottom:8px;}
+.empire-amount{font-size:44px;font-weight:800;color:var(--gold);font-family:'Courier New',monospace;line-height:1;}
+.empire-sub{font-size:12px;color:var(--muted);margin-top:6px;}
+.period-row{display:flex;gap:6px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+.period-btn{font-size:11px;font-weight:600;letter-spacing:1px;padding:6px 12px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);cursor:pointer;min-height:36px;}
+.period-btn.active{background:rgba(212,175,55,0.15);border-color:var(--gold);color:var(--gold);}
+
+/* ── SECTION HEADERS ── */
+.section-hdr{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--muted);margin:20px 0 10px;padding-left:2px;}
+
+/* ── PROCESSOR ROWS ── */
+.processor-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;}
+.processor-row{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.processor-row:last-child{border-bottom:none;}
+.proc-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.proc-status-dot.red{background:var(--red);box-shadow:0 0 6px var(--red);}
+.proc-status-dot.green{background:var(--emerald);box-shadow:0 0 6px var(--emerald);}
+.proc-status-dot.btc{background:var(--orange);box-shadow:0 0 6px var(--orange);}
+.proc-name{font-size:13px;font-weight:600;min-width:70px;}
+.proc-label{font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 7px;border-radius:3px;}
+.proc-label.suspended{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.3);}
+.proc-label.active{background:rgba(16,185,129,0.12);color:var(--emerald);border:1px solid rgba(16,185,129,0.3);}
+.proc-detail{font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.proc-action{font-size:11px;font-weight:600;padding:6px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--gold);cursor:pointer;white-space:nowrap;min-height:36px;}
+.stripe-recovery{background:rgba(239,68,68,0.06);border:1px dashed rgba(239,68,68,0.3);border-radius:6px;padding:10px 14px;font-size:11px;color:var(--muted);line-height:1.6;margin:0 14px 14px;}
+.stripe-recovery a{color:var(--red);}
+.btc-addr{font-family:var(--font-mono);font-size:9px;}
+
+/* ── POTENTIAL METER ── */
+.potential-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.potential-nums{display:flex;align-items:baseline;gap:8px;justify-content:center;margin-bottom:8px;}
+.potential-actual{font-size:32px;font-weight:800;color:var(--emerald);font-family:var(--font-mono);}
+.potential-sep{font-size:20px;color:var(--muted);}
+.potential-max{font-size:24px;font-weight:700;color:var(--muted);}
+.potential-bar-wrap{position:relative;height:8px;background:var(--bg3);border-radius:4px;margin:12px 0 8px;overflow:hidden;}
+.potential-bar-bg{position:absolute;inset:0;background:var(--border);}
+.potential-bar-actual{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--emerald),var(--gold));border-radius:4px;transition:width 1s ease;}
+.potential-cta{font-size:11px;color:var(--muted);line-height:1.5;padding:10px;background:var(--bg3);border-radius:6px;margin-top:8px;}
+
+/* ── COMPANIES LIST ── */
+.company-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+.company-row:last-child{border-bottom:none;}
+.co-icon{font-size:22px;width:36px;text-align:center;flex-shrink:0;}
+.co-info{flex:1;min-width:0;}
+.co-name{font-size:13px;font-weight:600;color:var(--text);}
+.co-domain{font-size:10px;color:var(--muted);margin-top:1px;}
+.co-bar-wrap{height:3px;background:var(--bg3);border-radius:2px;margin-top:6px;overflow:hidden;}
+.co-bar{height:100%;background:linear-gradient(90deg,var(--emerald),var(--gold));border-radius:2px;}
+.co-right{text-align:right;flex-shrink:0;}
+.co-mrr{font-size:14px;font-weight:700;color:var(--gold);font-family:var(--font-mono);}
+.co-potential{font-size:9px;color:var(--muted);margin-top:2px;}
+.pill{font-size:8px;font-weight:700;letter-spacing:1px;padding:2px 6px;border-radius:3px;display:inline-block;margin-bottom:3px;}
+.pill-live{background:rgba(16,185,129,0.12);color:var(--emerald);border:1px solid rgba(16,185,129,0.3);}
+.pill-redirect{background:rgba(245,158,11,0.12);color:var(--orange);border:1px solid rgba(245,158,11,0.3);}
+.pill-dev{background:rgba(107,114,128,0.12);color:var(--muted);border:1px solid rgba(107,114,128,0.3);}
+
+/* ── TRANSACTION LOG ── */
+.tx-empty{text-align:center;padding:24px;color:var(--muted);font-size:13px;line-height:1.6;}
+.tx-list{display:flex;flex-direction:column;gap:0;}
+.tx-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+.tx-row:last-child{border-bottom:none;}
+.tx-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0;}
+.tx-info{flex:1;min-width:0;}
+.tx-co{font-size:13px;font-weight:600;}
+.tx-meta{font-size:10px;color:var(--muted);margin-top:2px;}
+.tx-amount{font-size:14px;font-weight:700;color:var(--emerald);font-family:var(--font-mono);flex-shrink:0;}
+.btn-log{width:100%;padding:14px;background:rgba(212,175,55,0.1);border:1px dashed var(--gold);border-radius:8px;color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;margin-top:12px;min-height:44px;}
+.btn-log:hover{background:rgba(212,175,55,0.15);}
+
+/* ── PAYPAL GRID ── */
+.paypal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pp-card{display:block;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;text-decoration:none;color:inherit;}
+.pp-card:hover{border-color:var(--gold);}
+.pp-product{font-size:11px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.pp-amount{font-size:14px;font-weight:800;color:var(--gold);font-family:var(--font-mono);margin-bottom:4px;}
+.pp-cta{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--emerald);}
+.pp-swap-note{font-size:8px;color:var(--muted);margin-top:4px;font-style:italic;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s ease;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-title{font-size:14px;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:16px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:6px;}
+.ng-input{width:100%;padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;outline:none;min-height:44px;}
+.ng-input:focus{border-color:var(--gold);}
+.modal-actions{display:flex;gap:10px;margin-top:16px;}
+.btn-ghost{flex:1;padding:12px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-size:13px;min-height:44px;}
+.btn-gold{flex:1;padding:12px;background:var(--gold);color:#0a0a1a;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;min-height:44px;}
+
+/* ── COPY TOOLTIP ── */
+.copy-tooltip{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--emerald);color:#0a0a1a;font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:600;}
+.copy-tooltip.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── BOTTOM NAV ── */
+.bot-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(5,5,10,0.97);border-top:1px solid var(--border);display:flex;align-items:stretch;z-index:200;padding:0 4px;}
+.bot-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--muted);font-size:9px;font-weight:600;letter-spacing:1px;text-decoration:none;background:none;border:none;cursor:pointer;position:relative;min-height:44px;}
+.bot-tab.active{color:var(--gold);}
+.bot-tab.active::after{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--gold);border-radius:0 0 2px 2px;}
+.bot-tab-icon{font-size:18px;}
+
+@media(max-width:360px){
+  .paypal-grid{grid-template-columns:1fr;}
+  .empire-amount{font-size:36px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOCK SCREEN ── -->
+<div id="lockScreen">
+  <div class="lock-eagle">🦅</div>
+  <div class="lock-title">NIGHTINGALE</div>
+  <div class="lock-sub">REVENUE COMMAND</div>
+  <input type="password" id="lockInput" placeholder="ACCESS CODE" autocomplete="off" autocorrect="off" spellcheck="false">
+  <button id="lockBtn">UNLOCK</button>
+  <div id="lockErr"></div>
+</div>
+
+<!-- ── APP WRAPPER ── -->
+<div id="appWrap">
+
+  <!-- HUD -->
+  <div class="hud">
+    <a href="nightingale-console.html" class="hud-back" aria-label="Back">←</a>
+    <div class="hud-title">💰 REVENUE</div>
+    <div class="hud-badge">LIVE</div>
+    <div class="hud-clock" id="hudClock"></div>
+  </div>
+
+  <div class="content">
+
+    <!-- EMPIRE TOTAL CARD -->
+    <div class="empire-card">
+      <div class="empire-label">EMPIRE TOTAL REVENUE</div>
+      <div class="empire-amount" id="empireTotal">$0.00</div>
+      <div class="empire-sub">CAD · All active processors · <span id="empireMrr">$0.00</span> logged</div>
+      <div class="period-row">
+        <button class="period-btn active" data-period="all">ALL TIME</button>
+        <button class="period-btn" data-period="month">THIS MONTH</button>
+        <button class="period-btn" data-period="week">THIS WEEK</button>
+      </div>
+    </div>
+
+    <!-- PAYMENT PROCESSORS -->
+    <div class="section-hdr">PAYMENT PROCESSORS</div>
+    <div class="processor-card">
+      <div class="processor-row">
+        <div class="proc-status-dot red"></div>
+        <div class="proc-name">Stripe</div>
+        <div class="proc-label suspended">SUSPENDED</div>
+        <div class="proc-detail">acct_1TG0cIASsTLqnu8V — $406.80 frozen</div>
+        <button class="proc-action" onclick="window.open('https://dashboard.stripe.com/recover','_blank','noopener')">Recover →</button>
+      </div>
+      <div class="stripe-recovery">
+        <strong>Stripe Recovery Steps:</strong><br>
+        → <a href="https://dashboard.stripe.com/recover" target="_blank" rel="noopener">dashboard.stripe.com/recover</a><br>
+        → Upload government ID<br>
+        → Enable Authy 2FA<br>
+        → Unlock acct_1TG0cIASsTLqnu8V
+      </div>
+      <div class="processor-row">
+        <div class="proc-status-dot green"></div>
+        <div class="proc-name">PayPal</div>
+        <div class="proc-label active">ACTIVE</div>
+        <div class="proc-detail">paypal.me/franciscoderek7</div>
+        <button class="proc-action" onclick="window.open('https://paypal.me/franciscoderek7/1','_blank','noopener')">Test $1 →</button>
+      </div>
+      <div class="processor-row">
+        <div class="proc-status-dot green"></div>
+        <div class="proc-name">Interac</div>
+        <div class="proc-label active">ACTIVE</div>
+        <div class="proc-detail">franciscoderek7@gmail.com</div>
+        <button class="proc-action" onclick="location.href='mailto:franciscoderek7@gmail.com?subject=Interac%20Transfer%20Test'">Send Test →</button>
+      </div>
+      <div class="processor-row">
+        <div class="proc-status-dot btc"></div>
+        <div class="proc-name">Bitcoin</div>
+        <div class="proc-label active" style="background:rgba(245,158,11,0.1);color:var(--orange);border:1px solid rgba(245,158,11,0.3);">ACTIVE</div>
+        <div class="proc-detail btc-addr">bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>
+        <button class="proc-action" id="btcCopyBtn" onclick="copyBtcAddress()">Copy</button>
+      </div>
+    </div>
+
+    <!-- REVENUE POTENTIAL METER -->
+    <div class="section-hdr">REVENUE POTENTIAL</div>
+    <div class="potential-card">
+      <div class="potential-nums">
+        <div class="potential-actual" id="potActual">$0</div>
+        <div class="potential-sep">/</div>
+        <div class="potential-max">$22,941<span style="font-size:14px;color:var(--muted)">/mo</span></div>
+      </div>
+      <div style="color:var(--gold);font-weight:600;font-size:12px;text-align:center;">0% of monthly potential captured</div>
+      <div class="potential-bar-wrap">
+        <div class="potential-bar-bg"></div>
+        <div class="potential-bar-actual" id="potBar" style="width:0%"></div>
+      </div>
+      <div class="potential-cta">
+        <strong>Next steps:</strong> Unlock Stripe ($406 frozen) + Create PayPal Business links at paypal.com/buttons to activate revenue across all live properties.
+      </div>
+    </div>
+
+    <!-- COMPANIES REVENUE -->
+    <div class="section-hdr">REVENUE BY COMPANY</div>
+    <div id="companiesList"></div>
+
+    <!-- TRANSACTION LOG -->
+    <div class="section-hdr">TRANSACTION LOG</div>
+    <div id="txEmpty" class="tx-empty">No transactions recorded yet.<br>Revenue will appear here when payments are confirmed.</div>
+    <div id="txList" class="tx-list" style="display:none;"></div>
+    <button class="btn-log" onclick="openLogModal()">+ Log Transaction</button>
+
+    <!-- QUICK PAYPAL LINKS -->
+    <div class="section-hdr">QUICK PAYPAL LINKS</div>
+    <div class="paypal-grid" id="paypalGrid"></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:12px;padding:10px;background:var(--bg2);border-radius:6px;border:1px dashed var(--border);">
+      <!-- PAYPAL SWAP ZONE — replace placeholder links with Business payment buttons from paypal.com/buttons once PayPal Business account is activated. -->
+      ⚠️ PAYPAL SWAP ZONE — replace paypal.me links with Business payment buttons from paypal.com/buttons.
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /appWrap -->
+
+<!-- ── BOTTOM NAV ── -->
+<nav class="bot-nav" id="botNav" style="display:none;">
+  <a href="nightingale-console.html" class="bot-tab">
+    <span class="bot-tab-icon">🏠</span>
+    <span>Overview</span>
+  </a>
+  <button class="bot-tab active">
+    <span class="bot-tab-icon">💰</span>
+    <span>Revenue</span>
+  </button>
+  <a href="nightingale-swarm-deploy.html" class="bot-tab">
+    <span class="bot-tab-icon">🚀</span>
+    <span>Deploy</span>
+  </a>
+</nav>
+
+<!-- ── LOG TRANSACTION MODAL ── -->
+<div class="modal-overlay" id="logModal" role="dialog" aria-modal="true" aria-label="Log Transaction">
+  <div class="modal">
+    <div class="modal-title">+ LOG TRANSACTION</div>
+    <div class="form-group">
+      <label class="form-label" for="txCompany">Company</label>
+      <select class="ng-input" id="txCompany"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="txAmount">Amount (CAD $)</label>
+      <input type="number" class="ng-input" id="txAmount" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="txMethod">Payment Method</label>
+      <select class="ng-input" id="txMethod">
+        <option value="PayPal">PayPal</option>
+        <option value="Interac">Interac</option>
+        <option value="Bitcoin">Bitcoin</option>
+        <option value="Stripe">Stripe</option>
+        <option value="Cash">Cash</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="txNote">Note (optional)</label>
+      <textarea class="ng-input" id="txNote" rows="2" placeholder="Client name, product, notes..." style="resize:vertical;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeLogModal()">Cancel</button>
+      <button class="btn-gold" onclick="saveTransaction()">Save Transaction</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COPY TOOLTIP ── -->
+<div class="copy-tooltip" id="copyTooltip">Copied!</div>
+
+<script>
+/* ──────────────────────────────
+   DATA
+   ────────────────────────────── */
+const COMPANIES_REVENUE = [
+  { id:'ccldr',      name:'CCLDR.NET',              icon:'⚖️',  domain:'ccldr.net',                  potential:1499, status:'live' },
+  { id:'omniaguard', name:'OmniaGuard',              icon:'🛡️',  domain:'omniaguard.com',              potential:4995, status:'live' },
+  { id:'primedox',   name:'PrimeDox AI',             icon:'🤖',  domain:'primedoxai.com',              potential:499,  status:'live' },
+  { id:'techpetcage',name:'TechPetCage',             icon:'🐾',  domain:'techpetcage.com',             potential:149,  status:'live' },
+  { id:'cleanswarm', name:'CleanSwarm',              icon:'🧹',  domain:'cleanswarm.ca',               potential:299,  status:'live' },
+  { id:'benox',      name:'BENO-X',                  icon:'📋',  domain:'ccldr.net/beno-x',            potential:500,  status:'live' },
+  { id:'fh',         name:'Francisco Holdings Inc.', icon:'🏢',  domain:'franciscoholdingsinc.com',    potential:5000, status:'live' },
+  { id:'vigilax',    name:'Vigilax',                 icon:'👁️',  domain:'vigilax.com',                 potential:10000,status:'redirect' },
+  { id:'kiaros',     name:'Kiaros',                  icon:'⚙️',  domain:'kiaros.ai',                  potential:0,    status:'redirect' },
+  { id:'vaultvelocity',name:'Vault Velocity Auto',   icon:'🚗',  domain:'vaultvelocityauto.com',       potential:0,    status:'redirect' },
+  { id:'techpackcage',name:'TechPackCage',           icon:'📦',  domain:'techpackcage.com',            potential:0,    status:'redirect' },
+  { id:'soulstack',  name:'SoulStack',               icon:'🔮',  domain:'soulstack.ai',                potential:0,    status:'dev' },
+  { id:'biotech',    name:'BiotechSwarm',            icon:'🧬',  domain:'biotech-swarm.ai',            potential:0,    status:'dev' },
+  { id:'aigovernance',name:'AI Governance Canada',   icon:'🏛️',  domain:'aigovernance.ca',             potential:0,    status:'dev' },
+  { id:'autoswarm',  name:'AutoSwarm',               icon:'🚘',  domain:'autoswarm.ai',                potential:0,    status:'dev' },
+  { id:'defenseswarm',name:'DefenseSwarm',           icon:'⚔️',  domain:'defenseswarm.ai',             potential:0,    status:'dev' },
+  { id:'fintech',    name:'FintechSwarm',            icon:'💳',  domain:'fintechswarm.ai',             potential:0,    status:'dev' },
+  { id:'energy',     name:'EnergySwarm',             icon:'⚡',  domain:'energyswarm.ai',              potential:0,    status:'dev' },
+  { id:'health',     name:'HealthSwarm',             icon:'🏥',  domain:'healthswarm.ai',              potential:0,    status:'dev' },
+  { id:'koolduce',   name:'Koolduce Motors',         icon:'🏎️',  domain:'koolduce.com',               potential:0,    status:'dev' },
+  { id:'logistics',  name:'LogisticsSwarm',          icon:'📦',  domain:'logisticsswarm.ai',           potential:0,    status:'dev' },
+  { id:'medswarm',   name:'MedSwarm',                icon:'💊',  domain:'medswarm.ai',                 potential:0,    status:'dev' },
+  { id:'pharma',     name:'PharmaSwarm',             icon:'🧪',  domain:'pharmaswarm.ai',              potential:0,    status:'dev' },
+  { id:'quantum',    name:'QuantumSwarm',            icon:'⚛️',  domain:'quantumswarm.ai',             potential:0,    status:'dev' },
+  { id:'sovereignty',name:'Sovereignty',             icon:'🦅',  domain:'sovereignty.ca',              potential:0,    status:'dev' },
+  { id:'spaceswarm', name:'SpaceSwarm',              icon:'🚀',  domain:'spaceswarm.ai',               potential:0,    status:'dev' },
+  { id:'supplychain',name:'SupplyChain Pro',         icon:'🔗',  domain:'supplychainpro.ai',           potential:0,    status:'dev' },
+  { id:'ccc',        name:'Cannabis Compliance CA',  icon:'📜',  domain:'ccc.net',                    potential:0,    status:'dev' },
+  { id:'gcalliance', name:'Global Cannabis Alliance',icon:'🌍',  domain:'gcalliance.org',              potential:0,    status:'dev' },
+  { id:'lindsay',    name:'Lindsay Innovation',      icon:'💡',  domain:'lindsay.ai',                  potential:0,    status:'dev' },
+  { id:'constdefense',name:'Constitutional Defense', icon:'📚',  domain:'constdefense.ca',            potential:0,    status:'dev' },
+  { id:'aeroshield', name:'AeroShield',              icon:'✈️',  domain:'aeroshield.ai',               potential:0,    status:'dev' },
+  { id:'weedlawpub', name:'WeedLaw Publishing',      icon:'📖',  domain:'weedlawpublishing.com',       potential:0,    status:'dev' },
+  { id:'ccldraca',   name:'CCLDR Academy',           icon:'🎓',  domain:'ccldr.net/academy',           potential:0,    status:'dev' },
+];
+
+const PAYPAL_LINKS = [
+  { product:'CCLDR Foundation',      amount:'$149/mo',  url:'https://paypal.me/franciscoderek7/149',  swap:'Replace with Business recurring link' },
+  { product:'CCLDR Practitioner',    amount:'$499/mo',  url:'https://paypal.me/franciscoderek7/499',  swap:'Replace with Business recurring link' },
+  { product:'CCLDR Elite',           amount:'$1,499/mo',url:'https://paypal.me/franciscoderek7/1499', swap:'Replace with Business recurring link' },
+  { product:'OmniaGuard Audit',      amount:'$500',     url:'https://paypal.me/franciscoderek7/500',  swap:'Replace with omniaguard1@gmail.com link' },
+  { product:'OmniaGuard Retainer',   amount:'$499/mo',  url:'https://paypal.me/franciscoderek7/499',  swap:'Replace with omniaguard1@gmail.com link' },
+  { product:'BENO-X Session',        amount:'$500',     url:'https://paypal.me/franciscoderek7/500',  swap:'Replace with Business link' },
+  { product:'PrimeDox Enterprise',   amount:'$499/mo',  url:'https://paypal.me/franciscoderek7/499',  swap:'Replace with Business recurring link' },
+  { product:'Strategy Session',      amount:'$500',     url:'https://paypal.me/franciscoderek7/500',  swap:'Replace with Business link' },
+  { product:'Test Payment',          amount:'$1',       url:'https://paypal.me/franciscoderek7/1',    swap:'Keep as test link' },
+];
+
+const POTENTIAL_TOTAL = 22941;
+const TX_KEY = 'ng_transactions';
+const PERIOD_KEY = 'ng_rev_period';
+
+/* ── UTILS ── */
+function fmtCAD(n) {
+  return new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', minimumFractionDigits:2 }).format(n || 0);
+}
+function getTransactions() {
+  try { return JSON.parse(localStorage.getItem(TX_KEY) || '[]'); } catch { return []; }
+}
+function saveTransactions(txs) {
+  localStorage.setItem(TX_KEY, JSON.stringify(txs));
+}
+function filterByPeriod(txs) {
+  const period = localStorage.getItem(PERIOD_KEY) || 'all';
+  if (period === 'all') return txs;
+  const now = new Date();
+  return txs.filter(tx => {
+    const d = new Date(tx.date);
+    if (period === 'month') {
+      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    }
+    if (period === 'week') {
+      const startOfWeek = new Date(now);
+      startOfWeek.setDate(now.getDate() - now.getDay());
+      startOfWeek.setHours(0,0,0,0);
+      return d >= startOfWeek;
+    }
+    return true;
+  });
+}
+
+/* ── LOCK SCREEN ── */
+function checkLock() {
+  if (sessionStorage.getItem('ng_unlocked') === '1') unlock();
+}
+function unlock() {
+  document.getElementById('lockScreen').style.display = 'none';
+  document.getElementById('appWrap').style.display = 'block';
+  document.getElementById('botNav').style.display = 'flex';
+  init();
+}
+document.getElementById('lockBtn').addEventListener('click', attemptUnlock);
+document.getElementById('lockInput').addEventListener('keydown', e => { if (e.key === 'Enter') attemptUnlock(); });
+function attemptUnlock() {
+  const val = document.getElementById('lockInput').value.trim().toUpperCase();
+  if (val === 'NIGHTINGALE') {
+    sessionStorage.setItem('ng_unlocked', '1');
+    document.getElementById('lockErr').textContent = '';
+    unlock();
+  } else {
+    document.getElementById('lockErr').textContent = 'Incorrect code.';
+    const ls = document.getElementById('lockScreen');
+    ls.classList.remove('shake');
+    void ls.offsetWidth;
+    ls.classList.add('shake');
+    document.getElementById('lockInput').value = '';
+    document.getElementById('lockInput').focus();
+  }
+}
+
+/* ── CLOCK ── */
+function updateClock() {
+  document.getElementById('hudClock').textContent = new Date().toLocaleTimeString('en-CA', { hour12:false });
+}
+
+/* ── PERIOD TOGGLE ── */
+function initPeriodToggle() {
+  const saved = localStorage.getItem(PERIOD_KEY) || 'all';
+  const btns = document.querySelectorAll('.period-btn');
+  btns.forEach(btn => {
+    if (btn.dataset.period === saved) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      localStorage.setItem(PERIOD_KEY, btn.dataset.period);
+      updateTotals();
+      renderTransactions();
+    });
+  });
+}
+
+/* ── COMPANIES ── */
+function renderCompanies() {
+  const container = document.getElementById('companiesList');
+  const txs = getTransactions();
+  const mrrMap = {};
+  txs.forEach(tx => { mrrMap[tx.companyId] = (mrrMap[tx.companyId] || 0) + (parseFloat(tx.amount) || 0); });
+  container.innerHTML = '';
+  COMPANIES_REVENUE.forEach(co => {
+    const mrr = mrrMap[co.id] || 0;
+    const barPct = co.potential > 0 ? Math.min((mrr / co.potential) * 100, 100) : 0;
+    const statusPill = co.status === 'live'
+      ? '<span class="pill pill-live">LIVE</span>'
+      : co.status === 'redirect'
+      ? '<span class="pill pill-redirect">REDIRECT</span>'
+      : '<span class="pill pill-dev">DEV</span>';
+    const row = document.createElement('div');
+    row.className = 'company-row';
+    row.innerHTML = `
+      <div class="co-icon">${co.icon}</div>
+      <div class="co-info">
+        <div class="co-name">${co.name}</div>
+        <div class="co-domain">${co.domain}</div>
+        <div class="co-bar-wrap"><div class="co-bar" style="width:${barPct}%"></div></div>
+      </div>
+      <div class="co-right">
+        ${statusPill}
+        <div class="co-mrr">${fmtCAD(mrr)}</div>
+        ${co.potential > 0 ? `<div class="co-potential">/ ${fmtCAD(co.potential)} potential</div>` : ''}
+      </div>`;
+    container.appendChild(row);
+  });
+}
+
+/* ── TOTALS ── */
+function updateTotals() {
+  const txs = filterByPeriod(getTransactions());
+  const total = txs.reduce((s, t) => s + (parseFloat(t.amount) || 0), 0);
+  document.getElementById('empireTotal').textContent = fmtCAD(total);
+  document.getElementById('empireMrr').textContent = fmtCAD(total);
+  document.getElementById('potActual').textContent = fmtCAD(total).replace('.00', '');
+  const pct = Math.min((total / POTENTIAL_TOTAL) * 100, 100);
+  document.getElementById('potBar').style.width = pct + '%';
+  const pctEl = document.querySelector('.potential-card [style*="color:var(--gold)"]');
+  if (pctEl) pctEl.textContent = pct.toFixed(1) + '% of monthly potential captured';
+}
+
+/* ── TRANSACTIONS ── */
+function renderTransactions() {
+  const txs = filterByPeriod(getTransactions()).slice().reverse();
+  const emptyEl = document.getElementById('txEmpty');
+  const listEl = document.getElementById('txList');
+  if (!txs.length) { emptyEl.style.display = 'block'; listEl.style.display = 'none'; return; }
+  emptyEl.style.display = 'none';
+  listEl.style.display = 'flex';
+  listEl.innerHTML = '';
+  txs.forEach(tx => {
+    const co = COMPANIES_REVENUE.find(c => c.id === tx.companyId) || {};
+    const row = document.createElement('div');
+    row.className = 'tx-row';
+    const dStr = new Date(tx.date).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' });
+    row.innerHTML = `
+      <div class="tx-icon">${co.icon || '💵'}</div>
+      <div class="tx-info">
+        <div class="tx-co">${co.name || tx.companyId}</div>
+        <div class="tx-meta">${tx.method} · ${dStr}${tx.note ? ' · ' + tx.note : ''}</div>
+      </div>
+      <div class="tx-amount">+${fmtCAD(tx.amount)}</div>`;
+    listEl.appendChild(row);
+  });
+}
+
+/* ── MODAL ── */
+function populateCompanyDropdown() {
+  const sel = document.getElementById('txCompany');
+  sel.innerHTML = '';
+  COMPANIES_REVENUE.forEach(co => {
+    const opt = document.createElement('option');
+    opt.value = co.id;
+    opt.textContent = co.icon + ' ' + co.name;
+    sel.appendChild(opt);
+  });
+}
+function openLogModal() {
+  document.getElementById('logModal').classList.add('open');
+  setTimeout(() => document.getElementById('txAmount').focus(), 300);
+}
+function closeLogModal() {
+  document.getElementById('logModal').classList.remove('open');
+  document.getElementById('txAmount').value = '';
+  document.getElementById('txNote').value = '';
+}
+document.getElementById('logModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('logModal')) closeLogModal();
+});
+function saveTransaction() {
+  const companyId = document.getElementById('txCompany').value;
+  const amount = parseFloat(document.getElementById('txAmount').value);
+  const method = document.getElementById('txMethod').value;
+  const note = document.getElementById('txNote').value.trim();
+  if (!companyId || isNaN(amount) || amount <= 0) { alert('Enter a valid amount.'); return; }
+  const txs = getTransactions();
+  txs.push({ id: Date.now(), companyId, amount, method, note, date: new Date().toISOString() });
+  saveTransactions(txs);
+  closeLogModal();
+  renderTransactions();
+  renderCompanies();
+  updateTotals();
+}
+
+/* ── PAYPAL GRID ── */
+function renderPayPalGrid() {
+  const grid = document.getElementById('paypalGrid');
+  grid.innerHTML = '';
+  PAYPAL_LINKS.forEach(link => {
+    const card = document.createElement('a');
+    card.href = link.url;
+    card.target = '_blank';
+    card.rel = 'noopener noreferrer';
+    card.className = 'pp-card';
+    card.innerHTML = `
+      <div class="pp-product">${link.product}</div>
+      <div class="pp-amount">${link.amount}</div>
+      <div class="pp-cta">Pay with PayPal →</div>
+      <div class="pp-swap-note">⚡ SWAP: ${link.swap}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ── BITCOIN COPY ── */
+function copyBtcAddress() {
+  const addr = 'bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(addr).then(showCopied).catch(() => fallbackCopy(addr));
+  } else {
+    fallbackCopy(addr);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showCopied();
+}
+function showCopied() {
+  const el = document.getElementById('copyTooltip');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+/* ── INIT ── */
+function init() {
+  updateClock();
+  setInterval(updateClock, 1000);
+  initPeriodToggle();
+  renderCompanies();
+  updateTotals();
+  renderTransactions();
+  renderPayPalGrid();
+  populateCompanyDropdown();
+}
+
+checkLock();
+</script>
+</body>
+</html>

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Swarm Deploy — Nightingale Console</title>
+<link rel="stylesheet" href="nightingale-mobile.css">
+<style>
+/* ===== PAGE-SPECIFIC STYLES ===== */
+.phase-card { margin-bottom: 12px; }
+.phase-label {
+  font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700;
+  letter-spacing: 2px; color: var(--muted); text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+}
+.phase-label .phase-num {
+  width: 22px; height: 22px; border-radius: 50%; background: var(--gold-dim);
+  border: 1px solid var(--border); color: var(--gold); font-size: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.phase-label.done .phase-num { background: var(--emerald-dim); border-color: var(--border-em); color: var(--emerald); }
+.phase-hidden { display: none; }
+
+/* Company Grid */
+.company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.company-btn {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 10px; text-align: left; color: var(--platinum); transition: border-color .2s, background .2s;
+  cursor: pointer; min-height: 44px;
+}
+.company-btn:hover { border-color: rgba(212,175,55,0.4); }
+.company-btn.selected { border-color: var(--gold); background: var(--gold-dim); }
+.company-icon { font-size: 20px; margin-bottom: 4px; }
+.company-name { font-size: 13px; font-weight: 700; color: var(--platinum); line-height: 1.2; }
+.company-domain { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.company-agents { font-size: 10px; color: var(--gold); margin-top: 4px; }
+
+/* Agent Search */
+.agent-search-wrap { position: relative; margin-bottom: 12px; }
+.agent-search-wrap::before {
+  content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  font-size: 14px; pointer-events: none;
+}
+#agentSearch { padding-left: 36px; }
+
+/* Agent Grid */
+.agent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 320px; overflow-y: auto; }
+.agent-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px; cursor: pointer; transition: border-color .2s, background .2s;
+  min-height: 44px; position: relative;
+}
+.agent-card:hover { border-color: rgba(16,185,129,0.3); }
+.agent-card.selected { border-color: var(--emerald); background: var(--emerald-dim); }
+.agent-card.tier-gold { border-color: rgba(212,175,55,0.3); }
+.agent-card.tier-gold.selected { border-color: var(--gold); background: var(--gold-dim); }
+.agent-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.agent-icon-name { display: flex; align-items: center; gap: 6px; }
+.agent-icon { font-size: 18px; line-height: 1; }
+.agent-name { font-size: 13px; font-weight: 700; color: var(--platinum); }
+.agent-role { font-size: 10px; color: var(--muted); line-height: 1.3; }
+.agent-status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.agent-status-dot.active { background: var(--emerald); box-shadow: 0 0 6px var(--emerald); }
+.agent-status-dot.standby { background: var(--muted); }
+.tier-badge {
+  position: absolute; top: 6px; right: 6px;
+  font-size: 8px; font-weight: 800; letter-spacing: 1px; padding: 1px 5px;
+  border-radius: 3px; text-transform: uppercase;
+}
+.tier-badge.gold { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid var(--border); }
+.tier-badge.emerald { background: var(--emerald-dim); color: var(--emerald); border: 1px solid var(--border-em); }
+.agent-select-limit { font-size: 11px; color: var(--muted); text-align: center; padding: 8px 0; }
+
+/* Priority Selector */
+.priority-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+.priority-btn {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 4px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 700;
+  color: var(--muted); transition: all .2s; min-height: 44px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+}
+.priority-btn .p-icon { font-size: 16px; }
+.priority-btn.selected { color: var(--platinum); }
+.priority-btn[data-p="critical"].selected { border-color: var(--red); background: var(--red-dim); color: var(--red); }
+.priority-btn[data-p="high"].selected { border-color: var(--orange); background: rgba(245,158,11,0.1); color: var(--orange); }
+.priority-btn[data-p="medium"].selected { border-color: #EAB308; background: rgba(234,179,8,0.1); color: #EAB308; }
+.priority-btn[data-p="low"].selected { border-color: var(--emerald); background: var(--emerald-dim); color: var(--emerald); }
+
+/* GPU Toggle */
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+.toggle-label { font-size: 14px; font-weight: 600; color: var(--platinum); }
+.toggle-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.toggle-wrap { position: relative; }
+.toggle-input { position: absolute; opacity: 0; width: 0; height: 0; }
+.toggle-track {
+  display: block; width: 44px; height: 24px; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all .2s;
+}
+.toggle-input:checked + .toggle-track { background: var(--emerald); border-color: var(--emerald); }
+.toggle-track::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; border-radius: 50%; background: var(--muted); transition: all .2s;
+}
+.toggle-input:checked + .toggle-track::after { background: #000; transform: translateX(20px); }
+
+/* Summary Card */
+.summary-grid { display: grid; gap: 8px; }
+.summary-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-key { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+.summary-val { font-size: 13px; font-weight: 600; color: var(--platinum); text-align: right; max-width: 60%; }
+.summary-val.gold { color: var(--gold); }
+.summary-val.emerald { color: var(--emerald); }
+.cost-line { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 14px; }
+
+/* Deploy Button */
+#deployBtn {
+  width: 100%; min-height: 56px; font-size: 16px; font-weight: 800;
+  letter-spacing: 1px; border-radius: 10px;
+}
+#deployBtn:disabled { opacity: .5; cursor: not-allowed; }
+.cancel-link { display: block; text-align: center; color: var(--muted); font-size: 13px; padding: 14px; cursor: pointer; }
+.cancel-link:hover { color: var(--platinum); }
+
+/* Terminal Output */
+.terminal-wrap { display: none; margin-top: 16px; }
+.terminal-wrap.visible { display: block; }
+
+/* Success Banner */
+.success-banner {
+  display: none; background: var(--emerald-dim); border: 1px solid var(--border-em);
+  border-radius: 10px; padding: 20px 16px; text-align: center; margin-top: 16px;
+}
+.success-banner.visible { display: block; }
+.success-icon { font-size: 40px; margin-bottom: 8px; }
+.success-title { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700;
+  color: var(--emerald); letter-spacing: 2px; margin-bottom: 4px; }
+.success-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+/* Active Deployments */
+.deploy-row {
+  display: flex; align-items: flex-start; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.deploy-row:last-child { border-bottom: none; }
+.deploy-icon { font-size: 24px; flex-shrink: 0; }
+.deploy-info { flex: 1; min-width: 0; }
+.deploy-task { font-size: 14px; font-weight: 600; color: var(--platinum); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.deploy-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.deploy-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.deploy-time { font-size: 10px; color: var(--muted); }
+.empty-state { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 13px; }
+.empty-state-icon { font-size: 32px; margin-bottom: 8px; opacity: .4; }
+
+/* Collapsible */
+.collapsible-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; padding: 2px 0 14px; user-select: none;
+}
+.collapsible-header h3 { font-family: 'Orbitron', monospace; font-size: 12px; font-weight: 700;
+  color: var(--platinum); letter-spacing: 1px; }
+.collapsible-header .chev { color: var(--muted); font-size: 12px; transition: transform .2s; }
+.collapsible-header.collapsed .chev { transform: rotate(-90deg); }
+.collapsible-body { }
+.collapsible-body.hidden { display: none; }
+
+/* Back link */
+.back-link { display: flex; align-items: center; gap: 6px; color: var(--muted);
+  font-size: 13px; font-weight: 600; text-decoration: none; }
+.back-link:hover { color: var(--gold); }
+
+/* Form spacing */
+.form-group { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.5px;
+  text-transform: uppercase; margin-bottom: 6px; display: block; }
+.form-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOCK SCREEN ===== -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-logo">🤖</div>
+  <div class="lock-logo" style="font-size:20px;margin-top:4px">SWARM DEPLOY</div>
+  <div class="lock-sub">NIGHTINGALE CONSOLE — RESTRICTED</div>
+  <input type="password" class="ng-input lock-input" id="lockInput"
+    placeholder="ENTER CODE" autocomplete="off" maxlength="20"
+    style="max-width:280px">
+  <button class="btn-gold lock-btn" onclick="checkLock()">UNLOCK</button>
+  <div class="lock-hint">Access code required</div>
+</div>
+
+<!-- ===== HUD ===== -->
+<header class="hud">
+  <a href="nightingale-console.html" class="back-link">&#8592; Console</a>
+  <div class="hud-brand">🤖 SWARM DEPLOY</div>
+  <div class="hud-status">
+    <span class="hud-dot"></span>
+    <span>45 AGENTS READY</span>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="content" style="padding-top:16px">
+
+  <!-- PHASE 1: Select Company -->
+  <div class="ng-card phase-card" id="phase1Card">
+    <div class="collapsible-header" id="phase1Toggle">
+      <div class="phase-label" style="margin:0">
+        <span class="phase-num" id="phase1Num">1</span>
+        <span>SELECT COMPANY</span>
+      </div>
+      <span class="chev">▼</span>
+    </div>
+    <div class="collapsible-body" id="phase1Body">
+      <div class="company-grid" id="companyGrid"></div>
+    </div>
+  </div>
+
+  <!-- PHASE 2: Select Agent -->
+  <div class="ng-card phase-card phase-hidden" id="phase2Card">
+    <div class="collapsible-header" id="phase2Toggle">
+      <div class="phase-label" style="margin:0">
+        <span class="phase-num" id="phase2Num">2</span>
+        <span>SELECT AGENT</span>
+      </div>
+      <span class="chev">▼</span>
+    </div>
+    <div class="collapsible-body" id="phase2Body">
+      <p class="agent-select-limit">Select 1–3 agents to deploy simultaneously</p>
+      <div class="agent-search-wrap">
+        <input type="search" class="ng-input" id="agentSearch" placeholder="Search agents by name or role...">
+      </div>
+      <div class="agent-grid" id="agentGrid"></div>
+    </div>
+  </div>
+
+  <!-- PHASE 3: Define Task -->
+  <div class="ng-card phase-card phase-hidden" id="phase3Card">
+    <div class="collapsible-header" id="phase3Toggle">
+      <div class="phase-label" style="margin:0">
+        <span class="phase-num" id="phase3Num">3</span>
+        <span>DEFINE TASK</span>
+      </div>
+      <span class="chev">▼</span>
+    </div>
+    <div class="collapsible-body" id="phase3Body">
+
+      <div class="form-group">
+        <label class="form-label" for="taskTitle">Task Title <span style="color:var(--red)">*</span></label>
+        <input type="text" class="ng-input" id="taskTitle" placeholder="e.g. Analyze competitor pricing strategy">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Priority</label>
+        <div class="priority-row">
+          <button class="priority-btn" data-p="critical" onclick="selectPriority(this)">
+            <span class="p-icon">🔴</span>CRITICAL
+          </button>
+          <button class="priority-btn" data-p="high" onclick="selectPriority(this)">
+            <span class="p-icon">🟠</span>HIGH
+          </button>
+          <button class="priority-btn selected" data-p="medium" onclick="selectPriority(this)">
+            <span class="p-icon">🟡</span>MEDIUM
+          </button>
+          <button class="priority-btn" data-p="low" onclick="selectPriority(this)">
+            <span class="p-icon">🟢</span>LOW
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="taskDue">Due Date</label>
+        <input type="date" class="ng-input" id="taskDue">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="taskDesc">Description</label>
+        <textarea class="ng-input" id="taskDesc" rows="3"
+          placeholder="Describe what you need the agent to accomplish..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="taskSpecial">Special Instructions <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <textarea class="ng-input" id="taskSpecial" rows="2"
+          placeholder="Any constraints, tone, output format preferences..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">GPU Required</div>
+            <div class="toggle-sub">Enable for heavy compute tasks</div>
+          </div>
+          <div class="toggle-wrap">
+            <input type="checkbox" class="toggle-input" id="gpuToggle" onchange="toggleGPU()">
+            <label class="toggle-track" for="gpuToggle"></label>
+          </div>
+        </div>
+        <div id="gpuField" style="display:none">
+          <input type="url" class="ng-input" id="runpodEndpoint"
+            placeholder="https://api.runpod.ai/v2/YOUR_POD_ID">
+          <div class="form-hint">RunPod serverless endpoint URL</div>
+        </div>
+      </div>
+
+      <button class="btn-gold" style="width:100%" onclick="goToPhase4()">
+        Review Deployment &#8594;
+      </button>
+    </div>
+  </div>
+
+  <!-- PHASE 4: Confirm & Deploy -->
+  <div class="ng-card phase-card phase-hidden" id="phase4Card">
+    <div class="phase-label">
+      <span class="phase-num" id="phase4Num">4</span>
+      <span>CONFIRM &amp; DEPLOY</span>
+    </div>
+
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <div class="cost-line" id="costLine" style="display:none">
+      Estimated cost: <strong style="color:var(--gold)">~$0.74/hr per GPU</strong>
+    </div>
+
+    <button class="btn-gold" id="deployBtn" onclick="startDeploy()">
+      ⚡ DEPLOY SWARM
+    </button>
+    <button class="cancel-link" onclick="cancelDeploy()">Cancel</button>
+
+    <!-- Terminal Output -->
+    <div class="terminal-wrap" id="terminalWrap">
+      <div class="section-hdr">Deployment Log</div>
+      <div class="terminal" id="terminalBox"></div>
+    </div>
+
+    <!-- Success Banner -->
+    <div class="success-banner" id="successBanner">
+      <div class="success-icon">✅</div>
+      <div class="success-title">DEPLOYMENT SUCCESSFUL</div>
+      <div class="success-sub" id="successMsg">Agent is now active and on task.</div>
+      <button class="btn-em" onclick="viewInConsole()" style="width:100%">View in Console</button>
+    </div>
+  </div>
+
+  <!-- ACTIVE DEPLOYMENTS -->
+  <div class="section-hdr">Active Deployments</div>
+  <div class="ng-card" id="activeDeploymentsCard">
+    <div id="activeDeploymentsList"></div>
+  </div>
+
+</main>
+
+<!-- ===== DATA ===== -->
+<script>
+/* ---- SUPABASE SWAP ZONE — replace with Supabase client init ----
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_ANON_KEY')
+// Then swap localStorage calls below with supabase.from('ng_deployments')... inserts/selects
+----------------------------------------------------------------- */
+
+const AGENTS_45 = [
+  { id:'phoenix',   name:'Phoenix',   icon:'🔥', role:'Empire Orchestrator',   tier:'gold',    status:'standby' },
+  { id:'archivist', name:'Archivist', icon:'📚', role:'Knowledge Base',         tier:'gold',    status:'standby' },
+  { id:'counsel',   name:'Counsel',   icon:'⚖️', role:'Legal Education AI',    tier:'gold',    status:'active'  },
+  { id:'barrister', name:'Barrister', icon:'🏛️', role:'Court Document AI',     tier:'gold',    status:'active'  },
+  { id:'ledger',    name:'Ledger',    icon:'📊', role:'Financial Intelligence', tier:'gold',    status:'standby' },
+  { id:'alpha',     name:'Alpha',     icon:'Α',   role:'Strategic Commander',   tier:'gold',    status:'standby' },
+  { id:'prime',     name:'Prime',     icon:'⭐',  role:'PrimeDox Concierge',    tier:'gold',    status:'active'  },
+  { id:'sentinel',  name:'Sentinel',  icon:'🛡️', role:'Threat Detection',       tier:'emerald', status:'active'  },
+  { id:'shield',    name:'Shield',    icon:'🔒', role:'Zero-Day Defense',       tier:'emerald', status:'active'  },
+  { id:'cipher',    name:'Cipher',    icon:'🔐', role:'Encryption Guard',       tier:'emerald', status:'active'  },
+  { id:'vault',     name:'Vault',     icon:'🗝️', role:'Credential Manager',    tier:'emerald', status:'standby' },
+  { id:'ghost',     name:'Ghost',     icon:'👻', role:'Dark Web Monitor',       tier:'emerald', status:'standby' },
+  { id:'mirror',    name:'Mirror',    icon:'🪞', role:'Honeypot Operator',      tier:'emerald', status:'standby' },
+  { id:'gate',      name:'Gate',      icon:'⛩️', role:'Access Control',        tier:'emerald', status:'active'  },
+  { id:'nexus',     name:'Nexus',     icon:'🔗', role:'E-Commerce AI',          tier:'standard',status:'active'  },
+  { id:'atlas',     name:'Atlas',     icon:'🗺️', role:'Market Intelligence',   tier:'standard',status:'standby' },
+  { id:'herald',    name:'Herald',    icon:'📢', role:'Marketing AI',           tier:'standard',status:'active'  },
+  { id:'sovereign', name:'Sovereign', icon:'👑', role:'BENO-X Strategy',        tier:'standard',status:'active'  },
+  { id:'oracle',    name:'Oracle',    icon:'🔮', role:'Predictive Analytics',   tier:'standard',status:'standby' },
+  { id:'midas',     name:'Midas',     icon:'💰', role:'Revenue Optimizer',      tier:'standard',status:'standby' },
+  { id:'forge',     name:'Forge',     icon:'⚒️', role:'Code Generator',        tier:'standard',status:'active'  },
+  { id:'matrix',    name:'Matrix',    icon:'🔢', role:'Data Pipeline',          tier:'standard',status:'standby' },
+  { id:'ranger',    name:'Ranger',    icon:'🌲', role:'Field Operations',       tier:'standard',status:'standby' },
+  { id:'navigator', name:'Navigator', icon:'🧭', role:'Route Optimizer',        tier:'standard',status:'standby' },
+  { id:'spectrum',  name:'Spectrum',  icon:'🌈', role:'Content Creator',        tier:'standard',status:'standby' },
+  { id:'apex',      name:'Apex',      icon:'▲',  role:'Performance Monitor',    tier:'standard',status:'active'  },
+  { id:'titan',     name:'Titan',     icon:'🏔️', role:'Infrastructure',        tier:'standard',status:'active'  },
+  { id:'nova',      name:'Nova',      icon:'💫', role:'Innovation Scout',       tier:'standard',status:'standby' },
+  { id:'echo',      name:'Echo',      icon:'🔊', role:'Social Media AI',        tier:'standard',status:'standby' },
+  { id:'prism',     name:'Prism',     icon:'🔷', role:'Brand Intelligence',     tier:'standard',status:'standby' },
+  { id:'cascade',   name:'Cascade',   icon:'💧', role:'Workflow Automation',    tier:'standard',status:'standby' },
+  { id:'delta',     name:'Delta',     icon:'Δ',  role:'Change Management',      tier:'standard',status:'standby' },
+  { id:'vector',    name:'Vector',    icon:'→',  role:'Direction AI',           tier:'standard',status:'standby' },
+  { id:'sigma',     name:'Sigma',     icon:'Σ',  role:'Quality Control',        tier:'standard',status:'standby' },
+  { id:'omega',     name:'Omega',     icon:'Ω',  role:'Final Reviewer',         tier:'standard',status:'standby' },
+  { id:'core',      name:'Core',      icon:'◉',  role:'System Health',          tier:'standard',status:'active'  },
+  { id:'pulse',     name:'Pulse',     icon:'💗', role:'Revenue Pulse',          tier:'standard',status:'active'  },
+  { id:'stream',    name:'Stream',    icon:'〜', role:'Data Stream',             tier:'standard',status:'standby' },
+  { id:'flux',      name:'Flux',      icon:'⟳',  role:'State Manager',          tier:'standard',status:'standby' },
+  { id:'node',      name:'Node',      icon:'●',  role:'Network Node',           tier:'standard',status:'active'  },
+  { id:'link',      name:'Link',      icon:'🔗', role:'Integration Hub',        tier:'standard',status:'standby' },
+  { id:'bridge',    name:'Bridge',    icon:'🌉', role:'Cross-Chain',            tier:'standard',status:'standby' },
+  { id:'relay',     name:'Relay',     icon:'📡', role:'Message Router',         tier:'standard',status:'active'  },
+  { id:'hub',       name:'Hub',       icon:'🎯', role:'Command Hub',            tier:'standard',status:'active'  },
+  { id:'terminus',  name:'Terminus',  icon:'⚫', role:'Session Terminator',     tier:'standard',status:'standby' },
+];
+
+const COMPANIES = [
+  { id:'omniaguard', name:'OmniaGuard',         icon:'🛡️', domain:'omniaguard.com'             },
+  { id:'ccldr',      name:'CCLDR.NET',           icon:'⚖️', domain:'ccldr.net'                  },
+  { id:'primedox',   name:'PrimeDox AI',          icon:'🤖', domain:'primedoxai.com'             },
+  { id:'fh',         name:'Francisco Holdings',   icon:'🏢', domain:'franciscoholdingsinc.com'   },
+  { id:'techpetcage',name:'TechPetCage',          icon:'🐾', domain:'techpetcage.com'            },
+  { id:'cleanswarm', name:'CleanSwarm',           icon:'🧹', domain:'cleanswarm.ca'              },
+  { id:'benox',      name:'BENO-X',              icon:'📋', domain:'ccldr.net/beno-x'           },
+  { id:'vigilax',    name:'Vigilax',             icon:'👁️', domain:'vigilax.com'               },
+  { id:'kiaros',     name:'Kiaros',              icon:'⚙️', domain:'kiaros.ai'                 },
+  { id:'hq',         name:'PrimeDox HQ',          icon:'🔐', domain:'zprimedoxaihq.com'          },
+];
+
+// ===== STATE =====
+let selectedCompany = null;
+let selectedAgents = [];
+let selectedPriority = 'medium';
+let deployments = [];
+
+// ===== LOCK SCREEN =====
+function checkLock() {
+  const val = document.getElementById('lockInput').value.trim().toUpperCase();
+  if (val === 'NIGHTINGALE') {
+    sessionStorage.setItem('ng_unlocked', '1');
+    document.getElementById('lockScreen').style.display = 'none';
+  } else {
+    const ls = document.getElementById('lockScreen');
+    ls.classList.remove('lock-shake');
+    void ls.offsetWidth;
+    ls.classList.add('lock-shake');
+    document.getElementById('lockInput').value = '';
+  }
+}
+document.getElementById('lockInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkLock();
+});
+
+// ===== INIT =====
+function init() {
+  if (!sessionStorage.getItem('ng_unlocked')) {
+    document.getElementById('lockScreen').style.display = 'flex';
+  } else {
+    document.getElementById('lockScreen').style.display = 'none';
+  }
+  loadDeployments();
+  renderCompanyGrid();
+  renderAgentGrid('');
+  setupCollapsibles();
+  document.getElementById('agentSearch').addEventListener('input', e => {
+    renderAgentGrid(e.target.value.toLowerCase());
+  });
+}
+
+// ===== COMPANY GRID =====
+function renderCompanyGrid() {
+  const grid = document.getElementById('companyGrid');
+  grid.innerHTML = COMPANIES.map(c => {
+    const agentCount = AGENTS_45.filter(a => a.status === 'active').length;
+    return `<button class="company-btn ${selectedCompany?.id === c.id ? 'selected' : ''}"
+      onclick="selectCompany('${c.id}')">
+      <div class="company-icon">${c.icon}</div>
+      <div class="company-name">${c.name}</div>
+      <div class="company-domain">${c.domain}</div>
+    </button>`;
+  }).join('');
+}
+
+function selectCompany(id) {
+  selectedCompany = COMPANIES.find(c => c.id === id);
+  renderCompanyGrid();
+  // Collapse phase 1, show phase 2
+  document.getElementById('phase1Body').classList.add('hidden');
+  document.getElementById('phase1Toggle').classList.add('collapsed');
+  document.getElementById('phase1Num').textContent = '✓';
+  document.getElementById('phase1Num').style.cssText = 'background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);color:var(--emerald)';
+  showPhase(2);
+}
+
+// ===== AGENT GRID =====
+function renderAgentGrid(query) {
+  const grid = document.getElementById('agentGrid');
+  const filtered = query
+    ? AGENTS_45.filter(a => a.name.toLowerCase().includes(query) || a.role.toLowerCase().includes(query))
+    : AGENTS_45;
+
+  grid.innerHTML = filtered.map(a => {
+    const sel = selectedAgents.some(s => s.id === a.id);
+    const tierClass = a.tier !== 'standard' ? `tier-${a.tier}` : '';
+    const badgeHtml = a.tier !== 'standard'
+      ? `<span class="tier-badge ${a.tier}">${a.tier.toUpperCase()}</span>` : '';
+    return `<div class="agent-card ${tierClass} ${sel ? 'selected' : ''}" onclick="toggleAgent('${a.id}')">
+      ${badgeHtml}
+      <div class="agent-card-top">
+        <div class="agent-icon-name">
+          <span class="agent-icon">${a.icon}</span>
+          <span class="agent-name">${a.name}</span>
+        </div>
+        <span class="agent-status-dot ${a.status}"></span>
+      </div>
+      <div class="agent-role">${a.role}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleAgent(id) {
+  const agent = AGENTS_45.find(a => a.id === id);
+  const idx = selectedAgents.findIndex(a => a.id === id);
+  if (idx > -1) {
+    selectedAgents.splice(idx, 1);
+  } else {
+    if (selectedAgents.length >= 3) {
+      selectedAgents.shift();
+    }
+    selectedAgents.push(agent);
+  }
+  renderAgentGrid(document.getElementById('agentSearch').value.toLowerCase());
+  if (selectedAgents.length > 0) {
+    document.getElementById('phase3Card').classList.remove('phase-hidden');
+    document.getElementById('phase2Num').textContent = selectedAgents.length;
+    document.getElementById('phase2Num').style.cssText = 'background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);color:var(--emerald)';
+  }
+}
+
+// ===== PRIORITY =====
+function selectPriority(btn) {
+  document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedPriority = btn.dataset.p;
+}
+
+// ===== GPU TOGGLE =====
+function toggleGPU() {
+  const on = document.getElementById('gpuToggle').checked;
+  document.getElementById('gpuField').style.display = on ? 'block' : 'none';
+}
+
+// ===== PHASE MANAGEMENT =====
+function showPhase(num) {
+  document.getElementById(`phase${num}Card`).classList.remove('phase-hidden');
+  setTimeout(() => {
+    document.getElementById(`phase${num}Card`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+function goToPhase4() {
+  const title = document.getElementById('taskTitle').value.trim();
+  if (!title) {
+    document.getElementById('taskTitle').focus();
+    document.getElementById('taskTitle').style.borderColor = 'var(--red)';
+    return;
+  }
+  if (selectedAgents.length === 0) {
+    alert('Please select at least one agent.');
+    return;
+  }
+  document.getElementById('taskTitle').style.borderColor = '';
+  renderSummary();
+  showPhase(4);
+  document.getElementById('phase3Body').classList.add('hidden');
+  document.getElementById('phase3Toggle').classList.add('collapsed');
+  document.getElementById('phase3Num').textContent = '✓';
+  document.getElementById('phase3Num').style.cssText = 'background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);color:var(--emerald)';
+}
+
+// ===== SUMMARY =====
+const PRIORITY_LABELS = {
+  critical: '🔴 CRITICAL',
+  high:     '🟠 HIGH',
+  medium:   '🟡 MEDIUM',
+  low:      '🟢 LOW'
+};
+
+function renderSummary() {
+  const gpuOn = document.getElementById('gpuToggle').checked;
+  const endpoint = document.getElementById('runpodEndpoint').value.trim();
+  const title = document.getElementById('taskTitle').value.trim();
+  const due = document.getElementById('taskDue').value;
+  const agentNames = selectedAgents.map(a => `${a.icon} ${a.name}`).join(', ');
+
+  document.getElementById('summaryGrid').innerHTML = `
+    <div class="summary-row">
+      <span class="summary-key">Company</span>
+      <span class="summary-val gold">${selectedCompany.icon} ${selectedCompany.name}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Agent(s)</span>
+      <span class="summary-val emerald">${agentNames}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Task</span>
+      <span class="summary-val">${title}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Priority</span>
+      <span class="summary-val">${PRIORITY_LABELS[selectedPriority]}</span>
+    </div>
+    ${due ? `<div class="summary-row"><span class="summary-key">Due</span><span class="summary-val">${due}</span></div>` : ''}
+    <div class="summary-row">
+      <span class="summary-key">Compute</span>
+      <span class="summary-val">${gpuOn ? 'GPU — RunPod' : 'Local Mode'}</span>
+    </div>
+    ${gpuOn && endpoint ? `<div class="summary-row"><span class="summary-key">Endpoint</span><span class="summary-val" style="font-size:11px;word-break:break-all">${endpoint}</span></div>` : ''}
+  `;
+
+  const costLine = document.getElementById('costLine');
+  if (gpuOn) {
+    costLine.style.display = 'block';
+  } else {
+    costLine.style.display = 'none';
+  }
+}
+
+// ===== DEPLOY =====
+function startDeploy() {
+  const btn = document.getElementById('deployBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="display:inline-block;animation:spin 1s linear infinite">⟳</span> DEPLOYING...';
+
+  const termWrap = document.getElementById('terminalWrap');
+  const termBox = document.getElementById('terminalBox');
+  termWrap.classList.add('visible');
+  termBox.innerHTML = '';
+
+  const agentName = selectedAgents[0].name;
+  const taskTitle = document.getElementById('taskTitle').value.trim();
+  const gpuOn = document.getElementById('gpuToggle').checked;
+  const endpoint = document.getElementById('runpodEndpoint').value.trim();
+
+  const lines = [
+    'Initializing deployment protocol...',
+    'Connecting to PrimeDox Agent Network...',
+    `Authenticating agent: ${agentName}...`,
+    `Loading system prompt for ${agentName}...`,
+    `Assigning task: ${taskTitle}...`,
+    `GPU endpoint: ${gpuOn && endpoint ? endpoint : 'LOCAL MODE'}`,
+    `✅ Deployment successful — Agent ${agentName} is active`,
+  ];
+
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i >= lines.length) {
+      clearInterval(interval);
+      btn.style.display = 'none';
+      document.getElementById('successMsg').textContent =
+        `${selectedAgents.map(a => a.name).join(' + ')} ${selectedAgents.length > 1 ? 'are' : 'is'} now active and on task.`;
+      document.getElementById('successBanner').classList.add('visible');
+      saveDeployment();
+      return;
+    }
+    const pad = String(i).padStart(2, '0');
+    const line = document.createElement('div');
+    line.className = 'terminal-line';
+    line.textContent = `[00:0${pad}] ${lines[i]}`;
+    termBox.appendChild(line);
+    termBox.scrollTop = termBox.scrollHeight;
+    i++;
+  }, 600);
+}
+
+function cancelDeploy() {
+  document.getElementById('phase4Card').classList.add('phase-hidden');
+  document.getElementById('deployBtn').disabled = false;
+  document.getElementById('deployBtn').innerHTML = '⚡ DEPLOY SWARM';
+  document.getElementById('terminalWrap').classList.remove('visible');
+  document.getElementById('successBanner').classList.remove('visible');
+  document.getElementById('terminalBox').innerHTML = '';
+  document.getElementById('deployBtn').style.display = '';
+}
+
+function viewInConsole() {
+  window.location.href = 'nightingale-console.html';
+}
+
+// ===== PERSIST DEPLOYMENTS =====
+function saveDeployment() {
+  const record = {
+    id: Date.now(),
+    agents: selectedAgents.map(a => ({ id: a.id, name: a.name, icon: a.icon })),
+    company: { id: selectedCompany.id, name: selectedCompany.name, icon: selectedCompany.icon },
+    task: document.getElementById('taskTitle').value.trim(),
+    priority: selectedPriority,
+    gpu: document.getElementById('gpuToggle').checked,
+    status: 'active',
+    ts: new Date().toISOString(),
+  };
+  deployments.unshift(record);
+  // Keep last 20
+  if (deployments.length > 20) deployments.length = 20;
+  localStorage.setItem('ng_deployments', JSON.stringify(deployments));
+  renderActiveDeployments();
+}
+
+function loadDeployments() {
+  try {
+    deployments = JSON.parse(localStorage.getItem('ng_deployments') || '[]');
+  } catch { deployments = []; }
+  renderActiveDeployments();
+}
+
+function terminateDeployment(id) {
+  deployments = deployments.filter(d => d.id !== id);
+  localStorage.setItem('ng_deployments', JSON.stringify(deployments));
+  renderActiveDeployments();
+}
+
+function renderActiveDeployments() {
+  const list = document.getElementById('activeDeploymentsList');
+  if (!deployments.length) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon">🤖</div>
+      No active deployments. Deploy your first agent above.
+    </div>`;
+    return;
+  }
+  list.innerHTML = deployments.map(d => {
+    const agentLabel = d.agents.map(a => `${a.icon} ${a.name}`).join(', ');
+    const ts = new Date(d.ts).toLocaleDateString('en-CA', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const priorityMap = { critical: 'pill-live', high: 'pill-pending', medium: 'pill-redirect', low: 'pill-dev' };
+    return `<div class="deploy-row">
+      <div class="deploy-icon">${d.agents[0]?.icon || '🤖'}</div>
+      <div class="deploy-info">
+        <div class="deploy-task">${d.task}</div>
+        <div class="deploy-meta">${agentLabel} &rarr; ${d.company.icon} ${d.company.name}</div>
+      </div>
+      <div class="deploy-right">
+        <span class="pill ${priorityMap[d.priority] || 'pill-dev'}">${d.status.toUpperCase()}</span>
+        <span class="deploy-time">${ts}</span>
+        <button class="btn-red" onclick="terminateDeployment(${d.id})">&#10005; Terminate</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== COLLAPSIBLES =====
+function setupCollapsibles() {
+  ['phase1Toggle','phase2Toggle','phase3Toggle'].forEach(id => {
+    const hdr = document.getElementById(id);
+    if (!hdr) return;
+    hdr.addEventListener('click', () => {
+      const num = id.replace('phase','').replace('Toggle','');
+      const body = document.getElementById(`phase${num}Body`);
+      if (!body) return;
+      hdr.classList.toggle('collapsed');
+      body.classList.toggle('hidden');
+    });
+  });
+}
+
+// Spinner keyframe (injected here to keep CSS DRY)
+const styleEl = document.createElement('style');
+styleEl.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+document.head.appendChild(styleEl);
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Francisco Holdings Empire Command Center">
+  <meta name="theme-color" content="#05050A">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nightingale">
+  <link rel="manifest" href="nightingale-manifest.json">
+  <title>Nightingale Console — Empire Command</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05050A;
+      --bg2: #0A0A14;
+      --card: #0D1117;
+      --gold: #D4AF37;
+      --gold-l: #F0CB5A;
+      --emerald: #10B981;
+      --emerald-dim: rgba(16,185,129,0.12);
+      --platinum: #E5E7EB;
+      --muted: #6B7280;
+      --border: rgba(212,175,55,0.15);
+      --border-em: rgba(16,185,129,0.2);
+      --red: #EF4444;
+      --orange: #F59E0B;
+      --hud-h: 52px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; background: var(--bg); }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--platinum);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== LOCK SCREEN ===== */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 24px;
+    }
+
+    .lock-eagle {
+      font-size: 64px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 24px rgba(212,175,55,0.6));
+    }
+
+    .lock-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 4px;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .lock-sub {
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .lock-hint {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .lock-input {
+      width: 100%;
+      max-width: 320px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-family: 'Orbitron', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+      text-align: center;
+      letter-spacing: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 16px;
+      -webkit-text-security: disc;
+      text-security: disc;
+    }
+
+    .lock-input:focus { border-color: var(--gold); }
+    .lock-input.error { border-color: var(--red) !important; }
+    .lock-input.shake { animation: shake 0.6s ease; }
+
+    .lock-btn {
+      width: 100%;
+      max-width: 320px;
+      background: var(--gold);
+      color: #05050A;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-family: 'Orbitron', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      min-height: 48px;
+    }
+
+    .lock-btn:hover { background: var(--gold-l); }
+    .lock-btn:active { transform: scale(0.98); }
+
+    .lock-error-msg {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--red);
+      letter-spacing: 1px;
+      min-height: 18px;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      15% { transform: translateX(-8px); }
+      30% { transform: translateX(8px); }
+      45% { transform: translateX(-6px); }
+      60% { transform: translateX(6px); }
+      75% { transform: translateX(-4px); }
+      90% { transform: translateX(4px); }
+    }
+
+    /* ===== HUD BAR ===== */
+    #hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--hud-h);
+      background: #080808;
+      border-bottom: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      z-index: 900;
+      gap: 8px;
+    }
+
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+
+    .hud-logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    .hud-badge {
+      background: rgba(212,175,55,0.15);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .hud-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      flex-shrink: 0;
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+
+    .hud-dot.red { background: var(--red); animation: pulse-red 1s ease-in-out infinite; }
+
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+      50% { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+    }
+
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+      50% { box-shadow: 0 0 0 5px rgba(239,68,68,0); }
+    }
+
+    .hud-status-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--emerald);
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hud-status-text.alert { color: var(--red); }
+
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .hud-bell {
+      position: relative;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      padding: 4px;
+      min-width: 32px;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bell-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--red);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 1px 4px;
+      min-width: 15px;
+      text-align: center;
+      line-height: 13px;
+    }
+
+    .hud-xp {
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--gold-l);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .hud-lvl {
+      background: linear-gradient(135deg, var(--gold), var(--gold-l));
+      color: #05050A;
+      font-family: 'Orbitron', monospace;
+      font-size: 8px;
+      font-weight: 900;
+      padding: 3px 7px;
+      border-radius: 10px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    #app-content {
+      padding-top: var(--hud-h);
+      padding-bottom: 80px;
+      min-height: 100vh;
+    }
+
+    /* ===== BOTTOM NAV ===== */
+    #bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #080808;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: stretch;
+      z-index: 1000;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 8px 4px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      transition: color 0.2s;
+      min-height: 44px;
+      position: relative;
+    }
+
+    .nav-tab.active { color: var(--gold); }
+
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 1px 1px 0 0;
+    }
+
+    .nav-icon { font-size: 18px; line-height: 1; }
+
+    .nav-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    /* ===== TAB PANES ===== */
+    .tab-pane { padding: 16px; }
+
+    /* ===== STATS STRIP ===== */
+    .stats-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      margin-bottom: 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .stats-strip::-webkit-scrollbar { display: none; }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      min-width: 130px;
+      flex-shrink: 0;
+    }
+
+    .stat-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 8px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-family: 'Orbitron', monospace;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--gold);
+    }
+
+    .stat-value.em { color: var(--emerald); }
+    .stat-value.sm { font-size: 16px; }
+
+    /* ===== FILTER CHIPS ===== */
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 16px;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .filter-chips::-webkit-scrollbar { display: none; }
+
+    .chip {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+    }
+
+    .chip.active {
+      background: rgba(212,175,55,0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ===== COMPANY GRID ===== */
+    .company-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .company-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    @media (min-width: 900px) {
+      .company-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .company-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .company-card:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-1px); }
+    .company-card:active { transform: scale(0.98); }
+
+    .company-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .company-icon { font-size: 22px; line-height: 1; }
+
+    .company-loops {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .loop-badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 8px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+    }
+
+    .loop-a { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid var(--border); }
+    .loop-b { background: rgba(16,185,129,0.12); color: var(--emerald); border: 1px solid var(--border-em); }
+
+    .company-name {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--platinum);
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .company-domain {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .company-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-pill {
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .pill-live { background: var(--emerald-dim); color: var(--emerald); border: 1px solid var(--border-em); }
+    .pill-redirect { background: rgba(212,175,55,0.1); color: var(--gold); border: 1px solid var(--border); }
+    .pill-pending { background: rgba(107,114,128,0.15); color: var(--muted); border: 1px solid rgba(107,114,128,0.3); }
+    .pill-dev { background: rgba(107,114,128,0.1); color: #9CA3AF; border: 1px solid rgba(107,114,128,0.2); }
+
+    .company-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meta-agents {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .alert-dot {
+      background: var(--red);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== COMPANIES LIST VIEW ===== */
+    .company-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .company-list-row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .company-list-row:hover { border-color: rgba(212,175,55,0.4); }
+
+    .list-row-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .list-row-info { flex: 1; min-width: 0; }
+
+    .list-row-name {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--platinum);
+      margin-bottom: 2px;
+    }
+
+    .list-row-domain { font-size: 12px; color: var(--muted); }
+
+    .list-row-agents {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .agent-tag {
+      display: inline-block;
+      background: rgba(16,185,129,0.08);
+      border: 1px solid var(--border-em);
+      color: var(--emerald);
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-right: 4px;
+      margin-bottom: 4px;
+      font-family: 'Orbitron', monospace;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .list-row-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .list-row-mrr {
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      color: var(--gold);
+    }
+
+    .list-actions { display: flex; gap: 8px; }
+
+    .action-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 32px;
+      white-space: nowrap;
+    }
+
+    .action-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .action-btn.em:hover { border-color: var(--emerald); color: var(--emerald); }
+
+    /* ===== AGENTS TAB ===== */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .agents-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    @media (min-width: 900px) {
+      .agents-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .agent-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      position: relative;
+    }
+
+    .agent-card.gold-tier { border-color: rgba(212,175,55,0.35); }
+    .agent-card.emerald-tier { border-color: rgba(16,185,129,0.25); }
+
+    .agent-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .agent-icon-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .agent-icon { font-size: 20px; line-height: 1; }
+
+    .agent-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--platinum);
+      letter-spacing: 0.5px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-dot.active {
+      background: var(--emerald);
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+
+    .status-dot.standby { background: var(--muted); }
+
+    .agent-role {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .agent-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tier-badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    .tier-gold { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid var(--border); }
+    .tier-emerald { background: var(--emerald-dim); color: var(--emerald); border: 1px solid var(--border-em); }
+    .tier-standard { background: rgba(107,114,128,0.1); color: var(--muted); border: 1px solid rgba(107,114,128,0.2); }
+
+    .deploy-btn {
+      background: rgba(212,175,55,0.1);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      font-family: 'Orbitron', monospace;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 28px;
+    }
+
+    .deploy-btn:hover { background: rgba(212,175,55,0.2); border-color: var(--gold); }
+
+    /* ===== TASKS TAB ===== */
+    .tasks-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .task-row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      border-left-width: 3px;
+      position: relative;
+    }
+
+    .task-row.priority-critical { border-left-color: var(--red); }
+    .task-row.priority-high { border-left-color: var(--orange); }
+    .task-row.priority-medium { border-left-color: var(--gold); }
+    .task-row.priority-low { border-left-color: var(--muted); }
+
+    .task-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .task-priority-badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-critical { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+    .badge-high { background: rgba(245,158,11,0.15); color: var(--orange); border: 1px solid rgba(245,158,11,0.3); }
+    .badge-medium { background: rgba(212,175,55,0.1); color: var(--gold); border: 1px solid var(--border); }
+    .badge-low { background: rgba(107,114,128,0.1); color: var(--muted); border: 1px solid rgba(107,114,128,0.2); }
+
+    .task-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--platinum);
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .task-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .tag-company { background: rgba(212,175,55,0.1); color: var(--gold); }
+    .tag-agent { background: var(--emerald-dim); color: var(--emerald); }
+    .tag-due { color: var(--muted); }
+
+    .task-status-badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .status-pending { background: rgba(107,114,128,0.1); color: var(--muted); }
+    .status-in-progress { background: var(--emerald-dim); color: var(--emerald); }
+    .status-done { background: rgba(16,185,129,0.2); color: var(--emerald); }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .task-approve-btn {
+      background: rgba(16,185,129,0.1);
+      border: 1px solid var(--border-em);
+      color: var(--emerald);
+      font-size: 16px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      min-height: 36px;
+      min-width: 44px;
+      transition: all 0.2s;
+    }
+
+    .task-approve-btn:hover { background: rgba(16,185,129,0.2); }
+
+    .task-reject-btn {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: var(--red);
+      font-size: 16px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      min-height: 36px;
+      min-width: 44px;
+      transition: all 0.2s;
+    }
+
+    .task-reject-btn:hover { background: rgba(239,68,68,0.2); }
+
+    /* ===== ALERTS TAB ===== */
+    .alerts-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .alert-row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .alert-row.type-critical { border-color: rgba(239,68,68,0.3); }
+    .alert-row.type-warning { border-color: rgba(245,158,11,0.25); }
+    .alert-row.type-info { border-color: var(--border-em); }
+
+    .alert-icon-col { font-size: 22px; flex-shrink: 0; line-height: 1; padding-top: 2px; }
+
+    .alert-content { flex: 1; min-width: 0; }
+
+    .alert-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--platinum);
+      margin-bottom: 4px;
+    }
+
+    .alert-body {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .alert-ts {
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+
+    .alert-dismiss {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      min-height: 32px;
+      min-width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .alert-dismiss:hover { color: var(--platinum); }
+
+    /* ===== COMPANY DETAIL MODAL ===== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 800;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-slide {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-radius: 16px 16px 0 0;
+      z-index: 850;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 20px 20px calc(80px + env(safe-area-inset-bottom));
+      transform: translateY(0);
+      animation: slide-up 0.3s ease;
+    }
+
+    @keyframes slide-up {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .modal-title-group { display: flex; align-items: center; gap: 12px; }
+    .modal-icon { font-size: 32px; }
+
+    .modal-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 18px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    .modal-domain {
+      font-size: 13px;
+      color: var(--emerald);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .modal-domain a {
+      color: var(--emerald);
+      text-decoration: none;
+    }
+
+    .modal-domain a:hover { text-decoration: underline; }
+
+    .modal-section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .modal-section { margin-bottom: 20px; }
+
+    .modal-stat-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .modal-stat { display: flex; flex-direction: column; gap: 4px; }
+
+    .modal-stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .modal-stat-value {
+      font-family: 'Orbitron', monospace;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--gold);
+    }
+
+    .modal-agents { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+
+    .modal-no-agents { font-size: 12px; color: var(--muted); font-style: italic; }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-action-btn {
+      flex: 1;
+      min-width: 120px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--platinum);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 44px;
+      text-align: center;
+    }
+
+    .modal-action-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    .modal-action-btn.primary {
+      background: rgba(212,175,55,0.1);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ===== DEPLOY MODAL ===== */
+    .deploy-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 960;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .deploy-modal-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 420px;
+      animation: slide-up 0.25s ease;
+    }
+
+    .deploy-modal-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .deploy-modal-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .deploy-modal-close-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .section-count {
+      font-family: 'Orbitron', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ===== SUPABASE SWAP ZONE COMMENT ===== */
+    /* The Supabase connection stubs live in the Vue app data below */
+
+    /* ===== UTILS ===== */
+    .text-gold { color: var(--gold); }
+    .text-em { color: var(--emerald); }
+    .text-muted { color: var(--muted); }
+    .font-hud { font-family: 'Orbitron', monospace; }
+    .mb-4 { margin-bottom: 16px; }
+    .divider { height: 1px; background: var(--border); margin: 16px 0; }
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); font-size: 14px; }
+
+    /* ===== Transition ===== */
+    .fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
+    .fade-enter-from, .fade-leave-to { opacity: 0; }
+
+    /* ===== Scrollbar ===== */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.2); border-radius: 2px; }
+
+    @media (min-width: 768px) {
+      .tab-pane { padding: 24px; }
+      .stats-strip { margin-bottom: 24px; }
+    }
+  </style>
+</head>
+<body>
+<div id="nightingale-app">
+
+  <!-- LOCK SCREEN -->
+  <div id="lock-screen" v-if="!unlocked">
+    <div class="lock-eagle">🦅</div>
+    <div class="lock-title">NIGHTINGALE</div>
+    <div class="lock-sub">EMPIRE COMMAND</div>
+    <div class="lock-hint">Empire Access Code</div>
+    <input
+      class="lock-input"
+      :class="{ error: lockError, shake: lockShake }"
+      type="password"
+      v-model="lockInput"
+      placeholder="••••••••••••"
+      autocomplete="off"
+      spellcheck="false"
+      @keyup.enter="attemptUnlock"
+      ref="lockInputRef"
+    >
+    <button class="lock-btn" @click="attemptUnlock">UNLOCK CONSOLE</button>
+    <div class="lock-error-msg">{{ lockErrorMsg }}</div>
+  </div>
+
+  <!-- MAIN APP (shown when unlocked) -->
+  <template v-if="unlocked">
+
+    <!-- HUD BAR -->
+    <div id="hud">
+      <div class="hud-left">
+        <span style="font-size:18px;">🦅</span>
+        <span class="hud-logo">NIGHTINGALE</span>
+        <span class="hud-badge">EMPIRE COMMAND</span>
+      </div>
+
+      <div class="hud-center">
+        <div class="hud-dot" :class="{ red: criticalAlertCount > 0 }"></div>
+        <span class="hud-status-text" :class="{ alert: criticalAlertCount > 0 }">
+          {{ criticalAlertCount > 0 ? criticalAlertCount + ' CRITICAL ALERT' + (criticalAlertCount > 1 ? 'S' : '') : 'ALL SYSTEMS OPERATIONAL' }}
+        </span>
+      </div>
+
+      <div class="hud-right">
+        <div class="hud-bell" @click="activeTab = 'alerts'" title="Alerts">
+          🔔
+          <span class="bell-count" v-if="activeAlerts.length > 0">{{ activeAlerts.length }}</span>
+        </div>
+        <span class="hud-xp">⚡ XP: 2,847</span>
+        <span class="hud-lvl">LVL 12</span>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="app-content">
+
+      <!-- OVERVIEW TAB -->
+      <div class="tab-pane" v-show="activeTab === 'overview'">
+        <div class="stats-strip">
+          <div class="stat-card">
+            <div class="stat-label">Total Companies</div>
+            <div class="stat-value">{{ COMPANIES.length }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Agents</div>
+            <div class="stat-value em">{{ activeAgentCount }}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Empire MRR</div>
+            <div class="stat-value sm">$0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">GPU Status</div>
+            <div class="stat-value sm text-muted">Standby</div>
+          </div>
+        </div>
+
+        <div class="filter-chips">
+          <div
+            v-for="f in overviewFilters"
+            :key="f.key"
+            class="chip"
+            :class="{ active: overviewFilter === f.key }"
+            @click="overviewFilter = f.key"
+          >{{ f.label }}</div>
+        </div>
+
+        <div class="company-grid">
+          <div
+            v-for="c in filteredOverviewCompanies"
+            :key="c.id"
+            class="company-card"
+            @click="openCompanyModal(c)"
+          >
+            <div class="company-card-top">
+              <span class="company-icon">{{ c.icon }}</span>
+              <div class="company-loops">
+                <span class="loop-badge" :class="c.loop === 'A' ? 'loop-a' : 'loop-b'">{{ c.loop }}</span>
+                <span class="alert-dot" v-if="c.alerts > 0">{{ c.alerts }}</span>
+              </div>
+            </div>
+            <div class="company-name">{{ c.name }}</div>
+            <div class="company-domain">{{ c.domain }}</div>
+            <div class="company-footer">
+              <span class="status-pill" :class="'pill-' + c.status">{{ c.status }}</span>
+              <span class="company-meta">
+                <span class="meta-agents" v-if="c.agents.length > 0">{{ c.agents.length }} agent{{ c.agents.length !== 1 ? 's' : '' }}</span>
+                <span class="meta-agents" v-if="c.floor > 0"> · Fl {{ c.floor }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPANIES TAB -->
+      <div class="tab-pane" v-show="activeTab === 'companies'">
+        <div class="section-header">
+          <span class="section-title">ALL COMPANIES</span>
+          <span class="section-count">{{ COMPANIES.length }} total</span>
+        </div>
+
+        <div class="filter-chips" style="margin-bottom:16px;">
+          <div
+            v-for="f in overviewFilters"
+            :key="f.key"
+            class="chip"
+            :class="{ active: companiesFilter === f.key }"
+            @click="companiesFilter = f.key"
+          >{{ f.label }}</div>
+        </div>
+
+        <div class="company-list">
+          <div
+            v-for="c in filteredListCompanies"
+            :key="c.id"
+            class="company-list-row"
+            @click="openCompanyModal(c)"
+          >
+            <div class="list-row-top">
+              <span style="font-size:24px;flex-shrink:0;">{{ c.icon }}</span>
+              <div class="list-row-info">
+                <div class="list-row-name">{{ c.name }}</div>
+                <div class="list-row-domain">{{ c.domain }}</div>
+              </div>
+              <span class="status-pill" :class="'pill-' + c.status">{{ c.status }}</span>
+              <span class="loop-badge" :class="c.loop === 'A' ? 'loop-a' : 'loop-b'" style="flex-shrink:0;">{{ c.loop }}</span>
+            </div>
+            <div class="list-row-agents" v-if="c.agents.length > 0">
+              <span v-for="a in c.agents" :key="a" class="agent-tag">{{ a }}</span>
+            </div>
+            <div class="list-row-footer" @click.stop>
+              <span class="list-row-mrr font-hud">MRR: ${{ c.mrr.toLocaleString() }}</span>
+              <div class="list-actions">
+                <button class="action-btn" @click.stop="openDeployModal(c)">Deploy Agent</button>
+                <button class="action-btn em" v-if="c.domain && !c.domain.includes('(not owned)') && !c.domain.includes('github.io') && c.status === 'live'" @click.stop="openSite(c.domain)">Visit Site</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENTS TAB -->
+      <div class="tab-pane" v-show="activeTab === 'agents'">
+        <div class="section-header">
+          <span class="section-title">AGENT SWARM</span>
+          <span class="section-count">{{ AGENTS.length }} total</span>
+        </div>
+
+        <div class="filter-chips" style="margin-bottom:16px;">
+          <div
+            v-for="f in agentFilters"
+            :key="f.key"
+            class="chip"
+            :class="{ active: agentsFilter === f.key }"
+            @click="agentsFilter = f.key"
+          >{{ f.label }}</div>
+        </div>
+
+        <div class="agents-grid">
+          <div
+            v-for="agent in filteredAgents"
+            :key="agent.id"
+            class="agent-card"
+            :class="agent.tier + '-tier'"
+          >
+            <div class="agent-card-header">
+              <div class="agent-icon-name">
+                <span class="agent-icon">{{ agent.icon }}</span>
+                <span class="agent-name">{{ agent.name }}</span>
+              </div>
+              <div class="status-dot" :class="agent.status"></div>
+            </div>
+            <div class="agent-role">{{ agent.role }}</div>
+            <div class="agent-footer">
+              <span class="tier-badge" :class="'tier-' + agent.tier">{{ agent.tier.toUpperCase() }}</span>
+              <button class="deploy-btn" @click="openDeployModalForAgent(agent)">DEPLOY</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASKS TAB -->
+      <div class="tab-pane" v-show="activeTab === 'tasks'">
+        <div class="section-header">
+          <span class="section-title">TASK QUEUE</span>
+          <span class="section-count">{{ tasks.filter(t => t.status !== 'done').length }} pending</span>
+        </div>
+
+        <div class="tasks-list">
+          <div
+            v-for="task in tasks"
+            :key="task.id"
+            class="task-row"
+            :class="'priority-' + task.priority"
+          >
+            <div class="task-header">
+              <span class="task-priority-badge" :class="'badge-' + task.priority">{{ task.priority.toUpperCase() }}</span>
+              <span class="task-title">{{ task.title }}</span>
+            </div>
+            <div class="task-meta">
+              <span class="task-tag tag-company">{{ task.company.toUpperCase() }}</span>
+              <span class="task-tag tag-agent">{{ task.agent }}</span>
+              <span class="task-tag tag-due">Due: {{ task.due }}</span>
+              <span class="task-status-badge" :class="'status-' + task.status.replace('-','')">{{ task.status.replace('-',' ').toUpperCase() }}</span>
+            </div>
+            <div class="task-actions">
+              <button class="task-approve-btn" @click="approveTask(task.id)" title="Mark Complete">✅</button>
+              <button class="task-reject-btn" @click="rejectTask(task.id)" title="Dismiss">❌</button>
+            </div>
+          </div>
+          <div class="empty-state" v-if="tasks.length === 0">
+            <div style="font-size:40px;margin-bottom:12px;">✅</div>
+            All tasks complete.
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERTS TAB -->
+      <div class="tab-pane" v-show="activeTab === 'alerts'">
+        <div class="section-header">
+          <span class="section-title">ALERT FEED</span>
+          <span class="section-count">{{ activeAlerts.length }} active</span>
+        </div>
+
+        <div class="alerts-list">
+          <div
+            v-for="alert in activeAlerts"
+            :key="alert.id"
+            class="alert-row"
+            :class="'type-' + alert.type"
+          >
+            <div class="alert-icon-col">{{ alert.icon }}</div>
+            <div class="alert-content">
+              <div class="alert-title">{{ alert.title }}</div>
+              <div class="alert-body">{{ alert.body }}</div>
+              <div class="alert-ts">{{ formatTs(alert.ts) }}</div>
+            </div>
+            <button class="alert-dismiss" @click="dismissAlert(alert.id)" title="Dismiss">✕</button>
+          </div>
+          <div class="empty-state" v-if="activeAlerts.length === 0">
+            <div style="font-size:40px;margin-bottom:12px;">🛡️</div>
+            No active alerts. Empire is clear.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- #app-content -->
+
+    <!-- BOTTOM NAV -->
+    <nav id="bottom-nav">
+      <button
+        v-for="tab in navTabs"
+        :key="tab.key"
+        class="nav-tab"
+        :class="{ active: activeTab === tab.key }"
+        @click="activeTab = tab.key"
+      >
+        <span class="nav-icon">{{ tab.icon }}</span>
+        <span class="nav-label">{{ tab.label }}</span>
+      </button>
+    </nav>
+
+    <!-- COMPANY DETAIL MODAL -->
+    <transition name="fade">
+      <div v-if="selectedCompany" class="modal-backdrop" @click="closeCompanyModal"></div>
+    </transition>
+    <transition name="fade">
+      <div v-if="selectedCompany" class="modal-slide">
+        <div class="modal-handle"></div>
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-icon">{{ selectedCompany.icon }}</span>
+            <div>
+              <div class="modal-title">{{ selectedCompany.name }}</div>
+              <div style="margin-top:4px;">
+                <span class="status-pill" :class="'pill-' + selectedCompany.status">{{ selectedCompany.status }}</span>
+                <span class="loop-badge" :class="selectedCompany.loop === 'A' ? 'loop-a' : 'loop-b'" style="margin-left:6px;">LOOP {{ selectedCompany.loop }}</span>
+              </div>
+            </div>
+          </div>
+          <button class="modal-close" @click="closeCompanyModal">✕</button>
+        </div>
+
+        <div class="modal-domain">
+          🌐
+          <a
+            v-if="selectedCompany.status === 'live' && !selectedCompany.domain.includes('(not owned)')"
+            :href="'https://' + selectedCompany.domain"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{{ selectedCompany.domain }}</a>
+          <span v-else style="color:var(--muted);">{{ selectedCompany.domain }}</span>
+        </div>
+
+        <div class="modal-stat-row">
+          <div class="modal-stat" v-if="selectedCompany.floor > 0">
+            <span class="modal-stat-label">Floor</span>
+            <span class="modal-stat-value">{{ selectedCompany.floor }}</span>
+          </div>
+          <div class="modal-stat">
+            <span class="modal-stat-label">Agents</span>
+            <span class="modal-stat-value">{{ selectedCompany.agents.length }}</span>
+          </div>
+          <div class="modal-stat">
+            <span class="modal-stat-label">MRR</span>
+            <span class="modal-stat-value">${{ selectedCompany.mrr.toLocaleString() }}</span>
+          </div>
+          <div class="modal-stat" v-if="selectedCompany.alerts > 0">
+            <span class="modal-stat-label">Alerts</span>
+            <span class="modal-stat-value" style="color:var(--red);">{{ selectedCompany.alerts }}</span>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Assigned Agents</div>
+          <div class="modal-agents" v-if="selectedCompany.agents.length > 0">
+            <span v-for="a in selectedCompany.agents" :key="a" class="agent-tag">{{ a }}</span>
+          </div>
+          <div class="modal-no-agents" v-else>No agents assigned.</div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="modal-action-btn primary" @click="openDeployModal(selectedCompany); closeCompanyModal()">Deploy Agent</button>
+          <button
+            class="modal-action-btn"
+            v-if="selectedCompany.status === 'live' && !selectedCompany.domain.includes('(not owned)')"
+            @click="openSite(selectedCompany.domain); closeCompanyModal()"
+          >Visit Site</button>
+          <button class="modal-action-btn" @click="goToTasksFor(selectedCompany.id)">Task Queue</button>
+        </div>
+      </div>
+    </transition>
+
+    <!-- DEPLOY MODAL -->
+    <transition name="fade">
+      <div class="deploy-modal" v-if="deployTarget" @click.self="deployTarget = null">
+        <div class="deploy-modal-box">
+          <div class="deploy-modal-title">⚡ Deploy Agent</div>
+          <div class="deploy-modal-sub">
+            Target: <span style="color:var(--gold);">{{ deployTarget.name }}</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
+            Agent deployment requires Supabase connection. Configure the SUPABASE SWAP ZONE in the source file and wire up your RunPod GPU to enable live agent dispatch.
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:11px;color:var(--muted);font-family:'Orbitron',monospace;letter-spacing:0.5px;">
+            // SUPABASE SWAP ZONE<br>
+            // Fill in project URL + anon key<br>
+            // at supabase.com/dashboard
+          </div>
+          <div class="deploy-modal-close-row">
+            <button class="action-btn" @click="deployTarget = null">CLOSE</button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+  </template><!-- v-if unlocked -->
+</div><!-- #nightingale-app -->
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+// ─────────────────────────────────────────────
+// SUPABASE SWAP ZONE — Fill in project URL and anon key from supabase.com/dashboard
+// Project: hub (existing Derek project)
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co'; // TODO: fill in
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'; // TODO: fill in
+// Load CDN: <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"><\/script>
+// const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ─────────────────────────────────────────────
+
+const LOCK_CODE = 'NIGHTINGALE';
+
+const COMPANIES = [
+  // LOOP B — Anonymous
+  { id:'omniaguard', name:'OmniaGuard', icon:'🛡️', loop:'B', status:'live', floor:1, domain:'omniaguard.com', agents:['sentinel','shield','cipher'], mrr:0, alerts:0 },
+  { id:'kiaros', name:'Kiaros', icon:'⚙️', loop:'B', status:'redirect', floor:10, domain:'kiaros.ai', agents:[], mrr:0, alerts:0 },
+  { id:'techpetcage', name:'TechPetCage', icon:'🐾', loop:'B', status:'live', floor:5, domain:'techpetcage.com', agents:['nexus','herald'], mrr:0, alerts:1 },
+  { id:'vigilax', name:'Vigilax', icon:'👁️', loop:'B', status:'redirect', floor:7, domain:'vigilax.com', agents:[], mrr:0, alerts:0 },
+  { id:'cleanswarm', name:'CleanSwarm', icon:'🧹', loop:'B', status:'live', floor:11, domain:'cleanswarm.ca', agents:['matrix'], mrr:0, alerts:0 },
+  { id:'vaultvelocity', name:'Vault Velocity Auto', icon:'🚗', loop:'B', status:'redirect', floor:9, domain:'vaultvelocityauto.com', agents:[], mrr:0, alerts:0 },
+  { id:'soulstack', name:'SoulStack', icon:'🔮', loop:'B', status:'pending', floor:6, domain:'soulstack.ai (not owned)', agents:[], mrr:0, alerts:0 },
+  { id:'techpackcage', name:'TechPackCage', icon:'📦', loop:'B', status:'redirect', floor:8, domain:'techpackcage.com', agents:[], mrr:0, alerts:0 },
+  { id:'cyberguard', name:'CyberGuard', icon:'🔐', loop:'B', status:'dev', floor:0, domain:'cyberguard.dev', agents:[], mrr:0, alerts:0 },
+  { id:'omniashield', name:'OmniaShield', icon:'🔒', loop:'B', status:'dev', floor:0, domain:'omniashield.ai', agents:[], mrr:0, alerts:0 },
+  // LOOP A — Derek visible
+  { id:'ccldr', name:'CCLDR.NET', icon:'⚖️', loop:'A', status:'live', floor:2, domain:'ccldr.net', agents:['counsel','barrister','archivist'], mrr:0, alerts:0 },
+  { id:'primedox', name:'PrimeDox AI', icon:'🤖', loop:'A', status:'live', floor:3, domain:'primedoxai.com', agents:['phoenix','oracle','midas'], mrr:0, alerts:0 },
+  { id:'fh', name:'Francisco Holdings Inc.', icon:'🏢', loop:'A', status:'live', floor:0, domain:'franciscoholdingsinc.com', agents:['alpha','ledger','forge'], mrr:0, alerts:0 },
+  { id:'benox', name:'BENO-X', icon:'📋', loop:'A', status:'live', floor:4, domain:'ccldr.net/beno-x', agents:['sovereign'], mrr:0, alerts:0 },
+  { id:'docweedlaw', name:'Doc WeedLaw Media', icon:'🌿', loop:'A', status:'live', floor:0, domain:'docweedlaw.com', agents:['herald'], mrr:0, alerts:0 },
+  { id:'hq', name:'PrimeDox HQ', icon:'🔐', loop:'A', status:'live', floor:0, domain:'zprimedoxaihq.com', agents:['prime'], mrr:0, alerts:0 },
+  // SWARM / DEVELOPMENT
+  { id:'biotech', name:'BiotechSwarm', icon:'🧬', loop:'B', status:'dev', floor:0, domain:'biotech-swarm', agents:[], mrr:0, alerts:0 },
+  { id:'agentswarm', name:'Agent Swarm Tech', icon:'🤖', loop:'B', status:'dev', floor:0, domain:'agentswarmtech', agents:[], mrr:0, alerts:0 },
+  { id:'aigovernance', name:'AI Governance Canada', icon:'🏛️', loop:'B', status:'dev', floor:0, domain:'aigovernance.ca', agents:[], mrr:0, alerts:0 },
+  { id:'autoswarm', name:'AutoSwarm', icon:'🚘', loop:'B', status:'dev', floor:0, domain:'autoswarm.ai', agents:[], mrr:0, alerts:0 },
+  { id:'defenseswarm', name:'DefenseSwarm', icon:'⚔️', loop:'B', status:'dev', floor:0, domain:'defenseswarm', agents:[], mrr:0, alerts:0 },
+  { id:'fintech', name:'FintechSwarm', icon:'💳', loop:'B', status:'dev', floor:0, domain:'fintechswarm', agents:[], mrr:0, alerts:0 },
+  { id:'francofamily', name:'Francisco Family Office', icon:'👨‍👩‍👧', loop:'A', status:'dev', floor:0, domain:'franciscofamilyoffice.com', agents:[], mrr:0, alerts:0 },
+  { id:'energy', name:'EnergySwarm', icon:'⚡', loop:'B', status:'dev', floor:0, domain:'energyswarm', agents:[], mrr:0, alerts:0 },
+  { id:'health', name:'HealthSwarm', icon:'🏥', loop:'B', status:'dev', floor:0, domain:'healthswarm', agents:[], mrr:0, alerts:0 },
+  { id:'kentst', name:'Kent Street Holdings', icon:'🏘️', loop:'A', status:'dev', floor:0, domain:'kentstreetholdings.com', agents:[], mrr:0, alerts:0 },
+  { id:'francovt', name:'Francisco Ventures', icon:'💼', loop:'A', status:'dev', floor:0, domain:'franciscoventures.com', agents:[], mrr:0, alerts:0 },
+  { id:'koolduce', name:'Koolduce Motors', icon:'🏎️', loop:'B', status:'dev', floor:0, domain:'koolduce.com', agents:[], mrr:0, alerts:0 },
+  { id:'logistics', name:'LogisticsSwarm', icon:'📦', loop:'B', status:'dev', floor:0, domain:'logisticsswarm', agents:[], mrr:0, alerts:0 },
+  { id:'medswarm', name:'MedSwarm', icon:'💊', loop:'B', status:'dev', floor:0, domain:'medswarm.ai', agents:[], mrr:0, alerts:0 },
+  { id:'pharma', name:'PharmaSwarm', icon:'🧪', loop:'B', status:'dev', floor:0, domain:'pharmaswarm', agents:[], mrr:0, alerts:0 },
+  { id:'quantum', name:'QuantumSwarm', icon:'⚛️', loop:'B', status:'dev', floor:0, domain:'quantumswarm', agents:[], mrr:0, alerts:0 },
+  { id:'sovereignty', name:'Sovereignty', icon:'🦅', loop:'A', status:'dev', floor:0, domain:'sovereignty.ca', agents:[], mrr:0, alerts:0 },
+  { id:'spaceswarm', name:'SpaceSwarm', icon:'🚀', loop:'B', status:'dev', floor:0, domain:'spaceswarm', agents:[], mrr:0, alerts:0 },
+  { id:'supplychain', name:'SupplyChain Pro', icon:'🔗', loop:'B', status:'dev', floor:0, domain:'supplychainpro', agents:[], mrr:0, alerts:0 },
+  { id:'cannadelivery', name:'CannaDeliver', icon:'🌿', loop:'A', status:'dev', floor:0, domain:'cannadelivery.ca', agents:[], mrr:0, alerts:0 },
+  { id:'ccc', name:'Cannabis Compliance Canada', icon:'📜', loop:'A', status:'dev', floor:0, domain:'ccc.net', agents:[], mrr:0, alerts:0 },
+  { id:'gcalliance', name:'Global Cannabis Alliance', icon:'🌍', loop:'A', status:'dev', floor:0, domain:'gcalliance.org', agents:[], mrr:0, alerts:0 },
+  { id:'lindsay', name:'Lindsay Innovation', icon:'💡', loop:'A', status:'dev', floor:0, domain:'lindsay.ai', agents:[], mrr:0, alerts:0 },
+  { id:'constdefense', name:'Constitutional Defense Labs', icon:'📚', loop:'A', status:'dev', floor:0, domain:'constdefense.ca', agents:[], mrr:0, alerts:0 },
+  { id:'aeroshield', name:'AeroShield', icon:'✈️', loop:'B', status:'dev', floor:0, domain:'aeroshield.ai', agents:[], mrr:0, alerts:0 },
+  { id:'weedlawpub', name:'WeedLaw Publishing', icon:'📖', loop:'A', status:'dev', floor:0, domain:'weedlawpublishing.com', agents:[], mrr:0, alerts:0 },
+  { id:'weedlawdefense', name:'WeedLaw Defense Network', icon:'⚖️', loop:'A', status:'dev', floor:0, domain:'weedlawdefense.ca', agents:[], mrr:0, alerts:0 },
+  { id:'ccldracademy', name:'CCLDR Academy', icon:'🎓', loop:'A', status:'dev', floor:0, domain:'ccldr.net/academy', agents:[], mrr:0, alerts:0 },
+  { id:'nightingale', name:'Nightingale Console', icon:'🦅', loop:'A', status:'live', floor:0, domain:'github.io/nightingale', agents:['prime','terminus','hub'], mrr:0, alerts:0 },
+];
+
+const AGENTS = [
+  // Premium (GPT-4o in hybrid mode)
+  { id:'phoenix', name:'Phoenix', icon:'🔥', role:'Empire Orchestrator', status:'standby', site:'fh', tier:'gold' },
+  { id:'archivist', name:'Archivist', icon:'📚', role:'Knowledge Base', status:'standby', site:'ccldr', tier:'gold' },
+  { id:'counsel', name:'Counsel', icon:'⚖️', role:'Legal Education AI', status:'active', site:'ccldr', tier:'gold' },
+  { id:'barrister', name:'Barrister', icon:'🏛️', role:'Court Document AI', status:'active', site:'ccldr', tier:'gold' },
+  { id:'ledger', name:'Ledger', icon:'📊', role:'Financial Intelligence', status:'standby', site:'fh', tier:'gold' },
+  { id:'alpha', name:'Alpha', icon:'Α', role:'Strategic Commander', status:'standby', site:'fh', tier:'gold' },
+  // Security layer
+  { id:'sentinel', name:'Sentinel', icon:'🛡️', role:'Threat Detection', status:'active', site:'omniaguard', tier:'emerald' },
+  { id:'shield', name:'Shield', icon:'🔒', role:'Zero-Day Defense', status:'active', site:'omniaguard', tier:'emerald' },
+  { id:'cipher', name:'Cipher', icon:'🔐', role:'Encryption Guard', status:'active', site:'omniaguard', tier:'emerald' },
+  { id:'vault', name:'Vault', icon:'🗝️', role:'Credential Manager', status:'standby', site:'omniaguard', tier:'emerald' },
+  { id:'ghost', name:'Ghost', icon:'👻', role:'Dark Web Monitor', status:'standby', site:'vigilax', tier:'emerald' },
+  { id:'mirror', name:'Mirror', icon:'🪞', role:'Honeypot Operator', status:'standby', site:'omniaguard', tier:'emerald' },
+  // Commerce
+  { id:'nexus', name:'Nexus', icon:'🔗', role:'E-Commerce AI', status:'active', site:'techpetcage', tier:'standard' },
+  { id:'atlas', name:'Atlas', icon:'🗺️', role:'Market Intelligence', status:'standby', site:'fh', tier:'standard' },
+  { id:'herald', name:'Herald', icon:'📢', role:'Marketing AI', status:'active', site:'techpetcage', tier:'standard' },
+  { id:'sovereign', name:'Sovereign', icon:'👑', role:'BENO-X Strategy', status:'active', site:'ccldr', tier:'standard' },
+  { id:'oracle', name:'Oracle', icon:'🔮', role:'Predictive Analytics', status:'standby', site:'primedox', tier:'standard' },
+  { id:'midas', name:'Midas', icon:'💰', role:'Revenue Optimizer', status:'standby', site:'primedox', tier:'standard' },
+  { id:'forge', name:'Forge', icon:'⚒️', role:'Code Generator', status:'active', site:'primedox', tier:'standard' },
+  { id:'matrix', name:'Matrix', icon:'🔢', role:'Data Pipeline', status:'standby', site:'cleanswarm', tier:'standard' },
+  // Operations
+  { id:'ranger', name:'Ranger', icon:'🌲', role:'Field Operations', status:'standby', site:'fh', tier:'standard' },
+  { id:'navigator', name:'Navigator', icon:'🧭', role:'Route Optimizer', status:'standby', site:'logistics', tier:'standard' },
+  { id:'spectrum', name:'Spectrum', icon:'🌈', role:'Content Creator', status:'standby', site:'fh', tier:'standard' },
+  { id:'apex', name:'Apex', icon:'▲', role:'Performance Monitor', status:'active', site:'primedox', tier:'standard' },
+  { id:'titan', name:'Titan', icon:'🏔️', role:'Infrastructure', status:'active', site:'hq', tier:'standard' },
+  { id:'nova', name:'Nova', icon:'💫', role:'Innovation Scout', status:'standby', site:'fh', tier:'standard' },
+  { id:'echo', name:'Echo', icon:'🔊', role:'Social Media AI', status:'standby', site:'fh', tier:'standard' },
+  { id:'prism', name:'Prism', icon:'🔷', role:'Brand Intelligence', status:'standby', site:'fh', tier:'standard' },
+  { id:'cascade', name:'Cascade', icon:'💧', role:'Workflow Automation', status:'standby', site:'primedox', tier:'standard' },
+  { id:'delta', name:'Delta', icon:'Δ', role:'Change Management', status:'standby', site:'fh', tier:'standard' },
+  { id:'vector', name:'Vector', icon:'→', role:'Direction AI', status:'standby', site:'fh', tier:'standard' },
+  { id:'sigma', name:'Sigma', icon:'Σ', role:'Quality Control', status:'standby', site:'fh', tier:'standard' },
+  { id:'omega', name:'Omega', icon:'Ω', role:'Final Reviewer', status:'standby', site:'fh', tier:'standard' },
+  { id:'core', name:'Core', icon:'◉', role:'System Health', status:'active', site:'hq', tier:'standard' },
+  { id:'pulse', name:'Pulse', icon:'💗', role:'Revenue Pulse', status:'active', site:'fh', tier:'standard' },
+  { id:'stream', name:'Stream', icon:'〜', role:'Data Stream', status:'standby', site:'primedox', tier:'standard' },
+  { id:'flux', name:'Flux', icon:'⟳', role:'State Manager', status:'standby', site:'hq', tier:'standard' },
+  { id:'node', name:'Node', icon:'●', role:'Network Node', status:'active', site:'hq', tier:'standard' },
+  { id:'link', name:'Link', icon:'🔗', role:'Integration Hub', status:'standby', site:'hq', tier:'standard' },
+  { id:'bridge', name:'Bridge', icon:'🌉', role:'Cross-Chain', status:'standby', site:'fh', tier:'standard' },
+  { id:'relay', name:'Relay', icon:'📡', role:'Message Router', status:'active', site:'hq', tier:'standard' },
+  { id:'hub', name:'Hub', icon:'🎯', role:'Command Hub', status:'active', site:'hq', tier:'standard' },
+  { id:'gate', name:'Gate', icon:'⛩️', role:'Access Control', status:'active', site:'omniaguard', tier:'emerald' },
+  { id:'terminus', name:'Terminus', icon:'⚫', role:'Session Terminator', status:'standby', site:'hq', tier:'standard' },
+  { id:'prime', name:'Prime', icon:'⭐', role:'PrimeDox Concierge', status:'active', site:'hq', tier:'gold' },
+];
+
+const DEFAULT_TASKS = [
+  { id:1, priority:'critical', title:'File Court Documents', company:'ccldr', agent:'barrister', status:'pending', due:'Jun 9', created: Date.now()-86400000 },
+  { id:2, priority:'high', title:'Swear Affidavits — Doc 6, 7b', company:'ccldr', agent:'counsel', status:'pending', due:'Jun 8', created: Date.now()-3600000 },
+  { id:3, priority:'high', title:'Deploy Gemma 27B on RunPod', company:'hq', agent:'prime', status:'in-progress', due:'Today', created: Date.now()-7200000 },
+  { id:4, priority:'medium', title:'Create PayPal Business links', company:'fh', agent:'midas', status:'pending', due:'This week', created: Date.now()-3600000 },
+  { id:5, priority:'medium', title:'Set up CCLDR GitHub Pages repo', company:'ccldr', agent:'forge', status:'pending', due:'This week', created: Date.now() },
+  { id:6, priority:'medium', title:'Stripe recovery — upload ID + 2FA', company:'fh', agent:'ledger', status:'pending', due:'ASAP', created: Date.now() },
+  { id:7, priority:'low', title:'OmniaGuard free-scan.html build', company:'omniaguard', agent:'sentinel', status:'pending', due:'Next sprint', created: Date.now() },
+  { id:8, priority:'low', title:'CCLDR education.html page', company:'ccldr', agent:'archivist', status:'pending', due:'Next sprint', created: Date.now() },
+];
+
+const DEFAULT_ALERTS = [
+  { id:1, type:'critical', icon:'⚡', title:'Stripe Account Under Review', body:'$406.80 frozen. Recover at dashboard.stripe.com/recover', ts: Date.now()-3600000 },
+  { id:2, type:'warning', icon:'⚠️', title:'RunPod GPU Not Connected', body:'Gemma 3 27B requires GPU. Deploy docker-compose to RunPod.', ts: Date.now()-7200000 },
+  { id:3, type:'warning', icon:'📋', title:'PayPal Business Links Missing', body:'PAYPAL SWAP ZONE: 18 products need Business payment links.', ts: Date.now()-86400000 },
+  { id:4, type:'info', icon:'✅', title:'Gemma Backend Committed', body:'agents/backend/gemma-server.js + Dockerfile pushed to feature branch.', ts: Date.now()-86400000 },
+  { id:5, type:'info', icon:'📱', title:'Mobile Optimization Complete', body:'All 5 key sites: 0 dead links, 44px touch targets, overflow-x fixed.', ts: Date.now()-1800000 },
+];
+
+// ─── localStorage helpers ───────────────────
+const LS = {
+  get(key, fallback) {
+    try {
+      const v = localStorage.getItem('ng_' + key);
+      return v !== null ? JSON.parse(v) : fallback;
+    } catch { return fallback; }
+  },
+  set(key, val) {
+    try { localStorage.setItem('ng_' + key, JSON.stringify(val)); } catch {}
+  }
+};
+
+// ─── Vue App ─────────────────────────────────
+const { createApp, ref, computed, onMounted, nextTick } = Vue;
+
+createApp({
+  setup() {
+    // ── Auth ──
+    const unlocked = ref(sessionStorage.getItem('ng_unlocked') === '1');
+    const lockInput = ref('');
+    const lockError = ref(false);
+    const lockShake = ref(false);
+    const lockErrorMsg = ref('');
+    const lockInputRef = ref(null);
+
+    function attemptUnlock() {
+      if (lockInput.value.trim().toUpperCase() === LOCK_CODE) {
+        sessionStorage.setItem('ng_unlocked', '1');
+        unlocked.value = true;
+        lockInput.value = '';
+        lockErrorMsg.value = '';
+      } else {
+        lockError.value = true;
+        lockShake.value = true;
+        lockErrorMsg.value = 'INVALID ACCESS CODE';
+        setTimeout(() => {
+          lockError.value = false;
+          lockShake.value = false;
+          lockErrorMsg.value = '';
+        }, 800);
+        lockInput.value = '';
+      }
+    }
+
+    onMounted(() => {
+      if (!unlocked.value && lockInputRef.value) {
+        nextTick(() => lockInputRef.value.focus());
+      }
+    });
+
+    // ── Navigation ──
+    const activeTab = ref('overview');
+
+    const navTabs = [
+      { key: 'overview', icon: '🏛️', label: 'Overview' },
+      { key: 'companies', icon: '🏢', label: 'Companies' },
+      { key: 'agents', icon: '🤖', label: 'Agents' },
+      { key: 'tasks', icon: '📋', label: 'Tasks' },
+      { key: 'alerts', icon: '🔔', label: 'Alerts' },
+    ];
+
+    // ── Data ──
+    const tasks = ref(LS.get('tasks', DEFAULT_TASKS));
+    const activeAlerts = ref(LS.get('alerts', DEFAULT_ALERTS));
+
+    function saveTasks() { LS.set('tasks', tasks.value); }
+    function saveAlerts() { LS.set('alerts', activeAlerts.value); }
+
+    // ── Computed ──
+    const activeAgentCount = computed(() => AGENTS.filter(a => a.status === 'active').length);
+
+    const criticalAlertCount = computed(() =>
+      activeAlerts.value.filter(a => a.type === 'critical').length
+    );
+
+    // ── Overview filter ──
+    const overviewFilters = [
+      { key: 'all', label: 'ALL' },
+      { key: 'live', label: 'LIVE' },
+      { key: 'pending', label: 'PENDING' },
+      { key: 'A', label: 'LOOP A' },
+      { key: 'B', label: 'LOOP B' },
+    ];
+
+    const overviewFilter = ref('all');
+    const companiesFilter = ref('all');
+
+    function applyCompanyFilter(list, f) {
+      if (f === 'all') return list;
+      if (f === 'live') return list.filter(c => c.status === 'live');
+      if (f === 'pending') return list.filter(c => c.status === 'pending');
+      if (f === 'A') return list.filter(c => c.loop === 'A');
+      if (f === 'B') return list.filter(c => c.loop === 'B');
+      return list;
+    }
+
+    const filteredOverviewCompanies = computed(() =>
+      applyCompanyFilter([...COMPANIES], overviewFilter.value)
+    );
+
+    const filteredListCompanies = computed(() =>
+      applyCompanyFilter([...COMPANIES], companiesFilter.value)
+    );
+
+    // ── Agents filter ──
+    const agentFilters = [
+      { key: 'all', label: 'ALL' },
+      { key: 'active', label: 'ACTIVE' },
+      { key: 'standby', label: 'STANDBY' },
+      { key: 'gold', label: 'GOLD TIER' },
+      { key: 'emerald', label: 'EMERALD TIER' },
+    ];
+
+    const agentsFilter = ref('all');
+
+    const filteredAgents = computed(() => {
+      const f = agentsFilter.value;
+      if (f === 'all') return AGENTS;
+      if (f === 'active') return AGENTS.filter(a => a.status === 'active');
+      if (f === 'standby') return AGENTS.filter(a => a.status === 'standby');
+      if (f === 'gold') return AGENTS.filter(a => a.tier === 'gold');
+      if (f === 'emerald') return AGENTS.filter(a => a.tier === 'emerald');
+      return AGENTS;
+    });
+
+    // ── Company modal ──
+    const selectedCompany = ref(null);
+
+    function openCompanyModal(c) { selectedCompany.value = c; }
+    function closeCompanyModal() { selectedCompany.value = null; }
+
+    // ── Deploy modal ──
+    const deployTarget = ref(null);
+
+    function openDeployModal(c) {
+      deployTarget.value = c;
+    }
+
+    function openDeployModalForAgent(agent) {
+      const company = COMPANIES.find(c => c.id === agent.site) || { name: agent.site, id: agent.site };
+      deployTarget.value = { name: agent.name + ' → ' + company.name };
+    }
+
+    // ── Open site ──
+    function openSite(domain) {
+      if (!domain || domain.includes('(not owned)')) return;
+      const url = domain.startsWith('http') ? domain : 'https://' + domain;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    // ── Tasks ──
+    function approveTask(id) {
+      const t = tasks.value.find(t => t.id === id);
+      if (t) {
+        t.status = 'done';
+        saveTasks();
+        setTimeout(() => {
+          tasks.value = tasks.value.filter(t => t.id !== id);
+          saveTasks();
+        }, 600);
+      }
+    }
+
+    function rejectTask(id) {
+      tasks.value = tasks.value.filter(t => t.id !== id);
+      saveTasks();
+    }
+
+    function goToTasksFor(companyId) {
+      closeCompanyModal();
+      activeTab.value = 'tasks';
+    }
+
+    // ── Alerts ──
+    function dismissAlert(id) {
+      activeAlerts.value = activeAlerts.value.filter(a => a.id !== id);
+      saveAlerts();
+    }
+
+    function formatTs(ts) {
+      const diff = Date.now() - ts;
+      const m = Math.floor(diff / 60000);
+      if (m < 60) return m <= 0 ? 'Just now' : m + 'm ago';
+      const h = Math.floor(m / 60);
+      if (h < 24) return h + 'h ago';
+      return Math.floor(h / 24) + 'd ago';
+    }
+
+    return {
+      // auth
+      unlocked, lockInput, lockError, lockShake, lockErrorMsg, lockInputRef, attemptUnlock,
+      // nav
+      activeTab, navTabs,
+      // data
+      COMPANIES, AGENTS, tasks, activeAlerts,
+      // computed
+      activeAgentCount, criticalAlertCount,
+      // filters
+      overviewFilters, overviewFilter, companiesFilter,
+      filteredOverviewCompanies, filteredListCompanies,
+      agentFilters, agentsFilter, filteredAgents,
+      // modal
+      selectedCompany, openCompanyModal, closeCompanyModal,
+      deployTarget, openDeployModal, openDeployModalForAgent,
+      // actions
+      openSite, approveTask, rejectTask, goToTasksFor,
+      dismissAlert, formatTs,
+    };
+  }
+}).mount('#nightingale-app');
+</script>
+</body>
+</html>
