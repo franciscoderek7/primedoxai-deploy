@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Francisco Holdings Inc. — Phoenix Dominion · 45-Floor Empire Skyscraper</title>
-<meta name="description" content="Francisco Holdings Inc. — 45 Divisions. AI-First Empire. Dubai-Level Ambition. Cannabis Defense, Enterprise Security, Document AI, Real Estate, Legal Services.">
+<title>Phoenix Tower: Empire Builder — Francisco Holdings Inc. · 45-Floor Empire Skyscraper</title>
+<meta name="description" content="Phoenix Tower: Empire Builder — explore Francisco Holdings Inc. as an interactive 45-floor empire. AI-First divisions, Enterprise Security, Document AI, Legal Services, Real Estate.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -13,27 +13,152 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 :root{
-  --emerald:#0A5C36;--emerald-light:#1A8A50;
+  --emerald:#0A5C36;--emerald-light:#1A8A50;--emerald-bright:#10B981;
   --gold:#D4AF37;--gold-light:#F0CC60;
   --platinum:#E5E4E2;--platinum-mid:#ABABAB;--platinum-dark:#787878;
-  --charcoal:#1A1A1A;--dark:#06060A;--surface:#111118;--card:#17171F;
+  --charcoal:#1A1A1A;--dark:#0A0A0A;--marble:#0A0A0A;--surface:#111118;--card:#17171F;
   --border-gold:rgba(212,175,55,0.25);--border-em:rgba(10,92,54,0.5);
-  --el-w:72px;
+  --el-w:72px;--hud-h:46px;
+  --ember:#FF6B1A;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--dark);color:var(--platinum);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;overflow-x:hidden}
+body{background:var(--marble);color:var(--platinum);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;overflow-x:hidden}
+body.game-locked{overflow:hidden;height:100vh}
+
+/* ── GAME HUD ─────────────────────────── */
+#game-hud{position:fixed;top:0;left:0;right:0;height:var(--hud-h);background:linear-gradient(180deg,#0A0A0A,rgba(10,10,10,0.92));border-bottom:1px solid var(--border-gold);z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:0 14px;backdrop-filter:blur(6px);font-family:'Orbitron',sans-serif}
+#game-hud .hud-left,#game-hud .hud-right{display:flex;align-items:center;gap:14px}
+.hud-chip{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--platinum-mid);white-space:nowrap}
+.hud-chip .hud-val{color:var(--gold-light)}
+#hud-coins-val{color:var(--gold);font-size:12px;transition:transform .25s}
+#hud-coins-val.bump{transform:scale(1.45);color:var(--gold-light)}
+.hud-role-badge{display:flex;align-items:center;gap:5px;padding:3px 10px;border:1px solid var(--border-gold);border-radius:20px;font-size:9px;color:var(--gold-light);background:rgba(212,175,55,0.08)}
+.hud-btn{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-size:11px;padding:5px 9px;border-radius:4px;cursor:pointer;font-family:'Orbitron',sans-serif;letter-spacing:.5px;transition:all .15s}
+.hud-btn:hover{border-color:var(--gold);color:var(--gold-light);background:rgba(212,175,55,0.08)}
+@media(max-width:768px){
+  .hud-chip.hud-hide-mobile{display:none}
+  #game-hud{padding:0 8px}
+  #game-hud .hud-left,#game-hud .hud-right{gap:8px}
+}
+body.game-ready{padding-top:var(--hud-h)}
+
+/* ── MINIMAP ──────────────────────────── */
+#minimap{position:fixed;right:14px;bottom:14px;width:120px;background:rgba(10,10,10,0.94);border:1px solid var(--border-gold);border-radius:8px;padding:10px;z-index:1400;display:none;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+#minimap.open{display:block}
+#minimap .mm-title{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:8px}
+#minimap .mm-tower{display:flex;flex-direction:column-reverse;gap:1px;max-height:300px;overflow-y:auto}
+#minimap .mm-tower::-webkit-scrollbar{width:3px}
+#minimap .mm-tower::-webkit-scrollbar-thumb{background:var(--emerald)}
+.mm-floor{height:5px;border-radius:1px;background:#2a2a30;cursor:pointer;position:relative;transition:background .2s}
+.mm-floor.explored{background:linear-gradient(90deg,var(--gold),var(--gold-light));box-shadow:0 0 4px rgba(212,175,55,.5)}
+.mm-floor.current{background:var(--emerald-bright);box-shadow:0 0 6px var(--emerald-bright)}
+.mm-floor:hover{outline:1px solid var(--gold)}
+.mm-lobby{height:7px;background:#1a1a22;border:1px solid var(--border-gold);border-radius:1px;cursor:pointer}
+.mm-lobby.current{background:var(--emerald-bright)}
+
+/* ── CINEMATIC OVERLAY ────────────────── */
+#cinematic{position:fixed;inset:0;background:radial-gradient(ellipse at center,#15100A 0%,#0A0A0A 70%);z-index:3000;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+#cinematic.show{display:flex}
+#ember-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+.cine-inner{position:relative;z-index:2}
+.cine-title{font-family:'Orbitron',sans-serif;font-size:clamp(2.6rem,11vw,8rem);font-weight:900;line-height:.95;letter-spacing:-2px;background:linear-gradient(135deg,#7a5a12 0%,var(--gold) 30%,var(--gold-light) 50%,var(--gold) 70%,#7a5a12 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(212,175,55,.45));margin-bottom:.4rem;animation:cineRise 1.4s cubic-bezier(.2,.8,.2,1)}
+.cine-sub{font-family:'Orbitron',sans-serif;font-size:clamp(0.9rem,3vw,1.6rem);letter-spacing:8px;color:var(--platinum-mid);text-transform:uppercase;margin-bottom:3rem;animation:cineFade 2s ease .6s both}
+.cine-press{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:4px;color:var(--gold-light);animation:cinePulse 1.5s ease-in-out infinite}
+.cine-begin-btn{margin-top:1.4rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0A0A0A;border:none;font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;letter-spacing:2px;padding:16px 44px;border-radius:6px;cursor:pointer;box-shadow:0 0 30px rgba(212,175,55,.4);transition:transform .15s}
+.cine-begin-btn:hover{transform:scale(1.05)}
+.cine-skip{position:absolute;top:20px;right:24px;background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-size:13px;padding:8px 14px;border-radius:4px;cursor:pointer;z-index:3;font-family:'Orbitron',sans-serif;letter-spacing:1px}
+.cine-skip:hover{color:var(--gold-light);border-color:var(--gold)}
+@keyframes cineRise{0%{opacity:0;transform:translateY(40px) scale(.92)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cineFade{0%{opacity:0}100%{opacity:1}}
+@keyframes cinePulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ── CHARACTER SELECT ─────────────────── */
+#char-select{position:fixed;inset:0;background:radial-gradient(ellipse at top,#15100A 0%,#0A0A0A 70%);z-index:2900;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 5%;overflow-y:auto}
+#char-select.show{display:flex}
+.cs-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,4vw,2.4rem);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-bottom:.3rem;text-align:center}
+.cs-sub{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;color:var(--platinum-mid);text-transform:uppercase;margin-bottom:2.4rem;text-align:center}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:1000px;width:100%}
+.cs-card{background:linear-gradient(180deg,var(--card),#0d0d14);border:1px solid var(--border-gold);border-radius:10px;padding:22px 18px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.cs-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(212,175,55,.18)}
+.cs-card.selected{border-color:var(--emerald-bright);box-shadow:0 0 30px rgba(16,185,129,.3)}
+.cs-icon{font-size:2.6rem;margin-bottom:10px}
+.cs-name{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:var(--gold-light);letter-spacing:1px;margin-bottom:6px}
+.cs-tagline{font-size:11px;color:var(--platinum-mid);font-style:italic;margin-bottom:10px;min-height:30px}
+.cs-bonus{font-size:10px;color:var(--emerald-bright);background:rgba(16,185,129,.1);border:1px solid var(--border-em);border-radius:4px;padding:6px 8px}
+.cs-confirm{margin-top:2rem;background:linear-gradient(135deg,var(--emerald),var(--emerald-bright));color:#0A0A0A;border:none;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:2px;padding:14px 40px;border-radius:6px;cursor:pointer;opacity:.4;pointer-events:none;transition:opacity .2s}
+.cs-confirm.ready{opacity:1;pointer-events:auto;box-shadow:0 0 24px rgba(16,185,129,.4)}
+
+/* ── ACHIEVEMENT POPUP ────────────────── */
+#ach-stack{position:fixed;top:calc(var(--hud-h) + 12px);right:14px;z-index:2200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.ach-card{background:linear-gradient(135deg,#1a160a,#0A0A0A);border:1px solid var(--gold);border-radius:8px;padding:12px 16px;min-width:280px;box-shadow:0 0 40px rgba(212,175,55,.35);transform:translateX(360px);opacity:0;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s}
+.ach-card.in{transform:translateX(0);opacity:1}
+.ach-head{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.ach-body{display:flex;align-items:center;gap:12px}
+.ach-icon{font-size:2rem}
+.ach-info{flex:1}
+.ach-aname{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--platinum)}
+.ach-adesc{font-size:10px;color:var(--platinum-mid)}
+.ach-coins{font-family:'Orbitron',sans-serif;font-size:12px;color:var(--gold-light);font-weight:700;white-space:nowrap}
+
+/* ── GAME / PAUSE MENU ────────────────── */
+#game-menu{position:fixed;inset:0;background:rgba(10,10,10,.92);z-index:2600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+#game-menu.show{display:flex}
+.gm-box{background:linear-gradient(180deg,var(--surface),#0A0A0A);border:1px solid var(--gold);border-radius:12px;padding:36px 32px;max-width:380px;width:90%;text-align:center;box-shadow:0 0 80px rgba(212,175,55,.25)}
+.gm-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:var(--gold-light);letter-spacing:3px;margin-bottom:22px}
+.gm-btn{display:block;width:100%;background:var(--card);border:1px solid var(--border-gold);color:var(--platinum);font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;padding:13px;border-radius:6px;cursor:pointer;margin-bottom:10px;transition:all .15s}
+.gm-btn:hover{border-color:var(--gold);background:rgba(212,175,55,.1);color:var(--gold-light)}
+.gm-btn.danger:hover{border-color:#9b3944;color:#d46}
+
+/* ── ACHIEVEMENTS PANEL ───────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,10,.88);z-index:2700;align-items:center;justify-content:center}
+.modal-overlay.open,.modal-overlay:not(.hidden){display:flex}
+.modal-overlay.hidden{display:none!important}
+.modal-box{background:var(--surface);border:1px solid var(--border-gold);border-radius:10px;padding:32px;max-width:480px;width:90%;position:relative;max-height:86vh;overflow-y:auto}
+.modal-box h3{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--gold-light);margin-bottom:16px;letter-spacing:1px}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--platinum-mid);font-size:18px;cursor:pointer;padding:4px 8px}
+.ach-list-item{display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--border-gold);border-radius:6px;margin-bottom:8px;background:var(--card)}
+.ach-list-item.locked{opacity:.4;filter:grayscale(1)}
+.ach-list-item.unlocked{border-color:var(--gold)}
+.ach-li-icon{font-size:1.6rem}
+.ach-li-info{flex:1}
+.ach-li-name{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--platinum);font-weight:700}
+.ach-li-desc{font-size:10px;color:var(--platinum-mid)}
+.ach-li-coins{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--gold-light)}
+.char-info-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:14px;margin-bottom:14px}
+.char-info-row .ci-icon{font-size:2.4rem}
+
+/* ── HIDDEN COIN ──────────────────────── */
+.hidden-coin{position:absolute;width:22px;height:22px;cursor:pointer;z-index:50;border-radius:50%;background:radial-gradient(circle,rgba(240,204,96,.9),rgba(212,175,55,.2) 60%,transparent 75%);animation:coinTwinkle 2.2s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:11px}
+.hidden-coin.found{display:none}
+@keyframes coinTwinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.9;transform:scale(1.1)}}
+
+/* ── BOSS GATE ────────────────────────── */
+.boss-gate{margin-top:1.6rem;background:linear-gradient(135deg,#15100A,#0A0A0A);border:1px solid var(--gold);border-radius:10px;padding:24px;text-align:center;box-shadow:0 0 50px rgba(212,175,55,.15);position:relative;overflow:hidden}
+.boss-gate::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(255,107,26,.1),transparent 60%);pointer-events:none}
+.boss-gate.cleared{border-color:var(--emerald-bright)}
+.bg-title{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:var(--gold-light);letter-spacing:2px;margin-bottom:6px;position:relative}
+.bg-sub{font-size:12px;color:var(--platinum-mid);margin-bottom:16px;position:relative}
+.bg-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.bg-pay{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0A0A0A;border:none;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;letter-spacing:1px;padding:13px 26px;border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block}
+.bg-skip{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:1px;padding:13px 22px;border-radius:6px;cursor:pointer}
+.bg-skip:hover{color:var(--gold-light);border-color:var(--gold)}
+.bg-cleared-msg{display:none;color:var(--emerald-bright);font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1px;margin-top:10px}
+.boss-gate.cleared .bg-cleared-msg{display:block}
+.bg-stripe-note{font-size:9px;color:var(--platinum-dark);margin-top:12px;position:relative}
 
 /* ── ELEVATOR SIDEBAR ─────────────────── */
-#elevator{position:fixed;top:0;left:0;bottom:0;width:var(--el-w);background:#08080E;border-right:1px solid var(--border-gold);z-index:900;display:flex;flex-direction:column;overflow:hidden}
+#elevator{position:fixed;top:var(--hud-h);left:0;bottom:0;width:var(--el-w);background:#08080E;border-right:1px solid var(--border-gold);z-index:900;display:flex;flex-direction:column;overflow:hidden}
 #el-logo{padding:14px 0;text-align:center;border-bottom:1px solid var(--border-gold);flex-shrink:0;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;cursor:pointer}
 #el-current{display:block;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:var(--platinum-mid);letter-spacing:1px;text-align:center;padding:4px 0;border-bottom:1px solid var(--border-gold);flex-shrink:0}
 #el-shaft{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding:4px 4px}
 #el-shaft::-webkit-scrollbar{width:3px}
 #el-shaft::-webkit-scrollbar-thumb{background:var(--emerald);border-radius:2px}
-.el-btn{background:none;border:none;width:100%;padding:5px 4px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--platinum-dark);border-radius:3px;transition:all .15s;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.el-btn{background:none;border:none;width:100%;padding:5px 4px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--platinum-dark);border-radius:3px;transition:all .15s;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
 .el-btn:hover{background:rgba(212,175,55,0.12);color:var(--gold-light)}
 .el-btn.active{background:var(--gold);color:var(--dark)}
+.el-btn.visited::after{content:'✓';position:absolute;right:3px;top:3px;font-size:6px;color:var(--emerald-bright)}
+.el-btn.highlight-role{box-shadow:inset 0 0 0 1px var(--emerald-bright)}
 #el-arrows{flex-shrink:0;border-top:1px solid var(--border-gold);display:flex;gap:0}
 #el-arrows button{flex:1;background:none;border:none;color:var(--platinum-mid);font-size:14px;padding:10px 0;cursor:pointer;transition:color .15s}
 #el-arrows button:hover{color:var(--gold)}
@@ -43,7 +168,7 @@ body{background:var(--dark);color:var(--platinum);font-family:'Inter',sans-serif
 #mobile-dock{display:none;position:fixed;bottom:0;left:0;right:0;height:52px;background:#08080E;border-top:1px solid var(--border-gold);z-index:900;align-items:center;justify-content:space-between;padding:0 12px}
 #mobile-dock button{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer}
 #mobile-floor-name{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;color:var(--gold-light);letter-spacing:1px}
-#floor-sheet{display:none;position:fixed;inset:0;background:rgba(6,6,10,0.95);z-index:950;overflow-y:auto;padding:20px}
+#floor-sheet{display:none;position:fixed;inset:0;background:rgba(10,10,10,0.95);z-index:950;overflow-y:auto;padding:20px}
 #floor-sheet.open{display:block}
 .fsheet-close{float:right;background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);padding:6px 10px;border-radius:4px;cursor:pointer;margin-bottom:12px}
 .fsheet-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;clear:both}
@@ -63,7 +188,7 @@ body{background:var(--dark);color:var(--platinum);font-family:'Inter',sans-serif
 .stat-item{text-align:center}
 .stat-num{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-label{font-size:9px;letter-spacing:2px;color:var(--platinum-dark);text-transform:uppercase;margin-top:2px}
-.lobby-cta{display:inline-block;background:linear-gradient(135deg,var(--emerald),var(--emerald-light));color:var(--gold-light);font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:14px 32px;border-radius:4px;text-decoration:none;margin-bottom:3rem;transition:opacity .2s}
+.lobby-cta{display:inline-block;background:linear-gradient(135deg,var(--emerald),var(--emerald-light));color:var(--gold-light);font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:14px 32px;border-radius:4px;text-decoration:none;margin-bottom:3rem;transition:opacity .2s;cursor:pointer}
 .lobby-cta:hover{opacity:.85}
 
 /* ── DIRECTORY BOARD ─────────────────── */
@@ -82,7 +207,7 @@ body{background:var(--dark);color:var(--platinum);font-family:'Inter',sans-serif
 .arr-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
 .arr-bar{width:100%;border-radius:3px 3px 0 0;transition:height 1.2s cubic-bezier(.4,0,.2,1)}
 .arr-bar.historical{background:linear-gradient(180deg,var(--gold-light),var(--gold))}
-.arr-bar.projected{background:linear-gradient(180deg,#9b3944,#722F37);border:1px dashed #9b3944;border-bottom:none}
+.arr-bar.projected{background:linear-gradient(180deg,var(--emerald-bright),var(--emerald));border:1px dashed var(--emerald-bright);border-bottom:none}
 .arr-bar-label{font-size:8px;color:var(--platinum-dark);text-align:center;white-space:nowrap}
 .arr-bar-val{font-family:'Orbitron',sans-serif;font-size:8px;color:var(--gold-light);text-align:center}
 .arr-legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:8px;color:var(--platinum-dark)}
@@ -98,7 +223,7 @@ body{background:var(--dark);color:var(--platinum);font-family:'Inter',sans-serif
 .pay-notice strong{color:var(--gold-light)}
 
 /* ── FLOOR SECTIONS ──────────────────── */
-.floor-section{min-height:100vh;border-top:1px solid var(--border-gold);padding:0;display:flex;flex-direction:column}
+.floor-section{min-height:100vh;border-top:1px solid var(--border-gold);padding:0;display:flex;flex-direction:column;position:relative}
 .floor-inner{flex:1;padding:60px 5% 40px;max-width:1100px;margin:0 auto;width:100%}
 .floor-label{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--platinum-dark);text-transform:uppercase;margin-bottom:10px}
 .floor-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;background:linear-gradient(135deg,var(--platinum-mid) 0%,var(--gold) 40%,var(--gold-light) 55%,var(--gold) 70%,var(--platinum-mid) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -124,6 +249,10 @@ body{background:var(--dark);color:var(--platinum);font-family:'Inter',sans-serif
 .coming-soon-band{background:linear-gradient(90deg,rgba(212,175,55,0.08),rgba(212,175,55,0.15),rgba(212,175,55,0.08));border:1px solid var(--border-gold);border-radius:4px;padding:10px 14px;font-size:11px;color:var(--gold-light);margin-bottom:1.2rem;text-align:center;font-family:'Orbitron',sans-serif;letter-spacing:1.5px}
 .soulstack-badge{font-size:9px;color:var(--platinum-dark);letter-spacing:.5px;padding-top:12px;border-top:1px solid rgba(212,175,55,0.1)}
 .soulstack-badge .dot{color:#22c55e}
+.investor-deck{background:rgba(16,185,129,.06);border:1px solid var(--border-em);border-radius:6px;padding:12px 14px;margin-bottom:1.4rem;font-size:11px;color:var(--platinum-mid);display:none}
+.investor-deck.show{display:block}
+.investor-deck strong{color:var(--emerald-bright);font-family:'Orbitron',sans-serif;letter-spacing:1px;display:block;margin-bottom:4px;font-size:10px}
+.floor-section.role-highlight .floor-title{filter:drop-shadow(0 0 12px rgba(16,185,129,.35))}
 
 /* ── FOOTER ───────────────────────────── */
 footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);padding:32px 5%;text-align:center}
@@ -132,13 +261,7 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
 .footer-copy{font-size:10px;color:var(--platinum-dark);margin-top:6px}
 .footer-copy a{color:var(--platinum-dark)}
 
-/* ── MODALS ───────────────────────────── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(6,6,10,.88);z-index:2000;align-items:center;justify-content:center}
-.modal-overlay.open,.modal-overlay:not(.hidden){display:flex}
-.modal-overlay.hidden{display:none!important}
-.modal-box{background:var(--surface);border:1px solid var(--border-gold);border-radius:10px;padding:32px;max-width:480px;width:90%;position:relative}
-.modal-box h3{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--gold-light);margin-bottom:16px;letter-spacing:1px}
-.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--platinum-mid);font-size:18px;cursor:pointer;padding:4px 8px}
+/* ── MODALS (checkout/dynasty) ────────── */
 .modal-input{width:100%;background:var(--card);border:1px solid var(--border-gold);border-radius:4px;color:var(--platinum);font-size:13px;padding:10px 12px;outline:none;margin-bottom:8px}
 .modal-input:focus{border-color:var(--gold)}
 .modal-btn{display:block;width:100%;padding:12px;border:none;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;margin-top:8px;transition:opacity .2s}
@@ -149,6 +272,8 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
 .ref-savings-badge{display:none;background:rgba(26,138,80,.2);border:1px solid var(--border-em);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--emerald-light);margin-bottom:8px}
 .ref-your-code-wrap{background:var(--card);border:1px solid var(--border-gold);border-radius:4px;padding:10px 12px;margin-top:12px;display:flex;align-items:center;justify-content:space-between}
 .ref-copy-btn{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-size:10px;padding:4px 8px;border-radius:3px;cursor:pointer}
+.btc-line{font-size:10px;color:var(--platinum-dark);word-break:break-all;margin-top:8px}
+.btc-line strong{color:var(--gold-light)}
 
 /* ── DYNASTY MODAL ───────────────────── */
 #dynasty-modal{display:none}
@@ -166,10 +291,67 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
   .stat-num{font-size:1.4rem}
   .floor-pricing{flex-direction:column}
   .price-card{min-width:unset}
+  #minimap{bottom:60px}
 }
 </style>
 </head>
 <body>
+
+<!-- ═══════ CINEMATIC OPENING ═══════ -->
+<div id="cinematic">
+  <canvas id="ember-canvas"></canvas>
+  <button class="cine-skip" onclick="PhoenixGame.skipCinematic()">✕ SKIP</button>
+  <div class="cine-inner">
+    <div class="cine-title">PHOENIX<br>TOWER</div>
+    <div class="cine-sub">Empire Builder</div>
+    <div class="cine-press" id="cine-press">PRESS ENTER TO BEGIN</div>
+    <button class="cine-begin-btn" id="cine-begin" onclick="PhoenixGame.beginFromCinematic()">BEGIN</button>
+  </div>
+</div>
+
+<!-- ═══════ CHARACTER SELECT ═══════ -->
+<div id="char-select">
+  <div class="cs-title">CHOOSE YOUR ROLE</div>
+  <div class="cs-sub">How will you build the empire?</div>
+  <div class="cs-grid" id="cs-grid"></div>
+  <button class="cs-confirm" id="cs-confirm" onclick="PhoenixGame.confirmCharacter()">ENTER PHOENIX TOWER →</button>
+</div>
+
+<!-- ═══════ GAME HUD ═══════ -->
+<div id="game-hud" style="display:none">
+  <div class="hud-left">
+    <div class="hud-chip">🏆 <span class="hud-val">Empire Coins:</span> <span id="hud-coins-val">0</span></div>
+    <div class="hud-chip hud-hide-mobile">🏢 Floor <span class="hud-val" id="hud-floor">0</span> / 45</div>
+    <div class="hud-role-badge" id="hud-role"><span id="hud-role-icon">🧠</span> <span id="hud-role-name">Visionary</span></div>
+  </div>
+  <div class="hud-right">
+    <button class="hud-btn" onclick="PhoenixGame.toggleMinimap()" title="Minimap">🗺</button>
+    <button class="hud-btn hud-hide-mobile" onclick="PhoenixGame.save()" title="Save Progress">💾 SAVE</button>
+    <button class="hud-btn" onclick="PhoenixGame.openAchievements()" title="Achievements">🏅 <span id="hud-ach-count">0</span>/10</button>
+    <button class="hud-btn" onclick="PhoenixGame.openMenu()" title="Menu (ESC)">☰</button>
+  </div>
+</div>
+
+<!-- ═══════ MINIMAP ═══════ -->
+<div id="minimap">
+  <div class="mm-title">PHOENIX TOWER</div>
+  <div class="mm-tower" id="mm-tower"></div>
+</div>
+
+<!-- ═══════ ACHIEVEMENT POPUP STACK ═══════ -->
+<div id="ach-stack"></div>
+
+<!-- ═══════ GAME MENU ═══════ -->
+<div id="game-menu">
+  <div class="gm-box">
+    <div class="gm-title">⏸ PAUSED</div>
+    <button class="gm-btn" onclick="PhoenixGame.closeMenu()">▶ RESUME</button>
+    <button class="gm-btn" onclick="PhoenixGame.openAchievements()">🏅 ACHIEVEMENTS</button>
+    <button class="gm-btn" onclick="PhoenixGame.save();PhoenixGame.toast('Progress saved')">💾 SAVE</button>
+    <button class="gm-btn" onclick="PhoenixGame.openCharInfo()">🎭 CHARACTER INFO</button>
+    <button class="gm-btn danger" onclick="PhoenixGame.newGame()">🔄 NEW GAME</button>
+  </div>
+</div>
 
 <!-- ═══════ ELEVATOR SIDEBAR ═══════ -->
 <nav id="elevator">
@@ -178,7 +360,6 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
   <div id="el-current">LOBBY</div>
   <div id="el-shaft">
     <button class="el-btn active" data-floor="0" onclick="goToFloor(0)">LOBBY</button>
-    <!-- Floor buttons injected by JS -->
   </div>
   <div id="el-arrows">
     <button onclick="goFloorDelta(-1)">▲</button>
@@ -216,7 +397,10 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
         <div class="stat-item"><div class="stat-num" id="ctr-cases">0</div><div class="stat-label">Cases Won</div></div>
         <div class="stat-item"><div class="stat-num" id="ctr-arr">$0</div><div class="stat-label">ARR 2025</div></div>
       </div>
-      <a href="#floor-1" class="lobby-cta" onclick="goToFloor(1);return false">Enter the Building &nbsp;↓</a>
+      <a class="lobby-cta" onclick="goToFloor(1);return false">Enter the Building &nbsp;↓</a>
+
+      <!-- Hidden coin in lobby -->
+      <span class="hidden-coin" id="coin-lobby" style="top:32%;left:14%" onclick="PhoenixGame.collectCoin('lobby',this)">💰</span>
 
       <!-- ARR Chart -->
       <div class="arr-section">
@@ -225,12 +409,12 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
           <div class="arr-bar-wrap"><div class="arr-bar historical" id="bar-yr1" style="height:0;max-height:100px"></div><div class="arr-bar-val">$180K</div><div class="arr-bar-label">Yr1</div></div>
           <div class="arr-bar-wrap"><div class="arr-bar historical" id="bar-yr2" style="height:0;max-height:100px"></div><div class="arr-bar-val">$640K</div><div class="arr-bar-label">Yr2</div></div>
           <div class="arr-bar-wrap"><div class="arr-bar historical" id="bar-yr3" style="height:0;max-height:100px"></div><div class="arr-bar-val">$2.4M</div><div class="arr-bar-label">Yr3</div></div>
-          <div class="arr-bar-wrap"><div class="arr-bar projected" id="bar-yr4" style="height:0;max-height:100px"></div><div class="arr-bar-val" style="color:#9b3944">$8.5M</div><div class="arr-bar-label">Yr4 ▲</div></div>
-          <div class="arr-bar-wrap"><div class="arr-bar projected" id="bar-yr5" style="height:0;max-height:100px"></div><div class="arr-bar-val" style="color:#9b3944">$22M</div><div class="arr-bar-label">Yr5 ▲</div></div>
+          <div class="arr-bar-wrap"><div class="arr-bar projected" id="bar-yr4" style="height:0;max-height:100px"></div><div class="arr-bar-val" style="color:var(--emerald-bright)">$8.5M</div><div class="arr-bar-label">Yr4 ▲</div></div>
+          <div class="arr-bar-wrap"><div class="arr-bar projected" id="bar-yr5" style="height:0;max-height:100px"></div><div class="arr-bar-val" style="color:var(--emerald-bright)">$22M</div><div class="arr-bar-label">Yr5 ▲</div></div>
         </div>
         <div class="arr-legend">
           <span><span class="arr-dot" style="background:var(--gold)"></span>Historical</span>
-          <span><span class="arr-dot" style="background:#722F37;border:1px dashed #9b3944"></span>Projected</span>
+          <span><span class="arr-dot" style="background:var(--emerald);border:1px dashed var(--emerald-bright)"></span>Projected</span>
         </div>
       </div>
 
@@ -256,7 +440,7 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
     <div class="fbadge"><span style="color:var(--emerald-light)">●</span> OmniaGuard Secured</div>
   </div>
   <div class="footer-copy">© 2025 Francisco Holdings Inc. All Rights Reserved.<br>
-  Payments via PayPal or Interac · <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a><br>
+  Payments via PayPal or Bitcoin · <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a><br>
   <a href="../affiliate/">Affiliate Program</a> &nbsp;·&nbsp; <a href="book.html">Book Strategy Session</a></div>
 </footer>
 
@@ -269,7 +453,7 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
       <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Product</div>
       <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold-light)" id="ref-product-name"></div>
     </div>
-    <div class="pay-notice"><strong>Payment via PayPal or Interac e-Transfer.</strong><br>Send to <strong>franciscoderek7@gmail.com</strong> with product name as reference.</div>
+    <div class="pay-notice"><strong>Pay via PayPal or Bitcoin.</strong> Stripe temporarily unavailable.<br>PayPal: paypal.me/derekfrancisco · Reference the product name.</div>
     <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Price</div>
     <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--platinum)" id="ref-orig-price"></div>
     <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--gold);display:none;margin-top:4px" id="ref-disc-price"></div>
@@ -277,12 +461,13 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
     <div style="margin-top:12px">
       <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:6px">Have a referral code?</div>
       <div style="display:flex;gap:6px">
-        <input class="modal-input" id="ref-code-input" placeholder="Enter code (FH####)" style="margin-bottom:0;flex:1">
+        <input class="modal-input" id="ref-code-input" placeholder="Enter code (FH#### / PHOENIX-XXXX)" style="margin-bottom:0;flex:1">
         <button class="modal-btn btn-emerald" onclick="applyRefCode()" style="width:auto;margin:0;padding:10px 14px;font-size:10px">APPLY</button>
       </div>
       <div class="ref-code-msg" id="ref-code-msg"></div>
     </div>
     <button class="modal-btn btn-gold" onclick="proceedToPayPal()">PAY VIA PAYPAL →</button>
+    <div class="btc-line">Or pay with Bitcoin: <strong>bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</strong></div>
     <div class="ref-your-code-wrap" style="margin-top:12px">
       <div>
         <div style="font-size:9px;color:var(--platinum-dark);letter-spacing:1px;margin-bottom:2px">YOUR REFERRAL CODE</div>
@@ -310,6 +495,39 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
       <div style="font-size:11px;color:var(--platinum-dark);margin-bottom:12px" id="aff-link-display"></div>
       <button class="modal-btn btn-emerald" onclick="copyAffLink()">Copy Affiliate Link</button>
     </div>
+  </div>
+</div>
+
+<!-- ACHIEVEMENTS PANEL -->
+<div class="modal-overlay hidden" id="achievements-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="PhoenixGame.closeAchievements()">✕</button>
+    <h3>🏅 ACHIEVEMENTS — <span id="ach-modal-count">0</span>/10</h3>
+    <div id="ach-list"></div>
+  </div>
+</div>
+
+<!-- CHARACTER INFO PANEL -->
+<div class="modal-overlay hidden" id="charinfo-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="PhoenixGame.closeCharInfo()">✕</button>
+    <h3>🎭 CHARACTER</h3>
+    <div class="char-info-row">
+      <div class="ci-icon" id="ci-icon">🧠</div>
+      <div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold-light)" id="ci-name">Visionary</div>
+        <div style="font-size:11px;color:var(--platinum-mid);font-style:italic" id="ci-tagline"></div>
+        <div style="font-size:11px;color:var(--emerald-bright);margin-top:4px" id="ci-bonus"></div>
+      </div>
+    </div>
+    <div class="ref-your-code-wrap">
+      <div>
+        <div style="font-size:9px;color:var(--platinum-dark);letter-spacing:1px;margin-bottom:2px">YOUR REFERRAL CODE</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold)" id="ci-refcode">PHOENIX-XXXX</div>
+      </div>
+      <button class="ref-copy-btn" onclick="PhoenixGame.copyPhoenixRef()">Copy Link</button>
+    </div>
+    <div style="font-size:10px;color:var(--platinum-dark);margin-top:12px">Share your code — friends get a 5% discount and you build the empire together.</div>
   </div>
 </div>
 
@@ -341,25 +559,28 @@ var FLOORS = [
    desc:'Autonomous AI threat detection, real-time response, and zero-trust architecture for enterprises that cannot afford a breach.',
    feats:['Real-time threat scanning','AI behavioral analysis','Zero-trust identity management','14-layer defense matrix','Executive risk dashboards','SOC 2 & HIPAA compliance','Incident response 4hr SLA','Autonomous countermeasures'],
    pricing:[{tier:'Sentinel',val:'$499/mo',desc:'Up to 50 endpoints · Monitoring + weekly reports',url:'mailto:omniaguard1@gmail.com?subject=Sentinel%20Inquiry',cls:'btn-emerald'},{tier:'Warden',val:'$2,499/mo',desc:'250 endpoints · Active defense · Daily briefings',url:'mailto:omniaguard1@gmail.com?subject=Warden%20Inquiry',cls:'btn-gold',feat:true},{tier:'Archon',val:'$9,999/mo',desc:'Unlimited endpoints · Full fortress · 24/7 SOC',url:'mailto:omniaguard1@gmail.com?subject=Archon%20Inquiry',cls:'btn-platinum'}],
-   live:'https://omniaguard.com',liveLabel:'omniaguard.com →',contact:'omniaguard1@gmail.com',loopB:true},
+   live:'https://omniaguard.com',liveLabel:'omniaguard.com →',contact:'omniaguard1@gmail.com',loopB:true,
+   boss:{title:'⚔ Secure the Empire',sub:'Deploy OmniaGuard 14-layer defense. Start with the Warden tier.',amount:2499,ach:'cyber_warrior'}},
 
-  {n:2,name:'BENO-X / Weedlaw',tag:'⚖️',sub:'Constitutional Cannabis Defense · 200+ Victories',
+  {n:2,name:'BENO-X / Weedlaw',tag:'⚖️',sub:'Constitutional Defense Framework · 200+ Victories',
    desc:'The BENO-X Framework — 5-pillar constitutional defense: Breach identification, Evidence exclusion, Negotiation leverage, On-record defense, X-multiplier. 20+ years of Charter victories.',
    feats:['Charter s.8/9/10 analysis','Evidence exclusion motions','Crown negotiation strategy','On-record documentation','BENO-X X-multiplier precedent','200+ cases · 4,000 charges stayed','20+ years expertise','Available coast-to-coast'],
    pricing:[{tier:'BENO-X Playbook',val:'$49',desc:'Full framework PDF + case templates',url:'https://paypal.me/derekfrancisco/49CAD',cls:'btn-emerald'},{tier:'Strategy Session',val:'$500',desc:'60-min consultation with Derek Francisco',url:'https://franciscoholdingsinc.com/book.html',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/Ccldr-net/',liveLabel:'CCLDR (GitHub Pages) →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day registration hold.'},
 
   {n:3,name:'PrimeDox AI',tag:'🤖',sub:'Derek Francisco\'s AI Clone · Document Automation · 24/7',
-   desc:'20 years of Cannabis Charter expertise, constitutional strategy, and business automation compressed into an AI available around the clock.',
+   desc:'20 years of constitutional Charter expertise, strategy, and business automation compressed into an AI available around the clock.',
    feats:['BENO-X defense builder','Charter breach identification','Legal document generation','Court filing templates','Business document automation','Confidential AI sessions','Real-time case analysis','BENO-X full case law library'],
    pricing:[{tier:'Free',val:'$0',desc:'10 msg/day · 5 docs/mo · 1 BENO-X check',url:'primedox-ai-chat.html',cls:'btn-platinum'},{tier:'Pro',val:'$49/mo',desc:'Unlimited chat · Full BENO-X · All case law',url:'https://paypal.me/derekfrancisco/49CAD',cls:'btn-emerald',feat:true},{tier:'Elite',val:'$199/mo',desc:'Priority + 30% affiliate + white-glove onboarding',url:'https://paypal.me/derekfrancisco/199CAD',cls:'btn-gold'}],
-   live:'primedox-ai-chat.html',liveLabel:'Start Free Trial →',contact:'docweedla@gmail.com',note:'First 14 days free. No auto-billing. No credit card.'},
+   live:'primedox-ai-chat.html',liveLabel:'Start Free Trial →',contact:'docweedla@gmail.com',note:'First 14 days free. No auto-billing. No credit card.',
+   boss:{title:'⚔ Unleash PrimeDox AI',sub:'Activate the Pro tier — unlimited AI, full BENO-X, all case law.',amount:49,ach:'ai_pioneer'}},
 
-  {n:4,name:'CCLDR',tag:'📋',sub:'Canadian Cannabis constitutional education resource',
-   desc:'Canada\'s cannabis constitutional education network. Charter challenges, evidence exclusion, and constitutional rights education for every province.',
-   feats:['Cannabis charter education','Evidence exclusion filings','Crown negotiation leverage','Know Your Rights training','Case tracking system','Province-wide network','24/7 emergency intake','BENO-X integrated workflow'],
+  {n:4,name:'CCLDR',tag:'📋',sub:'Constitutional education resource',
+   desc:'A constitutional education network. Charter challenges, evidence exclusion, and constitutional rights education for every province.',
+   feats:['Constitutional charter education','Evidence exclusion filings','Crown negotiation leverage','Know Your Rights training','Case tracking system','Province-wide network','24/7 emergency intake','BENO-X integrated workflow'],
    pricing:[{tier:'Warrior',val:'$99',desc:'BENO-X starter kit + rights guide',url:'https://paypal.me/derekfrancisco/99CAD',cls:'btn-platinum'},{tier:'Pro',val:'$299',desc:'Full BENO-X + document templates + case review',url:'https://paypal.me/derekfrancisco/299CAD',cls:'btn-emerald'},{tier:'Elite',val:'$999',desc:'2 strategy calls + ongoing support',url:'https://paypal.me/derekfrancisco/999CAD',cls:'btn-gold'},{tier:'Sovereign',val:'$1,499',desc:'Full retainer · unlimited access · dedicated support',url:'https://paypal.me/derekfrancisco/1499CAD',cls:'btn-gold'}],
-   live:'https://franciscoderek7.github.io/Ccldr-net/',liveLabel:'CCLDR (GitHub Pages) →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day hold. Full launch Q3 2026.'},
+   live:'https://franciscoderek7.github.io/Ccldr-net/',liveLabel:'CCLDR (GitHub Pages) →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day hold. Full launch Q3 2026.',
+   boss:{title:'⚔ Defend Your Rights',sub:'Join CCLDR with the Pro tier — full BENO-X, templates, and case review.',amount:299,ach:'legal_legend'}},
 
   {n:5,name:'CleanSwarm AI',tag:'🐝',sub:'Physical & Document Cleaning Intelligence',
    desc:'AI dispatch for commercial and residential physical cleaning services — private jets, skyscrapers, offices, yachts — and AI-powered document cleanup including OCR and data extraction.',
@@ -409,9 +630,9 @@ var FLOORS = [
    pricing:[{tier:'Session',val:'$99',desc:'1-hour coaching session',url:'https://paypal.me/derekfrancisco/99CAD',cls:'btn-emerald'},{tier:'Package',val:'$299',desc:'Monthly program + travel lifestyle blueprint',url:'https://paypal.me/derekfrancisco/299CAD',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/mindshift-makayla/',liveLabel:'MindShift →',contact:'franciscoderek7@gmail.com'},
 
-  {n:13,name:'CCC-Site',tag:'🌿',sub:'Canadian Cannabis Consulting · Compliance & Licensing',
-   desc:'Full-service cannabis business consulting — from Health Canada licensing and compliance to operations, marketing, and expansion strategy.',
-   feats:['Health Canada licensing','Compliance management','Operations setup','Marketing strategy','SOP development','Financial modeling','Distribution strategy','Expansion planning'],
+  {n:13,name:'CCC-Site',tag:'🌐',sub:'Business Consulting · Compliance & Licensing',
+   desc:'Full-service business consulting — from licensing and compliance to operations, marketing, and expansion strategy.',
+   feats:['Licensing guidance','Compliance management','Operations setup','Marketing strategy','SOP development','Financial modeling','Distribution strategy','Expansion planning'],
    pricing:[{tier:'Consult',val:'$500',desc:'60-min compliance strategy session',url:'https://paypal.me/derekfrancisco/499CAD',cls:'btn-emerald'},{tier:'Retainer',val:'$2,000/mo',desc:'Full compliance management + monthly strategy',url:'https://paypal.me/derekfrancisco/199CAD',cls:'btn-gold'}],
    live:false,contact:'docweedla@gmail.com'},
 
@@ -430,10 +651,10 @@ var FLOORS = [
    desc:'End-to-end real estate services powered by AI — buying, selling, investment, and property management across Canada and beyond.',
    pricing:[{tier:'Listing Commission',val:'2.5%',desc:'AI-powered listing, marketing, and closing',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Realty%20Inquiry',cls:'btn-gold'},{tier:'Buyer Commission',val:'2.5%',desc:'AI property search, negotiation, close',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Realty%20Buyer',cls:'btn-emerald'}],
    live:false,contact:'franciscoderek7@gmail.com',note:'RECO licensing in progress. Full launch Q4 2026.'},
-  {n:23,name:'Francisco Legal',tag:'⚖️',sub:'Full-Service Law Firm · 19 Practice Areas',
-   desc:'AI-enhanced legal services across all practice areas. Partner lawyers. PrimeDox AI document generation. Nationwide coverage.',
-   pricing:[{tier:'Consultation',val:'$150/hr',desc:'Initial legal consultation',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Legal%20Consult',cls:'btn-emerald'},{tier:'Retainer',val:'$500/hr',desc:'Ongoing educational guidance',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Legal%20Retainer',cls:'btn-gold'}],
-   live:false,contact:'franciscoderek7@gmail.com',note:'Partner lawyer network launching Q1 2027.'},
+  {n:23,name:'Francisco Legal',tag:'⚖️',sub:'Full-Service Educational Resource · 19 Practice Areas',
+   desc:'AI-enhanced legal education across all practice areas. Partner network. PrimeDox AI document generation. Nationwide coverage.',
+   pricing:[{tier:'Consultation',val:'$150/hr',desc:'Initial educational consultation',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Legal%20Consult',cls:'btn-emerald'},{tier:'Retainer',val:'$500/hr',desc:'Ongoing educational guidance',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Legal%20Retainer',cls:'btn-gold'}],
+   live:false,contact:'franciscoderek7@gmail.com',note:'Partner network launching Q1 2027.'},
   {n:24,name:'Francisco Mortgage',tag:'🏦',sub:'AI Mortgage Brokerage · Best Rate Guarantee',coming:true},
   {n:25,name:'Francisco Insurance',tag:'🛡️',sub:'Home · Auto · Life · Business · Cyber Insurance',coming:true},
   {n:26,name:'Francisco Title',tag:'📜',sub:'Title Insurance · Escrow Services · $200-500/transaction',coming:true},
@@ -461,6 +682,415 @@ var FLOORS = [
    live:false,contact:'franciscoderek7@gmail.com',note:'Konami Code: ↑↑↓↓←→←→BA',secret:true}
 ];
 
+/* Floor-tag mapping for role highlights & achievement triggers */
+var ROLE_HIGHLIGHT = {
+  Advocate: [2,4,23,35],      // CCLDR / legal floors
+  Guardian: [1,7,44]          // OmniaGuard / security floors
+};
+
+/* ══════════════════════════════════════════════════════
+   ACHIEVEMENTS
+══════════════════════════════════════════════════════ */
+var ACHIEVEMENTS = {
+  'lobby_lurker': { name: 'Lobby Lurker', desc: 'Spent 5+ minutes in the lobby', coins: 50, icon: '🏛', trigger: 'time_in_lobby' },
+  'first_ascent': { name: 'First Ascent', desc: 'Visited Floor 1', coins: 100, icon: '⬆️', trigger: 'floor_visit_1' },
+  'cyber_warrior': { name: 'Cyber Warrior', desc: 'Explored OmniaGuard floor', coins: 500, icon: '🛡', trigger: 'floor_visit_omniaguard' },
+  'legal_legend': { name: 'Legal Legend', desc: 'Explored CCLDR floor', coins: 500, icon: '⚖', trigger: 'floor_visit_ccldr' },
+  'ai_pioneer': { name: 'AI Pioneer', desc: 'Explored PrimeDox AI floor', coins: 300, icon: '🤖', trigger: 'floor_visit_primedox' },
+  'empire_5': { name: 'Empire Builder', desc: 'Visited 5 different floors', coins: 2000, icon: '👑', trigger: 'floors_visited_5' },
+  'secret_keeper': { name: 'Secret Keeper', desc: 'Found a hidden Empire Coin', coins: 100, icon: '💰', trigger: 'hidden_coin_found' },
+  'konami_master': { name: 'Konami Master', desc: 'Entered the Konami code', coins: 1000, icon: '🎮', trigger: 'konami' },
+  'night_owl': { name: 'Night Owl', desc: 'Visited between midnight and 5am', coins: 200, icon: '🦉', trigger: 'night_visit' },
+  'phoenix_rising': { name: 'Phoenix Rising', desc: 'Earned 5 achievements', coins: 5000, icon: '🔥', trigger: 'achievements_5' }
+};
+
+var CHARACTERS = [
+  {id:'visionary',icon:'🧠',name:'Visionary',tagline:'Sees the empire whole',bonus:'All 45 floors unlocked (read-only)'},
+  {id:'entrepreneur',icon:'💼',name:'Entrepreneur',tagline:'Builds from scratch',bonus:'15% referral commission'},
+  {id:'investor',icon:'💰',name:'Investor',tagline:'Capital multiplied',bonus:'Investor deck on all floors'},
+  {id:'advocate',icon:'⚖',name:'Advocate',tagline:'Rights defended',bonus:'CCLDR / legal floors highlighted'},
+  {id:'guardian',icon:'🛡',name:'Guardian',tagline:'Security first',bonus:'OmniaGuard floors highlighted'}
+];
+
+/* ══════════════════════════════════════════════════════
+   GAME ENGINE
+══════════════════════════════════════════════════════ */
+var PhoenixGame = (function(){
+  var LS = {
+    visited:'phoenix_visited', coins:'phoenix_coins', floors:'phoenix_floors',
+    ach:'phoenix_achievements', role:'phoenix_role', ref:'phoenix_ref',
+    coinsFound:'phoenix_coins_found', boss:'phoenix_boss_cleared'
+  };
+  var state = {
+    coins:0, floors:[], achievements:[], role:null,
+    refCode:'', coinsFound:[], bossCleared:[]
+  };
+  var _selectedChar = null;
+  var _lobbyTimer = null;
+  var _lobbyStart = null;
+
+  function load(){
+    state.coins = parseInt(localStorage.getItem(LS.coins)||'0',10);
+    state.floors = safeArr(LS.floors);
+    state.achievements = safeArr(LS.ach);
+    state.role = localStorage.getItem(LS.role) || null;
+    state.coinsFound = safeArr(LS.coinsFound);
+    state.bossCleared = safeArr(LS.boss);
+    var r = localStorage.getItem(LS.ref);
+    if(!r){ r = 'PHOENIX-'+randCode(4); localStorage.setItem(LS.ref, r); }
+    state.refCode = r;
+  }
+  function safeArr(k){ try{ return JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){ return []; } }
+  function randCode(n){ var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var i=0;i<n;i++)s+=c[Math.floor(Math.random()*c.length)];return s; }
+
+  function save(){
+    localStorage.setItem(LS.coins, state.coins);
+    localStorage.setItem(LS.floors, JSON.stringify(state.floors));
+    localStorage.setItem(LS.ach, JSON.stringify(state.achievements));
+    if(state.role) localStorage.setItem(LS.role, state.role);
+    localStorage.setItem(LS.coinsFound, JSON.stringify(state.coinsFound));
+    localStorage.setItem(LS.boss, JSON.stringify(state.bossCleared));
+    localStorage.setItem(LS.visited, '1');
+  }
+
+  /* ── COINS ── */
+  function addCoins(amt){
+    state.coins += amt;
+    var el = document.getElementById('hud-coins-val');
+    if(el){ el.textContent = state.coins.toLocaleString(); el.classList.add('bump'); setTimeout(function(){el.classList.remove('bump');},260); }
+    save();
+  }
+  function refreshCoins(){ var el=document.getElementById('hud-coins-val'); if(el) el.textContent=state.coins.toLocaleString(); }
+
+  /* ── ACHIEVEMENTS ── */
+  function unlock(id){
+    if(!ACHIEVEMENTS[id] || state.achievements.indexOf(id)!==-1) return;
+    state.achievements.push(id);
+    var a = ACHIEVEMENTS[id];
+    addCoins(a.coins);
+    popAchievement(a);
+    updateAchCount();
+    save();
+    if(state.achievements.length>=5) unlock('phoenix_rising');
+  }
+  function updateAchCount(){
+    var n = state.achievements.length;
+    var hc = document.getElementById('hud-ach-count'); if(hc) hc.textContent=n;
+    var mc = document.getElementById('ach-modal-count'); if(mc) mc.textContent=n;
+  }
+  function popAchievement(a){
+    var stack = document.getElementById('ach-stack');
+    var card = document.createElement('div');
+    card.className='ach-card';
+    card.innerHTML='<div class="ach-head">🏆 ACHIEVEMENT UNLOCKED</div>'+
+      '<div class="ach-body"><div class="ach-icon">'+a.icon+'</div>'+
+      '<div class="ach-info"><div class="ach-aname">'+a.name+'</div><div class="ach-adesc">'+a.desc+'</div></div>'+
+      '<div class="ach-coins">+'+a.coins.toLocaleString()+'</div></div>';
+    stack.appendChild(card);
+    requestAnimationFrame(function(){ card.classList.add('in'); });
+    setTimeout(function(){ card.classList.remove('in'); setTimeout(function(){ if(card.parentNode)card.parentNode.removeChild(card); },600); }, 4200);
+  }
+
+  /* ── FLOOR VISITS ── */
+  function visitFloor(n){
+    if(n<1||n>45) return;
+    if(state.floors.indexOf(n)===-1){
+      state.floors.push(n);
+      addCoins(10);
+      save();
+      markVisitedMinimap();
+      var btn=document.querySelector('[data-floor="'+n+'"].el-btn'); if(btn) btn.classList.add('visited');
+      // achievement triggers tied to specific brands
+      if(n===1){ unlock('first_ascent'); unlock('cyber_warrior'); }
+      if(n===3) unlock('ai_pioneer');
+      if(n===4) unlock('legal_legend');
+      if(state.floors.length>=5) unlock('empire_5');
+    }
+    var hf=document.getElementById('hud-floor'); if(hf) hf.textContent=n;
+    updateMinimapCurrent(n);
+  }
+
+  /* ── HIDDEN COINS ── */
+  function collectCoin(id, el){
+    if(state.coinsFound.indexOf(id)!==-1) return;
+    state.coinsFound.push(id);
+    if(el) el.classList.add('found');
+    addCoins(50);
+    unlock('secret_keeper');
+    toast('+50 Empire Coins — hidden coin found!');
+    save();
+  }
+  function restoreCoins(){
+    state.coinsFound.forEach(function(id){
+      var el=document.getElementById('coin-'+id); if(el) el.classList.add('found');
+    });
+  }
+
+  /* ── BOSS GATES ── */
+  function clearBoss(floorN, ach){
+    if(state.bossCleared.indexOf(floorN)===-1){
+      state.bossCleared.push(floorN);
+      addCoins(500);
+      if(ach) unlock(ach);
+      toast('+500 Empire Coins — commitment honored!');
+      save();
+    }
+    var gate=document.getElementById('boss-'+floorN);
+    if(gate) gate.classList.add('cleared');
+  }
+  function payBoss(floorN, amount, ach){
+    // open PayPal (honor system — cannot verify)
+    window.open('https://paypal.me/derekfrancisco/'+amount+'CAD','_blank','noopener');
+    clearBoss(floorN, ach);
+  }
+  function skipBoss(floorN){
+    var gate=document.getElementById('boss-'+floorN);
+    if(gate){ gate.style.opacity='0.45'; }
+    toast('Skipped — you can commit any time.');
+  }
+
+  /* ── MINIMAP ── */
+  function buildMinimap(){
+    var t=document.getElementById('mm-tower');
+    var h='<div class="mm-lobby" data-mm="0" title="Lobby"></div>';
+    for(var i=1;i<=45;i++){
+      h+='<div class="mm-floor" data-mm="'+i+'" title="Floor '+i+'"></div>';
+    }
+    t.innerHTML=h;
+    t.querySelectorAll('[data-mm]').forEach(function(el){
+      el.addEventListener('click',function(){ goToFloor(parseInt(el.getAttribute('data-mm'),10)); });
+    });
+    markVisitedMinimap();
+  }
+  function markVisitedMinimap(){
+    state.floors.forEach(function(n){
+      var el=document.querySelector('.mm-floor[data-mm="'+n+'"]'); if(el) el.classList.add('explored');
+    });
+  }
+  function updateMinimapCurrent(n){
+    document.querySelectorAll('#mm-tower [data-mm]').forEach(function(el){ el.classList.remove('current'); });
+    var el=document.querySelector('[data-mm="'+n+'"]'); if(el) el.classList.add('current');
+  }
+  function toggleMinimap(){ document.getElementById('minimap').classList.toggle('open'); }
+
+  /* ── TOAST ── */
+  function toast(msg){
+    var t=document.createElement('div');
+    t.textContent=msg;
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0A0A0A;border:1px solid var(--gold);color:var(--gold-light);font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1px;padding:12px 22px;border-radius:6px;z-index:3200;opacity:0;transition:all .35s;box-shadow:0 6px 30px rgba(0,0,0,.6)';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){ t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)'; });
+    setTimeout(function(){ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(20px)'; setTimeout(function(){ if(t.parentNode)t.parentNode.removeChild(t); },400); }, 2400);
+  }
+
+  /* ── EMBER CINEMATIC ── */
+  function startEmbers(){
+    var canvas=document.getElementById('ember-canvas');
+    if(!canvas) return;
+    var ctx=canvas.getContext('2d');
+    function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+    resize(); window.addEventListener('resize',resize);
+    var embers=[];
+    for(var i=0;i<70;i++){
+      embers.push({x:Math.random()*canvas.width,y:canvas.height+Math.random()*canvas.height,
+        r:Math.random()*2.4+0.6,sp:Math.random()*1.4+0.4,dx:(Math.random()-0.5)*0.6,
+        hue:Math.random()>0.5?42:28});
+    }
+    var running=true;
+    PhoenixGame._stopEmbers=function(){ running=false; };
+    function frame(){
+      if(!running) return;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      embers.forEach(function(e){
+        e.y-=e.sp; e.x+=e.dx;
+        if(e.y<-10){ e.y=canvas.height+10; e.x=Math.random()*canvas.width; }
+        ctx.beginPath();
+        var g=ctx.createRadialGradient(e.x,e.y,0,e.x,e.y,e.r*3);
+        g.addColorStop(0,'hsla('+e.hue+',95%,60%,0.9)');
+        g.addColorStop(1,'hsla('+e.hue+',95%,40%,0)');
+        ctx.fillStyle=g;
+        ctx.arc(e.x,e.y,e.r*3,0,Math.PI*2);
+        ctx.fill();
+      });
+      requestAnimationFrame(frame);
+    }
+    frame();
+  }
+
+  /* ── FLOW: CINEMATIC → CHARACTER → GAME ── */
+  function boot(){
+    load();
+    buildCharacterCards();
+    buildMinimap();
+    restoreCoins();
+    // role from prior session
+    if(state.role){
+      applyRoleEffects();
+    }
+    var visited = localStorage.getItem(LS.visited);
+    document.body.classList.add('game-locked');
+    if(visited && state.role){
+      // returning player → CONTINUE, skip straight to game
+      document.getElementById('cine-press').textContent='WELCOME BACK';
+      document.getElementById('cine-begin').textContent='CONTINUE';
+      showCinematic(true);
+    } else {
+      showCinematic(false);
+    }
+  }
+
+  function showCinematic(returning){
+    var c=document.getElementById('cinematic');
+    c.classList.add('show');
+    startEmbers();
+    PhoenixGame._returning = returning;
+  }
+  function beginFromCinematic(){
+    if(PhoenixGame._stopEmbers) PhoenixGame._stopEmbers();
+    document.getElementById('cinematic').classList.remove('show');
+    if(PhoenixGame._returning && state.role){
+      enterGame();
+    } else {
+      document.getElementById('char-select').classList.add('show');
+    }
+  }
+  function skipCinematic(){ beginFromCinematic(); }
+
+  function buildCharacterCards(){
+    var g=document.getElementById('cs-grid');
+    g.innerHTML='';
+    CHARACTERS.forEach(function(ch){
+      var card=document.createElement('div');
+      card.className='cs-card';
+      card.innerHTML='<div class="cs-icon">'+ch.icon+'</div><div class="cs-name">'+ch.name+'</div>'+
+        '<div class="cs-tagline">"'+ch.tagline+'"</div><div class="cs-bonus">'+ch.bonus+'</div>';
+      card.onclick=function(){
+        document.querySelectorAll('.cs-card').forEach(function(c){c.classList.remove('selected');});
+        card.classList.add('selected');
+        _selectedChar=ch;
+        document.getElementById('cs-confirm').classList.add('ready');
+      };
+      g.appendChild(card);
+    });
+  }
+  function confirmCharacter(){
+    if(!_selectedChar) return;
+    state.role=_selectedChar.id;
+    save();
+    applyRoleEffects();
+    document.getElementById('char-select').classList.remove('show');
+    enterGame();
+  }
+  function getRoleObj(){ return CHARACTERS.filter(function(c){return c.id===state.role;})[0] || CHARACTERS[0]; }
+
+  function applyRoleEffects(){
+    var role=getRoleObj();
+    // HUD badge
+    document.getElementById('hud-role-icon').textContent=role.icon;
+    document.getElementById('hud-role-name').textContent=role.name;
+    // Investor: show investor decks
+    if(role.id==='investor'){
+      document.querySelectorAll('.investor-deck').forEach(function(d){ d.classList.add('show'); });
+    }
+    // Advocate / Guardian: highlight floors
+    var hl = role.id==='advocate'?ROLE_HIGHLIGHT.Advocate : role.id==='guardian'?ROLE_HIGHLIGHT.Guardian : [];
+    hl.forEach(function(n){
+      var sec=document.getElementById('floor-'+n); if(sec) sec.classList.add('role-highlight');
+      var btn=document.querySelector('[data-floor="'+n+'"].el-btn'); if(btn) btn.classList.add('highlight-role');
+    });
+  }
+
+  function enterGame(){
+    document.body.classList.remove('game-locked');
+    document.body.classList.add('game-ready');
+    document.getElementById('game-hud').style.display='flex';
+    refreshCoins();
+    updateAchCount();
+    // mark previously visited floors
+    state.floors.forEach(function(n){
+      var btn=document.querySelector('[data-floor="'+n+'"].el-btn'); if(btn) btn.classList.add('visited');
+    });
+    startLobbyTimer();
+    nightCheck();
+    toast('Welcome, '+getRoleObj().name+'. Build the empire.');
+  }
+
+  function startLobbyTimer(){
+    _lobbyStart=Date.now();
+    // award lobby_lurker after 5 min if still near lobby
+    setTimeout(function(){
+      if(state.achievements.indexOf('lobby_lurker')===-1 && ELEVATOR_FLOOR<=1){
+        unlock('lobby_lurker');
+      }
+    }, 5*60*1000);
+  }
+  function nightCheck(){
+    var h=new Date().getHours();
+    if(h>=0 && h<5) unlock('night_owl');
+  }
+
+  /* ── MENU ── */
+  function openMenu(){ document.getElementById('game-menu').classList.add('show'); }
+  function closeMenu(){ document.getElementById('game-menu').classList.remove('show'); }
+  function newGame(){
+    if(!confirm('Start a new game? This resets coins, floors, and achievements.')) return;
+    [LS.visited,LS.coins,LS.floors,LS.ach,LS.role,LS.coinsFound,LS.boss].forEach(function(k){ localStorage.removeItem(k); });
+    location.reload();
+  }
+
+  /* ── ACHIEVEMENTS PANEL ── */
+  function openAchievements(){
+    var list=document.getElementById('ach-list');
+    list.innerHTML='';
+    Object.keys(ACHIEVEMENTS).forEach(function(id){
+      var a=ACHIEVEMENTS[id];
+      var got=state.achievements.indexOf(id)!==-1;
+      var row=document.createElement('div');
+      row.className='ach-list-item '+(got?'unlocked':'locked');
+      row.innerHTML='<div class="ach-li-icon">'+a.icon+'</div>'+
+        '<div class="ach-li-info"><div class="ach-li-name">'+a.name+'</div><div class="ach-li-desc">'+a.desc+'</div></div>'+
+        '<div class="ach-li-coins">+'+a.coins.toLocaleString()+'</div>';
+      list.appendChild(row);
+    });
+    updateAchCount();
+    closeMenu();
+    document.getElementById('achievements-modal').classList.remove('hidden');
+  }
+  function closeAchievements(){ document.getElementById('achievements-modal').classList.add('hidden'); }
+
+  function openCharInfo(){
+    var role=getRoleObj();
+    document.getElementById('ci-icon').textContent=role.icon;
+    document.getElementById('ci-name').textContent=role.name;
+    document.getElementById('ci-tagline').textContent='"'+role.tagline+'"';
+    document.getElementById('ci-bonus').textContent='Bonus: '+role.bonus;
+    document.getElementById('ci-refcode').textContent=state.refCode;
+    closeMenu();
+    document.getElementById('charinfo-modal').classList.remove('hidden');
+  }
+  function closeCharInfo(){ document.getElementById('charinfo-modal').classList.add('hidden'); }
+  function copyPhoenixRef(){
+    var link='https://franciscoholdingsinc.com/?ref='+state.refCode;
+    navigator.clipboard.writeText(link).catch(function(){});
+    toast('Referral link copied');
+  }
+
+  function getRefCode(){ return state.refCode; }
+
+  return {
+    boot:boot, save:save, addCoins:addCoins, unlock:unlock,
+    visitFloor:visitFloor, collectCoin:collectCoin,
+    payBoss:payBoss, skipBoss:skipBoss, clearBoss:clearBoss,
+    toggleMinimap:toggleMinimap, updateMinimapCurrent:updateMinimapCurrent,
+    beginFromCinematic:beginFromCinematic, skipCinematic:skipCinematic,
+    confirmCharacter:confirmCharacter,
+    openMenu:openMenu, closeMenu:closeMenu, newGame:newGame,
+    openAchievements:openAchievements, closeAchievements:closeAchievements,
+    openCharInfo:openCharInfo, closeCharInfo:closeCharInfo, copyPhoenixRef:copyPhoenixRef,
+    toast:toast, getRefCode:getRefCode
+  };
+})();
+
 /* ══════════════════════════════════════════════════════
    RENDER ENGINE
 ══════════════════════════════════════════════════════ */
@@ -472,6 +1102,9 @@ function renderFloor(f) {
   html += '<div class="floor-label">FLOOR '+f.n+' &nbsp;·&nbsp; '+escHtml(f.name)+'</div>';
   html += '<h2 class="floor-title">'+escHtml(f.tag)+' '+escHtml(f.name)+'</h2>';
   html += '<p class="floor-sub">'+escHtml(f.sub)+'</p>';
+
+  // Investor deck (shown only for Investor role via CSS class)
+  html += '<div class="investor-deck"><strong>📊 INVESTOR DECK</strong>Projected division contribution to empire ARR. Engagement structures, equity tiers, and partnership terms available on request via the Boardroom (Floor 8).</div>';
 
   if (f.loopB) {
     html += '<div class="loop-b-notice">Anonymous division · Contact-only engagement · No public client disclosure</div>';
@@ -497,7 +1130,7 @@ function renderFloor(f) {
     }
 
     if (!f.secret) {
-      html += '<div class="pay-notice">💳 <strong>Payment via PayPal or Interac e-Transfer.</strong> Send to <strong>'+(f.loopB && f.contact !== 'franciscoderek7@gmail.com' ? f.contact : 'franciscoderek7@gmail.com')+'</strong> · Reference: '+escHtml(f.name)+'</div>';
+      html += '<div class="pay-notice">💳 <strong>Pay via PayPal or Bitcoin.</strong> Stripe temporarily unavailable. PayPal: paypal.me/derekfrancisco · Reference: '+escHtml(f.name)+'</div>';
     }
 
     if (f.pricing && f.pricing.length) {
@@ -516,6 +1149,26 @@ function renderFloor(f) {
     if (f.live) links.push('<a href="'+f.live+'" class="btn-gold" target="_blank" rel="noopener">'+(f.liveLabel||'Visit →')+'</a>');
     if (f.contact) links.push('<a href="mailto:'+f.contact+'" class="btn-emerald">Email: '+escHtml(f.contact)+' →</a>');
     if (links.length) html += '<div class="floor-links">'+links.join('')+'</div>';
+
+    // BOSS GATE
+    if (f.boss) {
+      var b=f.boss;
+      html += '<div class="boss-gate" id="boss-'+f.n+'">';
+      html += '<div class="bg-title">'+escHtml(b.title)+'</div>';
+      html += '<div class="bg-sub">'+escHtml(b.sub)+'</div>';
+      html += '<div class="bg-btns">';
+      html += '<button class="bg-pay" onclick="PhoenixGame.payBoss('+f.n+','+b.amount+',&quot;'+b.ach+'&quot;)">⚔ Ready to Commit? — $'+b.amount+' via PayPal</button>';
+      html += '<button class="bg-skip" onclick="PhoenixGame.skipBoss('+f.n+')">Skip for now</button>';
+      html += '</div>';
+      html += '<div class="bg-cleared-msg">✓ COMMITMENT HONORED — +500 Empire Coins</div>';
+      html += '<div class="bg-stripe-note">Stripe temporarily unavailable · PayPal or Bitcoin (bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x)</div>';
+      html += '</div>';
+    }
+  }
+
+  // Hidden coin at the top floor (45)
+  if (f.n === 45) {
+    html += '<span class="hidden-coin" id="coin-top" style="position:relative;display:inline-block;margin-top:18px" onclick="PhoenixGame.collectCoin(\'top\',this)">💰</span>';
   }
 
   html += '<div class="soulstack-badge"><span class="dot">●</span> SoulStack Observer &nbsp;·&nbsp; Agent Swarm Technologies &nbsp;·&nbsp; Floor '+f.n+' Active</div>';
@@ -538,12 +1191,10 @@ function escHtml(s) {
   var fsheetGrid = document.getElementById('fsheet-grid');
 
   FLOORS.forEach(function(f) {
-    // Inject floor HTML
     var tmp = document.createElement('div');
     tmp.innerHTML = renderFloor(f);
     container.appendChild(tmp.firstElementChild);
 
-    // Elevator button
     var btn = document.createElement('button');
     btn.className = 'el-btn';
     btn.dataset.floor = f.n;
@@ -552,14 +1203,12 @@ function escHtml(s) {
     btn.onclick = (function(n){ return function(){ goToFloor(n); }; })(f.n);
     shaft.appendChild(btn);
 
-    // Directory plaque
     var plaque = document.createElement('div');
     plaque.className = 'dir-plaque';
     plaque.onclick = (function(n){ return function(){ goToFloor(n); }; })(f.n);
     plaque.innerHTML = '<span class="dir-num">F'+f.n+'</span><span class="dir-name">'+escHtml(f.name)+'</span>';
     dirGrid.appendChild(plaque);
 
-    // Floor sheet (mobile)
     var fb = document.createElement('button');
     fb.className = 'fsheet-btn';
     fb.textContent = 'F'+f.n+'\n'+f.name.split(' ')[0];
@@ -568,12 +1217,14 @@ function escHtml(s) {
     fsheetGrid.appendChild(fb);
   });
 
-  // Set up IntersectionObserver for auto-highlight
+  // IntersectionObserver for auto-highlight + floor visit tracking
   var obs = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) {
       if (e.isIntersecting) {
         var n = parseInt(e.target.dataset.floor, 10) || 0;
         updateElevatorDisplay(n);
+        if (n >= 1) PhoenixGame.visitFloor(n);
+        PhoenixGame.updateMinimapCurrent(n);
       }
     });
   }, { threshold: 0.35 });
@@ -589,6 +1240,7 @@ function updateElevatorDisplay(n) {
   var label = n === 0 ? 'LOBBY' : 'F' + n;
   document.getElementById('el-current').textContent = label;
   document.getElementById('mobile-floor-name').textContent = n === 0 ? 'LOBBY' : FLOORS[n-1] ? FLOORS[n-1].name : 'F'+n;
+  var hf=document.getElementById('hud-floor'); if(hf) hf.textContent=n;
   document.querySelectorAll('.el-btn').forEach(function(b){ b.classList.remove('active'); });
   document.querySelectorAll('.fsheet-btn').forEach(function(b){ b.classList.remove('active'); });
   var activeBtn = document.querySelector('[data-floor="'+n+'"].el-btn');
@@ -602,15 +1254,11 @@ window.goToFloor = function(n) {
   var target = document.getElementById('floor-' + n);
   if (!target) return;
   target.scrollIntoView({ behavior: 'smooth' });
-  // Shaft flash
+  if (n >= 1) PhoenixGame.visitFloor(n);
+  PhoenixGame.updateMinimapCurrent(n);
   var flash = document.getElementById('el-shaft-flash');
-  if (flash && window.gsap) {
-    gsap.fromTo(flash, {opacity:0.6}, {opacity:0, duration:0.6});
-  }
-  // Counter animation
-  if (window.gsap) {
-    gsap.fromTo('#el-current', {scale:1.3, color:'var(--gold)'}, {scale:1, color:'var(--platinum-mid)', duration:0.4});
-  }
+  if (flash && window.gsap) { gsap.fromTo(flash, {opacity:0.6}, {opacity:0, duration:0.6}); }
+  if (window.gsap) { gsap.fromTo('#el-current', {scale:1.3, color:'var(--gold)'}, {scale:1, color:'var(--platinum-mid)', duration:0.4}); }
 };
 
 window.goFloorDelta = function(delta) {
@@ -624,6 +1272,16 @@ window.closeFloorSheet = function() { document.getElementById('floor-sheet').cla
 // Keyboard navigation: type floor number + Enter
 var _keyBuf = '';
 document.addEventListener('keydown', function(e) {
+  // Cinematic ENTER-to-begin
+  if (e.key === 'Enter' && document.getElementById('cinematic').classList.contains('show')) {
+    PhoenixGame.beginFromCinematic(); return;
+  }
+  // ESC → game menu (when in game)
+  if (e.key === 'Escape' && document.body.classList.contains('game-ready')) {
+    var gm=document.getElementById('game-menu');
+    if(gm.classList.contains('show')) PhoenixGame.closeMenu(); else PhoenixGame.openMenu();
+    return;
+  }
   if (e.key >= '0' && e.key <= '9') { _keyBuf += e.key; }
   else if (e.key === 'Enter' && _keyBuf) {
     var n = parseInt(_keyBuf, 10);
@@ -633,7 +1291,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ══════════════════════════════════════════════════════
-   THREE.JS LOBBY PARTICLES
+   THREE.JS LOBBY PARTICLES (+ hidden coin in elevator section)
 ══════════════════════════════════════════════════════ */
 (function initThree() {
   if (!window.THREE) return;
@@ -655,7 +1313,7 @@ document.addEventListener('keydown', function(e) {
     positions[i*3+2] = (Math.random() - 0.5) * 4;
     var t = Math.random();
     if (t > 0.5) { colors[i*3]=0.831;colors[i*3+1]=0.686;colors[i*3+2]=0.216; }
-    else { colors[i*3]=0.898;colors[i*3+1]=0.898;colors[i*3+2]=0.886; }
+    else { colors[i*3]=0.063;colors[i*3+1]=0.725;colors[i*3+2]=0.506; }
   }
   var geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -682,6 +1340,19 @@ document.addEventListener('keydown', function(e) {
   });
 })();
 
+/* Inject the "elevator section" hidden coin into the elevator sidebar */
+(function addElevatorCoin(){
+  var el = document.getElementById('elevator');
+  if(!el) return;
+  var coin = document.createElement('span');
+  coin.className='hidden-coin';
+  coin.id='coin-elevator';
+  coin.textContent='💰';
+  coin.style.cssText='position:absolute;bottom:52px;left:50%;transform:translateX(-50%)';
+  coin.onclick=function(){ PhoenixGame.collectCoin('elevator', coin); };
+  el.appendChild(coin);
+})();
+
 /* ══════════════════════════════════════════════════════
    GSAP ANIMATIONS
 ══════════════════════════════════════════════════════ */
@@ -697,25 +1368,20 @@ document.addEventListener('keydown', function(e) {
       });
   });
 
-  // Lobby headline
   gsap.fromTo('.lobby-monogram', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
   gsap.fromTo('.lobby-sub', { opacity: 0 }, { opacity: 1, duration: 0.8, delay: 0.6 });
   gsap.fromTo('.lobby-cta', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.9 });
 
-  // Price card hover
   document.querySelectorAll('.price-card').forEach(function(c) {
     c.addEventListener('mouseenter', function() { gsap.to(c, {y:-3, duration:0.2}); });
     c.addEventListener('mouseleave', function() { gsap.to(c, {y:0, duration:0.2}); });
   });
 
-  // ARR bars animation
   var arrBars = document.getElementById('arr-bars');
   if (arrBars) {
     var heights = {yr1:18, yr2:32, yr3:52, yr4:78, yr5:100};
     ScrollTrigger.create({
-      trigger: arrBars,
-      start: 'top 85%',
-      once: true,
+      trigger: arrBars, start: 'top 85%', once: true,
       onEnter: function() {
         Object.keys(heights).forEach(function(k){
           var el = document.getElementById('bar-'+k);
@@ -725,12 +1391,8 @@ document.addEventListener('keydown', function(e) {
     });
   }
 
-  // Stat counters
-  var targets = {brands:45, clients:392, cases:200, arr:'$2.4M'};
   ScrollTrigger.create({
-    trigger: '#ctr-brands',
-    start: 'top 85%',
-    once: true,
+    trigger: '#ctr-brands', start: 'top 85%', once: true,
     onEnter: function() {
       gsap.to({val:0}, {val:45, duration:1.5, ease:'power2.out', onUpdate: function(){ document.getElementById('ctr-brands').textContent=Math.floor(this.targets()[0].val)+'+'; }});
       gsap.to({val:0}, {val:392, duration:1.8, ease:'power2.out', onUpdate: function(){ document.getElementById('ctr-clients').textContent=Math.floor(this.targets()[0].val); }});
@@ -741,7 +1403,7 @@ document.addEventListener('keydown', function(e) {
 })();
 
 /* ══════════════════════════════════════════════════════
-   KONAMI CODE → DYNASTY PROTOCOL
+   KONAMI CODE → DYNASTY PROTOCOL + ACHIEVEMENT
 ══════════════════════════════════════════════════════ */
 (function() {
   var seq = [38,38,40,40,37,39,37,39,66,65];
@@ -752,6 +1414,7 @@ document.addEventListener('keydown', function(e) {
     if (buf.join(',') === seq.join(',')) {
       document.getElementById('dynasty-modal').classList.remove('hidden');
       document.getElementById('dynasty-modal').classList.add('open');
+      PhoenixGame.unlock('konami');
     }
   });
 })();
@@ -768,15 +1431,30 @@ document.addEventListener('keydown', function(e) {
 
   // Capture incoming ?ref=
   var params = new URLSearchParams(window.location.search);
-  if (params.get('ref')) localStorage.setItem(REF_KEY, params.get('ref').toUpperCase());
+  if (params.get('ref')) {
+    var incoming = params.get('ref').toUpperCase();
+    localStorage.setItem(REF_KEY, incoming);
+    // PHOENIX referral → 5% discount message
+    if (/^PHOENIX-[A-Z0-9]{4}$/.test(incoming)) {
+      window.addEventListener('load', function(){
+        setTimeout(function(){ PhoenixGame.toast('Referral '+incoming+' applied — 5% discount unlocked!'); }, 1200);
+      });
+    }
+  }
 
   function getUserRefCode() {
+    // Prefer Phoenix game referral code if present
+    var phx = PhoenixGame.getRefCode && PhoenixGame.getRefCode();
+    if (phx) return phx;
     var c = localStorage.getItem(MY_REF_KEY);
     if (!c) { c = 'FH'+Math.floor(1000+Math.random()*9000); localStorage.setItem(MY_REF_KEY, c); }
     return c;
   }
-  function isValidCode(c) { return /^(FH\d{4}|AFF-[A-Z]{1,4}-\d{3})$/i.test(c); }
-  function getDiscount(c) { return isValidCode(c) ? 0.10 : 0; }
+  function isValidCode(c) { return /^(FH\d{4}|AFF-[A-Z]{1,4}-\d{3}|PHOENIX-[A-Z0-9]{4})$/i.test(c); }
+  function getDiscount(c) {
+    if(!isValidCode(c)) return 0;
+    return /^PHOENIX-/i.test(c) ? 0.05 : 0.10;
+  }
 
   window.openCheckout = function(productName, priceCAD, paypalUrl) {
     _checkout.price = priceCAD; _checkout.discounted = priceCAD;
@@ -812,7 +1490,7 @@ document.addEventListener('keydown', function(e) {
       document.getElementById('ref-orig-price').style.color = 'rgba(234,234,226,0.35)';
       document.getElementById('ref-savings-badge').textContent = 'You save $'+saved.toFixed(2)+' with code '+code;
       document.getElementById('ref-savings-badge').style.display = 'inline-block';
-      msg.textContent = '✓ Code applied — 10% discount activated!';
+      msg.textContent = '✓ Code applied — '+(disc*100)+'% discount activated!';
       msg.className = 'ref-code-msg success';
       localStorage.setItem(REF_KEY, code);
     } else {
@@ -871,9 +1549,14 @@ document.addEventListener('keydown', function(e) {
   window.copyAffLink = function() {
     var link = 'franciscoholdingsinc.com/?ref='+document.getElementById('aff-code-display').textContent;
     navigator.clipboard.writeText(link).catch(function(){});
-    var btn=document.querySelector('.modal-btn.btn-emerald');if(btn){var o=btn.textContent;btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=o;},1500);}
+    var btn=document.querySelector('#aff-result .modal-btn.btn-emerald');if(btn){var o=btn.textContent;btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=o;},1500);}
   };
 })();
+
+/* ══════════════════════════════════════════════════════
+   BOOT THE GAME
+══════════════════════════════════════════════════════ */
+window.addEventListener('load', function(){ PhoenixGame.boot(); });
 </script>
 <div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
 </body>
