@@ -5,8 +5,8 @@
 //   Set window.PAYMENT_PROVIDER = 'paypal' (default) or 'stripe' (when unlocked)
 //   Or set <script>window.PAYMENT_PROVIDER = 'stripe';</script> before this file
 //
-// Stripe account: acct_1TG0cIASsTLqnu8V — currently under review
-// Recover at: dashboard.stripe.com/recover (upload ID + Authy 2FA)
+// Stripe account: acct_1TG0cIASsTLqnu8V — LIVE (recovered June 2026)
+// pk_live key active. Set window.PAYMENT_PROVIDER = 'stripe' to enable Stripe checkout.
 
 (function () {
   'use strict';
