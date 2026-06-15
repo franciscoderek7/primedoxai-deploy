@@ -2,7 +2,7 @@ name: Deploy ZPrimeDoxAI HQ to zprimedoxaihq.com
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
     paths:
       - 'zprimedoxaihq-site/**'
   workflow_dispatch:
@@ -40,10 +40,12 @@ jobs:
 
       - name: Copy site files
         run: |
+          # Copy all HTML, JS, CSS, images, JSON — wildcard recurse into subdirs
           cd zprimedoxaihq-site
-          for f in *.html; do cp "$f" /tmp/zprimedoxaihq/"$f" && echo "  copied $f"; done
-          for ext in jpg jpeg png webp gif svg js css; do
-            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/zprimedoxaihq/"$f" && echo "  copied $f"; done
+          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.json" -o -name "*.webp" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.svg" -o -name "*.gif" -o -name "*.ico" -o -name "*.xml" -o -name "*.txt" -o -name "*.md" \) | while read f; do
+            dir=$(dirname "$f")
+            mkdir -p "/tmp/zprimedoxaihq/$dir"
+            cp "$f" "/tmp/zprimedoxaihq/$f"
           done
           echo "zprimedoxaihq.com" > /tmp/zprimedoxaihq/CNAME
           touch /tmp/zprimedoxaihq/.nojekyll

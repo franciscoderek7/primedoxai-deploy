@@ -2,7 +2,7 @@ name: Deploy Francisco Holdings to franciscoholdingsinc.com
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
     paths:
       - 'francisco-holdings-site/**'
   workflow_dispatch:
@@ -39,16 +39,13 @@ jobs:
 
       - name: Copy site files
         run: |
+          # Copy all HTML, JS, CSS, images, JSON — wildcard recurse into subdirs
           cd francisco-holdings-site
-          for f in *.html; do cp "$f" /tmp/fh/"$f" && echo "  copied $f"; done
-          for ext in jpg jpeg png webp gif svg js css; do
-            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/fh/"$f" && echo "  copied $f"; done
+          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.json" -o -name "*.webp" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.svg" -o -name "*.gif" -o -name "*.ico" -o -name "*.xml" -o -name "*.txt" -o -name "*.md" \) | while read f; do
+            dir=$(dirname "$f")
+            mkdir -p "/tmp/fh/$dir"
+            cp "$f" "/tmp/fh/$f"
           done
-          if [ -d "logos" ]; then
-            mkdir -p /tmp/fh/logos
-            cp logos/* /tmp/fh/logos/ 2>/dev/null || true
-            echo "  copied logos/"
-          fi
           echo "franciscoholdingsinc.com" > /tmp/fh/CNAME
           touch /tmp/fh/.nojekyll
           echo "All Francisco Holdings files copied"
