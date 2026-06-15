@@ -145,15 +145,46 @@ footer a{color:var(--gold)}
   © 2026 CCLDR.NET — Educational Content Only — Not Legal Advice
 </footer>
 <script>
-function sendContact(e) {
+// Formspree ID: set to your form ID from formspree.io (franciscoderek7@gmail.com account)
+// Get your ID at: formspree.io → New Form → copy the ID like "xpwzybkv"
+var FORMSPREE_ID = 'YOUR_FORM_ID';
+
+async function sendContact(e) {
   e.preventDefault();
-  var name = document.getElementById('c-name').value;
-  var email = document.getElementById('c-email').value;
+  var name = document.getElementById('c-name').value.trim();
+  var email = document.getElementById('c-email').value.trim();
   var subj = document.getElementById('c-subject').value;
-  var msg = document.getElementById('c-message').value;
+  var msg = document.getElementById('c-message').value.trim();
+  var btn = e.target.querySelector('button[type="submit"]');
+  var successEl = document.getElementById('contact-success');
+
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  if (FORMSPREE_ID !== 'YOUR_FORM_ID') {
+    try {
+      var res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, subject: subj, message: msg, _subject: 'CCLDR — ' + subj })
+      });
+      if (res.ok) {
+        successEl.textContent = '✅ Message sent! Derek responds within 24 hours.';
+        successEl.style.display = 'block';
+        e.target.reset();
+        btn.textContent = 'Sent ✓';
+        return;
+      }
+    } catch(err) {}
+  }
+
+  // Fallback: mailto
   var body = 'From: ' + name + ' (' + email + ')\n\n' + msg;
   window.location.href = 'mailto:franciscoderek7@gmail.com?subject=CCLDR%20%E2%80%94%20' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
-  document.getElementById('contact-success').style.display = 'block';
+  successEl.innerHTML = '✅ Your email client opened. Derek responds within 24 hours.<br><small>If it didn\'t open, email directly: franciscoderek7@gmail.com</small>';
+  successEl.style.display = 'block';
+  btn.textContent = 'Send Message →';
+  btn.disabled = false;
 }
 </script>
 </body>
