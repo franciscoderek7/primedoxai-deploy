@@ -33,9 +33,9 @@ Here's what you can do right now:
 
 To get started, reply to this email with a brief description of your situation — or if you're ready to get full access:
 
-[Emergency Defense — $99 one-time →](https://paypal.me/derekfrancisco/99CAD)
-[Pro — $49/mo ongoing →](https://paypal.me/derekfrancisco/49CAD)
-[Elite — $199/mo full service →](https://paypal.me/derekfrancisco/199CAD)
+[Emergency Defense — $99 one-time →](https://paypal.me/franciscoderek7/99CAD)
+[Pro — $49/mo ongoing →](https://paypal.me/franciscoderek7/49CAD)
+[Elite — $199/mo full service →](https://paypal.me/franciscoderek7/199CAD)
 
 — Derek Francisco
 *kind disregards de Francisco*
@@ -70,8 +70,8 @@ Let me show you exactly what PrimeDox AI does.
 
 This is $300/hour lawyer knowledge at $49/month.
 
-[Get Pro Access — $49/mo →](https://paypal.me/derekfrancisco/49CAD)
-[Emergency $99 one-time →](https://paypal.me/derekfrancisco/99CAD)
+[Get Pro Access — $49/mo →](https://paypal.me/franciscoderek7/49CAD)
+[Emergency $99 one-time →](https://paypal.me/franciscoderek7/99CAD)
 
 — Derek Francisco
 
@@ -100,8 +100,8 @@ I want to show you a real example of how PrimeDox AI works.
 
 This is what knowing your rights — and knowing how to argue them — looks like in practice.
 
-[Get Full Access — $49/mo →](https://paypal.me/derekfrancisco/49CAD)
-[Emergency One-Time — $99 →](https://paypal.me/derekfrancisco/99CAD)
+[Get Full Access — $49/mo →](https://paypal.me/franciscoderek7/49CAD)
+[Emergency One-Time — $99 →](https://paypal.me/franciscoderek7/99CAD)
 
 — Derek Francisco
 *kind disregards de Francisco*
@@ -132,7 +132,7 @@ Here's what to do if you're in crisis right now:
 
 For immediate emergency response:
 
-[Get Emergency Defense — $99 →](https://paypal.me/derekfrancisco/99CAD)
+[Get Emergency Defense — $99 →](https://paypal.me/franciscoderek7/99CAD)
 [Pay via Interac →](mailto:franciscoderek7@gmail.com?subject=PrimeDox%20Emergency%20%E2%80%94%20%2499&body=I%20need%20emergency%20defense%20access.%20Please%20send%20Interac%20e-transfer%20details%20for%20%2499.)
 
 Or email me directly: franciscoderek7@gmail.com — Subject: EMERGENCY
@@ -159,9 +159,9 @@ If you're facing charges, or someone you know is, I want you to have access to t
 
 **Your options:**
 
-→ [Emergency Defense — $99 one-time](https://paypal.me/derekfrancisco/99CAD) — For an immediate situation
-→ [Pro — $49/mo](https://paypal.me/derekfrancisco/49CAD) — For ongoing constitutional protection
-→ [Elite — $199/mo](https://paypal.me/derekfrancisco/199CAD) — For complex, multi-appearance cases
+→ [Emergency Defense — $99 one-time](https://paypal.me/franciscoderek7/99CAD) — For an immediate situation
+→ [Pro — $49/mo](https://paypal.me/franciscoderek7/49CAD) — For ongoing constitutional protection
+→ [Elite — $199/mo](https://paypal.me/franciscoderek7/199CAD) — For complex, multi-appearance cases
 → [Pay via Interac for any tier](mailto:franciscoderek7@gmail.com?subject=PrimeDox%20Subscription) — Just email for details
 
 **Referral:** Refer someone facing charges and get 1 month free. Lawyers: refer clients and earn 25% recurring commission.

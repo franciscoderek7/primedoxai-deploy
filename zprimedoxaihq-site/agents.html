@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>45 AI Agents — PrimeDox Empire | Francisco Holdings Inc.</title>
+<meta name="description" content="45 specialized AI agents covering cybersecurity, constitutional law, finance, pet tech, real estate, and more. One empire. One intelligence network. Powered by PrimeDox AI.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --dark:#080810;--mid:#10101c;--card:#181828;--border:#252538;
+  --gold:#D4AF37;--gold2:#F5CC5A;--green:#10B981;--red:#e63946;
+  --text:#f0f0f8;--muted:#8888a8;--dim:#44446a;
+}
+body{background:var(--dark);color:var(--text);font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;}
+
+/* HEADER */
+header{background:rgba(8,8,16,0.95);border-bottom:1px solid rgba(212,175,55,0.2);padding:14px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);}
+.logo{font-size:17px;font-weight:900;letter-spacing:-0.3px;}
+.logo span{color:var(--gold);}
+.header-nav{display:flex;gap:20px;align-items:center;font-size:13px;}
+.header-nav a{color:var(--muted);text-decoration:none;transition:color 0.15s;}
+.header-nav a:hover{color:var(--gold);}
+.header-cta{background:var(--gold);color:#111;font-weight:800;padding:7px 16px;border-radius:6px;text-decoration:none;font-size:13px;}
+.header-cta:hover{background:var(--gold2);color:#111;}
+
+/* HERO */
+.hero{text-align:center;padding:72px 5% 48px;background:linear-gradient(160deg,rgba(212,175,55,0.06),rgba(16,185,129,0.04));}
+.hero-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:var(--gold);margin-bottom:16px;}
+.hero-title{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px;}
+.hero-title span{color:var(--gold);}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:600px;margin:0 auto 32px;}
+.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+.hero-stat{text-align:center;}
+.hero-stat-n{font-size:2rem;font-weight:900;color:var(--gold);}
+.hero-stat-l{font-size:12px;color:var(--muted);}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--gold);color:#111;font-weight:800;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:14px;}
+.btn-primary:hover{background:var(--gold2);color:#111;}
+.btn-secondary{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:var(--text);font-weight:600;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:14px;}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+
+/* SEARCH */
+.search-wrap{max-width:560px;margin:0 auto 40px;padding:0 5%;}
+.search-input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:8px;font-size:14px;outline:none;}
+.search-input:focus{border-color:rgba(212,175,55,0.5);}
+
+/* PRICING BANNER */
+.pricing-bar{background:rgba(212,175,55,0.07);border-top:1px solid rgba(212,175,55,0.12);border-bottom:1px solid rgba(212,175,55,0.12);padding:20px 5%;text-align:center;}
+.pricing-bar-title{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em;}
+.pricing-tiers{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.ptier{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 20px;text-align:center;min-width:160px;}
+.ptier-name{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:4px;}
+.ptier-price{font-size:18px;font-weight:900;}
+.ptier-desc{font-size:11px;color:var(--muted);margin-bottom:10px;}
+.ptier-btn{display:block;background:var(--gold);color:#111;font-weight:700;padding:7px;border-radius:5px;text-decoration:none;font-size:12px;}
+.ptier-btn:hover{background:var(--gold2);color:#111;}
+.ptier-btn.outline{background:transparent;border:1px solid rgba(212,175,55,0.3);color:var(--gold);}
+.ptier-btn.outline:hover{background:rgba(212,175,55,0.1);}
+
+/* TIER SECTION */
+.tier-section{padding:48px 5%;}
+.tier-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.tier-indicator{width:4px;height:28px;background:var(--gold);border-radius:2px;}
+.tier-title{font-size:1.25rem;font-weight:800;}
+.tier-count{font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:2px 8px;border-radius:10px;}
+
+/* AGENT GRID */
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.agent-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all 0.2s;cursor:pointer;position:relative;overflow:hidden;}
+.agent-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transition:transform 0.2s;transform-origin:left;}
+.agent-card:hover::before{transform:scaleX(1);}
+.agent-card:hover{border-color:rgba(212,175,55,0.35);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.4);}
+.agent-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.agent-avatar{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.15);}
+.agent-info{flex:1;min-width:0;}
+.agent-name{font-size:14px;font-weight:800;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.agent-company{font-size:11px;color:var(--gold);font-weight:600;}
+.agent-role{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:12px;min-height:32px;}
+.loop-badge{display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;margin-left:6px;}
+.loop-a{background:rgba(16,185,129,0.12);color:#10B981;border:1px solid rgba(16,185,129,0.2);}
+.loop-b{background:rgba(124,58,237,0.12);color:#a78bfa;border:1px solid rgba(124,58,237,0.2);}
+.agent-actions{display:flex;gap:8px;}
+.agent-chat-btn{flex:1;background:var(--gold);color:#111;font-weight:700;padding:7px;border-radius:6px;text-align:center;text-decoration:none;font-size:12px;cursor:pointer;border:none;}
+.agent-chat-btn:hover{background:var(--gold2);}
+.agent-site-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--muted);padding:7px 10px;border-radius:6px;font-size:12px;text-decoration:none;white-space:nowrap;}
+.agent-site-btn:hover{border-color:rgba(212,175,55,0.3);color:var(--gold);}
+.agent-card.hidden{display:none;}
+
+/* BOTTOM CTA */
+.bottom-cta{background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(16,185,129,0.05));border-top:1px solid rgba(212,175,55,0.12);padding:64px 5%;text-align:center;}
+.bottom-cta h2{font-size:2rem;font-weight:900;margin-bottom:12px;}
+.bottom-cta p{color:var(--muted);margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:20px 5%;font-size:11px;color:var(--dim);text-align:center;}
+
+/* RESERVE */
+.reserve-badge{background:rgba(107,114,128,0.1);border:1px dashed rgba(107,114,128,0.3);border-radius:6px;padding:6px 10px;font-size:11px;color:#555;text-align:center;margin-top:6px;}
+
+@media(max-width:600px){
+  .hero-stats{gap:20px;}
+  .header-nav{display:none;}
+  .ptier{min-width:140px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PrimeDox <span>AI</span></div>
+  <nav class="header-nav">
+    <a href="https://franciscoholdingsinc.com">Phoenix Tower</a>
+    <a href="index.html">HQ Dashboard</a>
+    <a href="https://omniaguard.com">OmniaGuard</a>
+    <a href="https://ccldr.net">CCLDR</a>
+  </nav>
+  <a class="header-cta" href="https://paypal.me/franciscoderek7/99" target="_blank">Get AI Access — $99/year</a>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">Francisco Holdings Inc.</div>
+  <h1 class="hero-title">45 <span>AI Agents.</span><br>One Empire Intelligence.</h1>
+  <p class="hero-sub">Specialists in cybersecurity, constitutional law, finance, pet tech, real estate, immigration, and more. Powered by PrimeDox AI — routed through Francisco Holdings HQ.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-n">45</div><div class="hero-stat-l">AI Specialists</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">8</div><div class="hero-stat-l">Specialty Tiers</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">13+</div><div class="hero-stat-l">Empire Sites</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">24/7</div><div class="hero-stat-l">Always On</div></div>
+  </div>
+  <div class="hero-btns">
+    <a class="btn-primary" href="https://paypal.me/franciscoderek7/99" target="_blank">💳 Start — $99/year</a>
+    <a class="btn-secondary" href="index.html">🧠 Access HQ</a>
+  </div>
+</section>
+
+<div class="search-wrap">
+  <input class="search-input" type="text" id="agent-search" placeholder="Search agents by name, company, or specialty…" oninput="filterAgents(this.value)">
+</div>
+
+<section class="pricing-bar">
+  <div class="pricing-bar-title">🤖 AI Agent Access — Choose Your Plan</div>
+  <div class="pricing-tiers">
+    <div class="ptier">
+      <div class="ptier-name">Free</div>
+      <div class="ptier-price">$0</div>
+      <div class="ptier-desc">5 messages per agent per day</div>
+      <a href="#agents" class="ptier-btn outline">Start Free</a>
+    </div>
+    <div class="ptier">
+      <div class="ptier-name">Starter</div>
+      <div class="ptier-price">$99<small style="font-size:12px;font-weight:400;">/year</small></div>
+      <div class="ptier-desc">Unlimited messages + basic docs</div>
+      <a href="https://paypal.me/franciscoderek7/99" target="_blank" class="ptier-btn">💳 Pay $99</a>
+    </div>
+    <div class="ptier" style="border-color:rgba(212,175,55,0.4);">
+      <div class="ptier-name">Professional</div>
+      <div class="ptier-price">$499<small style="font-size:12px;font-weight:400;">/year</small></div>
+      <div class="ptier-desc">All agents + advanced docs + priority</div>
+      <a href="https://paypal.me/franciscoderek7/499" target="_blank" class="ptier-btn">💳 Pay $499</a>
+    </div>
+    <div class="ptier">
+      <div class="ptier-name">Enterprise</div>
+      <div class="ptier-price">$2,499<small style="font-size:12px;font-weight:400;">/year</small></div>
+      <div class="ptier-desc">Custom training + API + dedicated support</div>
+      <a href="https://paypal.me/franciscoderek7/2499" target="_blank" class="ptier-btn">💳 Pay $2,499</a>
+    </div>
+  </div>
+  <p style="font-size:11px;color:#555;margin-top:12px;">Secure checkout via PayPal · No PayPal account required · Pay with any card · After payment, email franciscoderek7@gmail.com with receipt for access code</p>
+</section>
+
+<div id="agents">
+
+<!-- TIER 1 — SECURITY -->
+<section class="tier-section">
+  <div class="tier-header">
+    <div class="tier-indicator" style="background:#10B981;"></div>
+    <div class="tier-title">Tier 1 — Security</div>
+    <div class="tier-count">2 agents</div>
+  </div>
+  <div class="agent-grid">
+    <div class="agent-card" data-search="sentinel omniaguard security vpn antivirus">
+      <div class="agent-card-head">
+        <div class="agent-avatar">🛡️</div>
+        <div class="agent-info">
+          <div class="agent-name">Sentinel <span class="loop-badge loop-b">Loop B</span></div>
+          <div class="agent-company">OmniaGuard</div>
+        </div>
+      </div>
+      <div class="agent-role">Cybersecurity threat analysis, 14-layer protection, VPN, encrypted vault, AI antivirus, data broker removal.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://omniaguard.com" target="_blank">Chat with Sentinel ↗</a>
+        <a class="agent-site-btn" href="https://omniaguard.com" target="_blank">Site ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="warden vigilax counter surveillance espionage">
+      <div class="agent-card-head">
+        <div class="agent-avatar" style="background:rgba(124,58,237,0.1);">👁️</div>
+        <div class="agent-info">
+          <div class="agent-name">Warden <span class="loop-badge loop-b">Loop B</span></div>
+          <div class="agent-company">VIGILAX</div>
+        </div>
+      </div>
+      <div class="agent-role">Enterprise counter-surveillance intelligence, threat response, forensic analysis, adversary profiling.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://vigilax.com" target="_blank">Chat with Warden ↗</a>
+        <a class="agent-site-btn" href="https://vigilax.com" target="_blank">Site ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIER 2 — LEGAL/CANNABIS -->
+<section class="tier-section" style="padding-top:0;">
+  <div class="tier-header">
+    <div class="tier-indicator" style="background:#DC2626;"></div>
+    <div class="tier-title">Tier 2 — Legal & Constitutional</div>
+    <div class="tier-count">3 agents</div>
+  </div>
+  <div class="agent-grid">
+    <div class="agent-card" data-search="counsel benox weedlaw cannabis marijuana charter constitutional">
+      <div class="agent-card-head">
+        <div class="agent-avatar" style="background:rgba(220,38,38,0.1);">⚖️</div>
+        <div class="agent-info">
+          <div class="agent-name">Counsel <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">BENO-X / Doc Weedlaw</div>
+        </div>
+      </div>
+      <div class="agent-role">Cannabis constitutional law education, Charter analysis, BENO-X defense framework. Educational only — not legal advice.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/500" target="_blank">💳 Session — $500</a>
+        <a class="agent-site-btn" href="https://ccldr.net" target="_blank">CCLDR ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="archivist ccldr documents affidavit court filing">
+      <div class="agent-card-head">
+        <div class="agent-avatar" style="background:rgba(220,38,38,0.1);">📚</div>
+        <div class="agent-info">
+          <div class="agent-name">Archivist <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">CCLDR</div>
+        </div>
+      </div>
+      <div class="agent-role">Legal document generation, case tracking, court templates. Francisco v. Denby & AG ($35M) live tracking.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/49" target="_blank">💳 Document — $49</a>
+        <a class="agent-site-btn" href="https://ccldr.net" target="_blank">Cases ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="defender constitutional rights charter criminal defense">
+      <div class="agent-card-head">
+        <div class="agent-avatar" style="background:rgba(220,38,38,0.1);">🛡️</div>
+        <div class="agent-info">
+          <div class="agent-name">Defender <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">BENO-X / CCLDR</div>
+        </div>
+      </div>
+      <div class="agent-role">Constitutional defense education, Charter s.7-15 guide, police rights, evidence exclusion, s.24(2) remedies. Educational only.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/500" target="_blank">💳 Session — $500</a>
+        <a class="agent-site-btn" href="https://ccldr.net/cases.html" target="_blank">Cases ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIER 3 — AI/TECH -->
+<section class="tier-section" style="padding-top:0;">
+  <div class="tier-header">
+    <div class="tier-indicator" style="background:#D4AF37;"></div>
+    <div class="tier-title">Tier 3 — AI & Tech</div>
+    <div class="tier-count">5 agents</div>
+  </div>
+  <div class="agent-grid">
+    <div class="agent-card" data-search="primedox hq concierge routing francisco holdings">
+      <div class="agent-card-head">
+        <div class="agent-avatar">👑</div>
+        <div class="agent-info">
+          <div class="agent-name">PrimeDox <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">Francisco Holdings Inc.</div>
+        </div>
+      </div>
+      <div class="agent-role">Supreme routing AI — routes queries to all 44 specialist agents. General empire concierge. Always available.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="index.html" target="_blank">Open HQ →</a>
+        <a class="agent-site-btn" href="https://franciscoholdingsinc.com" target="_blank">Tower ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="swarm cleanswarm cleaning workforce dispatch automation">
+      <div class="agent-card-head">
+        <div class="agent-avatar">🧹</div>
+        <div class="agent-info">
+          <div class="agent-name">Swarm <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">CleanSwarm</div>
+        </div>
+      </div>
+      <div class="agent-role">AI cleaning business automation — dispatch, scheduling, quality tracking, client management, ESG reporting.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/299" target="_blank">💳 $299/year</a>
+        <a class="agent-site-btn" href="https://cleanswarm.ca" target="_blank">Site ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="vetbot techpetcage pet dog cat gps tracker health monitor">
+      <div class="agent-card-head">
+        <div class="agent-avatar">🐾</div>
+        <div class="agent-info">
+          <div class="agent-name">VetBot <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">TechPetCage</div>
+        </div>
+      </div>
+      <div class="agent-role">Pet technology specialist — GPS trackers, health monitors, smart feeders, cameras. Product recommendations for every breed.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/49" target="_blank">💳 Tracker — $49</a>
+        <a class="agent-site-btn" href="https://techpetcage.com" target="_blank">Shop ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="torque vault velocity auto car vehicle finance diagnostics">
+      <div class="agent-card-head">
+        <div class="agent-avatar">⚡</div>
+        <div class="agent-info">
+          <div class="agent-name">Torque <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">Vault Velocity Auto</div>
+        </div>
+      </div>
+      <div class="agent-role">Auto finance strategy, OBD diagnostics, EV incentives (iZEV up to $5,000), fleet management, dealer negotiation tactics.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/99" target="_blank">💳 Diagnostic — $99</a>
+        <a class="agent-site-btn" href="https://franciscoholdingsinc.com" target="_blank">Holdings ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="crate techpackcage packaging logistics supply chain warehouse">
+      <div class="agent-card-head">
+        <div class="agent-avatar">📦</div>
+        <div class="agent-info">
+          <div class="agent-name">Crate <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">TechPackCage</div>
+        </div>
+      </div>
+      <div class="agent-role">Packaging optimization, supply chain routing, warehouse efficiency, smart labeling (QR/NFC), 15-25% cost reduction.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/500" target="_blank">💳 Consult — $500</a>
+        <a class="agent-site-btn" href="https://techpackcage.com" target="_blank">Site ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIER 4 — STRATEGY/FINANCE -->
+<section class="tier-section" style="padding-top:0;">
+  <div class="tier-header">
+    <div class="tier-indicator" style="background:#D4AF37;"></div>
+    <div class="tier-title">Tier 4 — Strategy & Finance</div>
+    <div class="tier-count">3 agents</div>
+  </div>
+  <div class="agent-grid">
+    <div class="agent-card" data-search="chronos kiaros scheduling calendar time productivity meeting">
+      <div class="agent-card-head">
+        <div class="agent-avatar">⏱️</div>
+        <div class="agent-info">
+          <div class="agent-name">Chronos <span class="loop-badge loop-b">Loop B</span></div>
+          <div class="agent-company">Kiaros</div>
+        </div>
+      </div>
+      <div class="agent-role">AI scheduling intelligence — calendar optimization, time blocking, multi-timezone, Google/Outlook/Teams integration.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://kiaros.ai" target="_blank">Chat with Chronos ↗</a>
+        <a class="agent-site-btn" href="https://kiaros.ai" target="_blank">Site ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="ratehawk mortgage rate refinance canada heloc home loan">
+      <div class="agent-card-head">
+        <div class="agent-avatar">🏠</div>
+        <div class="agent-info">
+          <div class="agent-name">RateHawk <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">Francisco Mortgage</div>
+        </div>
+      </div>
+      <div class="agent-role">Canadian mortgage rate optimization — Big 6 vs credit unions, stress test, FHSA, refinancing strategy. Educational only.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/500" target="_blank">💳 Strategy — $500</a>
+        <a class="agent-site-btn" href="https://franciscoholdingsinc.com" target="_blank">Holdings ↗</a>
+      </div>
+    </div>
+    <div class="agent-card" data-search="alpha fintech trading portfolio algorithmic investment TSX">
+      <div class="agent-card-head">
+        <div class="agent-avatar">📈</div>
+        <div class="agent-info">
+          <div class="agent-name">Alpha <span class="loop-badge loop-a">Loop A</span></div>
+          <div class="agent-company">Fintech Swarm</div>
+        </div>
+      </div>
+      <div class="agent-role">Algorithmic trading & portfolio optimization education — TSX, TFSA/RRSP strategy, risk analysis. Educational only, not financial advice.</div>
+      <div class="agent-actions">
+        <a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/500" target="_blank">💳 Strategy — $500</a>
+        <a class="agent-site-btn" href="https://franciscoholdingsinc.com" target="_blank">Holdings ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIER 5 — PROFESSIONAL SERVICES (abbreviated grid for space) -->
+<section class="tier-section" style="padding-top:0;">
+  <div class="tier-header">
+    <div class="tier-indicator" style="background:#DC2626;"></div>
+    <div class="tier-title">Tier 5 — Professional Services</div>
+    <div class="tier-count">19 agents</div>
+  </div>
+  <div class="agent-grid" id="tier5-grid">
+    <!-- KeyMaster, Barrister, Shield, Ledger, VisaPath, Guardian, Scribe, Gavel, Incorporator, Patent, Advocate, Terra, HardHat, Spotlight, Agent, Anchor, Wingman, Vault, Cipher -->
+    <script>
+    (function(){
+      var agents = [
+        { name:'KeyMaster', co:'Francisco Realty', avatar:'🔑', role:'Property valuation, market analysis, buyer/seller strategy. Educational guidance, not regulated real estate advice.', price:'500', label:'Consult — $500', search:'keymaster real estate property valuation market' },
+        { name:'Barrister', co:'Francisco Legal (19 Areas)', avatar:'⚖️', role:'Legal research across 19 practice areas — constitutional, criminal, civil, family, corporate, employment, and more. Educational only.', price:'150', label:'Research — $150/hr', search:'barrister legal research 19 areas criminal civil family' },
+        { name:'Shield', co:'Francisco Insurance', avatar:'🛡️', role:'Insurance coverage gap analysis — home, auto, life, commercial, liability. Educational, not licensed insurance advice.', price:'299', label:'Audit — $299', search:'shield insurance coverage gap analysis policy' },
+        { name:'Ledger', co:'Francisco Tax', avatar:'📊', role:'Canadian tax strategy — TFSA/RRSP/FHSA optimization, small business, CRA disputes. Educational only, not CPA advice.', price:'299', label:'Strategy — $299', search:'ledger tax canada CRA tfsa rrsp fhsa small business' },
+        { name:'VisaPath', co:'Francisco Immigration', avatar:'✈️', role:'Canadian immigration navigation — Express Entry, PNP, work permits, citizenship. Educational only, consult licensed RCIC.', price:'499', label:'Strategy — $499', search:'visapath immigration canada express entry pnp visa' },
+        { name:'Guardian', co:'Francisco Family Law', avatar:'👨‍👩‍👧', role:'Family law education — divorce, custody, child/spousal support, property division (Ontario). Educational only.', price:'299', label:'Consult — $299', search:'guardian family law divorce custody support ontario' },
+        { name:'Scribe', co:'Francisco Wills & Estates', avatar:'📜', role:'Will drafting, POA, estate planning education. Templates require lawyer review before execution.', price:'299', label:'Session — $299', search:'scribe wills estates estate planning poa probate' },
+        { name:'Gavel', co:'Francisco Employment Law', avatar:'⚖️', role:'Wrongful dismissal, constructive dismissal, ESA Ontario, severance negotiation. Educational, not legal advice.', price:'149', label:'Review — $149', search:'gavel employment law wrongful dismissal severance ontario' },
+        { name:'Incorporator', co:'Francisco Corporate Law', avatar:'🏛️', role:'Business formation education — sole prop vs corporation, CBCA vs OBCA, shareholders agreements. Educational only.', price:'299', label:'Strategy — $299', search:'incorporator corporate law incorporation business formation shareholders' },
+        { name:'Patent', co:'Francisco IP Law', avatar:'💡', role:'IP strategy — patents, CIPO trademark, copyright, trade secrets. Educational strategy, not filings by a registered agent.', price:'299', label:'Strategy — $299', search:'patent IP trademark copyright cipo trade secret' },
+        { name:'Advocate', co:'Francisco Personal Injury', avatar:'⚡', role:'Personal injury education (Ontario) — MVA, slip & fall, SABS, catastrophic injury, limitation periods. Educational only.', price:'149', label:'Assessment — $149', search:'advocate personal injury accident slip fall ontario SABS' },
+        { name:'Terra', co:'Francisco Environmental Law', avatar:'🌍', role:'Environmental law & carbon strategy — CEPA, carbon pricing, carbon credits, contaminated site liability, ESG.', price:'499', label:'Audit — $499', search:'terra environmental law carbon credits CEPA ESG' },
+        { name:'HardHat', co:'Francisco Construction Law', avatar:'🔨', role:'Construction law (Ontario) — Construction Act, lien rights, holdback, Tarion warranty, delay damages. Educational only.', price:'299', label:'Strategy — $299', search:'hardhat construction law lien ontario tarion' },
+        { name:'Spotlight', co:'Francisco Entertainment Law', avatar:'🎬', role:'Entertainment law — music royalties (SOCAN), recording contracts, content creator rights, NFT/digital rights.', price:'299', label:'Consult — $299', search:'spotlight entertainment law music royalties socan content creator' },
+        { name:'Agent', co:'Francisco Sports Law', avatar:'🏆', role:'Sports law — athlete contracts, endorsement deals, arbitration (CAS/SDRCC), image rights. Educational only.', price:'299', label:'Review — $299', search:'agent sports law athlete contracts endorsements arbitration' },
+        { name:'Anchor', co:'Francisco Maritime Law', avatar:'⚓', role:'Maritime law education — Canada Shipping Act, vessel registration, charter parties, cargo claims, marine insurance.', price:'299', label:'Research — $299', search:'anchor maritime law shipping vessel canada' },
+        { name:'Wingman', co:'Francisco Aviation Law', avatar:'✈️', role:'Aviation law — Transport Canada CARs, drone/RPAS law, accident investigation (TSB), aviation liability.', price:'299', label:'Research — $299', search:'wingman aviation law drone rpas transport canada' },
+        { name:'Vault', co:'Francisco Banking Law', avatar:'🏦', role:'Banking & financial disputes — Bank Act, FCAC consumer protection, account freezes, fintech regulation (FINTRAC).', price:'299', label:'Strategy — $299', search:'vault banking law financial disputes fintrac bank act' },
+        { name:'Cipher', co:'Francisco Data Privacy', avatar:'🔐', role:'Data privacy law — PIPEDA, Quebec Law 25, breach notification, privacy policies, cookie law, CPPA. Educational only.', price:'499', label:'Audit — $499', search:'cipher privacy pipeda gdpr data breach cookie policy' },
+      ];
+      var grid = document.getElementById('tier5-grid');
+      agents.forEach(function(a){
+        var d = document.createElement('div');
+        d.className = 'agent-card';
+        d.setAttribute('data-search', a.search);
+        d.innerHTML = '<div class="agent-card-head"><div class="agent-avatar" style="background:rgba(220,38,38,0.08);">'+a.avatar+'</div><div class="agent-info"><div class="agent-name">'+a.name+' <span class="loop-badge loop-a">Loop A</span></div><div class="agent-company">'+a.co+'</div></div></div><div class="agent-role">'+a.role+'</div><div class="agent-actions"><a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/'+a.price+'" target="_blank">💳 '+a.label+'</a><a class="agent-site-btn" href="https://franciscoholdingsinc.com" target="_blank">Holdings ↗</a></div>';
+        grid.appendChild(d);
+      });
+    })();
+    </script>
+  </div>
+</section>
+
+<!-- TIER 6-8 — SPECIALIZED, INFRASTRUCTURE, RESERVE -->
+<section class="tier-section" style="padding-top:0;">
+  <div class="tier-header">
+    <div class="tier-indicator" style="background:#8B5CF6;"></div>
+    <div class="tier-title">Tiers 6–8 — Specialized, Infrastructure & Reserve</div>
+    <div class="tier-count">13 agents</div>
+  </div>
+  <div class="agent-grid" id="tier678-grid">
+    <script>
+    (function(){
+      var agents = [
+        { name:'Maya', co:'MindShift', avatar:'🧘', color:'rgba(139,92,246,0.08)', role:'Personal transformation coaching — limiting beliefs, mindset shift, sovereignty consciousness. Educational, not therapy.', price:'299', label:'Session — $299', search:'maya mindshift coaching transformation mindset' },
+        { name:'Bud', co:'CCC-Site', avatar:'🌿', color:'rgba(22,163,74,0.08)', role:'Cannabis business licensing & Health Canada compliance — license types, SOPs, AGCO Ontario retail. Educational only.', price:'499', label:'Consult — $499', search:'bud cannabis business licensing health canada AGCO' },
+        { name:'Orbit', co:'Space Swarm', avatar:'🚀', color:'rgba(8,145,178,0.08)', role:'Space technology intelligence — satellite comms, remote sensing, CubeSat, CSA programs, orbital applications.', price:'999', label:'Briefing — $999', search:'orbit space swarm satellite orbital technology' },
+        { name:'Grid', co:'Energy Swarm', avatar:'⚡', color:'rgba(16,185,129,0.08)', role:'Renewable energy & grid optimization — clean energy credits, solar economics, EV infrastructure, IESO markets.', price:'299', label:'Audit — $299', search:'grid energy swarm renewable solar EV IESO carbon' },
+        { name:'Pulse', co:'Health Swarm', avatar:'❤️', color:'rgba(220,38,38,0.08)', role:'Health navigation AI — Canadian healthcare system, OHIP, digital health, patient rights. Educational, not medical advice.', price:'149', label:'Consult — $149', search:'pulse health swarm healthcare OHIP medical navigation' },
+        { name:'Helix', co:'Biotech Swarm', avatar:'🧬', color:'rgba(16,185,129,0.08)', role:'Biotechnology intelligence — drug discovery, genomics, CRISPR, Health Canada approval process, NRC IRAP funding.', price:'999', label:'Strategy — $999', search:'helix biotech genomics CRISPR drug discovery NRC IRAP' },
+        { name:'Qubit', co:'Quantum Swarm', avatar:'⚛️', color:'rgba(139,92,246,0.08)', role:'Quantum computing & cryptography — post-quantum standards (NIST), quantum ML, Canadian quantum ecosystem (D-Wave, Xanadu).', price:'999', label:'Briefing — $999', search:'qubit quantum computing cryptography post quantum NIST' },
+        { name:'Drive', co:'Auto Swarm', avatar:'🚗', color:'rgba(212,175,55,0.08)', role:'Automotive manufacturing AI — EV supply chain, battery tech, AV development, CUSMA, fleet electrification.', price:'499', label:'Analysis — $499', search:'drive auto swarm automotive manufacturing EV CUSMA fleet' },
+        { name:'Hive', co:'Agent Swarm Tech', avatar:'🐝', color:'rgba(212,175,55,0.08)', role:'Multi-agent AI orchestration — OpenAI Assistants API, LangChain, vector stores, production deployment.', price:'999', label:'Setup — $999', search:'hive agent swarm orchestration openai langchain deployment' },
+        { name:'Phoenix', co:'Francisco Phoenix', avatar:'🔥', color:'rgba(212,175,55,0.08)', role:'Dynasty strategy & sovereign wealth — $10M+ deals, empire acquisition, generational wealth, family office design.', price:'500', label:'Session — $500', search:'phoenix dynasty sovereign wealth empire acquisition family office' },
+        { name:'Timmy', co:'Francisco Holdings Inc.', avatar:'🤖', color:'rgba(16,185,129,0.08)', role:'Empire oversight AI — monitors agent behavior, detects anomalies, enforces brand compliance, reports to Derek Francisco.', price:'299', label:'Audit — $299', search:'timmy oversight monitoring compliance integrity anomaly' },
+        { name:'Reserved (44)', co:'Future Company', avatar:'🌐', color:'rgba(107,114,128,0.08)', role:'Reserved for future Francisco Holdings company. Join the waitlist to be notified at launch.', price:null, label:null, search:'reserved future' },
+        { name:'Reserved (45)', co:'Future Company', avatar:'🌐', color:'rgba(107,114,128,0.08)', role:'Reserved for future Francisco Holdings company. Join the waitlist to be notified at launch.', price:null, label:null, search:'reserved future' },
+      ];
+      var grid = document.getElementById('tier678-grid');
+      agents.forEach(function(a){
+        var d = document.createElement('div');
+        d.className = 'agent-card';
+        d.setAttribute('data-search', a.search);
+        var btn = a.price ? '<a class="agent-chat-btn" href="https://paypal.me/franciscoderek7/'+a.price+'" target="_blank">💳 '+a.label+'</a>' : '<a class="agent-chat-btn" href="mailto:franciscoderek7@gmail.com?subject=Waitlist+for+Future+Agent" style="background:rgba(107,114,128,0.2);color:#888;pointer-events:none;">Join Waitlist</a>';
+        d.innerHTML = '<div class="agent-card-head"><div class="agent-avatar" style="background:'+a.color+';">'+a.avatar+'</div><div class="agent-info"><div class="agent-name">'+a.name+' <span class="loop-badge loop-a">Loop A</span></div><div class="agent-company">'+a.co+'</div></div></div><div class="agent-role">'+a.role+'</div><div class="agent-actions">'+btn+'<a class="agent-site-btn" href="https://franciscoholdingsinc.com" target="_blank">Holdings ↗</a></div>';
+        grid.appendChild(d);
+      });
+    })();
+    </script>
+  </div>
+</section>
+
+</div><!-- end #agents -->
+
+<section class="bottom-cta">
+  <h2>Ready to Access the Empire?</h2>
+  <p>Get unlimited access to all 45 AI specialists for $99/year. Educational guidance, constitutional law, cybersecurity, pet tech, and more — on demand.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a class="btn-primary" href="https://paypal.me/franciscoderek7/99" target="_blank">💳 Start — $99/year</a>
+    <a class="btn-secondary" href="index.html">Access HQ Dashboard</a>
+  </div>
+  <p style="font-size:11px;color:#444;margin-top:16px;">After payment, email franciscoderek7@gmail.com with your PayPal receipt to receive your access code. Delivery within 24 hours.</p>
+</section>
+
+<div style="background:#0d0d14;border-top:2px solid #D4AF37;padding:16px 5%;text-align:center;font-size:11px;color:#666;line-height:1.8;">
+  <strong style="color:#D4AF37;">⚖️ Educational Content Only — Not Legal, Medical, or Financial Advice</strong><br>
+  All AI agents provide educational information only. No professional service relationship is created. Always consult licensed professionals for your specific situation.
+</div>
+
+<footer>© 2026 Francisco Holdings Inc. · PrimeDox AI · 45 Specialists · zprimedoxaihq.com</footer>
+
+<script>
+function filterAgents(val) {
+  const q = val.toLowerCase().trim();
+  document.querySelectorAll('.agent-card').forEach(function(c) {
+    const search = (c.getAttribute('data-search') || '') + ' ' + c.textContent;
+    c.classList.toggle('hidden', q.length > 0 && !search.toLowerCase().includes(q));
+  });
+}
+</script>
+
+</body>
+</html>

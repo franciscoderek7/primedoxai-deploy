@@ -2,7 +2,7 @@ name: Deploy OmniaGuard to omniaguard.com
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
     paths:
       - 'omniaguard-site/**'
   workflow_dispatch:   # allows manual trigger from GitHub UI
@@ -41,19 +41,22 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
+      - name: Wipe old files
+        run: |
+          find /tmp/omniaguard -mindepth 1 -not -path '/tmp/omniaguard/.git*' -delete
+          echo "Clean slate"
+
       - name: Copy site files
         run: |
-          cp omniaguard-site/index.html        /tmp/omniaguard/index.html
-          cp omniaguard-site/pricing.html      /tmp/omniaguard/pricing.html
-          cp omniaguard-site/vpn.html          /tmp/omniaguard/vpn.html
-          cp omniaguard-site/intelligence.html /tmp/omniaguard/intelligence.html
-          cp omniaguard-site/ecosystem.html    /tmp/omniaguard/ecosystem.html
-          cp omniaguard-site/investor.html     /tmp/omniaguard/investor.html
-          cp omniaguard-site/about.html        /tmp/omniaguard/about.html
-          cp omniaguard-site/contact.html      /tmp/omniaguard/contact.html
-          mkdir -p /tmp/omniaguard/app
-          cp omniaguard-site/app/index.html    /tmp/omniaguard/app/index.html
+          # Copy all HTML, JS, CSS, images, JSON and any other web assets
+          cd omniaguard-site
+          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.json" -o -name "*.webp" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.svg" -o -name "*.gif" -o -name "*.ico" -o -name "*.xml" -o -name "*.txt" -o -name "*.md" \) | while read f; do
+            dir=$(dirname "$f")
+            mkdir -p "/tmp/omniaguard/$dir"
+            cp "$f" "/tmp/omniaguard/$f"
+          done
           echo "omniaguard.com" > /tmp/omniaguard/CNAME
+          touch /tmp/omniaguard/.nojekyll
           echo "All files copied"
 
       - name: Commit and push to omniaguard repo
@@ -65,9 +68,8 @@ jobs:
           git diff --cached --stat
           git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
 
-          Pages: index, pricing, vpn, intelligence, ecosystem, investor, about, contact, app
           CNAME: omniaguard.com
-          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+          Triggered by: push to franciscoderek7/primedoxai-deploy" \
             || echo "Nothing to commit — already up to date"
           git push origin main
           echo "Pushed to franciscoderek7/omniaguard — live in ~2 minutes"
@@ -85,7 +87,7 @@ jobs:
           echo "================================================"
           echo "  Repo: franciscoderek7/omniaguard (main)"
           echo "  CNAME: omniaguard.com"
-          echo "  Pages: 9"
+          echo "  Files: $(find /tmp/omniaguard -not -path '*/.git*' -type f | wc -l) total"
           echo "  Live in: ~2 minutes (GitHub Pages build)"
           echo ""
           echo "  Check: https://omniaguard.com"

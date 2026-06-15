@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="manifest" href="/manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Phoenix Tower: Empire Builder — Francisco Holdings Inc. · 45-Floor Empire Skyscraper</title>
 <meta name="description" content="Phoenix Tower: Empire Builder — explore Francisco Holdings Inc. as an interactive 45-floor empire. AI-First divisions, Enterprise Security, Document AI, Legal Services, Real Estate.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#D4AF37">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Francisco Holdings Inc.">
+<meta property="og:title" content="Phoenix Tower: Empire Builder — Francisco Holdings Inc.">
+<meta property="og:description" content="Explore Francisco Holdings Inc. as an interactive 45-floor empire. AI-First divisions, Enterprise Security, Document AI, Legal Services, Real Estate.">
+<meta property="og:url" content="https://franciscoholdingsinc.com/">
+<meta property="og:image" content="https://franciscoholdingsinc.com/fh-boardroom.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@franciscoholdings">
+<meta name="twitter:image" content="https://franciscoholdingsinc.com/fh-boardroom.webp">
+<link rel="canonical" href="https://franciscoholdingsinc.com/">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23000'/><text y='.9em' font-size='80' text-anchor='middle' x='50'>🏛</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -23,7 +40,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--marble);color:var(--platinum);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;overflow-x:hidden}
+body{background:var(--marble);color:var(--platinum);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
 body.game-locked{overflow:hidden;height:100vh}
 
 /* ── GAME HUD ─────────────────────────── */
@@ -242,6 +259,8 @@ body.game-ready{padding-top:var(--hud-h)}
 .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--dark)}
 .btn-emerald{background:linear-gradient(135deg,var(--emerald),var(--emerald-light));color:var(--gold-light)}
 .btn-platinum{background:linear-gradient(135deg,var(--platinum-dark),var(--platinum-mid));color:var(--dark)}
+.btn-stripe{background:linear-gradient(135deg,#8B0000,#A0002A);color:#fff;border:none;padding:10px 16px;border-radius:4px;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;transition:opacity .2s;font-family:'Orbitron',sans-serif;display:block;text-align:center;width:100%;margin-top:6px;text-decoration:none}
+.btn-stripe:hover{opacity:.85}
 .floor-links{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.2rem}
 .floor-links a{padding:10px 18px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-decoration:none;transition:opacity .2s}
 .floor-links a:hover{opacity:.85}
@@ -293,6 +312,44 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
   .price-card{min-width:unset}
   #minimap{bottom:60px}
 }
+
+/* ── ELEVATOR DOORS ─────────────────────── */
+#el-door-left, #el-door-right {
+  position: fixed; top: 0; bottom: 0; width: 50.5%; z-index: 8000;
+  background: linear-gradient(180deg,#05050A 0%,#0A0A14 50%,#05050A 100%);
+  pointer-events: none; display: flex; align-items: center;
+}
+#el-door-left { left: 0; transform: translateX(-100%); border-right: 1px solid var(--gold); justify-content: flex-end; }
+#el-door-right { right: 0; transform: translateX(100%); border-left: 1px solid var(--gold); justify-content: flex-start; }
+.el-door-label { padding: 0 28px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 3px; opacity: 0.5; }
+#el-door-floor { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 8001; font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; color: var(--gold); letter-spacing: 4px; pointer-events: none; opacity: 0; text-shadow: 0 0 40px rgba(212,175,55,0.6); }
+
+/* ── CITY SKYLINE CANVAS ────────────────── */
+#city-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ── CONCIERGE DESK ─────────────────────── */
+.concierge-desk { display: flex; align-items: flex-start; gap: 20px; background: linear-gradient(135deg,rgba(212,175,55,0.07),rgba(16,185,129,0.04)); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 24px; margin: 2rem auto; max-width: 700px; text-align: left; }
+.cd-avatar { font-size: 3rem; flex-shrink: 0; }
+.cd-name { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 2px; margin-bottom: 4px; }
+.cd-greeting { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 14px; line-height: 1.6; }
+.cd-routes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.cd-btn { border: none; border-radius: 6px; font-size: 11px; font-weight: 700; padding: 7px 13px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; transition: opacity 0.2s; }
+.cd-btn:hover { opacity: 0.8; }
+.cd-btn-sec { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+.cd-btn-gold { background: var(--gold); color: #111; }
+.cd-query-row { display: flex; gap: 8px; }
+.cd-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.2); border-radius: 6px; padding: 9px 13px; color: #fff; font-size: 13px; outline: none; }
+.cd-input:focus { border-color: var(--gold); }
+.cd-send { background: var(--gold); color: #111; border: none; padding: 9px 16px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+@media (max-width: 600px) { .concierge-desk { flex-direction: column; } .cd-routes { gap: 6px; } .cd-btn { font-size: 10px; padding: 6px 10px; } }
+@media (max-width: 480px) {
+  .cd-query-row { flex-wrap: wrap; }
+  .cd-input, .cd-send { min-height: 44px; }
+  .cd-send { width: 100%; justify-content: center; }
+  .floor-cta a, .floor-cta button { min-height: 44px; }
+}
+a, button, [role="button"] { min-height: 44px; }
+img { max-width: 100%; height: auto; }
 </style>
 </head>
 <body>
@@ -387,8 +444,9 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
 
   <!-- LOBBY -->
   <section class="floor-section" id="floor-0" data-floor="0" style="border-top:none">
+    <canvas id="city-canvas"></canvas>
     <canvas id="three-canvas"></canvas>
-    <div class="lobby-content" style="position:relative;z-index:1;padding:80px 5% 60px;text-align:center">
+    <div class="lobby-content" style="position:relative;z-index:2;padding:80px 5% 60px;text-align:center">
       <div class="lobby-monogram">FRANCISCO<br>HOLDINGS INC.</div>
       <div class="lobby-sub">45 Divisions &nbsp;·&nbsp; AI-First Empire &nbsp;·&nbsp; Dubai-Level Ambition &nbsp;·&nbsp; Phoenix Dominion</div>
       <div class="lobby-stats">
@@ -415,6 +473,27 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
         <div class="arr-legend">
           <span><span class="arr-dot" style="background:var(--gold)"></span>Historical</span>
           <span><span class="arr-dot" style="background:var(--emerald);border:1px dashed var(--emerald-bright)"></span>Projected</span>
+        </div>
+      </div>
+
+      <!-- Concierge Desk -->
+      <div class="concierge-desk" id="lobby-concierge">
+        <div class="cd-avatar">🤖</div>
+        <div style="flex:1;min-width:0">
+          <div class="cd-name">PrimeDox AI Concierge</div>
+          <div class="cd-greeting">Welcome to Phoenix Tower. 45 divisions. One empire. How may I direct you?</div>
+          <div class="cd-routes">
+            <button onclick="goToFloor(1)" class="cd-btn cd-btn-sec">🛡️ Security → F1</button>
+            <button onclick="goToFloor(2)" class="cd-btn cd-btn-sec">⚖️ Legal → F2</button>
+            <button onclick="goToFloor(6)" class="cd-btn cd-btn-sec">🐾 Pet Tech → F6</button>
+            <button onclick="goToFloor(8)" class="cd-btn cd-btn-gold">🏛️ Boardroom → F8</button>
+            <button onclick="goToFloor(10)" class="cd-btn cd-btn-sec">⏱️ AI Scheduling → F10</button>
+            <button onclick="goToFloor(21)" class="cd-btn cd-btn-sec">🤖 Agent Swarm → F21</button>
+          </div>
+          <div class="cd-query-row">
+            <input id="cd-query" class="cd-input" type="text" placeholder="Tell me what you need and I'll find your floor…" onkeydown="if(event.key==='Enter')conciergeRoute()" />
+            <button onclick="conciergeRoute()" class="cd-send">Route Me →</button>
+          </div>
         </div>
       </div>
 
@@ -453,7 +532,7 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
       <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Product</div>
       <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold-light)" id="ref-product-name"></div>
     </div>
-    <div class="pay-notice"><strong>Pay via PayPal or Bitcoin.</strong> Stripe temporarily unavailable.<br>PayPal: paypal.me/derekfrancisco · Reference the product name.</div>
+    <div class="pay-notice"><strong>Pay via PayPal, Card (Stripe), or Bitcoin.</strong> All payment methods active.<br>PayPal: www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA · Reference the product name.</div>
     <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Price</div>
     <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--platinum)" id="ref-orig-price"></div>
     <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--gold);display:none;margin-top:4px" id="ref-disc-price"></div>
@@ -551,6 +630,8 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
 <script>
 'use strict';
 
+window.STRIPE_PK = 'pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz';
+
 /* ══════════════════════════════════════════════════════
    FLOOR DATA — ALL 45 DIVISIONS
 ══════════════════════════════════════════════════════ */
@@ -565,20 +646,20 @@ var FLOORS = [
   {n:2,name:'BENO-X / Weedlaw',tag:'⚖️',sub:'Constitutional Defense Framework · 200+ Victories',
    desc:'The BENO-X Framework — 5-pillar constitutional defense: Breach identification, Evidence exclusion, Negotiation leverage, On-record defense, X-multiplier. 20+ years of Charter victories.',
    feats:['Charter s.8/9/10 analysis','Evidence exclusion motions','Crown negotiation strategy','On-record documentation','BENO-X X-multiplier precedent','200+ cases · 4,000 charges stayed','20+ years expertise','Available coast-to-coast'],
-   pricing:[{tier:'BENO-X Playbook',val:'$49',desc:'Full framework PDF + case templates',url:'https://paypal.me/derekfrancisco/49CAD',cls:'btn-emerald'},{tier:'Strategy Session',val:'$500',desc:'60-min consultation with Derek Francisco',url:'https://franciscoholdingsinc.com/book.html',cls:'btn-gold'}],
+   pricing:[{tier:'BENO-X Playbook',val:'$49',desc:'Full framework PDF + case templates',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald'},{tier:'Strategy Session',val:'$500',desc:'60-min consultation with Derek Francisco',url:'https://franciscoholdingsinc.com/book.html',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/Ccldr-net/',liveLabel:'CCLDR (GitHub Pages) →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day registration hold.'},
 
   {n:3,name:'PrimeDox AI',tag:'🤖',sub:'Derek Francisco\'s AI Clone · Document Automation · 24/7',
    desc:'20 years of constitutional Charter expertise, strategy, and business automation compressed into an AI available around the clock.',
    feats:['BENO-X defense builder','Charter breach identification','Legal document generation','Court filing templates','Business document automation','Confidential AI sessions','Real-time case analysis','BENO-X full case law library'],
-   pricing:[{tier:'Free',val:'$0',desc:'10 msg/day · 5 docs/mo · 1 BENO-X check',url:'primedox-ai-chat.html',cls:'btn-platinum'},{tier:'Pro',val:'$49/mo',desc:'Unlimited chat · Full BENO-X · All case law',url:'https://paypal.me/derekfrancisco/49CAD',cls:'btn-emerald',feat:true},{tier:'Elite',val:'$199/mo',desc:'Priority + 30% affiliate + white-glove onboarding',url:'https://paypal.me/derekfrancisco/199CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Free',val:'$0',desc:'10 msg/day · 5 docs/mo · 1 BENO-X check',url:'primedox-ai-chat.html',cls:'btn-platinum'},{tier:'Pro',val:'$49/mo',desc:'Unlimited chat · Full BENO-X · All case law',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald',feat:true},{tier:'Elite',val:'$199/mo',desc:'Priority + 30% affiliate + white-glove onboarding',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-gold'}],
    live:'primedox-ai-chat.html',liveLabel:'Start Free Trial →',contact:'docweedla@gmail.com',note:'First 14 days free. No auto-billing. No credit card.',
    boss:{title:'⚔ Unleash PrimeDox AI',sub:'Activate the Pro tier — unlimited AI, full BENO-X, all case law.',amount:49,ach:'ai_pioneer'}},
 
   {n:4,name:'CCLDR',tag:'📋',sub:'Constitutional education resource',
    desc:'A constitutional education network. Charter challenges, evidence exclusion, and constitutional rights education for every province.',
    feats:['Constitutional charter education','Evidence exclusion filings','Crown negotiation leverage','Know Your Rights training','Case tracking system','Province-wide network','24/7 emergency intake','BENO-X integrated workflow'],
-   pricing:[{tier:'Warrior',val:'$99',desc:'BENO-X starter kit + rights guide',url:'https://paypal.me/derekfrancisco/99CAD',cls:'btn-platinum'},{tier:'Pro',val:'$299',desc:'Full BENO-X + document templates + case review',url:'https://paypal.me/derekfrancisco/299CAD',cls:'btn-emerald'},{tier:'Elite',val:'$999',desc:'2 strategy calls + ongoing support',url:'https://paypal.me/derekfrancisco/999CAD',cls:'btn-gold'},{tier:'Sovereign',val:'$1,499',desc:'Full retainer · unlimited access · dedicated support',url:'https://paypal.me/derekfrancisco/1499CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Warrior',val:'$99',desc:'BENO-X starter kit + rights guide',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-platinum'},{tier:'Pro',val:'$299',desc:'Full BENO-X + document templates + case review',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald'},{tier:'Elite',val:'$999',desc:'2 strategy calls + ongoing support',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-gold'},{tier:'Sovereign',val:'$1,499',desc:'Full retainer · unlimited access · dedicated support',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/Ccldr-net/',liveLabel:'CCLDR (GitHub Pages) →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day hold. Full launch Q3 2026.',
    boss:{title:'⚔ Defend Your Rights',sub:'Join CCLDR with the Pro tier — full BENO-X, templates, and case review.',amount:299,ach:'legal_legend'}},
 
@@ -591,7 +672,7 @@ var FLOORS = [
   {n:6,name:'TechPetCage',tag:'🐾',sub:'Smart Pet Health AI · GPS Monitoring · Behavior Analytics',
    desc:'AI-powered pet health monitoring with real-time GPS tracking, behavioral analysis, and veterinary alert integration for pet owners worldwide.',
    feats:['AI health tracking','Real-time GPS monitoring','Veterinary alert integration','Behavioral analysis engine','Multi-pet dashboard','24/7 status updates','Emergency SOS protocol','Worldwide shipping'],
-   pricing:[{tier:'Basic',val:'$19/mo',desc:'1 pet · Basic health monitoring',url:'https://paypal.me/derekfrancisco/19CAD',cls:'btn-platinum'},{tier:'Plus',val:'$49/mo',desc:'3 pets · Health alerts + GPS + vet alerts',url:'https://paypal.me/derekfrancisco/49CAD',cls:'btn-emerald',feat:true},{tier:'Family',val:'$149/mo',desc:'Unlimited pets · Full suite + vet integration',url:'https://paypal.me/derekfrancisco/149CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Basic',val:'$19/mo',desc:'1 pet · Basic health monitoring',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA/19CAD',cls:'btn-platinum'},{tier:'Plus',val:'$49/mo',desc:'3 pets · Health alerts + GPS + vet alerts',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald',feat:true},{tier:'Family',val:'$149/mo',desc:'Unlimited pets · Full suite + vet integration',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA/149CAD',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/techpetcage/',liveLabel:'TechPetCage →',contact:'franciscoderek7@gmail.com'},
 
   {n:7,name:'VIGILAX',tag:'🔒',sub:'Enterprise Threat Response · Zero Compromise',
@@ -609,7 +690,7 @@ var FLOORS = [
   {n:9,name:'Vault Velocity Auto',tag:'🚗',sub:'AI-Powered Automotive Intelligence',
    desc:'AI diagnostics, performance optimization, and secure automotive intelligence for high-value vehicles and fleet operations.',
    feats:['AI vehicle diagnostics','Performance optimization','Fleet management AI','Security & anti-theft intelligence','Predictive maintenance','OBD-II deep integration','Insurance telematics','Custom automotive AI'],
-   pricing:[{tier:'Individual',val:'$99/mo',desc:'1 vehicle · AI diagnostics + alerts',url:'https://paypal.me/derekfrancisco/99CAD',cls:'btn-emerald'},{tier:'Fleet',val:'$499/mo',desc:'10 vehicles · Full fleet AI management',url:'https://paypal.me/derekfrancisco/499CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Individual',val:'$99/mo',desc:'1 vehicle · AI diagnostics + alerts',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald'},{tier:'Fleet',val:'$499/mo',desc:'10 vehicles · Full fleet AI management',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/vaultvelocityauto/',liveLabel:'Vault Velocity Auto →',contact:'franciscoderek7@gmail.com'},
 
   {n:10,name:'Kiaros',tag:'⏱️',sub:'AI Strategy · Precision Timing · Growth Architecture',
@@ -621,19 +702,19 @@ var FLOORS = [
   {n:11,name:'TechPackCage',tag:'📦',sub:'Smart Packaging AI · Supply Chain Intelligence',
    desc:'AI-powered packaging optimization and supply chain intelligence for e-commerce and manufacturing operations.',
    feats:['Packaging material AI','Dimension optimization','Supply chain visibility','Carrier rate AI negotiation','Returns reduction AI','Sustainability scoring','Inventory forecasting','Custom packaging design'],
-   pricing:[{tier:'Starter',val:'$49/mo',desc:'Up to 500 shipments · Basic optimization',url:'https://paypal.me/derekfrancisco/49CAD',cls:'btn-emerald'},{tier:'Growth',val:'$149/mo',desc:'Unlimited shipments · Full AI suite',url:'https://paypal.me/derekfrancisco/149CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Starter',val:'$49/mo',desc:'Up to 500 shipments · Basic optimization',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald'},{tier:'Growth',val:'$149/mo',desc:'Unlimited shipments · Full AI suite',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA/149CAD',cls:'btn-gold'}],
    live:false,contact:'franciscoderek7@gmail.com'},
 
   {n:12,name:'MindShift by Michaella',tag:'🧠',sub:'Psychology & Travel AI · Behavioral Transformation',
    desc:'Combining behavioral psychology and immersive travel experiences to unlock automated income streams and mindset transformation.',
    feats:['Behavioral modification programs','Automated income systems','Travel lifestyle design','Psychology-based coaching','Digital product creation','Online course platform','Community building','Mindset reprogramming'],
-   pricing:[{tier:'Session',val:'$99',desc:'1-hour coaching session',url:'https://paypal.me/derekfrancisco/99CAD',cls:'btn-emerald'},{tier:'Package',val:'$299',desc:'Monthly program + travel lifestyle blueprint',url:'https://paypal.me/derekfrancisco/299CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Session',val:'$99',desc:'1-hour coaching session',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald'},{tier:'Package',val:'$299',desc:'Monthly program + travel lifestyle blueprint',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/mindshift-makayla/',liveLabel:'MindShift →',contact:'franciscoderek7@gmail.com'},
 
   {n:13,name:'CCC-Site',tag:'🌐',sub:'Business Consulting · Compliance & Licensing',
    desc:'Full-service business consulting — from licensing and compliance to operations, marketing, and expansion strategy.',
    feats:['Licensing guidance','Compliance management','Operations setup','Marketing strategy','SOP development','Financial modeling','Distribution strategy','Expansion planning'],
-   pricing:[{tier:'Consult',val:'$500',desc:'60-min compliance strategy session',url:'https://paypal.me/derekfrancisco/499CAD',cls:'btn-emerald'},{tier:'Retainer',val:'$2,000/mo',desc:'Full compliance management + monthly strategy',url:'https://paypal.me/derekfrancisco/199CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Consult',val:'$500',desc:'60-min compliance strategy session',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald'},{tier:'Retainer',val:'$2,000/mo',desc:'Full compliance management + monthly strategy',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-gold'}],
    live:false,contact:'docweedla@gmail.com'},
 
   {n:14,name:'Space Swarm',tag:'🛸',sub:'Space Operations AI · Orbital Logistics · Satellite Intelligence',coming:true},
@@ -645,7 +726,7 @@ var FLOORS = [
   {n:20,name:'Auto Swarm',tag:'🏭',sub:'Automotive Manufacturing AI · Supply Chain Intelligence',coming:true},
   {n:21,name:'Agent Swarm Tech',tag:'🤖',sub:'Multi-Agent Orchestration · AI Scaling · Swarm Intelligence',
    desc:'The backbone technology powering all 45 Francisco Holdings divisions. Deploy, manage, and scale AI agent networks.',
-   pricing:[{tier:'Starter',val:'$299/mo',desc:'Up to 5 agents',url:'https://paypal.me/derekfrancisco/299CAD',cls:'btn-emerald'},{tier:'Growth',val:'$999/mo',desc:'Up to 25 agents + monitoring',url:'https://paypal.me/derekfrancisco/999CAD',cls:'btn-gold'},{tier:'Enterprise',val:'$2,999/mo',desc:'Unlimited agents + SoulStack integration',url:'mailto:franciscoderek7@gmail.com?subject=Agent%20Swarm%20Enterprise',cls:'btn-platinum'}],
+   pricing:[{tier:'Starter',val:'$299/mo',desc:'Up to 5 agents',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-emerald'},{tier:'Growth',val:'$999/mo',desc:'Up to 25 agents + monitoring',url:'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA',cls:'btn-gold'},{tier:'Enterprise',val:'$2,999/mo',desc:'Unlimited agents + SoulStack integration',url:'mailto:franciscoderek7@gmail.com?subject=Agent%20Swarm%20Enterprise',cls:'btn-platinum'}],
    live:false,contact:'franciscoderek7@gmail.com'},
   {n:22,name:'Francisco Realty',tag:'🏘️',sub:'AI Real Estate · Full-Stack Property Transactions',
    desc:'End-to-end real estate services powered by AI — buying, selling, investment, and property management across Canada and beyond.',
@@ -840,7 +921,7 @@ var PhoenixGame = (function(){
   }
   function payBoss(floorN, amount, ach){
     // open PayPal (honor system — cannot verify)
-    window.open('https://paypal.me/derekfrancisco/'+amount+'CAD','_blank','noopener');
+    window.open('https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA/'+amount+'CAD','_blank','noopener');
     clearBoss(floorN, ach);
   }
   function skipBoss(floorN){
@@ -1130,7 +1211,7 @@ function renderFloor(f) {
     }
 
     if (!f.secret) {
-      html += '<div class="pay-notice">💳 <strong>Pay via PayPal or Bitcoin.</strong> Stripe temporarily unavailable. PayPal: paypal.me/derekfrancisco · Reference: '+escHtml(f.name)+'</div>';
+      html += '<div class="pay-notice">💳 <strong>Pay via PayPal or Bitcoin.</strong> Stripe LIVE. PayPal also active. PayPal: www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA · Reference: '+escHtml(f.name)+'</div>';
     }
 
     if (f.pricing && f.pricing.length) {
@@ -1139,7 +1220,15 @@ function renderFloor(f) {
         html += '<div class="price-card'+(p.feat?' featured':'')+'"><div class="price-tier">'+escHtml(p.tier)+'</div>';
         if (p.val) html += '<div class="price-val">'+escHtml(p.val)+'</div>';
         if (p.desc) html += '<div class="price-desc">'+escHtml(p.desc)+'</div>';
-        html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" '+(p.url.startsWith('http')||p.url.startsWith('mailto')?'target="_blank" rel="noopener"':'')+'>'+(p.url.startsWith('mailto')?'Inquire →':p.url.includes('paypal')?'Pay via PayPal →':'Learn More →')+'</a>';
+        if (p.url.includes('paypal')) {
+          var _pid = escHtml(f.name.replace(/[^a-zA-Z0-9_]/g,'_')+'_'+p.tier.replace(/[^a-zA-Z0-9_]/g,'_'));
+          var _amt = (p.val||'0').replace(/[^0-9.]/g,'') || '0';
+          var _lbl = escHtml(f.name+' — '+p.tier);
+          html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" target="_blank" rel="noopener" onclick="event.preventDefault();window.PAYMENT_PROVIDER=\'paypal\';if(window.PrimeDoxPayment&&PrimeDoxPayment.checkout){PrimeDoxPayment.checkout(\''+_pid+'\',\''+_amt+'\',\''+_lbl+'\')}else{window.open(\''+p.url+'\',\'_blank\',\'noopener\')}">💳 PayPal</a>';
+          html += '<button class="btn-stripe" onclick="window.PAYMENT_PROVIDER=\'stripe\';if(window.PrimeDoxPayment&&PrimeDoxPayment.checkout){PrimeDoxPayment.checkout(\''+_pid+'\',\''+_amt+'\',\''+_lbl+'\')}else{alert(\'Stripe checkout loading — please try again in a moment.\')};window.PAYMENT_PROVIDER=\'paypal\'">🔒 Card (Stripe)</button>';
+        } else {
+          html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" '+(p.url.startsWith('http')||p.url.startsWith('mailto')?'target="_blank" rel="noopener"':'')+'>'+(p.url.startsWith('mailto')?'Inquire →':'Learn More →')+'</a>';
+        }
         html += '</div>';
       });
       html += '</div>';
@@ -1161,7 +1250,7 @@ function renderFloor(f) {
       html += '<button class="bg-skip" onclick="PhoenixGame.skipBoss('+f.n+')">Skip for now</button>';
       html += '</div>';
       html += '<div class="bg-cleared-msg">✓ COMMITMENT HONORED — +500 Empire Coins</div>';
-      html += '<div class="bg-stripe-note">Stripe temporarily unavailable · PayPal or Bitcoin (bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x)</div>';
+      html += '<div class="bg-stripe-note">Stripe LIVE · PayPal active · Bitcoin: bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>';
       html += '</div>';
     }
   }
@@ -1171,6 +1260,16 @@ function renderFloor(f) {
     html += '<span class="hidden-coin" id="coin-top" style="position:relative;display:inline-block;margin-top:18px" onclick="PhoenixGame.collectCoin(\'top\',this)">💰</span>';
   }
 
+  // Agent-on-call button for active floors
+  var FLOOR_AGENT_MAP = {1:{id:'sentinel',name:'Sentinel'},2:{id:'counsel',name:'Counsel'},3:{id:'primedox',name:'PrimeDox'},4:{id:'archivist',name:'Archivist'},5:{id:'swarm',name:'Swarm'},6:{id:'vetbot',name:'VetBot'},7:{id:'warden',name:'Warden'},8:{id:'phoenix',name:'Phoenix'},9:{id:'torque',name:'Torque'},10:{id:'chronos',name:'Chronos'},11:{id:'crate',name:'Crate'},12:{id:'maya',name:'Maya'},13:{id:'primedox',name:'PrimeDox'}};
+  var fa = FLOOR_AGENT_MAP[f.n];
+  if (fa && !f.coming && !f.secret) {
+    html += '<div style="margin-top:18px;padding:13px 16px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">';
+    html += '<div><div style="font-size:9px;font-weight:700;color:#10B981;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:2px;">🤖 AI Specialist On Call</div>';
+    html += '<div style="font-size:12px;color:rgba(255,255,255,0.75);">' + escHtml(fa.name) + ' — Ask anything about ' + escHtml(f.name) + '</div></div>';
+    html += '<button onclick="pdFloorChat(&quot;' + fa.id + '&quot;,&quot;Floor ' + f.n + ' — ' + escHtml(f.name) + '&quot;)" style="background:#10B981;color:#111;border:none;padding:8px 16px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:Orbitron,sans-serif;letter-spacing:1px;">Talk to ' + escHtml(fa.name) + ' →</button>';
+    html += '</div>';
+  }
   html += '<div class="soulstack-badge"><span class="dot">●</span> SoulStack Observer &nbsp;·&nbsp; Agent Swarm Technologies &nbsp;·&nbsp; Floor '+f.n+' Active</div>';
   html += '</div></section>';
   return html;
@@ -1249,16 +1348,104 @@ function updateElevatorDisplay(n) {
   if (activeFSheet) activeFSheet.classList.add('active');
 }
 
+/* ── Elevator Audio ─────────────────────── */
+function pingDing() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    [880, 1100].forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      osc.connect(gain);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.start(ctx.currentTime + i * 0.14);
+      osc.stop(ctx.currentTime + 0.5);
+    });
+  } catch(e) {}
+}
+
+/* ── Elevator Door Animation ────────────── */
+function elevatorDoorClose(callback) {
+  var dL = document.getElementById('el-door-left');
+  var dR = document.getElementById('el-door-right');
+  if (!dL || !window.gsap) { if (callback) callback(); return; }
+  gsap.timeline({ onComplete: callback })
+    .to(dL, { x: 0, duration: 0.35, ease: 'power3.inOut' }, 0)
+    .to(dR, { x: 0, duration: 0.35, ease: 'power3.inOut' }, 0);
+}
+
+function elevatorDoorOpen(n) {
+  var dL = document.getElementById('el-door-left');
+  var dR = document.getElementById('el-door-right');
+  var flEl = document.getElementById('el-door-floor');
+  if (!dL || !window.gsap) return;
+  var label = n === 0 ? 'LOBBY' : 'FLOOR ' + n;
+  if (flEl) { flEl.textContent = label; gsap.fromTo(flEl, {opacity:0.9},{opacity:0,duration:0.6,delay:0.25}); }
+  gsap.timeline({ delay: 0.1 })
+    .to(dL, { x: '-100%', duration: 0.45, ease: 'power3.inOut' }, 0)
+    .to(dR, { x: '100%', duration: 0.45, ease: 'power3.inOut' }, 0);
+  pingDing();
+  if (n > 0 && FLOORS[n-1]) PhoenixGame.toast('Floor ' + n + ' — ' + FLOORS[n-1].name);
+  else if (n === 0) PhoenixGame.toast('Welcome back to the Lobby');
+}
+
+/* ── Cascading Floor Number ─────────────── */
+function cascadeFloorNumber(target) {
+  var el = document.getElementById('el-current');
+  if (!el) return;
+  var i = 0, steps = 14;
+  var iv = setInterval(function() {
+    i++;
+    el.textContent = i < steps ? 'F' + (Math.floor(Math.random() * 44) + 1) : (target === 0 ? 'LOBBY' : 'F' + target);
+    if (i >= steps) clearInterval(iv);
+  }, 38);
+}
+
+/* ── Concierge Route Logic ──────────────── */
+window.conciergeRoute = function() {
+  var q = ((document.getElementById('cd-query') || {}).value || '').toLowerCase().trim();
+  if (!q) return;
+  var rules = [
+    {k:['security','vpn','cyber','hack','virus','antivirus','omniaguard'],f:1},
+    {k:['legal','cannabis','weed','charter','court','defense','cdsa','beno'],f:2},
+    {k:['primedox','ai','document automation'],f:3},
+    {k:['ccldr','case track','affidavit','motion','template'],f:4},
+    {k:['cleaning','cleanswarm','gig','workforce','janitor'],f:5},
+    {k:['pet','dog','cat','gps collar','feeder','tracker'],f:6},
+    {k:['vigilax','surveillance','stalker','opsec','spy'],f:7},
+    {k:['invest','boardroom','partner','equity','dynasty','fund'],f:8},
+    {k:['car','auto','vehicle','financing','torque','vault velocity'],f:9},
+    {k:['schedule','calendar','meeting','kiaros','booking','time'],f:10},
+    {k:['package','packaging','shipping','supply chain','techpack'],f:11},
+    {k:['mindshift','coaching','mindset','maya','transformation'],f:12},
+  ];
+  for (var i = 0; i < rules.length; i++) {
+    if (rules[i].k.some(function(k){ return q.includes(k); })) {
+      goToFloor(rules[i].f);
+      document.getElementById('cd-query').value = '';
+      return;
+    }
+  }
+  PhoenixGame.toast('Showing all 45 floors — scroll or use the directory below');
+  document.getElementById('cd-query').value = '';
+};
+
 window.goToFloor = function(n) {
-  updateElevatorDisplay(n);
   var target = document.getElementById('floor-' + n);
   if (!target) return;
-  target.scrollIntoView({ behavior: 'smooth' });
-  if (n >= 1) PhoenixGame.visitFloor(n);
-  PhoenixGame.updateMinimapCurrent(n);
+  updateElevatorDisplay(n);
+  cascadeFloorNumber(n);
   var flash = document.getElementById('el-shaft-flash');
-  if (flash && window.gsap) { gsap.fromTo(flash, {opacity:0.6}, {opacity:0, duration:0.6}); }
-  if (window.gsap) { gsap.fromTo('#el-current', {scale:1.3, color:'var(--gold)'}, {scale:1, color:'var(--platinum-mid)', duration:0.4}); }
+  if (flash && window.gsap) { gsap.fromTo(flash, {opacity:0.7}, {opacity:0, duration:0.5}); }
+  elevatorDoorClose(function() {
+    target.scrollIntoView({ behavior: 'instant' });
+    elevatorDoorOpen(n);
+    if (n >= 1) PhoenixGame.visitFloor(n);
+    PhoenixGame.updateMinimapCurrent(n);
+  });
 };
 
 window.goFloorDelta = function(delta) {
@@ -1337,6 +1524,80 @@ document.addEventListener('keydown', function(e) {
     W = section.offsetWidth; H = section.offsetHeight;
     camera.aspect = W/H; camera.updateProjectionMatrix();
     renderer.setSize(W, H);
+  });
+})();
+
+/* ── City Skyline Canvas 2D ─────────────── */
+(function initCitySkyline() {
+  var canvas = document.getElementById('city-canvas');
+  var section = document.getElementById('floor-0');
+  if (!canvas || !section) return;
+  var W = canvas.width = section.offsetWidth;
+  var H = canvas.height = section.offsetHeight;
+  var ctx = canvas.getContext('2d');
+  var tick = 0;
+
+  function genBuildings(w, h) {
+    var bs = [], count = Math.max(20, Math.floor(w / 16));
+    for (var i = 0; i < count; i++) {
+      var bW = 10 + Math.random() * 28;
+      var bH = 50 + Math.random() * (h * 0.52);
+      var x = (i / count) * w + (Math.random() * (w / count * 0.5));
+      var windows = [];
+      var wC = Math.max(1, Math.floor(bW / 7));
+      var wR = Math.max(1, Math.floor(bH / 11));
+      for (var r = 0; r < wR; r++) {
+        for (var c = 0; c < wC; c++) {
+          windows.push({ r: r, c: c, lit: Math.random() > 0.38, blink: Math.random() > 0.93 });
+        }
+      }
+      bs.push({ x: x, w: bW, h: bH, windows: windows, antenna: bH > h * 0.32 });
+    }
+    return bs;
+  }
+
+  var buildings = genBuildings(W, H);
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, 'rgba(4,4,12,0.95)');
+    grad.addColorStop(1, 'rgba(8,8,20,0.98)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    buildings.forEach(function(b) {
+      var y = H - b.h;
+      ctx.fillStyle = '#080810';
+      ctx.fillRect(b.x, y, b.w, b.h);
+      ctx.strokeStyle = 'rgba(212,175,55,0.06)';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(b.x, y, b.w, b.h);
+
+      b.windows.forEach(function(w) {
+        var lit = w.blink ? (Math.sin(tick * 0.04 + w.r * 1.7 + b.x * 0.1) > 0.6) : w.lit;
+        ctx.fillStyle = lit ? 'rgba(212,175,55,0.55)' : 'rgba(255,255,255,0.03)';
+        ctx.fillRect(b.x + w.c * 7 + 1, y + w.r * 11 + 3, 5, 7);
+      });
+
+      if (b.antenna) {
+        var blink = Math.sin(tick * 0.025 + b.x) > 0;
+        ctx.strokeStyle = 'rgba(212,175,55,0.25)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(b.x + b.w / 2, y); ctx.lineTo(b.x + b.w / 2, y - 18); ctx.stroke();
+        ctx.fillStyle = blink ? 'rgba(255,60,60,0.9)' : 'rgba(255,60,60,0.12)';
+        ctx.beginPath(); ctx.arc(b.x + b.w / 2, y - 18, 2, 0, Math.PI * 2); ctx.fill();
+      }
+    });
+    tick++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  window.addEventListener('resize', function() {
+    W = canvas.width = section.offsetWidth;
+    H = canvas.height = section.offsetHeight;
+    buildings = genBuildings(W, H);
   });
 })();
 
@@ -1501,7 +1762,7 @@ document.addEventListener('keydown', function(e) {
   };
 
   window.proceedToPayPal = function() {
-    window.open('https://paypal.me/derekfrancisco/'+_checkout.discounted+'CAD', '_blank', 'noopener');
+    window.open('https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA/'+_checkout.discounted+'CAD', '_blank', 'noopener');
     window.closeCheckoutModal();
   };
 
@@ -1517,7 +1778,7 @@ document.addEventListener('keydown', function(e) {
 
   // Intercept all PayPal links
   document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('a[href*="paypal.me/derekfrancisco"]').forEach(function(link) {
+    document.querySelectorAll('a[href*="www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA"]').forEach(function(link) {
       var href = link.getAttribute('href');
       var match = href.match(/\/(\d+CAD)$/i);
       if (!match) return;
@@ -1559,5 +1820,30 @@ document.addEventListener('keydown', function(e) {
 window.addEventListener('load', function(){ PhoenixGame.boot(); });
 </script>
 <div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
+
+<!-- Elevator Doors (animate closed/open on floor change) -->
+<div id="el-door-left"><div class="el-door-label">PHOENIX TOWER</div></div>
+<div id="el-door-right"><div class="el-door-label">FRANCISCO HOLDINGS INC.</div></div>
+<div id="el-door-floor">LOBBY</div>
+
+<!-- PrimeDox AI Concierge — Routes to floor specialists -->
+<script>window.PRIMEDOX_API_URL = '';</script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/agent-config.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/chat-widget.js" data-agent="primedox"></script>
+<script>
+function pdFloorChat(agentId, floorName) {
+  var panel = document.getElementById('pd-panel');
+  var bubble = document.getElementById('pd-bubble');
+  if (!panel || !bubble) return;
+  panel.style.display = '';
+  panel.classList.add('open');
+  if (bubble) bubble.classList.add('open');
+  var input = document.getElementById('pd-input');
+  if (input) { input.value = 'I\'m on ' + floorName + '. Talk to ' + agentId; input.focus(); }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/stripe-payment-links.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/payment-provider.js"></script>
 </body>
 </html>

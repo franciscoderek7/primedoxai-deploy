@@ -72,7 +72,7 @@ The ultimate remedy: proceedings stayed as an abuse of process.
 
 This is what you get inside CCLDR.
 
-[Join at Warrior tier — $149/mo →](https://paypal.me/derekfrancisco/149CAD)
+[Join at Warrior tier — $149/mo →](https://paypal.me/franciscoderek7/149CAD)
 [Pay via Interac →](mailto:franciscoderek7@gmail.com?subject=CCLDR%20Warrior%20Join%20%E2%80%94%20%24149&body=I%20want%20to%20join%20CCLDR%20Warrior%20tier%20at%20%24149%2Fmo.%20Please%20send%20Interac%20details.)
 
 — Derek Francisco
@@ -110,8 +110,8 @@ Inside CCLDR, I show you exactly how to draft each of these motions — with tem
 
 7 spots left at the Warrior price this month. After that, it increases to the regular rate.
 
-[Join CCLDR — Warrior $149/mo →](https://paypal.me/derekfrancisco/149CAD)
-[Join CCLDR — Professional $499/mo →](https://paypal.me/derekfrancisco/499CAD)
+[Join CCLDR — Warrior $149/mo →](https://paypal.me/franciscoderek7/149CAD)
+[Join CCLDR — Professional $499/mo →](https://paypal.me/franciscoderek7/499CAD)
 
 — Derek Francisco
 
@@ -144,7 +144,7 @@ We're at 43 now.
 
 **This week only:** Join Warrior and get 30 days free access to the Weedlaw Education course bundle ($149 value) included.
 
-[Join Warrior — $149/mo PayPal →](https://paypal.me/derekfrancisco/149CAD)
+[Join Warrior — $149/mo PayPal →](https://paypal.me/franciscoderek7/149CAD)
 [Join Warrior — $149/mo Interac →](mailto:franciscoderek7@gmail.com?subject=Join%20CCLDR%20Warrior%20%24149&body=I%20want%20to%20join%20CCLDR%20Warrior%20tier%20at%20%24149%2Fmo.%20Please%20send%20Interac%20e-transfer%20details.)
 
 — Derek Francisco
@@ -173,9 +173,9 @@ Not because I need the money. Because I know what it feels like to stand in that
 **The system counts on your ignorance. My entire mission is to end that advantage.**
 
 If you're ready:
-→ [Warrior — $149/mo →](https://paypal.me/derekfrancisco/149CAD)
-→ [Professional — $499/mo →](https://paypal.me/derekfrancisco/499CAD)
-→ [Elite — $999/mo →](https://paypal.me/derekfrancisco/999CAD)
+→ [Warrior — $149/mo →](https://paypal.me/franciscoderek7/149CAD)
+→ [Professional — $499/mo →](https://paypal.me/franciscoderek7/499CAD)
+→ [Elite — $999/mo →](https://paypal.me/franciscoderek7/999CAD)
 → [Courses only →](courses.html)
 
 If you're not ready yet, I understand. Come back when you need us. We'll be here.

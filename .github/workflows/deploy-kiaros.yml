@@ -2,7 +2,7 @@ name: Deploy Kiaros to kiaros.com
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
     paths:
       - 'kiaros-site/**'
   workflow_dispatch:
@@ -50,10 +50,12 @@ jobs:
 
       - name: Copy site files
         run: |
+          # Copy all HTML, JS, CSS, images, JSON — wildcard recurse into subdirs
           cd kiaros-site
-          for f in *.html; do [ -f "$f" ] && cp "$f" /tmp/kiaros/"$f" && echo "  copied $f"; done
-          for ext in jpg jpeg png webp gif svg js css ico; do
-            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/kiaros/"$f" && echo "  copied $f"; done
+          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.json" -o -name "*.webp" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.svg" -o -name "*.gif" -o -name "*.ico" -o -name "*.xml" -o -name "*.txt" -o -name "*.md" \) | while read f; do
+            dir=$(dirname "$f")
+            mkdir -p "/tmp/kiaros/$dir"
+            cp "$f" "/tmp/kiaros/$f"
           done
           echo "kiaros.com" > /tmp/kiaros/CNAME
           touch /tmp/kiaros/.nojekyll
