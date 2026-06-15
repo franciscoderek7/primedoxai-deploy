@@ -44,7 +44,7 @@
       color: '#27ae60',
       accent: '#1a7a40',
       greeting: "Know Your Rights. I'm here to help. Are you facing a charge, or do you want to learn BENO-X?",
-      consultLink: 'https://paypal.me/derekfrancisco/149CAD',
+      consultLink: 'https://paypal.me/franciscoderek7/149CAD',
       consultLabel: 'Get Warrior Tier — $149',
     },
     'omniaguard': {

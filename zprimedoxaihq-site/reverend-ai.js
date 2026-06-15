@@ -26,7 +26,7 @@
       color: '#00d4ff',
       accent: '#0099bb',
       greeting: "I'm PrimeDox AI. I can help you understand our document automation tiers. What are you looking for?",
-      consultLink: 'https://paypal.me/derekfrancisco/49CAD',
+      consultLink: 'https://paypal.me/franciscoderek7/49CAD',
       consultLabel: 'Start Free Trial — $49',
     },
     'francisco-holdings': {
@@ -44,7 +44,7 @@
       color: '#27ae60',
       accent: '#1a7a40',
       greeting: "Know Your Rights. I'm here to help. Are you facing a charge, or do you want to learn BENO-X?",
-      consultLink: 'https://paypal.me/derekfrancisco/149CAD',
+      consultLink: 'https://paypal.me/franciscoderek7/149CAD',
       consultLabel: 'Get Warrior Tier — $149',
     },
     'omniaguard': {

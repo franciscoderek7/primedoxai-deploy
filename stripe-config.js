@@ -177,35 +177,35 @@
             price:    49,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_BASIC', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/49',
+            paypal:   'https://paypal.me/franciscoderek7/49CAD',
           },
           warrior: {
             label:    'Warrior',
             price:    149,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_WARRIOR', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/149',
+            paypal:   'https://paypal.me/franciscoderek7/149CAD',
           },
           professional: {
             label:    'Professional',
             price:    499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_PROFESSIONAL', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/499',
+            paypal:   'https://paypal.me/franciscoderek7/499CAD',
           },
           elite: {
             label:    'Elite',
             price:    999,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_ELITE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/999',
+            paypal:   'https://paypal.me/franciscoderek7/999CAD',
           },
           sovereign: {
             label:    'Sovereign',
             price:    2499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_SOVEREIGN', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/2499',
+            paypal:   'https://paypal.me/franciscoderek7/2499CAD',
           },
         },
       },
@@ -223,21 +223,21 @@
             price:    199,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_INDIVIDUAL', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/199',
+            paypal:   'https://paypal.me/franciscoderek7/199CAD',
           },
           team: {
             label:    'Team',
             price:    499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_TEAM', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/499',
+            paypal:   'https://paypal.me/franciscoderek7/499CAD',
           },
           enterprise: {
             label:    'Enterprise',
             price:    1999,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_ENTERPRISE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfrancisco/1999',
+            paypal:   'https://paypal.me/franciscoderek7/1999CAD',
           },
         },
       },
@@ -256,7 +256,7 @@
             price:    null, // products vary
             recurring: null,
             stripeUrl: null, // product-level Stripe links applied per item — STRIPE SWAP ZONE
-            paypal:    'https://paypal.me/derekfrancisco', // amount appended dynamically at checkout
+            paypal:    'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA', // amount appended dynamically at checkout
           },
         },
       },
