@@ -516,7 +516,7 @@ img { max-width: 100%; height: auto; }
       <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Product</div>
       <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold-light)" id="ref-product-name"></div>
     </div>
-    <div class="pay-notice"><strong>Pay via PayPal or Bitcoin.</strong> Stripe LIVE. PayPal also active.<br>PayPal: www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA · Reference the product name.</div>
+    <div class="pay-notice"><strong>Pay via PayPal, Card (Stripe), or Bitcoin.</strong> All payment methods active.<br>PayPal: www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA · Reference the product name.</div>
     <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Price</div>
     <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--platinum)" id="ref-orig-price"></div>
     <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--gold);display:none;margin-top:4px" id="ref-disc-price"></div>
@@ -613,6 +613,8 @@ img { max-width: 100%; height: auto; }
 
 <script>
 'use strict';
+
+window.STRIPE_PK = 'pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz';
 
 /* ══════════════════════════════════════════════════════
    FLOOR DATA — ALL 45 DIVISIONS
@@ -1202,7 +1204,15 @@ function renderFloor(f) {
         html += '<div class="price-card'+(p.feat?' featured':'')+'"><div class="price-tier">'+escHtml(p.tier)+'</div>';
         if (p.val) html += '<div class="price-val">'+escHtml(p.val)+'</div>';
         if (p.desc) html += '<div class="price-desc">'+escHtml(p.desc)+'</div>';
-        html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" '+(p.url.startsWith('http')||p.url.startsWith('mailto')?'target="_blank" rel="noopener"':'')+'>'+(p.url.startsWith('mailto')?'Inquire →':p.url.includes('paypal')?'Pay via PayPal →':'Learn More →')+'</a>';
+        if (p.url.includes('paypal')) {
+          var _pid = escHtml(f.name.replace(/[^a-zA-Z0-9_]/g,'_')+'_'+p.tier.replace(/[^a-zA-Z0-9_]/g,'_'));
+          var _amt = (p.val||'0').replace(/[^0-9.]/g,'') || '0';
+          var _lbl = escHtml(f.name+' — '+p.tier);
+          html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" target="_blank" rel="noopener" onclick="event.preventDefault();window.PAYMENT_PROVIDER=\'paypal\';if(window.PrimeDoxPayment&&PrimeDoxPayment.checkout){PrimeDoxPayment.checkout(\''+_pid+'\',\''+_amt+'\',\''+_lbl+'\')}else{window.open(\''+p.url+'\',\'_blank\',\'noopener\')}">💳 PayPal</a>';
+          html += '<button class="btn-stripe" onclick="window.PAYMENT_PROVIDER=\'stripe\';if(window.PrimeDoxPayment&&PrimeDoxPayment.checkout){PrimeDoxPayment.checkout(\''+_pid+'\',\''+_amt+'\',\''+_lbl+'\')}else{alert(\'Stripe checkout loading — please try again in a moment.\')};window.PAYMENT_PROVIDER=\'paypal\'">🔒 Card (Stripe)</button>';
+        } else {
+          html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" '+(p.url.startsWith('http')||p.url.startsWith('mailto')?'target="_blank" rel="noopener"':'')+'>'+(p.url.startsWith('mailto')?'Inquire →':'Learn More →')+'</a>';
+        }
         html += '</div>';
       });
       html += '</div>';
@@ -1224,7 +1234,7 @@ function renderFloor(f) {
       html += '<button class="bg-skip" onclick="PhoenixGame.skipBoss('+f.n+')">Skip for now</button>';
       html += '</div>';
       html += '<div class="bg-cleared-msg">✓ COMMITMENT HONORED — +500 Empire Coins</div>';
-      html += '<div class="bg-stripe-note">Stripe temporarily unavailable · PayPal or Bitcoin (bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x)</div>';
+      html += '<div class="bg-stripe-note">Stripe LIVE · PayPal active · Bitcoin: bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>';
       html += '</div>';
     }
   }
