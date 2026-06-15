@@ -1544,14 +1544,16 @@
           <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px;">
             Deploy <strong style="color:var(--gold);">{{ deployTarget.name }}</strong> agent to this company. Supabase real-time sync coming once credentials are wired in.
           </div>
-          <div style="background:rgba(239,68,68,0.07);border:1px dashed rgba(239,68,68,0.3);border-radius:8px;padding:12px;font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">
-            ⚡ <strong style="color:var(--red);">Stripe account recovery in progress.</strong><br>
-            Use PayPal for immediate payments.
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <a href="https://dashboard.stripe.com" target="_blank" rel="noopener noreferrer"
+               style="flex:1;display:block;padding:12px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:var(--emerald);font-size:12px;font-weight:700;text-align:center;border-radius:8px;text-decoration:none;min-height:44px;line-height:20px;">
+              ⚡ STRIPE
+            </a>
+            <a href="https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA" target="_blank" rel="noopener noreferrer"
+               style="flex:1;display:block;padding:12px;background:var(--gold);color:#0a0a1a;font-size:12px;font-weight:700;text-align:center;border-radius:8px;text-decoration:none;min-height:44px;line-height:20px;">
+              💳 PAYPAL
+            </a>
           </div>
-          <a href="https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA" target="_blank" rel="noopener noreferrer"
-             style="display:block;width:100%;padding:14px;background:var(--gold);color:#0a0a1a;font-size:13px;font-weight:700;letter-spacing:1px;text-align:center;border-radius:8px;text-decoration:none;margin-bottom:10px;min-height:44px;line-height:1.2;">
-            💳 PAY WITH PAYPAL
-          </a>
           <div class="deploy-modal-close-row">
             <button class="action-btn" @click="deployTarget = null">CLOSE</button>
           </div>
@@ -1683,13 +1685,13 @@ const DEFAULT_TASKS = [
   { id:3, priority:'high', title:'Deploy Gemma 27B on RunPod', company:'hq', agent:'prime', status:'in-progress', due:'Today', created: Date.now()-7200000 },
   { id:4, priority:'medium', title:'Create PayPal Business links', company:'fh', agent:'midas', status:'pending', due:'This week', created: Date.now()-3600000 },
   { id:5, priority:'medium', title:'Set up CCLDR GitHub Pages repo', company:'ccldr', agent:'forge', status:'pending', due:'This week', created: Date.now() },
-  { id:6, priority:'medium', title:'Stripe recovery — upload ID + 2FA', company:'fh', agent:'ledger', status:'pending', due:'ASAP', created: Date.now() },
+  { id:6, priority:'medium', title:'Create PayPal Business recurring buttons', company:'fh', agent:'midas', status:'pending', due:'This week', created: Date.now() },
   { id:7, priority:'low', title:'OmniaGuard free-scan.html build', company:'omniaguard', agent:'sentinel', status:'pending', due:'Next sprint', created: Date.now() },
   { id:8, priority:'low', title:'CCLDR education.html page', company:'ccldr', agent:'archivist', status:'pending', due:'Next sprint', created: Date.now() },
 ];
 
 const DEFAULT_ALERTS = [
-  { id:1, type:'critical', icon:'⚡', title:'Stripe Account Under Review', body:'$406.80 frozen. Stripe account recovery in progress — use PayPal for immediate payments: www.paypal.com/paypalme/franciscoderek7', ts: Date.now()-3600000 },
+  { id:1, type:'info', icon:'⚡', title:'Stripe LIVE', body:'acct_1TG0cIASsTLqnu8V active. pk_live key injected across all payment pages. PayPal remains active as fallback.', ts: Date.now()-3600000 },
   { id:2, type:'warning', icon:'⚠️', title:'RunPod GPU Not Connected', body:'Gemma 3 27B requires GPU. Deploy docker-compose to RunPod.', ts: Date.now()-7200000 },
   { id:3, type:'info', icon:'💳', title:'PayPal Live — CA Link Active', body:'Active: www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA', ts: Date.now()-86400000 },
   { id:4, type:'info', icon:'✅', title:'Gemma Backend Committed', body:'agents/backend/gemma-server.js + Dockerfile pushed to feature branch.', ts: Date.now()-86400000 },
