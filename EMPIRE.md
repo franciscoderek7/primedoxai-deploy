@@ -1,5 +1,5 @@
 # EMPIRE.md — Francisco Holdings Master State Document
-# Last Updated: 2026-06-13
+# Last Updated: 2026-06-15
 # Authority: PrimeDox (Derek Francisco) — Human Final Authority
 # Override: PrimeDocs — Activated only by PrimeDox explicit instruction
 
@@ -9,13 +9,13 @@
 
 | Entity | Role | Loop | Status | Domain | Repo |
 |--------|------|------|--------|--------|------|
-| Francisco Holdings Inc. | Parent holding company | A | LIVE — 45-FLOOR SKYSCRAPER DEPLOYED | franciscoholdingsinc.com | franciscoderek7/franciscoholdings |
+| Francisco Holdings Inc. | Parent holding company | A | LIVE — 45-FLOOR SKYSCRAPER + STRIPE/PAYPAL PER FLOOR | franciscoholdingsinc.com | franciscoderek7/franciscoholdings |
 | CleanSwarm | Physical + Document Cleaning AI | A | LIVE | cleanswarm.ca | franciscoderek7/cleanswarm |
-| CCLDR | Cannabis charter defense education | A | LIVE | franciscoderek7.github.io/Ccldr-net/ | franciscoderek7/Ccldr-net |
-| OmniaGuard | AI security / agent protection | B | LIVE | omniaguard.com | franciscoderek7/omniaguard |
+| CCLDR | Cannabis charter defense education | A | LIVE + REFERRAL ENGINE + EDUCATION HUB | franciscoderek7.github.io/Ccldr-net/ | franciscoderek7/Ccldr-net |
+| OmniaGuard | AI security / agent protection | B | LIVE + FREE-SCAN FUNNEL + $500 AUDIT UPSELL | omniaguard.com | franciscoderek7/omniaguard |
 | BENO-X / Doc Weedlaw | Cannabis constitutional defense | A | LIVE | franciscoderek7.github.io/Ccldr-net/ | franciscoderek7/beno-x |
-| VIGILAX | Enterprise threat response | B | LIVE | franciscoderek7.github.io/vigilax/ | franciscoderek7/vigilax |
-| Kiaros | AI strategy consulting | B | LIVE | franciscoderek7.github.io/kiaros/ | franciscoderek7/kiaros |
+| VIGILAX | Enterprise threat response | B | LIVE — PRICING UPDATED + STRIPE LIVE | franciscoderek7.github.io/vigilax/ | franciscoderek7/vigilax |
+| Kiaros | AI strategy consulting | B | LIVE — STRIPE LIVE + PAYPAL.ME DIRECT | franciscoderek7.github.io/kiaros/ | franciscoderek7/kiaros |
 | Weedlaw Education | Doc Weedlaw educational platform | A | LIVE | franciscoderek7.github.io/weedlaw-education/ | franciscoderek7/weedlaw-education |
 | PrimeDox AI | Derek's AI persona/clone | A | LIVE | franciscoderek7.github.io/primedox/ | franciscoderek7/primedox |
 | ZPrimeDoxAI HQ | AI Concierge HQ (password: FHI2026) | A | LIVE — CONCIERGE DEPLOYED | zprimedoxaihq.com | franciscoderek7/zprimedoxaihq |
@@ -118,13 +118,20 @@
 | 9 | Custom domain HTTPS in GitHub Pages settings | Derek (browser) | After DNS | PENDING |
 | 10 | ccldr.net domain — 60-day hold resolves | Derek (wait) | ~Aug 2026 | PENDING |
 | 11 | File provisional patents CIPO/USPTO (8 inventions) | Derek → IP lawyer | ASAP | PENDING — NOT filed yet despite Phoenix Dominion text |
-| 12 | Stripe account recovery ($406.80 pending) | Derek | ASAP | IN PROGRESS — PayPal/Interac fallback active |
-| 13 | PayPal.me links confirm: derekfrancisco/49CAD, /199CAD, /299CAD, etc. | Derek | Verify | PENDING |
+| 12 | ~~Stripe account recovery~~ | Derek | DONE | ✅ COMPLETE — acct_1TG0cIASsTLqnu8V LIVE as of June 2026 |
+| 13 | ~~PayPal.me links: derekfrancisco → franciscoderek7 CA format~~ | Claude | DONE | ✅ COMPLETE — 33 files fixed 2026-06-15 |
 | 14 | Francisco Realty — RECO licensing | Derek | Q4 2026 | PENDING |
 | 15 | Francisco Legal — partner lawyer network | Derek | Q1 2027 | PENDING |
 | 16 | Crypto wallet addresses (BTC/XMR/ETH) to wire into skyscraper | Derek → Claude | When ready | PENDING |
 | 17 | SoulStack.ai domain registration | Derek | When funded | PENDING |
 | 18 | Extend skyscraper to 80 floors (Floors 46-80 Phoenix Dominion) | Claude | On order | PENDING — 45 floors live first |
+| 19 | ~~Empire-wide referral engine~~ | Claude | 2026-06-15 | ✅ COMPLETE — referral-engine.js + discount tiers + commission tracking |
+| 20 | ~~Add Stripe buttons to all 45 skyscraper floors~~ | Claude | 2026-06-15 | ✅ COMPLETE — PayPal + Stripe per floor |
+| 21 | ~~OmniaGuard $500 deep audit upsell~~ | Claude | 2026-06-15 | ✅ COMPLETE — free-scan.html upsell + comparison table |
+| 22 | Add Stripe Price IDs to payment-provider.js | Derek (Stripe dashboard) | ASAP | PENDING — create at dashboard.stripe.com then send to Claude |
+| 23 | Create PayPal Business recurring buttons | Derek (PayPal dashboard) | ASAP | PENDING — paypal.com/buttons |
+| 24 | Supabase referral_commissions table | Derek (Supabase) | ASAP | PENDING — table not yet created |
+| 25 | ~~Pricing pages: Kiaros/VaultVelocity/TechPackCage/Vigilax/TechPetCage~~ | Claude | 2026-06-15 | ✅ COMPLETE |
 
 ---
 
