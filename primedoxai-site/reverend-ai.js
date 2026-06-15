@@ -22,12 +22,12 @@
     },
     'primedox': {
       name: 'PrimeDox AI',
-      avatar: '🤖',
+      avatar: '⚖️',
       color: '#00d4ff',
       accent: '#0099bb',
-      greeting: "I'm PrimeDox AI. I can help you understand our document automation tiers. What are you looking for?",
-      consultLink: 'https://paypal.me/derekfrancisco/49CAD',
-      consultLabel: 'Start Free Trial — $49',
+      greeting: "I'm PrimeDox AI — Derek Francisco's AI clone. Facing a cannabis charge or need constitutional documents? Tell me what's happening and I'll point you right.",
+      consultLink: 'primedox-ai-chat.html',
+      consultLabel: 'Try Free — No Card →',
     },
     'francisco-holdings': {
       name: 'FH Assistant',
@@ -87,13 +87,11 @@
       answer: "If you're facing a cannabis charge, time matters. The BENO-X Framework lets you build a constitutional defense using Charter breaches — evidence can be excluded, charges can be stayed.<br><br><strong>The window is now. Don't wait.</strong>" },
     { kw: ['rights', 'charter', 'section 10', 'remain silent', 'lawyer', 'detained'],
       answer: "Under s.10 of the Canadian Charter: <br>✓ Right to know why you're detained<br>✓ Right to speak to a lawyer immediately<br>✓ Right to remain silent<br><br>Say: \"I'd like to speak to a lawyer\" and nothing else." },
-    { kw: ['price', 'cost', 'tier', 'warrior', 'professional', 'elite', 'sovereign', 'how much', 'pricing'],
-      answer: "Weedlaw Education tiers:<br>🥉 Warrior — $149 (Stages 1-2)<br>🥈 Professional — $499 (Stages 1-5, full BENO-X)<br>🥇 Elite — $999 (Stages 1-9, trial prep)<br>👑 Sovereign — $1,499 (All 12 stages)<br><br>All one-time, lifetime access." },
+    { kw: ['price', 'cost', 'tier', 'how much', 'pricing', 'free', 'pro', 'elite', 'plan'],
+      answer: "PrimeDox AI tiers:<br>🟢 <strong>Free</strong> — Always free · 10 msg/day · 5 docs/mo<br>🔵 <strong>Pro — $49/mo</strong> · Unlimited chat, full BENO-X, all case law<br>🟣 <strong>Elite — $199/mo</strong> · Everything + priority support, 30% affiliate commission<br><br>First 14 days free. No auto-billing. No credit card required to start." },
     // PrimeDox
     { kw: ['primedox', 'document', 'automation', 'pdf', 'filing', 'draft', 'template'],
-      answer: "PrimeDox AI automates legal, business, and strategic documents. Upload → AI structures → download court-ready PDFs in minutes. Tiers start at $49/mo." },
-    { kw: ['enterprise', 'team', 'multiple users', '5 users', 'team access'],
-      answer: "PrimeDox Enterprise ($499/mo) gives your team up to 5 users, a dedicated AI agent instance, priority processing, and monthly strategy calls." },
+      answer: "PrimeDox AI is Derek Francisco's AI clone — 20+ years of cannabis Charter defense, BENO-X framework, and constitutional strategy available 24/7. Free tier available. Pro starts at $49/mo." },
     // Francisco Holdings
     { kw: ['consulting', 'consult', 'strategy', 'session', '$500', 'book', 'meeting', 'call'],
       answer: "Francisco Holdings offers 60-minute strategy sessions at $500 CAD. Topics: revenue acceleration, AI automation, legal structure, brand architecture, strategic positioning.<br><br>Reply with 3 available time slots to book." },

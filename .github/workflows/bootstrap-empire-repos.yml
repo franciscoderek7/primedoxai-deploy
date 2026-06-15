@@ -1,0 +1,133 @@
+name: Bootstrap Empire — Create All Missing GitHub Pages Repos
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bootstrap-empire-repos.yml'
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create all missing empire repos and enable Pages
+        run: |
+          set -e
+
+          TOKEN="${{ secrets.DEPLOY_TOKEN }}"
+          OWNER="franciscoderek7"
+
+          # All empire repos that need to exist for GitHub Pages
+          declare -A REPOS=(
+            ["franciscoholdings"]="Francisco Holdings Inc. — Empire Skyscraper"
+            ["primedox"]="PrimeDox AI — Cannabis Charter Defense AI"
+            ["zprimedoxaihq"]="PrimeDox AI Concierge HQ"
+            ["Ccldr-net"]="CCLDR — Canadian Cannabis Legal Defense Resource"
+            ["vigilax"]="VIGILAX — Enterprise Threat Response"
+            ["cleanswarm"]="CleanSwarm AI — Document Cleanup at Scale"
+            ["beno-x"]="BENO-X Framework — Constitutional Cannabis Defense"
+            ["docweedlaw"]="Doc Weedlaw AI — Cannabis Charter Defense"
+            ["kiaros"]="Kiaros — AI Strategy"
+            ["mindshift-makayla"]="MindShift by Michaella"
+            ["techpetcage"]="TechPet — Smart Pet Monitoring"
+            ["techpackcage"]="TechPackCage"
+            ["vaultvelocityauto"]="Vault Velocity Auto"
+            ["weedlaw-education"]="Weedlaw Education"
+          )
+
+          for REPO in "${!REPOS[@]}"; do
+            DESC="${REPOS[$REPO]}"
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "  Processing: $OWNER/$REPO"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+            # Check if repo exists
+            HTTP=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "Authorization: token $TOKEN" \
+              "https://api.github.com/repos/$OWNER/$REPO")
+
+            if [ "$HTTP" = "200" ]; then
+              echo "  ✓ Repo exists — checking Pages..."
+            else
+              echo "  ✗ Repo missing (HTTP $HTTP) — creating..."
+              CREATE_RESPONSE=$(curl -s -X POST \
+                -H "Authorization: token $TOKEN" \
+                -H "Accept: application/vnd.github.v3+json" \
+                "https://api.github.com/user/repos" \
+                -d "{\"name\":\"$REPO\",\"description\":\"$DESC\",\"private\":false,\"auto_init\":true,\"default_branch\":\"main\"}")
+              echo "  Created: $(echo $CREATE_RESPONSE | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("full_name","ERROR: "+str(d.get("errors","unknown"))))')"
+              echo "  Waiting for GitHub to initialize repo..."
+              sleep 4
+            fi
+
+            # Check/enable GitHub Pages
+            PAGES_HTTP=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "Authorization: token $TOKEN" \
+              "https://api.github.com/repos/$OWNER/$REPO/pages")
+
+            if [ "$PAGES_HTTP" = "200" ]; then
+              echo "  ✓ Pages already enabled"
+            else
+              echo "  Enabling GitHub Pages..."
+              PAGES_RESPONSE=$(curl -s -X POST \
+                -H "Authorization: token $TOKEN" \
+                -H "Accept: application/vnd.github.v3+json" \
+                "https://api.github.com/repos/$OWNER/$REPO/pages" \
+                -d '{"source":{"branch":"main","path":"/"}}')
+              echo "  Pages: $(echo $PAGES_RESPONSE | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get("html_url", d.get("message","done")))')"
+            fi
+
+            echo "  Done: $OWNER/$REPO"
+          done
+
+          echo ""
+          echo "================================================"
+          echo "  EMPIRE REPOS BOOTSTRAP COMPLETE"
+          echo "================================================"
+          echo "  All repos verified or created."
+          echo "  All Pages enabled or confirmed."
+          echo "  Deploy workflows will now fire on next push."
+          echo "================================================"
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Trigger all deploy workflows
+        run: |
+          TOKEN="${{ secrets.DEPLOY_TOKEN }}"
+          OWNER="franciscoderek7"
+          REPO_DEPLOY="primedoxai-deploy"
+
+          WORKFLOWS=(
+            "deploy-francisco-holdings.yml"
+            "deploy-zprimedoxaihq.yml"
+            "deploy-ccldr.yml"
+            "deploy-primedox.yml"
+            "deploy-vigilax.yml"
+            "deploy-cleanswarm.yml"
+            "deploy-beno-x.yml"
+            "deploy-docweedlaw.yml"
+            "deploy-kiaros.yml"
+            "deploy-techpetcage.yml"
+            "deploy-vaultvelocityauto.yml"
+            "deploy-weedlaw-education.yml"
+          )
+
+          for WF in "${WORKFLOWS[@]}"; do
+            echo "Triggering $WF..."
+            curl -s -X POST \
+              -H "Authorization: token $TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/$OWNER/$REPO_DEPLOY/actions/workflows/$WF/dispatches" \
+              -d '{"ref":"main"}' && echo "  ✓ Triggered" || echo "  ✗ Failed to trigger $WF"
+            sleep 1
+          done
+
+          echo ""
+          echo "All deploy workflows triggered."
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
