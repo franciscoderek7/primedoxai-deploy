@@ -2,7 +2,7 @@
 // CDN: https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js
 //
 // Discount tiers (by code prefix):
-//   SENIOR* → 10% | VET*  → 15% | CARE* → 20% | FIXED* → 10% | general → 10%
+//   SENIOR* → 15% | VET*  → 20% | CARE* → 25% | FIXED* → 15% | general → 10%
 //
 // Commission rates:
 //   First sale → 25% | Recurring → 15%
@@ -16,10 +16,10 @@
 
   // ─── Discount Tier Map ────────────────────────────────────────────────────
   var TIERS = [
-    { prefix: 'SENIOR', percent: 10, label: 'Senior Discount' },
-    { prefix: 'VET',    percent: 15, label: 'Veteran Discount' },
-    { prefix: 'CARE',   percent: 20, label: 'Terminal Illness Care Discount' },
-    { prefix: 'FIXED',  percent: 10, label: 'Fixed Income Discount' },
+    { prefix: 'SENIOR', percent: 15, label: 'Senior Discount' },
+    { prefix: 'VET',    percent: 20, label: 'Veteran Discount' },
+    { prefix: 'CARE',   percent: 25, label: 'Terminal Illness Care Discount' },
+    { prefix: 'FIXED',  percent: 15, label: 'Fixed Income Discount' },
   ];
 
   var GENERAL_PERCENT = 10;
