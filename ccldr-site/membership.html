@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership — CCLDR Doc Weedlaw 7-Tier Access</title>
+  <meta name="description" content="Doc Weedlaw's 7-tier access system — from free public case headlines to direct personal consultation. Education is free. Expertise is premium." />
+  <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:      #0A0A0A;
+      --near-black: #111111;
+      --card-bg:    #141414;
+      --gold:       #D4AF37;
+      --gold-light: #e0c84a;
+      --green:      #0A5C36;
+      --green-mid:  #1A8A50;
+      --green-bright: #27ae60;
+      --white:      #F5F5F5;
+      --muted:      #888888;
+      --border:     #2a2a2a;
+      --red:        #CC2222;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(10,10,10,0.96);
+      border-bottom: 1px solid var(--gold);
+      padding: 0 20px; height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      backdrop-filter: blur(8px);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 14px; }
+    .nav-logo { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--gold); object-fit: cover; flex-shrink: 0; }
+    .nav-title { display: flex; flex-direction: column; }
+    .nav-title-main { font-family: 'Georgia','Cinzel',serif; font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; letter-spacing: 2px; }
+    .nav-title-sub { font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-top: 3px; }
+    .hamburger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 8px; }
+    .hamburger span { display: block; width: 26px; height: 3px; background: var(--green-bright); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-menu {
+      display: none; position: absolute; top: 68px; left: 0; right: 0;
+      background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border);
+      padding: 20px; flex-direction: column; gap: 4px;
+    }
+    .nav-menu.open { display: flex; }
+    .nav-menu a { padding: 12px 16px; border-radius: 6px; font-size: 15px; font-weight: 500; color: var(--white); transition: background 0.2s, color 0.2s; display: block; }
+    .nav-menu a:hover, .nav-menu a.active { background: var(--card-bg); color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(160deg, rgba(0,0,0,0.82) 0%, rgba(10,92,54,0.2) 50%, rgba(0,0,0,0.9) 100%);
+      background-color: var(--black);
+      border-bottom: 1px solid rgba(212,175,55,0.25);
+      padding: 100px 24px 80px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block; border: 1px solid var(--gold); border-radius: 999px;
+      padding: 6px 18px; font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold-light); margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(32px, 6vw, 64px);
+      font-weight: 900; color: var(--white); line-height: 1.1; margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-sub {
+      font-size: clamp(15px, 2.5vw, 18px); color: #cccccc;
+      max-width: 640px; margin: 0 auto 36px; line-height: 1.75;
+    }
+    .hero-cta {
+      display: inline-block; background: var(--green); color: var(--white);
+      font-weight: 700; font-size: 15px; padding: 15px 36px; border-radius: 8px;
+      transition: background 0.2s, transform 0.2s; letter-spacing: 0.5px;
+    }
+    .hero-cta:hover { background: var(--green-mid); transform: translateY(-2px); }
+
+    /* ── SECTION HEADER ── */
+    .section-header { text-align: center; padding: 72px 24px 40px; }
+    .section-header h2 {
+      font-family: 'Cinzel', serif; font-size: clamp(26px,4.5vw,42px);
+      font-weight: 700; color: var(--gold); margin-bottom: 12px;
+    }
+    .section-header p { color: var(--muted); font-size: 16px; max-width: 520px; margin: 0 auto; }
+
+    /* ── TIER CARDS ── */
+    .tiers-section { padding: 0 20px 80px; }
+    .tiers-grid { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    .tier-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 32px 28px; position: relative;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .tier-card:hover { border-color: rgba(212,175,55,0.5); transform: translateY(-2px); }
+    .tier-card.popular {
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(212,175,55,0.15);
+    }
+    .tier-card.popular::before {
+      content: 'MOST POPULAR';
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: var(--black);
+      font-size: 10px; font-weight: 800; letter-spacing: 2px;
+      padding: 4px 16px; border-radius: 999px;
+    }
+    .tier-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+    .tier-number { font-family: 'Orbitron', sans-serif; font-size: 9px; letter-spacing: 3px; color: var(--muted); margin-bottom: 4px; }
+    .tier-name { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: var(--white); }
+    .tier-price { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1; white-space: nowrap; }
+    .tier-price span { font-size: 13px; color: var(--muted); font-weight: 400; }
+    .tier-free { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 900; color: var(--green-bright); }
+    .tier-what { font-size: 14px; color: #aaaaaa; margin-bottom: 20px; line-height: 1.6; }
+    .tier-btn {
+      display: inline-block; padding: 13px 28px; border-radius: 8px;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+      transition: all 0.2s; text-align: center;
+    }
+    .tier-btn-gold { background: var(--gold); color: var(--black); }
+    .tier-btn-gold:hover { background: var(--gold-light); }
+    .tier-btn-green { background: var(--green); color: var(--white); }
+    .tier-btn-green:hover { background: var(--green-mid); }
+    .tier-btn-outline { border: 2px solid var(--border); color: var(--white); }
+    .tier-btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── SCC AUTHORITY PREVIEW ── */
+    .scc-section { background: var(--near-black); border-top: 1px solid var(--border); padding: 72px 20px; }
+    .scc-grid { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 16px; }
+    .scc-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 18px; position: relative;
+      transition: border-color 0.3s;
+    }
+    .scc-card:hover { border-color: rgba(212,175,55,0.4); }
+    .scc-name { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+    .scc-year { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-bottom: 10px; }
+    .scc-principle { font-size: 13px; color: #aaaaaa; line-height: 1.6; margin-bottom: 14px; }
+    .scc-lock { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; display: inline-block; }
+
+    /* ── CONSULTATION ── */
+    .consult-section { padding: 72px 20px; border-top: 1px solid var(--border); }
+    .consult-grid { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+    .consult-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: border-color 0.3s;
+    }
+    .consult-card:hover { border-color: rgba(212,175,55,0.4); }
+    .consult-title { font-family: 'Cinzel', serif; font-size: 16px; font-weight: 700; color: var(--white); }
+    .consult-price { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 900; color: var(--gold); }
+    .consult-btn {
+      display: block; text-align: center; padding: 11px; border-radius: 7px;
+      font-size: 13px; font-weight: 700; margin-top: auto;
+      background: var(--green); color: var(--white); transition: background 0.2s;
+    }
+    .consult-btn:hover { background: var(--green-mid); }
+
+    /* ── COURSES ── */
+    .courses-section { background: var(--near-black); border-top: 1px solid var(--border); padding: 72px 20px; }
+    .courses-grid { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+    .course-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: border-color 0.3s;
+    }
+    .course-card:hover { border-color: rgba(212,175,55,0.4); }
+    .course-title { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.35; }
+    .course-price { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 900; color: var(--gold); }
+    .course-btn {
+      display: block; text-align: center; padding: 11px; border-radius: 7px;
+      font-size: 13px; font-weight: 700; margin-top: auto;
+      background: var(--gold); color: var(--black); transition: background 0.2s;
+    }
+    .course-btn:hover { background: var(--gold-light); }
+
+    /* ── TEMPLATES ── */
+    .templates-section { padding: 72px 20px; border-top: 1px solid var(--border); }
+    .templates-grid { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+    .template-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: border-color 0.3s;
+    }
+    .template-card:hover { border-color: rgba(212,175,55,0.4); }
+    .template-card.featured { border-color: var(--gold); }
+    .template-title { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.35; }
+    .template-price { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 900; color: var(--gold); }
+    .template-btn {
+      display: block; text-align: center; padding: 11px; border-radius: 7px;
+      font-size: 13px; font-weight: 700; margin-top: auto;
+      background: var(--green); color: var(--white); transition: background 0.2s;
+    }
+    .template-btn:hover { background: var(--green-mid); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #070707; border-top: 1px solid var(--border);
+      padding: 48px 24px 32px; text-align: center;
+    }
+    .footer-brand-name { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: 3px; margin-bottom: 6px; }
+    .footer-email { font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+    .footer-btc { font-family: monospace; font-size: 12px; color: #555; word-break: break-all; margin-bottom: 20px; }
+    .footer-btc strong { color: var(--gold); }
+    .footer-disclaimer { max-width: 620px; margin: 0 auto 20px; font-size: 12px; color: #555; line-height: 1.75; }
+    .footer-copy { font-size: 12px; color: #444; }
+    .footer-tagline { font-size: 13px; color: var(--gold); font-style: italic; margin-bottom: 8px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .tier-header { flex-direction: column; }
+      .tier-price { font-size: 1.6rem; }
+      .hero { padding: 80px 16px 60px; }
+    }
+
+    a, button, [role="button"] { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+    .tier-btn, .consult-btn, .course-btn, .template-btn { display: flex; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <img src="doc-weedlaw-logo.jpg" alt="Doc WeedLaw" class="nav-logo" />
+    <div class="nav-title">
+      <span class="nav-title-main">CCLDR</span>
+      <span class="nav-title-sub">.NET &mdash; EST. 2006</span>
+    </div>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-menu" id="nav-menu" role="navigation">
+    <a href="education.html">Education</a>
+    <a href="courses.html">Courses</a>
+    <a href="case-review.html">Case Review</a>
+    <a href="cases.html">Active Cases</a>
+    <a href="consultation.html">Book Session</a>
+    <a href="membership.html" class="active">Membership</a>
+    <a href="cases.html#donate" style="color:#D4AF37;font-weight:700">⚖ Support</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">⚖️ Doc Weedlaw Education Network &nbsp;·&nbsp; 7 Tiers &nbsp;·&nbsp; Education is Free. Expertise is Premium.</div>
+  <h1>Join the Fight.<br><span>Learn from the Best.</span></h1>
+  <p class="hero-sub">Doc Weedlaw's 7-tier access system gives you everything from public case headlines to direct personal consultation. Education is free. Expertise is premium.</p>
+  <a href="cases.html" class="hero-cta">Start Free in the Lobby &rarr;</a>
+</section>
+
+<!-- TIERS SECTION -->
+<div class="section-header">
+  <h2>The 7-Tier Access System</h2>
+  <p>Pick your level. Start free. Upgrade when you're ready to fight.</p>
+</div>
+<section class="tiers-section">
+  <div class="tiers-grid">
+
+    <!-- TIER 1: The Lobby -->
+    <div class="tier-card">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">TIER 1</div>
+          <div class="tier-name">The Lobby</div>
+        </div>
+        <div class="tier-free">FREE</div>
+      </div>
+      <p class="tier-what">Case headlines, basic timeline, public filings index. Everything that's public — organized for you.</p>
+      <a href="cases.html" class="tier-btn tier-btn-green">Enter the Lobby &rarr;</a>
+    </div>
+
+    <!-- TIER 2: The Library -->
+    <div class="tier-card">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">TIER 2</div>
+          <div class="tier-name">The Library</div>
+        </div>
+        <div>
+          <div class="tier-price">$29.99<span>/mo</span></div>
+        </div>
+      </div>
+      <p class="tier-what">Full case summaries, SCC authority cards, document previews. The foundation of constitutional knowledge.</p>
+      <a href="https://paypal.me/franciscoderek7/30CAD" target="_blank" rel="noopener" class="tier-btn tier-btn-gold">Join The Library &rarr;</a>
+    </div>
+
+    <!-- TIER 3: The Courtroom -->
+    <div class="tier-card">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">TIER 3</div>
+          <div class="tier-name">The Courtroom</div>
+        </div>
+        <div>
+          <div class="tier-price">$99.99<span>/mo</span></div>
+        </div>
+      </div>
+      <p class="tier-what">Live case updates, evidence vault access, damages calculator, filing templates. Everything you need to understand active litigation.</p>
+      <a href="https://paypal.me/franciscoderek7/100CAD" target="_blank" rel="noopener" class="tier-btn tier-btn-gold">Join The Courtroom &rarr;</a>
+    </div>
+
+    <!-- TIER 4: The Boardroom -->
+    <div class="tier-card popular">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">TIER 4</div>
+          <div class="tier-name">The Boardroom</div>
+        </div>
+        <div>
+          <div class="tier-price">$199.99<span>/mo</span></div>
+        </div>
+      </div>
+      <p class="tier-what">Strategy memos, mock trial sessions, case studies, peer review. For the serious student of constitutional law.</p>
+      <a href="https://paypal.me/franciscoderek7/200CAD" target="_blank" rel="noopener" class="tier-btn tier-btn-gold">Join The Boardroom &rarr;</a>
+    </div>
+
+    <!-- TIER 5: The Chambers -->
+    <div class="tier-card">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">TIER 5</div>
+          <div class="tier-name">The Chambers</div>
+        </div>
+        <div>
+          <div class="tier-price">$499.99<span>/mo</span></div>
+        </div>
+      </div>
+      <p class="tier-what">Real-time alerts, PrimeDox AI case predictions, exclusive webinars. The intelligence layer for legal professionals.</p>
+      <a href="https://paypal.me/franciscoderek7/500CAD" target="_blank" rel="noopener" class="tier-btn tier-btn-gold">Join The Chambers &rarr;</a>
+    </div>
+
+    <!-- TIER 6: The Judge's Lounge -->
+    <div class="tier-card">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">TIER 6</div>
+          <div class="tier-name">The Judge's Lounge</div>
+        </div>
+        <div>
+          <div class="tier-price">$1,999.99<span>/mo</span></div>
+        </div>
+      </div>
+      <p class="tier-what">Direct access to Doc Weedlaw, personal case review, priority consultation. For those who need answers — not just information.</p>
+      <a href="https://paypal.me/franciscoderek7/2000CAD" target="_blank" rel="noopener" class="tier-btn tier-btn-gold">Join The Judge's Lounge &rarr;</a>
+    </div>
+
+    <!-- TIER 7: The Empire -->
+    <div class="tier-card" style="border-color:rgba(212,175,55,0.5);">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">TIER 7</div>
+          <div class="tier-name">The Empire</div>
+        </div>
+        <div>
+          <div class="tier-price">$9,999.99<span>/mo</span></div>
+        </div>
+      </div>
+      <p class="tier-what">White-label for law firms, bulk training, API access, strategic partnership. Build your own practice on top of Doc Weedlaw's framework.</p>
+      <a href="https://paypal.me/franciscoderek7/10000CAD" target="_blank" rel="noopener" class="tier-btn tier-btn-gold">Join The Empire &rarr;</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- SCC AUTHORITY PREVIEW -->
+<section class="scc-section">
+  <div class="section-header" style="padding-top:0;">
+    <h2>SCC Authority Preview</h2>
+    <p>Free teaser — four landmark cases that shape every argument Doc Weedlaw makes in court.</p>
+  </div>
+  <div class="scc-grid">
+
+    <div class="scc-card">
+      <div class="scc-name">R v Grant</div>
+      <div class="scc-year">2009 SCC 32</div>
+      <p class="scc-principle">Established the modern framework for excluding evidence obtained in breach of the Charter under s.24(2). The foundation of every exclusion argument.</p>
+      <span class="scc-lock">🔒 Full analysis — Library tier+</span>
+    </div>
+
+    <div class="scc-card">
+      <div class="scc-name">R v Collins</div>
+      <div class="scc-year">1987 1 SCR 265</div>
+      <p class="scc-principle">Pre-Grant standard for s.24(2) exclusion. Introduced "fair trial" and "administration of justice" considerations. Still cited in legacy arguments.</p>
+      <span class="scc-lock">🔒 Full analysis — Library tier+</span>
+    </div>
+
+    <div class="scc-card">
+      <div class="scc-name">PHS Community v Canada</div>
+      <div class="scc-year">2011 SCC 44</div>
+      <p class="scc-principle">Federal Minister's refusal to grant exemption for Insite held to violate s.7. Established that arbitrary denial of life-saving health services breaches Charter rights.</p>
+      <span class="scc-lock">🔒 Full analysis — Library tier+</span>
+    </div>
+
+    <div class="scc-card">
+      <div class="scc-name">Uber Technologies v Heller</div>
+      <div class="scc-year">2020 SCC 16</div>
+      <p class="scc-principle">Arbitration clause held unconscionable where it imposed prohibitive cost on vulnerable party. Key precedent for fighting unfair standard form contracts — including telecom agreements.</p>
+      <span class="scc-lock">🔒 Full analysis — Library tier+</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONSULTATION TIERS -->
+<section class="consult-section">
+  <div class="section-header" style="padding-top:0;">
+    <h2>One-Time Consultations</h2>
+    <p>Book a direct session with Doc Weedlaw. No subscription required.</p>
+  </div>
+  <div class="consult-grid">
+
+    <div class="consult-card">
+      <div class="consult-title">Case Review — 30 min</div>
+      <div class="consult-price">$500</div>
+      <a href="https://paypal.me/franciscoderek7/500CAD" target="_blank" rel="noopener" class="consult-btn">Book via PayPal &rarr;</a>
+    </div>
+
+    <div class="consult-card">
+      <div class="consult-title">Case Review — 60 min</div>
+      <div class="consult-price">$1,000</div>
+      <a href="https://paypal.me/franciscoderek7/1000CAD" target="_blank" rel="noopener" class="consult-btn">Book via PayPal &rarr;</a>
+    </div>
+
+    <div class="consult-card">
+      <div class="consult-title">Document Review</div>
+      <div class="consult-price">$250<span style="font-size:13px;font-weight:400;color:var(--muted);">/page</span></div>
+      <a href="mailto:docweedla@gmail.com?subject=Document%20Review%20Request" class="consult-btn">Email to Book &rarr;</a>
+    </div>
+
+    <div class="consult-card">
+      <div class="consult-title">Demand Letter Draft</div>
+      <div class="consult-price">$2,500</div>
+      <a href="https://paypal.me/franciscoderek7/2500CAD" target="_blank" rel="noopener" class="consult-btn">Book via PayPal &rarr;</a>
+    </div>
+
+    <div class="consult-card">
+      <div class="consult-title">Statement of Claim</div>
+      <div class="consult-price">$5,000</div>
+      <a href="https://paypal.me/franciscoderek7/5000CAD" target="_blank" rel="noopener" class="consult-btn">Book via PayPal &rarr;</a>
+    </div>
+
+    <div class="consult-card" style="border-color:var(--gold);">
+      <div class="consult-title">Full Litigation Strategy</div>
+      <div class="consult-price">$10,000</div>
+      <a href="https://paypal.me/franciscoderek7/10000CAD" target="_blank" rel="noopener" class="consult-btn">Book via PayPal &rarr;</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- COURSE CATALOG -->
+<section class="courses-section">
+  <div class="section-header" style="padding-top:0;">
+    <h2>Course Catalog</h2>
+    <p>Learn Doc Weedlaw's frameworks — one-time purchase, lifetime access.</p>
+  </div>
+  <div class="courses-grid">
+
+    <div class="course-card">
+      <div class="course-title">How to Fight Telecom Giants</div>
+      <div class="course-price">$199</div>
+      <a href="https://paypal.me/franciscoderek7/199CAD" target="_blank" rel="noopener" class="course-btn">Buy Course &rarr;</a>
+    </div>
+
+    <div class="course-card">
+      <div class="course-title">Constitutional Cannabis Law 101</div>
+      <div class="course-price">$299</div>
+      <a href="https://paypal.me/franciscoderek7/299CAD" target="_blank" rel="noopener" class="course-btn">Buy Course &rarr;</a>
+    </div>
+
+    <div class="course-card">
+      <div class="course-title">SCC Authority Masterclass</div>
+      <div class="course-price">$399</div>
+      <a href="https://paypal.me/franciscoderek7/399CAD" target="_blank" rel="noopener" class="course-btn">Buy Course &rarr;</a>
+    </div>
+
+    <div class="course-card">
+      <div class="course-title">Build Your Own Empire</div>
+      <div class="course-price">$499</div>
+      <a href="https://paypal.me/franciscoderek7/499CAD" target="_blank" rel="noopener" class="course-btn">Buy Course &rarr;</a>
+    </div>
+
+    <div class="course-card" style="border-color:var(--gold);">
+      <div class="course-title">Doc Weedlaw Certification</div>
+      <div class="course-price">$999</div>
+      <a href="https://paypal.me/franciscoderek7/999CAD" target="_blank" rel="noopener" class="course-btn">Buy Course &rarr;</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- TEMPLATE LIBRARY -->
+<section class="templates-section">
+  <div class="section-header" style="padding-top:0;">
+    <h2>Template Library</h2>
+    <p>Court-ready documents drafted by Doc Weedlaw. Download, fill in, file.</p>
+  </div>
+  <div class="templates-grid">
+
+    <div class="template-card">
+      <div class="template-title">Demand Letter — Telecom Abuse</div>
+      <div class="template-price">$99</div>
+      <a href="https://paypal.me/franciscoderek7/99CAD" target="_blank" rel="noopener" class="template-btn">Get Template &rarr;</a>
+    </div>
+
+    <div class="template-card">
+      <div class="template-title">CCTS Complaint Template</div>
+      <div class="template-price">$49</div>
+      <a href="https://paypal.me/franciscoderek7/49CAD" target="_blank" rel="noopener" class="template-btn">Get Template &rarr;</a>
+    </div>
+
+    <div class="template-card">
+      <div class="template-title">Superior Court Statement of Claim</div>
+      <div class="template-price">$199</div>
+      <a href="https://paypal.me/franciscoderek7/199CAD" target="_blank" rel="noopener" class="template-btn">Get Template &rarr;</a>
+    </div>
+
+    <div class="template-card">
+      <div class="template-title">CPL Motion — Property</div>
+      <div class="template-price">$149</div>
+      <a href="https://paypal.me/franciscoderek7/149CAD" target="_blank" rel="noopener" class="template-btn">Get Template &rarr;</a>
+    </div>
+
+    <div class="template-card">
+      <div class="template-title">Default Judgment Motion</div>
+      <div class="template-price">$129</div>
+      <a href="https://paypal.me/franciscoderek7/129CAD" target="_blank" rel="noopener" class="template-btn">Get Template &rarr;</a>
+    </div>
+
+    <div class="template-card featured">
+      <div class="template-title">Full Litigation Toolkit <span style="display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px;">(All 5 Templates)</span></div>
+      <div class="template-price">$499 <span style="font-size:12px;color:var(--green-bright);font-weight:600;">Save $125</span></div>
+      <a href="https://paypal.me/franciscoderek7/499CAD" target="_blank" rel="noopener" class="template-btn" style="background:var(--gold);color:var(--black);">Get Full Toolkit &rarr;</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand-name">CCLDR</div>
+  <p class="footer-email"><a href="mailto:docweedla@gmail.com" style="color:var(--muted);">docweedla@gmail.com</a></p>
+  <p class="footer-tagline">Education is free. Expertise is premium.</p>
+  <p class="footer-btc"><strong>BTC:</strong> bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</p>
+  <p class="footer-disclaimer">CCLDR provides constitutional law education and self-representation resources. We are not a law firm. Nothing on this site constitutes legal advice.</p>
+  <p class="footer-copy">&copy; 2026 CCLDR &mdash; Doc Weedlaw Education Network &nbsp;&middot;&nbsp; All rights reserved.</p>
+</footer>
+
+<!-- Hamburger JS -->
+<script>
+(function(){
+  var btn = document.getElementById('hamburger');
+  var menu = document.getElementById('nav-menu');
+  if(!btn || !menu) return;
+  btn.addEventListener('click', function(){
+    var isOpen = menu.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  menu.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
