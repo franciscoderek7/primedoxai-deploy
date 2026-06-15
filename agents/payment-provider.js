@@ -71,10 +71,24 @@
   window.PrimeDoxPayment = {
 
     checkout: function (productId, amount, label) {
+      // Apply referral discount if ReferralEngine is loaded
+      var finalAmount = amount;
+      if (window.ReferralEngine && typeof window.ReferralEngine.applyToAmount === 'function') {
+        var discounted = window.ReferralEngine.applyToAmount(parseFloat(amount) || 0);
+        if (discounted !== (parseFloat(amount) || 0)) {
+          finalAmount = discounted;
+        }
+      }
+
       if (PROVIDER === 'stripe') {
-        this._stripeCheckout(productId, amount, label);
+        this._stripeCheckout(productId, finalAmount, label);
       } else {
-        this._paypalCheckout(productId, amount, label);
+        this._paypalCheckout(productId, finalAmount, label);
+      }
+
+      // Track sale commission after initiating checkout
+      if (window.ReferralEngine && typeof window.ReferralEngine.trackSale === 'function') {
+        window.ReferralEngine.trackSale(productId, parseFloat(amount) || 0, null);
       }
     },
 
