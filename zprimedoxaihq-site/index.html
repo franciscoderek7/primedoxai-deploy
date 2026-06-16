@@ -17,29 +17,74 @@
 
   /* ===== LOCK SCREEN ===== */
   #lock-screen {
-    position: fixed; inset: 0; background: var(--dark); z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0; z-index: 9999;
+    background: radial-gradient(ellipse at 30% 50%, #0d0020 0%, #000011 50%, #000008 100%);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  #lock-screen::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 55%, rgba(0,212,255,.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 50% 15%, rgba(255,255,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 70%, rgba(212,175,55,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 10%, rgba(255,255,255,.7) 0%, transparent 100%),
+      radial-gradient(2px 2px at 25% 80%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 40%, rgba(0,212,255,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 90%, rgba(212,175,55,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 30%, rgba(255,255,255,.4) 0%, transparent 100%);
+  }
+  #lock-ghost {
+    position: absolute; right: -2%; top: 50%; transform: translateY(-50%);
+    font-size: clamp(180px, 25vw, 420px); opacity: 0.09;
+    filter: blur(3px) grayscale(1); user-select: none; pointer-events: none; z-index: 1; line-height: 1;
   }
   .lock-box {
-    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 48px 40px; text-align: center; width: 360px;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    position: relative; z-index: 2;
+    background: rgba(8, 8, 20, 0.88); backdrop-filter: blur(24px);
+    border: 1px solid rgba(201,168,76,.2); border-radius: 20px;
+    padding: 52px 44px 44px; text-align: center; width: min(400px, calc(100vw - 32px));
+    box-shadow: 0 0 80px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.03);
   }
-  .lock-logo { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
-  .lock-logo span { color: var(--gold); }
-  .lock-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  .lock-eyebrow {
+    font-size: 9px; letter-spacing: 4px; color: rgba(201,168,76,.5);
+    text-transform: uppercase; margin-bottom: 28px; font-family: monospace;
+  }
+  .lock-logo {
+    font-size: 32px; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px;
+    background: linear-gradient(135deg, #c9a84c, #e8c76e, #c9a84c);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .lock-tagline {
+    font-size: 12px; color: rgba(255,255,255,.35); margin-bottom: 40px;
+    letter-spacing: 1px; line-height: 1.6;
+  }
   .lock-input {
-    width: 100%; background: var(--mid); border: 1px solid var(--border); border-radius: 8px;
-    padding: 12px 16px; color: var(--text); font-size: 16px; text-align: center;
-    letter-spacing: 4px; outline: none; margin-bottom: 14px;
+    width: 100%; background: rgba(255,255,255,.04);
+    border: 1px solid rgba(201,168,76,.2); border-radius: 10px;
+    padding: 16px 20px; color: var(--text); font-size: 18px; text-align: center;
+    letter-spacing: 6px; outline: none; margin-bottom: 16px;
+    font-family: monospace; transition: border-color .2s, box-shadow .2s;
   }
-  .lock-input:focus { border-color: var(--gold); }
+  .lock-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
   .lock-btn {
-    width: 100%; background: var(--gold); color: #111; border: none;
-    padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer;
+    width: 100%; background: linear-gradient(135deg, #c9a84c, #e8c76e);
+    color: #0a0a14; border: none; padding: 15px; border-radius: 10px;
+    font-size: 14px; font-weight: 800; cursor: pointer; letter-spacing: 1.5px;
+    text-transform: uppercase; transition: opacity .2s; font-family: system-ui, sans-serif;
   }
-  .lock-btn:hover { background: var(--gold2); }
+  .lock-btn:hover { opacity: .85; }
   .lock-error { font-size: 12px; color: var(--red); margin-top: 10px; display: none; }
+  .lock-access-link {
+    margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.06);
+  }
+  .lock-access-link a {
+    font-size: 12px; color: rgba(201,168,76,.55); text-decoration: none;
+    letter-spacing: 1px; transition: color .2s; min-height: auto !important;
+  }
+  .lock-access-link a:hover { color: var(--gold); }
 
   /* ===== HQ HEADER ===== */
   header {
@@ -271,24 +316,16 @@
 
 <!-- ===== LOCK SCREEN ===== -->
 <div id="lock-screen">
+  <div id="lock-ghost" aria-hidden="true">🤖</div>
   <div class="lock-box">
-    <div class="lock-logo">PrimeDox <span>HQ</span></div>
-    <div class="lock-sub">zprimedoxaihq.com — Private Command Center<br>Derek Francisco / Doc Weedlaw</div>
-    <input type="password" class="lock-input" id="lock-input" placeholder="Access code" autofocus />
-    <button class="lock-btn" onclick="checkCode()">Enter HQ</button>
-    <div class="lock-error" id="lock-error">Incorrect access code</div>
-    <div style="font-size:11px;color:var(--dim);margin-top:20px;">Change code: edit LOCK_CODE in page source</div>
-    <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--border);">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-align:center;">No code? <strong style="color:var(--gold);">Purchase access below.</strong></div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Individual Access — $199/mo</div>
-      <a href="https://paypal.me/franciscoderek7/199CAD" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:var(--gold);color:#111;font-weight:800;padding:11px;border-radius:8px;font-size:13px;text-decoration:none;margin-bottom:8px;">💳 Pay $199/mo — Individual (PayPal)</a>
-      <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20HQ%20Access%20%E2%80%94%20%24199%2Fmo%20Individual&body=Hi%20Derek%2C%0A%0AI%20want%20to%20purchase%20PrimeDox%20HQ%20Individual%20access%20at%20%24199%2Fmo.%20Sending%20Interac%20e-Transfer%20to%20franciscoderek7%40gmail.com.%0A%0APlease%20send%20me%20the%20access%20code%20on%20confirmation." style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-weight:600;padding:9px;border-radius:8px;font-size:12px;text-decoration:none;margin-bottom:14px;">💸 Interac e-Transfer — $199/mo</a>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Team / Enterprise — $499/mo</div>
-      <a href="https://paypal.me/franciscoderek7/499CAD" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(201,168,76,0.15);border:1px solid var(--gold);color:var(--gold);font-weight:800;padding:11px;border-radius:8px;font-size:13px;text-decoration:none;margin-bottom:8px;">💳 Pay $499/mo — Team Access (PayPal)</a>
-      <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20HQ%20Access%20%E2%80%94%20%24499%2Fmo%20Team&body=Hi%20Derek%2C%0A%0AI%20want%20to%20purchase%20PrimeDox%20HQ%20Team%20access%20at%20%24499%2Fmo.%20Organization%3A%20%0A%0ASending%20Interac%20e-Transfer%20to%20franciscoderek7%40gmail.com.%0A%0APlease%20send%20team%20access%20codes%20on%20confirmation." style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-weight:600;padding:9px;border-radius:8px;font-size:12px;text-decoration:none;margin-bottom:14px;">💸 Interac e-Transfer — $499/mo</a>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Enterprise — $999/mo</div>
-      <a href="https://paypal.me/franciscoderek7/999CAD" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.5);color:var(--gold);font-weight:800;padding:11px;border-radius:8px;font-size:13px;text-decoration:none;margin-bottom:8px;">💳 Pay $999/mo — Enterprise (PayPal)</a>
-      <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20HQ%20Enterprise%20Access%20%E2%80%94%20%24999%2Fmo&body=Hi%20Derek%2C%0A%0AWe%20need%20Enterprise%20HQ%20access%20at%20%24999%2Fmo.%20Organization%3A%20%0A%0AContact%3A%20%0A%0APlease%20quote%20or%20invoice%20us." style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-weight:600;padding:9px;border-radius:8px;font-size:12px;text-decoration:none;">📧 Enterprise Inquiry → Email</a>
+    <div class="lock-eyebrow">⬡ &nbsp; PrimeDox HQ &nbsp; · &nbsp; Classified</div>
+    <div class="lock-logo">Prime<span style="-webkit-text-fill-color:rgba(201,168,76,1)">Dox</span></div>
+    <div class="lock-tagline">The Brain Behind the Empire<br><span style="font-size:10px;opacity:.5">zprimedoxaihq.com · Derek Francisco</span></div>
+    <input type="password" class="lock-input" id="lock-input" placeholder="• • • • • • •" autofocus />
+    <button class="lock-btn" onclick="checkCode()">Enter Command Center →</button>
+    <div class="lock-error" id="lock-error">⚠ Incorrect access code</div>
+    <div class="lock-access-link">
+      <a href="pricing.html">No code? &nbsp;Get Access →</a>
     </div>
   </div>
 </div>
@@ -1263,6 +1300,12 @@
 </script>
 <script>window.REVEREND_SITE='primedox';</script>
 <script src="reverend-ai.js"></script>
+<style>
+/* Chatbot: constrain to corner, no page-covering */
+#rev-ai-box{width:300px!important;max-height:400px!important;bottom:88px!important;right:20px!important;}
+#rev-ai-btn{bottom:20px!important;right:20px!important;width:52px!important;height:52px!important;}
+@media(max-width:480px){#rev-ai-box{width:calc(100vw - 32px)!important;right:16px!important;max-height:380px!important;bottom:80px!important;}#rev-ai-btn{right:16px!important;bottom:16px!important;}}
+</style>
 <div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
 
 <div id="timmy-badge" style="position:fixed;bottom:20px;left:20px;z-index:999;background:rgba(0,0,0,0.88);border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:6px 14px;display:flex;align-items:center;gap:8px;font-size:0.72rem;color:rgba(255,255,255,0.7);cursor:pointer;backdrop-filter:blur(8px);" title="Timmy AI: Oversight layer active — monitoring empire integrity" onclick="this.querySelector('.timmy-tip').style.display=this.querySelector('.timmy-tip').style.display==='none'?'block':'none'">
@@ -1275,7 +1318,7 @@
 </div>
 <style>@keyframes tpulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{opacity:0.7;box-shadow:0 0 0 4px rgba(16,185,129,0)}}</style>
 
-<div id="discount-widget" style="position:fixed;bottom:20px;right:20px;z-index:998;background:rgba(0,0,0,0.92);border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:0;width:240px;backdrop-filter:blur(12px);font-size:0.8rem;">
+<div id="discount-widget" style="position:fixed;bottom:100px;right:20px;z-index:998;background:rgba(0,0,0,0.92);border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:0;width:240px;backdrop-filter:blur(12px);font-size:0.8rem;">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(212,175,55,0.15);cursor:pointer;" onclick="var b=document.getElementById('discount-body');b.style.display=b.style.display==='none'?'block':'none'">
     <span style="color:#D4AF37;font-weight:700;font-size:0.75rem;letter-spacing:0.08em;">🎖 DISCOUNT ELIGIBILITY</span>
     <span id="discount-toggle" style="color:#888;font-size:0.7rem;">▼ Open</span>
