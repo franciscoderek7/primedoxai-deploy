@@ -67,6 +67,7 @@
     padding: 16px 20px; color: var(--text); font-size: 18px; text-align: center;
     letter-spacing: 6px; outline: none; margin-bottom: 16px;
     font-family: monospace; transition: border-color .2s, box-shadow .2s;
+    min-height: 52px;
   }
   .lock-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
   .lock-btn {
@@ -74,6 +75,7 @@
     color: #0a0a14; border: none; padding: 15px; border-radius: 10px;
     font-size: 14px; font-weight: 800; cursor: pointer; letter-spacing: 1.5px;
     text-transform: uppercase; transition: opacity .2s; font-family: system-ui, sans-serif;
+    min-height: 52px;
   }
   .lock-btn:hover { opacity: .85; }
   .lock-error { font-size: 12px; color: var(--red); margin-top: 10px; display: none; }
@@ -176,7 +178,7 @@
   .action-deadline.ok { color: var(--muted); }
 
   /* ===== QUICK PAYMENT ===== */
-  .payment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .payment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
   .pay-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; text-align: center; }
   .pay-icon { font-size: 28px; margin-bottom: 8px; }
   .pay-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
@@ -285,6 +287,38 @@
   .rlog .radpt { color: var(--gold); font-weight: 700; }
   .rlog .ok { color: var(--green); }
 
+  /* ===== SWARM BAR ===== */
+  .swarm-bar { background: rgba(16,185,129,0.05); border-bottom: 1px solid rgba(16,185,129,0.15); padding: 7px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: rgba(16,185,129,0.75); }
+  .swarm-bar a { color: rgba(201,168,76,0.65); font-size: 10px; text-decoration: none; letter-spacing: 1px; }
+  .swarm-bar a:hover { color: var(--gold); }
+
+  /* ===== AI CONCIERGE ===== */
+  .concierge-panel { background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(16,185,129,0.05)); border: 1px solid rgba(201,168,76,0.2); border-radius: 14px; padding: 20px 22px; margin-bottom: 20px; }
+  .concierge-greeting { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .concierge-avatar { font-size: 28px; flex-shrink: 0; }
+  .concierge-title { font-size: 15px; font-weight: 900; color: var(--gold); }
+  .concierge-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .concierge-routes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .croute { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; text-decoration: none; transition: border-color 0.15s, transform 0.15s; cursor: pointer; }
+  .croute:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-1px); }
+  .cr-icon { font-size: 20px; margin-bottom: 4px; }
+  .cr-label { font-size: 12px; font-weight: 800; color: var(--text); line-height: 1.3; }
+  .cr-sub { font-size: 10px; color: var(--muted); line-height: 1.4; }
+  .cr-arrow { font-size: 14px; color: var(--gold); margin-top: 6px; font-weight: 700; }
+  .croute-legal { border-top: 2px solid var(--green); }
+  .croute-cyber { border-top: 2px solid #f87171; }
+  .croute-docs { border-top: 2px solid var(--gold); }
+  .croute-general { border-top: 2px solid #a78bfa; }
+
+  /* ===== SKYSCRAPER CTA ===== */
+  .sky-cta { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04)); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; text-decoration: none; transition: border-color 0.2s; }
+  .sky-cta:hover { border-color: var(--gold); }
+  .sky-cta-left { display: flex; align-items: center; gap: 12px; }
+  .sky-cta-icon { font-size: 22px; }
+  .sky-cta-title { font-size: 13px; font-weight: 800; color: var(--gold); }
+  .sky-cta-sub { font-size: 11px; color: var(--muted); }
+  .sky-cta-btn { background: var(--gold); color: #0a0a14; font-size: 11px; font-weight: 800; padding: 7px 14px; border-radius: 6px; white-space: nowrap; }
+
   @media (max-width: 900px) {
     .hq { grid-template-columns: 1fr; }
     aside { display: none; }
@@ -292,6 +326,7 @@
     .payment-grid { grid-template-columns: 1fr; }
     .router-adapters-grid { grid-template-columns: repeat(3, 1fr); }
     .ifr-panel { width: 100%; }
+    .concierge-routes { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 600px) {
     body { overflow-x: hidden; font-size: 16px; }
@@ -343,6 +378,11 @@
   </div>
 </header>
 
+<div class="swarm-bar">
+  <span>⬡ &nbsp;<strong>Powered by Agent Swarm Technology</strong> &nbsp;·&nbsp; 45 specialist agents &nbsp;·&nbsp; 8 adapters active &nbsp;·&nbsp; <span style="color:rgba(16,185,129,0.9);">●</span> All Systems Nominal</span>
+  <a href="https://franciscoholdingsinc.com" target="_blank" rel="noopener">🏛️ Empire OS →</a>
+</div>
+
 <div class="hq">
   <!-- Sidebar -->
   <aside>
@@ -354,6 +394,7 @@
       <a class="nav-link" onclick="showView('router')"><span class="nav-link-icon">🧠</span>AI Router</a>
       <a class="nav-link" onclick="showView('legal')"><span class="nav-link-icon">⚖️</span>Legal Tracker</a>
       <a class="nav-link" onclick="window.location.href='empire-os.html'" style="border-left:2px solid #D4AF37;background:rgba(212,175,55,.07);color:#D4AF37;font-weight:700;"><span class="nav-link-icon">🏛️</span>Empire.OS</a>
+      <a class="nav-link" href="https://franciscoholdingsinc.com" target="_blank" rel="noopener" style="border-left:2px solid rgba(16,185,129,0.6);"><span class="nav-link-icon">🏢</span>Skyscraper ↗</a>
       <a class="nav-link" onclick="window.location.href='doc-weedlaw-ai.html'" style="border-left:2px solid #FFD700;background:rgba(255,215,0,.06);color:#FFD700;font-weight:700;"><span class="nav-link-icon">🤖</span>Doc Weedlaw AI</a>
     </div>
     <div class="nav-group">
@@ -382,6 +423,55 @@
 
     <!-- ====== DASHBOARD ====== -->
     <div class="view active" id="view-dashboard">
+
+      <!-- AI Concierge Quick Route -->
+      <div class="concierge-panel">
+        <div class="concierge-greeting">
+          <div class="concierge-avatar">🤖</div>
+          <div>
+            <div class="concierge-title">PrimeDox AI — What do you need today?</div>
+            <div class="concierge-sub">Select your focus area → routed instantly to the right specialist. All 45 agents standing by.</div>
+          </div>
+        </div>
+        <div class="concierge-routes">
+          <a href="https://franciscoderek7.github.io/Ccldr-net/" target="_blank" rel="noopener" class="croute croute-legal">
+            <span class="cr-icon">🌿</span>
+            <span class="cr-label">Legal / Cannabis Defense</span>
+            <span class="cr-sub">CCLDR · BENO-X · Charter Rights</span>
+            <span class="cr-arrow">→</span>
+          </a>
+          <a href="https://omniaguard.com" target="_blank" rel="noopener" class="croute croute-cyber">
+            <span class="cr-icon">🛡️</span>
+            <span class="cr-label">Cybersecurity</span>
+            <span class="cr-sub">OmniaGuard · Threat Defense · AI Shield</span>
+            <span class="cr-arrow">→</span>
+          </a>
+          <a href="javascript:void(0)" onclick="showViewDirect('apps')" class="croute croute-docs">
+            <span class="cr-icon">📄</span>
+            <span class="cr-label">Business Documents</span>
+            <span class="cr-sub">AI Drafting · Templates · Automation</span>
+            <span class="cr-arrow">→</span>
+          </a>
+          <a href="javascript:void(0)" onclick="showViewDirect('router')" class="croute croute-general">
+            <span class="cr-icon">🧠</span>
+            <span class="cr-label">General Query</span>
+            <span class="cr-sub">Route to any of 8 specialist agents</span>
+            <span class="cr-arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Empire Skyscraper CTA -->
+      <a href="https://franciscoholdingsinc.com" target="_blank" rel="noopener" class="sky-cta">
+        <div class="sky-cta-left">
+          <span class="sky-cta-icon">🏢</span>
+          <div>
+            <div class="sky-cta-title">Enter the Francisco Holdings Skyscraper</div>
+            <div class="sky-cta-sub">45-floor empire · Floor 1 OmniaGuard · Floor 2 BENO-X · Floor 3 CCLDR · Floor 4 TechPetCage · Floor 5 CleanSwarm · Floor 6 VaultVelocity · Floor 7 VIGILAX · +38 more</div>
+          </div>
+        </div>
+        <span class="sky-cta-btn">Enter ↗</span>
+      </a>
 
       <!-- Alerts -->
       <div class="alert alert-critical">
@@ -744,6 +834,13 @@
           <div class="pay-detail">$406.80 pending payout<br>Recover account then request payout</div>
           <a href="https://dashboard.stripe.com" target="_blank" class="pay-btn">Stripe Dashboard →</a>
         </div>
+        <div class="pay-card" style="border-top:2px solid #F59E0B;">
+          <div class="pay-icon">₿</div>
+          <div class="pay-title">Bitcoin (BTC)</div>
+          <div class="pay-detail" style="word-break:break-all;font-family:monospace;font-size:10px;">bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>
+          <button onclick="navigator.clipboard.writeText('bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x').then(function(){var b=document.getElementById('btc-copy-msg');b.style.display='block';setTimeout(function(){b.style.display='none'},2000)})" class="pay-btn" style="cursor:pointer;border:none;">Copy BTC Address</button>
+          <div id="btc-copy-msg" style="display:none;font-size:11px;color:#10B981;margin-top:6px;text-align:center;">✓ Copied!</div>
+        </div>
       </div>
 
       <div style="margin-top:24px;">
@@ -1004,7 +1101,7 @@
     <div style="text-align:center;margin-top:24px;padding:16px;background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.1);border-radius:4px;">
       <p style="font-size:0.82rem;color:#666;margin-bottom:12px;">Support the constitutional fight. Every dollar goes directly to court costs.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <a href="https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA" target="_blank" rel="noopener" style="background:#D4AF37;color:#000;padding:10px 20px;font-weight:800;font-size:0.82rem;text-decoration:none;border-radius:2px;">💳 Donate via PayPal</a>
+        <a href="https://paypal.me/franciscoderek7" target="_blank" rel="noopener" style="background:#D4AF37;color:#000;padding:10px 20px;font-weight:800;font-size:0.82rem;text-decoration:none;border-radius:2px;">💳 Donate via PayPal</a>
         <a href="https://ccldr.net/cases.html#donate" target="_blank" rel="noopener" style="border:1px solid rgba(212,175,55,0.4);color:#D4AF37;padding:10px 20px;font-weight:700;font-size:0.82rem;text-decoration:none;border-radius:2px;">View All Donation Options</a>
       </div>
     </div>
@@ -1092,7 +1189,13 @@
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + id).classList.add('active');
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    event.target.closest('.nav-link').classList.add('active');
+    var navEl = event && event.target ? event.target.closest('.nav-link') : null;
+    if (navEl) navEl.classList.add('active');
+  }
+  function showViewDirect(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + id).classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   }
 
   // App Launcher / Iframe Panel
@@ -1341,10 +1444,19 @@
     <div style="margin-top:12px;border-top:1px solid rgba(212,175,55,0.1);padding-top:10px;">
       <label style="font-size:0.7rem;color:rgba(255,255,255,0.5);display:block;margin-bottom:4px;">Referral Code (5% off):</label>
       <div style="display:flex;gap:6px;">
-        <input type="text" id="ref-input" placeholder="REF-XXXX" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(212,175,55,0.2);color:#e0e0e0;padding:6px 8px;border-radius:4px;font-size:0.75rem;outline:none;">
+        <input type="text" id="ref-input" placeholder="FHI-REFER-XXX" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(212,175,55,0.2);color:#e0e0e0;padding:6px 8px;border-radius:4px;font-size:0.75rem;outline:none;">
         <button onclick="applyRef()" style="background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.3);color:#D4AF37;padding:6px 10px;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:700;">Apply</button>
       </div>
       <div id="ref-status" style="font-size:0.7rem;color:#10B981;margin-top:4px;display:none;">✓ Referral applied — 5% off added</div>
+    </div>
+    <div style="margin-top:12px;border-top:1px solid rgba(212,175,55,0.1);padding-top:10px;">
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">Share &amp; Earn — give friends 5% off, you earn 10% commission:</div>
+      <div id="my-ref-code" style="font-family:monospace;font-size:0.8rem;font-weight:700;color:#D4AF37;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.25);border-radius:4px;padding:8px 10px;text-align:center;letter-spacing:1px;margin-bottom:6px;">—</div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="generateMyRefCode()" style="flex:1;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#10B981;padding:6px;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:700;">Generate My Code</button>
+        <button onclick="copyMyRefCode()" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.25);color:#D4AF37;padding:6px 10px;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:700;">Copy</button>
+      </div>
+      <div id="ref-copy-ok" style="font-size:0.68rem;color:#10B981;margin-top:4px;display:none;text-align:center;">✓ Copied! Share with anyone — they get 5% off, you earn 10%</div>
     </div>
   </div>
 </div>
@@ -1368,17 +1480,36 @@ function calcDiscount(){
 }
 function applyRef(){
   var code = document.getElementById('ref-input').value.trim().toUpperCase();
-  if(code && code.startsWith('REF-')){
+  if(code && (code.startsWith('FHI-REFER-') || code.startsWith('REF-'))){
     empireDiscount.ref = true;
     document.getElementById('ref-status').style.display = 'block';
     calcDiscount();
     localStorage.setItem('empire_ref', code);
   }
 }
+function generateMyRefCode(){
+  var existing = localStorage.getItem('my_ref_code');
+  if(existing){ document.getElementById('my-ref-code').textContent = existing; return; }
+  var num = ('000' + (Math.floor(Math.random()*900)+100)).slice(-3);
+  var ts = Date.now().toString(36).slice(-3).toUpperCase();
+  var code = 'FHI-REFER-' + ts + num;
+  localStorage.setItem('my_ref_code', code);
+  document.getElementById('my-ref-code').textContent = code;
+}
+function copyMyRefCode(){
+  var code = document.getElementById('my-ref-code').textContent;
+  if(code === '—'){ generateMyRefCode(); }
+  code = document.getElementById('my-ref-code').textContent;
+  if(code !== '—'){
+    navigator.clipboard.writeText(code).then(function(){ document.getElementById('ref-copy-ok').style.display='block'; setTimeout(function(){ document.getElementById('ref-copy-ok').style.display='none'; }, 3000); });
+  }
+}
 // Restore from localStorage
 try{
   var saved = JSON.parse(localStorage.getItem('empire_discount') || '{}');
   if(saved.ref){ empireDiscount.ref = true; }
+  var myCode = localStorage.getItem('my_ref_code');
+  if(myCode){ document.getElementById('my-ref-code').textContent = myCode; }
 }catch(e){}
 </script>
 <script>window.STRIPE_PK = 'pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz';</script>
