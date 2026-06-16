@@ -5,6 +5,7 @@
 <link rel="manifest" href="/manifest.json">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PrimeDox HQ — Command Center</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -287,6 +288,41 @@
   .rlog .radpt { color: var(--gold); font-weight: 700; }
   .rlog .ok { color: var(--green); }
 
+  /* ===== AUTH MODAL ===== */
+  .auth-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; }
+  .auth-overlay.open { display: flex; }
+  .auth-card { background: #0d0d1a; border: 1px solid rgba(201,168,76,0.3); border-radius: 18px; padding: 40px 36px 32px; width: min(420px, calc(100vw - 24px)); max-height: 90vh; overflow-y: auto; position: relative; }
+  .auth-tabs { display: flex; border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; margin-bottom: 28px; overflow: hidden; }
+  .auth-tab { flex: 1; padding: 11px; background: transparent; border: none; color: var(--muted); font-weight: 700; font-size: 13px; cursor: pointer; transition: all .2s; }
+  .auth-tab.active { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .auth-field { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.18); border-radius: 9px; padding: 14px 16px; color: var(--text); font-size: 16px; outline: none; min-height: 52px; margin-bottom: 12px; font-family: system-ui, sans-serif; transition: border-color .2s; }
+  .auth-field:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,168,76,0.1); }
+  .auth-err { display: none; background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.3); border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #f87171; margin-bottom: 12px; line-height: 1.5; }
+  .auth-ok { display: none; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); border-radius: 6px; padding: 10px 14px; font-size: 12px; color: var(--emerald); margin-bottom: 12px; }
+  .auth-submit { width: 100%; background: linear-gradient(135deg, #c9a84c, #e8c76e); color: #0a0a14; border: none; padding: 15px; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; min-height: 52px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; transition: opacity .2s; }
+  .auth-submit:hover { opacity: .85; }
+  .auth-submit:disabled { opacity: .5; cursor: not-allowed; }
+  .auth-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; padding: 4px; }
+  .auth-footer { text-align: center; font-size: 12px; color: var(--muted); }
+  .auth-link { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 12px; font-weight: 700; padding: 0; }
+
+  /* ===== USER PROFILE WIDGET ===== */
+  .user-widget { background: var(--card); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; margin: 12px 10px 0; padding: 14px; }
+  .user-widget-email { font-size: 11px; color: var(--muted); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-ref-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+  .user-ref-code { font-family: monospace; font-size: 11px; font-weight: 700; color: var(--gold); background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 4px; padding: 4px 8px; flex: 1; letter-spacing: 1px; }
+  .user-copy-btn { background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.25); color: var(--gold); padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: 700; white-space: nowrap; }
+  .user-copy-btn:hover { background: rgba(201,168,76,0.22); }
+  .user-logout-btn { width: 100%; background: rgba(230,57,70,0.08); border: 1px solid rgba(230,57,70,0.2); color: #f87171; padding: 7px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 700; }
+  .user-logout-btn:hover { background: rgba(230,57,70,0.18); }
+
+  /* ===== TRIAL COUNTDOWN BANNER ===== */
+  .trial-banner { background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(46,158,107,0.06)); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .trial-banner-left { display: flex; align-items: center; gap: 12px; }
+  .trial-timer { font-family: monospace; font-size: 20px; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+  .trial-label { font-size: 11px; color: var(--muted); }
+  .trial-upgrade-btn { background: var(--gold); color: #0a0a14; border: none; padding: 8px 16px; border-radius: 7px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; text-decoration: none; display: inline-block; }
+
   /* ===== SWARM BAR ===== */
   .swarm-bar { background: rgba(16,185,129,0.05); border-bottom: 1px solid rgba(16,185,129,0.15); padding: 7px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: rgba(16,185,129,0.75); }
   .swarm-bar a { color: rgba(201,168,76,0.65); font-size: 10px; text-decoration: none; letter-spacing: 1px; }
@@ -361,6 +397,9 @@
     <div class="lock-error" id="lock-error">⚠ Incorrect access code</div>
     <div class="lock-access-link">
       <a href="pricing.html">No code? &nbsp;Get Access →</a>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.04);">
+        <button onclick="openAuthModal('login')" style="background:none;border:none;color:rgba(201,168,76,0.45);font-size:11px;cursor:pointer;letter-spacing:1px;padding:0;min-height:auto;">Already have an account? &nbsp;Login →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -415,6 +454,20 @@
       <a class="nav-link" onclick="window.open('https://supabase.com','_blank')"><span class="nav-link-icon">🗄️</span>Supabase</a>
       <a class="nav-link" onclick="window.open('https://dashboard.stripe.com','_blank')"><span class="nav-link-icon">💲</span>Stripe</a>
       <a class="nav-link" onclick="window.open('https://porkbun.com','_blank')"><span class="nav-link-icon">🐷</span>Porkbun DNS</a>
+    </div>
+
+    <!-- User Profile Widget -->
+    <div id="user-widget" class="user-widget" style="display:none;">
+      <div class="user-widget-email" id="uw-email">—</div>
+      <div class="user-ref-row">
+        <span class="user-ref-code" id="uw-ref-code">—</span>
+        <button class="user-copy-btn" onclick="copyRefLink()">Copy</button>
+      </div>
+      <div id="uw-discount" style="font-size:10px;color:var(--muted);margin-bottom:10px;"></div>
+      <button class="user-logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+    <div id="user-login-prompt" style="margin:12px 10px 0;text-align:center;">
+      <button onclick="openAuthModal('login')" style="width:100%;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);color:var(--gold);padding:8px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">Login / Sign Up</button>
     </div>
   </aside>
 
@@ -472,6 +525,19 @@
         </div>
         <span class="sky-cta-btn">Enter ↗</span>
       </a>
+
+      <!-- Trial Countdown (shown only when trial is active) -->
+      <div class="trial-banner" id="trial-banner" style="display:none;">
+        <div class="trial-banner-left">
+          <span style="font-size:20px;">⏱</span>
+          <div>
+            <div class="trial-label">FREE TRIAL ACTIVE · <span id="trial-email-display"></span></div>
+            <div class="trial-timer" id="trial-timer">23:59:59</div>
+            <div class="trial-label" style="margin-top:2px;">remaining · Auto-expires in 24h</div>
+          </div>
+        </div>
+        <a href="pricing.html" class="trial-upgrade-btn">Upgrade Now →</a>
+      </div>
 
       <!-- Alerts -->
       <div class="alert alert-critical">
@@ -1401,6 +1467,212 @@
     log.parentElement.scrollTop = log.parentElement.scrollHeight;
   }
 </script>
+<!-- ===== AUTH MODAL ===== -->
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeAuthModal()">✕</button>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Login</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+    <input class="auth-field" id="auth-email" type="email" placeholder="Email address" autocomplete="email" />
+    <input class="auth-field" id="auth-password" type="password" placeholder="Password" autocomplete="current-password" />
+    <input class="auth-field" id="auth-ref-field" type="text" placeholder="Referral code (optional) — FHI-REF-XXXX" style="display:none;" />
+    <div class="auth-err" id="auth-err"></div>
+    <div class="auth-ok" id="auth-ok"></div>
+    <button class="auth-submit" id="auth-submit" onclick="submitAuth()">Login →</button>
+    <div class="auth-footer">
+      <span id="auth-switch-lbl">Don't have an account? </span>
+      <button class="auth-link" id="auth-switch-btn" onclick="switchAuthTab(currentAuthTab==='login'?'signup':'login')">Sign Up Free</button>
+      <br><button class="auth-link" style="margin-top:8px;color:var(--muted);font-weight:400;" onclick="showResetForm()">Forgot password?</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── AUTH MODAL ─────────────────────────────────────────────────────────────
+var currentAuthTab = 'login';
+
+function openAuthModal(tab) {
+  currentAuthTab = tab || 'login';
+  switchAuthTab(currentAuthTab);
+  document.getElementById('auth-overlay').classList.add('open');
+  setTimeout(function() { document.getElementById('auth-email').focus(); }, 100);
+}
+function closeAuthModal() {
+  document.getElementById('auth-overlay').classList.remove('open');
+  document.getElementById('auth-err').style.display = 'none';
+  document.getElementById('auth-ok').style.display = 'none';
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-ref-field').value = '';
+}
+
+function switchAuthTab(tab) {
+  currentAuthTab = tab;
+  document.getElementById('tab-login').className = 'auth-tab' + (tab === 'login' ? ' active' : '');
+  document.getElementById('tab-signup').className = 'auth-tab' + (tab === 'signup' ? ' active' : '');
+  document.getElementById('auth-ref-field').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('auth-submit').textContent = tab === 'login' ? 'Login →' : 'Create Account →';
+  document.getElementById('auth-switch-lbl').textContent = tab === 'login' ? "Don't have an account? " : 'Already have an account? ';
+  document.getElementById('auth-switch-btn').textContent = tab === 'login' ? 'Sign Up Free' : 'Login';
+  document.getElementById('auth-password').setAttribute('autocomplete', tab === 'login' ? 'current-password' : 'new-password');
+}
+
+function showAuthErr(msg) {
+  var el = document.getElementById('auth-err');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('auth-ok').style.display = 'none';
+}
+function showAuthOk(msg) {
+  var el = document.getElementById('auth-ok');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('auth-err').style.display = 'none';
+}
+
+async function submitAuth() {
+  var btn = document.getElementById('auth-submit');
+  var email = document.getElementById('auth-email').value.trim();
+  var pass = document.getElementById('auth-password').value;
+  var ref = document.getElementById('auth-ref-field').value.trim();
+  if (!email || !pass) { showAuthErr('Please enter your email and password.'); return; }
+  if (pass.length < 8) { showAuthErr('Password must be at least 8 characters.'); return; }
+  btn.disabled = true; btn.textContent = 'Working…';
+  document.getElementById('auth-err').style.display = 'none';
+
+  var r;
+  if (currentAuthTab === 'login') {
+    r = await (window.FHI_SUPA ? FHI_SUPA.login(email, pass) : { error: 'Auth module loading…' });
+    if (r.error) { showAuthErr(r.error); }
+    else {
+      showAuthOk('Logged in! Loading your dashboard…');
+      setTimeout(function() {
+        closeAuthModal();
+        loadUserProfile(r.user);
+        unlockHQ();
+        sessionStorage.setItem(SESSION_KEY, '1');
+      }, 800);
+    }
+  } else {
+    r = await (window.FHI_SUPA ? FHI_SUPA.signup(email, pass, ref) : { error: 'Auth module loading…' });
+    if (r.error) { showAuthErr(r.error); }
+    else {
+      showAuthOk('Account created! Check your email, then log in below.');
+      setTimeout(function() { switchAuthTab('login'); }, 2000);
+    }
+  }
+  btn.disabled = false;
+  btn.textContent = currentAuthTab === 'login' ? 'Login →' : 'Create Account →';
+}
+
+async function showResetForm() {
+  var email = document.getElementById('auth-email').value.trim();
+  if (!email) { showAuthErr('Enter your email address first, then click Forgot password.'); return; }
+  if (!window.FHI_SUPA) { showAuthErr('Auth module loading — try again in a moment.'); return; }
+  var r = await FHI_SUPA.resetPassword(email);
+  if (r.error) showAuthErr(r.error);
+  else showAuthOk('Password reset email sent to ' + email);
+}
+
+// ── USER PROFILE ──────────────────────────────────────────────────────────
+async function loadUserProfile(user) {
+  if (!user) return;
+  var email = user.email || localStorage.getItem('fhi_user_email') || '—';
+  document.getElementById('uw-email').textContent = email;
+
+  var profile = null;
+  if (window.FHI_SUPA) {
+    profile = await FHI_SUPA.getProfile(user.id);
+  }
+  var refCode = (profile && profile.referral_code) || localStorage.getItem('my_ref_code') || '—';
+  document.getElementById('uw-ref-code').textContent = refCode;
+
+  var tier = (profile && profile.discount_tier) || 'none';
+  var tierMap = { none: '', referral: '🔗 10% referral discount', senior: '🌿 15% senior', veteran: '⚔ 20% veteran', fixed_income: '💪 25% fixed income' };
+  document.getElementById('uw-discount').textContent = tierMap[tier] || '';
+
+  document.getElementById('user-widget').style.display = 'block';
+  document.getElementById('user-login-prompt').style.display = 'none';
+}
+
+function copyRefLink() {
+  var code = document.getElementById('uw-ref-code').textContent;
+  if (code === '—') return;
+  var link = window.location.origin + '/pricing.html?ref=' + encodeURIComponent(code);
+  navigator.clipboard.writeText(link).then(function() {
+    var btn = event.target;
+    btn.textContent = '✓ Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+  });
+}
+
+async function handleLogout() {
+  if (window.FHI_SUPA) await FHI_SUPA.logout();
+  document.getElementById('user-widget').style.display = 'none';
+  document.getElementById('user-login-prompt').style.display = 'block';
+  lockHQ();
+}
+
+// ── TRIAL COUNTDOWN ────────────────────────────────────────────────────────
+function startTrialCountdown() {
+  var banner = document.getElementById('trial-banner');
+  var timerEl = document.getElementById('trial-timer');
+  var emailEl = document.getElementById('trial-email-display');
+
+  function tick() {
+    if (!window.FHI_SUPA) { setTimeout(tick, 1000); return; }
+    var t = FHI_SUPA.checkTrial();
+    if (!t) { banner.style.display = 'none'; return; }
+    if (t.expired) {
+      banner.style.display = 'none';
+      if (window.location.pathname.indexOf('index.html') > -1 || window.location.pathname === '/') {
+        window.location.href = 'pricing.html?expired=1';
+      }
+      return;
+    }
+    banner.style.display = 'flex';
+    if (emailEl) emailEl.textContent = t.email || '';
+    var h = String(t.hours).padStart(2, '0');
+    var m = String(t.mins).padStart(2, '0');
+    var s = String(t.secs).padStart(2, '0');
+    timerEl.textContent = h + ':' + m + ':' + s;
+    setTimeout(tick, 1000);
+  }
+  tick();
+}
+
+// ── SESSION INIT (extend existing unlockHQ) ────────────────────────────────
+var _origUnlock = window.unlockHQ;
+window.unlockHQ = function() {
+  if (_origUnlock) _origUnlock();
+  // Check Supabase session
+  if (window.FHI_SUPA) {
+    FHI_SUPA.getSession().then(function(sess) {
+      if (sess && sess.user) loadUserProfile(sess.user);
+    });
+  }
+  startTrialCountdown();
+};
+
+// Auto-open auth if ?ref= in URL (pre-fill referral)
+document.addEventListener('DOMContentLoaded', function() {
+  var ref = window.FHI_SUPA ? FHI_SUPA.getRefFromURL() : (new URLSearchParams(window.location.search).get('ref'));
+  if (ref) {
+    document.getElementById('auth-ref-field').value = ref;
+  }
+  // Restore Supabase session
+  if (window.FHI_SUPA) {
+    FHI_SUPA.getSession().then(function(sess) {
+      if (sess) {
+        unlockHQ();
+        sessionStorage.setItem(SESSION_KEY, '1');
+        loadUserProfile(sess.user);
+      }
+    });
+  }
+});
+</script>
+
 <script>window.REVEREND_SITE='primedox';</script>
 <script src="reverend-ai.js"></script>
 <style>
@@ -1516,5 +1788,17 @@ try{
 <script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/stripe-payment-links.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/payment-provider.js"></script>
+<script>
+// Load Supabase client after SDK is ready
+(function waitForSupa() {
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    var s = document.createElement('script');
+    s.src = 'supabase-client.js';
+    document.body.appendChild(s);
+  } else {
+    setTimeout(waitForSupa, 100);
+  }
+})();
+</script>
 </body>
 </html>
