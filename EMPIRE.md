@@ -1,5 +1,5 @@
 # EMPIRE.md — Francisco Holdings Master State Document
-# Last Updated: 2026-06-15
+# Last Updated: 2026-06-16
 # Authority: PrimeDox (Derek Francisco) — Human Final Authority
 # Override: PrimeDocs — Activated only by PrimeDox explicit instruction
 
@@ -51,7 +51,7 @@
 
 | Site | Market | Loop | Status | Deploy Workflow | Domain | Last Deploy |
 |------|--------|------|--------|----------------|--------|-------------|
-| OmniaGuard | AI Security | B | LIVE | deploy-omniaguard.yml | omniaguard.com | 2026-06-04 |
+| OmniaGuard | AI Security | B | LIVE — MOBILE FIXED (Samsung A11) | deploy-omniaguard.yml | omniaguard.com | 2026-06-16 |
 | CCLDR.net | Cannabis Education | A | LIVE → REDEPLOY READY | deploy-ccldr.yml | ccldr.net | 2026-06-07 |
 | CCC.net | Cannabis Compliance | A | LIVE | — | ccc.net | 2026-04-15 |
 | Weedlaw Education | Doc Weedlaw Platform | A | LIVE | — | weedlaw-education | 2026-05-31 |
