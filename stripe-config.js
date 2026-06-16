@@ -1,5 +1,5 @@
 /* stripe-config.js — Francisco Holdings Empire Payment Config
- * STRIPE SWAP ZONE: When acct_1TG0cIASsTLqnu8V is unlocked:
+ * STRIPE SWAP ZONE: When [STRIPE-ACCT-REDACTED] is unlocked:
  *   1. Set STRIPE_LIVE = true
  *   2. Replace each stripeUrl with actual buy.stripe.com/... link
  *   3. Push — all sites update automatically
@@ -20,7 +20,7 @@
   window.EMPIRE_PAYMENTS = {
 
     // ── STRIPE SWAP ZONE ─────────────────────────────────────────────────────
-    STRIPE_LIVE: false,                          // flip to true when acct_1TG0cIASsTLqnu8V is unlocked
+    STRIPE_LIVE: false,                          // flip to true when [STRIPE-ACCT-REDACTED] is unlocked
     STRIPE_PK:   'pk_live_51TG0cIASsTLqnu8V...', // live publishable key — replace with full key on unlock
     // ─────────────────────────────────────────────────────────────────────────
 
