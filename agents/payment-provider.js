@@ -5,7 +5,7 @@
 //   Set window.PAYMENT_PROVIDER = 'paypal' (default) or 'stripe' (when unlocked)
 //   Or set <script>window.PAYMENT_PROVIDER = 'stripe';</script> before this file
 //
-// Stripe account: acct_1TG0cIASsTLqnu8V — LIVE (recovered June 2026)
+// Stripe LIVE account active (recovered June 2026)
 // pk_live key active. Set window.PAYMENT_PROVIDER = 'stripe' to enable Stripe checkout.
 
 (function () {
@@ -58,7 +58,7 @@
   };
 
   // ─── Stripe Price IDs ─────────────────────────────────────────────────────
-  // Populate these when Stripe is re-enabled (acct_1TG0cIASsTLqnu8V)
+  // Populate these when Stripe is re-enabled ([STRIPE-ACCT-REDACTED])
   // See: agents/backend/stripe-config.js for full Stripe setup
   var STRIPE_PRICE_IDS = {
     // 'ccldr-digital-99':       'price_xxxxxxxxxxxxx',
