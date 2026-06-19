@@ -27,6 +27,11 @@ Manus's next-priority build queue (informational, not yet assigned to Claude): v
 
 See `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` CHECKPOINT v3 for the corrected prompt sent to Manus reflecting these decisions.
 
+**CRITICAL CORRECTION confirmed by Derek 2026-06-19 — DO NOT overwrite live pricing on PrimeDox AI or CCLDR:** Audited the actual deployed files (not just the briefs) and found both sites already have real, PayPal-wired pricing structures that differ from every pricing table dictated in Manus's briefs today:
+- **PrimeDox AI** (`primedoxai-site/pricing.html`) — LIVE/authoritative: Pro $49/mo, Elite $199/mo, Team $499/mo, Sovereign $999/mo, Imperium $9,999/mo. Do NOT replace with the brief's Starter/Pro/Team/Business $99/$499/$499/$1499 table.
+- **CCLDR** (`ccldr-site/index.html`) — LIVE/authoritative: Digital Access $99/mo, charter education Course, Foundation, Practitioner, Sovereignty $999/mo (PayPal product ID `ccldr-sovereignty-999`), Sovereign Elite $1499/mo. Do NOT replace with either the old 6-tier table or the 4-tier Warrior/Professional/Elite/Sovereign table — both are now retired as far as these two live files go.
+Manus/Claude work on these two sites must be **visual-only** (colors/layout/type per the differentiation brief) — never touch pricing, copy, or payment product IDs on them without a fresh, explicit, file-specific instruction from Derek.
+
 ---
 
 ## 1. HOLDING STRUCTURE

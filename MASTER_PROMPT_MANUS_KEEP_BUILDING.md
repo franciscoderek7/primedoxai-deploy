@@ -206,3 +206,13 @@ Authoritative pricing, supersedes any 6-tier table you saw earlier: Warrior $149
 Don't retire or rename `franciscoderek7/omniaguard` (legacy). Build the new space-theme/blue-pink rebrand in `franciscoderek7/omni-guard` (new repo) and deploy that to omni-guard.com. Leave the old repo alone — Derek will decide later whether to retire it.
 
 Everything else in the prior build queue stands: TechPetCage/TechPackCage separation, vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io, the 40+ Stripe products table, Make.com integration, and the empire-wide color rules — all unchanged from the CHECKPOINT v2 prompt above. Keep building. Don't stop.
+
+---
+
+## CHECKPOINT UPDATE — 2026-06-19 (fourth update — pricing freeze on PrimeDox AI + CCLDR)
+
+Audited the live files (not the briefs) before letting any build proceed. Both `primedoxai-site/pricing.html` and `ccldr-site/index.html` already have real, payment-wired pricing structures that don't match any pricing table dictated today. Derek confirmed: **keep the live pricing on both, do not overwrite.**
+
+MESSAGE FOR MANUS — paste this alongside the override message above:
+
+> "Manus — one freeze before you touch PrimeDox AI or CCLDR: their pricing is already live and wired to real payment links (PrimeDox AI: Pro $49/Elite $199/Team $499/Sovereign $999/Imperium $9,999/mo. CCLDR: Digital Access $99/Foundation/Practitioner/Sovereignty $999/Sovereign Elite $1499/mo, PayPal product IDs already attached). Ignore any pricing numbers in earlier briefs for these two — they're outdated. Visual/color/layout changes only on these two sites. Do not rename tiers, do not change prices, do not touch payment links or PayPal product IDs. Everything else in the build queue is unaffected — keep going."
