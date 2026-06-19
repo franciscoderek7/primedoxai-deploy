@@ -2,9 +2,23 @@
 
 ---
 
-MASTER PROMPT FOR MANUS — KEEP BUILDING THE EMPIRE
+## CHECKPOINT UPDATE — 2026-06-19 (later same day)
 
-Manus, you are building Derek Francisco's 45+ company empire. Keep going. Don't stop. Build what's next. Fix what's broken. Deploy everything.
+Manus confirmed `.153` is correct and accepted the DNS correction. He finished wiring the PrimeDox email-capture form (`Home.tsx`) to the backend's `leads.subscribe` mutation and saved a checkpoint. He is now starting TechPetCage as a static GitHub Pages build, pushing to `franciscoderek7/techpetcage` — correct repo per EMPIRE.md.
+
+The block below is the prompt to send Manus next: acknowledges progress, flags a real brand mix-up (TechPetCage vs. TechPackCage are two different companies — Manus's pricing/description matches TechPetCage, but the original brief said "techpackcage.com," which is Derek's separately *registered* Ontario business with an active Stripe account, not the pet-tech brand), and re-issues the full build queue/Stripe/color rules so the prompt is self-contained and doesn't depend on Manus remembering the earlier one.
+
+---
+
+MASTER PROMPT FOR MANUS — KEEP BUILDING THE EMPIRE (CHECKPOINT v2)
+
+Manus — confirmed: .153 is correct, you were right. Good work finishing the PrimeDox email-capture wiring (leads.subscribe) and saving checkpoint. Keep going. Don't stop. Build what's next. Fix what's broken. Deploy everything.
+
+ONE CORRECTION BEFORE YOU CONTINUE: TechPetCage and TechPackCage are two separate companies — don't merge them.
+- TechPetCage (repo: franciscoderek7/techpetcage, domain: techpetcage.com) = smart pet monitoring — GPS tracking, health alerts, AI analysis. Pricing: Family $29/mo, Pro $49/mo, Kennel $199/mo. This is what you're building right now under the techpetcage repo — correct, keep going exactly as you are.
+- TechPackCage (repo: franciscoderek7/techpackcage, domain: techpackcage.com) = Derek's separately REGISTERED Ontario business — the one entity with an active Stripe account used for real contracts and government filings. It is travel/storage tech, NOT pet tech. It still needs its own build, separate from TechPetCage's pet-tech content. Build it after TechPetCage ships, with its own copy/imagery — do not reuse TechPetCage's pages for it.
+
+REMINDER: Derek is manually fixing the Porkbun DNS A-records to .153 right now — that's on his end, not yours. Keep building and pushing to feature branches regardless of whether a domain resolves yet; GitHub Pages will serve correctly once Derek's DNS fix propagates.
 
 ---
 
@@ -21,7 +35,16 @@ WHAT YOU'RE ALREADY BUILDING (Continue)
 
 WHAT TO BUILD NEXT (Priority Order)
 
-1. vaultvelocityauto.com
+1. Finish TechPetCage (in progress) → push to franciscoderek7/techpetcage feature branch
+- Pet tech platform — GPS tracking, health alerts, AI analysis
+- Pricing: Family $29/mo, Pro $49/mo, Kennel $199/mo
+- Stripe checkout
+
+2. TechPackCage (separate brand — see correction above)
+- Derek's registered Ontario business, real Stripe account — travel/storage tech, not pet tech
+- Build its own copy/pricing once you have it from Derek — don't reuse TechPetCage content
+
+3. vaultvelocityauto.com
 - 25 workflow automations
 - AI agent swarm
 - Pricing: Starter 99, Pro 499, Empire 2499
@@ -29,31 +52,25 @@ WHAT TO BUILD NEXT (Priority Order)
 - Stripe checkout
 - Derek will create GitHub repo — you build files, push to feature branch
 
-2. primedoxai.com
+4. primedoxai.com
 - PrimeDox AI services page
 - Pricing: Starter 99, Pro 499, Team 499, Business 1499
 - AI consulting, workflow automation
 - Link to zprimedoxaihq.com
 - Stripe checkout
 
-3. cleanswarm.ca
+5. cleanswarm.ca
 - Clean tech platform
 - Pricing: Home 39, Pro 149
 - Energy audit, solar calculator, carbon tracking
 - Stripe checkout
 
-4. mindshift-makayla.github.io
+6. mindshift-makayla.github.io
 - Imperial purple redesign (if not done)
 - Makayla's brand: psychology, sustainability, sovereignty
 - Pages: /coaching, /courses, /shop, /membership, /corporate, /about
 - Palette: #2D1B55 purple, #C9A84C gold, #E896C8 sakura, #06000F void
 - Stripe + PayPal + Calendly
-
-5. techpackcage.com
-- Pet tech platform
-- Pricing: Family 29, Pro 49, Kennel 199
-- GPS tracking, health alerts, AI analysis
-- Stripe checkout
 
 ---
 
