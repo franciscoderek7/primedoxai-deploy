@@ -355,3 +355,76 @@ Features: Empire Dashboard (all 45+ companies in one view), AI Agent Swarm Monit
 **REPORTING:** Daily — conversations, leads, sales, issues, fixes, opportunities, recommendations. Weekly — revenue by company, traffic, conversion, AI performance, priorities.
 
 BUILD: 1. zPrimeDox AI HQ command center. 2. Kimi memory/chat widget on every site. 3. Gemma 41B customer-facing AI on every site. 4. Shared Supabase across all sites. 5. Unified daily/weekly reporting into HQ.
+
+---
+
+## CHECKPOINT v8 — infra setup redirected from Claude to Manus (2026-06-19, seventh update)
+
+Derek asked Claude to create GitHub repos, enable Pages, set Porkbun/Cloudflare DNS, create Stripe products, and wire Make.com webhooks directly. **Claude checked first and has none of that access this session**: no Porkbun/Cloudflare credentials, no Stripe keys, no Make.com connection, and GitHub access scoped to a single repo (`primedoxai-deploy`) with no Pages-settings API at all. None of it is reachable from Claude's side regardless of instruction — it's a hard tool/credential gap, not a refusal. Derek confirmed: redirect the whole list to Manus, since Manus already has working GitHub push access (per the checkpoint history above) and is the one actually positioned to do this.
+
+**One correction made before forwarding:** Derek's original list asked to set `primedoxai.com` as the custom domain on `franciscoderek7/primedoxai-deploy`. Two problems with that — `primedoxai.com` is confirmed **not yet owned** (see "DO NOT BUILD YET" table above), and `primedoxai-deploy` is the multi-site source monorepo, not the actual PrimeDox AI site repo (that's `franciscoderek7/primedox`, per the existing `deploy-primedox.yml`). Corrected below: skip Pages/domain config for PrimeDox entirely until the domain is purchased.
+
+MESSAGE FOR MANUS — paste this as the next build order:
+
+---
+
+Manus, infrastructure setup — do this alongside the build queue, not instead of it.
+
+**1. CREATE THESE GITHUB REPOS** (public, with README, then push your zip content into each):
+
+| Repo | Purpose | Pages custom domain |
+|------|---------|---------------------|
+| `franciscoderek7/vaultvelocityauto` | Vault Velocity Auto | vaultvelocityauto.com |
+| `franciscoderek7/techpetcage` | TechPetCage main | techpetcage.com |
+| `franciscoderek7/techpetcage-ca` | TechPetCage Canadian | techpetcage.ca |
+| `franciscoderek7/franciscoholdingsinc-ca` | Francisco Holdings Canada | franciscoholdingsinc.ca |
+| `franciscoderek7/franciscoholdingsinc-buzz` | Francisco Holdings marketing | franciscoholdingsinc.buzz |
+| `franciscoderek7/omniaguard-ca` | OmniGuard Canada | omniaguard.ca |
+| `franciscoderek7/omniaguard-io` | OmniGuard API docs | omniaguard.io |
+| `franciscoderek7/omniaguard-pro` | OmniGuard pro services | omniaguard.pro |
+| `franciscoderek7/omniaguard-tech` | OmniGuard tech blog | omniaguard.tech |
+
+For each: create repo → push site files → Settings → Pages → Source: main/root → Custom domain: (see table) → Enforce HTTPS ON → verify the Pages URL loads before moving to DNS.
+
+**2. CONFIGURE PAGES FOR EXISTING REPOS**
+
+| Repo | Custom domain | Note |
+|------|---------------|------|
+| `franciscoderek7/omni-guard` | omniaguard.com | This is the **new** rebrand repo. The **legacy** `franciscoderek7/omniaguard` repo also currently points Pages at the same domain — GitHub only serves one repo per custom domain, so Derek has to flip this setting himself once the rebrand is ready to go live. Don't fight the legacy repo for it; just get this repo's Pages config correct and ready. |
+| `franciscoderek7/Ccldr-net` | ccldr.net | Domain is on a 60-day hold — configure Pages now, but the domain itself won't resolve until the hold lifts. Don't wait on this. |
+
+**Skip `primedoxai-deploy` entirely.** `primedoxai.com` isn't purchased yet, and that repo is the shared multi-site source monorepo anyway — not a Pages target. The actual PrimeDox AI site is `franciscoderek7/primedox`, already live at its GitHub Pages URL; leave its domain as GitHub Pages until Derek buys `primedoxai.com`.
+
+**3. SET DNS IN PORKBUN/CLOUDFLARE** (only for domains in the table above that you're actually deploying today)
+
+A records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` (note: `.153`, not `.15` — Derek already hit this exact typo once on vaultvelocityauto.com). CNAME: `www` → the bare domain. Cloudflare: grey cloud (DNS only, not proxied), SSL mode Full, Always Use HTTPS ON.
+
+**4. STRIPE PRODUCTS** — create payment links for each, paste the URLs into the matching site's checkout buttons before you call that site done:
+
+| Product | Price (CAD) |
+|---------|-------------|
+| Vault Velocity Starter | $99/mo |
+| Vault Velocity Pro | $499/mo |
+| Vault Velocity Empire | $2,499/mo |
+| TechPetCage Family | $29/mo |
+| TechPetCage Pro | $49/mo |
+| TechPetCage Kennel | $199/mo |
+| OmniGuard CA Starter | $99/mo |
+| OmniGuard CA Pro | $299/mo |
+| OmniGuard CA Sentinel | $499/mo |
+
+(These match the pricing already locked in CHECKPOINT v6 above — don't invent new tiers, just create the actual Stripe products/links for the prices already specified.)
+
+**5. MAKE.COM WEBHOOKS** — wire on every site you deploy: lead form → Supabase CRM, Stripe purchase → welcome email, 24-hour trial expiry → reminder email, new booking → calendar invite.
+
+**REPORT BACK:**
+```
+Repos created: [list]
+GitHub Pages enabled: [list]
+DNS configured: [list]
+Stripe products created: [count]
+Make.com webhooks: [status]
+Ready for next zip batch: [yes/no]
+```
+
+Everything else from CHECKPOINT v6/v7 (build order, owned-domains-only rule, color rules, Kimi/Claude integration) still stands — this is additive infra work, not a replacement.
