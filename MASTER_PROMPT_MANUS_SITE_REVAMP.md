@@ -16,9 +16,9 @@ You are doing a visual/design revamp pass across ~50 static HTML sites that curr
 
 ## 1. NON-NEGOTIABLE CONSTRAINTS (violating any of these is a failed task)
 
-1. **Zero Bleed Rule**: OmniaGuard, Vigilax, Kiaros, SoulStack, CleanSwarm (Loop B / anonymous brands) must **never** reference cannabis, Derek Francisco by name, or legal/cannabis imagery. CCLDR, Doc Weedlaw, Beno-X, Weedlaw-* sites (Loop A) must **never** reference AI security products, swarm tech, or threat-detection language. Cross-contamination between loops is a critical failure.
+1. **Zero Bleed Rule**: OmniGuard, Vigilax, Kiaros, SoulStack, CleanSwarm (Loop B / anonymous brands) must **never** reference cannabis, Derek Francisco by name, or legal/cannabis imagery. CCLDR, Doc Weedlaw, Beno-X, Weedlaw-* sites (Loop A) must **never** reference AI security products, swarm tech, or threat-detection language. Cross-contamination between loops is a critical failure.
 2. **No personal info on public sites**: never add or surface `derek@franciscoholdings.com`, `705-307-8080`, the Kent St W address, or postal code `K9V 2Z8` anywhere in a public-facing page.
-3. **Brand spelling — zero tolerance**: `OmniaGuard` (never OmniGuard/Omni Guard), `SoulStack` (never Soulstack/Soul Stack), `Kiaros` (never kiaros/KIAROS), `PrimeDox` (never Primedox — PrimeDocs is a different entity), `Francisco Holdings Inc.` (never just "Francisco Holdings" or "FHI" in headers).
+3. **Brand spelling — zero tolerance**: `OmniGuard` (rebranded 2026-06-19, formerly OmniaGuard — never use the old name; never Omni Guard/OMNIGUARD), `SoulStack` (never Soulstack/Soul Stack), `Kiaros` (never kiaros/KIAROS), `PrimeDox` (never Primedox — PrimeDocs is a different entity), `Francisco Holdings Inc.` (never just "Francisco Holdings" or "FHI" in headers).
 4. **Do not change**: payment links/buttons (PayPal.me/derekfranciacco1, Interac docweedla@gmail.com, BTC address, Stripe checkout calls), GitHub repo URLs, email addresses, Supabase keys, Stripe publishable keys. Never introduce or expose a Stripe **secret** key (`sk_live_`/`sk_test_`) in any frontend file.
 5. **No new domains, no new repos.** Work only within the existing site folders in this repo (or the separate `omniaguard` repo if you're given access to it).
 6. **Branch discipline**: create one branch per site-cluster (see naming convention in §5). Never push directly to `main`. Never force-push, never delete branches.
@@ -54,7 +54,7 @@ Below are concrete assignments for every live or near-live site, grouped by clus
 | Site | Folder | Current identity — KEEP |
 |------|--------|--------------------------|
 | Francisco Holdings | `francisco-holdings-site` | 45-floor skyscraper concept, black/gold, corporate-finance |
-| OmniaGuard | `omniaguard-site` | Dark cyan/black SOC-dashboard aesthetic, monospace data readouts |
+| OmniGuard | `omniaguard-site` (folder predates rebrand — confirm with Derek before editing; Manus is rebuilding under omni-guard.com) | **SUPERSEDED 2026-06-19** — rebranded from OmniaGuard. New identity: blue `#4A90E2` / pink `#E91E63` (OmniGuard-exclusive colors, empire-wide ban on blue/pink elsewhere) |
 | ZPrimeDoxAI HQ | `zprimedoxaihq-site` | Green/gold/black concierge luxury, empire-index master page |
 | Vault Velocity Auto | `vault-velocity-auto-site` | Dubai luxury auto marketplace, Burj Khalifa hero, gold/black |
 
@@ -82,7 +82,7 @@ Below are concrete assignments for every live or near-live site, grouped by clus
 | SoulStack | `soulstack-site` | Observer-AI infrastructure layer: ethereal abstract, deep indigo/violet gradients, flowing particle/neural-thread visuals |
 | CleanSwarm | `cleantech-automation-site` | Clean autonomous tech: white + teal, dot-grid swarm pattern, crisp rounded-corner cards |
 | Cyberguard | `cyberguard-site` | Classic cybersecurity terminal: pure black + neon green, scanline/CRT texture, fixed-width type |
-| Omnia Shield | `omnia-shield-site` | Enterprise B2B armor (sister to OmniaGuard's consumer angle): slate gray + chrome silver, angular/faceted shapes, no cyan (reserve cyan for OmniaGuard only) |
+| Omnia Shield | `omnia-shield-site` | Enterprise B2B armor (sister to OmniGuard's consumer angle): slate gray + chrome silver, angular/faceted shapes. **No blue or pink** — those are OmniGuard-exclusive empire-wide |
 | Aero Shield | `aero-shield-site` | Aviation/airspace security: sky blue gradient + steel gray, radar-ring iconography, horizon-line layout |
 | Sovereignty | `sovereignty-site` | Data sovereignty/vault: deep purple + antique gold, fortress/vault imagery, heavy borders |
 | Sovereignty Data | `sovereignty-data-site` | Data-specific sibling: same purple family as Sovereignty but swap gold for electric teal, data-stream visual motif (distinguish from parent) |

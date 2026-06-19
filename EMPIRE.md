@@ -1,7 +1,24 @@
 # EMPIRE.md — Francisco Holdings Master State Document
-# Last Updated: 2026-06-15
+# Last Updated: 2026-06-19
 # Authority: PrimeDox (Derek Francisco) — Human Final Authority
 # Override: PrimeDocs — Activated only by PrimeDox explicit instruction
+
+---
+
+## ⚠️ MANUS COORDINATION NOTICE (2026-06-19)
+
+Derek is running a second AI builder, **Manus**, concurrently with Claude on the following sites. Claude sessions should **check with Derek before making further changes to these sites** to avoid clobbering Manus's in-progress rebuilds (repo push target for Manus's work was not confirmed — may be same repo, may be separate):
+
+- **Francisco Holdings** (franciscoholdingsinc.com) — Manus rebuilding posh boardroom aesthetic (green/gold/platinum, see new color table below)
+- **zprimedoxaihq.com** — Manus rebuilding command center / lock code / empire dashboard
+- **OmniGuard** (omni-guard.com) — Manus rebuilding under the new rebrand (see Spelling table in CLAUDE.md — OmniaGuard retired, now OmniGuard, blue/pink)
+- **ccldr.net** — Manus rebuilding CCLDR education modules + pricing tiers (still on 60-day domain hold — do not touch DNS)
+
+**Empire-wide color rule (Manus directive, confirmed by Derek):** Crown Green `#0B3D2E`, Executive Gold `#C9A227`, Platinum `#E5E4E2`, Silver `#C0C0C0`, Crown Black `#0A0A0A` — empire-wide. **No blue or pink anywhere except OmniGuard** (`#4A90E2` blue / `#E91E63` pink, OmniGuard-exclusive).
+
+**MindShift by Michaella is explicitly separate** from the empire palette — her own brand: Imperial Purple `#2D1B55`, Gold `#C9A84C`, Sakura Pink `#E896C8`, Void Black `#06000F`.
+
+Manus's next-priority build queue (informational, not yet assigned to Claude): vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io, techpackcage.com — plus 40+ Stripe products across the empire and Make.com webhook integration. See `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` for the full brief Derek gave Manus.
 
 ---
 
@@ -12,7 +29,7 @@
 | Francisco Holdings Inc. | Parent holding company | A | LIVE — 45-FLOOR SKYSCRAPER + STRIPE/PAYPAL PER FLOOR | franciscoholdingsinc.com | franciscoderek7/franciscoholdings |
 | CleanSwarm | Physical + Document Cleaning AI | A | LIVE | cleanswarm.ca | franciscoderek7/cleanswarm |
 | CCLDR | Cannabis charter defense education | A | LIVE + REFERRAL ENGINE + EDUCATION HUB | franciscoderek7.github.io/Ccldr-net/ | franciscoderek7/Ccldr-net |
-| OmniaGuard | AI security / agent protection | B | LIVE + FREE-SCAN FUNNEL + $500 AUDIT UPSELL | omniaguard.com | franciscoderek7/omniaguard |
+| OmniGuard | AI security / agent protection | B | REBRANDING (was OmniaGuard) — Manus rebuilding under new name/domain/colors (blue #4A90E2 / pink #E91E63) | omni-guard.com | franciscoderek7/omniaguard |
 | BENO-X / Doc Weedlaw | Cannabis constitutional defense | A | LIVE | franciscoderek7.github.io/Ccldr-net/ | franciscoderek7/beno-x |
 | VIGILAX | Enterprise threat response | B | LIVE — PRICING UPDATED + STRIPE LIVE | franciscoderek7.github.io/vigilax/ | franciscoderek7/vigilax |
 | Kiaros | AI strategy consulting | B | LIVE — STRIPE LIVE + PAYPAL.ME DIRECT | franciscoderek7.github.io/kiaros/ | franciscoderek7/kiaros |
@@ -51,7 +68,7 @@
 
 | Site | Market | Loop | Status | Deploy Workflow | Domain | Last Deploy |
 |------|--------|------|--------|----------------|--------|-------------|
-| OmniaGuard | AI Security | B | LIVE | deploy-omniaguard.yml | omniaguard.com | 2026-06-04 |
+| OmniGuard | AI Security | B | REBRANDING — Manus rebuilding (blue/pink, omni-guard.com) | deploy-omniaguard.yml | omni-guard.com | 2026-06-04 (pre-rebrand) |
 | CCLDR.net | Cannabis Education | A | LIVE → REDEPLOY READY | deploy-ccldr.yml | ccldr.net | 2026-06-07 |
 | CCC.net | Cannabis Compliance | A | LIVE | — | ccc.net | 2026-04-15 |
 | Weedlaw Education | Doc Weedlaw Platform | A | LIVE | — | weedlaw-education | 2026-05-31 |
