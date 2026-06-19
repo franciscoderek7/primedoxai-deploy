@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>OmniGuard — AI Cybersecurity Platform | Orbital-Grade Threat Defense</title>
+<link rel="canonical" href="https://omni-guard.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OmniGuard">
+<meta property="og:title" content="OmniGuard — AI Cybersecurity Platform | Orbital-Grade Threat Defense">
+<meta property="og:description" content="OmniGuard: 14-layer AI Agent Swarm defense, watching your perimeter the way a satellite watches a planet. Real-time threat intelligence. 0% breach rate.">
+<meta property="og:url" content="https://omni-guard.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OmniGuard — AI Cybersecurity Platform | Orbital-Grade Threat Defense">
+<meta name="twitter:description" content="OmniGuard: 14-layer AI Agent Swarm defense, watching your perimeter the way a satellite watches a planet.">
+<meta name="robots" content="index, follow">
+<meta name="description" content="OmniGuard: 14-layer AI Agent Swarm defense. Real-time threat intelligence. 0% breach rate. Enterprise AI security, built like a satellite watching your perimeter.">
+<meta name="theme-color" content="#0a0a18">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="OmniGuard">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230a0a18'/><circle cx='50' cy='50' r='34' fill='none' stroke='%234A90E2' stroke-width='4'/><circle cx='50' cy='16' r='5' fill='%23E91E63'/></svg>">
+<style>
+:root{
+  --bg:#07070f;
+  --bg2:#0b0c1a;
+  --bg3:#10122a;
+  --blue:#4A90E2;
+  --blue-dim:#3a72b8;
+  --blue-glow:rgba(74,144,226,0.14);
+  --pink:#E91E63;
+  --pink-dim:rgba(233,30,99,0.16);
+  --white:#f4f6fb;
+  --gray:#8b92ad;
+  --gray2:#202442;
+  --border:rgba(74,144,226,0.22);
+  --border-pink:rgba(233,30,99,0.28);
+  --green:#27d97a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;overflow-x:hidden;width:100%;}
+
+/* STARFIELD */
+#starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 50%, transparent),radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.4) 50%, transparent),radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.5) 50%, transparent),radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,0.4) 50%, transparent),radial-gradient(1px 1px at 10% 90%, rgba(255,255,255,0.4) 50%, transparent),radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.35) 50%, transparent);background-size:280px 280px;pointer-events:none;z-index:0;opacity:.8;}
+
+/* PROGRESS BAR */
+#progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--blue),var(--pink));z-index:9999;transition:width .1s linear;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:1000;background:rgba(7,7,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 20px;}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white);font-size:18px;font-weight:800;letter-spacing:-.3px;white-space:nowrap;}
+.nav-logo-orb{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--blue), #142049 75%);box-shadow:0 0 16px rgba(74,144,226,0.6);position:relative;flex-shrink:0;}
+.nav-logo-orb::after{content:'';position:absolute;top:-4px;left:50%;width:5px;height:5px;border-radius:50%;background:var(--pink);box-shadow:0 0 6px var(--pink);}
+.nav-links{display:flex;align-items:center;gap:26px;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--gray);font-size:14px;font-weight:500;letter-spacing:.3px;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-cta{background:var(--blue)!important;color:#04101e!important;font-weight:700!important;padding:9px 18px;border-radius:6px;box-shadow:0 0 20px rgba(74,144,226,0.35);}
+.nav-cta:hover{background:#5c9ee8!important;color:#04101e!important;}
+.nav-mobile-toggle{display:none;background:none;border:1px solid var(--border);color:var(--blue);font-size:20px;cursor:pointer;padding:8px 12px;border-radius:6px;min-width:44px;min-height:44px;align-items:center;justify-content:center;}
+
+#mobile-overlay{display:none;position:fixed;top:0;padding-top:64px;left:0;width:100%;height:100%;background:rgba(7,7,15,0.98);backdrop-filter:blur(20px);z-index:999;flex-direction:column;padding-left:24px;padding-right:24px;padding-bottom:24px;overflow-y:auto;}
+#mobile-overlay.open{display:flex;}
+#mobile-overlay a{color:var(--white);text-decoration:none;font-size:18px;font-weight:600;padding:18px 0;border-bottom:1px solid var(--gray2);display:block;}
+#mobile-overlay .mobile-cta{margin-top:24px;background:var(--blue);color:#04101e;font-weight:700;font-size:16px;padding:16px 24px;border-radius:8px;text-align:center;border:none;}
+
+.container{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:2;}
+
+/* HERO — ORBIT */
+#hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;padding:100px 0 60px;position:relative;overflow:hidden;}
+.orbit-system{position:absolute;top:50%;right:-120px;transform:translateY(-50%);width:560px;height:560px;pointer-events:none;opacity:.9;}
+.orbit-ring{position:absolute;border:1px solid rgba(74,144,226,0.22);border-radius:50%;top:50%;left:50%;}
+.orbit-ring.r1{width:180px;height:180px;margin:-90px;animation:spin 22s linear infinite;}
+.orbit-ring.r2{width:340px;height:340px;margin:-170px;border-color:rgba(233,30,99,0.18);animation:spin 38s linear infinite reverse;}
+.orbit-ring.r3{width:520px;height:520px;margin:-260px;animation:spin 60s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.orbit-planet{position:absolute;top:50%;left:50%;width:120px;height:120px;margin:-60px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #5ba3ee, #0d1a36 78%);box-shadow:0 0 80px rgba(74,144,226,0.45),inset -14px -14px 30px rgba(0,0,0,0.5);}
+.orbit-sat{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink),0 0 24px rgba(233,30,99,0.6);top:50%;left:50%;}
+.orbit-sat.s1{margin-top:-90px;margin-left:-5px;animation:spin 22s linear infinite;}
+.orbit-sat.s2{margin-top:-170px;margin-left:-5px;animation:spin 38s linear infinite reverse;}
+@media(max-width:900px){.orbit-system{display:none;}}
+
+.hero-badge{display:inline-flex;align-items:center;gap:10px;background:var(--pink-dim);border:1px solid var(--border-pink);border-radius:30px;padding:8px 20px;margin-bottom:28px;font-size:13px;font-weight:600;color:#f48fb0;}
+.hero-badge-dot{width:8px;height:8px;background:var(--pink);border-radius:50%;animation:blink 1.4s ease-in-out infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 8px var(--pink);}50%{opacity:.3;box-shadow:none;}}
+#hero h1{font-size:clamp(32px,5.4vw,58px);font-weight:900;line-height:1.08;letter-spacing:-1.5px;margin-bottom:24px;max-width:680px;}
+#hero h1 span{background:linear-gradient(135deg,var(--blue) 0%,#7fb8f5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(16px,2vw,19px);color:var(--gray);max-width:560px;margin-bottom:36px;line-height:1.75;}
+.hero-sub strong{color:var(--white);}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:28px;}
+.btn-primary{background:var(--blue);color:#04101e;font-weight:700;font-size:15px;padding:15px 30px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;box-shadow:0 0 28px rgba(74,144,226,0.4);border:none;cursor:pointer;font-family:inherit;}
+.btn-primary:hover{background:#5c9ee8;box-shadow:0 0 46px rgba(74,144,226,0.6);transform:translateY(-2px);}
+.btn-secondary{background:transparent;color:var(--pink);font-weight:600;font-size:15px;padding:15px 30px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-pink);transition:all .2s;}
+.btn-secondary:hover{background:var(--pink-dim);border-color:var(--pink);transform:translateY(-2px);}
+.hero-proof{font-size:13px;color:#6f7a98;}
+
+/* TRUST BAR */
+.trust-bar{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(74,144,226,0.03);padding:20px 0;}
+.trust-bar-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 24px;}
+.trust-bar-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);}
+.trust-badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--white);background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:8px 14px;}
+.trust-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);}
+@media(max-width:700px){.trust-bar-inner{justify-content:flex-start;overflow-x:auto;}}
+
+/* STATS */
+#stats{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 0;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.stat-card{text-align:center;padding:28px 14px;background:rgba(74,144,226,0.05);border:1px solid var(--border);border-radius:12px;}
+.stat-number{font-size:clamp(24px,4vw,42px);font-weight:900;color:var(--blue);letter-spacing:-1px;display:block;margin-bottom:8px;}
+.stat-label{font-size:12px;color:var(--gray);font-weight:500;letter-spacing:.4px;text-transform:uppercase;}
+@media(max-width:760px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* SECTION COMMON */
+.section-badge{display:inline-block;background:var(--blue-glow);border:1px solid var(--border);color:var(--blue);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:16px;}
+.section-header{text-align:center;margin-bottom:44px;}
+.section-header h2{font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-.5px;margin-bottom:12px;}
+.section-header p{color:var(--gray);font-size:16px;max-width:600px;margin:0 auto;}
+.blue{color:var(--blue);}
+.pink{color:var(--pink);}
+
+/* PERIMETER / SENTINEL SECTION */
+#sentinel{padding:84px 0;background:var(--bg);position:relative;}
+.sentinel-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.sentinel-copy p{color:#b4bcd6;font-size:15.5px;line-height:1.85;margin-bottom:18px;}
+.sentinel-copy p strong{color:var(--white);}
+.satellite-visual{position:relative;aspect-ratio:1;max-width:420px;margin:0 auto;}
+.sv-globe{position:absolute;top:50%;left:50%;width:46%;height:46%;margin-top:-23%;margin-left:-23%;border-radius:50%;background:radial-gradient(circle at 32% 28%, #1d3a6e, #060b18 75%);box-shadow:0 0 60px rgba(74,144,226,0.3),inset -10px -10px 24px rgba(0,0,0,0.6);}
+.sv-ring{position:absolute;top:50%;left:50%;border:1px dashed rgba(74,144,226,0.4);border-radius:50%;}
+.sv-ring.a{width:70%;height:70%;margin:-35% 0 0 -35%;animation:spin 30s linear infinite;}
+.sv-ring.b{width:94%;height:94%;margin:-47% 0 0 -47%;border-color:rgba(233,30,99,0.32);animation:spin 46s linear infinite reverse;}
+.sv-node{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--pink);box-shadow:0 0 12px var(--pink);top:50%;left:50%;margin-top:-35%;margin-left:-6px;animation:spin 30s linear infinite;}
+@media(max-width:900px){.sentinel-grid{grid-template-columns:1fr;}}
+
+/* DEFENSE LAYERS — ORBITAL CARDS */
+#defense{padding:84px 0;background:var(--bg2);}
+.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.ops-card{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:14px;padding:26px 24px;transition:all .25s;}
+.ops-card:hover{border-color:var(--blue);box-shadow:0 0 40px rgba(74,144,226,0.12);transform:translateY(-3px);}
+.ops-card-icon{width:42px;height:42px;border-radius:10px;background:var(--blue-glow);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--blue);margin-bottom:16px;}
+.ops-card-name{font-size:16px;font-weight:800;color:var(--white);margin-bottom:6px;}
+.ops-card-role{font-size:13px;color:var(--gray);line-height:1.6;}
+.ops-card-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-top:14px;}
+.ops-card-status .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink2 1.6s ease-in-out infinite;}
+@keyframes blink2{0%,100%{opacity:1;}50%{opacity:.35;}}
+@media(max-width:900px){.ops-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.ops-grid{grid-template-columns:1fr;}}
+
+/* SWARM CANVAS */
+#swarm-section{padding:84px 0;background:var(--bg);}
+.swarm-wrap{max-width:900px;margin:0 auto;text-align:center;}
+#swarm-canvas{display:block;margin:0 auto;border-radius:16px;border:1px solid var(--border);background:rgba(7,7,15,0.8);max-width:100%;}
+
+/* THREAT TICKER */
+.threat-ticker{width:100%;background:var(--pink-dim);border-top:1px solid var(--border-pink);border-bottom:1px solid var(--border-pink);padding:11px 0;overflow:hidden;position:relative;}
+.threat-ticker::before,.threat-ticker::after{content:'LIVE';position:absolute;top:50%;transform:translateY(-50%);background:var(--bg);color:var(--pink);font-size:10px;font-weight:800;letter-spacing:2px;padding:0 12px;z-index:2;}
+.threat-ticker::before{left:0;}.threat-ticker::after{right:0;}
+.ticker-track{display:flex;gap:50px;animation:tickerScroll 30s linear infinite;white-space:nowrap;width:max-content;}
+@keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#f48fb0;font-weight:500;}
+.ticker-item::before{content:'\25C6';color:var(--pink);}
+
+/* PRICING TEASER */
+#pricing-teaser{padding:84px 0;background:var(--bg2);text-align:center;}
+.pricing-teaser-cta{margin-top:28px;}
+
+/* FAQ */
+#faq{padding:84px 0;background:var(--bg);}
+.faq-list{max-width:780px;margin:0 auto;}
+.faq-item{border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;}
+.faq-item.open{border-color:var(--blue);}
+.faq-q{width:100%;background:rgba(74,144,226,0.05);border:none;color:var(--white);font-size:15px;font-weight:600;padding:20px 22px;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:inherit;}
+.faq-icon{font-size:20px;color:var(--blue);transition:transform .35s;flex-shrink:0;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(0,1,0,1);}
+.faq-item.open .faq-body{max-height:400px;transition:max-height .5s ease-in-out;}
+.faq-body-inner{padding:0 22px 20px;color:var(--gray);font-size:14px;line-height:1.75;}
+
+/* CONTACT CTA */
+#contact-cta{padding:84px 0;background:var(--bg2);text-align:center;}
+.contact-form{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:600px;margin:0 auto;text-align:left;}
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;}
+.form-group label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray);}
+.form-group input,.form-group textarea{background:rgba(255,255,255,0.04);border:1px solid var(--gray2);border-radius:8px;color:var(--white);font-size:14px;padding:12px 14px;outline:none;font-family:inherit;width:100%;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(74,144,226,0.12);}
+.btn-submit{width:100%;background:var(--blue);color:#04101e;font-weight:700;font-size:15px;padding:16px 28px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 0 24px rgba(74,144,226,0.3);font-family:inherit;}
+.btn-submit:hover{background:#5c9ee8;}
+
+/* FOOTER */
+footer{background:var(--bg3);border-top:1px solid var(--border);padding:44px 0 26px;}
+.footer-inner{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;}
+.footer-logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800;color:var(--white);}
+.footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;}
+.footer-links a{color:var(--gray);text-decoration:none;font-size:13px;}
+.footer-links a:hover{color:var(--blue);}
+.footer-copy{font-size:12px;color:var(--gray);line-height:1.8;text-align:center;}
+.not-legal{font-size:11px;color:rgba(139,146,173,0.6);margin-top:6px;max-width:600px;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .nav-mobile-toggle{display:flex;}
+}
+@media(max-width:480px){
+  .hero-ctas{flex-direction:column;}
+  .btn-primary,.btn-secondary{width:100%;justify-content:center;}
+}
+body{overflow-x:hidden;}
+img{max-width:100%;height:auto;}
+a,button,[role="button"]{min-height:44px;}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="OmniGuard Home">
+      <span class="nav-logo-orb"></span>
+      OmniGuard
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#sentinel">Platform</a></li>
+      <li><a href="#defense">Defense Layers</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pricing.html" class="nav-cta">Get Protected</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+  </div>
+</nav>
+
+<div id="mobile-overlay">
+  <a href="#sentinel">Platform</a>
+  <a href="#defense">Defense Layers</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="#faq">FAQ</a>
+  <a href="about.html">About</a>
+  <a href="pricing.html" class="mobile-cta">Get Protected</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orbit-system">
+    <div class="orbit-ring r3"></div>
+    <div class="orbit-ring r2"></div>
+    <div class="orbit-ring r1"></div>
+    <div class="orbit-planet"></div>
+    <div class="orbit-sat s1"></div>
+    <div class="orbit-sat s2"></div>
+  </div>
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      <span id="hero-threat-count">1,247,832</span>&nbsp;threats intercepted today
+    </div>
+    <h1>OmniGuard watches your perimeter<br><span>like a satellite watches a planet.</span></h1>
+    <p class="hero-sub">
+      <strong>14-layer AI Agent Swarm defense.</strong> Continuous orbit around every prompt, response, and tool call your AI systems make — detecting, intercepting, and neutralizing threats before they ever reach the surface.
+    </p>
+    <div class="hero-ctas">
+      <a href="pricing.html" class="btn-primary">View Plans &nbsp;&rarr;</a>
+      <a href="about.html" class="btn-secondary">How It Works &nbsp;&darr;</a>
+    </div>
+    <p class="hero-proof">&check; 14 security agent layers &nbsp;&middot;&nbsp; &check; 0% breach rate &nbsp;&middot;&nbsp; &check; Sub-second response</p>
+  </div>
+</section>
+
+<!-- THREAT TICKER -->
+<div class="threat-ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Prompt injection attempt — INTERCEPTED</span>
+    <span class="ticker-item">Data exfiltration probe — NEUTRALIZED</span>
+    <span class="ticker-item">Agent cascade attack — CONTAINED</span>
+    <span class="ticker-item">Context window overflow — BLOCKED</span>
+    <span class="ticker-item">Memory poisoning attempt — QUARANTINED</span>
+    <span class="ticker-item">Jailbreak sequence detected — BLOCKED</span>
+    <span class="ticker-item">Cross-agent contamination — ISOLATED</span>
+    <span class="ticker-item">Prompt injection attempt — INTERCEPTED</span>
+    <span class="ticker-item">Data exfiltration probe — NEUTRALIZED</span>
+    <span class="ticker-item">Agent cascade attack — CONTAINED</span>
+    <span class="ticker-item">Context window overflow — BLOCKED</span>
+    <span class="ticker-item">Memory poisoning attempt — QUARANTINED</span>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-bar-inner">
+      <span class="trust-bar-label">Built to Standard</span>
+      <span class="trust-badge"><span class="dot"></span> SOC 2 Type II — Audit Ready</span>
+      <span class="trust-badge"><span class="dot"></span> ISO 27001 — Aligned</span>
+      <span class="trust-badge"><span class="dot"></span> NIST AI RMF — Aligned</span>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number" id="stat-0">1.2M+</span>
+        <span class="stat-label">Threats Intercepted Today</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">0%</span>
+        <span class="stat-label">Breach Rate</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">847</span>
+        <span class="stat-label">Deployments Protected</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">14</span>
+        <span class="stat-label">Security Agent Layers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SENTINEL / SATELLITE FRAMING -->
+<section id="sentinel">
+  <div class="container">
+    <div class="sentinel-grid">
+      <div class="sentinel-copy">
+        <div class="section-badge">Orbital Defense Doctrine</div>
+        <h2 style="font-size:clamp(24px,3.6vw,38px);font-weight:800;margin-bottom:20px;letter-spacing:-.5px;">A sentinel in constant orbit, never blind, never off duty.</h2>
+        <p>A satellite doesn't patrol — it <strong>orbits</strong>, holding a fixed vantage point above everything it protects. <strong>OmniGuard</strong> does the same for your AI systems: a continuous, elevated watch over every prompt, every agent call, every data path leaving your perimeter.</p>
+        <p>When a threat crosses into view — a prompt injection, a data exfiltration attempt, a jailbreak sequence — the swarm reacts before it ever reaches ground level. No gaps in coverage. No blind side of the planet.</p>
+        <p>This isn't a single watchtower. It's <strong>14 coordinated layers</strong>, each holding a different orbit, each verifying the others — so no single failure point can ever bring the whole system down.</p>
+      </div>
+      <div class="satellite-visual" aria-hidden="true">
+        <div class="sv-ring b"></div>
+        <div class="sv-ring a"></div>
+        <div class="sv-globe"></div>
+        <div class="sv-node"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEFENSE LAYERS -->
+<section id="defense">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">Defense Architecture</div>
+      <h2>A Layered Defense <span class="blue">Built for Enterprise Scale.</span></h2>
+      <p>OmniGuard runs a coordinated stack of specialized security agents — each hardened against a specific class of attack, cross-verifying every critical decision.</p>
+    </div>
+    <div class="ops-grid">
+      <div class="ops-card">
+        <div class="ops-card-icon">&#9670;</div>
+        <div class="ops-card-name">Threat Interception Layer</div>
+        <div class="ops-card-role">Front-line inspection of every prompt, response, and tool call before it reaches your systems.</div>
+        <div class="ops-card-status"><span class="live-dot"></span> Active</div>
+      </div>
+      <div class="ops-card">
+        <div class="ops-card-icon">&#9633;</div>
+        <div class="ops-card-name">Command &amp; Consensus Layer</div>
+        <div class="ops-card-role">Cross-verification across agents — no single point of failure can authorize a critical action.</div>
+        <div class="ops-card-status"><span class="live-dot"></span> Active</div>
+      </div>
+      <div class="ops-card">
+        <div class="ops-card-icon">&#9678;</div>
+        <div class="ops-card-name">Continuous Monitoring Layer</div>
+        <div class="ops-card-role">24/7 anomaly detection across logs, endpoints, and cloud infrastructure with automated containment.</div>
+        <div class="ops-card-status"><span class="live-dot"></span> Active</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SWARM SECTION -->
+<section id="swarm-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">Agent Swarm Formation</div>
+      <h2>Multiple Agents. <span class="pink">One Unbreakable Orbit.</span></h2>
+      <p>OmniGuard's Agent Swarm holds formation around your systems — each agent watching the others, eliminating single points of failure.</p>
+    </div>
+    <div class="swarm-wrap">
+      <canvas id="swarm-canvas" width="860" height="360"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING TEASER -->
+<section id="pricing-teaser">
+  <div class="container">
+    <div class="section-badge">Protection Tiers</div>
+    <h2 style="font-size:clamp(24px,4vw,38px);font-weight:800;margin-bottom:14px;">Choose Your Orbit.</h2>
+    <p style="color:var(--gray);font-size:16px;max-width:560px;margin:0 auto;">From solo builders to government-grade infrastructure — every tier runs on the same 14-layer swarm.</p>
+    <div class="pricing-teaser-cta">
+      <a href="pricing.html" class="btn-primary">View Pricing &nbsp;&rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">FAQ</div>
+      <h2>Common <span class="blue">Questions.</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">What does OmniGuard actually protect? <span class="faq-icon">+</span></button>
+        <div class="faq-body"><div class="faq-body-inner">OmniGuard protects AI agents and pipelines — inspecting every prompt, tool call, and response for injection attempts, data exfiltration, and cascade failures before they reach production.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How is OmniGuard different from a standard firewall? <span class="faq-icon">+</span></button>
+        <div class="faq-body"><div class="faq-body-inner">Traditional firewalls inspect network traffic. OmniGuard inspects AI behavior — the semantic content of prompts and model outputs — using a 14-layer agent swarm built specifically for AI-native attack patterns.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How fast can we deploy? <span class="faq-icon">+</span></button>
+        <div class="faq-body"><div class="faq-body-inner">Most deployments activate within hours via SDK integration. Enterprise rollouts with custom playbooks are scoped individually.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is there a free tier? <span class="faq-icon">+</span></button>
+        <div class="faq-body"><div class="faq-body-inner">Yes — see the Pricing page for current tiers, from solo-developer plans up to government-grade infrastructure coverage.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT CTA -->
+<section id="contact-cta">
+  <div class="container">
+    <div class="section-badge">Get In Touch</div>
+    <h2 style="font-size:clamp(22px,3.6vw,34px);font-weight:800;margin-bottom:10px;">Ready to put a sentinel in orbit?</h2>
+    <p style="color:var(--gray);font-size:15px;margin-bottom:32px;">Tell us about your systems. We'll respond within one business day.</p>
+    <form class="contact-form" onsubmit="return handleContactForm(event)">
+      <div class="form-group">
+        <label for="cname">Name</label>
+        <input type="text" id="cname" name="name" placeholder="Jane Smith" required>
+      </div>
+      <div class="form-group">
+        <label for="cemail">Email</label>
+        <input type="email" id="cemail" name="email" placeholder="jane@company.com" required>
+      </div>
+      <div class="form-group">
+        <label for="cmsg">What do you need protected?</label>
+        <textarea id="cmsg" name="message" rows="4" placeholder="Tell us about your AI systems and security needs..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo"><span class="nav-logo-orb"></span> OmniGuard</div>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact-cta">Contact</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 OmniGuard. All rights reserved.
+      <div class="not-legal">OmniGuard provides AI security tooling and threat monitoring. Not a substitute for a full independent security audit of regulated systems.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* Scroll progress bar */
+  var bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', function(){
+    var h = document.documentElement;
+    var pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    if (bar) bar.style.width = pct + '%';
+  });
+
+  /* Mobile nav toggle */
+  var toggle = document.getElementById('nav-toggle');
+  var overlay = document.getElementById('mobile-overlay');
+  if (toggle && overlay) {
+    toggle.addEventListener('click', function(){
+      overlay.classList.toggle('open');
+    });
+    overlay.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ overlay.classList.remove('open'); });
+    });
+  }
+
+  /* FAQ accordion */
+  document.querySelectorAll('.faq-item').forEach(function(item){
+    var q = item.querySelector('.faq-q');
+    q.addEventListener('click', function(){
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  /* Contact form (mailto fallback — no backend) */
+  window.handleContactForm = function(e){
+    e.preventDefault();
+    var name = document.getElementById('cname').value;
+    var email = document.getElementById('cemail').value;
+    var msg = document.getElementById('cmsg').value;
+    var body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + msg);
+    window.location.href = 'mailto:contact@omni-guard.com?subject=OmniGuard%20Inquiry&body=' + body;
+    return false;
+  };
+
+  /* Swarm canvas animation — orbiting nodes around a center */
+  var canvas = document.getElementById('swarm-canvas');
+  if (canvas) {
+    var ctx = canvas.getContext('2d');
+    function resizeCanvas(){
+      var w = canvas.parentElement.clientWidth;
+      canvas.width = Math.min(860, w);
+      canvas.height = canvas.width * (360/860);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    var nodeCount = 7;
+    var nodes = [];
+    for (var i = 0; i < nodeCount; i++) {
+      nodes.push({
+        angle: (Math.PI * 2 / nodeCount) * i,
+        radius: 0.32,
+        speed: 0.0026 + (i % 3) * 0.0006,
+        dir: i % 2 === 0 ? 1 : -1
+      });
+    }
+
+    function draw(){
+      var W = canvas.width, H = canvas.height;
+      ctx.clearRect(0,0,W,H);
+      var cx = W/2, cy = H/2;
+      var R = Math.min(W,H) * 0.34;
+
+      /* center core */
+      var coreGrad = ctx.createRadialGradient(cx,cy,2,cx,cy,30);
+      coreGrad.addColorStop(0, 'rgba(74,144,226,0.9)');
+      coreGrad.addColorStop(1, 'rgba(74,144,226,0)');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(cx,cy,30,0,Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = '#4A90E2';
+      ctx.beginPath();
+      ctx.arc(cx,cy,8,0,Math.PI*2);
+      ctx.fill();
+
+      /* orbit ring */
+      ctx.strokeStyle = 'rgba(74,144,226,0.18)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(cx,cy,R,0,Math.PI*2);
+      ctx.stroke();
+
+      var positions = [];
+      nodes.forEach(function(n){
+        n.angle += n.speed * n.dir;
+        var x = cx + Math.cos(n.angle) * R;
+        var y = cy + Math.sin(n.angle) * R * 0.42;
+        positions.push({x:x,y:y});
+      });
+
+      /* connecting lines to center */
+      ctx.strokeStyle = 'rgba(233,30,99,0.15)';
+      ctx.lineWidth = 1;
+      positions.forEach(function(p){
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.lineTo(p.x,p.y);
+        ctx.stroke();
+      });
+
+      /* node dots */
+      positions.forEach(function(p){
+        ctx.fillStyle = '#E91E63';
+        ctx.shadowColor = '#E91E63';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,5,0,Math.PI*2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  /* Hero threat counter — slow increment for ambience */
+  var counterEl = document.getElementById('hero-threat-count');
+  if (counterEl) {
+    var base = 1247832;
+    setInterval(function(){
+      base += Math.floor(Math.random()*7)+1;
+      counterEl.textContent = base.toLocaleString();
+    }, 2400);
+  }
+})();
+</script>
+</body>
+</html>
