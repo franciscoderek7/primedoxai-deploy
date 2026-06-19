@@ -231,11 +231,10 @@ Derek confirmed a new universal pricing/conversion strategy for revenue maximiza
 | Enterprise/Elite | $999–2,499/mo | Big money. Companies, teams, serious users. |
 | Sovereign/Agency | $4,999–9,999/mo | Whale hunting. Custom everything. |
 
-**24-hour free trial mechanic** (Derek's original message cut off after "Day 1" — this is the standard SaaS pattern filled in, no objection raised when checked):
-1. User signs up → instant full access, no feature limits, card required at signup.
-2. 24-hour countdown banner visible site-wide from the moment they start.
-3. At hour 20: reminder email/in-app notice — trial ends in 4 hours, billed at [Starter price] unless cancelled.
-4. At hour 24: card on file → auto-charge Starter tier, account stays fully active (the lock-in — no action required from the user, so most convert by default). No card on file → account drops to a locked/read-only view with an upgrade CTA, data preserved but features gated.
-5. Upsell prompts at usage ceilings push Starter users toward Pro; Enterprise/Sovereign are sales-assisted (book-a-call CTA, not self-serve checkout).
+**24-hour free trial mechanic** (simple version, confirmed by Derek):
+1. User signs up → full access for 24 hours. No card required.
+2. Countdown timer runs site-wide.
+3. At 24 hours → account locks, downgrades to free view-only.
+4. User clicks "Upgrade" → Stripe checkout → instant unlock at Starter tier (or whichever tier they pick).
 
 Applies to: OmniGuard, Vault Velocity, TechPetCage, TechPackCage, CleanSwarm, VIGILAX, Kiaros, MindShift, and any other site without already-wired live pricing. PrimeDox AI and CCLDR are explicitly excluded — frozen as logged above.
