@@ -1,0 +1,88 @@
+name: Deploy OmniGuard (new rebrand) to omni-guard.com
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'omni-guard-site/**'
+  workflow_dispatch:   # allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Verify OmniGuard spelling (zero tolerance)
+        run: |
+          ERRORS=$(grep -rln "OmniaGuard\|OMNIGUARD\|Omni Guard\|OMNI GUARD" omni-guard-site/ --include="*.html" | wc -l)
+          echo "Spelling errors found: $ERRORS"
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "FAIL: Wrong OmniGuard spelling detected"
+            grep -rln "OmniaGuard\|OMNIGUARD\|Omni Guard" omni-guard-site/ --include="*.html"
+            exit 1
+          fi
+          echo "PASS: OmniGuard spelling correct on all pages"
+
+      - name: Verify no personal info leaked
+        run: |
+          LEAKS=$(grep -rln "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8" omni-guard-site/ --include="*.html" | wc -l)
+          if [ "$LEAKS" -gt 0 ]; then
+            echo "FAIL: Personal info found in source"
+            grep -rln "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8" omni-guard-site/ --include="*.html"
+            exit 1
+          fi
+          echo "PASS: Zero personal info in source"
+
+      - name: Clone omni-guard repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/omni-guard.git /tmp/omni-guard
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe old files
+        run: |
+          find /tmp/omni-guard -mindepth 1 -not -path '/tmp/omni-guard/.git*' -delete
+          echo "Clean slate"
+
+      - name: Copy site files
+        run: |
+          cd omni-guard-site
+          find . -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.json" -o -name "*.webp" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.svg" -o -name "*.gif" -o -name "*.ico" -o -name "*.xml" -o -name "*.txt" -o -name "*.md" \) | while read f; do
+            dir=$(dirname "$f")
+            mkdir -p "/tmp/omni-guard/$dir"
+            cp "$f" "/tmp/omni-guard/$f"
+          done
+          echo "omni-guard.com" > /tmp/omni-guard/CNAME
+          touch /tmp/omni-guard/.nojekyll
+          echo "All files copied"
+
+      - name: Commit and push to omni-guard repo
+        run: |
+          cd /tmp/omni-guard
+          git config user.email "deploy@omni-guard.com"
+          git config user.name "OmniGuard Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
+
+          CNAME: omni-guard.com
+          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
+            || echo "Nothing to commit — already up to date"
+          git push origin main
+          echo "Pushed to franciscoderek7/omni-guard — live in ~2 minutes"
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "================================================"
+          echo "  OMNIGUARD (REBRAND) DEPLOYED"
+          echo "================================================"
+          echo "  Repo: franciscoderek7/omni-guard (main)"
+          echo "  CNAME: omni-guard.com"
+          echo "  Legacy franciscoderek7/omniaguard repo untouched"
+          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo ""
+          echo "  Check: https://omni-guard.com"
+          echo "================================================"
