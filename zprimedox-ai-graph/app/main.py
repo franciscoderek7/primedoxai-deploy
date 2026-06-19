@@ -10,6 +10,8 @@ from langgraph.types import Command
 from app.graphs.router import get_compiled_graph
 from app.models.state import RunRequest, RunResponse, HumanGateInput, StateResponse, GraphState
 from app.config import get_settings
+from app.personas import get_persona, should_escalate
+from app.services.llm import invoke_llm
 from datetime import datetime, timezone
 import uuid
 import json
@@ -24,9 +26,30 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Empire site domains allowed to call this API from a browser widget.
+EMPIRE_ORIGINS = [
+    "https://zprimedoxaihq.com",
+    "https://franciscoholdingsinc.com",
+    "https://franciscoholdingsinc.ca",
+    "https://franciscoholdingsinc.buzz",
+    "https://omniaguard.com",
+    "https://omniaguard.ca",
+    "https://omniaguard.io",
+    "https://omniaguard.pro",
+    "https://omniaguard.tech",
+    "https://ccldr.net",
+    "https://primedoxai.com",
+    "https://vaultvelocityauto.com",
+    "https://techpetcage.com",
+    "https://techpetcage.ca",
+    "http://localhost:3000",
+    "http://localhost:3001",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://zprimedoxaihq.com", "http://localhost:3000", "http://localhost:3001"],
+    allow_origins=EMPIRE_ORIGINS,
+    allow_origin_regex=r"https://franciscoderek7\.github\.io",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -288,3 +311,106 @@ async def list_runs(limit: int = 20):
         return {"runs": result.data or []}
     except Exception as e:
         return {"runs": [], "error": str(e)}
+
+
+# ─── Widget chat: lightweight per-site persona endpoint ───────────────────────
+# This is what the embeddable chat widgets on each empire site call. It is
+# deliberately separate from /run — it does NOT go through the LangGraph
+# document-drafting workflow or the human approval gate. It's a single
+# persona-prompted Claude call, logged to Supabase for human review.
+# "learned": true means the turn was logged, not that any model was retrained.
+
+@app.post(f"{settings.api_prefix}/widget-chat")
+async def widget_chat(body: dict):
+    message = body.get("message", "")
+    if not message:
+        raise HTTPException(status_code=400, detail="message is required")
+
+    site = body.get("site", "unknown")
+    visitor_id = body.get("visitorId") or body.get("visitor_id") or "anonymous"
+    persona = get_persona(body.get("aiPersona") or body.get("ai_persona"))
+    escalate = should_escalate(message)
+
+    try:
+        reply = await invoke_llm(
+            system_key="widget",
+            user_message=message,
+            temperature=0.3,
+            max_tokens=600,
+            custom_system=persona["system"],
+        )
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"AI service error: {str(e)}")
+
+    try:
+        from app.services.vector_db import get_supabase
+        sb = get_supabase()
+        sb.table("widget_messages").insert({
+            "site": site,
+            "persona": persona["name"],
+            "visitor_id": visitor_id,
+            "message": message,
+            "response": reply,
+            "escalate": escalate,
+        }).execute()
+        logged = True
+    except Exception:
+        # Supabase not configured yet — don't fail the chat reply over it.
+        logged = False
+
+    return {
+        "response": reply,
+        "persona": persona["name"],
+        "learned": logged,
+        "escalate": escalate,
+    }
+
+
+# ─── Report: aggregate widget activity for the HQ dashboard ───────────────────
+
+@app.get(f"{settings.api_prefix}/report")
+async def daily_report(hours: int = 24):
+    """
+    Real aggregate counts from widget_messages + sessions — not a predictive
+    or AI-generated summary. Requires Supabase tables to be migrated.
+    """
+    from app.services.vector_db import get_supabase
+    from datetime import timedelta
+
+    since = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+
+    try:
+        sb = get_supabase()
+        widget = sb.table("widget_messages").select(
+            "site, persona, escalate, created_at"
+        ).gte("created_at", since).execute().data or []
+        sessions = sb.table("sessions").select(
+            "domain, outcome, created_at"
+        ).gte("created_at", since).execute().data or []
+    except Exception as e:
+        return {"error": str(e), "hint": "Supabase tables may not be migrated yet"}
+
+    by_site: dict[str, int] = {}
+    by_persona: dict[str, int] = {}
+    escalations = 0
+    for row in widget:
+        by_site[row["site"]] = by_site.get(row["site"], 0) + 1
+        by_persona[row["persona"]] = by_persona.get(row["persona"], 0) + 1
+        if row.get("escalate"):
+            escalations += 1
+
+    by_outcome: dict[str, int] = {}
+    for row in sessions:
+        outcome = row.get("outcome") or "unknown"
+        by_outcome[outcome] = by_outcome.get(outcome, 0) + 1
+
+    return {
+        "window_hours": hours,
+        "widget_conversations": len(widget),
+        "by_site": by_site,
+        "by_persona": by_persona,
+        "escalations_flagged": escalations,
+        "document_workflows": len(sessions),
+        "document_workflows_by_outcome": by_outcome,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+    }
