@@ -131,7 +131,7 @@ Manus's next-priority build queue (informational, not yet assigned to Claude): v
 | 5 | ~~Chatbot routing fixes (CCLDR/OmniaGuard/CleanSwarm/pricing)~~ | Claude | 2026-06-13 | ✅ COMPLETE |
 | 6 | ~~Force-merge feature branch → main~~ | Claude | 2026-06-13 | ✅ COMPLETE |
 | 7 | BTC + XMR wallet addresses on site | Derek → Claude | ASAP | PENDING — awaiting addresses |
-| 8 | Porkbun DNS for all domains (185.199.108-111.153) | Derek (browser) | ASAP | PENDING |
+| 8 | Porkbun DNS for all domains (185.199.108-111.153) — CONFIRMED 2026-06-19: A records were entered as `.15` instead of `.153`, breaking custom-domain GitHub Pages resolution (e.g. vaultvelocityauto.com). Fix: edit each A record in Porkbun/Cloudflare to end in `.153`, save, wait 5-10 min for propagation | Derek (browser) | ASAP | PENDING |
 | 9 | Custom domain HTTPS in GitHub Pages settings | Derek (browser) | After DNS | PENDING |
 | 10 | ccldr.net domain — 60-day hold resolves | Derek (wait) | ~Aug 2026 | PENDING |
 | 11 | File provisional patents CIPO/USPTO (8 inventions) | Derek → IP lawyer | ASAP | PENDING — NOT filed yet despite Phoenix Dominion text |
