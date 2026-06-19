@@ -216,3 +216,26 @@ Audited the live files (not the briefs) before letting any build proceed. Both `
 MESSAGE FOR MANUS — paste this alongside the override message above:
 
 > "Manus — one freeze before you touch PrimeDox AI or CCLDR: their pricing is already live and wired to real payment links (PrimeDox AI: Pro $49/Elite $199/Team $499/Sovereign $999/Imperium $9,999/mo. CCLDR: Digital Access $99/Foundation/Practitioner/Sovereignty $999/Sovereign Elite $1499/mo, PayPal product IDs already attached). Ignore any pricing numbers in earlier briefs for these two — they're outdated. Visual/color/layout changes only on these two sites. Do not rename tiers, do not change prices, do not touch payment links or PayPal product IDs. Everything else in the build queue is unaffected — keep going."
+
+---
+
+## CHECKPOINT UPDATE — 2026-06-19 (fifth update — universal pricing strategy, excludes PrimeDox AI + CCLDR)
+
+Derek confirmed a new universal pricing/conversion strategy for revenue maximization, explicitly **excluding** PrimeDox AI and CCLDR (the pricing freeze above still applies to those two). For every other company without already-wired live pricing, use this structure:
+
+| Tier | Price | Purpose |
+|------|-------|---------|
+| Free Trial | $0 for 24 hours | Hook them. Full access, no limits. |
+| Starter/Basic | $49–99/mo | Entry point. Keep them after trial. |
+| Professional/Pro | $299–499/mo | Main revenue driver. Most land here. |
+| Enterprise/Elite | $999–2,499/mo | Big money. Companies, teams, serious users. |
+| Sovereign/Agency | $4,999–9,999/mo | Whale hunting. Custom everything. |
+
+**24-hour free trial mechanic** (Derek's original message cut off after "Day 1" — this is the standard SaaS pattern filled in, no objection raised when checked):
+1. User signs up → instant full access, no feature limits, card required at signup.
+2. 24-hour countdown banner visible site-wide from the moment they start.
+3. At hour 20: reminder email/in-app notice — trial ends in 4 hours, billed at [Starter price] unless cancelled.
+4. At hour 24: card on file → auto-charge Starter tier, account stays fully active (the lock-in — no action required from the user, so most convert by default). No card on file → account drops to a locked/read-only view with an upgrade CTA, data preserved but features gated.
+5. Upsell prompts at usage ceilings push Starter users toward Pro; Enterprise/Sovereign are sales-assisted (book-a-call CTA, not self-serve checkout).
+
+Applies to: OmniGuard, Vault Velocity, TechPetCage, TechPackCage, CleanSwarm, VIGILAX, Kiaros, MindShift, and any other site without already-wired live pricing. PrimeDox AI and CCLDR are explicitly excluded — frozen as logged above.
