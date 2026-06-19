@@ -1,4 +1,4 @@
-name: Deploy OmniGuard (new rebrand) to omni-guard.com
+name: Deploy OmniGuard (new rebrand) to omniaguard.com
 
 on:
   push:
@@ -54,20 +54,20 @@ jobs:
             mkdir -p "/tmp/omni-guard/$dir"
             cp "$f" "/tmp/omni-guard/$f"
           done
-          echo "omni-guard.com" > /tmp/omni-guard/CNAME
+          echo "omniaguard.com" > /tmp/omni-guard/CNAME
           touch /tmp/omni-guard/.nojekyll
           echo "All files copied"
 
       - name: Commit and push to omni-guard repo
         run: |
           cd /tmp/omni-guard
-          git config user.email "deploy@omni-guard.com"
+          git config user.email "deploy@omniaguard.com"
           git config user.name "OmniGuard Deploy Bot"
           git add -A
           git diff --cached --stat
           git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
 
-          CNAME: omni-guard.com
+          CNAME: omniaguard.com
           Triggered by: push to franciscoderek7/primedoxai-deploy main" \
             || echo "Nothing to commit — already up to date"
           git push origin main
@@ -80,9 +80,12 @@ jobs:
           echo "  OMNIGUARD (REBRAND) DEPLOYED"
           echo "================================================"
           echo "  Repo: franciscoderek7/omni-guard (main)"
-          echo "  CNAME: omni-guard.com"
-          echo "  Legacy franciscoderek7/omniaguard repo untouched"
-          echo "  Live in: ~2 minutes (GitHub Pages build)"
+          echo "  CNAME: omniaguard.com"
+          echo "  NOTE: legacy franciscoderek7/omniaguard repo also targets omniaguard.com."
+          echo "  GitHub Pages only serves ONE repo per custom domain - Derek must"
+          echo "  switch the custom-domain setting to THIS repo in GitHub Pages"
+          echo "  settings (Settings > Pages > Custom domain) for this to go live."
+          echo "  Live in: ~2 minutes (GitHub Pages build) once domain is switched"
           echo ""
-          echo "  Check: https://omni-guard.com"
+          echo "  Check: https://omniaguard.com"
           echo "================================================"

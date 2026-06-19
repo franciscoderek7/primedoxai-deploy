@@ -75,6 +75,12 @@ Manus/Claude work on these two sites must be **visual-only** (colors/layout/type
 | franciscoholdingsinc.buzz | Francisco Holdings | A | ⬜ Set 301 → .com |
 | vaultvelocityauto.com | Vault Velocity Auto | B | ⬜ Set A+CNAME (when site ready) |
 | zprimedoxaihq.com | ZPrimeDoxAI HQ | A | ⬜ Set A+CNAME |
+| techpetcage.com | TechPetCage | A | ⬜ Set A+CNAME (when site ready) |
+| techpetcage.ca | TechPetCage | A | ⬜ Set 301 → .com |
+
+**NOT YET OWNED (confirmed by Derek 2026-06-19) — do not build live custom-domain deploy targets for these; use GitHub Pages URLs until purchased:** `primedoxai.com`, `cleanswarm.ca`, `mindshift-makayla.com`. (`ccldr.net` is owned but on the separately-tracked 60-day hold above — different case, don't conflate.)
+
+**OmniGuard domain/repo correction (2026-06-19):** the new rebrand repo `franciscoderek7/omni-guard` deploys to `omniaguard.com` (the domain actually owned, confirmed by Derek) — NOT `omni-guard.com`, which isn't in this owned-domains list and doesn't exist as a registered domain. Fixed in `.github/workflows/deploy-omni-guard.yml`. Both the legacy `franciscoderek7/omniaguard` repo and this new repo now target the same `omniaguard.com` domain — GitHub Pages only serves one repo per custom domain, so **Derek must manually switch the custom-domain setting to the new `omni-guard` repo** (GitHub repo Settings → Pages → Custom domain) once he's ready for the rebrand to go live. Not done automatically by either workflow.
 
 ---
 

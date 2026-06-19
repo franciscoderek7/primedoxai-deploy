@@ -203,7 +203,7 @@ Derek confirmed: keep the existing 45-floor skyscraper structure exactly as-is �
 Authoritative pricing, supersedes any 6-tier table you saw earlier: Warrior $149/mo, Professional $499/mo, Elite $999/mo, Sovereign $1499/mo. Build the 6 Quintinity modules, BENO-X framework, 12-Appearance Method, Inmate Academy, and The Library (A-Z Cannabis Law Database) around these 4 tiers only. Deploy to `franciscoderek7/Ccldr-net` (overwrite existing — but preserve the existing correct PayPal payment format: PayPal.me/derekfranciacco1, Interac docweedla@gmail.com, CAD amounts matching the 4 tiers above). Still on 60-day DNS hold — use the GitHub Pages URL, don't touch DNS.
 
 **3. OmniGuard — keep BOTH repos for now.**
-Don't retire or rename `franciscoderek7/omniaguard` (legacy). Build the new space-theme/blue-pink rebrand in `franciscoderek7/omni-guard` (new repo) and deploy that to omni-guard.com. Leave the old repo alone — Derek will decide later whether to retire it.
+Don't retire or rename `franciscoderek7/omniaguard` (legacy). Build the new space-theme/blue-pink rebrand in `franciscoderek7/omni-guard` (new repo) — it deploys to `omniaguard.com` (the domain Derek actually owns — `omni-guard.com` with a hyphen is NOT a registered domain, ignore that spelling if you saw it anywhere). Leave the old repo's content alone; Derek will manually switch GitHub Pages' custom-domain setting to the new repo when he's ready to flip the live domain over.
 
 Everything else in the prior build queue stands: TechPetCage/TechPackCage separation, vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io, the 40+ Stripe products table, Make.com integration, and the empire-wide color rules — all unchanged from the CHECKPOINT v2 prompt above. Keep building. Don't stop.
 
@@ -236,5 +236,77 @@ Derek confirmed a new universal pricing/conversion strategy for revenue maximiza
 2. Countdown timer runs site-wide.
 3. At 24 hours → account locks, downgrades to free view-only.
 4. User clicks "Upgrade" → Stripe checkout → instant unlock at Starter tier (or whichever tier they pick).
+
+---
+
+## CHECKPOINT UPDATE — 2026-06-19 (sixth update — build owned domains only)
+
+Derek wants Manus focused exclusively on domains already registered — get those live and making money before buying/building anything else. Confirmed: the OmniGuard rebrand domain is `omniaguard.com` (no hyphen) — `omni-guard.com` is not a real registered domain and should be ignored anywhere it appeared in earlier prompts. Also confirmed: a hidden, unlisted page for rare/exotic car inventory goes on Vault Velocity Auto (not linked from main nav, kept separate from the core automation-workflow product).
+
+MESSAGE FOR MANUS — paste this as the next build order:
+
+---
+
+Manus, stop. Build only the sites for domains Derek already owns. Nothing else until these are live and making money.
+
+**DOMAINS DEREK OWNS — BUILD THESE NOW**
+
+| Domain | Repo | Status | Action |
+|--------|------|--------|--------|
+| omniaguard.com | franciscoderek7/omni-guard (new rebrand repo) | ✅ Built, on branch `claude/omni-guard-space-theme` | Derek to merge + switch GitHub Pages custom-domain setting from the legacy repo to this one |
+| omniaguard.ca | franciscoderek7/omniaguard-ca | ❌ Not built | Build clone of omniaguard.com space theme with CAD pricing |
+| omniaguard.io | franciscoderek7/omniaguard-io | ❌ Not built | Build API/tech landing page |
+| omniaguard.pro | franciscoderek7/omniaguard-pro | ❌ Not built | Build pro services page |
+| omniaguard.tech | franciscoderek7/omniaguard-tech | ❌ Not built | Build technology showcase |
+| franciscoholdingsinc.com | franciscoderek7/francisco-holdings | ✅ Live (45-floor skyscraper, boardroom palette already applied) | No action needed |
+| franciscoholdingsinc.ca | franciscoderek7/franciscoholdingsinc-ca | ❌ Not built | Build clone with Canadian focus, CAD pricing |
+| franciscoholdingsinc.buzz | franciscoderek7/franciscoholdingsinc-buzz | ❌ Not built | Build marketing/buzz landing page, lead capture, viral referral |
+| vaultvelocityauto.com | franciscoderek7/vaultvelocityauto | ❌ Not built (repo doesn't exist yet) | Build workflow automation site — see priority 3 below |
+| zprimedoxaihq.com | franciscoderek7/zprimedoxaihq | ✅ Live | Keep as-is |
+| techpetcage.com | franciscoderek7/techpetcage | ❌ Not built (repo doesn't exist yet) | Build pet tech site |
+| techpetcage.ca | franciscoderek7/techpetcage-ca | ❌ Not built | Build clone with CAD pricing |
+
+**DO NOT BUILD YET — domains not owned:**
+
+| Domain | Status | Action |
+|--------|--------|--------|
+| primedoxai.com | ❌ Not owned | Derek buys first — use the existing `franciscoderek7.github.io/primedox/` GitHub Pages URL for now |
+| cleanswarm.ca | ❌ Not owned | Derek buys first |
+| ccldr.net | ⏳ Owned, 60-day hold | Wait for hold to lift — use GitHub Pages URL |
+| mindshift-makayla.com | ❌ Not owned | Use GitHub Pages URL for now |
+
+**BUILD ORDER — PRIORITY**
+
+1. **OmniGuard variants** (omniaguard.ca, .io, .pro, .tech) — clone the omniaguard.com space theme; .ca = CAD pricing; .io = API docs/developer focus; .pro = enterprise/consulting focus; .tech = technology showcase + blog. 24-hour free trial on all (see mechanic below).
+2. **Francisco Holdings variants** (.ca, .buzz) — clone the franciscoholdingsinc.com skyscraper; .ca = Canadian focus, CAD pricing, local contact; .buzz = marketing landing page, lead capture, viral referral.
+3. **Vault Velocity Auto** (vaultvelocityauto.com) — 25 workflow automations, AI agent swarm, pricing Starter $99/Pro $499/Empire $2,499/mo, 24-hour free trial. **Also build a hidden, unlisted page** (not linked from main nav — something like a footer easter-egg link or a direct URL Derek will share privately) listing rare/exotic car inventory for sale. Keep this completely separate in copy/imagery from the automation-workflow product pages — it's a side inventory listing, not part of the SaaS pitch.
+4. **TechPetCage** (techpetcage.com, .ca) — pet tech, GPS tracking, health alerts, pricing Family $29/Pro $49/Kennel $199/mo, 24-hour free trial; .ca = CAD pricing.
+
+**24-HOUR FREE TRIAL — all sites in this build order**
+1. User signs up with email — full access, no card required.
+2. Countdown timer visible site-wide.
+3. At 24 hours → account locks to free view-only.
+4. User clicks "Upgrade" → Stripe checkout → instant unlock.
+
+**STRIPE PRODUCTS — create for owned domains**
+
+| Product | Price | Domain |
+|---------|-------|--------|
+| OmniGuard Starter | $99/mo | omniaguard.com |
+| OmniGuard Pro | $299/mo | omniaguard.com |
+| OmniGuard Sentinel | $499/mo | omniaguard.com |
+| OmniGuard Enterprise | $1,499/mo | omniaguard.com |
+| Vault Velocity Starter | $99/mo | vaultvelocityauto.com |
+| Vault Velocity Pro | $499/mo | vaultvelocityauto.com |
+| Vault Velocity Empire | $2,499/mo | vaultvelocityauto.com |
+| TechPetCage Family | $29/mo | techpetcage.com |
+| TechPetCage Pro | $49/mo | techpetcage.com |
+| TechPetCage Kennel | $199/mo | techpetcage.com |
+
+**DEPLOYMENT:** push to feature branch → Derek merges to main → GitHub Actions auto-deploys. DNS: 185.199.108-111.153, CNAME www → domain, grey cloud (DNS only), SSL Full.
+
+**DELIVER ZIPS:** `omniaguard-ca-site.zip`, `omniaguard-io-site.zip`, `omniaguard-pro-site.zip`, `omniaguard-tech-site.zip`, `franciscoholdingsinc-ca-site.zip`, `franciscoholdingsinc-buzz-site.zip`, `vaultvelocityauto-site.zip`, `techpetcage-site.zip`, `techpetcage-ca-site.zip`.
+
+BUILD ONLY OWNED DOMAINS. DEPLOY FAST. MAKE MONEY. THEN BUY MORE DOMAINS.
 
 Applies to: OmniGuard, Vault Velocity, TechPetCage, TechPackCage, CleanSwarm, VIGILAX, Kiaros, MindShift, and any other site without already-wired live pricing. PrimeDox AI and CCLDR are explicitly excluded — frozen as logged above.
