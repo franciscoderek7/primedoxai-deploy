@@ -428,3 +428,64 @@ Ready for next zip batch: [yes/no]
 ```
 
 Everything else from CHECKPOINT v6/v7 (build order, owned-domains-only rule, color rules, Kimi/Claude integration) still stands — this is additive infra work, not a replacement.
+
+---
+
+## CHECKPOINT v9 — Francisco Holdings Dubai skyscraper theme, queued behind Vault Velocity fix (2026-06-19, overnight)
+
+Derek asked for this queued and ready the moment Manus finishes the current Vault Velocity fix. **Interpretation flag for Derek to correct in the morning if wrong:** no further spec was given for "Dubai skyscraper," so this is read as a visual-theme layer on the existing Francisco Holdings structure, not a new entity or a palette change. Confirm or correct on review.
+
+MESSAGE FOR MANUS — send this the moment Vault Velocity is done:
+
+---
+
+Manus, next up once Vault Velocity is finished: Francisco Holdings (franciscoholdingsinc.com) gets a Dubai skyscraper visual theme.
+
+**Do NOT replace the existing structure** — same rule as the CHECKPOINT v3 restyle: keep the 45-floor skyscraper, per-floor Stripe/PayPal buttons, the referral engine, and the Floor 45 Konami-code easter egg exactly as they work today. This is a visual theme layer on top, not a rebuild.
+
+**Add:**
+- Hero section: stylized Dubai skyline silhouette behind the tower render — the existing 45-floor tower becomes the Burj-Khalifa-style spire centerpiece of that skyline.
+- Glass-curtain-wall texture/reflection treatment on the building visuals (replacing any flat/solid tower graphic).
+- Desert gold-hour gradient backdrop (sunset oranges/golds blending into the existing Crown Black) behind the skyline.
+- Tagline/copy adjustment positioning Francisco Holdings as a global financial capital player — keep this subtle, don't rewrite the existing per-floor copy.
+
+**Do NOT add:** new colors outside the existing palette (Crown Green #0B3D2E, Executive Gold #C9A227, Platinum #E5E4E2, Silver #C0C0C0, Crown Black #0A0A0A). No blue/pink — still OmniGuard-exclusive.
+
+Deliver as a zip or push to a feature branch on `franciscoderek7/francisco-holdings` same as your other work. Then move to Batch 3 below.
+
+---
+
+## CHECKPOINT v10 — Batch 3: VIGILAX, MindShift, CleanSwarm, Weedlaw Education (2026-06-19, overnight)
+
+**Flag for Derek before this goes out as a "build" instruction:** all four of these already show as LIVE in EMPIRE.md with real committed content — VIGILAX has a 4-page commercial site with live Stripe payment links (Sentinel $299/Warden $899/Archon $2,499/Sovereign custom), MindShift has a committed merch grid + affiliate + donations + newsletter, CleanSwarm has committed pricing + per-job fees + payment CTAs, Weedlaw Education has a committed courses catalogue. Telling Manus to "build" these from scratch risks overwriting or duplicating shipped, payment-linked work. Batch 3 below is framed as **audit and finish gaps**, not greenfield build — flagging this reframing for Derek to confirm is the right call when he wakes, in case he specifically meant a visual overhaul rather than new build.
+
+**Second flag — needs Derek's direct confirmation, not something Claude can resolve alone:** EMPIRE.md contradicts itself on `cleanswarm.ca` ownership. One section lists it as the live deploy target with a registered domain; another section (the owned-vs-not-owned split Derek confirmed earlier today) lists `cleanswarm.ca` as **not yet owned**. Until Derek confirms which is correct, Manus should not touch DNS for CleanSwarm — GitHub Pages URL only.
+
+MESSAGE FOR MANUS — send after the Dubai skyscraper prompt above:
+
+---
+
+Manus, Batch 3: VIGILAX, MindShift, CleanSwarm, Weedlaw Education. These are already live with real content — audit and close gaps, don't rebuild from scratch.
+
+1. **VIGILAX** (`franciscoderek7/vigilax`, no custom domain yet — stays on `franciscoderek7.github.io/vigilax/`) — 4-page commercial site already committed (landing, pricing, investor relations, deploy guide) with live Stripe links. Audit: all nav tabs work, no dead links, mobile responsive, email capture functional. Fix what's broken, don't touch the pricing tiers or Stripe links.
+
+2. **MindShift by Michaella** (`franciscoderek7/mindshift-makayla`, domain `mindshift-makayla.com` **not yet owned** — stays on `franciscoderek7.github.io/mindshift-makayla/`) — merch grid, affiliate section, donations, newsletter already committed. Confirm `/coaching`, `/courses`, `/shop`, `/membership`, `/corporate`, `/about` all exist and aren't placeholders; finish any that are stubs. Keep her separate palette (Imperial Purple #2D1B55, Gold #C9A84C, Sakura Pink #E896C8, Void Black #06000F) — this is not empire-palette territory.
+
+3. **CleanSwarm** (`franciscoderek7/cleanswarm`) — pricing, per-job fees, and payment CTAs already committed. Audit and fix only. **Do not touch DNS for cleanswarm.ca** — its ownership status is unconfirmed (Derek is resolving this), stay on the GitHub Pages URL until he confirms in the next checkpoint.
+
+4. **Weedlaw Education** (`franciscoderek7/weedlaw-education`, no custom domain registered — stays on GitHub Pages URL) — courses catalogue already committed. Confirm certifications content is complete, no broken links to CCLDR/BENO-X material.
+
+Report back per-site: what was already there, what gaps you closed, what's still missing.
+
+---
+
+## Overnight status — for Derek to read on waking
+
+**Built/queued while you slept:** Dubai skyscraper theme prompt (CHECKPOINT v9) staged for the moment Vault Velocity finishes; Batch 3 prompt (CHECKPOINT v10) staged behind it, reframed as audit-and-finish since VIGILAX/MindShift/CleanSwarm/Weedlaw Education are already live in EMPIRE.md, not greenfield builds.
+
+**Issues flagged, need your call:**
+1. `cleanswarm.ca` ownership is self-contradictory in EMPIRE.md (one table says LIVE deploy target, another says not yet owned, both dated today). Manus is told to leave its DNS alone until you confirm which is correct.
+2. "Dubai skyscraper" for Francisco Holdings had no further spec from you — Claude's prompt to Manus treats it as a visual-theme layer (skyline/glass/gold-hour gradient) on the existing 45-floor structure, not a new entity or palette change. Correct this if you meant something else.
+3. No zip artifacts from Manus are visible in this repo/session to verify against spec — Manus delivers directly to its own repos or to you, not into `primedoxai-deploy`, so "check the zips" isn't something Claude can do from here. Flagging this rather than claiming a check that didn't happen.
+
+**Nothing executed outside `primedoxai-deploy`:** no GitHub repos created, no DNS touched, no Stripe products created — all of that stays queued for Manus per the redirect in CHECKPOINT v8.
