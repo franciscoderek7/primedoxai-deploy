@@ -177,3 +177,32 @@ Next: [what you're building tomorrow]
 ---
 
 KEEP BUILDING. DON'T STOP. EMPIRE GROWS. MONEY FLOWS.
+
+---
+
+## CHECKPOINT UPDATE — 2026-06-19 (third update, same day)
+
+Derek resolved three conflicts between the latest Manus brief ("PROMPT FOR CLAUDE — PROMPT MANUS": OmniGuard space theme, CCLDR revamp, Francisco Holdings boardroom, MindShift) and what was already logged in EMPIRE.md as complete:
+
+1. **Francisco Holdings**: the new brief said "posh boardroom aesthetic, NOT skyscraper." Derek confirmed: **restyle the existing 45-floor skyscraper** with the new boardroom palette — do not replace the skyscraper structure. Per-floor Stripe/PayPal buttons, the referral engine, and the secret Floor 45 Konami-code easter egg must all survive the restyle.
+2. **CCLDR pricing**: two conflicting tables existed (old 6-tier Stripe table vs. new 4-tier brief). Derek confirmed the **4-tier structure is authoritative**: Warrior $149/mo, Professional $499/mo, Elite $999/mo, Sovereign $1499/mo. The old 6-tier table (Free/Basic/Warrior/Defender/Corporate/Litigation) is retired.
+3. **OmniGuard repo**: the new brief implied a rename/move to `franciscoderek7/omni-guard`. Derek confirmed: **keep both repos** — `franciscoderek7/omniaguard` (legacy, do not delete) and `franciscoderek7/omni-guard` (new build target) — for now.
+
+The block below is the corrected, self-contained prompt — paste this to Manus instead of the raw brief Derek typed, since it fixes the three conflicts above.
+
+---
+
+MASTER PROMPT FOR MANUS — KEEP BUILDING THE EMPIRE (CHECKPOINT v3)
+
+Manus — three corrections before you continue on the next build order. These supersede anything conflicting in earlier prompts:
+
+**1. Francisco Holdings (franciscoholdingsinc.com) — RESTYLE, don't replace.**
+Derek confirmed: keep the existing 45-floor skyscraper structure exactly as-is — per-floor Stripe/PayPal buttons, the referral engine with discount tiers + commission tracking, and the secret Floor 45 Konami-code easter egg must all stay functional. Apply the new boardroom palette (Crown Green #0B3D2E, Executive Gold #C9A227, Platinum #E5E4E2, Silver #C0C0C0, Crown Black #0A0A0A — no blue/pink anywhere except the OmniGuard floor's card) on top of that structure. This is a re-skin, not a rebuild. Do not remove floors, the referral engine, or the Konami egg.
+
+**2. CCLDR (ccldr.net) — pricing is now locked at 4 tiers.**
+Authoritative pricing, supersedes any 6-tier table you saw earlier: Warrior $149/mo, Professional $499/mo, Elite $999/mo, Sovereign $1499/mo. Build the 6 Quintinity modules, BENO-X framework, 12-Appearance Method, Inmate Academy, and The Library (A-Z Cannabis Law Database) around these 4 tiers only. Deploy to `franciscoderek7/Ccldr-net` (overwrite existing — but preserve the existing correct PayPal payment format: PayPal.me/derekfranciacco1, Interac docweedla@gmail.com, CAD amounts matching the 4 tiers above). Still on 60-day DNS hold — use the GitHub Pages URL, don't touch DNS.
+
+**3. OmniGuard — keep BOTH repos for now.**
+Don't retire or rename `franciscoderek7/omniaguard` (legacy). Build the new space-theme/blue-pink rebrand in `franciscoderek7/omni-guard` (new repo) and deploy that to omni-guard.com. Leave the old repo alone — Derek will decide later whether to retire it.
+
+Everything else in the prior build queue stands: TechPetCage/TechPackCage separation, vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io, the 40+ Stripe products table, Make.com integration, and the empire-wide color rules — all unchanged from the CHECKPOINT v2 prompt above. Keep building. Don't stop.

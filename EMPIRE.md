@@ -20,6 +20,13 @@ Derek is running a second AI builder, **Manus**, concurrently with Claude on the
 
 Manus's next-priority build queue (informational, not yet assigned to Claude): vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io, techpackcage.com — plus 40+ Stripe products across the empire and Make.com webhook integration. See `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` for the full brief Derek gave Manus.
 
+**Three decisions confirmed by Derek 2026-06-19 (resolving conflicts in Manus's latest brief — locked, do not re-litigate):**
+1. **Francisco Holdings** — RESTYLE the existing 45-floor skyscraper with the new boardroom palette; do NOT replace it. Per-floor Stripe/PayPal buttons, the referral engine, and the secret Floor 45 Konami-code egg must survive.
+2. **CCLDR pricing** — the 4-tier structure is authoritative: Warrior $149/mo, Professional $499/mo, Elite $999/mo, Sovereign $1499/mo. The earlier 6-tier table (Free/Basic/Warrior/Defender/Corporate/Litigation) is retired.
+3. **OmniGuard repos** — keep BOTH `franciscoderek7/omniaguard` (legacy) and `franciscoderek7/omni-guard` (new build target) for now. Do not retire or rename either.
+
+See `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` CHECKPOINT v3 for the corrected prompt sent to Manus reflecting these decisions.
+
 ---
 
 ## 1. HOLDING STRUCTURE
