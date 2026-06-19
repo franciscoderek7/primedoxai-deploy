@@ -529,3 +529,17 @@ Derek wants the whole pipeline queued now rather than written one piece at a tim
 ### Why there's no hourly pipeline-check loop
 
 Derek asked for an hourly check on "Manus chat active / new zips delivered." There's no signal source for either from this session — no connection to Manus's chat, no zip-drop location inside this repo (confirmed empty search). An hourly loop with nothing to poll would just generate empty notifications. The actual fix is what's above: all three prompts are pre-staged right now, so there's no idle gap to check for — whichever one is next is already written the moment Manus finishes the prior step, no waiting on a wake-up or an hourly tick required.
+
+---
+
+## CHECKPOINT v12 — empire-wide hardening pass (queue exhausted, 2026-06-19 overnight cont'd)
+
+After v11 (Sovereignty Privacy), there is no further named build queued anywhere in EMPIRE.md. Checked before inventing a new target: every site named across this session's various lists — Kiaros, TechPackCage — already shows LIVE with committed content (Kiaros: Stripe + PayPal.me direct; TechPackCage: full WooCommerce launch stack, warehouse dashboard, setup guide, all committed 2026-06-11). Manufacturing a new "build" prompt for an already-shipped site would repeat the same overwrite risk flagged in CHECKPOINT v10. The legitimate next step is the hardening/QA checklist that's been sitting unexecuted since CHECKPOINT v6 — apply it across every live site now that the named build queue is empty.
+
+**Two items are Derek-only, not Manus's** (per EMPIRE.md's own pending-action log, items 22-23): buying `techpackcage.com` and creating the `franciscoderek7/techpackcage` repo. Still marked PENDING — not something to push onto Manus.
+
+MESSAGE FOR MANUS — send after Sovereignty Privacy:
+
+> Manus, no new site to build right now — every named site in the queue is already live. Sweep the whole empire instead: every live site needs all nav tabs working, all "Visit →" links pointing to the real live URL (not a placeholder), all company logos clickable, zero 404s/dead ends, mobile responsive, Stripe checkout actually completing a test transaction, email capture present on every page, a "Back to Empire" link to franciscoholdingsinc.com, and a GitHub repo link in the footer. Go site by site, fix what's broken, report back per-site what you found and fixed. This keeps you building without waiting on Derek to name the next target.
+
+**For Derek when he wakes:** the named pipeline (Dubai skyscraper → Gemma concierge → Batch 3 → Sovereignty Privacy) is now fully delivered-or-queued. Nothing else is sitting in EMPIRE.md as a known unbuilt site — Manus is on a hardening sweep until you hand over a new target (new domain purchase, new company, or a specific redesign ask).
