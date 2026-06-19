@@ -19,6 +19,13 @@ class Settings(BaseSettings):
     app_name: str = "zPrimeDox AI HQ — LangGraph Engine"
     debug: bool = False
     api_prefix: str = "/api/v1"
+    log_level: str = "INFO"
+
+    # Rate limiting (widget-chat) — in-memory, per-process. Fine for a single
+    # Railway/Render/Fly instance; if this ever runs multiple replicas behind
+    # a load balancer, move this to Redis (already provisioned for the
+    # LangGraph checkpointer) so limits are shared across instances.
+    widget_rate_limit_per_minute: int = 12
 
     # Human gate
     human_gate_timeout_seconds: int = 86400  # 24 hours
@@ -35,3 +42,8 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     return Settings()
+
+
+def is_placeholder(value: str) -> bool:
+    """True if a setting is still the unfilled PASTE_..._HERE default."""
+    return not value or "PASTE_" in value

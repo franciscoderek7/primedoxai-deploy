@@ -3,20 +3,24 @@ zPrimeDox AI HQ — FastAPI Application
 LangGraph state-machine AI with human-in-the-loop gates.
 Green (#2E7D32) + Gold (#FFD700) — Francisco Holdings Inc.
 """
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from langgraph.types import Command
 from app.graphs.router import get_compiled_graph
 from app.models.state import RunRequest, RunResponse, HumanGateInput, StateResponse, GraphState
-from app.config import get_settings
+from app.config import get_settings, is_placeholder
 from app.personas import get_persona, should_escalate
-from app.services.llm import invoke_llm
+from app.services.llm import invoke_llm, LLMConfigError
+from app.services.rate_limit import check_rate_limit
+from app.logging_config import configure_logging, get_logger
 from datetime import datetime, timezone
 import uuid
 import json
 
 settings = get_settings()
+configure_logging(settings.log_level)
+logger = get_logger(__name__)
 
 app = FastAPI(
     title="zPrimeDox AI HQ",
@@ -25,6 +29,21 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+
+@app.on_event("startup")
+async def warn_on_unconfigured_secrets():
+    """Log (not crash) so the service still boots and /health can report what's missing."""
+    if is_placeholder(settings.anthropic_api_key):
+        logger.warning("ANTHROPIC_API_KEY is unset — /run, /chat, and /widget-chat will fail until it's configured")
+    if is_placeholder(settings.supabase_url) or is_placeholder(settings.supabase_service_key):
+        logger.warning("Supabase is unconfigured — logging, memory, and /report will degrade gracefully but won't persist")
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    logger.exception("Unhandled exception", extra={"extra_fields": {"path": request.url.path}})
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
 # Empire site domains allowed to call this API from a browser widget.
 EMPIRE_ORIGINS = [
@@ -57,17 +76,49 @@ app.add_middleware(
 
 
 # ─── Health Check ─────────────────────────────────────────────────────────────
+# Point an uptime monitor (e.g. UptimeRobot) at this endpoint. It returns 503
+# (not just a 200 with a "down" field buried in JSON) whenever a dependency
+# the live workflows actually need is unreachable or unconfigured, so a
+# plain "alert on non-200" monitor rule is enough — see DEPLOY.md.
 
 @app.get("/health")
 async def health():
-    return {
-        "status": "online",
+    components: dict[str, str] = {}
+
+    components["anthropic"] = "unconfigured" if is_placeholder(settings.anthropic_api_key) else "configured"
+
+    if is_placeholder(settings.supabase_url) or is_placeholder(settings.supabase_service_key):
+        components["supabase"] = "unconfigured"
+    else:
+        try:
+            from app.services.vector_db import get_supabase
+            get_supabase().table("sessions").select("id").limit(1).execute()
+            components["supabase"] = "ok"
+        except Exception as e:
+            logger.warning("Supabase health check failed", extra={"extra_fields": {"error": str(e)}})
+            components["supabase"] = "unreachable"
+
+    try:
+        import redis
+        redis.from_url(settings.redis_url, socket_connect_timeout=2).ping()
+        components["redis"] = "ok"
+    except Exception as e:
+        logger.warning("Redis health check failed", extra={"extra_fields": {"error": str(e)}})
+        components["redis"] = "unreachable"
+
+    critical_down = components["anthropic"] == "unconfigured" or components["redis"] == "unreachable"
+    status = "down" if critical_down else ("degraded" if components["supabase"] != "ok" else "online")
+
+    body = {
+        "status": status,
         "service": "zPrimeDox AI HQ",
         "version": "1.0.0",
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "components": components,
         "color": "#2E7D32",
         "gold": "#FFD700",
     }
+    return JSONResponse(status_code=503 if critical_down else 200, content=body)
 
 
 @app.get("/")
@@ -331,6 +382,18 @@ async def widget_chat(body: dict):
     persona = get_persona(body.get("aiPersona") or body.get("ai_persona"))
     escalate = should_escalate(message)
 
+    allowed, retry_after = check_rate_limit(
+        key=f"{site}:{visitor_id}",
+        max_per_minute=settings.widget_rate_limit_per_minute,
+    )
+    if not allowed:
+        logger.warning("Widget chat rate limited", extra={"extra_fields": {"site": site, "visitor_id": visitor_id}})
+        raise HTTPException(
+            status_code=429,
+            detail=f"Rate limit exceeded. Retry after {retry_after}s.",
+            headers={"Retry-After": str(retry_after)},
+        )
+
     try:
         reply = await invoke_llm(
             system_key="widget",
@@ -339,7 +402,11 @@ async def widget_chat(body: dict):
             max_tokens=600,
             custom_system=persona["system"],
         )
+    except LLMConfigError as e:
+        logger.error("widget-chat called with no ANTHROPIC_API_KEY configured")
+        raise HTTPException(status_code=503, detail=str(e))
     except Exception as e:
+        logger.exception("widget-chat AI call failed", extra={"extra_fields": {"site": site, "persona": persona["name"]}})
         raise HTTPException(status_code=502, detail=f"AI service error: {str(e)}")
 
     try:
@@ -354,8 +421,9 @@ async def widget_chat(body: dict):
             "escalate": escalate,
         }).execute()
         logged = True
-    except Exception:
+    except Exception as e:
         # Supabase not configured yet — don't fail the chat reply over it.
+        logger.warning("Failed to log widget_messages row", extra={"extra_fields": {"site": site, "error": str(e)}})
         logged = False
 
     return {

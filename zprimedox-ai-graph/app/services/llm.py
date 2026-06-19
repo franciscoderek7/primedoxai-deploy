@@ -1,14 +1,25 @@
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
-from app.config import get_settings
+from app.config import get_settings, is_placeholder
+from app.logging_config import get_logger
 from typing import Optional
 
 settings = get_settings()
+logger = get_logger(__name__)
 
 # ─── Primary Claude client ────────────────────────────────────────────────────
 
+
+class LLMConfigError(RuntimeError):
+    """Raised when ANTHROPIC_API_KEY is missing/unset — distinct from a live API failure."""
+
+
 def get_llm(temperature: float = 0.1, max_tokens: int = 4096) -> ChatAnthropic:
+    if is_placeholder(settings.anthropic_api_key):
+        raise LLMConfigError(
+            "ANTHROPIC_API_KEY is not set — copy .env.example to .env and add a real key."
+        )
     return ChatAnthropic(
         model=settings.claude_model,
         api_key=settings.anthropic_api_key,
@@ -83,13 +94,13 @@ Reference MITRE ATT&CK, MISP, NIST frameworks.
 Correlate with known threat actor groups.
 Output enriched threat profile with confidence scores.""",
 
-    "safety_dispatch": """You are OmniaGuard — Public Safety AI for First Responders.
+    "safety_dispatch": """You are OmniGuard — Public Safety AI for First Responders.
 Parse incident reports and dispatch information.
 Classify incident type, severity, required resources.
 Always flag constitutional compliance requirements (Charter s.8, s.9, s.10).
 Output structured incident object.""",
 
-    "safety_constitutional": """You are OmniaGuard — Constitutional Compliance Check.
+    "safety_constitutional": """You are OmniGuard — Constitutional Compliance Check.
 This is your UNIQUE capability — no other public safety AI has this.
 For every action, verify:
 - Search authority (Charter s.8 — warrant or authorized exception)
@@ -128,5 +139,9 @@ async def invoke_llm(
         SystemMessage(content=system),
         HumanMessage(content=user_message),
     ]
-    response = await llm.ainvoke(messages)
+    try:
+        response = await llm.ainvoke(messages)
+    except Exception:
+        logger.exception("Claude API call failed", extra={"extra_fields": {"system_key": system_key}})
+        raise
     return response.content

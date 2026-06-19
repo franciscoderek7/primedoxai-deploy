@@ -12,10 +12,15 @@ from app.graphs.safety import build_safety_graph
 from app.graphs.business import build_business_graph
 from langgraph.checkpoint.redis import RedisSaver
 from app.config import get_settings
+from app.logging_config import get_logger
+from contextlib import ExitStack
 import json
 import uuid
 
 settings = get_settings()
+logger = get_logger(__name__)
+_exit_stack = ExitStack()
+_redis_checkpointer = None
 
 
 # ─── Router Node ─────────────────────────────────────────────────────────────
@@ -114,9 +119,29 @@ async def business_entry(state: GraphState) -> GraphState:
     return result
 
 
-def _get_checkpointer():
-    """Redis checkpointer for state persistence and human-gate resume."""
-    return RedisSaver.from_conn_string(settings.redis_url)
+def _get_checkpointer() -> RedisSaver:
+    """
+    Redis checkpointer for state persistence and human-gate resume.
+
+    `RedisSaver.from_conn_string` is a contextmanager, not a constructor — it
+    must be entered to get a usable saver, and the saver is only valid while
+    that context is open. Bug found during backend testing: the previous
+    version of this function returned the unentered `_GeneratorContextManager`
+    object directly, which `StateGraph.compile(checkpointer=...)` rejects with
+    `TypeError: Invalid checkpointer provided` — meaning every /run call would
+    have failed in production with a real Redis configured, not just here in
+    a no-Redis test. Fix: enter the context once, keep it open for the app's
+    lifetime (a long-running server holding one Redis connection open is the
+    intended usage), and reuse the same saver on every call.
+    """
+    global _redis_checkpointer
+    if _redis_checkpointer is None:
+        _redis_checkpointer = _exit_stack.enter_context(
+            RedisSaver.from_conn_string(settings.redis_url)
+        )
+        _redis_checkpointer.setup()
+        logger.info("Redis checkpointer initialized")
+    return _redis_checkpointer
 
 
 # ─── Build and compile router graph ──────────────────────────────────────────
