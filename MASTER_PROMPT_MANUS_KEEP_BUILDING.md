@@ -310,3 +310,48 @@ Manus, stop. Build only the sites for domains Derek already owns. Nothing else u
 BUILD ONLY OWNED DOMAINS. DEPLOY FAST. MAKE MONEY. THEN BUY MORE DOMAINS.
 
 Applies to: OmniGuard, Vault Velocity, TechPetCage, TechPackCage, CleanSwarm, VIGILAX, Kiaros, MindShift, and any other site without already-wired live pricing. PrimeDox AI and CCLDR are explicitly excluded — frozen as logged above.
+
+---
+
+## CHECKPOINT v7 — Kimi + Claude integration, every site + zPrimeDox AI HQ command center (2026-06-19)
+
+**FEASIBILITY NOTE (read before pasting to Manus):** "Claude API endpoint" and "Kimi API endpoint" embedded live on each customer site, autonomously building/fixing/deploying code, is not an off-the-shelf product — there's no public API where Claude pushes its own commits from a website backend. What Manus *can* build per-site: a chat widget that calls the Claude API (Derek's own API key) for customer-facing Q&A/support copy, and a Kimi-backed memory/notes layer via Supabase. Actual code-building/deploying stays a human-in-the-loop process (Derek + Claude in this chat, same as today) — Manus should build the chat-widget/memory layer, not a literal autonomous-deploy bot.
+
+Manus, integrate Kimi and Claude AI into EVERY site. Not just some. ALL OF THEM. Plus build the zPrimeDox AI HQ as the central command center.
+
+**KIMI + CLAUDE INTEGRATION — EVERY SITE**
+
+| Site | Kimi Role | Claude Role |
+|------|-----------|--------------|
+| franciscoholdingsinc.com | Memory keeper, knows Derek's full empire, recalls past conversations, personal touch | Code builder, fixes bugs, deploys updates, technical operations |
+| omniaguard.com | Security intelligence, threat analysis, remembers attack patterns | Security architecture, builds defense systems, API integration |
+| ccldr.net | Legal research, case law memory, constitutional advocacy knowledge | Legal document automation, court filing tech, workflow building |
+| primedoxai.com | AI strategy memory, knows Derek's automation preferences | AI system builder, creates workflows, integrates APIs |
+| vaultvelocityauto.com | Automation memory, knows all 25 workflows, optimization | Workflow builder, creates new automations, fixes broken ones |
+| techpetcage.com | Pet health knowledge, remembers pet data, care recommendations | Hardware integration, GPS tracking tech, AI health analysis |
+| cleanswarm.ca | Sustainability knowledge, carbon tracking, environmental data | Clean tech integration, energy audit systems, IoT connectivity |
+| mindshift-makayla.github.io | Psychology knowledge, wellness memory, coaching history | Site builder, course platform, e-commerce integration |
+| vigilax pages | Cybersecurity memory, threat database, incident history | Security platform builder, monitoring systems, alert automation |
+
+**ZPRIMEDOX AI HQ — CENTRAL COMMAND CENTER**
+
+URL: zprimedoxaihq.com (already owned/live per EMPIRE.md)
+
+Purpose: Central brain of the entire empire. Kimi and Claude live here. They watch over everything.
+
+Features: Empire Dashboard (all 45+ companies in one view), AI Agent Swarm Monitor, Live Conversations, Revenue Tracker (Stripe/PayPal across all sites), Alert Center, Deployment Control, Memory Bank, Learning Engine.
+
+**AGENT SWARM HIERARCHY**
+
+| Level | Agent | Role |
+|-------|-------|------|
+| HQ | Kimi + Claude | Central command, watch everything, report to Derek |
+| Site Level | Gemma 41B | Customer-facing, sales, support, lead capture |
+| Task Level | Make.com | Automation, workflows, connections |
+| Data Level | Supabase | CRM, storage, analytics |
+
+**INTEGRATION METHOD — per site:** Kimi-backed chat/memory widget (Supabase-stored) + Gemma 41B for customer chat/sales/support, both reporting into zPrimeDox AI HQ via shared Supabase. (Claude's "integration" is this chat in primedoxai-deploy, not a live in-browser agent — see feasibility note above.)
+
+**REPORTING:** Daily — conversations, leads, sales, issues, fixes, opportunities, recommendations. Weekly — revenue by company, traffic, conversion, AI performance, priorities.
+
+BUILD: 1. zPrimeDox AI HQ command center. 2. Kimi memory/chat widget on every site. 3. Gemma 41B customer-facing AI on every site. 4. Shared Supabase across all sites. 5. Unified daily/weekly reporting into HQ.
