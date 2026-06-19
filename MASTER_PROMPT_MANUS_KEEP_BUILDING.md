@@ -543,3 +543,16 @@ MESSAGE FOR MANUS — send after Sovereignty Privacy:
 > Manus, no new site to build right now — every named site in the queue is already live. Sweep the whole empire instead: every live site needs all nav tabs working, all "Visit →" links pointing to the real live URL (not a placeholder), all company logos clickable, zero 404s/dead ends, mobile responsive, Stripe checkout actually completing a test transaction, email capture present on every page, a "Back to Empire" link to franciscoholdingsinc.com, and a GitHub repo link in the footer. Go site by site, fix what's broken, report back per-site what you found and fixed. This keeps you building without waiting on Derek to name the next target.
 
 **For Derek when he wakes:** the named pipeline (Dubai skyscraper → Gemma concierge → Batch 3 → Sovereignty Privacy) is now fully delivered-or-queued. Nothing else is sitting in EMPIRE.md as a known unbuilt site — Manus is on a hardening sweep until you hand over a new target (new domain purchase, new company, or a specific redesign ask).
+
+---
+
+## CHECKPOINT v13 — Batch 3 audit confirmed the overwrite-risk concern was real (2026-06-19, live evidence)
+
+Derek shared a screenshot of Manus actually running the CHECKPOINT v10 audit on VIGILAX and MindShift. Findings, recorded here and corrected in EMPIRE.md directly:
+
+- **VIGILAX**: EMPIRE.md's June 11 log claimed 4 committed files (`index.html`, `pricing.html`, `investor.html`, `deploy.html`). Manus's direct repo audit found only `index.html` actually exists — the other 3 are not in the repo, and the 24h trial mechanic isn't wired. Not speculating on the cause (lost commit, wrong branch, log written ahead of an actual push) — EMPIRE.md now reflects the verified state instead of the original claim.
+- **MindShift Makayla**: trial mechanic, pricing (Seed $29/Bloom $79/Enlighten $199 CAD), shop grid, and the BonsaiMind chat widget are all confirmed live. But the affiliate/donations/newsletter sections and the /courses, /membership, /corporate, /about pages — also logged "✅ COMMITTED" on the same June 11 date — don't exist; they're not even single-page anchor sections yet.
+
+**Manus's remediation plan, no objection:** leave already-committed pricing untouched, add the missing 24h trial + pages for VIGILAX, and add the missing sections (courses, membership, corporate, about, affiliate, donations, newsletter) to MindShift's existing single-page layout rather than splitting into separate pages — consistent with the v10 instruction to close gaps, not rebuild. Correct call; no change needed to what Manus is doing.
+
+This is exactly the scenario CHECKPOINT v10's audit-and-finish framing was written to catch — if Manus had been told to "build VIGILAX/MindShift" instead of "audit," there's a real chance it would have skipped straight past gaps that didn't match the brief instead of finding them. No prompt change needed here; just logging the confirmation and the EMPIRE.md correction for the next session.
