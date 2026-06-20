@@ -1,5 +1,5 @@
 /* stripe-config.js — Francisco Holdings Empire Payment Config
- * STRIPE SWAP ZONE: When acct_1TG0cIASsTLqnu8V is unlocked:
+ * STRIPE SWAP ZONE: When [STRIPE-ACCT-REDACTED] is unlocked:
  *   1. Set STRIPE_LIVE = true
  *   2. Replace each stripeUrl with actual buy.stripe.com/... link
  *   3. Push — all sites update automatically
@@ -20,7 +20,7 @@
   window.EMPIRE_PAYMENTS = {
 
     // ── STRIPE SWAP ZONE ─────────────────────────────────────────────────────
-    STRIPE_LIVE: false,                          // flip to true when acct_1TG0cIASsTLqnu8V is unlocked
+    STRIPE_LIVE: false,                          // flip to true when [STRIPE-ACCT-REDACTED] is unlocked
     STRIPE_PK:   'pk_live_51TG0cIASsTLqnu8V...', // live publishable key — replace with full key on unlock
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -177,35 +177,35 @@
             price:    49,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_BASIC', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/49CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/49CAD',
           },
           warrior: {
             label:    'Warrior',
             price:    149,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_WARRIOR', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/149CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/149CAD',
           },
           professional: {
             label:    'Professional',
             price:    499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_PROFESSIONAL', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/499CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/499CAD',
           },
           elite: {
             label:    'Elite',
             price:    999,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_ELITE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/999CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/999CAD',
           },
           sovereign: {
             label:    'Sovereign',
             price:    2499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_SOVEREIGN', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/2499CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/2499CAD',
           },
         },
       },
@@ -223,21 +223,21 @@
             price:    199,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_INDIVIDUAL', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/199CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/199CAD',
           },
           team: {
             label:    'Team',
             price:    499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_TEAM', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/499CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/499CAD',
           },
           enterprise: {
             label:    'Enterprise',
             price:    1999,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_ENTERPRISE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/franciscoderek7/1999CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/1999CAD',
           },
         },
       },

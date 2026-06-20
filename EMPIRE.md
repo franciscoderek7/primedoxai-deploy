@@ -1,5 +1,5 @@
 # EMPIRE.md — Francisco Holdings Master State Document
-# Last Updated: 2026-06-19
+# Last Updated: 2026-06-20
 # Authority: PrimeDox (Derek Francisco) — Human Final Authority
 # Override: PrimeDocs — Activated only by PrimeDox explicit instruction
 
@@ -145,7 +145,7 @@ Responding to Derek's "CHINESE AI INTEGRATION — Build This Now" directive (Dee
 
 | Site | Market | Loop | Status | Deploy Workflow | Domain | Last Deploy |
 |------|--------|------|--------|----------------|--------|-------------|
-| OmniGuard | AI Security | B | REBRANDING — Manus rebuilding (blue/pink, omni-guard.com) | deploy-omniaguard.yml | omni-guard.com | 2026-06-04 (pre-rebrand) |
+| OmniGuard | AI Security | B | LIVE (legacy, mobile fixed) — REBRAND PENDING (Manus rebuilding under franciscoderek7/omni-guard, blue/pink; Derek must flip Pages custom-domain to new repo to go live) | deploy-omniaguard.yml / deploy-omni-guard.yml | omniaguard.com | 2026-06-16 |
 | CCLDR.net | Cannabis Education | A | LIVE → REDEPLOY READY | deploy-ccldr.yml | ccldr.net | 2026-06-07 |
 | CCC.net | Cannabis Compliance | A | LIVE | — | ccc.net | 2026-04-15 |
 | Weedlaw Education | Doc Weedlaw Platform | A | LIVE | — | weedlaw-education | 2026-05-31 |

@@ -5,6 +5,7 @@
 <link rel="manifest" href="/manifest.json">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PrimeDox HQ — Command Center</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -17,29 +18,76 @@
 
   /* ===== LOCK SCREEN ===== */
   #lock-screen {
-    position: fixed; inset: 0; background: var(--dark); z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0; z-index: 9999;
+    background: radial-gradient(ellipse at 30% 50%, #0d0020 0%, #000011 50%, #000008 100%);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  #lock-screen::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 55%, rgba(0,212,255,.5) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 50% 15%, rgba(255,255,255,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 70%, rgba(212,175,55,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 10%, rgba(255,255,255,.7) 0%, transparent 100%),
+      radial-gradient(2px 2px at 25% 80%, rgba(255,255,255,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 40%, rgba(0,212,255,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 90%, rgba(212,175,55,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 30%, rgba(255,255,255,.4) 0%, transparent 100%);
+  }
+  #lock-ghost {
+    position: absolute; right: -2%; top: 50%; transform: translateY(-50%);
+    font-size: clamp(180px, 25vw, 420px); opacity: 0.09;
+    filter: blur(3px) grayscale(1); user-select: none; pointer-events: none; z-index: 1; line-height: 1;
   }
   .lock-box {
-    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 48px 40px; text-align: center; width: 360px;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    position: relative; z-index: 2;
+    background: rgba(8, 8, 20, 0.88); backdrop-filter: blur(24px);
+    border: 1px solid rgba(201,168,76,.2); border-radius: 20px;
+    padding: 52px 44px 44px; text-align: center; width: min(400px, calc(100vw - 32px));
+    box-shadow: 0 0 80px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.03);
   }
-  .lock-logo { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
-  .lock-logo span { color: var(--gold); }
-  .lock-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  .lock-eyebrow {
+    font-size: 9px; letter-spacing: 4px; color: rgba(201,168,76,.5);
+    text-transform: uppercase; margin-bottom: 28px; font-family: monospace;
+  }
+  .lock-logo {
+    font-size: 32px; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px;
+    background: linear-gradient(135deg, #c9a84c, #e8c76e, #c9a84c);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .lock-tagline {
+    font-size: 12px; color: rgba(255,255,255,.35); margin-bottom: 40px;
+    letter-spacing: 1px; line-height: 1.6;
+  }
   .lock-input {
-    width: 100%; background: var(--mid); border: 1px solid var(--border); border-radius: 8px;
-    padding: 12px 16px; color: var(--text); font-size: 16px; text-align: center;
-    letter-spacing: 4px; outline: none; margin-bottom: 14px;
+    width: 100%; background: rgba(255,255,255,.04);
+    border: 1px solid rgba(201,168,76,.2); border-radius: 10px;
+    padding: 16px 20px; color: var(--text); font-size: 18px; text-align: center;
+    letter-spacing: 6px; outline: none; margin-bottom: 16px;
+    font-family: monospace; transition: border-color .2s, box-shadow .2s;
+    min-height: 52px;
   }
-  .lock-input:focus { border-color: var(--gold); }
+  .lock-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
   .lock-btn {
-    width: 100%; background: var(--gold); color: #111; border: none;
-    padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer;
+    width: 100%; background: linear-gradient(135deg, #c9a84c, #e8c76e);
+    color: #0a0a14; border: none; padding: 15px; border-radius: 10px;
+    font-size: 14px; font-weight: 800; cursor: pointer; letter-spacing: 1.5px;
+    text-transform: uppercase; transition: opacity .2s; font-family: system-ui, sans-serif;
+    min-height: 52px;
   }
-  .lock-btn:hover { background: var(--gold2); }
+  .lock-btn:hover { opacity: .85; }
   .lock-error { font-size: 12px; color: var(--red); margin-top: 10px; display: none; }
+  .lock-access-link {
+    margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.06);
+  }
+  .lock-access-link a {
+    font-size: 12px; color: rgba(201,168,76,.55); text-decoration: none;
+    letter-spacing: 1px; transition: color .2s; min-height: auto !important;
+  }
+  .lock-access-link a:hover { color: var(--gold); }
 
   /* ===== HQ HEADER ===== */
   header {
@@ -131,7 +179,7 @@
   .action-deadline.ok { color: var(--muted); }
 
   /* ===== QUICK PAYMENT ===== */
-  .payment-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .payment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
   .pay-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; text-align: center; }
   .pay-icon { font-size: 28px; margin-bottom: 8px; }
   .pay-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
@@ -240,6 +288,73 @@
   .rlog .radpt { color: var(--gold); font-weight: 700; }
   .rlog .ok { color: var(--green); }
 
+  /* ===== AUTH MODAL ===== */
+  .auth-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; }
+  .auth-overlay.open { display: flex; }
+  .auth-card { background: #0d0d1a; border: 1px solid rgba(201,168,76,0.3); border-radius: 18px; padding: 40px 36px 32px; width: min(420px, calc(100vw - 24px)); max-height: 90vh; overflow-y: auto; position: relative; }
+  .auth-tabs { display: flex; border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; margin-bottom: 28px; overflow: hidden; }
+  .auth-tab { flex: 1; padding: 11px; background: transparent; border: none; color: var(--muted); font-weight: 700; font-size: 13px; cursor: pointer; transition: all .2s; }
+  .auth-tab.active { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .auth-field { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.18); border-radius: 9px; padding: 14px 16px; color: var(--text); font-size: 16px; outline: none; min-height: 52px; margin-bottom: 12px; font-family: system-ui, sans-serif; transition: border-color .2s; }
+  .auth-field:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,168,76,0.1); }
+  .auth-err { display: none; background: rgba(230,57,70,0.1); border: 1px solid rgba(230,57,70,0.3); border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #f87171; margin-bottom: 12px; line-height: 1.5; }
+  .auth-ok { display: none; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); border-radius: 6px; padding: 10px 14px; font-size: 12px; color: var(--emerald); margin-bottom: 12px; }
+  .auth-submit { width: 100%; background: linear-gradient(135deg, #c9a84c, #e8c76e); color: #0a0a14; border: none; padding: 15px; border-radius: 10px; font-size: 14px; font-weight: 800; cursor: pointer; min-height: 52px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; transition: opacity .2s; }
+  .auth-submit:hover { opacity: .85; }
+  .auth-submit:disabled { opacity: .5; cursor: not-allowed; }
+  .auth-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; padding: 4px; }
+  .auth-footer { text-align: center; font-size: 12px; color: var(--muted); }
+  .auth-link { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 12px; font-weight: 700; padding: 0; }
+
+  /* ===== USER PROFILE WIDGET ===== */
+  .user-widget { background: var(--card); border: 1px solid rgba(201,168,76,0.2); border-radius: 10px; margin: 12px 10px 0; padding: 14px; }
+  .user-widget-email { font-size: 11px; color: var(--muted); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .user-ref-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+  .user-ref-code { font-family: monospace; font-size: 11px; font-weight: 700; color: var(--gold); background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 4px; padding: 4px 8px; flex: 1; letter-spacing: 1px; }
+  .user-copy-btn { background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.25); color: var(--gold); padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: 700; white-space: nowrap; }
+  .user-copy-btn:hover { background: rgba(201,168,76,0.22); }
+  .user-logout-btn { width: 100%; background: rgba(230,57,70,0.08); border: 1px solid rgba(230,57,70,0.2); color: #f87171; padding: 7px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 700; }
+  .user-logout-btn:hover { background: rgba(230,57,70,0.18); }
+
+  /* ===== TRIAL COUNTDOWN BANNER ===== */
+  .trial-banner { background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(46,158,107,0.06)); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .trial-banner-left { display: flex; align-items: center; gap: 12px; }
+  .trial-timer { font-family: monospace; font-size: 20px; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+  .trial-label { font-size: 11px; color: var(--muted); }
+  .trial-upgrade-btn { background: var(--gold); color: #0a0a14; border: none; padding: 8px 16px; border-radius: 7px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; text-decoration: none; display: inline-block; }
+
+  /* ===== SWARM BAR ===== */
+  .swarm-bar { background: rgba(16,185,129,0.05); border-bottom: 1px solid rgba(16,185,129,0.15); padding: 7px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: rgba(16,185,129,0.75); }
+  .swarm-bar a { color: rgba(201,168,76,0.65); font-size: 10px; text-decoration: none; letter-spacing: 1px; }
+  .swarm-bar a:hover { color: var(--gold); }
+
+  /* ===== AI CONCIERGE ===== */
+  .concierge-panel { background: linear-gradient(135deg, rgba(201,168,76,0.07), rgba(16,185,129,0.05)); border: 1px solid rgba(201,168,76,0.2); border-radius: 14px; padding: 20px 22px; margin-bottom: 20px; }
+  .concierge-greeting { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .concierge-avatar { font-size: 28px; flex-shrink: 0; }
+  .concierge-title { font-size: 15px; font-weight: 900; color: var(--gold); }
+  .concierge-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .concierge-routes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .croute { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; text-decoration: none; transition: border-color 0.15s, transform 0.15s; cursor: pointer; }
+  .croute:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-1px); }
+  .cr-icon { font-size: 20px; margin-bottom: 4px; }
+  .cr-label { font-size: 12px; font-weight: 800; color: var(--text); line-height: 1.3; }
+  .cr-sub { font-size: 10px; color: var(--muted); line-height: 1.4; }
+  .cr-arrow { font-size: 14px; color: var(--gold); margin-top: 6px; font-weight: 700; }
+  .croute-legal { border-top: 2px solid var(--green); }
+  .croute-cyber { border-top: 2px solid #f87171; }
+  .croute-docs { border-top: 2px solid var(--gold); }
+  .croute-general { border-top: 2px solid #a78bfa; }
+
+  /* ===== SKYSCRAPER CTA ===== */
+  .sky-cta { display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04)); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; text-decoration: none; transition: border-color 0.2s; }
+  .sky-cta:hover { border-color: var(--gold); }
+  .sky-cta-left { display: flex; align-items: center; gap: 12px; }
+  .sky-cta-icon { font-size: 22px; }
+  .sky-cta-title { font-size: 13px; font-weight: 800; color: var(--gold); }
+  .sky-cta-sub { font-size: 11px; color: var(--muted); }
+  .sky-cta-btn { background: var(--gold); color: #0a0a14; font-size: 11px; font-weight: 800; padding: 7px 14px; border-radius: 6px; white-space: nowrap; }
+
   @media (max-width: 900px) {
     .hq { grid-template-columns: 1fr; }
     aside { display: none; }
@@ -247,6 +362,7 @@
     .payment-grid { grid-template-columns: 1fr; }
     .router-adapters-grid { grid-template-columns: repeat(3, 1fr); }
     .ifr-panel { width: 100%; }
+    .concierge-routes { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 600px) {
     body { overflow-x: hidden; font-size: 16px; }
@@ -265,30 +381,25 @@
 </head>
 <body>
 <div id="stripe-banner" style="background:linear-gradient(90deg,rgba(0,212,115,0.08),rgba(0,212,115,0.03));border-bottom:1px solid rgba(0,212,115,0.3);padding:10px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:0.8rem;color:#00D473;">
-  <span>✅ <strong>Stripe LIVE.</strong> PayPal, Card, and Interac all active. acct_1TG0cIASsTLqnu8V recovered June 2026.</span>
+  <span>✅ <strong>Payments: Active.</strong> PayPal, Card, and Interac all active.</span>
   <button onclick="this.parentElement.style.display='none'" style="background:none;border:none;color:#888;cursor:pointer;font-size:1.2rem;">×</button>
 </div>
 
 <!-- ===== LOCK SCREEN ===== -->
 <div id="lock-screen">
+  <div id="lock-ghost" aria-hidden="true">🤖</div>
   <div class="lock-box">
-    <div class="lock-logo">PrimeDox <span>HQ</span></div>
-    <div class="lock-sub">zprimedoxaihq.com — Private Command Center<br>Derek Francisco / Doc Weedlaw</div>
-    <input type="password" class="lock-input" id="lock-input" placeholder="Access code" autofocus />
-    <button class="lock-btn" onclick="checkCode()">Enter HQ</button>
-    <div class="lock-error" id="lock-error">Incorrect access code</div>
-    <div style="font-size:11px;color:var(--dim);margin-top:20px;">Change code: edit LOCK_CODE in page source</div>
-    <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--border);">
-      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;text-align:center;">No code? <strong style="color:var(--gold);">Purchase access below.</strong></div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Individual Access — $199/mo</div>
-      <a href="https://paypal.me/franciscoderek7/199CAD" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:var(--gold);color:#111;font-weight:800;padding:11px;border-radius:8px;font-size:13px;text-decoration:none;margin-bottom:8px;">💳 Pay $199/mo — Individual (PayPal)</a>
-      <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20HQ%20Access%20%E2%80%94%20%24199%2Fmo%20Individual&body=Hi%20Derek%2C%0A%0AI%20want%20to%20purchase%20PrimeDox%20HQ%20Individual%20access%20at%20%24199%2Fmo.%20Sending%20Interac%20e-Transfer%20to%20franciscoderek7%40gmail.com.%0A%0APlease%20send%20me%20the%20access%20code%20on%20confirmation." style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-weight:600;padding:9px;border-radius:8px;font-size:12px;text-decoration:none;margin-bottom:14px;">💸 Interac e-Transfer — $199/mo</a>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Team / Enterprise — $499/mo</div>
-      <a href="https://paypal.me/franciscoderek7/499CAD" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(201,168,76,0.15);border:1px solid var(--gold);color:var(--gold);font-weight:800;padding:11px;border-radius:8px;font-size:13px;text-decoration:none;margin-bottom:8px;">💳 Pay $499/mo — Team Access (PayPal)</a>
-      <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20HQ%20Access%20%E2%80%94%20%24499%2Fmo%20Team&body=Hi%20Derek%2C%0A%0AI%20want%20to%20purchase%20PrimeDox%20HQ%20Team%20access%20at%20%24499%2Fmo.%20Organization%3A%20%0A%0ASending%20Interac%20e-Transfer%20to%20franciscoderek7%40gmail.com.%0A%0APlease%20send%20team%20access%20codes%20on%20confirmation." style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-weight:600;padding:9px;border-radius:8px;font-size:12px;text-decoration:none;margin-bottom:14px;">💸 Interac e-Transfer — $499/mo</a>
-      <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;">Enterprise — $999/mo</div>
-      <a href="https://paypal.me/franciscoderek7/999CAD" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.5);color:var(--gold);font-weight:800;padding:11px;border-radius:8px;font-size:13px;text-decoration:none;margin-bottom:8px;">💳 Pay $999/mo — Enterprise (PayPal)</a>
-      <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20HQ%20Enterprise%20Access%20%E2%80%94%20%24999%2Fmo&body=Hi%20Derek%2C%0A%0AWe%20need%20Enterprise%20HQ%20access%20at%20%24999%2Fmo.%20Organization%3A%20%0A%0AContact%3A%20%0A%0APlease%20quote%20or%20invoice%20us." style="display:flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-weight:600;padding:9px;border-radius:8px;font-size:12px;text-decoration:none;">📧 Enterprise Inquiry → Email</a>
+    <div class="lock-eyebrow">⬡ &nbsp; PrimeDox HQ &nbsp; · &nbsp; Classified</div>
+    <div class="lock-logo">Prime<span style="-webkit-text-fill-color:rgba(201,168,76,1)">Dox</span></div>
+    <div class="lock-tagline">The Brain Behind the Empire<br><span style="font-size:10px;opacity:.5">zprimedoxaihq.com · Derek Francisco</span></div>
+    <input type="password" class="lock-input" id="lock-input" placeholder="• • • • • • •" autofocus />
+    <button class="lock-btn" onclick="checkCode()">Enter Command Center →</button>
+    <div class="lock-error" id="lock-error">⚠ Incorrect access code</div>
+    <div class="lock-access-link">
+      <a href="pricing.html">No code? &nbsp;Get Access →</a>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.04);">
+        <button onclick="openAuthModal('login')" style="background:none;border:none;color:rgba(201,168,76,0.45);font-size:11px;cursor:pointer;letter-spacing:1px;padding:0;min-height:auto;">Already have an account? &nbsp;Login →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -306,6 +417,11 @@
   </div>
 </header>
 
+<div class="swarm-bar">
+  <span>⬡ &nbsp;<strong>Powered by Agent Swarm Technology</strong> &nbsp;·&nbsp; 45 specialist agents &nbsp;·&nbsp; 8 adapters active &nbsp;·&nbsp; <span style="color:rgba(16,185,129,0.9);">●</span> All Systems Nominal</span>
+  <a href="https://franciscoholdingsinc.com" target="_blank" rel="noopener">🏛️ Empire OS →</a>
+</div>
+
 <div class="hq">
   <!-- Sidebar -->
   <aside>
@@ -318,6 +434,7 @@
       <a class="nav-link" onclick="showView('legal')"><span class="nav-link-icon">⚖️</span>Legal Tracker</a>
       <a class="nav-link" onclick="showView('autofix')"><span class="nav-link-icon">🛠️</span>Auto-Fix (GLM)</a>
       <a class="nav-link" onclick="window.location.href='empire-os.html'" style="border-left:2px solid #D4AF37;background:rgba(212,175,55,.07);color:#D4AF37;font-weight:700;"><span class="nav-link-icon">🏛️</span>Empire.OS</a>
+      <a class="nav-link" href="https://franciscoholdingsinc.com" target="_blank" rel="noopener" style="border-left:2px solid rgba(16,185,129,0.6);"><span class="nav-link-icon">🏢</span>Skyscraper ↗</a>
       <a class="nav-link" onclick="window.location.href='doc-weedlaw-ai.html'" style="border-left:2px solid #FFD700;background:rgba(255,215,0,.06);color:#FFD700;font-weight:700;"><span class="nav-link-icon">🤖</span>Doc Weedlaw AI</a>
     </div>
     <div class="nav-group">
@@ -339,6 +456,20 @@
       <a class="nav-link" onclick="window.open('https://dashboard.stripe.com','_blank')"><span class="nav-link-icon">💲</span>Stripe</a>
       <a class="nav-link" onclick="window.open('https://porkbun.com','_blank')"><span class="nav-link-icon">🐷</span>Porkbun DNS</a>
     </div>
+
+    <!-- User Profile Widget -->
+    <div id="user-widget" class="user-widget" style="display:none;">
+      <div class="user-widget-email" id="uw-email">—</div>
+      <div class="user-ref-row">
+        <span class="user-ref-code" id="uw-ref-code">—</span>
+        <button class="user-copy-btn" onclick="copyRefLink()">Copy</button>
+      </div>
+      <div id="uw-discount" style="font-size:10px;color:var(--muted);margin-bottom:10px;"></div>
+      <button class="user-logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+    <div id="user-login-prompt" style="margin:12px 10px 0;text-align:center;">
+      <button onclick="openAuthModal('login')" style="width:100%;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);color:var(--gold);padding:8px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;">Login / Sign Up</button>
+    </div>
   </aside>
 
   <!-- Main content -->
@@ -346,6 +477,68 @@
 
     <!-- ====== DASHBOARD ====== -->
     <div class="view active" id="view-dashboard">
+
+      <!-- AI Concierge Quick Route -->
+      <div class="concierge-panel">
+        <div class="concierge-greeting">
+          <div class="concierge-avatar">🤖</div>
+          <div>
+            <div class="concierge-title">PrimeDox AI — What do you need today?</div>
+            <div class="concierge-sub">Select your focus area → routed instantly to the right specialist. All 45 agents standing by.</div>
+          </div>
+        </div>
+        <div class="concierge-routes">
+          <a href="https://franciscoderek7.github.io/Ccldr-net/" target="_blank" rel="noopener" class="croute croute-legal">
+            <span class="cr-icon">🌿</span>
+            <span class="cr-label">Legal / Cannabis Defense</span>
+            <span class="cr-sub">CCLDR · BENO-X · Charter Rights</span>
+            <span class="cr-arrow">→</span>
+          </a>
+          <a href="https://omniaguard.com" target="_blank" rel="noopener" class="croute croute-cyber">
+            <span class="cr-icon">🛡️</span>
+            <span class="cr-label">Cybersecurity</span>
+            <span class="cr-sub">OmniaGuard · Threat Defense · AI Shield</span>
+            <span class="cr-arrow">→</span>
+          </a>
+          <a href="javascript:void(0)" onclick="showViewDirect('apps')" class="croute croute-docs">
+            <span class="cr-icon">📄</span>
+            <span class="cr-label">Business Documents</span>
+            <span class="cr-sub">AI Drafting · Templates · Automation</span>
+            <span class="cr-arrow">→</span>
+          </a>
+          <a href="javascript:void(0)" onclick="showViewDirect('router')" class="croute croute-general">
+            <span class="cr-icon">🧠</span>
+            <span class="cr-label">General Query</span>
+            <span class="cr-sub">Route to any of 8 specialist agents</span>
+            <span class="cr-arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Empire Skyscraper CTA -->
+      <a href="https://franciscoholdingsinc.com" target="_blank" rel="noopener" class="sky-cta">
+        <div class="sky-cta-left">
+          <span class="sky-cta-icon">🏢</span>
+          <div>
+            <div class="sky-cta-title">Enter the Francisco Holdings Skyscraper</div>
+            <div class="sky-cta-sub">45-floor empire · Floor 1 OmniaGuard · Floor 2 BENO-X · Floor 3 CCLDR · Floor 4 TechPetCage · Floor 5 CleanSwarm · Floor 6 VaultVelocity · Floor 7 VIGILAX · +38 more</div>
+          </div>
+        </div>
+        <span class="sky-cta-btn">Enter ↗</span>
+      </a>
+
+      <!-- Trial Countdown (shown only when trial is active) -->
+      <div class="trial-banner" id="trial-banner" style="display:none;">
+        <div class="trial-banner-left">
+          <span style="font-size:20px;">⏱</span>
+          <div>
+            <div class="trial-label">FREE TRIAL ACTIVE · <span id="trial-email-display"></span></div>
+            <div class="trial-timer" id="trial-timer">23:59:59</div>
+            <div class="trial-label" style="margin-top:2px;">remaining · Auto-expires in 24h</div>
+          </div>
+        </div>
+        <a href="pricing.html" class="trial-upgrade-btn">Upgrade Now →</a>
+      </div>
 
       <!-- Alerts -->
       <div class="alert alert-critical">
@@ -360,20 +553,12 @@
       <div class="alert alert-urgent">
         <div class="alert-icon">⚠️</div>
         <div>
-          <div class="alert-title">Stripe LIVE — acct_1TG0cIASsTLqnu8V Recovered</div>
+          <div class="alert-title">Payments: Active</div>
           Stripe is active as of June 2026. Wire Stripe Price IDs into payment-provider.js for full Stripe checkout.
           <a href="https://dashboard.stripe.com" target="_blank" class="alert-link">→ Stripe Dashboard</a>
         </div>
       </div>
 
-      <div class="alert alert-urgent">
-        <div class="alert-icon">💬</div>
-        <div>
-          <div class="alert-title">MDG Order #8600918 — $35 NSF Dispute Unsent</div>
-          Email template ready. Fill case number and send to finance@mdg.ca today.
-          <a href="mailto:finance@mdg.ca?subject=Order 8600918 — NSF Fee Dispute %26 Reschedule" class="alert-link">→ Send Email</a>
-        </div>
-      </div>
 
       <!-- Key metrics -->
       <div class="metrics" style="margin-top:20px;">
@@ -550,12 +735,7 @@
         </div>
         <div class="action-item high">
           <div class="action-check" onclick="this.style.background='var(--green)';this.style.borderColor='var(--green)'"></div>
-          <div class="action-text"><strong>STRIPE LIVE</strong> — acct_1TG0cIASsTLqnu8V recovered. Add Stripe Price IDs to payment-provider.js for each product. dashboard.stripe.com</div>
-          <div class="action-deadline">TODAY</div>
-        </div>
-        <div class="action-item high">
-          <div class="action-check" onclick="this.style.background='var(--green)';this.style.borderColor='var(--green)'"></div>
-          <div class="action-text"><strong>MDG DISPUTE EMAIL</strong> — Send to finance@mdg.ca — template in Phase 2 Content Kit — need: your case #, NSF date</div>
+          <div class="action-text"><strong>PAYMENTS ACTIVE</strong> — Add Stripe Price IDs to payment-provider.js for each product. dashboard.stripe.com</div>
           <div class="action-deadline">TODAY</div>
         </div>
         <div class="action-item high">
@@ -706,7 +886,7 @@
         <div class="pay-card">
           <div class="pay-icon">💳</div>
           <div class="pay-title">PayPal</div>
-          <div class="pay-detail">paypal.me/franciscoderek7<br>Send link to anyone instantly</div>
+          <div class="pay-detail">paypal.me/derekfranciacco1<br>Send link to anyone instantly</div>
           <a href="https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA" target="_blank" class="pay-btn">Open PayPal Link</a>
         </div>
         <div class="pay-card">
@@ -720,6 +900,13 @@
           <div class="pay-title">Stripe — LIVE</div>
           <div class="pay-detail">$406.80 pending payout<br>Recover account then request payout</div>
           <a href="https://dashboard.stripe.com" target="_blank" class="pay-btn">Stripe Dashboard →</a>
+        </div>
+        <div class="pay-card" style="border-top:2px solid #F59E0B;">
+          <div class="pay-icon">₿</div>
+          <div class="pay-title">Bitcoin (BTC)</div>
+          <div class="pay-detail" style="word-break:break-all;font-family:monospace;font-size:10px;">bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>
+          <button onclick="navigator.clipboard.writeText('bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x').then(function(){var b=document.getElementById('btc-copy-msg');b.style.display='block';setTimeout(function(){b.style.display='none'},2000)})" class="pay-btn" style="cursor:pointer;border:none;">Copy BTC Address</button>
+          <div id="btc-copy-msg" style="display:none;font-size:11px;color:#10B981;margin-top:6px;text-align:center;">✓ Copied!</div>
         </div>
       </div>
 
@@ -981,7 +1168,7 @@
     <div style="text-align:center;margin-top:24px;padding:16px;background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.1);border-radius:4px;">
       <p style="font-size:0.82rem;color:#666;margin-bottom:12px;">Support the constitutional fight. Every dollar goes directly to court costs.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <a href="https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA" target="_blank" rel="noopener" style="background:#D4AF37;color:#000;padding:10px 20px;font-weight:800;font-size:0.82rem;text-decoration:none;border-radius:2px;">💳 Donate via PayPal</a>
+        <a href="https://paypal.me/derekfranciacco1" target="_blank" rel="noopener" style="background:#D4AF37;color:#000;padding:10px 20px;font-weight:800;font-size:0.82rem;text-decoration:none;border-radius:2px;">💳 Donate via PayPal</a>
         <a href="https://ccldr.net/cases.html#donate" target="_blank" rel="noopener" style="border:1px solid rgba(212,175,55,0.4);color:#D4AF37;padding:10px 20px;font-weight:700;font-size:0.82rem;text-decoration:none;border-radius:2px;">View All Donation Options</a>
       </div>
     </div>
@@ -1052,7 +1239,7 @@
 
   function checkCode() {
     const val = document.getElementById('lock-input').value;
-    if (val === LOCK_CODE) {
+    if (val.trim().toUpperCase() === LOCK_CODE.toUpperCase()) {
       unlockHQ();
       sessionStorage.setItem(SESSION_KEY, '1');
     } else {
@@ -1081,7 +1268,13 @@
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + id).classList.add('active');
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    event.target.closest('.nav-link').classList.add('active');
+    var navEl = event && event.target ? event.target.closest('.nav-link') : null;
+    if (navEl) navEl.classList.add('active');
+  }
+  function showViewDirect(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + id).classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   }
 
   // App Launcher / Iframe Panel
@@ -1144,7 +1337,7 @@
       spec: 'Empire Concierge — 45 Specialist Agents',
       response: "PrimeDox here. I'm the central concierge for Francisco Holdings Inc. — 45 specialist agents across security, legal, AI, business, and specialized sectors. Let me route your query to the optimal agent.",
       revenue: [
-        { label: '🤖 Empire AI Access — $99/year', url: 'https://paypal.me/franciscoderek7/99', primary: true },
+        { label: '🤖 Empire AI Access — $99/year', url: 'https://paypal.me/derekfranciacco1/99', primary: true },
         { label: '🏢 Francisco Holdings Inc.', url: 'https://franciscoholdingsinc.com', primary: false }
       ]
     },
@@ -1153,8 +1346,8 @@
       spec: 'Cannabis Defense & Charter Rights Education',
       response: "Counsel standing by. The BENO-X constitutional education framework has helped hundreds of Canadians understand their Charter rights. Derek Francisco is a constitutional educator with 20+ years of litigation experience. Educational only — not legal advice.",
       revenue: [
-        { label: '🚨 Emergency Session — $500', url: 'https://paypal.me/franciscoderek7/500', primary: true },
-        { label: '📄 Defense Document Template — $49', url: 'https://paypal.me/franciscoderek7/49', primary: false }
+        { label: '🚨 Emergency Session — $500', url: 'https://paypal.me/derekfranciacco1/500', primary: true },
+        { label: '📄 Defense Document Template — $49', url: 'https://paypal.me/derekfranciacco1/49', primary: false }
       ]
     },
     'omniaguard': {
@@ -1180,8 +1373,8 @@
       spec: 'Smart Pet Technology',
       response: "VetBot activated. TechPetCage has smart solutions for every pet — GPS trackers ($49), health monitors ($99), smart cameras ($79), automated feeders ($59), and interactive toys ($29). General guidance only — consult a vet for health concerns.",
       revenue: [
-        { label: '📍 GPS Pet Tracker — $49', url: 'https://paypal.me/franciscoderek7/49', primary: true },
-        { label: '❤️ Pet Health Monitor — $99', url: 'https://paypal.me/franciscoderek7/99', primary: false }
+        { label: '📍 GPS Pet Tracker — $49', url: 'https://paypal.me/derekfranciacco1/49', primary: true },
+        { label: '❤️ Pet Health Monitor — $99', url: 'https://paypal.me/derekfranciacco1/99', primary: false }
       ]
     },
     'phoenix': {
@@ -1189,7 +1382,7 @@
       spec: '$10M+ Dynasty Investment Strategy',
       response: "Phoenix here. Dynasty-level strategy is different from business strategy. I work with clients building generational wealth — $10M+ deal strategy, sovereign wealth, multi-generational transfer, and family office design. State your vision.",
       revenue: [
-        { label: '💎 Dynasty Strategy Session — $500', url: 'https://paypal.me/franciscoderek7/500', primary: true },
+        { label: '💎 Dynasty Strategy Session — $500', url: 'https://paypal.me/derekfranciacco1/500', primary: true },
         { label: '🏢 Francisco Holdings', url: 'https://franciscoholdingsinc.com', primary: false }
       ]
     },
@@ -1207,7 +1400,7 @@
       spec: 'Cleaning Business Automation',
       response: "Swarm online. CleanSwarm helps cleaning businesses run leaner, dispatch faster, and track quality in real time. Typical clients see 25% admin reduction in the first 30 days. What's your operational challenge?",
       revenue: [
-        { label: '🧹 CleanSwarm Growth — $99/month', url: 'https://paypal.me/franciscoderek7/99', primary: true },
+        { label: '🧹 CleanSwarm Growth — $99/month', url: 'https://paypal.me/derekfranciacco1/99', primary: true },
         { label: '💬 Book a Demo', url: 'https://cleanswarm.ca', primary: false }
       ]
     }
@@ -1310,8 +1503,220 @@
     });
   }
 </script>
+<!-- ===== AUTH MODAL ===== -->
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeAuthModal()">✕</button>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Login</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+    <input class="auth-field" id="auth-email" type="email" placeholder="Email address" autocomplete="email" />
+    <input class="auth-field" id="auth-password" type="password" placeholder="Password" autocomplete="current-password" />
+    <input class="auth-field" id="auth-ref-field" type="text" placeholder="Referral code (optional) — FHI-REF-XXXX" style="display:none;" />
+    <div class="auth-err" id="auth-err"></div>
+    <div class="auth-ok" id="auth-ok"></div>
+    <button class="auth-submit" id="auth-submit" onclick="submitAuth()">Login →</button>
+    <div class="auth-footer">
+      <span id="auth-switch-lbl">Don't have an account? </span>
+      <button class="auth-link" id="auth-switch-btn" onclick="switchAuthTab(currentAuthTab==='login'?'signup':'login')">Sign Up Free</button>
+      <br><button class="auth-link" style="margin-top:8px;color:var(--muted);font-weight:400;" onclick="showResetForm()">Forgot password?</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── AUTH MODAL ─────────────────────────────────────────────────────────────
+var currentAuthTab = 'login';
+
+function openAuthModal(tab) {
+  currentAuthTab = tab || 'login';
+  switchAuthTab(currentAuthTab);
+  document.getElementById('auth-overlay').classList.add('open');
+  setTimeout(function() { document.getElementById('auth-email').focus(); }, 100);
+}
+function closeAuthModal() {
+  document.getElementById('auth-overlay').classList.remove('open');
+  document.getElementById('auth-err').style.display = 'none';
+  document.getElementById('auth-ok').style.display = 'none';
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-ref-field').value = '';
+}
+
+function switchAuthTab(tab) {
+  currentAuthTab = tab;
+  document.getElementById('tab-login').className = 'auth-tab' + (tab === 'login' ? ' active' : '');
+  document.getElementById('tab-signup').className = 'auth-tab' + (tab === 'signup' ? ' active' : '');
+  document.getElementById('auth-ref-field').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('auth-submit').textContent = tab === 'login' ? 'Login →' : 'Create Account →';
+  document.getElementById('auth-switch-lbl').textContent = tab === 'login' ? "Don't have an account? " : 'Already have an account? ';
+  document.getElementById('auth-switch-btn').textContent = tab === 'login' ? 'Sign Up Free' : 'Login';
+  document.getElementById('auth-password').setAttribute('autocomplete', tab === 'login' ? 'current-password' : 'new-password');
+}
+
+function showAuthErr(msg) {
+  var el = document.getElementById('auth-err');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('auth-ok').style.display = 'none';
+}
+function showAuthOk(msg) {
+  var el = document.getElementById('auth-ok');
+  el.textContent = msg; el.style.display = 'block';
+  document.getElementById('auth-err').style.display = 'none';
+}
+
+async function submitAuth() {
+  var btn = document.getElementById('auth-submit');
+  var email = document.getElementById('auth-email').value.trim();
+  var pass = document.getElementById('auth-password').value;
+  var ref = document.getElementById('auth-ref-field').value.trim();
+  if (!email || !pass) { showAuthErr('Please enter your email and password.'); return; }
+  if (pass.length < 8) { showAuthErr('Password must be at least 8 characters.'); return; }
+  btn.disabled = true; btn.textContent = 'Working…';
+  document.getElementById('auth-err').style.display = 'none';
+
+  var r;
+  if (currentAuthTab === 'login') {
+    r = await (window.FHI_SUPA ? FHI_SUPA.login(email, pass) : { error: 'Auth module loading…' });
+    if (r.error) { showAuthErr(r.error); }
+    else {
+      showAuthOk('Logged in! Loading your dashboard…');
+      setTimeout(function() {
+        closeAuthModal();
+        loadUserProfile(r.user);
+        unlockHQ();
+        sessionStorage.setItem(SESSION_KEY, '1');
+      }, 800);
+    }
+  } else {
+    r = await (window.FHI_SUPA ? FHI_SUPA.signup(email, pass, ref) : { error: 'Auth module loading…' });
+    if (r.error) { showAuthErr(r.error); }
+    else {
+      showAuthOk('Account created! Check your email, then log in below.');
+      setTimeout(function() { switchAuthTab('login'); }, 2000);
+    }
+  }
+  btn.disabled = false;
+  btn.textContent = currentAuthTab === 'login' ? 'Login →' : 'Create Account →';
+}
+
+async function showResetForm() {
+  var email = document.getElementById('auth-email').value.trim();
+  if (!email) { showAuthErr('Enter your email address first, then click Forgot password.'); return; }
+  if (!window.FHI_SUPA) { showAuthErr('Auth module loading — try again in a moment.'); return; }
+  var r = await FHI_SUPA.resetPassword(email);
+  if (r.error) showAuthErr(r.error);
+  else showAuthOk('Password reset email sent to ' + email);
+}
+
+// ── USER PROFILE ──────────────────────────────────────────────────────────
+async function loadUserProfile(user) {
+  if (!user) return;
+  var email = user.email || localStorage.getItem('fhi_user_email') || '—';
+  document.getElementById('uw-email').textContent = email;
+
+  var profile = null;
+  if (window.FHI_SUPA) {
+    profile = await FHI_SUPA.getProfile(user.id);
+  }
+  var refCode = (profile && profile.referral_code) || localStorage.getItem('my_ref_code') || '—';
+  document.getElementById('uw-ref-code').textContent = refCode;
+
+  var tier = (profile && profile.discount_tier) || 'none';
+  var tierMap = { none: '', referral: '🔗 10% referral discount', senior: '🌿 15% senior', veteran: '⚔ 20% veteran', fixed_income: '💪 25% fixed income' };
+  document.getElementById('uw-discount').textContent = tierMap[tier] || '';
+
+  document.getElementById('user-widget').style.display = 'block';
+  document.getElementById('user-login-prompt').style.display = 'none';
+}
+
+function copyRefLink() {
+  var code = document.getElementById('uw-ref-code').textContent;
+  if (code === '—') return;
+  var link = window.location.origin + '/pricing.html?ref=' + encodeURIComponent(code);
+  navigator.clipboard.writeText(link).then(function() {
+    var btn = event.target;
+    btn.textContent = '✓ Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+  });
+}
+
+async function handleLogout() {
+  if (window.FHI_SUPA) await FHI_SUPA.logout();
+  document.getElementById('user-widget').style.display = 'none';
+  document.getElementById('user-login-prompt').style.display = 'block';
+  lockHQ();
+}
+
+// ── TRIAL COUNTDOWN ────────────────────────────────────────────────────────
+function startTrialCountdown() {
+  var banner = document.getElementById('trial-banner');
+  var timerEl = document.getElementById('trial-timer');
+  var emailEl = document.getElementById('trial-email-display');
+
+  function tick() {
+    if (!window.FHI_SUPA) { setTimeout(tick, 1000); return; }
+    var t = FHI_SUPA.checkTrial();
+    if (!t) { banner.style.display = 'none'; return; }
+    if (t.expired) {
+      banner.style.display = 'none';
+      if (window.location.pathname.indexOf('index.html') > -1 || window.location.pathname === '/') {
+        window.location.href = 'pricing.html?expired=1';
+      }
+      return;
+    }
+    banner.style.display = 'flex';
+    if (emailEl) emailEl.textContent = t.email || '';
+    var h = String(t.hours).padStart(2, '0');
+    var m = String(t.mins).padStart(2, '0');
+    var s = String(t.secs).padStart(2, '0');
+    timerEl.textContent = h + ':' + m + ':' + s;
+    setTimeout(tick, 1000);
+  }
+  tick();
+}
+
+// ── SESSION INIT (extend existing unlockHQ) ────────────────────────────────
+var _origUnlock = window.unlockHQ;
+window.unlockHQ = function() {
+  if (_origUnlock) _origUnlock();
+  // Check Supabase session
+  if (window.FHI_SUPA) {
+    FHI_SUPA.getSession().then(function(sess) {
+      if (sess && sess.user) loadUserProfile(sess.user);
+    });
+  }
+  startTrialCountdown();
+};
+
+// Auto-open auth if ?ref= in URL (pre-fill referral)
+document.addEventListener('DOMContentLoaded', function() {
+  var ref = window.FHI_SUPA ? FHI_SUPA.getRefFromURL() : (new URLSearchParams(window.location.search).get('ref'));
+  if (ref) {
+    document.getElementById('auth-ref-field').value = ref;
+  }
+  // Restore Supabase session
+  if (window.FHI_SUPA) {
+    FHI_SUPA.getSession().then(function(sess) {
+      if (sess) {
+        unlockHQ();
+        sessionStorage.setItem(SESSION_KEY, '1');
+        loadUserProfile(sess.user);
+      }
+    });
+  }
+});
+</script>
+
 <script>window.REVEREND_SITE='primedox';</script>
 <script src="reverend-ai.js"></script>
+<style>
+/* Chatbot: constrain to corner, no page-covering */
+#rev-ai-box{width:300px!important;max-height:400px!important;bottom:88px!important;right:20px!important;}
+#rev-ai-btn{bottom:20px!important;right:20px!important;width:52px!important;height:52px!important;}
+@media(max-width:480px){#rev-ai-box{width:calc(100vw - 32px)!important;right:16px!important;max-height:380px!important;bottom:80px!important;}#rev-ai-btn{right:16px!important;bottom:16px!important;}}
+</style>
 <div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
 
 <div id="timmy-badge" style="position:fixed;bottom:20px;left:20px;z-index:999;background:rgba(0,0,0,0.88);border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:6px 14px;display:flex;align-items:center;gap:8px;font-size:0.72rem;color:rgba(255,255,255,0.7);cursor:pointer;backdrop-filter:blur(8px);" title="Timmy AI: Oversight layer active — monitoring empire integrity" onclick="this.querySelector('.timmy-tip').style.display=this.querySelector('.timmy-tip').style.display==='none'?'block':'none'">
@@ -1324,7 +1729,7 @@
 </div>
 <style>@keyframes tpulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{opacity:0.7;box-shadow:0 0 0 4px rgba(16,185,129,0)}}</style>
 
-<div id="discount-widget" style="position:fixed;bottom:20px;right:20px;z-index:998;background:rgba(0,0,0,0.92);border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:0;width:240px;backdrop-filter:blur(12px);font-size:0.8rem;">
+<div id="discount-widget" style="position:fixed;bottom:100px;right:20px;z-index:998;background:rgba(0,0,0,0.92);border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:0;width:240px;backdrop-filter:blur(12px);font-size:0.8rem;">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(212,175,55,0.15);cursor:pointer;" onclick="var b=document.getElementById('discount-body');b.style.display=b.style.display==='none'?'block':'none'">
     <span style="color:#D4AF37;font-weight:700;font-size:0.75rem;letter-spacing:0.08em;">🎖 DISCOUNT ELIGIBILITY</span>
     <span id="discount-toggle" style="color:#888;font-size:0.7rem;">▼ Open</span>
@@ -1347,10 +1752,19 @@
     <div style="margin-top:12px;border-top:1px solid rgba(212,175,55,0.1);padding-top:10px;">
       <label style="font-size:0.7rem;color:rgba(255,255,255,0.5);display:block;margin-bottom:4px;">Referral Code (5% off):</label>
       <div style="display:flex;gap:6px;">
-        <input type="text" id="ref-input" placeholder="REF-XXXX" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(212,175,55,0.2);color:#e0e0e0;padding:6px 8px;border-radius:4px;font-size:0.75rem;outline:none;">
+        <input type="text" id="ref-input" placeholder="FHI-REFER-XXX" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(212,175,55,0.2);color:#e0e0e0;padding:6px 8px;border-radius:4px;font-size:0.75rem;outline:none;">
         <button onclick="applyRef()" style="background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.3);color:#D4AF37;padding:6px 10px;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:700;">Apply</button>
       </div>
       <div id="ref-status" style="font-size:0.7rem;color:#10B981;margin-top:4px;display:none;">✓ Referral applied — 5% off added</div>
+    </div>
+    <div style="margin-top:12px;border-top:1px solid rgba(212,175,55,0.1);padding-top:10px;">
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">Share &amp; Earn — give friends 5% off, you earn 10% commission:</div>
+      <div id="my-ref-code" style="font-family:monospace;font-size:0.8rem;font-weight:700;color:#D4AF37;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.25);border-radius:4px;padding:8px 10px;text-align:center;letter-spacing:1px;margin-bottom:6px;">—</div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="generateMyRefCode()" style="flex:1;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#10B981;padding:6px;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:700;">Generate My Code</button>
+        <button onclick="copyMyRefCode()" style="background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.25);color:#D4AF37;padding:6px 10px;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:700;">Copy</button>
+      </div>
+      <div id="ref-copy-ok" style="font-size:0.68rem;color:#10B981;margin-top:4px;display:none;text-align:center;">✓ Copied! Share with anyone — they get 5% off, you earn 10%</div>
     </div>
   </div>
 </div>
@@ -1374,17 +1788,36 @@ function calcDiscount(){
 }
 function applyRef(){
   var code = document.getElementById('ref-input').value.trim().toUpperCase();
-  if(code && code.startsWith('REF-')){
+  if(code && (code.startsWith('FHI-REFER-') || code.startsWith('REF-'))){
     empireDiscount.ref = true;
     document.getElementById('ref-status').style.display = 'block';
     calcDiscount();
     localStorage.setItem('empire_ref', code);
   }
 }
+function generateMyRefCode(){
+  var existing = localStorage.getItem('my_ref_code');
+  if(existing){ document.getElementById('my-ref-code').textContent = existing; return; }
+  var num = ('000' + (Math.floor(Math.random()*900)+100)).slice(-3);
+  var ts = Date.now().toString(36).slice(-3).toUpperCase();
+  var code = 'FHI-REFER-' + ts + num;
+  localStorage.setItem('my_ref_code', code);
+  document.getElementById('my-ref-code').textContent = code;
+}
+function copyMyRefCode(){
+  var code = document.getElementById('my-ref-code').textContent;
+  if(code === '—'){ generateMyRefCode(); }
+  code = document.getElementById('my-ref-code').textContent;
+  if(code !== '—'){
+    navigator.clipboard.writeText(code).then(function(){ document.getElementById('ref-copy-ok').style.display='block'; setTimeout(function(){ document.getElementById('ref-copy-ok').style.display='none'; }, 3000); });
+  }
+}
 // Restore from localStorage
 try{
   var saved = JSON.parse(localStorage.getItem('empire_discount') || '{}');
   if(saved.ref){ empireDiscount.ref = true; }
+  var myCode = localStorage.getItem('my_ref_code');
+  if(myCode){ document.getElementById('my-ref-code').textContent = myCode; }
 }catch(e){}
 </script>
 <script>window.STRIPE_PK = 'pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz';</script>
@@ -1399,6 +1832,18 @@ window.GemmaChat && window.GemmaChat.init({
   accent: '#D4AF37',
   greeting: 'PrimeDox HQ concierge — ask about any company in the empire.'
 });
+</script>
+<script>
+// Load Supabase client after SDK is ready
+(function waitForSupa() {
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    var s = document.createElement('script');
+    s.src = 'supabase-client.js';
+    document.body.appendChild(s);
+  } else {
+    setTimeout(waitForSupa, 100);
+  }
+})();
 </script>
 </body>
 </html>

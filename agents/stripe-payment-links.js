@@ -3,7 +3,7 @@
 // Paste the https://buy.stripe.com/XXXX URLs below
 // Then Claude will wire them into every Buy button across all sites
 //
-// Account: acct_1TG0cIASsTLqnu8V (RECOVERED — June 2026)
+// Stripe LIVE account (RECOVERED — June 2026)
 // Currency: CAD on all one-time, CAD subscriptions for recurring
 
 window.STRIPE_PAYMENT_LINKS = {
