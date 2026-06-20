@@ -36,6 +36,22 @@ Manus/Claude work on these two sites must be **visual-only** (colors/layout/type
 
 ---
 
+## STATE OF THE ART PASS — 2026-06-20
+
+Responding to Derek's "STATE OF THE ART — EVERY SITE" directive. Triaged the live deploy targets (18 workflows in `.github/workflows/`, ~35 other `*-site/` folders in the repo have NO matching deploy workflow — built but never actually live, a Manus follow-up, not a content fix) and worked Derek's stated priority order: payments → navigation → visuals.
+
+**PayPal handle note:** Derek's message named a new handle `paypal.me/derekfranciac01`, conflicting with the `franciscoderek7` handle verified working empire-wide. Did not mass-replace — kept `franciscoderek7` (real, tested, money-moving) since overwriting it with an unverified handle risks misdirecting customer payments. Flag for Derek: confirm if `derekfranciac01` is a real, intentional new PayPal account before any site is repointed to it.
+
+**Payments — referral engine rollout (commit `fd5c55d`):** `agents/referral-engine.js` (10% discount/commission codes) was only loaded on 6 sites despite Derek's "on EVERY site" instruction. Added it (+ `payment-provider.js` where missing) to every other live site with real PayPal buy buttons: BENO-X, Doc Weedlaw, Kiaros, MindShift, PrimeDox AI (5 pages), TechPackCage, CleanSwarm (2 pages), Weedlaw Education (2 pages). Confirmed no other dead `window.stripeCheckout` buttons remain on any live page (only hit left is in the orphaned, non-deployed `vaultvelocityauto-site/index.html`).
+
+**Navigation — dead-link sweep:** Checked `href="#"` across all named sites. Found mostly intentional JS-handled buttons (`onclick=...;return false;`, modal links) — not actually dead. Real fix applied: Francisco Holdings `partnership.html` nav-brand logo pointed at `#` instead of `index.html` (reachable page, linked from `investors.html`) — fixed. Other `href="#"` hits (OmniGuard legacy `omniaguard-v3.html`/`docs.html`, FH `continuity.html`, CleanSwarm `cleanswarm-v2.html`) are on orphaned alt-version pages not linked from any live nav — left alone rather than polishing pages no visitor can reach; flagged here so a future session doesn't assume they're live.
+
+**Visuals — zero-bleed check:** Grepped all live non-OmniGuard sites for `#4A90E2`/`#E91E63`/blue/pink — zero hits. Brand color separation is clean.
+
+**Not attempted this pass (too large for a single turn, would need staging):** GSAP/Three.js animation framework, `js/agent-swarm.js`/`window.askGemma()`, natural-language elevator navigation, Web Speech API voice commands, PWA manifests — none of this exists anywhere in the repo yet as working infra. Full floor-by-floor link audit of the 45-floor Francisco Holdings skyscraper also not done (single-page JS app, too large to verify in this pass). These need a dedicated build session or a Manus prompt, not a quick fix.
+
+---
+
 ## 1. HOLDING STRUCTURE
 
 | Entity | Role | Loop | Status | Domain | Repo |
