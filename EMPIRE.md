@@ -52,6 +52,18 @@ Responding to Derek's "STATE OF THE ART — EVERY SITE" directive. Triaged the l
 
 ---
 
+## APEX AGENT v1 — 2026-06-20 (commit `007f5c4`)
+
+Built `agents/apex-agent.js` per Derek's "DUAL TRACK — MONEY + APEX" directive. Scoped to what's actually real and working client-side, with no fabricated capability:
+
+**Real and working today:** `Apex.injectSEO()` (meta description/keywords + Schema.org JSON-LD), exit-intent lead-capture popup with local lead scoring (cold/warm/hot by time-on-page + clicks) forwarding to Formspree, `Apex.wireShareButtons()` (Twitter/X, LinkedIn, Facebook share-intent dialogs — no API keys needed for these), `Apex.initUrgencyTimer()` (persists per-visitor like the existing 24h trial countdowns), `Apex.initSocialProof()` (rotates testimonials/counts Derek supplies — never auto-fabricates numbers), and `Apex.trackEvent()`/`Apex.getLocalStats()` (localStorage event log, Supabase mirror if `window.supabase` exists — same graceful no-op pattern as `referral-engine.js`).
+
+**Wired into 3 live sites** (no real traffic data exists to pick "highest-traffic," chose highest revenue-potential per DEREK-TODO.md instead): CCLDR, VIGILAX, PrimeDox AI — each with an exit-intent lead magnet placeholder. **The lead-magnet PDFs themselves do not exist yet** — Derek needs to create/upload "7 Cannabis Charter Defense Tactics" (CCLDR), "Security Incident Response Checklist" (VIGILAX), "AI Document Automation Starter Guide" (PrimeDox AI) before those specific offers are real; the capture mechanism itself works today regardless. Formspree IDs are still the `YOUR_FORM_ID` placeholder (same as every other Formspree integration in this repo) until Derek creates the forms per `DEREK-TODO.md` step 4.
+
+**BLOCKED — not built, would be dishonest to fake:** auto-posting to Twitter/X, LinkedIn, Facebook (needs an OAuth app + API keys per platform — none exist in this repo), automated email drip sequences (needs an email service like SendGrid/Mailchimp + backend — none exist here), sitemap auto-submission to Google/Bing Search Console (needs Search Console API auth), a "Gemma 41B endpoint" (no such endpoint exists anywhere in this repo), and real cross-visitor analytics/revenue-attribution reporting (`Apex.getLocalStats()` is per-browser localStorage only — a real dashboard needs GA4/Plausible or the Supabase table actually wired and paid for, see Supabase invoice note in `DEREK-TODO.md` step 7).
+
+---
+
 ## 1. HOLDING STRUCTURE
 
 | Entity | Role | Loop | Status | Domain | Repo |
