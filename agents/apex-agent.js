@@ -280,6 +280,73 @@
     var interval = setInterval(tick, 1000);
   }
 
+  // ─── 5b. Sticky "Buy Now" Bar ───────────────────────────────────────────────
+  // Appears after the visitor scrolls past a threshold, stays fixed at the
+  // bottom. Dismissible — once dismissed it stays hidden for the rest of the
+  // browser session (sessionStorage), so it never nags on every scroll tick.
+
+  function initStickyBuyBar(opts) {
+    opts = opts || {};
+    if (!opts.href) return; // must be told where to send the click — no guessing
+    if (sessionStorage.getItem('apex_stickybar_dismissed')) return;
+    if (document.getElementById('apex-sticky-buy')) return;
+
+    var threshold = opts.scrollPx || 400;
+    var bar = null;
+
+    function build() {
+      bar = document.createElement('div');
+      bar.id = 'apex-sticky-buy';
+      bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:999997;' +
+        'display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;' +
+        'background:' + (opts.bg || '#101014') + ';border-top:1px solid ' + (opts.accent || '#d4af37') + ';' +
+        'padding:12px 16px;font-family:system-ui,-apple-system,sans-serif;' +
+        'transform:translateY(100%);transition:transform .25s ease;box-shadow:0 -8px 24px rgba(0,0,0,0.35);';
+
+      var label = document.createElement('span');
+      label.textContent = opts.text || 'Ready to get started?';
+      label.style.cssText = 'color:#eee;font-size:14px;font-weight:600;';
+
+      var cta = document.createElement('a');
+      cta.href = opts.href;
+      cta.textContent = opts.ctaText || 'Buy Now →';
+      cta.target = opts.target || '_self';
+      cta.rel = 'noopener';
+      cta.style.cssText = 'display:inline-block;padding:9px 20px;border-radius:8px;' +
+        'background:' + (opts.accent || '#d4af37') + ';color:#0a0a0a;font-weight:700;' +
+        'font-size:14px;text-decoration:none;min-height:36px;line-height:1.3;';
+      cta.addEventListener('click', function () { trackEvent('sticky_buy_click', { href: opts.href }); });
+
+      var close = document.createElement('button');
+      close.textContent = '×';
+      close.setAttribute('aria-label', 'Dismiss');
+      close.style.cssText = 'background:transparent;border:none;color:#888;font-size:20px;' +
+        'cursor:pointer;line-height:1;padding:0 4px;';
+      close.onclick = function () {
+        sessionStorage.setItem('apex_stickybar_dismissed', '1');
+        bar.style.transform = 'translateY(100%)';
+        setTimeout(function () { bar.remove(); }, 250);
+      };
+
+      bar.appendChild(label);
+      bar.appendChild(cta);
+      bar.appendChild(close);
+      document.body.appendChild(bar);
+    }
+
+    var shown = false;
+    function onScroll() {
+      if (shown) return;
+      if (window.scrollY >= threshold) {
+        shown = true;
+        if (!bar) build();
+        requestAnimationFrame(function () { bar.style.transform = 'translateY(0)'; });
+        window.removeEventListener('scroll', onScroll);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
   // ─── 6. Honest Social Proof Widget ─────────────────────────────────────────
   // Rotates testimonials/counts YOU supply. Does NOT invent or auto-escalate
   // numbers — that would be a deceptive dark pattern.
@@ -320,6 +387,7 @@
     initExitIntent: initExitIntent,
     wireShareButtons: wireShareButtons,
     initUrgencyTimer: initUrgencyTimer,
+    initStickyBuyBar: initStickyBuyBar,
     initSocialProof: initSocialProof,
     trackEvent: trackEvent,
     getLocalStats: getLocalStats,

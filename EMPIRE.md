@@ -86,6 +86,11 @@ Responding to Derek's "CHINESE AI INTEGRATION — Build This Now" directive (Dee
 
 **❌ BLOCKED — not built:** Qwen auto-translate is not wired into "All empire sites" as Derek's directive requested — only the reusable widget exists; rolling it onto all ~20 live sites is a larger follow-up pass, not done silently here. Kimi swarm orchestration ("replace agent-swarm.js... 100 sub-agents... all 45 sites") was **not** built — the existing `/swarm` endpoint in `gemma-server.js` has an explicit, intentional 5-agent cap (`SWARM_MAX_AGENTS=8` env ceiling); raising that 20x to 100 is a cost/infra decision that needs Derek's explicit sign-off before being implemented, not something to change unilaterally. No `agents/agent-swarm.js` file exists in this repo to "replace" — flagging rather than inventing one.
 
+**CONTINUED BUILD — 2026-06-20 (same day, "keep building" directive, while Manus handles deployment per CHECKPOINT v14):**
+- `agents/apex-agent.js` — added `Apex.initStickyBuyBar()`: dismissible fixed-bottom CTA bar that appears after a scroll threshold, links to a real checkout URL (PayPal/Stripe), tracks clicks via the existing `trackEvent()`. Wired onto CCLDR (`templates.html`, $149/mo Foundation), VIGILAX (`pricing.html`, $499/mo Guardian — the tier already marked recommended), and PrimeDox AI (`index.html`, $49/mo Pro).
+- `agents/gemma-chat-widget.js` (new) — floating chat bubble that calls the existing `/chat` route on `agents/backend/gemma-server.js` (same `agent_id`/`messages`/`session_id` shape that route already expects — no new backend code needed). Same security model and same "not configured yet" honest fallback as `chinese-ai-connector.js` until the backend is actually deployed (see CHECKPOINT v14 — that's Manus's job, not built here). Wired into zPrimeDoxAI HQ as the `primedox` concierge agent, matching the "central command center" role CHECKPOINT v7 already assigned that site.
+- Not yet extended to the remaining live sites (OmniGuard, Francisco Holdings, Kiaros, CleanSwarm, MindShift, Weedlaw Education, TechPetCage, Vault Velocity Auto) — same components, just needs the same two-line wiring repeated per site in a follow-up pass.
+
 ---
 
 ## 1. HOLDING STRUCTURE
