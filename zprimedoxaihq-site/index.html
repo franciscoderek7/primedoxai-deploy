@@ -316,6 +316,7 @@
       <a class="nav-link" onclick="showView('apps')"><span class="nav-link-icon">🚀</span>App Launcher</a>
       <a class="nav-link" onclick="showView('router')"><span class="nav-link-icon">🧠</span>AI Router</a>
       <a class="nav-link" onclick="showView('legal')"><span class="nav-link-icon">⚖️</span>Legal Tracker</a>
+      <a class="nav-link" onclick="showView('autofix')"><span class="nav-link-icon">🛠️</span>Auto-Fix (GLM)</a>
       <a class="nav-link" onclick="window.location.href='empire-os.html'" style="border-left:2px solid #D4AF37;background:rgba(212,175,55,.07);color:#D4AF37;font-weight:700;"><span class="nav-link-icon">🏛️</span>Empire.OS</a>
       <a class="nav-link" onclick="window.location.href='doc-weedlaw-ai.html'" style="border-left:2px solid #FFD700;background:rgba(255,215,0,.06);color:#FFD700;font-weight:700;"><span class="nav-link-icon">🤖</span>Doc Weedlaw AI</a>
     </div>
@@ -987,6 +988,18 @@
   </div>
 </section>
 
+<!-- ====== AUTO-FIX (GLM-5 suggestions — read-only, never auto-applied) ====== -->
+<div class="view" id="view-autofix">
+  <div class="section-hdr"><div class="section-title">Auto-Fix — GLM Suggestion Panel</div></div>
+  <div style="max-width:720px;background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.15);border-radius:6px;padding:18px;margin-bottom:16px;font-size:0.82rem;color:#999;line-height:1.6;">
+    Paste an error message, broken code snippet, or describe the bug below. This calls the GLM-first AI backend (falls back through DeepSeek/Qwen/Kimi/OpenAI if GLM is unavailable) and returns a <strong style="color:#D4AF37;">suggested</strong> fix as text — it does <strong style="color:#D4AF37;">not</strong> touch any file in the repo. Review and apply manually, or hand it to Claude/Manus to implement.
+  </div>
+  <textarea id="autofix-context" rows="6" placeholder="Paste the error / code / description here…" style="width:100%;max-width:720px;padding:10px;border-radius:6px;border:1px solid #2a2a2a;background:#0d0d0d;color:#eee;font-size:13px;font-family:monospace;box-sizing:border-box;margin-bottom:10px;"></textarea>
+  <br>
+  <button onclick="autofixSuggest()" style="padding:10px 22px;border-radius:6px;border:none;background:#D4AF37;color:#000;font-weight:700;font-size:0.85rem;cursor:pointer;">Get Suggested Fix</button>
+  <div id="autofix-output" style="display:none;margin-top:16px;max-width:720px;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:6px;padding:16px;font-size:0.82rem;color:#ccc;white-space:pre-wrap;max-height:420px;overflow-y:auto;"></div>
+</div>
+
 <footer>© 2026 Derek Francisco / Francisco Holdings Inc. · PrimeDox HQ — zprimedoxaihq.com · Private Command Center</footer>
 
 </div><!-- end hq-content -->
@@ -1273,6 +1286,29 @@
     log.appendChild(entry);
     log.parentElement.scrollTop = log.parentElement.scrollHeight;
   }
+
+  // Auto-Fix (GLM-first suggestion panel) — calls the Chinese AI backend via
+  // window.ChineseAI (loaded from agents/chinese-ai-connector.js below).
+  // Read-only: only ever displays a suggested fix as text, never touches a file.
+  function autofixSuggest() {
+    var ctxEl = document.getElementById('autofix-context');
+    var out = document.getElementById('autofix-output');
+    var context = ctxEl.value.trim();
+    if (!context) return;
+    out.style.display = 'block';
+    out.textContent = 'Asking GLM for a suggestion…';
+    if (!window.ChineseAI) {
+      out.textContent = 'AI connector not loaded.';
+      return;
+    }
+    window.ChineseAI.suggestFix(context, 'Suggest a fix:').then(function (res) {
+      if (res.ok && res.data && res.data.text) {
+        out.textContent = res.data.text + '\n\n— Suggested by ' + res.data.provider + '. Review before applying; not auto-applied to any file.';
+      } else {
+        out.textContent = (res.data && res.data.error) || res.error || 'AI backend not configured yet. Set window.PRIMEDOX_BACKEND_URL once agents/backend/ is deployed.';
+      }
+    });
+  }
 </script>
 <script>window.REVEREND_SITE='primedox';</script>
 <script src="reverend-ai.js"></script>
@@ -1355,5 +1391,6 @@ try{
 <script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/stripe-payment-links.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/payment-provider.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/chinese-ai-connector.js"></script>
 </body>
 </html>

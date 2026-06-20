@@ -355,6 +355,50 @@
   </div>
 </section>
 
+<!-- AI MOTION GENERATOR (DeepSeek-first, via agents/backend — requires backend deploy + API key) -->
+<section class="section section-alt">
+  <div style="max-width:640px;margin:0 auto;text-align:center;">
+    <div style="font-size:12px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">AI Draft Assistant</div>
+    <h2 style="font-family:'Cinzel',serif;font-size:clamp(20px,3.5vw,28px);font-weight:700;color:var(--white);margin-bottom:10px;">Generate a Motion Draft</h2>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Describe your facts below. Produces an educational draft to review with a licensed lawyer — not legal advice.</p>
+
+    <select id="ccldr-motion-type" style="width:100%;padding:10px;border-radius:8px;border:1px solid #2a2a2a;background:#111;color:#fff;font-size:14px;margin-bottom:10px;">
+      <option value="Motion to Stay (Cannabis Act)">Motion to Stay (Cannabis Act)</option>
+      <option value="Disclosure Request (Full)">Disclosure Request (Full)</option>
+      <option value="Charter s.7 Life/Liberty Notice">Charter s.7 Life/Liberty Notice</option>
+      <option value="Bill of Rights s.2(e) Notice">Bill of Rights s.2(e) Notice</option>
+    </select>
+    <textarea id="ccldr-motion-facts" rows="5" placeholder="Describe the facts of your case…" style="width:100%;padding:10px;border-radius:8px;border:1px solid #2a2a2a;background:#111;color:#fff;font-size:14px;margin-bottom:10px;box-sizing:border-box;font-family:inherit;"></textarea>
+    <button id="ccldr-motion-generate" type="button" style="width:100%;padding:13px;border-radius:8px;border:none;background:#c9a227;color:#0a0a0a;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:12px;">Generate Motion Draft</button>
+    <div id="ccldr-motion-output" style="display:none;text-align:left;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:8px;padding:16px;font-size:13px;color:#c8d0dc;white-space:pre-wrap;max-height:400px;overflow-y:auto;margin-top:10px;"></div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/chinese-ai-connector.js"></script>
+<script>
+(function () {
+  var btn = document.getElementById('ccldr-motion-generate');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    var motionType = document.getElementById('ccldr-motion-type').value;
+    var facts = document.getElementById('ccldr-motion-facts').value.trim();
+    var out = document.getElementById('ccldr-motion-output');
+    if (!facts) { return; }
+    out.style.display = 'block';
+    out.textContent = 'Generating…';
+    btn.disabled = true;
+    window.ChineseAI.generateMotion(motionType, facts, 'Canada').then(function (res) {
+      btn.disabled = false;
+      if (res.ok && res.data && res.data.text) {
+        out.textContent = res.data.text + '\n\n— Generated via ' + res.data.provider + '. Educational template only — review with a licensed lawyer before filing.';
+      } else {
+        out.textContent = (res.data && res.data.error) || res.error || 'AI draft generation is not yet configured on this site. Email franciscoderek7@gmail.com to request a draft directly.';
+      }
+    });
+  });
+})();
+</script>
+
 <!-- PAYPAL + PRICING CTA -->
 <section class="section">
   <div class="pricing-cta-box">

@@ -43,6 +43,7 @@ const cors      = require('cors');
 const helmet    = require('helmet');
 const rateLimit = require('express-rate-limit');
 const OpenAI    = require('openai');
+const { chineseAIComplete } = require('./chinese-ai-providers');
 
 // ── Backend selection ──────────────────────────────────────────────
 const LLM_BACKEND  = process.env.LLM_BACKEND  || 'gemma';  // 'gemma' | 'openai' | 'hybrid'
@@ -483,6 +484,78 @@ app.post('/swarm', async (req, res) => {
   }
 });
 
+// ── Chinese AI routes (DeepSeek → Qwen → GLM → Kimi → OpenAI fallback) ──
+// See agents/backend/chinese-ai-providers.js for the chain logic and
+// agents/backend/.env.example for where to get each API key.
+app.use(['/generate-motion', '/translate', '/suggest-fix'],
+  rateLimit({ windowMs: 60_000, max: 20, standardHeaders: true, legacyHeaders: false }));
+
+// CCLDR/Weedlaw "Generate Motion" — legal document drafting (DeepSeek-first)
+app.post('/generate-motion', async (req, res) => {
+  const { motionType, facts, jurisdiction } = req.body;
+  if (!motionType || !facts) {
+    return res.status(400).json({ error: 'motionType and facts required' });
+  }
+  try {
+    const result = await chineseAIComplete(
+      [
+        { role: 'system', content: AGENT_PROMPTS['archivist'] + '\n\nDraft a court-ready ' + motionType + ' for jurisdiction: ' + (jurisdiction || 'Canada (general)') + '. Use clear section headings. End with the mandatory disclaimer that this is an educational template, not legal advice, and must be reviewed by a licensed lawyer before filing.' },
+        { role: 'user', content: facts },
+      ],
+      ['deepseek', 'qwen', 'glm', 'kimi', 'openai'],
+      { maxTokens: 1536, temperature: 0.4 }
+    );
+    res.json(result);
+  } catch (err) {
+    res.status(503).json({ error: 'No AI provider available. ' + err.message });
+  }
+});
+
+// Multilingual translation — Qwen-first (strong at Chinese + general multilingual)
+app.post('/translate', async (req, res) => {
+  const { text, targetLang } = req.body;
+  if (!text || !targetLang) {
+    return res.status(400).json({ error: 'text and targetLang required' });
+  }
+  try {
+    const result = await chineseAIComplete(
+      [
+        { role: 'system', content: 'You are a precise translator. Translate the user text into ' + targetLang + '. Output ONLY the translation, no commentary, preserving any HTML tags exactly as given.' },
+        { role: 'user', content: text },
+      ],
+      ['qwen', 'deepseek', 'glm', 'kimi', 'openai'],
+      { maxTokens: 2048, temperature: 0.2 }
+    );
+    res.json(result);
+  } catch (err) {
+    res.status(503).json({ error: 'No AI provider available. ' + err.message });
+  }
+});
+
+// zprimedoxaihq internal tool — GLM-first code-fix SUGGESTIONS (read-only).
+// Deliberately does NOT touch the repo or apply anything automatically — an
+// external LLM should never get write access to live site code without a
+// human reviewing the diff first.
+app.post('/suggest-fix', async (req, res) => {
+  const { context, description } = req.body;
+  if (!context) {
+    return res.status(400).json({ error: 'context (code/error/file excerpt) required' });
+  }
+  try {
+    const result = await chineseAIComplete(
+      [
+        { role: 'system', content: 'You are a senior code reviewer. You suggest fixes as readable text with a short diff-style snippet. You NEVER claim a fix has been applied — you only suggest. Be concise.' },
+        { role: 'user', content: (description || 'Suggest a fix for this:') + '\n\n' + context },
+      ],
+      ['glm', 'deepseek', 'qwen', 'kimi', 'openai'],
+      { maxTokens: 1024, temperature: 0.3 }
+    );
+    res.json(result);
+  } catch (err) {
+    res.status(503).json({ error: 'No AI provider available. ' + err.message });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`\nPrimeDox AI Backend v2.0 — ${LLM_BACKEND.toUpperCase()} mode`);
@@ -494,5 +567,5 @@ app.listen(PORT, () => {
     console.log(`If Ollama not running: ollama serve`);
     console.log(`If model not pulled:   ollama pull ${GEMMA_MODEL}`);
   }
-  console.log('\nEndpoints: GET / · POST /chat · POST /route · POST /swarm\n');
+  console.log('\nEndpoints: GET / · POST /chat · POST /route · POST /swarm · POST /generate-motion · POST /translate · POST /suggest-fix\n');
 });
