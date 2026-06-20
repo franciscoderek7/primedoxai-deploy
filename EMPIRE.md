@@ -396,17 +396,19 @@ Claude                         — Builder/executor — acts on direct PrimeDox 
 ### Session Overview
 Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgency banners, email capture, court print package, CCLDR case tracker, and complete TechPackCage.com launch stack.
 
-### VIGILAX — 4-Page Commercial Site — ⚠️ CORRECTED 2026-06-19 (see audit note below)
+### VIGILAX — 4-Page Commercial Site — ✅ UPDATED 2026-06-20 (MONEY ONLY pass)
 | File | Description | Status |
 |------|-------------|--------|
 | vigilax-site/index.html | Landing page (hero + terminal + SVG architecture diagram + testimonials + email capture) | ✅ COMMITTED |
-| vigilax-site/pricing.html | 4-tier pricing (Sentinel $299, Warden $899, Archon $2,499, Sovereign custom) + urgency banner | ❌ NOT FOUND in repo — see audit note |
-| vigilax-site/investor.html | Investor relations ($300B market, IP assets, Y1-Y5 projections, Derek Francisco team) | ❌ NOT FOUND in repo — see audit note |
-| vigilax-site/deploy.html | Purchase + 5-step deployment guide + 24hr SLA guarantee | ❌ NOT FOUND in repo — see audit note |
+| vigilax-site/pricing.html | 4-tier pricing — Sentinel $199/mo, Guardian $499/mo, Fortress $1,499/mo, Custom $10k+ | ✅ COMMITTED — Manus added the file after the 2026-06-19 audit note below; repriced to Derek's exact spec 2026-06-20 |
+| vigilax-site/investor.html | Investor relations ($300B market, IP assets, Y1-Y5 projections, Derek Francisco team) | ✅ COMMITTED — added by Manus, not re-audited this pass |
+| vigilax-site/deploy.html | Purchase + 5-step deployment guide + 24hr SLA guarantee | ✅ COMMITTED — added by Manus, not re-audited this pass |
 
 **VIGILAX is Loop B: no Derek Francisco identity, no cannabis, no paypal.me/derekfrancisco**
 
-**AUDIT NOTE (2026-06-19, Manus live audit during CHECKPOINT v10):** This log entry said all 4 files were "✅ COMMITTED" on 2026-06-11. Manus's direct repo audit just found only `index.html` actually exists — the other 3 files and the pricing/investor/deploy content described above are not in the repo. Not speculating on why (lost commit, wrong branch, log written ahead of the push) — just correcting the record to match what Manus verified. Manus is closing this gap now (adding the missing pages/24h trial) per the CHECKPOINT v10 instruction to audit-and-finish without touching the already-committed pricing numbers.
+**FIX 2026-06-20 (MONEY ONLY directive):** All 3 "Pay by Card (Stripe)" buttons on pricing.html called `window.stripeCheckout(...)`, a function that does not exist anywhere except inside `omniaguard-site/index.html` — clicking did nothing. Rewired to `window.PrimeDoxPayment.checkout(...)` (already loaded on the page via `agents/payment-provider.js`), which falls back to a correctly-directed PayPal checkout (money → franciscoderek7). Also repriced Sentinel/Guardian/Warden ($499/$2,499/$5,000) → Sentinel/Guardian/Fortress ($199/$499/$1,499) per Derek's exact spec, and added a "Start 24-Hour Free Trial" button on every tier (`vigilaxStartTrial()`, localStorage + Formspree capture — same `YOUR_FORM_ID` placeholder pattern as primedoxai-site/pricing.html; Derek needs to create a Formspree form and paste the real ID in both places). The same dead `window.stripeCheckout` bug was found and fixed on TechPackCage and TechPetCage (see below) — Vault Velocity Auto's *stub* folder `vaultvelocityauto-site/` has it too but is **not deployed by any workflow** (the real, live site is `vault-velocity-auto-site/` — note the hyphens — which has no Stripe/PayPal checkout at all; flagged separately, not fixed this pass).
+
+**AUDIT NOTE (2026-06-19, Manus live audit during CHECKPOINT v10 — superseded by the fix above):** This log entry said all 4 files were "✅ COMMITTED" on 2026-06-11. Manus's direct repo audit at the time found only `index.html` actually existed. Manus has since added the other 3 files (confirmed in repo as of 2026-06-20).
 
 ### Monetization Additions
 | Site | Addition | Status |
@@ -430,6 +432,8 @@ Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgen
 | techpackcage-site/setup-guide.html | WooCommerce launch guide — ~$148 CAD cost breakdown, 4-week plan, profit calculator, Job Shipping PHP, launch checklist | ✅ COMMITTED |
 | .github/workflows/deploy-techpackcage.yml | Auto-deploy → franciscoderek7/techpackcage on push to main | ✅ COMMITTED |
 
+**FIX 2026-06-20 (MONEY ONLY directive):** Same dead `window.stripeCheckout` bug as VIGILAX (see above) — all 3 "Pay by Card (Stripe)" buttons (Starter $49, Growth $149, Enterprise $499) rewired to `window.PrimeDoxPayment.checkout(...)`. PayPal buttons next to them were already correctly wired (paypal.me/franciscoderek7) and untouched. TechPetCage (`techpetcage-site/index.html`) had the identical bug on its Basic $19 / Plus $49 / Family $149 tiers — fixed the same way.
+
 ### TechPackCage Derek Action Required
 1. Buy domain `techpackcage.com` at Namecheap (~$10.98 CAD)
 2. Buy Hostinger hosting (~$3.99/mo = $47.88/yr)
@@ -442,9 +446,9 @@ Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgen
 ### Stripe Placeholders — Need Real URLs (REVENUE BLOCKER)
 | Placeholder | Product | Price |
 |-------------|---------|-------|
-| STRIPE_LINK_VIGILAX_SENTINEL | VIGILAX Sentinel | $299/mo |
-| STRIPE_LINK_VIGILAX_WARDEN | VIGILAX Warden | $899/mo |
-| STRIPE_LINK_VIGILAX_ARCHON | VIGILAX Archon | $2,499/mo |
+| STRIPE_LINK_VIGILAX_SENTINEL | VIGILAX Sentinel | $199/mo (corrected 2026-06-20) |
+| STRIPE_LINK_VIGILAX_GUARDIAN | VIGILAX Guardian | $499/mo (corrected 2026-06-20) |
+| STRIPE_LINK_VIGILAX_FORTRESS | VIGILAX Fortress | $1,499/mo (corrected 2026-06-20, was "Warden $5,000/mo") |
 | STRIPE_LINK_FH_STARTER | FH Agency Starter | TBD |
 | STRIPE_LINK_FH_GROWTH | FH Agency Growth | TBD |
 | STRIPE_LINK_FH_ENTERPRISE | FH Agency Enterprise | TBD |
