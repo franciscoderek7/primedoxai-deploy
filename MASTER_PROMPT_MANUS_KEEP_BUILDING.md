@@ -556,3 +556,69 @@ Derek shared a screenshot of Manus actually running the CHECKPOINT v10 audit on 
 **Manus's remediation plan, no objection:** leave already-committed pricing untouched, add the missing 24h trial + pages for VIGILAX, and add the missing sections (courses, membership, corporate, about, affiliate, donations, newsletter) to MindShift's existing single-page layout rather than splitting into separate pages — consistent with the v10 instruction to close gaps, not rebuild. Correct call; no change needed to what Manus is doing.
 
 This is exactly the scenario CHECKPOINT v10's audit-and-finish framing was written to catch — if Manus had been told to "build VIGILAX/MindShift" instead of "audit," there's a real chance it would have skipped straight past gaps that didn't match the brief instead of finding them. No prompt change needed here; just logging the confirmation and the EMPIRE.md correction for the next session.
+
+---
+
+## CHECKPOINT v14 — Derek's "what can only Manus do" + Chinese AI deployment handoff (2026-06-20)
+
+Derek asked directly: what's left that Claude can't do, that Manus does better — covering max-profitability/aesthetics across every site, "AI agent control of the algorithms," and Chinese AI + Claude/Kimi/Gemma integration empire-wide. This checkpoint answers that and hands the result to Manus.
+
+**Correction made before writing the prompt:** Derek's message (and CHECKPOINT v7 before it) names "Gemma 41B, 31B." No such Gemma model sizes exist publicly — Gemma 2 ships at 2B/9B/27B, Gemma 3 at 1B/4B/12B/27B. There is no 41B or 31B variant from Google. This repo's actual configured model (`agents/backend/.env.example`, `GEMMA_MODEL`) is `gemma3:27b` via Ollama. The prompt below uses the real model name instead of repeating the nonexistent one — flagging this clearly rather than quietly perpetuating it a third time.
+
+**What Claude actually can't do here, concretely (not vague "Manus is better"):**
+- No hosting account (Railway/Render/Fly.io) to deploy `agents/backend/` — the Chinese AI fallback-chain server Claude built this session has never run anywhere outside this repo.
+- No ability to sign up for or pay for DeepSeek/Qwen/GLM/Kimi vendor accounts to obtain real API keys — Claude can write the code that uses a key, not acquire one.
+- No GPU hosting account (RunPod/Vast.ai) to actually run the `gemma3:27b` Ollama instance the backend's hybrid mode expects.
+- No image/PDF/visual-asset generation — the lead-magnet PDFs from the APEX agent work, and any new aesthetic/theme work, need an actual designer-capable agent.
+- Manus already has demonstrated, working GitHub push + Pages/DNS/Stripe account access this session (CHECKPOINT v8/v13) that Claude does not have.
+
+**What's already built and just needs deploying (not re-built):** `agents/backend/chinese-ai-providers.js` (DeepSeek→Qwen→GLM→Kimi→OpenAI fallback chain), three new routes on `agents/backend/gemma-server.js` (`/generate-motion`, `/translate`, `/suggest-fix`), `agents/chinese-ai-connector.js` (client widget), wired live into CCLDR's motion generator and zPrimeDoxAI HQ's Auto-Fix panel. All of it returns an honest "not configured" message until Manus completes the deployment steps below — this is not a placeholder Claude forgot, it's the deliberate fallback for "key/backend not live yet."
+
+MESSAGE FOR MANUS — from Derek Francisco (Doc Weedlaw):
+
+---
+
+Manus, this is from me directly. Claude already built the code side of this — your job is everything Claude can't touch: hosting, vendor accounts, and aesthetics.
+
+**1. DEPLOY THE AI BACKEND**
+Claude built `agents/backend/` in `primedoxai-deploy` — a Node/Express server with a DeepSeek → Qwen → GLM → Kimi → OpenAI fallback chain (`chinese-ai-providers.js`) and three live routes: `/generate-motion`, `/translate`, `/suggest-fix`. It has never been deployed anywhere. Deploy it to Railway, Render, or Fly.io (your call on which). Once it's live, give me the URL.
+
+**2. GET THE REAL API KEYS**
+Sign up and get a key from each (same way you've handled Stripe/Porkbun accounts for me):
+- DeepSeek — platform.deepseek.com (or siliconflow.cn, cheaper)
+- Qwen — siliconflow.cn (or dashscope.console.aliyun.com)
+- GLM — open.bigmodel.cn or z.ai (or siliconflow.cn)
+- Kimi — platform.moonshot.cn
+Put them in the backend's `.env` (template already in `agents/backend/.env.example`) once it's deployed. If any of these need a credit card on file, tell me before you commit to a paid tier — free tier first, scale with revenue, same rule as everything else.
+
+**3. STAND UP A REAL GEMMA INSTANCE — correction from my last message**
+I said "Gemma 41B/31B" before — that's not a real model size, Google doesn't ship that. The actual model already configured in this repo is `gemma3:27b`. Get a GPU instance running it on RunPod or Vast.ai, point `GEMMA_BASE_URL` in the backend's `.env` at it. This is the model that powers the customer-facing chat/concierge on every site from the empire-wide plan (CHECKPOINT v7) — same plan, corrected model name.
+
+**4. WIRE THE BACKEND INTO EVERY LIVE SITE**
+Once step 1 has a real URL: set `window.PRIMEDOX_BACKEND_URL = 'https://your-backend-url'` on every live site (same script-tag pattern already on CCLDR and zPrimeDoxAI HQ — copy it everywhere else). Then roll the Qwen-powered language selector (`ChineseAI.initLanguageSelector`, already built, not yet wired anywhere but CCLDR) onto every site's main content section — one selector per site, auto-translates the page.
+
+**5. MAX PROFITABILITY + AESTHETICS — EVERY SITE**
+Go past the "no dead links" hardening sweep already done (CHECKPOINT v12) — that was functional, not commercial. This pass is conversion and visual quality:
+- Every site: hero section states the offer and price in the first screen, no scrolling required to find what's for sale.
+- Every pricing page: highlight the recommended tier visually (border/badge), don't present all tiers as equal weight.
+- Every site: the urgency timer and social-proof rotator from Claude's APEX agent (`agents/apex-agent.js`, already live on CCLDR/VIGILAX/PrimeDox AI) — extend to every other live site.
+- Design and deliver the 3 lead-magnet PDFs APEX needs that don't exist yet: "7 Cannabis Charter Defense Tactics" (CCLDR), "Security Incident Response Checklist" (VIGILAX), "AI Document Automation Starter Guide" (PrimeDox AI). Claude can write the backend wiring for these but can't generate a designed PDF — that's you.
+- Visual consistency pass per brand palette already locked in EMPIRE.md (OmniGuard blue/pink exclusive, MindShift's separate purple/gold/pink, empire green/gold elsewhere) — flag anything you find off-palette, don't silently leave it.
+
+**6. AI AGENT CONTROLLING THE ALGORITHMS — WITH A LIMIT**
+I want the AI agents actually driving lead-scoring, SEO, and conversion decisions site-wide, not just sitting there as unused code. Wire APEX's lead-scoring and SEO injection live everywhere once the Formspree IDs exist. One rule that doesn't change: the AI agents can surface pricing/promo recommendations to me, but they don't change live prices or business logic without me approving it first — same rule Claude operates under, applies to whatever you build too.
+
+**REPORT BACK:**
+```
+Backend deployed: [URL or blocked-on-what]
+API keys obtained: [which vendors, which still pending]
+Gemma instance live: [yes/no, URL]
+window.PRIMEDOX_BACKEND_URL set on: [list of sites]
+Language selector wired on: [list of sites]
+Lead-magnet PDFs delivered: [list]
+Aesthetics pass complete on: [list of sites]
+```
+
+— Derek / Doc Weedlaw
+
+---
