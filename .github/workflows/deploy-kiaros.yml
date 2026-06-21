@@ -1,4 +1,4 @@
-name: Deploy Kiaros to kiaros.com
+name: Deploy Kiaros to kiaros.ai
 
 on:
   push:
@@ -57,20 +57,20 @@ jobs:
             mkdir -p "/tmp/kiaros/$dir"
             cp "$f" "/tmp/kiaros/$f"
           done
-          echo "kiaros.com" > /tmp/kiaros/CNAME
+          echo "kiaros.ai" > /tmp/kiaros/CNAME
           touch /tmp/kiaros/.nojekyll
           echo "All Kiaros files copied"
 
       - name: Commit and push to kiaros repo
         run: |
           cd /tmp/kiaros
-          git config user.email "deploy@kiaros.com"
+          git config user.email "deploy@kiaros.ai"
           git config user.name "Kiaros Deploy Bot"
           git add -A
           git diff --cached --stat
           git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
 
-          CNAME: kiaros.com
+          CNAME: kiaros.ai
           Loop: B (anonymous — no Derek Francisco, no cannabis)
           Triggered by: push to franciscoderek7/primedoxai-deploy main" \
             || echo "Nothing to commit — already up to date"
@@ -83,8 +83,8 @@ jobs:
           echo "  KIAROS DEPLOYED"
           echo "================================================"
           echo "  Repo: franciscoderek7/kiaros (main)"
-          echo "  CNAME: kiaros.com"
+          echo "  CNAME: kiaros.ai"
           echo "  Loop: B (anonymous — no Derek Francisco, no cannabis)"
           echo "  Live in: ~2 minutes (GitHub Pages build)"
-          echo "  Check: https://kiaros.com"
+          echo "  Check: https://kiaros.ai"
           echo "================================================"
