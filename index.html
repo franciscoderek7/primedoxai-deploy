@@ -250,25 +250,69 @@
 </footer>
 
 <script>
-    // ── Stripe Payment Links ───────────────────────────────────────────────
+    // ── Stripe Payment Links (takes priority if set) ───────────────────────
     // Create these at dashboard.stripe.com → Payment Links
-    // Then replace the null values below with your links
     const STRIPE = {
         pro:   null, // e.g. 'https://buy.stripe.com/xxxxxxx'
         elite: null  // e.g. 'https://buy.stripe.com/xxxxxxx'
     };
+
+    // ── PayPal Business (used if Stripe link not set) ──────────────────────
+    // Just put your PayPal Business email below — no PayPal dashboard setup needed.
+    // item_number on each plan is your tracking ID — shows up in every PayPal transaction record.
+    const PAYPAL_EMAIL = 'REPLACE_WITH_PAYPAL_BUSINESS_EMAIL';
+
+    const PAYPAL_ITEMS = {
+        pro:   { name: 'PrimeDox Pro Defense',   id: 'primedox-pro',   price: 49,  recurring: true },
+        elite: { name: 'PrimeDox Elite Defense', id: 'primedox-elite', price: 199, recurring: true },
+    };
+
+    function buildPaypalUrl(planKey) {
+        const item = PAYPAL_ITEMS[planKey];
+        if (!item || !PAYPAL_EMAIL || PAYPAL_EMAIL.startsWith('REPLACE_')) return null;
+
+        const params = new URLSearchParams({
+            business: PAYPAL_EMAIL,
+            item_name: item.name,
+            item_number: item.id,
+            currency_code: 'USD',
+            return: window.location.origin + window.location.pathname + '?paid=' + item.id,
+            cancel_return: window.location.origin + window.location.pathname,
+        });
+
+        if (item.recurring) {
+            params.set('cmd', '_xclick-subscriptions');
+            params.set('a3', item.price);
+            params.set('p3', '1');
+            params.set('t3', 'M');   // Monthly billing cycle
+            params.set('src', '1');  // Recurring
+            params.set('sra', '1');  // Reattempt on failed payment
+        } else {
+            params.set('cmd', '_xclick');
+            params.set('amount', item.price);
+        }
+
+        return 'https://www.paypal.com/cgi-bin/webscr?' + params.toString();
+    }
 
     // ── Formspree Lead Capture ─────────────────────────────────────────────
     // Create a form at formspree.io → New Form → copy endpoint below
     const FORMSPREE_LEADS = 'https://formspree.io/f/REPLACE_FORMSPREE_ID';
 
     function handleUpgrade(plan, e) {
-        const link = STRIPE[plan];
-        if (link) {
+        const stripeLink = STRIPE[plan];
+        if (stripeLink) {
             e.preventDefault();
-            window.open(link, '_blank', 'noopener');
+            window.open(stripeLink, '_blank', 'noopener');
+            return;
         }
-        // If no link yet, falls through to #contact anchor
+        const paypalUrl = buildPaypalUrl(plan);
+        if (paypalUrl) {
+            e.preventDefault();
+            window.open(paypalUrl, '_blank', 'noopener');
+            return;
+        }
+        // Neither configured yet — falls through to #contact anchor
     }
 
     async function submitLead(e) {
@@ -327,6 +371,15 @@
     // Pre-fill contact plan from URL param (e.g. ?plan=pro)
     const _plan = new URLSearchParams(window.location.search).get('plan');
     if (_plan) { const s = document.getElementById('contactPlan'); if (s) s.value = _plan; }
+
+    // Show thank-you after PayPal redirects back (e.g. ?paid=primedox-pro)
+    const _paid = new URLSearchParams(window.location.search).get('paid');
+    if (_paid) {
+        const banner = document.createElement('div');
+        banner.style.cssText = 'background:#1a3a1a;border:1px solid #2e7d32;color:#81c784;padding:14px 20px;text-align:center;font-size:14px;position:sticky;top:0;z-index:999';
+        banner.textContent = '✓ Payment received — thank you! Check your email for access details, or reach us at info@primedoxai.com.';
+        document.body.prepend(banner);
+    }
 </script>
 
 </body>
