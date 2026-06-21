@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Holdings Rewards — Check Your Earnings</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--gold:#D4AF37;--gold-light:#F0CC60;--platinum:#E5E4E2;--platinum-mid:#ABABAB;--platinum-dark:#787878;--emerald-bright:#10B981;--bg:#0A0A0A;--border-gold:rgba(212,175,55,0.25);}
+  body{background:var(--bg);color:var(--platinum);font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:60px 20px}
+  h1,.kicker{font-family:'Orbitron',sans-serif}
+  .kicker{font-size:11px;letter-spacing:4px;color:var(--emerald-bright);text-transform:uppercase;margin-bottom:16px}
+  h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;color:var(--gold);margin-bottom:14px;text-align:center}
+  .card{background:rgba(255,255,255,0.03);border:1px solid var(--border-gold);border-radius:14px;padding:32px;max-width:480px;width:100%}
+  input{width:100%;background:#141414;border:1px solid var(--border-gold);color:var(--platinum);padding:12px 14px;border-radius:8px;font-size:0.95rem;margin-bottom:16px;font-family:'Orbitron',sans-serif}
+  button{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0A0A0A;border:none;font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:1px;padding:14px;border-radius:8px;cursor:pointer;font-size:0.85rem}
+  #result{margin-top:20px;font-size:0.85rem;color:var(--platinum-mid);line-height:1.7}
+  .stat-row{display:flex;justify-content:space-between;border-bottom:1px solid var(--border-gold);padding:10px 0;font-size:0.85rem}
+  .notice{font-size:0.76rem;color:var(--platinum-dark);margin-top:24px;line-height:1.6;max-width:480px;text-align:center}
+  .nav-links{display:flex;gap:20px;margin-top:28px;font-size:0.82rem}
+  .nav-links a{color:var(--platinum-mid);text-decoration:none;border-bottom:1px solid var(--border-gold);padding-bottom:2px}
+</style>
+</head>
+<body>
+
+<div class="kicker">Francisco Holdings Rewards</div>
+<h1>Check Your Referral Earnings</h1>
+
+<div class="card">
+  <input type="text" id="code-input" placeholder="FHI-NAME-001" style="text-transform:uppercase">
+  <button onclick="checkStatus()">Check Earnings</button>
+  <div id="result"></div>
+</div>
+
+<p class="notice">Commission tracking is honor-system: it reflects purchases where the buyer typed your code into a checkout page that logged it. Purchases made via direct PayPal links without entering a code, or on a site not yet wired into this tracker, will not appear here even if Derek pays you for them manually. This is a best-effort log, not a guaranteed ledger — always confirm with Derek directly for an official payout.</p>
+
+<div class="nav-links">
+  <a href="index.html">← Get a Code</a>
+  <a href="faq.html">FAQ</a>
+</div>
+
+<script>
+  var SUPA_URL = 'https://ilmlnehehfcxwlurzfxd.supabase.co';
+  var SUPA_KEY = 'sb_publishable_aHi9NfxdTCPUWKO1AWX6vg_sZFj-XYA';
+  var _db = null;
+  function db() {
+    if (_db) return _db;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      try { _db = window.supabase.createClient(SUPA_URL, SUPA_KEY); } catch (e) {}
+    }
+    return _db;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var stored = localStorage.getItem('fhi_refer_my_code');
+    if (stored) document.getElementById('code-input').value = stored;
+  });
+
+  function checkStatus() {
+    var code = (document.getElementById('code-input').value || '').trim().toUpperCase();
+    var result = document.getElementById('result');
+    if (!code) { result.textContent = 'Enter a code first.'; return; }
+    result.textContent = 'Checking…';
+
+    var d = db();
+    if (!d) {
+      result.innerHTML = '<p>Could not connect to the tracking database from this browser. Try again, or ask Derek directly for a manual check.</p>';
+      return;
+    }
+
+    d.from('referral_commissions').select('*').eq('ref_code', code).then(function (res) {
+      if (res.error) {
+        result.innerHTML = '<p>No data could be retrieved for this code right now. This page can only show sales that were logged with your code attached — it cannot confirm whether commissions were actually paid out.</p>';
+        return;
+      }
+      var rows = res.data || [];
+      if (!rows.length) {
+        result.innerHTML = '<p>No logged sales found yet for <strong style="color:var(--gold-light)">' + code + '</strong>. This only shows purchases made through a checkout that recorded your code — it will not show direct PayPal payments without a code entered.</p>';
+        return;
+      }
+      var totalCommission = rows.reduce(function (sum, r) { return sum + (parseFloat(r.commission) || 0); }, 0);
+      var html = '<div class="stat-row"><span>Logged referrals</span><strong style="color:var(--gold-light)">' + rows.length + '</strong></div>';
+      html += '<div class="stat-row"><span>Total commission logged</span><strong style="color:var(--gold-light)">$' + totalCommission.toFixed(2) + '</strong></div>';
+      html += '<p style="margin-top:14px;">This is what the system has recorded — it is not confirmation of payment. Contact Derek to confirm your actual payout.</p>';
+      result.innerHTML = html;
+    }).catch(function () {
+      result.innerHTML = '<p>Could not retrieve data right now. Try again later, or ask Derek directly.</p>';
+    });
+  }
+</script>
+
+</body>
+</html>
