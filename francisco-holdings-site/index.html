@@ -705,7 +705,7 @@ img { max-width: 100%; height: auto; }
   </div>
   <div class="footer-copy">© 2026 Francisco Holdings Inc. All Rights Reserved.<br>
   Payments via PayPal or Bitcoin · <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a><br>
-  <a href="../affiliate/">Affiliate Program</a> &nbsp;·&nbsp; <a href="https://paypal.me/franciscoderek7/500CAD" target="_blank" rel="noopener">Book Strategy Session ($500)</a></div>
+  <a href="../affiliate/">Affiliate Program</a> &nbsp;·&nbsp; <a href="https://paypal.me/franciscoderek7/500" target="_blank" rel="noopener">Book Strategy Session ($500)</a></div>
 </footer>
 
 <!-- CHECKOUT MODAL -->
@@ -723,15 +723,26 @@ img { max-width: 100%; height: auto; }
     <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--platinum)" id="ref-orig-price"></div>
     <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--gold);display:none;margin-top:4px" id="ref-disc-price"></div>
     <div class="ref-savings-badge" id="ref-savings-badge"></div>
-    <div style="margin-top:12px">
+    <div id="ref-discount-block" style="margin-top:12px">
+      <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:6px">Do you qualify for a discount?</div>
+      <select class="modal-input" id="ref-honor-select" onchange="applyHonorDiscount(this)" style="margin-bottom:8px">
+        <option value="">— Select if applicable —</option>
+        <option value="TERMINAL">🎗️ Compassion Pricing — Terminal Illness (50% off)</option>
+        <option value="FIXED">♿ Accessibility Pricing — Fixed / Low Income (40% off)</option>
+        <option value="VETERAN">🎖️ Service Pricing — Veterans / Active Military (35% off)</option>
+        <option value="SENIOR">🦉 Wisdom Pricing — Seniors 65+ (30% off)</option>
+        <option value="STUDENT">🎓 Future Builder Pricing — Students (25% off)</option>
+      </select>
+      <div id="ref-honor-msg" style="font-size:11px;color:#6ee7a0;display:none;margin-bottom:8px">We believe you. Thank you for being part of the empire.</div>
       <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:6px">Have a referral code?</div>
       <div style="display:flex;gap:6px">
-        <input class="modal-input" id="ref-code-input" placeholder="FH#### / VETERAN / SENIOR / FIXED / TERMINAL / INVESTOR" style="margin-bottom:0;flex:1">
+        <input class="modal-input" id="ref-code-input" placeholder="FH#### / PHOENIX-XXXX / INVESTOR" style="margin-bottom:0;flex:1">
         <button class="modal-btn btn-emerald" onclick="applyRefCode()" style="width:auto;margin:0;padding:10px 14px;font-size:10px">APPLY</button>
       </div>
       <div class="ref-code-msg" id="ref-code-msg"></div>
+      <div id="ref-tier-msg" style="font-size:11px;color:var(--gold-light);margin-top:4px"></div>
     </div>
-    <button class="modal-btn btn-gold" onclick="proceedToPayPal()">PAY VIA PAYPAL →</button>
+    <button class="modal-btn btn-gold" onclick="proceedToPayPal()">⚡ PAY NOW — PayPal →</button>
     <a href="mailto:docweedla@gmail.com?subject=Payment%20—%20Francisco%20Holdings&body=Product%3A%20[name%20it]%0AAmount%3A%20[amount]%0ASending%20via%3A%20Interac%20e-Transfer" class="modal-btn" onclick="showOrderConfirmation()" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10B981;text-decoration:none;display:block;width:100%;padding:12px;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.5px;border-radius:4px;margin-top:8px;box-sizing:border-box;">💸 PAY VIA INTERAC E-TRANSFER →</a>
     <div class="btc-line" style="margin-top:8px;font-size:10px;color:var(--platinum-mid);">Interac: <strong style="color:#10B981">docweedla@gmail.com</strong> · Include product name in message</div>
     <div class="btc-line">Or pay with Bitcoin: <strong>bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</strong></div>
@@ -755,6 +766,13 @@ img { max-width: 100%; height: auto; }
       </div>
       <button class="ref-copy-btn" onclick="copyRefCode()">Copy Link</button>
     </div>
+    <div id="ref-share-row" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('sms')">📱 SMS</button>
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('email')">✉️ Email</button>
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('whatsapp')">💬 WhatsApp</button>
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('social')">🔗 Social</button>
+    </div>
+    <div id="ref-your-tier" style="font-size:10px;color:var(--platinum-mid);margin-top:8px;line-height:1.6"></div>
   </div>
 </div>
 
@@ -861,20 +879,20 @@ var FLOORS = [
   {n:2,name:'BENO-X / Weedlaw',tag:'⚖️',sub:'Constitutional Defense Framework · 200+ Victories',
    desc:'The BENO-X Framework — 5-pillar constitutional defense: Breach identification, Evidence exclusion, Negotiation leverage, On-record defense, X-multiplier. 20+ years of Charter victories.',
    feats:['Charter s.8/9/10 analysis','Evidence exclusion motions','Crown negotiation strategy','On-record documentation','BENO-X X-multiplier precedent','200+ cases · 4,000 charges stayed','20+ years expertise','Available coast-to-coast'],
-   pricing:[{tier:'BENO-X Playbook',val:'$49',desc:'Full framework PDF + case templates',url:'https://paypal.me/franciscoderek7/49CAD',cls:'btn-emerald'},{tier:'Strategy Session',val:'$500',desc:'60-min consultation with Derek Francisco',url:'https://paypal.me/franciscoderek7/500CAD',cls:'btn-gold'}],
+   pricing:[{tier:'BENO-X Playbook',val:'$49',desc:'Full framework PDF + case templates',url:'https://paypal.me/franciscoderek7/49',cls:'btn-emerald'},{tier:'Strategy Session',val:'$500',desc:'60-min consultation with Derek Francisco',url:'https://paypal.me/franciscoderek7/500',cls:'btn-gold'}],
    live:'https://zprimedoxaihq.com',liveLabel:'PrimeDox AI HQ →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day registration hold.'},
 
   {n:3,name:'PrimeDox AI',tag:'🤖',sub:'Derek Francisco\'s AI Clone · Document Automation · 24/7',
    desc:'20 years of constitutional Charter expertise, strategy, and business automation compressed into an AI available around the clock.',
    feats:['BENO-X defense builder','Charter breach identification','Legal document generation','Court filing templates','Business document automation','Confidential AI sessions','Real-time case analysis','BENO-X full case law library'],
-   pricing:[{tier:'Free',val:'$0',desc:'10 msg/day · 5 docs/mo · 1 BENO-X check',url:'primedox-ai-chat.html',cls:'btn-platinum'},{tier:'Pro',val:'$49/mo',desc:'Unlimited chat · Full BENO-X · All case law',url:'https://paypal.me/franciscoderek7/49CAD',cls:'btn-emerald',feat:true},{tier:'Elite',val:'$199/mo',desc:'Priority + 30% affiliate + white-glove onboarding',url:'https://paypal.me/franciscoderek7/199CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Free',val:'$0',desc:'10 msg/day · 5 docs/mo · 1 BENO-X check',url:'primedox-ai-chat.html',cls:'btn-platinum'},{tier:'Pro',val:'$49/mo',desc:'Unlimited chat · Full BENO-X · All case law',url:'https://paypal.me/franciscoderek7/49',cls:'btn-emerald',feat:true},{tier:'Elite',val:'$199/mo',desc:'Priority + 30% affiliate + white-glove onboarding',url:'https://paypal.me/franciscoderek7/199',cls:'btn-gold'}],
    live:'https://zprimedoxaihq.com',liveLabel:'PrimeDox AI HQ →',contact:'docweedla@gmail.com',note:'First 14 days free. No auto-billing. No credit card.',
    boss:{title:'⚔ Unleash PrimeDox AI',sub:'Activate the Pro tier — unlimited AI, full BENO-X, all case law.',amount:49,ach:'ai_pioneer'}},
 
   {n:4,name:'CCLDR',tag:'📋',sub:'Constitutional education resource',
    desc:'A constitutional education network. Charter challenges, evidence exclusion, and constitutional rights education for every province.',
    feats:['Constitutional charter education','Evidence exclusion filings','Crown negotiation leverage','Know Your Rights training','Case tracking system','Province-wide network','24/7 emergency intake','BENO-X integrated workflow'],
-   pricing:[{tier:'Warrior',val:'$99',desc:'BENO-X starter kit + rights guide',url:'https://paypal.me/franciscoderek7/99CAD',cls:'btn-platinum'},{tier:'Pro',val:'$299',desc:'Full BENO-X + document templates + case review',url:'https://paypal.me/franciscoderek7/299CAD',cls:'btn-emerald'},{tier:'Elite',val:'$999',desc:'2 strategy calls + ongoing support',url:'https://paypal.me/franciscoderek7/999CAD',cls:'btn-gold'},{tier:'Sovereign',val:'$1,499',desc:'Full retainer · unlimited access · dedicated support',url:'https://paypal.me/franciscoderek7/1499CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Warrior',val:'$99',desc:'BENO-X starter kit + rights guide',url:'https://paypal.me/franciscoderek7/99',cls:'btn-platinum'},{tier:'Pro',val:'$299',desc:'Full BENO-X + document templates + case review',url:'https://paypal.me/franciscoderek7/299',cls:'btn-emerald'},{tier:'Elite',val:'$999',desc:'2 strategy calls + ongoing support',url:'https://paypal.me/franciscoderek7/999',cls:'btn-gold'},{tier:'Sovereign',val:'$1,499',desc:'Full retainer · unlimited access · dedicated support',url:'https://paypal.me/franciscoderek7/1499',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/Ccldr-net/',liveLabel:'CCLDR (GitHub Pages) →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day hold. Full launch Q3 2026.',
    boss:{title:'⚔ Defend Your Rights',sub:'Join CCLDR with the Pro tier — full BENO-X, templates, and case review.',amount:299,ach:'legal_legend'}},
 
@@ -887,7 +905,7 @@ var FLOORS = [
   {n:6,name:'TechPetCage',tag:'🐾',sub:'Smart Pet Health AI · GPS Monitoring · Behavior Analytics',
    desc:'AI-powered pet health monitoring with real-time GPS tracking, behavioral analysis, and veterinary alert integration for pet owners worldwide.',
    feats:['AI health tracking','Real-time GPS monitoring','Veterinary alert integration','Behavioral analysis engine','Multi-pet dashboard','24/7 status updates','Emergency SOS protocol','Worldwide shipping'],
-   pricing:[{tier:'Basic',val:'$19/mo',desc:'1 pet · Basic health monitoring',url:'https://paypal.me/franciscoderek7/19CAD',cls:'btn-platinum'},{tier:'Plus',val:'$49/mo',desc:'3 pets · Health alerts + GPS + vet alerts',url:'https://paypal.me/franciscoderek7/49CAD',cls:'btn-emerald',feat:true},{tier:'Family',val:'$149/mo',desc:'Unlimited pets · Full suite + vet integration',url:'https://paypal.me/franciscoderek7/149CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Basic',val:'$19/mo',desc:'1 pet · Basic health monitoring',url:'https://paypal.me/franciscoderek7/19',cls:'btn-platinum'},{tier:'Plus',val:'$49/mo',desc:'3 pets · Health alerts + GPS + vet alerts',url:'https://paypal.me/franciscoderek7/49',cls:'btn-emerald',feat:true},{tier:'Family',val:'$149/mo',desc:'Unlimited pets · Full suite + vet integration',url:'https://paypal.me/franciscoderek7/149',cls:'btn-gold'}],
    live:'https://franciscoderek7.github.io/techpetcage/',liveLabel:'TechPetCage →',contact:'franciscoderek7@gmail.com'},
 
   {n:7,name:'VIGILAX',tag:'🔒',sub:'Enterprise Threat Response · Zero Compromise',
@@ -899,14 +917,14 @@ var FLOORS = [
   {n:8,name:'Francisco Holdings Boardroom',tag:'🏛️',sub:'Investor Relations · Dynasty Partnerships · Floor 8',
    desc:'The boardroom of the empire. Strategy sessions, investment tiers, and partnership structures for those building at the highest level.',
    feats:['60-min strategy sessions','Equity partnership tiers','NDA-protected negotiations','AI implementation roadmaps','Revenue acceleration consulting','Brand architecture strategy','Monthly partner calls','Dynasty Protocol access'],
-   pricing:[{tier:'Strategy Session',val:'$500',desc:'60-min with Derek Francisco · No NDA required',url:'https://paypal.me/franciscoderek7/500CAD',cls:'btn-platinum'},{tier:'Floor — $50K',desc:'Founding investor · Monthly updates · Annual boardroom call',url:'mailto:franciscoderek7@gmail.com?subject=Floor%20Investment%20%2450K',cls:'btn-emerald'},{tier:'Suite — $250K',desc:'5× equity · Quarterly sessions · Co-branding rights',url:'mailto:franciscoderek7@gmail.com?subject=Suite%20Investment%20%24250K',cls:'btn-gold'},{tier:'Penthouse — $1M',desc:'10× equity · Board observer seat · Priority deal flow',url:'mailto:franciscoderek7@gmail.com?subject=Penthouse%20Investment%20%241M',cls:'btn-gold',feat:true}],
+   pricing:[{tier:'Strategy Session',val:'$500',desc:'60-min with Derek Francisco · No NDA required',url:'https://paypal.me/franciscoderek7/500',cls:'btn-platinum'},{tier:'Floor — $50K',desc:'Founding investor · Monthly updates · Annual boardroom call',url:'mailto:franciscoderek7@gmail.com?subject=Floor%20Investment%20%2450K',cls:'btn-emerald'},{tier:'Suite — $250K',desc:'5× equity · Quarterly sessions · Co-branding rights',url:'mailto:franciscoderek7@gmail.com?subject=Suite%20Investment%20%24250K',cls:'btn-gold'},{tier:'Penthouse — $1M',desc:'10× equity · Board observer seat · Priority deal flow',url:'mailto:franciscoderek7@gmail.com?subject=Penthouse%20Investment%20%241M',cls:'btn-gold',feat:true}],
    live:false,contact:'franciscoderek7@gmail.com',
    pitchDeck:true,projection:'$400M projected revenue across the first 4 years · 45-company empire overview'},
 
   {n:9,name:'Vault Velocity Auto',tag:'🚗',sub:'AI-Powered Automotive Intelligence',
    desc:'AI diagnostics, performance optimization, and secure automotive intelligence for high-value vehicles and fleet operations.',
    feats:['AI vehicle diagnostics','Performance optimization','Fleet management AI','Security & anti-theft intelligence','Predictive maintenance','OBD-II deep integration','Insurance telematics','Custom automotive AI'],
-   pricing:[{tier:'Individual',val:'$99/mo',desc:'1 vehicle · AI diagnostics + alerts',url:'https://paypal.me/franciscoderek7/99CAD',cls:'btn-emerald'},{tier:'Fleet',val:'$499/mo',desc:'10 vehicles · Full fleet AI management',url:'https://paypal.me/franciscoderek7/499CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Individual',val:'$99/mo',desc:'1 vehicle · AI diagnostics + alerts',url:'https://paypal.me/franciscoderek7/99',cls:'btn-emerald'},{tier:'Fleet',val:'$499/mo',desc:'10 vehicles · Full fleet AI management',url:'https://paypal.me/franciscoderek7/499',cls:'btn-gold'}],
    live:'https://vaultvelocityauto.com',liveLabel:'Vault Velocity Auto →',contact:'franciscoderek7@gmail.com'},
 
   {n:10,name:'Kiaros',tag:'⏱️',sub:'AI Strategy · Precision Timing · Growth Architecture',
@@ -918,19 +936,19 @@ var FLOORS = [
   {n:11,name:'TechPackCage',tag:'📦',sub:'Smart Packaging AI · Supply Chain Intelligence',
    desc:'AI-powered packaging optimization and supply chain intelligence for e-commerce and manufacturing operations.',
    feats:['Packaging material AI','Dimension optimization','Supply chain visibility','Carrier rate AI negotiation','Returns reduction AI','Sustainability scoring','Inventory forecasting','Custom packaging design'],
-   pricing:[{tier:'Starter',val:'$49/mo',desc:'Up to 500 shipments · Basic optimization',url:'https://paypal.me/franciscoderek7/49CAD',cls:'btn-emerald'},{tier:'Growth',val:'$149/mo',desc:'Unlimited shipments · Full AI suite',url:'https://paypal.me/franciscoderek7/149CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Starter',val:'$49/mo',desc:'Up to 500 shipments · Basic optimization',url:'https://paypal.me/franciscoderek7/49',cls:'btn-emerald'},{tier:'Growth',val:'$149/mo',desc:'Unlimited shipments · Full AI suite',url:'https://paypal.me/franciscoderek7/149',cls:'btn-gold'}],
    live:false,contact:'franciscoderek7@gmail.com'},
 
   {n:12,name:'MindShift by Michaella',tag:'🧠',sub:'Psychology & Travel AI · Behavioral Transformation',
    desc:'Combining behavioral psychology and immersive travel experiences to unlock automated income streams and mindset transformation.',
    feats:['Behavioral modification programs','Automated income systems','Travel lifestyle design','Psychology-based coaching','Digital product creation','Online course platform','Community building','Mindset reprogramming'],
-   pricing:[{tier:'Session',val:'$99',desc:'1-hour coaching session',url:'https://paypal.me/franciscoderek7/99CAD',cls:'btn-emerald'},{tier:'Package',val:'$299',desc:'Monthly program + travel lifestyle blueprint',url:'https://paypal.me/franciscoderek7/299CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Session',val:'$99',desc:'1-hour coaching session',url:'https://paypal.me/franciscoderek7/99',cls:'btn-emerald'},{tier:'Package',val:'$299',desc:'Monthly program + travel lifestyle blueprint',url:'https://paypal.me/franciscoderek7/299',cls:'btn-gold'}],
    live:false,contact:'franciscoderek7@gmail.com',note:'Coming 2026 — domain not yet registered.'},
 
   {n:13,name:'CCC-Site',tag:'🌐',sub:'Business Consulting · Compliance & Licensing',
    desc:'Full-service business consulting — from licensing and compliance to operations, marketing, and expansion strategy.',
    feats:['Licensing guidance','Compliance management','Operations setup','Marketing strategy','SOP development','Financial modeling','Distribution strategy','Expansion planning'],
-   pricing:[{tier:'Consult',val:'$500',desc:'60-min compliance strategy session',url:'https://paypal.me/franciscoderek7/500CAD',cls:'btn-emerald'},{tier:'Retainer',val:'$2,000/mo',desc:'Full compliance management + monthly strategy',url:'https://paypal.me/franciscoderek7/2000CAD',cls:'btn-gold'}],
+   pricing:[{tier:'Consult',val:'$500',desc:'60-min compliance strategy session',url:'https://paypal.me/franciscoderek7/500',cls:'btn-emerald'},{tier:'Retainer',val:'$2,000/mo',desc:'Full compliance management + monthly strategy',url:'https://paypal.me/franciscoderek7/2000',cls:'btn-gold'}],
    live:false,contact:'docweedla@gmail.com'},
 
   {n:14,name:'Space Swarm',tag:'🛸',sub:'Space Operations AI · Orbital Logistics · Satellite Intelligence',coming:true},
@@ -942,7 +960,7 @@ var FLOORS = [
   {n:20,name:'Auto Swarm',tag:'🏭',sub:'Automotive Manufacturing AI · Supply Chain Intelligence',coming:true},
   {n:21,name:'Agent Swarm Tech',tag:'🤖',sub:'Multi-Agent Orchestration · AI Scaling · Swarm Intelligence',
    desc:'The backbone technology powering all 45 Francisco Holdings divisions. Deploy, manage, and scale AI agent networks.',
-   pricing:[{tier:'Starter',val:'$299/mo',desc:'Up to 5 agents',url:'https://paypal.me/franciscoderek7/299CAD',cls:'btn-emerald'},{tier:'Growth',val:'$999/mo',desc:'Up to 25 agents + monitoring',url:'https://paypal.me/franciscoderek7/999CAD',cls:'btn-gold'},{tier:'Enterprise',val:'$2,999/mo',desc:'Unlimited agents + SoulStack integration',url:'mailto:franciscoderek7@gmail.com?subject=Agent%20Swarm%20Enterprise',cls:'btn-platinum'}],
+   pricing:[{tier:'Starter',val:'$299/mo',desc:'Up to 5 agents',url:'https://paypal.me/franciscoderek7/299',cls:'btn-emerald'},{tier:'Growth',val:'$999/mo',desc:'Up to 25 agents + monitoring',url:'https://paypal.me/franciscoderek7/999',cls:'btn-gold'},{tier:'Enterprise',val:'$2,999/mo',desc:'Unlimited agents + SoulStack integration',url:'mailto:franciscoderek7@gmail.com?subject=Agent%20Swarm%20Enterprise',cls:'btn-platinum'}],
    live:'https://zprimedoxaihq.com',liveLabel:'PrimeDox HQ →',contact:'franciscoderek7@gmail.com'},
   {n:22,name:'Francisco Realty',tag:'🏘️',sub:'AI Real Estate · Full-Stack Property Transactions',
    desc:'End-to-end real estate services powered by AI — buying, selling, investment, and property management across Canada and beyond.',
@@ -1137,7 +1155,7 @@ var PhoenixGame = (function(){
   }
   function payBoss(floorN, amount, ach){
     // open PayPal (honor system — cannot verify)
-    window.open('https://paypal.me/franciscoderek7/'+amount+'CAD','_blank','noopener');
+    window.open('https://paypal.me/franciscoderek7/'+amount,'_blank','noopener');
     clearBoss(floorN, ach);
   }
   function skipBoss(floorN){
@@ -1962,17 +1980,42 @@ document.addEventListener('keydown', function(e) {
     if (!c) { c = 'FH'+Math.floor(1000+Math.random()*9000); localStorage.setItem(MY_REF_KEY, c); }
     return c;
   }
-  function isValidCode(c) { return /^(FH\d{4}|AFF-[A-Z]{1,4}-\d{3}|PHOENIX-[A-Z0-9]{4}|VETERAN|SENIOR|FIXED|TERMINAL|INVESTOR)/i.test(c); }
+  function isValidCode(c) { return /^(FH\d{4}|AFF-[A-Z]{1,4}-\d{3}|PHOENIX-[A-Z0-9]{4}|VETERAN|SENIOR|FIXED|TERMINAL|STUDENT|INVESTOR)/i.test(c); }
+  // Honor-system discount tiers (self-declared, no documentation required)
+  var HONOR_TIERS = [
+    {key:'terminal', code:'TERMINAL', percent:0.50, label:'Compassion Pricing',    desc:'Terminal Illness'},
+    {key:'fixed',    code:'FIXED',    percent:0.40, label:'Accessibility Pricing', desc:'Fixed / Low Income'},
+    {key:'veteran',  code:'VETERAN',  percent:0.35, label:'Service Pricing',       desc:'Veterans / Active Military'},
+    {key:'senior',   code:'SENIOR',   percent:0.30, label:'Wisdom Pricing',        desc:'Seniors (65+)'},
+    {key:'student',  code:'STUDENT',  percent:0.25, label:'Future Builder Pricing',desc:'Students'}
+  ];
+  // Referrer reward ladder — discount you EARN for your own future purchases based on successful referrals you've made
+  var REFERRER_TIERS = [
+    {min:10, percent:0.50, perk:'+ 1 free month'},
+    {min:5,  percent:0.30, perk:'+ priority support'},
+    {min:3,  percent:0.20, perk:''},
+    {min:1,  percent:0.10, perk:''}
+  ];
   function getDiscount(c) {
     if(!isValidCode(c)) return 0;
     var u = c.toUpperCase();
-    if (/^TERMINAL/.test(u)) return 0.20;
-    if (/^INVESTOR/.test(u)) return 0.25;
-    if (/^(VETERAN|SENIOR|FIXED)/.test(u)) return 0.10;
+    if (/^INVESTOR/.test(u)) return 0.25; // investor referral — 25% for life
+    for (var i=0;i<HONOR_TIERS.length;i++) { if (u.indexOf(HONOR_TIERS[i].code)===0) return HONOR_TIERS[i].percent; }
     return /^PHOENIX-/i.test(c) ? 0.05 : 0.10;
   }
+  function getMyReferralCount() {
+    var data = {}; try { data = JSON.parse(localStorage.getItem('pd_referral') || '{}'); } catch(e){}
+    var myCode = (localStorage.getItem(AFF_KEY) || getUserRefCode() || '').toUpperCase();
+    var commissions = data.commissions || [];
+    return commissions.filter(function(c){ return (c.code||'').toUpperCase() === myCode; }).length;
+  }
+  function getReferrerTierDiscount() {
+    var n = getMyReferralCount();
+    for (var i=0;i<REFERRER_TIERS.length;i++) { if (n >= REFERRER_TIERS[i].min) return REFERRER_TIERS[i]; }
+    return null;
+  }
 
-  window.openCheckout = function(productName, priceCAD, paypalUrl) {
+  window.openCheckout = function(productName, priceCAD, paypalUrl, excludeDiscount) {
     _checkout.price = priceCAD; _checkout.discounted = priceCAD;
     _checkout.product = productName; _checkout.baseUrl = paypalUrl;
     document.getElementById('ref-product-name').textContent = productName;
@@ -1982,12 +2025,58 @@ document.addEventListener('keydown', function(e) {
     document.getElementById('ref-disc-price').style.display = 'none';
     document.getElementById('ref-savings-badge').style.display = 'none';
     document.getElementById('ref-code-msg').textContent = '';
+    document.getElementById('ref-honor-select').value = '';
+    document.getElementById('ref-honor-msg').style.display = 'none';
+    document.getElementById('ref-tier-msg').textContent = '';
+    document.getElementById('ref-discount-block').style.display = excludeDiscount ? 'none' : '';
+    if (excludeDiscount) {
+      var note = document.createElement('div');
+      note.style.cssText = 'font-size:11px;color:var(--platinum-dark);margin-top:8px';
+      note.textContent = 'Penthouse tier — pricing is fixed, no discounts apply.';
+      document.getElementById('ref-discount-block').parentNode.insertBefore(note, document.getElementById('ref-discount-block'));
+    }
     var stored = localStorage.getItem(REF_KEY) || '';
     document.getElementById('ref-code-input').value = stored;
-    if (stored) window.applyRefCode();
+    if (stored && !excludeDiscount) window.applyRefCode();
+    else if (!excludeDiscount) {
+      var rt = getReferrerTierDiscount();
+      if (rt) {
+        var saved = Math.round(_checkout.price * rt.percent * 100) / 100;
+        _checkout.discounted = Math.round((_checkout.price - saved) * 100) / 100;
+        document.getElementById('ref-disc-price').textContent = '$'+_checkout.discounted.toLocaleString()+' CAD';
+        document.getElementById('ref-disc-price').style.display = 'block';
+        document.getElementById('ref-orig-price').style.textDecoration = 'line-through';
+        document.getElementById('ref-orig-price').style.color = 'rgba(234,234,226,0.35)';
+        document.getElementById('ref-tier-msg').textContent = '⭐ Referrer reward applied — '+(rt.percent*100)+'% off ('+getMyReferralCount()+' referrals)'+(rt.perk?' '+rt.perk:'');
+      }
+    }
     _userRefCode = getUserRefCode();
     document.getElementById('ref-your-code').textContent = _userRefCode;
+    var myCount = getMyReferralCount();
+    var nextTier = REFERRER_TIERS.slice().reverse().filter(function(t){return t.min>myCount;})[0];
+    document.getElementById('ref-your-tier').textContent = 'Referrals: '+myCount+' · 1=10% · 3=20% · 5=30%+priority · 10=50%+free month · Investor=25% for life'+(nextTier?' — '+(nextTier.min-myCount)+' more to unlock '+(nextTier.percent*100)+'%':'');
     document.getElementById('ref-checkout-modal').classList.remove('hidden');
+  };
+
+  window.applyHonorDiscount = function(sel) {
+    var code = sel.value;
+    var msg = document.getElementById('ref-honor-msg');
+    if (!code) { msg.style.display = 'none'; if(!document.getElementById('ref-code-input').value) { _checkout.discounted = _checkout.price; document.getElementById('ref-disc-price').style.display='none'; document.getElementById('ref-orig-price').style.textDecoration=''; } return; }
+    document.getElementById('ref-code-input').value = code;
+    window.applyRefCode();
+    msg.style.display = 'block';
+  };
+
+  window.shareReferral = function(channel) {
+    var code = _userRefCode || getUserRefCode();
+    var link = 'https://franciscoholdingsinc.com/?ref='+code;
+    var text = 'I use Francisco Holdings Inc. for AI security, legal defense, and automation — use my code for a discount: '+link;
+    var url;
+    if (channel === 'sms') url = 'sms:?body='+encodeURIComponent(text);
+    else if (channel === 'email') url = 'mailto:?subject='+encodeURIComponent('A referral for you — Francisco Holdings')+'&body='+encodeURIComponent(text);
+    else if (channel === 'whatsapp') url = 'https://wa.me/?text='+encodeURIComponent(text);
+    else url = 'https://twitter.com/intent/tweet?text='+encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener');
   };
 
   window.closeCheckoutModal = function() {
@@ -2015,7 +2104,8 @@ document.addEventListener('keydown', function(e) {
       document.getElementById('ref-orig-price').style.color = 'rgba(234,234,226,0.35)';
       document.getElementById('ref-savings-badge').textContent = 'You save $'+saved.toFixed(2)+' with code '+code;
       document.getElementById('ref-savings-badge').style.display = 'inline-block';
-      msg.textContent = '✓ Code applied — '+(disc*100)+'% discount activated!';
+      var honorMatch = HONOR_TIERS.filter(function(t){return code.indexOf(t.code)===0;})[0];
+      msg.textContent = honorMatch ? '✓ '+honorMatch.label+' — '+(disc*100)+'% off ('+honorMatch.desc+')' : '✓ Code applied — '+(disc*100)+'% discount activated!';
       msg.className = 'ref-code-msg success';
       localStorage.setItem(REF_KEY, code);
     } else {
@@ -2026,7 +2116,7 @@ document.addEventListener('keydown', function(e) {
   };
 
   window.proceedToPayPal = function() {
-    window.open('https://paypal.me/franciscoderek7/'+_checkout.discounted+'CAD', '_blank', 'noopener');
+    window.open('https://paypal.me/franciscoderek7/'+_checkout.discounted, '_blank', 'noopener');
     var referrerCode = localStorage.getItem(REF_KEY) || null;
     if (referrerCode && window.ReferralEngine && typeof window.ReferralEngine.trackSale === 'function') {
       window.ReferralEngine.trackSale(_checkout.product, _checkout.discounted, referrerCode);
@@ -2151,7 +2241,7 @@ function pdFloorChat(agentId, floorName) {
 <script>
 window.Apex && window.Apex.initStickyBuyBar({
   text: 'BENO-X Playbook — $49',
-  href: 'https://paypal.me/franciscoderek7/49CAD',
+  href: 'https://paypal.me/franciscoderek7/49',
   ctaText: 'Pay $49 →',
   target: '_blank',
   accent: '#D4AF37'
