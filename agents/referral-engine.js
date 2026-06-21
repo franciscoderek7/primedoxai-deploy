@@ -2,7 +2,7 @@
 // CDN: https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js
 //
 // Discount tiers (by code prefix), per Derek's 2026-06-21 spec:
-//   VETERAN10* → 10% | SENIOR10* → 10% | FIXED10* → 10% | TERMINAL20* → 20% | general → 10%
+//   VETERAN10* → 10% | SENIOR10* → 10% | FIXED10* → 10% | TERMINAL20* → 20% | INVESTOR* -> 25% | general → 10%
 //
 // Commission rates:
 //   First sale → 25% | Recurring → 20%
@@ -20,6 +20,7 @@
     { prefix: 'VETERAN',  percent: 10, label: 'Veteran Discount' },
     { prefix: 'TERMINAL', percent: 20, label: 'Terminal Illness Care Discount' },
     { prefix: 'FIXED',    percent: 10, label: 'Fixed Income Discount' },
+    { prefix: 'INVESTOR', percent: 25, label: 'Investor Partner Discount' },
   ];
 
   var GENERAL_PERCENT = 10;
