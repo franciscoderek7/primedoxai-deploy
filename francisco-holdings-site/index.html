@@ -779,6 +779,20 @@ img { max-width: 100%; height: auto; }
       <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--gold-light);margin-bottom:8px" id="aff-code-display"></div>
       <div style="font-size:11px;color:var(--platinum-dark);margin-bottom:12px" id="aff-link-display"></div>
       <button class="modal-btn btn-emerald" onclick="copyAffLink()">Copy Affiliate Link</button>
+      <div id="aff-earnings-dashboard" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(212,175,55,0.2);text-align:left">
+        <div style="font-size:10px;color:var(--platinum-dark);letter-spacing:1px;margin-bottom:10px;text-align:center">MY EARNINGS</div>
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <div style="flex:1;text-align:center;background:rgba(212,175,55,0.07);border-radius:8px;padding:10px">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--gold-light)" id="aff-earn-total">$0.00</div>
+            <div style="font-size:9px;color:var(--platinum-dark)">TOTAL COMMISSION</div>
+          </div>
+          <div style="flex:1;text-align:center;background:rgba(212,175,55,0.07);border-radius:8px;padding:10px">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--gold-light)" id="aff-earn-count">0</div>
+            <div style="font-size:9px;color:var(--platinum-dark)">SALES TRACKED</div>
+          </div>
+        </div>
+        <div id="aff-earn-list" style="font-size:11px;color:var(--platinum-mid);max-height:140px;overflow-y:auto"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -2048,8 +2062,36 @@ document.addEventListener('keydown', function(e) {
 
   window.proceedToPayPal = function() {
     window.open('https://paypal.me/franciscoderek7/'+_checkout.discounted+'CAD', '_blank', 'noopener');
+    var referrerCode = localStorage.getItem(REF_KEY) || null;
+    if (referrerCode && window.ReferralEngine && typeof window.ReferralEngine.trackSale === 'function') {
+      window.ReferralEngine.trackSale(_checkout.product, _checkout.discounted, referrerCode);
+    }
     window.showOrderConfirmation();
   };
+
+  function renderEarningsDashboard() {
+    var totalEl = document.getElementById('aff-earn-total');
+    var countEl = document.getElementById('aff-earn-count');
+    var listEl = document.getElementById('aff-earn-list');
+    if (!totalEl) return;
+    var data = {};
+    try { data = JSON.parse(localStorage.getItem('pd_referral') || '{}'); } catch (e) {}
+    var commissions = data.commissions || [];
+    var myCode = (localStorage.getItem(AFF_KEY) || '').toUpperCase();
+    var mine = myCode ? commissions.filter(function(c){ return (c.code||'').toUpperCase() === myCode; }) : [];
+    var total = mine.reduce(function(sum, c){ return sum + (c.commission || 0); }, 0);
+    totalEl.textContent = '$' + total.toFixed(2);
+    countEl.textContent = mine.length;
+    if (!mine.length) {
+      listEl.innerHTML = '<div style="text-align:center;color:var(--platinum-dark);padding:8px 0">No sales tracked yet — share your link above.</div>';
+      return;
+    }
+    listEl.innerHTML = mine.slice().reverse().slice(0, 10).map(function(c) {
+      return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)">' +
+        '<span>' + escHtml(c.productId || 'Sale') + ' · ' + c.rate + '</span>' +
+        '<span style="color:var(--gold-light)">+$' + c.commission.toFixed(2) + '</span></div>';
+    }).join('');
+  }
 
   window.copyRefCode = function() {
     var code = _userRefCode || getUserRefCode();
@@ -2075,8 +2117,17 @@ document.addEventListener('keydown', function(e) {
 
   // Affiliate modal
   window.openAffModal = function() {
-    document.getElementById('aff-form').style.display='block';
-    document.getElementById('aff-result').style.display='none';
+    var existingCode = localStorage.getItem(AFF_KEY);
+    if (existingCode) {
+      document.getElementById('aff-code-display').textContent = existingCode;
+      document.getElementById('aff-link-display').textContent = 'franciscoholdingsinc.com/?ref='+existingCode;
+      document.getElementById('aff-form').style.display='none';
+      document.getElementById('aff-result').style.display='block';
+      renderEarningsDashboard();
+    } else {
+      document.getElementById('aff-form').style.display='block';
+      document.getElementById('aff-result').style.display='none';
+    }
     document.getElementById('aff-signup-modal').classList.remove('hidden');
   };
   window.closeAffModal = function() { document.getElementById('aff-signup-modal').classList.add('hidden'); };
@@ -2090,6 +2141,7 @@ document.addEventListener('keydown', function(e) {
     document.getElementById('aff-link-display').textContent = 'franciscoholdingsinc.com/?ref='+code;
     document.getElementById('aff-form').style.display='none';
     document.getElementById('aff-result').style.display='block';
+    renderEarningsDashboard();
     window.open('mailto:franciscoderek7@gmail.com?subject=New+Affiliate+Signup&body=Name:+'+encodeURIComponent(name)+'%0AEmail:+'+encodeURIComponent(email)+'%0ACode:+'+code,'_blank');
   };
   window.copyAffLink = function() {
