@@ -80,6 +80,18 @@ Responding to Derek's "optimize SEO... AI analytics... its own branding... autom
 
 ---
 
+## DEPLOY-GATE FAILURES FOUND DURING "MERGE TO MAIN" — 2026-06-21
+
+Derek ordered "merge to main for all." On merge, GitHub Actions logs showed 2 deploys had been silently failing on **every** push to `main` for a while (pre-existing, not caused by this session's changes) — investigated and fixed both rather than leaving them broken:
+
+1. **Kiaros + CleanSwarm Loop B identity-leak check had a false-positive bug**: the grep pattern flagged the CDN script URL itself (`cdn.jsdelivr.net/gh/franciscoderek7/...`) as a "Derek Francisco identity leak," because the GitHub org name is literally `franciscoderek7` — but every Loop B site has always had to load shared `agents/*.js` from that exact CDN path. Fixed `deploy-kiaros.yml`/`deploy-cleanswarm.yml` to exclude that CDN line from the leak check while still catching real leaks (visible "Derek Francisco" text, personal email, etc.).
+2. **Doc Weedlaw, BENO-X — real leaks, not false positives**: both had Derek's personal phone number (`705-307-8080`) hardcoded and were correctly being blocked by their own security gate. Removed it from both (kept the public email contact, which is correct for these Loop A sites).
+3. **VIGILAX had `franciscoderek7@gmail.com` in 7 places** despite EMPIRE.md (§ VIGILAX MONEY ONLY pass) explicitly documenting VIGILAX as Loop B ("no Derek Francisco identity"). Replaced with `omniaguard1@gmail.com` — the anonymous Interac-transfer email the same page already used for payment instructions — so the whole page is now internally consistent.
+
+**Found but NOT fixed — flagging, not silently sweeping:** `705-307-8080` also appears in ~37 other HTML files across the repo (`francisco-holdings-site/{constitutional-ai,continuity,partnership}.html`, `ccldr-site/{index-new-design,pricing}.html`, `email-signatures/signatures.html`, `signatures/*.html`, and ~30 experimental/concept site stubs like `koolduce-motors-site`, `fintech-swarm-site`, `health-swarm-site`, etc. — most of these aren't wired to any deploy workflow, so they're not live, but some like `ccldr-site/pricing.html` and the `francisco-holdings-site` pages ARE live). This is a much larger cleanup than the 2 deploy-blockers above — Derek should confirm whether he wants a full empire-wide sweep before one is done, since it touches ~37 files outside this session's scope.
+
+---
+
 ## CHINESE AI INTEGRATION — 2026-06-20
 
 Responding to Derek's "CHINESE AI INTEGRATION — Build This Now" directive (DeepSeek/Qwen/GLM/Kimi stack). Built the secure server-proxy architecture rather than a client-only connector, because every one of these vendor APIs requires a secret key in the request header — putting a real key in any `agents/*.js` file would leak it to every site visitor via view-source within minutes (same risk class as the Stripe secret key, never done elsewhere in this repo).
