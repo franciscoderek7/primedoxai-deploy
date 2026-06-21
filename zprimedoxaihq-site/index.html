@@ -112,6 +112,8 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
   .logout-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
   .logout-btn:hover { border-color: var(--red); color: var(--red); }
+  .nav-toggle-btn { display: none; background: none; border: 1px solid var(--border); color: var(--text); width: 36px; height: 36px; border-radius: 6px; font-size: 16px; cursor: pointer; align-items: center; justify-content: center; }
+  #nav-backdrop { display: none; }
 
   /* ===== LAYOUT ===== */
   .hq { display: grid; grid-template-columns: 200px 1fr; min-height: calc(100vh - 49px); }
@@ -367,7 +369,17 @@
 
   @media (max-width: 900px) {
     .hq { grid-template-columns: 1fr; }
-    aside { display: none; }
+    .nav-toggle-btn { display: flex; }
+    aside {
+      position: fixed; top: 49px; left: 0; bottom: 0; width: 240px; max-width: 80vw;
+      z-index: 200; transform: translateX(-100%); transition: transform .25s ease;
+      overflow-y: auto;
+    }
+    aside.open { transform: translateX(0); box-shadow: 6px 0 28px rgba(0,0,0,0.45); }
+    #nav-backdrop.open {
+      display: block; position: fixed; top: 49px; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.55); z-index: 150;
+    }
     .metrics { grid-template-columns: repeat(2, 1fr); }
     .payment-grid { grid-template-columns: 1fr; }
     .router-adapters-grid { grid-template-columns: repeat(3, 1fr); }
@@ -418,7 +430,10 @@
 <div id="hq-content" style="display:none;">
 
 <header>
-  <div class="logo">PrimeDox <span>HQ</span></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button class="nav-toggle-btn" id="nav-toggle-btn" onclick="toggleNav()" aria-label="Open menu">☰</button>
+    <div class="logo">PrimeDox <span>HQ</span></div>
+  </div>
   <div class="header-right">
     <span class="live-dot"></span>
     <span id="hq-time">—</span>
@@ -432,9 +447,11 @@
   <a href="https://franciscoholdingsinc.com" target="_blank" rel="noopener">🏛️ Empire OS →</a>
 </div>
 
+<div id="nav-backdrop" onclick="toggleNav(false)"></div>
+
 <div class="hq">
   <!-- Sidebar -->
-  <aside>
+  <aside id="hq-aside">
     <div class="nav-group">
       <div class="nav-group-label">Command Center</div>
       <a class="nav-link active" onclick="showView('dashboard')"><span class="nav-link-icon">⚡</span>Dashboard</a>
@@ -1282,11 +1299,23 @@
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     var navEl = event && event.target ? event.target.closest('.nav-link') : null;
     if (navEl) navEl.classList.add('active');
+    toggleNav(false);
   }
   function showViewDirect(id) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + id).classList.add('active');
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    toggleNav(false);
+  }
+
+  // Mobile sidebar drawer
+  function toggleNav(force) {
+    var aside = document.getElementById('hq-aside');
+    var backdrop = document.getElementById('nav-backdrop');
+    if (!aside || !backdrop) return;
+    var open = typeof force === 'boolean' ? force : !aside.classList.contains('open');
+    aside.classList.toggle('open', open);
+    backdrop.classList.toggle('open', open);
   }
 
   // App Launcher / Iframe Panel
