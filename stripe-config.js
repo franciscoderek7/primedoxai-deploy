@@ -1,9 +1,24 @@
 /* stripe-config.js — Francisco Holdings Empire Payment Config
- * STRIPE SWAP ZONE: When [STRIPE-ACCT-REDACTED] is unlocked:
+ * STRIPE SWAP ZONE: When real Stripe Payment Links exist:
  *   1. Set STRIPE_LIVE = true
  *   2. Replace each stripeUrl with actual buy.stripe.com/... link
  *   3. Push — all sites update automatically
  *   Estimated swap time: 10 minutes
+ *
+ * WHY THIS USES window.EMPIRE_PAYMENTS INSTEAD OF process.env:
+ *   These are static GitHub Pages sites (plain HTML/JS, no Node build step),
+ *   so `process` does not exist in the browser — process.env.STRIPE_* would
+ *   throw a ReferenceError on every page load. window.EMPIRE_PAYMENTS.STRIPE_PK
+ *   below is the working equivalent: a single place to swap in the real key,
+ *   read by every site via this one shared file. (The one real Next.js app in
+ *   this repo, zprimedoxaihq-nextjs/, is the exception — it CAN use
+ *   process.env.NEXT_PUBLIC_STRIPE_* at build time if that ever goes live.)
+ *
+ * PRICING MODEL (Derek's 2026-06-21 directive, applied where noted below):
+ *   Entry ~$99 (one-time or /mo) → Mid ~$299-499 → Premium ~$999 → Enterprise (custom quote).
+ *   Already applied to: omniaguard, ccldr, zprimedox, techpetcage, vaultvelocityauto.
+ *   Not yet applied to every other floor's site copy — this file establishes the
+ *   template; remaining floors' on-page pricing still needs an individual pass.
  *
  * LOOP RULES (enforced — never cross-contaminate):
  *   Loop A: Derek Francisco is visible — paypal.me/derekfrancisco/AMOUNT, Interac = franciscoderek7@gmail.com
@@ -36,52 +51,41 @@
       /* ── OMNIAGUARD ────────────────────────────────────────────────────────
        * Loop B — anonymous. Never expose Derek's PayPal.me here.
        * ─────────────────────────────────────────────────────────────────────*/
+      // PRICING REVISED 2026-06-21 per Derek's 3-tier directive (entry/mid/premium).
+      // Previous 6-tier Starter/Sentinel/Warden/Archon/Sovereign/Imperium structure
+      // is preserved in git history if a future session needs to restore it.
       omniaguard: {
         loop:    'B',
         contact: 'omniaguard1@gmail.com',
         interacEmail: 'omniaguard1@gmail.com',
         plans: {
-          starter: {
-            label:          'Starter',
+          entry: {
+            label:          'Entry',
             price:          99,
             recurring:      'mo',
-            stripeUrl:      'https://buy.stripe.com/PLACEHOLDER_OMNIAGUARD_STARTER', // STRIPE SWAP ZONE
-            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniaGuard+Starter+%2499%2Fmo',
+            stripeUrl:      'https://buy.stripe.com/PLACEHOLDER_OMNIGUARD_ENTRY', // STRIPE SWAP ZONE
+            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniGuard+Entry+%2499%2Fmo',
           },
-          sentinel: {
-            label:          'Sentinel',
-            price:          499,
+          mid: {
+            label:          'Mid',
+            price:          299,
             recurring:      'mo',
-            stripeUrl:      'https://buy.stripe.com/PLACEHOLDER_OMNIAGUARD_SENTINEL', // STRIPE SWAP ZONE
-            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniaGuard+Sentinel+%24499%2Fmo',
+            stripeUrl:      'https://buy.stripe.com/PLACEHOLDER_OMNIGUARD_MID', // STRIPE SWAP ZONE
+            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniGuard+Mid+%24299%2Fmo',
           },
-          warden: {
-            label:          'Warden',
-            price:          2499,
+          premium: {
+            label:          'Premium',
+            price:          999,
             recurring:      'mo',
-            stripeUrl:      'https://buy.stripe.com/PLACEHOLDER_OMNIAGUARD_WARDEN', // STRIPE SWAP ZONE
-            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniaGuard+Warden+%242499%2Fmo',
+            stripeUrl:      'https://buy.stripe.com/PLACEHOLDER_OMNIGUARD_PREMIUM', // STRIPE SWAP ZONE
+            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniGuard+Premium+%24999%2Fmo',
           },
-          archon: {
-            label:          'Archon',
-            price:          9999,
-            recurring:      'mo',
-            stripeUrl:      'https://buy.stripe.com/PLACEHOLDER_OMNIAGUARD_ARCHON', // STRIPE SWAP ZONE
-            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniaGuard+Archon+%249999%2Fmo',
-          },
-          sovereign: {
-            label:          'Sovereign',
-            price:          null, // custom
+          enterprise: {
+            label:          'Enterprise',
+            price:          null, // custom quote
             recurring:      'mo',
             stripeUrl:      null, // custom — contact required
-            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniaGuard+Sovereign+Plan+Inquiry',
-          },
-          imperium: {
-            label:          'Imperium',
-            price:          null, // custom enterprise
-            recurring:      'mo',
-            stripeUrl:      null, // custom — contact required
-            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniaGuard+Imperium+Enterprise+Inquiry',
+            paypalInquiry:  'mailto:omniaguard1@gmail.com?subject=OmniGuard+Enterprise+Inquiry',
           },
         },
       },
@@ -166,52 +170,42 @@
 
       /* ── CCLDR (Doc Weedlaw) ───────────────────────────────────────────────
        * Loop A — Derek Francisco visible. Uses paypal.me/derekfrancisco.
+       * PRICING REVISED 2026-06-21: digital/premium/elite 3-tier per Derek's
+       * directive. Previous Basic/Warrior/Professional/Elite/Sovereign 5-tier
+       * structure is preserved in git history.
        * ─────────────────────────────────────────────────────────────────────*/
       ccldr: {
         loop:         'A',
         contact:      'franciscoderek7@gmail.com',
         interacEmail: 'franciscoderek7@gmail.com',
         plans: {
-          basic: {
-            label:    'Basic',
-            price:    49,
-            recurring:'mo',
-            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_BASIC', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacco1/49CAD',
+          digital: {
+            label:    'Digital',
+            price:    99,
+            recurring:null, // one-time
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_DIGITAL', // STRIPE SWAP ZONE
+            paypal:   'https://paypal.me/derekfranciacco1/99CAD',
           },
-          warrior: {
-            label:    'Warrior',
-            price:    149,
-            recurring:'mo',
-            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_WARRIOR', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacco1/149CAD',
-          },
-          professional: {
-            label:    'Professional',
+          premium: {
+            label:    'Premium',
             price:    499,
-            recurring:'mo',
-            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_PROFESSIONAL', // STRIPE SWAP ZONE
+            recurring:null, // one-time
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_PREMIUM', // STRIPE SWAP ZONE
             paypal:   'https://paypal.me/derekfranciacco1/499CAD',
           },
           elite: {
             label:    'Elite',
-            price:    999,
-            recurring:'mo',
+            price:    1499,
+            recurring:null, // one-time
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_ELITE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacco1/999CAD',
-          },
-          sovereign: {
-            label:    'Sovereign',
-            price:    2499,
-            recurring:'mo',
-            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_SOVEREIGN', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacco1/2499CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/1499CAD',
           },
         },
       },
 
-      /* ── ZPRIMEDOXAIHQ ─────────────────────────────────────────────────────
+      /* ── ZPRIMEDOXAIHQ (PrimeDox AI) ────────────────────────────────────────
        * Loop A — Derek Francisco visible. Uses paypal.me/derekfrancisco.
+       * PRICING REVISED 2026-06-21 per Derek's 3-tier directive.
        * ─────────────────────────────────────────────────────────────────────*/
       zprimedox: {
         loop:         'A',
@@ -220,43 +214,101 @@
         plans: {
           individual: {
             label:    'Individual',
-            price:    199,
+            price:    49,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_INDIVIDUAL', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacco1/199CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/49CAD',
           },
           team: {
             label:    'Team',
-            price:    499,
+            price:    149,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_TEAM', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacco1/499CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/149CAD',
           },
           enterprise: {
             label:    'Enterprise',
-            price:    1999,
+            price:    499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_ENTERPRISE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacco1/1999CAD',
+            paypal:   'https://paypal.me/derekfranciacco1/499CAD',
           },
         },
       },
 
       /* ── TECHPETCAGE ───────────────────────────────────────────────────────
        * Loop A — Derek Francisco visible. Uses paypal.me/derekfrancisco.
-       * Products vary — amount passed at purchase time.
+       * PRICING REVISED 2026-06-21 per Derek's 3-tier directive. The
+       * marketplace (per-item, amount-at-checkout) model is kept separately
+       * below since real product listings still need their own Stripe links.
        * ─────────────────────────────────────────────────────────────────────*/
       techpetcage: {
         loop:         'A',
         contact:      'franciscoderek7@gmail.com',
         interacEmail: 'franciscoderek7@gmail.com',
         plans: {
+          basic: {
+            label:    'Basic',
+            price:    199,
+            recurring:null, // one-time
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_TECHPETCAGE_BASIC', // STRIPE SWAP ZONE
+            paypal:   'https://paypal.me/derekfranciacco1/199CAD',
+          },
+          premium: {
+            label:    'Premium',
+            price:    499,
+            recurring:null, // one-time
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_TECHPETCAGE_PREMIUM', // STRIPE SWAP ZONE
+            paypal:   'https://paypal.me/derekfranciacco1/499CAD',
+          },
+          enterprise: {
+            label:    'Enterprise',
+            price:    999,
+            recurring:null, // one-time
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_TECHPETCAGE_ENTERPRISE', // STRIPE SWAP ZONE
+            paypal:   'https://paypal.me/derekfranciacco1/999CAD',
+          },
           marketplace: {
             label:    'Marketplace',
             price:    null, // products vary
             recurring: null,
             stripeUrl: null, // product-level Stripe links applied per item — STRIPE SWAP ZONE
             paypal:    'https://www.paypal.com/paypalme/franciscoderek7?country.x=CA&locale.x=en_CA', // amount appended dynamically at checkout
+          },
+        },
+      },
+
+      /* ── VAULT VELOCITY AUTO ────────────────────────────────────────────────
+       * Loop A — Derek Francisco visible. Uses paypal.me/derekfrancisco.
+       * Matches the live luxury-marketplace front page (vault-velocity-auto-site/
+       * index.html, rebuilt 2026-06-21): listing fee + featured add-on + premium
+       * seller tier, 5% commission tracked separately via referral-engine.js.
+       * ─────────────────────────────────────────────────────────────────────*/
+      vaultvelocityauto: {
+        loop:         'A',
+        contact:      'franciscoderek7@gmail.com',
+        interacEmail: 'franciscoderek7@gmail.com',
+        plans: {
+          listing: {
+            label:    'Standard Listing',
+            price:    99,
+            recurring:'mo',
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_VVA_LISTING', // STRIPE SWAP ZONE
+            paypal:   'https://paypal.me/derekfranciacco1/99CAD',
+          },
+          featured: {
+            label:    'Featured Listing',
+            price:    499,
+            recurring:'mo',
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_VVA_FEATURED', // STRIPE SWAP ZONE
+            paypal:   'https://paypal.me/derekfranciacco1/499CAD',
+          },
+          premiumSeller: {
+            label:    'Premium Seller',
+            price:    999,
+            recurring:'mo',
+            stripeUrl:'https://buy.stripe.com/PLACEHOLDER_VVA_PREMIUM_SELLER', // STRIPE SWAP ZONE
+            paypal:   'https://paypal.me/derekfranciacco1/999CAD',
           },
         },
       },

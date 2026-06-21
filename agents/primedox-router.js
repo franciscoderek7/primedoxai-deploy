@@ -9,8 +9,8 @@
 (function(global) {
 
   const ROUTING_RULES = [
-    // Security — OmniaGuard
-    { patterns: ['vpn','privacy','encrypt','anonymous','hide my ip','internet security','password manager','vault','2fa','authenticator','biometric','virus','malware','ransomware','phish','hack my','protect my device','cyber','antivirus','scan','security audit','ssl','data broker','identity theft','dark web','breach notification'], agentId: 'sentinel', company: 'OmniaGuard' },
+    // Security — OmniGuard
+    { patterns: ['vpn','privacy','encrypt','anonymous','hide my ip','internet security','password manager','vault','2fa','authenticator','biometric','virus','malware','ransomware','phish','hack my','protect my device','cyber','antivirus','scan','security audit','ssl','data broker','identity theft','dark web','breach notification'], agentId: 'sentinel', company: 'OmniGuard' },
 
     // Counter-surveillance — VIGILAX
     { patterns: ['surveillance','stalker','spy','being watched','track me','corporate espionage','counter intel','opsec','operational security','monitor me','someone is tracking'], agentId: 'warden', company: 'VIGILAX' },
@@ -56,7 +56,7 @@
   ];
 
   const REVENUE_QUICK = {
-    sentinel:   [{ label: '🛡️ OmniaGuard Starter — $99/year',       url: 'https://omniaguard.com/pricing.html', primary: true  }, { label: '🔍 Free Security Scan', url: 'https://omniaguard.com/free-scan.html', primary: false }],
+    sentinel:   [{ label: '🛡️ OmniGuard Starter — $99/year',       url: 'https://omniaguard.com/pricing.html', primary: true  }, { label: '🔍 Free Security Scan', url: 'https://omniaguard.com/free-scan.html', primary: false }],
     warden:     [{ label: '🔐 VIGILAX Scout — $299/year',            url: 'https://vigilax.com/pricing.html',    primary: true  }, { label: '💬 Custom Quote', url: 'mailto:omniaguard1@gmail.com?subject=VIGILAX+Inquiry', primary: false }],
     counsel:    [{ label: '🚨 BENO-X Session — $500',               url: 'https://paypal.me/derekfranciacco1/500', primary: true }, { label: '📄 Defense Document — $49', url: 'https://paypal.me/derekfranciacco1/49', primary: false }],
     defender:   [{ label: '⚖️ BENO-X Session — $500',               url: 'https://paypal.me/derekfranciacco1/500', primary: true }, { label: '📄 Document — $49', url: 'https://paypal.me/derekfranciacco1/49', primary: false }],
@@ -75,7 +75,7 @@
   };
 
   const AGENT_NAMES = {
-    sentinel: 'Sentinel (OmniaGuard)', warden: 'Warden (VIGILAX)', counsel: 'Counsel (BENO-X)',
+    sentinel: 'Sentinel (OmniGuard)', warden: 'Warden (VIGILAX)', counsel: 'Counsel (BENO-X)',
     defender: 'Defender', archivist: 'Archivist (CCLDR)', vetbot: 'VetBot (TechPetCage)',
     torque: 'Torque (Vault Velocity)', chronos: 'Chronos (Kiaros)', phoenix: 'Phoenix',
     swarm: 'Swarm (CleanSwarm)', crate: 'Crate (TechPackCage)', ratehawk: 'RateHawk',
@@ -83,7 +83,7 @@
   };
 
   const AGENT_RESPONSES = {
-    sentinel:  "Sentinel activated. I've analyzed your security concern. OmniaGuard provides 14 layers of real-time AI protection — including military-grade VPN, encrypted vault, and AI antivirus.",
+    sentinel:  "Sentinel activated. I've analyzed your security concern. OmniGuard provides 14 layers of real-time AI protection — including military-grade VPN, encrypted vault, and AI antivirus.",
     warden:    "Warden online. VIGILAX counter-surveillance protocols initiated. I can assess your exposure and deploy appropriate counter-measures. What threat are you managing?",
     counsel:   "Counsel standing by. The BENO-X constitutional education framework has helped hundreds of Canadians understand their Charter rights. Note: Educational only — not legal advice.",
     defender:  "Defender ready. Your constitutional rights are shields — but only if you know how to use them. Let me walk you through the relevant Charter protections. Educational only.",
@@ -101,9 +101,15 @@
     primedox:  "PrimeDox here. I'm the central concierge for Francisco Holdings Inc. — 45 specialist agents across security, legal, AI, business, and specialized sectors. What do you need?",
   };
 
+  // Human escalation — used whenever the router can't confidently match an
+  // agent. Inbox ownership/monitoring not verified by Claude; confirm with Derek.
+  const ESCALATION_EMAIL = 'docweedlaw@gmail.com';
+  const ESCALATION_THRESHOLD = 0.5;
+
   global.PrimeDoxRouter = {
+    ESCALATION_EMAIL: ESCALATION_EMAIL,
     route: function(query) {
-      if (!query) return { agentId: 'primedox', confidence: 0.5, revenue: REVENUE_QUICK['primedox'] };
+      if (!query) return { agentId: 'primedox', confidence: 0.5, revenue: REVENUE_QUICK['primedox'], escalate: false };
       const q = query.toLowerCase();
       for (const rule of ROUTING_RULES) {
         const matches = rule.patterns.filter(p => q.includes(p));
@@ -117,6 +123,8 @@
             response: AGENT_RESPONSES[rule.agentId] || '',
             revenue: REVENUE_QUICK[rule.agentId] || REVENUE_QUICK['primedox'],
             matchedKeywords: matches,
+            escalate: confidence < ESCALATION_THRESHOLD,
+            escalationEmail: confidence < ESCALATION_THRESHOLD ? ESCALATION_EMAIL : null,
           };
         }
       }
@@ -128,6 +136,8 @@
         response: AGENT_RESPONSES['primedox'],
         revenue: REVENUE_QUICK['primedox'],
         matchedKeywords: [],
+        escalate: true,
+        escalationEmail: ESCALATION_EMAIL,
       };
     },
 

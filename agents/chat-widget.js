@@ -64,13 +64,13 @@
 
   const OFFLINE_RESPONSES = {
     vpn: {
-      text: "I can help protect your online privacy with OmniaGuard's military-grade VPN. Zero logs, 40+ countries, 256-bit AES encryption. One tap and you're invisible.",
+      text: "I can help protect your online privacy with OmniGuard's military-grade VPN. Zero logs, 40+ countries, 256-bit AES encryption. One tap and you're invisible.",
     },
     vault: {
-      text: "I'll secure your passwords and sensitive data with OmniaGuard's AES-256-GCM encrypted vault. Biometric unlock, local storage only — we never see your data.",
+      text: "I'll secure your passwords and sensitive data with OmniGuard's AES-256-GCM encrypted vault. Biometric unlock, local storage only — we never see your data.",
     },
     threat: {
-      text: "Threat analysis initiated. OmniaGuard's AI antivirus engine detects zero-day threats in real time — before signature databases even know they exist.",
+      text: "Threat analysis initiated. OmniGuard's AI antivirus engine detects zero-day threats in real time — before signature databases even know they exist.",
     },
     audit: {
       text: "I can run a full security audit of your website — SSL, security headers, exposed files, and software vulnerabilities. Full PDF report with remediation plan.",
@@ -104,17 +104,28 @@
     },
   };
 
+  // Human escalation — used when no keyword pattern matches. Inbox
+  // ownership/monitoring not verified by Claude; confirm with Derek.
+  const ESCALATION_EMAIL = 'docweedlaw@gmail.com';
+
   function offlineResponse(agent, userMsg) {
     let matched = null;
     for (const p of OFFLINE_PATTERNS) {
       if (p.re.test(userMsg)) { matched = p.key; break; }
     }
 
-    const base = matched ? OFFLINE_RESPONSES[matched] : {
-      text: "I can help with that. Tell me more about what you're looking for and I'll connect you with the right resource or specialist.",
-    };
+    if (matched) {
+      return { text: OFFLINE_RESPONSES[matched].text, revenue: agent.revenue || [] };
+    }
 
-    return { text: base.text, revenue: agent.revenue || [] };
+    const escalateMailto = 'mailto:' + ESCALATION_EMAIL + '?subject=' +
+      encodeURIComponent('Francisco Holdings — Concierge Escalation') +
+      '&body=' + encodeURIComponent(userMsg || '');
+
+    return {
+      text: "I can help with that. Tell me more about what you're looking for and I'll connect you with the right resource or specialist — or talk to a person directly below.",
+      revenue: (agent.revenue || []).concat([{ label: '✉️ Talk to a Person', url: escalateMailto, primary: false }]),
+    };
   }
 
   async function callAPI(agent, messages) {

@@ -1,11 +1,11 @@
 // referral-engine.js — PrimeDox Empire Referral Engine v1.0
 // CDN: https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js
 //
-// Discount tiers (by code prefix):
-//   SENIOR* → 15% | VET*  → 20% | CARE* → 25% | FIXED* → 15% | general → 10%
+// Discount tiers (by code prefix), per Derek's 2026-06-21 spec:
+//   VETERAN10* → 10% | SENIOR10* → 10% | FIXED10* → 10% | TERMINAL20* → 20% | general → 10%
 //
 // Commission rates:
-//   First sale → 25% | Recurring → 15%
+//   First sale → 25% | Recurring → 20%
 //
 // localStorage key: pd_referral
 
@@ -16,17 +16,17 @@
 
   // ─── Discount Tier Map ────────────────────────────────────────────────────
   var TIERS = [
-    { prefix: 'SENIOR', percent: 15, label: 'Senior Discount' },
-    { prefix: 'VET',    percent: 20, label: 'Veteran Discount' },
-    { prefix: 'CARE',   percent: 25, label: 'Terminal Illness Care Discount' },
-    { prefix: 'FIXED',  percent: 15, label: 'Fixed Income Discount' },
+    { prefix: 'SENIOR',   percent: 10, label: 'Senior Discount' },
+    { prefix: 'VETERAN',  percent: 10, label: 'Veteran Discount' },
+    { prefix: 'TERMINAL', percent: 20, label: 'Terminal Illness Care Discount' },
+    { prefix: 'FIXED',    percent: 10, label: 'Fixed Income Discount' },
   ];
 
   var GENERAL_PERCENT = 10;
 
   // Commission rates (stored in localStorage; Supabase if available)
   var COMMISSION_FIRST     = 0.25;
-  var COMMISSION_RECURRING = 0.15;
+  var COMMISSION_RECURRING = 0.20;
 
   // ─── Internal Helpers ─────────────────────────────────────────────────────
 
