@@ -295,8 +295,10 @@
     document.body.appendChild(t);
   }
   function planPay(planName, amount) {
-    window.open('https://www.paypal.me/derekfrancisco/' + amount + 'cad', '_blank', 'noopener');
-    payToast('PayPal opening — $' + amount + ' CAD/mo — ' + planName, '$' + amount + ' CAD', 'CleanSwarm ' + planName + ' Plan');
+    var subject = encodeURIComponent(planName + ' Plan — Interac e-Transfer');
+    var body = encodeURIComponent('I\'d like to pay via Interac e-transfer for the ' + planName + ' plan ($' + amount + ' CAD/mo). Please send your Interac details.');
+    window.location.href = 'mailto:info@cleanswarm.ca?subject=' + subject + '&body=' + body;
+    payToast('Interac e-Transfer — $' + amount + ' CAD/mo — ' + planName, '$' + amount + ' CAD', 'CleanSwarm ' + planName + ' Plan');
   }
   function submitTrialRequest(e) {
     e.preventDefault();
