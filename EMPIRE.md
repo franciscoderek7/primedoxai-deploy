@@ -170,10 +170,10 @@ Responding to Derek's "CHINESE AI INTEGRATION — Build This Now" directive (Dee
 | franciscoholdingsinc.com | Francisco Holdings | A | ⬜ Set A+CNAME |
 | franciscoholdingsinc.ca | Francisco Holdings | A | ⬜ Set 301 → .com |
 | franciscoholdingsinc.buzz | Francisco Holdings | A | ⬜ Set 301 → .com |
-| vaultvelocityauto.com | Vault Velocity Auto | B | ⬜ Set A+CNAME (when site ready) |
+| vaultvelocityauto.com | Vault Velocity Auto | B | ⬜ Set A+CNAME (when site ready) — OWNERSHIP UNCONFIRMED, see note below |
 | zprimedoxaihq.com | ZPrimeDoxAI HQ | A | ⬜ Set A+CNAME |
-| techpetcage.com | TechPetCage | A | ⬜ Set A+CNAME (when site ready) |
-| techpetcage.ca | TechPetCage | A | ⬜ Set 301 → .com |
+
+**DISPUTED — DO NOT TREAT AS OWNED (2026-06-21):** `techpetcage.com` / `techpetcage.ca` were previously listed here as "confirmed owned," but a live web search on 2026-06-21 found `techpetcage.com` actually serving an unrelated, real pet-breeding/training business in Belton, TX — not a Francisco Holdings property. Either the earlier "confirmed by Derek" note was wrong, or the domain lapsed/was never actually registered to Derek. Removed from the confirmed-owned table above. **Derek needs to check his actual Porkbun account** (web search can't see registrar ownership, only what's currently being served) before this is added back. Until confirmed, treat as NOT owned — use the GitHub Pages URL (`franciscoderek7.github.io/techpetcage/`) only. `vaultvelocityauto.com` is also unconfirmed by the same 2026-06-21 audit (search found no matching live site either way, so this one is inconclusive, not disproven) — left in the table but flagged; Derek should confirm this one in Porkbun too.
 
 **NOT YET OWNED (confirmed by Derek 2026-06-19) — do not build live custom-domain deploy targets for these; use GitHub Pages URLs until purchased:** `primedoxai.com`, `cleanswarm.ca`, `mindshift-makayla.com`. (`ccldr.net` is owned but on the separately-tracked 60-day hold above — different case, don't conflate.)
 
