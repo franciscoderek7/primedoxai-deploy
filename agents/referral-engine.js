@@ -43,8 +43,9 @@
         return { prefix: TIERS[i].prefix, percent: TIERS[i].percent, label: TIERS[i].label };
       }
     }
-    // Valid general referral code — must be at least 4 chars and alphanumeric
-    if (/^[A-Z0-9]{4,}$/.test(c)) {
+    // Valid general referral code — must be at least 4 chars, alphanumeric or hyphenated
+    // (e.g. FHI-DEREK-001 per the Francisco Holdings Rewards code format)
+    if (/^[A-Z0-9-]{4,}$/.test(c)) {
       return { prefix: null, percent: GENERAL_PERCENT, label: 'Referral Discount' };
     }
     return null;
