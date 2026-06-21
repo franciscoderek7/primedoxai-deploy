@@ -78,42 +78,47 @@
 
   var cfg = SITE_CONFIG[SITE] || SITE_CONFIG['default'];
 
-  // ── Knowledge Base ────────────────────────────────────────────────────────
+  // ── Knowledge Base (OmniaGuard ONLY — isolated, no cross-brand KB) ─────────
   var KB = [
-    // CCLDR / Weedlaw
-    { kw: ['beno', 'beno-x', 'framework', 'constitutional', 'defense', 'defence'],
-      answer: "The BENO-X Framework is a 5-pillar constitutional defense strategy covering Breach identification, Evidence exclusion, Negotiation leverage, On-record defense, and the X-multiplier. It's been used in 200+ cannabis cases.<br><br><strong>Want the full framework?</strong>" },
-    { kw: ['charge', 'charged', 'arrested', 'police', 'stopped', 'cannabis charge', 'marijuana charge'],
-      answer: "If you're facing a cannabis charge, time matters. The BENO-X Framework lets you build a constitutional defense using Charter breaches — evidence can be excluded, charges can be stayed.<br><br><strong>The window is now. Don't wait.</strong>" },
-    { kw: ['rights', 'charter', 'section 10', 'remain silent', 'lawyer', 'detained'],
-      answer: "Under s.10 of the Canadian Charter: <br>✓ Right to know why you're detained<br>✓ Right to speak to a lawyer immediately<br>✓ Right to remain silent<br><br>Say: \"I'd like to speak to a lawyer\" and nothing else." },
-    { kw: ['price', 'cost', 'tier', 'warrior', 'professional', 'elite', 'sovereign', 'how much', 'pricing'],
-      answer: "Weedlaw Education tiers:<br>🥉 Warrior — $149 (Stages 1-2)<br>🥈 Professional — $499 (Stages 1-5, full BENO-X)<br>🥇 Elite — $999 (Stages 1-9, trial prep)<br>👑 Sovereign — $1,499 (All 12 stages)<br><br>All one-time, lifetime access." },
-    // PrimeDox
-    { kw: ['primedox', 'document', 'automation', 'pdf', 'filing', 'draft', 'template'],
-      answer: "PrimeDox AI automates legal, business, and strategic documents. Upload → AI structures → download court-ready PDFs in minutes. Tiers start at $49/mo." },
-    { kw: ['enterprise', 'team', 'multiple users', '5 users', 'team access'],
-      answer: "PrimeDox Enterprise ($499/mo) gives your team up to 5 users, a dedicated AI agent instance, priority processing, and monthly strategy calls." },
-    // Francisco Holdings
-    { kw: ['consulting', 'consult', 'strategy', 'session', '$500', 'book', 'meeting', 'call'],
-      answer: "Francisco Holdings offers 60-minute strategy sessions at $500 CAD. Topics: revenue acceleration, AI automation, legal structure, brand architecture, strategic positioning.<br><br>Reply with 3 available time slots to book." },
-    { kw: ['retainer', 'ongoing', 'monthly', 'long-term'],
-      answer: "The Francisco Holdings monthly strategy retainer is $1,500/mo — 4 sessions, priority access, direct line to Derek Francisco. Reply 'RETAINER' to get the agreement." },
-    { kw: ['22 brands', 'empire', 'holdings', 'how do you', 'run'],
-      answer: "Derek Francisco runs 22 brands with 2 people using AI automation, Loop A/B identity architecture, and a lean AI stack. That playbook is teachable in a single consulting session." },
-    // OmniaGuard
-    { kw: ['omniaguard', 'security', 'threat', 'ai security', 'enterprise security', 'protection'],
-      answer: "OmniaGuard offers enterprise-grade AI security:<br>🔹 Sentinel — $499/mo (monitoring)<br>🔸 Guardian — $1,499/mo (active defense)<br>🔥 Fortress — $4,999/mo (full suite)<br>💎 Sovereign — $15,000/mo (dedicated team)" },
-    // CleanSwarm
-    { kw: ['cleanswarm', 'clean', 'swarm', 'document cleanup', 'ocr', 'extraction'],
-      answer: "CleanSwarm automates document cleanup, OCR extraction, and data structuring at scale. Tiers:<br>🐝 Starter — $399/mo<br>🐝🐝 Growth — $999/mo<br>🐝🐝🐝 Scale — $2,499/mo" },
-    // General
-    { kw: ['affiliate', 'commission', 'referral', 'partner', 'earn'],
-      answer: "Our affiliate program pays 20% commission on every referral. Sign up at <a href='../affiliate/' style='color:inherit'>the affiliate page</a> — first payouts go through Interac or PayPal." },
-    { kw: ['paypal', 'payment', 'pay', 'interac', 'etransfer', 'e-transfer'],
-      answer: "All products can be purchased via PayPal or Interac e-Transfer. Send to <strong>franciscoderek7@gmail.com</strong> with the product name in the subject." },
-    { kw: ['contact', 'email', 'reach', 'talk to', 'speak'],
-      answer: "Best way to reach us: reply directly to your welcome email, or send to <strong>franciscoderek7@gmail.com</strong>. For OmniaGuard: omniaguard1@gmail.com." },
+    // Founder — only answered if explicitly asked, then pivots back to security
+    { kw: ['who built', 'who is the founder', 'who created', 'who founded', 'founder of omniaguard', 'who is behind', 'who owns omniaguard'],
+      answer: "OmniaGuard was founded by Derek Francisco.<br><br>Now — what's your threat surface? Tell me your industry and team size and I'll point you to the right protection tier." },
+    // Off-topic legal routing (cannabis/legal — not a security question)
+    { kw: ['cannabis charge', 'cannabis charges', 'marijuana charge', 'weed charge', 'cannabis', 'marijuana', 'possession charge', 'drug charge'],
+      answer: "I specialize in cybersecurity, not legal matters. For cannabis defense, visit Floor 2 (BENO-X / Doc Weedlaw) or PrimeDox AI HQ at zprimedoxaihq.com." },
+    // Healthcare / regulated industry — Warden minimum
+    { kw: ['healthcare', 'pharmacy', 'pharmacies', 'pharmacist', 'prescription', 'prescriptions', 'hospital', 'clinic', 'patient data', 'medical ai'],
+      answer: "For healthcare or pharmacy AI handling patient data, the minimum recommended tier is <strong>Warden — $5,000/mo</strong>. It includes HIPAA-aligned controls with a signed Business Associate Agreement (BAA) for US healthcare clients, PIPEDA/Bill C-27 compliance, full 14-layer protection, and a dedicated integration engineer — live and protected within 48 hours, guaranteed." },
+    // 14-layer stack
+    { kw: ['14-layer', '14 layer', '14layer', 'fourteen layer', 'what layers', 'prompt injection', 'stack'],
+      answer: "OmniaGuard's 14-layer stack: (1) Input sanitization, (2) Intent classification, (3) Prompt injection detection, (4) Role confusion prevention, (5) Context window monitoring, (6) Memory poisoning defense, (7) Token smuggling detection, (8) Output validation, (9) Data exfiltration prevention, (10) Agent cascade monitoring, (11) Cross-agent contamination detection, (12) Adversarial input filtering, (13) Policy enforcement, (14) Real-time human oversight integration. Each layer runs in under 12ms — no perceptible latency." },
+    // Small business — Guardian
+    { kw: ['small business', 'startup', '5-20 agents', '5 to 20 agents', 'few agents', 'growing team'],
+      answer: "For a small business running 5-20 AI agents, <strong>Guardian — $2,499/mo</strong> is the right fit: 24/7 SOC monitoring, full compliance package, and active defense across your whole agent fleet." },
+    // Individual — Sentinel
+    { kw: ['individual', '1-5 devices', 'personal use', 'freelancer', 'solo', 'single device'],
+      answer: "For individual or 1-5 device use, <strong>Sentinel — $499/mo</strong> covers you: self-serve setup, live in under 2 hours, core monitoring included." },
+    // National enterprise / critical infrastructure — Archon
+    { kw: ['national enterprise', 'critical infrastructure', 'large enterprise', 'regional corporation'],
+      answer: "For national enterprise or critical infrastructure deployments, <strong>Archon — $15,000/mo</strong> is the tier: ITAR + CIRA Shield, unlimited deployment scope, and full regulatory compliance at scale." },
+    // Fortune 500 / government — Sovereign
+    { kw: ['fortune 500', 'government', 'federal', 'military', 'intelligence agency', 'public sector'],
+      answer: "For Fortune 500 or government-scale deployments, <strong>Sovereign — $25,000/mo</strong> is the tier: unlimited agents, custom architecture, on-premise available, classified-grade encryption, 24/7 direct hotline." },
+    // Compliance / certifications
+    { kw: ['compliance', 'certification', 'certifications', 'soc 2', 'soc2', 'iso 27001', 'iso27001', 'nist', 'pipeda', 'bill c-27', 'itar', 'cira shield', 'audit'],
+      answer: "Compliance by framework:<br>• SOC 2 Type II — Audit-ready, available on Warden tier and above<br>• HIPAA + BAA — Available on Warden tier and above, signed BAA for US healthcare<br>• PIPEDA / Bill C-27 — Compliant for Canadian operations, all tiers<br>• ISO 27001 — Aligned, audit-ready on Warden tier and above<br>• NIST AI RMF — Aligned, all tiers<br>• ITAR / CIRA Shield — Archon tier only" },
+    // Deployment timeline
+    { kw: ['how long', 'deployment time', 'go live', 'timeline', 'how fast', 'when can i start', 'deploy'],
+      answer: "Deployment timeline by tier:<br>• Sentinel / Guardian — self-serve, live in 2 hours<br>• Warden and above — dedicated engineer, live in 48 hours<br>• Archon / Sovereign — custom scoping, 5-10 business days" },
+    // Payment
+    { kw: ['pay', 'payment', 'how do i pay', 'interac', 'bitcoin', 'wire transfer', 'corporate cheque', 'paypal'],
+      answer: "We accept PayPal, Interac e-Transfer, Bitcoin, wire transfer, and corporate cheque. Send your Interac payment or payment confirmation to <strong>omniaguard1@gmail.com</strong> with your company name and tier — accounts are activated within 2 business hours." },
+    // General pricing fallback
+    { kw: ['price', 'cost', 'tier', 'how much', 'pricing', 'plan', 'plans'],
+      answer: "OmniaGuard tiers:<br>🔹 Sentinel — $499/mo<br>🔸 Guardian — $2,499/mo<br>🛡️ Warden — $5,000/mo ★ Recommended<br>🔥 Archon — $15,000/mo<br>💎 Sovereign — $25,000/mo<br><br>Tell me your industry and team size and I'll recommend the right one." },
+    // Contact
+    { kw: ['contact', 'email', 'reach', 'talk to', 'speak to someone', 'sales'],
+      answer: "Reach our security team directly at <strong>omniaguard1@gmail.com</strong> — we typically respond within 1 business hour." },
     { kw: ['hello', 'hi', 'hey', 'start', 'help', 'what can you do'],
       answer: null } // triggers default greeting repeat
   ];
@@ -223,8 +228,8 @@
       botReply(answer);
     } else {
       botReply(
-        "Good question. For a detailed answer, the fastest path is speaking directly with our team.<br><br>" +
-        "Reply via email: <strong>franciscoderek7@gmail.com</strong> — or click below."
+        "I specialize in cybersecurity — ask me about our tiers, the 14-layer stack, compliance, or deployment timelines.<br><br>" +
+        "For anything else, reach our team at <strong>omniaguard1@gmail.com</strong>."
       );
     }
   }
