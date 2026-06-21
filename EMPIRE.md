@@ -64,6 +64,22 @@ Built `agents/apex-agent.js` per Derek's "DUAL TRACK — MONEY + APEX" directive
 
 ---
 
+## SEO + APEX ANALYTICS FIX — 2026-06-21
+
+Responding to Derek's "optimize SEO... AI analytics... its own branding... automated" message. Two real, working fixes (no new fabricated capability):
+
+**1. SEO scaffolding gap closed on the 3 worst sites** (`primedoxai-site`, `zprimedoxaihq-site`, `cleanswarm-checkout` — confirmed via grep audit they were the only flagship sites missing OG tags/canonical links entirely): added `og:*`/`twitter:*`/`canonical` tags matching the pattern already used on `omniaguard-site`/`ccldr-site`/etc., plus `robots.txt` + `sitemap.xml` following the existing `ccldr-site` template. `primedoxai-site`'s canonical points to its GitHub Pages fallback URL (NOT-YET-OWNED domain rule, §"Porkbun Registered Domains" below). Also fixed `deploy-primedox.yml`/`deploy-cleanswarm.yml` — neither copied `.txt`/`.xml` files on deploy, so the new sitemap/robots files would have been silently dropped.
+
+**2. Apex's Supabase mirror was a silent no-op everywhere — found and fixed the real bug**, not a new feature: `apex-agent.js` and `referral-engine.js` both checked `window.supabase.from` before inserting, but `window.supabase` (from the CDN SDK script) is the SDK namespace — `.from()` only exists on a client returned by `.createClient()`. No page was creating that client under the global `window.supabase` name (the one place a real client exists, `zprimedoxaihq-site/supabase-client.js`, stores it as `window.FHI_SUPA` instead). Fixed both files to create and cache their own lightweight client using the same already-public Supabase project/publishable key `zprimedoxaihq-site/supabase-client.js` uses. `apex-agent.js` also now self-loads the `supabase-js` CDN script if a page doesn't already include it, so this works without editing every site's `<head>`.
+
+**Derek/Manus action required for this to actually persist cross-visitor data:** the `apex_events` table (and whatever `referral-engine.js` inserts into — check its `_supabaseInsert` call sites for table names) must exist in the Supabase project (`ilmlnehehfcxwlurzfxd`) or every insert silently no-ops (caught, by design — never breaks the page). Claude has no Supabase dashboard/migration access from this environment to create tables directly.
+
+**Wired `apex-agent.js` onto the 3 flagship sites that were missing it** (`omniaguard-site`, `kiaros-site`, `docweedlaw-site` — every other flagship site already had it). Did not touch `omniaguard-site/index.html`'s pre-rebrand "OmniaGuard" spelling or anything else on that page beyond the one added script tag — that site is still flagged as Manus's in-progress rebuild per the REBRAND NOTICE above, out of scope without Derek's go-ahead.
+
+**Not built — explicitly declined, not a fabricated placeholder:** automated social media posting and paid-ad-campaign automation. Both require Derek to personally create developer credentials first (Meta Business app + access token, X/Twitter Developer app, Google Ads API OAuth) — none of which exist in this repo and none of which Claude can create on Derek's behalf. `Apex.wireShareButtons()` (manual visitor-triggered share dialogs, no API keys needed) is the only "social" capability that can honestly exist today. "AI analytics" beyond rule-based local lead-scoring (cold/warm/hot) and aggregate event counts would need an LLM call over the Supabase data — technically possible once `agents/backend/` is deployed (still not deployed anywhere, see CHINESE AI INTEGRATION section above), not built here.
+
+---
+
 ## CHINESE AI INTEGRATION — 2026-06-20
 
 Responding to Derek's "CHINESE AI INTEGRATION — Build This Now" directive (DeepSeek/Qwen/GLM/Kimi stack). Built the secure server-proxy architecture rather than a client-only connector, because every one of these vendor APIs requires a secret key in the request header — putting a real key in any `agents/*.js` file would leak it to every site visitor via view-source within minutes (same risk class as the Stripe secret key, never done elsewhere in this repo).

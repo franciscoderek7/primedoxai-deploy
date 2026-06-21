@@ -11,8 +11,11 @@
 //   - Urgency/scarcity countdown timer widget
 //   - Honest social-proof widget: rotates real testimonials you supply, and/or
 //     displays a count YOU supply — it does not fabricate or auto-escalate numbers
-//   - Local event log (localStorage) + optional Supabase mirror (same graceful
-//     no-op pattern as agents/referral-engine.js) feeding Apex.getLocalStats()
+//   - Local event log (localStorage) + Supabase mirror (apex_events table,
+//     same project as zprimedoxaihq-site/supabase-client.js — self-loads the
+//     supabase-js SDK if a page doesn't already include it) feeding
+//     Apex.getLocalStats(). The Supabase insert is a graceful no-op if the
+//     apex_events table doesn't exist yet (see EMPIRE.md for setup).
 //
 // WHAT THIS FILE DELIBERATELY DOES NOT DO (would require credentials/infra
 // that do not exist anywhere in this repo — flagged in EMPIRE.md, not faked):
@@ -24,9 +27,10 @@
 //   - Does NOT auto-submit sitemaps to Google/Bing Search Console (needs Search
 //     Console API auth — none exists here)
 //   - Does NOT call a "Gemma 41B endpoint" (no such endpoint exists in this repo)
-//   - getLocalStats() is PER-BROWSER ONLY (localStorage) — it is not a real
-//     cross-visitor analytics/revenue-attribution dashboard. That needs a real
-//     analytics service (GA4/Plausible) or the Supabase table wired up.
+//   - getLocalStats() itself is still PER-BROWSER ONLY (localStorage) — it
+//     does not read back the aggregate Supabase table. A real cross-visitor
+//     dashboard means querying apex_events from Supabase directly (or a
+//     GA4/Plausible integration), which is a separate follow-up, not done here.
 
 (function () {
   'use strict';
@@ -35,12 +39,40 @@
   var LS_LEAD   = 'apex_lead';
   var LS_SEEN_EXIT = 'apex_exit_shown';
 
-  // ─── Supabase Logging (graceful no-op, same pattern as referral-engine.js) ─
+  // ─── Supabase Logging (graceful no-op) ─────────────────────────────────────
+  // Same project already used by zprimedoxaihq-site/supabase-client.js — a
+  // publishable (anon) key, safe to ship client-side, same as that file.
+  // window.supabase from the CDN script is the SDK namespace, not a client —
+  // a client must be created via .createClient() before .from() exists. If a
+  // page already created its own client (e.g. FHI_SUPA), this won't collide;
+  // it just creates a second lightweight client for Apex's own inserts.
+  var APEX_SUPA_URL = 'https://ilmlnehehfcxwlurzfxd.supabase.co';
+  var APEX_SUPA_KEY = 'sb_publishable_aHi9NfxdTCPUWKO1AWX6vg_sZFj-XYA';
+  var _apexClient = null;
+
+  function _apexDb() {
+    if (_apexClient) return _apexClient;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      try { _apexClient = window.supabase.createClient(APEX_SUPA_URL, APEX_SUPA_KEY); } catch (e) {}
+    }
+    return _apexClient;
+  }
+
+  // Self-load the supabase-js SDK if the page didn't already include it, so
+  // cross-visitor event logging works without editing every site's <head>.
+  function _loadSupabaseSDK() {
+    if (window.supabase || document.getElementById('apex-supabase-sdk')) return;
+    var s = document.createElement('script');
+    s.id = 'apex-supabase-sdk';
+    s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+
   function _supabaseInsert(table, record) {
     try {
-      if (window.supabase && typeof window.supabase.from === 'function') {
-        window.supabase.from(table).insert([record]).then(function () {}).catch(function () {});
-      }
+      var db = _apexDb();
+      if (db) db.from(table).insert([record]).then(function () {}).catch(function () {});
     } catch (e) {}
   }
 
@@ -375,7 +407,7 @@
       totalEvents: events.length,
       byName: byName,
       lead: _loadJSON(LS_LEAD, null),
-      note: 'Per-browser localStorage only — not real cross-visitor analytics. Wire window.supabase for real aggregate reporting.',
+      note: 'Per-browser localStorage only. Cross-visitor events also mirror to the apex_events Supabase table if it exists — see EMPIRE.md for the one-time table-creation step.',
     };
   }
 
@@ -394,6 +426,7 @@
   };
 
   function _autoInit() {
+    _loadSupabaseSDK();
     trackEvent('page_view', {});
     wireShareButtons();
 

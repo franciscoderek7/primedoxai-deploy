@@ -74,12 +74,26 @@
   }
 
   // ─── Supabase Logging (graceful no-op) ───────────────────────────────────
+  // window.supabase from the CDN script is the SDK namespace, not a client —
+  // .from() only exists on a client created via .createClient(). Same project
+  // as zprimedoxaihq-site/supabase-client.js (publishable key, safe client-side).
+
+  var _REF_SUPA_URL = 'https://ilmlnehehfcxwlurzfxd.supabase.co';
+  var _REF_SUPA_KEY = 'sb_publishable_aHi9NfxdTCPUWKO1AWX6vg_sZFj-XYA';
+  var _refClient = null;
+
+  function _refDb() {
+    if (_refClient) return _refClient;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      try { _refClient = window.supabase.createClient(_REF_SUPA_URL, _REF_SUPA_KEY); } catch (e) {}
+    }
+    return _refClient;
+  }
 
   function _supabaseInsert(table, record) {
     try {
-      if (window.supabase && typeof window.supabase.from === 'function') {
-        window.supabase.from(table).insert([record]).then(function () {}).catch(function () {});
-      }
+      var db = _refDb();
+      if (db) db.from(table).insert([record]).then(function () {}).catch(function () {});
     } catch (e) {}
   }
 
