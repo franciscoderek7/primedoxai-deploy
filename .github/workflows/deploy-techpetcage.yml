@@ -21,13 +21,18 @@ jobs:
       - name: Copy site files
         run: |
           cp -r techpetcage-site/. /tmp/techpetcage/
-          echo "techpetcage.com" > /tmp/techpetcage/CNAME
+          # techpetcage.com is NOT owned by Derek (confirmed by web search 2026-06-21 —
+          # an unrelated Texas pet-breeding business serves that domain). Derek confirmed
+          # he owns techpetcage.ca instead (2026-06-21) — using that.
+          echo "techpetcage.ca" > /tmp/techpetcage/CNAME
 
       - name: Deploy to GitHub Pages
         run: |
           cd /tmp/techpetcage
-          git config user.email "deploy@techpetcage.com"
+          git config user.email "deploy@techpetcage.ca"
           git config user.name "TechPetCage Deploy Bot"
           git add -A
-          git diff --cached --quiet || git commit -m "deploy: TechPetCage @ ${{ github.sha }}"
+          git diff --cached --quiet || git commit -m "deploy: TechPetCage @ ${{ github.sha }}
+
+          CNAME: techpetcage.ca (switched from disputed techpetcage.com, 2026-06-21)"
           git push origin main
