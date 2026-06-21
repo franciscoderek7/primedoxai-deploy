@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Holdings Inc. — Investor Pitch Deck</title>
+<meta name="description" content="Francisco Holdings Inc. — 45-Company AI Empire. Investor pitch deck: market, traction, product, financials, and the ask.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --gold:#D4AF37;--gold-light:#F0CC60;
+    --platinum:#E5E4E2;--platinum-mid:#ABABAB;--platinum-dark:#787878;
+    --silver:#C0C0C0;
+    --emerald:#0A5C36;--emerald-bright:#10B981;
+    --bg:#0A0A0A;--bg2:#101010;
+    --border-gold:rgba(212,175,55,0.25);
+  }
+  html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--platinum);font-family:'Inter',sans-serif}
+  h1,h2,h3,.slide-kicker{font-family:'Orbitron',sans-serif}
+  #deck{position:relative;width:100vw;height:100vh}
+  .slide{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:48px 8vw;text-align:center;opacity:0;visibility:hidden;
+    background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(212,175,55,0.06),transparent),var(--bg);
+  }
+  .slide.active{opacity:1;visibility:visible}
+  .slide-kicker{font-size:11px;letter-spacing:4px;color:var(--emerald-bright);text-transform:uppercase;margin-bottom:18px}
+  .slide h1{font-size:clamp(1.8rem,5vw,3.2rem);font-weight:900;color:var(--gold);line-height:1.2;margin-bottom:18px}
+  .slide h1 .accent{color:var(--platinum)}
+  .slide p.lead{font-size:clamp(1rem,2vw,1.3rem);color:var(--platinum-mid);max-width:760px;margin-bottom:14px;line-height:1.7}
+  .gold-rule{width:60px;height:1px;background:var(--border-gold);margin:20px auto}
+  .slide-num{position:absolute;bottom:20px;right:28px;font-family:'Orbitron',sans-serif;font-size:11px;color:var(--platinum-dark);letter-spacing:2px}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:920px;margin-top:24px;width:100%}
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:780px;margin-top:24px;width:100%}
+  @media(max-width:720px){.grid-3,.grid-2{grid-template-columns:1fr}}
+  .card{background:rgba(255,255,255,0.03);border:1px solid var(--border-gold);border-radius:12px;padding:20px;text-align:left}
+  .card h3{color:var(--gold-light);font-size:0.95rem;margin-bottom:8px;letter-spacing:0.5px}
+  .card p{color:var(--platinum-mid);font-size:0.85rem;line-height:1.6}
+  .stat{font-family:'Orbitron',sans-serif;font-weight:900;color:var(--gold);font-size:clamp(1.6rem,3vw,2.4rem)}
+  .stat-label{font-size:0.78rem;color:var(--platinum-mid);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+
+  .nav-arrows{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:14px;z-index:50;align-items:center}
+  .nav-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border-gold);color:var(--gold-light);font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;padding:10px 18px;border-radius:6px;cursor:pointer;letter-spacing:1px;transition:all .15s}
+  .nav-btn:hover{background:rgba(212,175,55,0.1)}
+  .dots{display:flex;gap:6px}
+  .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.15);cursor:pointer;transition:all .2s}
+  .dot.active{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+
+  .exit-link{position:fixed;top:20px;left:24px;font-size:12px;color:var(--platinum-dark);text-decoration:none;letter-spacing:1px;z-index:50}
+  .exit-link:hover{color:var(--gold-light)}
+
+  table.fin{width:100%;max-width:680px;border-collapse:collapse;margin-top:20px;font-size:0.85rem}
+  table.fin th,table.fin td{border:1px solid var(--border-gold);padding:10px 14px;text-align:center}
+  table.fin th{color:var(--gold);font-family:'Orbitron',sans-serif;font-size:0.72rem;letter-spacing:1px}
+  table.fin td{color:var(--platinum-mid)}
+
+  .ask-box{background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(229,228,226,0.03));border:1px solid var(--border-gold);border-radius:14px;padding:32px 40px;margin-top:20px}
+  .ask-amt{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.2rem,5vw,3.6rem);color:var(--gold);margin-bottom:8px}
+  .contact-row{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap;justify-content:center}
+  .contact-row a{color:var(--gold-light);font-size:0.95rem;text-decoration:none;border-bottom:1px solid var(--border-gold);padding-bottom:2px}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="exit-link">← Exit to Tower</a>
+
+<div id="deck">
+
+  <!-- SLIDE 1 — TITLE -->
+  <section class="slide active" data-slide="1">
+    <div class="slide-kicker">Investor Pitch Deck</div>
+    <h1>Francisco Holdings Inc.<br><span class="accent">45-Company AI Empire</span></h1>
+    <p class="lead">Vertically integrated, AI-powered holding company spanning legal education, cybersecurity, automation, and consumer products.</p>
+    <div class="gold-rule"></div>
+    <p style="color:var(--platinum-dark);font-size:0.85rem;letter-spacing:1px;">CONFIDENTIAL — PREPARED FOR INVESTOR REVIEW</p>
+  </section>
+
+  <!-- SLIDE 2 — PROBLEM -->
+  <section class="slide" data-slide="2">
+    <div class="slide-kicker">The Problem</div>
+    <h1>Fragmented Markets,<br><span class="accent">No Single Operator</span></h1>
+    <div class="grid-3">
+      <div class="card"><h3>Legal Education</h3><p>Cannabis-rights defendants face a fragmented, expensive, inaccessible legal-education landscape with no trusted, affordable entry point.</p></div>
+      <div class="card"><h3>Cybersecurity</h3><p>Consumer and SMB security tools are either too complex for non-technical users or too shallow to stop real threats.</p></div>
+      <div class="card"><h3>AI Automation</h3><p>Small businesses can't access enterprise-grade AI agent infrastructure — it's locked behind agency retainers and dev teams.</p></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 — SOLUTION -->
+  <section class="slide" data-slide="3">
+    <div class="slide-kicker">The Solution</div>
+    <h1>One Holding Company.<br><span class="accent">Many Verticals.</span></h1>
+    <p class="lead">Francisco Holdings Inc. operates a portfolio of AI-powered products under a single operating company — each vertical cross-sells, cross-refers, and shares the same agent infrastructure, payment rails, and brand trust.</p>
+  </section>
+
+  <!-- SLIDE 4 — MARKET -->
+  <section class="slide" data-slide="4">
+    <div class="slide-kicker">Market Opportunity</div>
+    <h1>$400B+ <span class="accent">Combined TAM</span></h1>
+    <div class="grid-3">
+      <div class="card"><div class="stat">$150B+</div><div class="stat-label">Cannabis Legal Market</div></div>
+      <div class="card"><div class="stat">$200B+</div><div class="stat-label">Cybersecurity Market</div></div>
+      <div class="card"><div class="stat">$50B+</div><div class="stat-label">AI Automation / SMB SaaS</div></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5 — TRACTION -->
+  <section class="slide" data-slide="5">
+    <div class="slide-kicker">Traction</div>
+    <h1>Built On <span class="accent">Documented History</span></h1>
+    <div class="grid-3">
+      <div class="card"><div class="stat">20+ yrs</div><div class="stat-label">Constitutional litigation experience</div></div>
+      <div class="card"><div class="stat">$35M</div><div class="stat-label">Active claim in progress</div></div>
+      <div class="card"><div class="stat">45</div><div class="stat-label">Companies registered</div></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 — PRODUCT -->
+  <section class="slide" data-slide="6">
+    <div class="slide-kicker">Product Portfolio</div>
+    <h1>Five Flagship <span class="accent">Products</span></h1>
+    <div class="grid-3">
+      <div class="card"><h3>PrimeDox AI</h3><p>AI concierge — document automation and legal-education chat.</p></div>
+      <div class="card"><h3>OmniaGuard</h3><p>Consumer cybersecurity — 14-layer AI threat defense.</p></div>
+      <div class="card"><h3>CCLDR</h3><p>Cannabis constitutional-defense legal education platform.</p></div>
+      <div class="card"><h3>TechPetCage</h3><p>AI pet-health monitoring and alerts.</p></div>
+      <div class="card"><h3>Vault Velocity Auto</h3><p>AI vehicle diagnostics and fleet management.</p></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7 — BUSINESS MODEL -->
+  <section class="slide" data-slide="7">
+    <div class="slide-kicker">Business Model</div>
+    <h1>Four Revenue <span class="accent">Streams</span></h1>
+    <div class="grid-2">
+      <div class="card"><h3>SaaS Subscriptions</h3><p>Recurring monthly tiers across every product vertical.</p></div>
+      <div class="card"><h3>Document Sales</h3><p>One-time template and toolkit purchases (CCLDR, BENO-X).</p></div>
+      <div class="card"><h3>Legal Partnerships</h3><p>Referral and co-counsel arrangements with practicing lawyers.</p></div>
+      <div class="card"><h3>Real Estate Commissions</h3><p>Strategic property deals tied to the holding company's growth.</p></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8 — FINANCIALS -->
+  <section class="slide" data-slide="8">
+    <div class="slide-kicker">Financial Projection</div>
+    <h1>$400M <span class="accent">Year 4 Target</span></h1>
+    <table class="fin">
+      <tr><th>Year</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th></tr>
+      <tr><td>Revenue</td><td>Seed</td><td>Scale</td><td>Expand</td><td>$400M</td></tr>
+    </table>
+    <p class="lead" style="margin-top:20px;">70% margins projected on AI software products once infrastructure is built out.</p>
+  </section>
+
+  <!-- SLIDE 9 — PARTNERSHIP -->
+  <section class="slide" data-slide="9">
+    <div class="slide-kicker">Strategic Partnership</div>
+    <h1>Telus / Kudos <span class="accent">Infrastructure Deal</span></h1>
+    <p class="lead">$5B–$10B infrastructure partnership under discussion, 12-month timeline, to support agent-swarm scale-out across the empire's product lines.</p>
+  </section>
+
+  <!-- SLIDE 10 — TEAM -->
+  <section class="slide" data-slide="10">
+    <div class="slide-kicker">Team</div>
+    <h1>Derek Francisco <span class="accent">— CEO</span></h1>
+    <p class="lead">20+ years of constitutional advocacy and self-represented litigation experience. Legal educator and founder of the CCLDR platform, building the AI infrastructure to scale that expertise across every vertical in the empire.</p>
+  </section>
+
+  <!-- SLIDE 11 — ASK -->
+  <section class="slide" data-slide="11">
+    <div class="slide-kicker">The Ask</div>
+    <h1>Seed Round</h1>
+    <div class="ask-box">
+      <div class="ask-amt">$5,000,000</div>
+      <p class="lead" style="margin:0;">Skyscraper deployment, agent-swarm integration, and global expansion across the existing five-product portfolio.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 12 — CONTACT -->
+  <section class="slide" data-slide="12">
+    <div class="slide-kicker">Contact</div>
+    <h1>Let's Talk.</h1>
+    <div class="contact-row">
+      <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a>
+      <a href="tel:7053078080">705-307-8080</a>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav-arrows">
+  <button class="nav-btn" id="prev-btn" onclick="goToSlide(currentSlide-1)">← Prev</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="next-btn" onclick="goToSlide(currentSlide+1)">Next →</button>
+</div>
+<div class="slide-num" id="slide-num">1 / 12</div>
+
+<script>
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total = slides.length;
+  var currentSlide = 1;
+  var dotsEl = document.getElementById('dots');
+
+  for (var i = 1; i <= total; i++) {
+    var d = document.createElement('div');
+    d.className = 'dot' + (i === 1 ? ' active' : '');
+    d.onclick = (function (n) { return function () { goToSlide(n); }; })(i);
+    dotsEl.appendChild(d);
+  }
+
+  function goToSlide(n) {
+    if (n < 1 || n > total) return;
+    var outgoing = slides[currentSlide - 1];
+    var incoming = slides[n - 1];
+    currentSlide = n;
+
+    if (window.gsap) {
+      gsap.to(outgoing, { opacity: 0, duration: 0.35, onComplete: function () { outgoing.classList.remove('active'); } });
+      incoming.classList.add('active');
+      gsap.fromTo(incoming, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.1 });
+    } else {
+      outgoing.classList.remove('active');
+      incoming.classList.add('active');
+    }
+
+    document.querySelectorAll('.dot').forEach(function (dot, idx) {
+      dot.classList.toggle('active', idx === n - 1);
+    });
+    document.getElementById('slide-num').textContent = n + ' / ' + total;
+    document.getElementById('prev-btn').style.visibility = n === 1 ? 'hidden' : 'visible';
+    document.getElementById('next-btn').style.visibility = n === total ? 'hidden' : 'visible';
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') goToSlide(currentSlide + 1);
+    if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+  });
+
+  var touchStartX = 0;
+  document.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx > 50) goToSlide(currentSlide - 1);
+    if (dx < -50) goToSlide(currentSlide + 1);
+  });
+
+  goToSlide(1);
+</script>
+
+</body>
+</html>
