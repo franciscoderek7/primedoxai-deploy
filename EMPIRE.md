@@ -92,6 +92,18 @@ Derek ordered "merge to main for all." On merge, GitHub Actions logs showed 2 de
 
 ---
 
+## BROKEN PAYPAL HANDLE — EMPIRE-WIDE FIX — 2026-06-21 (commit pending)
+
+Derek confirmed `paypal.me/derekfranciacco1` is **dead** (manual test, logged-in browser check). This handle was baked into `agents/payment-provider.js`'s default PayPal fallback table (and a duplicate copy in `cleanswarm-checkout/payment-provider.js`), `stripe-config.js`'s PayPal fallback per tier, and hardcoded directly in 67 site/agent files — meaning most "Buy Now" buttons empire-wide were sending customers to a dead PayPal page. This directly contradicts the § STATE OF THE ART PASS note above, which assumed `franciscoderek7` (the separately-confirmed-working handle, used in 79 other places) was already the dominant handle — it wasn't; `derekfranciacco1` was actually the more widely wired default.
+
+**Fix:** global `derekfranciacco1` → `franciscoderek7` swap, 70 files (`sed`, exact-string replace, amount suffixes like `/99CAD` preserved untouched — `paypal.me/<handle>/<amount>` format unaffected by the handle swap). Verified zero remaining `derekfranciacco1` references repo-wide. Money flow direction unaffected by this fix — `PrimeDoxPayment.checkout()` only ever does `window.open(link)`, a customer-side redirect; nothing in the code path debits Derek.
+
+**Revenue-ready now (PayPal button on a live, deployed site, pointing at the confirmed-working handle):** CCLDR (11 tiers), Francisco Holdings (45-floor skyscraper + investors.html + book.html), BENO-X, Doc Weedlaw, Kiaros, TechPackCage, TechPetCage, PrimeDox AI (5 pages), CleanSwarm, Weedlaw Education, VIGILAX, zPrimeDoxAI HQ, MindShift/Makayla.
+
+**Not revenue-ready (PayPal/Stripe wired but NOT a live deploy target — fixed in source, but no workflow ships these):** `vaultvelocityauto-site/index.html` (the real live site is `vault-velocity-auto-site/`, hyphenated, which has no checkout at all — pre-existing gap, not part of this fix), `payment-portal/stripe-checkout.html`, `nightingale-console/*` (internal dashboard, not public-facing).
+
+---
+
 ## CHINESE AI INTEGRATION — 2026-06-20
 
 Responding to Derek's "CHINESE AI INTEGRATION — Build This Now" directive (DeepSeek/Qwen/GLM/Kimi stack). Built the secure server-proxy architecture rather than a client-only connector, because every one of these vendor APIs requires a secret key in the request header — putting a real key in any `agents/*.js` file would leak it to every site visitor via view-source within minutes (same risk class as the Stripe secret key, never done elsewhere in this repo).

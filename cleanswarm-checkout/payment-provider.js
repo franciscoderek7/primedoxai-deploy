@@ -20,41 +20,41 @@
   // Loop B (omniaguard1@gmail.com): OmniaGuard, Vigilax — marked with LOOP-B
   var PAYPAL_LINKS = {
     // ── OmniaGuard (Loop B — omniaguard1@gmail.com) ─────────────────────────
-    'omniguard-vpn-99':          'https://paypal.me/derekfranciacco1/99',   // SWAP → omniaguard1 link
-    'omniguard-vault-99':        'https://paypal.me/derekfranciacco1/99',   // SWAP → omniaguard1 link
-    'omniguard-bundle-149':      'https://paypal.me/derekfranciacco1/149',  // SWAP → omniaguard1 link
-    'omniguard-audit-500':       'https://paypal.me/derekfranciacco1/500',  // SWAP → omniaguard1 link
-    'omniguard-session-500':     'https://paypal.me/derekfranciacco1/500',  // SWAP → omniaguard1 link
+    'omniguard-vpn-99':          'https://paypal.me/franciscoderek7/99',   // SWAP → omniaguard1 link
+    'omniguard-vault-99':        'https://paypal.me/franciscoderek7/99',   // SWAP → omniaguard1 link
+    'omniguard-bundle-149':      'https://paypal.me/franciscoderek7/149',  // SWAP → omniaguard1 link
+    'omniguard-audit-500':       'https://paypal.me/franciscoderek7/500',  // SWAP → omniaguard1 link
+    'omniguard-session-500':     'https://paypal.me/franciscoderek7/500',  // SWAP → omniaguard1 link
     // ── BENO-X ───────────────────────────────────────────────────────────────
-    'benox-session-500':         'https://paypal.me/derekfranciacco1/500',
+    'benox-session-500':         'https://paypal.me/franciscoderek7/500',
     // ── CCLDR ────────────────────────────────────────────────────────────────
-    'ccldr-digital-99':          'https://paypal.me/derekfranciacco1/99',
-    'ccldr-course-299':          'https://paypal.me/derekfranciacco1/299',
-    'ccldr-foundation-149':      'https://paypal.me/derekfranciacco1/149',
-    'ccldr-practitioner-499':    'https://paypal.me/derekfranciacco1/499',
-    'ccldr-sovereignty-999':     'https://paypal.me/derekfranciacco1/999',
-    'ccldr-elite-1499':          'https://paypal.me/derekfranciacco1/1499',
-    'ccldr-templates-49':        'https://paypal.me/derekfranciacco1/49',
-    'ccldr-inmate-29':           'https://paypal.me/derekfranciacco1/29',
-    'ccldr-session-500':         'https://paypal.me/derekfranciacco1/500',
-    'ccldr-session-750':         'https://paypal.me/derekfranciacco1/750',
-    'ccldr-session-1000':        'https://paypal.me/derekfranciacco1/1000',
-    'ccldr-donate':              'https://paypal.me/derekfranciacco1/',     // open amount
+    'ccldr-digital-99':          'https://paypal.me/franciscoderek7/99',
+    'ccldr-course-299':          'https://paypal.me/franciscoderek7/299',
+    'ccldr-foundation-149':      'https://paypal.me/franciscoderek7/149',
+    'ccldr-practitioner-499':    'https://paypal.me/franciscoderek7/499',
+    'ccldr-sovereignty-999':     'https://paypal.me/franciscoderek7/999',
+    'ccldr-elite-1499':          'https://paypal.me/franciscoderek7/1499',
+    'ccldr-templates-49':        'https://paypal.me/franciscoderek7/49',
+    'ccldr-inmate-29':           'https://paypal.me/franciscoderek7/29',
+    'ccldr-session-500':         'https://paypal.me/franciscoderek7/500',
+    'ccldr-session-750':         'https://paypal.me/franciscoderek7/750',
+    'ccldr-session-1000':        'https://paypal.me/franciscoderek7/1000',
+    'ccldr-donate':              'https://paypal.me/franciscoderek7/',     // open amount
     // ── TechPetCage ──────────────────────────────────────────────────────────
-    'techpet-basic-19':          'https://paypal.me/derekfranciacco1/19',
-    'techpet-pro-49':            'https://paypal.me/derekfranciacco1/49',
-    'techpet-kennel-149':        'https://paypal.me/derekfranciacco1/149',
+    'techpet-basic-19':          'https://paypal.me/franciscoderek7/19',
+    'techpet-pro-49':            'https://paypal.me/franciscoderek7/49',
+    'techpet-kennel-149':        'https://paypal.me/franciscoderek7/149',
     // ── PrimeDox AI ──────────────────────────────────────────────────────────
-    'primedox-doc-49':           'https://paypal.me/derekfranciacco1/49',
-    'primedox-pro-99':           'https://paypal.me/derekfranciacco1/99',
-    'primedox-enterprise-499':   'https://paypal.me/derekfranciacco1/499',
+    'primedox-doc-49':           'https://paypal.me/franciscoderek7/49',
+    'primedox-pro-99':           'https://paypal.me/franciscoderek7/99',
+    'primedox-enterprise-499':   'https://paypal.me/franciscoderek7/499',
     // ── Francisco Holdings ────────────────────────────────────────────────────
-    'fh-strategy-500':           'https://paypal.me/derekfranciacco1/500',
-    'fh-boardroom-1000':         'https://paypal.me/derekfranciacco1/1000',
+    'fh-strategy-500':           'https://paypal.me/franciscoderek7/500',
+    'fh-boardroom-1000':         'https://paypal.me/franciscoderek7/1000',
     'fh-enterprise':             'mailto:franciscoderek7@gmail.com?subject=FH%20Enterprise%20Inquiry',
     // ── Vigilax (Loop B) ─────────────────────────────────────────────────────
-    'vigilax-custom-5000':       'https://paypal.me/derekfranciacco1/5000', // SWAP → Loop B link
-    'vigilax-retainer-10000':    'https://paypal.me/derekfranciacco1/10000',// SWAP → Loop B link
+    'vigilax-custom-5000':       'https://paypal.me/franciscoderek7/5000', // SWAP → Loop B link
+    'vigilax-retainer-10000':    'https://paypal.me/franciscoderek7/10000',// SWAP → Loop B link
   };
 
   // ─── Stripe Price IDs ─────────────────────────────────────────────────────
@@ -97,13 +97,13 @@
 
       // Dynamic fallback: build paypal.me URL from amount
       if (!link && amount && parseFloat(amount) > 0) {
-        link = 'https://paypal.me/derekfranciacco1/' + parseFloat(amount).toFixed(0);
+        link = 'https://paypal.me/franciscoderek7/' + parseFloat(amount).toFixed(0);
       }
 
       // Last resort: email
-      if (!link || link === 'https://paypal.me/derekfranciacco1/') {
+      if (!link || link === 'https://paypal.me/franciscoderek7/') {
         if (productId === 'ccldr-donate' || !amount) {
-          link = 'https://paypal.me/derekfranciacco1/';
+          link = 'https://paypal.me/franciscoderek7/';
         } else {
           var subject = encodeURIComponent('PrimeDox Payment — ' + (label || productId));
           link = 'mailto:franciscoderek7@gmail.com?subject=' + subject;
