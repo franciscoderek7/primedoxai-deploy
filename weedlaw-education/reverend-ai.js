@@ -17,7 +17,7 @@
       color: '#27ae60',
       accent: '#1a7a40',
       greeting: "I'm Doc Weedlaw AI. Facing a cannabis charge? Ask me anything about your rights or BENO-X.",
-      consultLink: 'https://paypal.me/derekfranciaço1/500CAD',
+      consultLink: 'https://paypal.me/derekfranciacao1/500CAD',
       consultLabel: 'Book Consultation ($500)',
     },
     'primedox': {
@@ -26,7 +26,7 @@
       color: '#00d4ff',
       accent: '#0099bb',
       greeting: "I'm PrimeDox AI. I can help you understand our document automation tiers. What are you looking for?",
-      consultLink: 'https://paypal.me/derekfranciaço1/49CAD',
+      consultLink: 'https://paypal.me/derekfranciacao1/49CAD',
       consultLabel: 'Start Free Trial — $49',
     },
     'francisco-holdings': {
@@ -35,7 +35,7 @@
       color: '#c9a84c',
       accent: '#9a7a2e',
       greeting: "Welcome to Francisco Holdings. I help founders get clarity fast. What challenge are you facing?",
-      consultLink: 'https://paypal.me/derekfranciaço1/500CAD',
+      consultLink: 'https://paypal.me/derekfranciacao1/500CAD',
       consultLabel: 'Book Strategy Session ($500)',
     },
     'weedlaw': {
@@ -44,7 +44,7 @@
       color: '#27ae60',
       accent: '#1a7a40',
       greeting: "Know Your Rights. I'm here to help. Are you facing a charge, or do you want to learn BENO-X?",
-      consultLink: 'https://paypal.me/derekfranciaço1/149CAD',
+      consultLink: 'https://paypal.me/derekfranciacao1/149CAD',
       consultLabel: 'Get Warrior Tier — $149',
     },
     'omniaguard': {
