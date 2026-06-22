@@ -1,8 +1,8 @@
 // referral-engine.js — PrimeDox Empire Referral Engine v1.0
 // CDN: https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js
 //
-// Discount tiers (by code prefix), per Derek's 2026-06-21 spec:
-//   VETERAN10* → 10% | SENIOR10* → 10% | FIXED10* → 10% | TERMINAL20* → 20% | INVESTOR* -> 25% | general → 10%
+// Discount tiers (by code prefix), per Derek's 2026-06-22 spec:
+//   TERMINAL* → 50% | FIXED* → 40% | VETERAN* → 35% | SENIOR* → 30% | STUDENT* → 25% | INVESTOR* → 25% | general → 10%
 //
 // Commission rates:
 //   First sale → 25% | Recurring → 20%
@@ -15,15 +15,28 @@
   var LS_KEY = 'pd_referral';
 
   // ─── Discount Tier Map ────────────────────────────────────────────────────
+  // Percentages per Derek's 2026-06-22 spec: Compassion/Accessibility/Service/
+  // Wisdom/Future Builder Pricing — honor system, no documentation required.
   var TIERS = [
-    { prefix: 'SENIOR',   percent: 10, label: 'Senior Discount' },
-    { prefix: 'VETERAN',  percent: 10, label: 'Veteran Discount' },
-    { prefix: 'TERMINAL', percent: 20, label: 'Terminal Illness Care Discount' },
-    { prefix: 'FIXED',    percent: 10, label: 'Fixed Income Discount' },
+    { prefix: 'TERMINAL', percent: 50, label: 'Compassion Pricing (Terminal Illness)' },
+    { prefix: 'FIXED',    percent: 40, label: 'Accessibility Pricing (Fixed / Low Income)' },
+    { prefix: 'VETERAN',  percent: 35, label: 'Service Pricing (Veterans / Active Military)' },
+    { prefix: 'SENIOR',   percent: 30, label: 'Wisdom Pricing (Seniors 65+)' },
+    { prefix: 'STUDENT',  percent: 25, label: 'Future Builder Pricing (Students)' },
     { prefix: 'INVESTOR', percent: 25, label: 'Investor Partner Discount' },
   ];
 
   var GENERAL_PERCENT = 10;
+
+  // Referrer reward ladder — discount the REFERRER earns toward their own future
+  // purchases based on how many successful referrals they've made (not the
+  // discount code tier above, which is what the REFERRED customer gets).
+  var REFERRER_TIERS = [
+    { min: 10, percent: 50, perk: '+ 1 free month' },
+    { min: 5,  percent: 30, perk: '+ priority support' },
+    { min: 3,  percent: 20, perk: '' },
+    { min: 1,  percent: 10, perk: '' },
+  ];
 
   // Commission rates (stored in localStorage; Supabase if available)
   var COMMISSION_FIRST     = 0.25;
@@ -267,6 +280,22 @@
       var data = _loadStored();
       if (!data || !data.code) return null;
       return { code: data.code, percent: data.discount, label: data.source };
+    },
+
+    /**
+     * Returns { percent, perk, min } for the highest reward tier unlocked by
+     * myCode's logged referral count on this device, or null if none unlocked.
+     */
+    getReferrerTier: function (myCode) {
+      var code = _normalizeCode(myCode);
+      if (!code) return null;
+      var data = _loadStored();
+      var commissions = (data && data.commissions) || [];
+      var count = commissions.filter(function (c) { return _normalizeCode(c.code) === code; }).length;
+      for (var i = 0; i < REFERRER_TIERS.length; i++) {
+        if (count >= REFERRER_TIERS[i].min) return REFERRER_TIERS[i];
+      }
+      return null;
     },
 
     /**
