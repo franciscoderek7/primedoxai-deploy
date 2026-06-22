@@ -237,16 +237,16 @@ body.game-ready{padding-top:var(--hud-h)}
 .pay-notice strong{color:var(--gold-light)}
 
 /* ── FLOOR SECTIONS ──────────────────── */
-.floor-section{min-height:100vh;border-top:1px solid var(--border-gold);padding:0;display:flex;flex-direction:column;position:relative}
+.floor-section{min-height:100vh;border-top:1px solid var(--border-gold);padding:0;display:flex;flex-direction:column;position:relative;background-repeat:no-repeat;background-size:cover}
 .floor-inner{flex:1;padding:60px 5% 40px;max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1}
 .floor-swarm-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
 .floor-label{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--platinum-dark);text-transform:uppercase;margin-bottom:10px}
 .floor-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;background:linear-gradient(135deg,var(--platinum-mid) 0%,var(--gold) 40%,var(--gold-light) 55%,var(--gold) 70%,var(--platinum-mid) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .floor-sub{color:var(--platinum-mid);font-size:1rem;margin-bottom:1.8rem;max-width:650px}
 .floor-features{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:1.8rem}
-.feat-chip{background:var(--card);border:1px solid var(--border-em);border-radius:4px;padding:7px 10px;font-size:11px;color:var(--platinum)}
+.feat-chip{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--border-em);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--platinum)}
 .floor-pricing{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:1.8rem}
-.price-card{position:relative;background:var(--card);border:1px solid var(--border-gold);border-radius:6px;padding:18px 20px;min-width:200px;flex:1;transition:transform .2s,box-shadow .2s}
+.price-card{position:relative;background:rgba(23,23,31,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-gold);border-radius:14px;padding:18px 20px;min-width:200px;flex:1;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
 .price-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,175,55,.15)}
 .price-card.featured{border-color:var(--gold)}
 .price-badge{position:absolute;top:-10px;right:14px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--dark);font-family:'Orbitron',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;padding:4px 9px;border-radius:10px;box-shadow:0 2px 8px rgba(212,175,55,.4)}
@@ -1400,9 +1400,25 @@ var AGENT_SWARM_STYLE = {
   torque:   { color:'#ff0044', glyphs:['🏎️','⚡'] }
 };
 
+// Per-floor ambient backdrop — CSS radial-gradients only, no photos.
+// Themed per company per Derek's interior-design spec; keyed by the same
+// agent id as AGENT_SWARM_STYLE so colors stay consistent floor-to-floor.
+var FLOOR_THEME = {
+  sentinel:  'radial-gradient(circle at 20% 18%,rgba(0,212,255,.16),transparent 58%),radial-gradient(circle at 82% 30%,rgba(255,0,255,.10),transparent 55%),radial-gradient(circle at 50% 95%,rgba(102,0,255,.12),transparent 60%)', // OmniGuard — space station
+  counsel:   'radial-gradient(circle at 15% 25%,rgba(0,255,136,.10),transparent 55%),radial-gradient(circle at 85% 80%,rgba(212,175,55,.10),transparent 55%)', // Weedlaw — luxury legal lounge
+  primedox:  'radial-gradient(circle at 25% 22%,rgba(0,255,255,.13),transparent 55%),radial-gradient(circle at 78% 78%,rgba(0,136,255,.12),transparent 55%)', // PrimeDox — AI command center
+  archivist: 'radial-gradient(circle at 18% 20%,rgba(136,0,255,.13),transparent 55%),radial-gradient(circle at 80% 82%,rgba(212,175,55,.09),transparent 55%)', // CCLDR — legal library
+  swarm:     'radial-gradient(circle at 28% 20%,rgba(255,136,0,.11),transparent 55%),radial-gradient(circle at 72% 82%,rgba(192,192,192,.09),transparent 55%)', // CleanSwarm — clean tech lab
+  vetbot:    'radial-gradient(circle at 22% 22%,rgba(0,255,204,.11),transparent 55%),radial-gradient(circle at 78% 78%,rgba(210,105,30,.09),transparent 55%)', // TechPetCage — pet tech showroom
+  warden:    'radial-gradient(circle at 50% 25%,rgba(229,228,226,.07),transparent 55%)', // VIGILAX — neutral command
+  phoenix:   'radial-gradient(circle at 28% 18%,rgba(212,175,55,.14),transparent 55%),radial-gradient(circle at 74% 82%,rgba(229,228,226,.09),transparent 55%)', // Holdings Boardroom — executive penthouse
+  torque:    'radial-gradient(circle at 24% 28%,rgba(192,192,192,.13),transparent 55%),radial-gradient(circle at 76% 72%,rgba(255,255,255,.06),transparent 55%)' // Vault Velocity — chrome showroom
+};
+
 function renderFloor(f) {
-  var html = '<section class="floor-section" id="floor-'+f.n+'" data-floor="'+f.n+'">';
   var faSwarm = FLOOR_AGENT_MAP[f.n];
+  var theme = faSwarm ? FLOOR_THEME[faSwarm.id] : null;
+  var html = '<section class="floor-section" id="floor-'+f.n+'" data-floor="'+f.n+'"'+(theme?' style="background-image:'+theme+'"':'')+'>';
   if (faSwarm && !f.coming && !f.secret && AGENT_SWARM_STYLE[faSwarm.id]) {
     html += '<canvas class="floor-swarm-canvas" data-agent="'+faSwarm.id+'" aria-hidden="true"></canvas>';
   }
