@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Dashboard — OmniGuard Privacy Shield</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --panel:rgba(255,255,255,.05); --border:rgba(255,255,255,.12);
+    --blue:#4A90E2; --pink:#E91E63; --text:#EAF0FF; --dim:#9aa6c4;
+    --green:#2ECC71; --amber:#F5A623; --red:#FF5C5C;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:radial-gradient(circle at 15% 0%,rgba(74,144,226,.15),transparent 50%),
+               radial-gradient(circle at 85% 100%,rgba(233,30,99,.12),transparent 50%),var(--bg);
+    color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;line-height:1.6}
+  .container{max-width:1100px;margin:0 auto;padding:24px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+  .logo{font-family:Orbitron,sans-serif;font-weight:900;font-size:18px}
+  .logo span{color:var(--dim);font-weight:400}
+  nav a{color:var(--dim);text-decoration:none;font-size:13px;margin-left:18px}
+  nav a:hover{color:var(--text)}
+
+  .glass{background:var(--panel);border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(12px)}
+  .demo-note{padding:12px 18px;border:1px dashed rgba(245,166,35,.4);background:rgba(245,166,35,.06);
+    border-radius:10px;font-size:12px;color:var(--amber);margin-bottom:24px}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .card{padding:24px}
+  .card h3{font-size:13px;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+  /* Privacy score gauge */
+  .score-wrap{display:flex;align-items:center;gap:18px}
+  .score-ring{position:relative;width:100px;height:100px;border-radius:50%;
+    background:conic-gradient(var(--blue) calc(var(--pct,72)*1%),rgba(255,255,255,.08) 0);
+    display:flex;align-items:center;justify-content:center}
+  .score-ring::before{content:'';position:absolute;inset:8px;border-radius:50%;background:var(--bg)}
+  .score-num{position:relative;font-size:26px;font-weight:800}
+  .score-meta{font-size:12px;color:var(--dim)}
+  input[type=range]{width:100%;margin-top:10px;accent-color:var(--blue)}
+  .control-label{font-size:11px;color:var(--dim);margin-top:8px}
+
+  /* VPN */
+  .vpn-status{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+  .dot.off{background:var(--red);box-shadow:0 0 10px var(--red)}
+  .toggle-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;
+    color:var(--text);cursor:pointer;font-size:12px;font-weight:700}
+  .toggle-btn:hover{border-color:var(--blue)}
+
+  /* devices */
+  .device-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;
+    border-bottom:1px solid var(--border);font-size:13px}
+  .device-row:last-child{border-bottom:none}
+  .agent-tag{font-size:10px;color:var(--blue);background:rgba(74,144,226,.1);padding:3px 8px;border-radius:8px;
+    display:inline-flex;align-items:center;gap:4px}
+  .agent-tag .pulse{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .add-device{margin-top:12px;display:flex;gap:8px}
+  .add-device input{flex:1;padding:8px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text);font-size:12px}
+  .add-device button{padding:8px 14px;border-radius:6px;border:none;background:linear-gradient(135deg,var(--blue),var(--pink));color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+  .remove-x{color:var(--dim);cursor:pointer;font-size:14px;margin-left:10px}
+  .remove-x:hover{color:var(--red)}
+
+  /* broker scan */
+  .broker-count{font-size:34px;font-weight:800;color:var(--pink)}
+  .broker-sub{font-size:12px;color:var(--dim);margin-bottom:14px}
+  .scan-btn{padding:10px 18px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--blue),var(--pink));
+    color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+  .scan-anim{font-size:11px;color:var(--blue);margin-top:10px;display:none}
+  .scan-anim.active{display:block}
+  .bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;margin-top:6px}
+  .bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--pink));transition:width 2s linear}
+
+  /* breach coming soon */
+  .soon-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 20px;color:var(--dim)}
+  .soon-tag{font-size:10px;letter-spacing:1px;background:rgba(255,255,255,.08);padding:3px 10px;border-radius:10px;margin-top:8px;display:inline-block}
+
+  .full-row{grid-column:1/-1}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">🛡️ OmniGuard <span>Privacy Shield — Client Dashboard</span></div>
+    <nav><a href="index.html">← Plans</a><a href="admin.html">Admin</a></nav>
+  </header>
+
+  <div class="demo-note">
+    ⚠️ Preview build: values below are stored locally in this browser (no account backend yet).
+    Use the controls to see how a client's dashboard updates — Derek can set Privacy Score, broker count,
+    VPN state, and device list per client manually until full multi-tenant accounts are wired up.
+  </div>
+
+  <div class="grid">
+
+    <div class="card glass">
+      <h3>🛰️ Privacy Score</h3>
+      <div class="score-wrap">
+        <div class="score-ring" id="scoreRing"><span class="score-num" id="scoreNum">72</span></div>
+        <div>
+          <div class="score-meta">Based on VPN use, broker exposure, and device hardening.</div>
+        </div>
+      </div>
+      <input type="range" id="scoreSlider" min="0" max="100" value="72">
+      <div class="control-label">Drag to set (admin control, v1)</div>
+    </div>
+
+    <div class="card glass">
+      <h3>🔐 VPN Status</h3>
+      <div class="vpn-status"><span class="dot" id="vpnDot"></span> <span id="vpnLabel">Connected — Toronto, CA</span></div>
+      <button class="toggle-btn" id="vpnToggle">Toggle Connection</button>
+    </div>
+
+    <div class="card glass">
+      <h3>🧹 Data Brokers Found</h3>
+      <div class="broker-count" id="brokerCount">14</div>
+      <div class="broker-sub">Across 50+ monitored brokers</div>
+      <button class="scan-btn" id="scanBtn">Request Removal</button>
+      <div class="scan-anim" id="scanAnim">
+        <span class="agent-tag"><span class="pulse"></span> Agent dispatched to broker queue…</span>
+        <div class="bar"><div class="bar-fill" id="scanBar"></div></div>
+      </div>
+    </div>
+
+    <div class="card glass full-row">
+      <h3>📱 Devices Protected</h3>
+      <div id="deviceList"></div>
+      <div class="add-device">
+        <input id="deviceInput" placeholder="e.g. Derek's iPhone">
+        <button id="addDeviceBtn">Add Device</button>
+      </div>
+    </div>
+
+    <div class="card glass full-row">
+      <h3>🚨 Breach Alerts</h3>
+      <div class="soon-panel">
+        <div style="font-size:32px">🔒</div>
+        <div>Dark-web breach monitoring is being wired up.</div>
+        <span class="soon-tag">COMING SOON — pending HaveIBeenPwned API key</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var state = JSON.parse(localStorage.getItem('og_dashboard') || 'null') || {
+    score: 72, vpn: true, brokers: 14,
+    devices: [{name:'iPhone 14', type:'phone'}, {name:'MacBook Pro', type:'computer'}]
+  };
+  function save(){ localStorage.setItem('og_dashboard', JSON.stringify(state)); }
+
+  var scoreNum = document.getElementById('scoreNum');
+  var scoreRing = document.getElementById('scoreRing');
+  var scoreSlider = document.getElementById('scoreSlider');
+  function renderScore(){
+    scoreNum.textContent = state.score;
+    scoreRing.style.setProperty('--pct', state.score);
+    scoreSlider.value = state.score;
+  }
+  scoreSlider.addEventListener('input', function(){
+    state.score = parseInt(this.value, 10); renderScore(); save();
+  });
+
+  var vpnDot = document.getElementById('vpnDot');
+  var vpnLabel = document.getElementById('vpnLabel');
+  function renderVpn(){
+    vpnDot.className = 'dot' + (state.vpn ? '' : ' off');
+    vpnLabel.textContent = state.vpn ? 'Connected — Toronto, CA' : 'Disconnected';
+  }
+  document.getElementById('vpnToggle').addEventListener('click', function(){
+    state.vpn = !state.vpn; renderVpn(); save();
+  });
+
+  var brokerCount = document.getElementById('brokerCount');
+  function renderBrokers(){ brokerCount.textContent = state.brokers; }
+  document.getElementById('scanBtn').addEventListener('click', function(){
+    var anim = document.getElementById('scanAnim');
+    var bar = document.getElementById('scanBar');
+    anim.classList.add('active');
+    bar.style.width = '0%';
+    setTimeout(function(){ bar.style.width = '100%'; }, 50);
+    setTimeout(function(){
+      state.brokers = Math.max(0, state.brokers - 1);
+      renderBrokers(); save();
+      anim.classList.remove('active');
+    }, 2100);
+  });
+
+  var deviceList = document.getElementById('deviceList');
+  var deviceIcons = {phone:'📱', tablet:'📲', computer:'💻'};
+  function renderDevices(){
+    deviceList.innerHTML = '';
+    state.devices.forEach(function(d, i){
+      var row = document.createElement('div');
+      row.className = 'device-row';
+      row.innerHTML = '<span>' + (deviceIcons[d.type] || '🖥️') + ' ' + d.name + '</span>' +
+        '<span><span class="agent-tag"><span class="pulse"></span> Agent monitoring</span>' +
+        '<span class="remove-x" data-i="' + i + '">✕</span></span>';
+      deviceList.appendChild(row);
+    });
+    deviceList.querySelectorAll('.remove-x').forEach(function(el){
+      el.addEventListener('click', function(){
+        state.devices.splice(parseInt(this.dataset.i, 10), 1);
+        renderDevices(); save();
+      });
+    });
+  }
+  document.getElementById('addDeviceBtn').addEventListener('click', function(){
+    var input = document.getElementById('deviceInput');
+    var name = input.value.trim();
+    if (!name) return;
+    var type = /phone/i.test(name) ? 'phone' : /tablet|ipad/i.test(name) ? 'tablet' : 'computer';
+    state.devices.push({name: name, type: type});
+    input.value = '';
+    renderDevices(); save();
+  });
+
+  renderScore(); renderVpn(); renderBrokers(); renderDevices();
+</script>
+</body>
+</html>

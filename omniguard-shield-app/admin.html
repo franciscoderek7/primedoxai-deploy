@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Command Center — OmniGuard Privacy Shield (Admin)</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --panel:rgba(255,255,255,.05); --border:rgba(255,255,255,.12);
+    --blue:#4A90E2; --pink:#E91E63; --text:#EAF0FF; --dim:#9aa6c4;
+    --green:#2ECC71; --amber:#F5A623; --red:#FF5C5C;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;line-height:1.6}
+  .container{max-width:1200px;margin:0 auto;padding:24px}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+  .logo{font-family:Orbitron,sans-serif;font-weight:900;font-size:18px}
+  .logo span{color:var(--dim);font-weight:400}
+  nav a{color:var(--dim);text-decoration:none;font-size:13px;margin-left:18px}
+  .glass{background:var(--panel);border:1px solid var(--border);border-radius:16px}
+  .demo-note{padding:12px 18px;border:1px dashed rgba(245,166,35,.4);background:rgba(245,166,35,.06);
+    border-radius:10px;font-size:12px;color:var(--amber);margin-bottom:24px}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+  @media(max-width:860px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+  .stat{padding:20px}
+  .stat .label{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+  .stat .value{font-size:28px;font-weight:800}
+  .stat .delta{font-size:12px;color:var(--green);margin-top:4px}
+  .stat .delta.down{color:var(--red)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;padding:10px 12px;color:var(--dim);font-size:11px;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+  td{padding:12px 12px;border-bottom:1px solid var(--border)}
+  tr:last-child td{border-bottom:none}
+  .tier-pill{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700}
+  .tier-basic{background:rgba(74,144,226,.15);color:var(--blue)}
+  .tier-pro{background:rgba(74,144,226,.25);color:#7fb1f0}
+  .tier-enterprise{background:rgba(233,30,99,.2);color:var(--pink)}
+  .status-active{color:var(--green)}
+  .status-late{color:var(--amber)}
+  .status-churned{color:var(--red)}
+
+  .panel{padding:24px;margin-bottom:20px}
+  .panel h2{font-size:15px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+  .alert-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .alert-row:last-child{border-bottom:none}
+  .sev{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700}
+  .sev-high{background:rgba(255,92,92,.15);color:var(--red)}
+  .sev-med{background:rgba(245,166,35,.15);color:var(--amber)}
+  .sev-low{background:rgba(74,144,226,.15);color:var(--blue)}
+
+  .queue-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .queue-row:last-child{border-bottom:none}
+  .agent-tag{font-size:10px;color:var(--blue);background:rgba(74,144,226,.1);padding:3px 8px;border-radius:8px}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:860px){.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">🛡️ OmniGuard <span>Command Center</span></div>
+    <nav><a href="index.html">← Public Site</a><a href="dashboard.html">Client View</a></nav>
+  </header>
+
+  <div class="demo-note">
+    ⚠️ Preview build: client list, MRR, and alert feed below are sample data for layout/testing.
+    Wire this to real subscriber records (Stripe/PayPal webhook + a database) before relying on these numbers.
+  </div>
+
+  <div class="stat-row">
+    <div class="stat glass"><div class="label">MRR</div><div class="value">$1,612</div><div class="delta">+$237 this month</div></div>
+    <div class="stat glass"><div class="label">Active Clients</div><div class="value">19</div><div class="delta">+3 this month</div></div>
+    <div class="stat glass"><div class="label">Churn (30d)</div><div class="value">1</div><div class="delta down">-1 client</div></div>
+    <div class="stat glass"><div class="label">Avg. Privacy Score</div><div class="value">74</div><div class="delta">+2 pts</div></div>
+  </div>
+
+  <div class="panel glass">
+    <h2>👤 Client List</h2>
+    <table>
+      <thead><tr><th>Client</th><th>Tier</th><th>MRR</th><th>Privacy Score</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>J. Patel</td><td><span class="tier-pill tier-enterprise">Enterprise</span></td><td>$299</td><td>91</td><td class="status-active">Active</td></tr>
+        <tr><td>M. Chen</td><td><span class="tier-pill tier-pro">Pro</span></td><td>$79</td><td>78</td><td class="status-active">Active</td></tr>
+        <tr><td>R. Singh</td><td><span class="tier-pill tier-pro">Pro</span></td><td>$79</td><td>65</td><td class="status-late">Payment Late</td></tr>
+        <tr><td>A. Novak</td><td><span class="tier-pill tier-basic">Basic</span></td><td>$29</td><td>58</td><td class="status-active">Active</td></tr>
+        <tr><td>T. Boucher</td><td><span class="tier-pill tier-basic">Basic</span></td><td>$0</td><td>40</td><td class="status-churned">Churned</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two-col">
+    <div class="panel glass">
+      <h2>🚨 Alert Feed</h2>
+      <div class="alert-row"><span><span class="sev sev-high">HIGH</span> J. Patel — new breach match flagged</span><span style="color:var(--dim)">2h ago</span></div>
+      <div class="alert-row"><span><span class="sev sev-med">MED</span> R. Singh — payment retry failed</span><span style="color:var(--dim)">1d ago</span></div>
+      <div class="alert-row"><span><span class="sev sev-low">LOW</span> A. Novak — new device added</span><span style="color:var(--dim)">2d ago</span></div>
+    </div>
+
+    <div class="panel glass">
+      <h2>🧹 Data Broker Removal Queue</h2>
+      <div class="queue-row"><span>J. Patel — Spokeo</span><span class="agent-tag">Agent dispatched</span></div>
+      <div class="queue-row"><span>M. Chen — WhitePages</span><span class="agent-tag">Agent dispatched</span></div>
+      <div class="queue-row"><span>A. Novak — BeenVerified</span><span class="agent-tag">Queued</span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
