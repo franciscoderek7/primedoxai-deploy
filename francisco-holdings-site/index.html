@@ -1779,18 +1779,23 @@ document.addEventListener('keydown', function(e) {
   // The hero tower: 45 floors, each floor = one Francisco Holdings division.
   // Floors with built content (FLOORS array entries that aren't "coming soon") glow gold/cyan.
   function genHeroTower(w, h) {
+    // Dubai-style stepped/tapering silhouette: 3 setback tiers, narrowing
+    // toward the top, topped with a slender spire (no photoreal image asset
+    // available — this is a stylized vector approximation, not a photo).
     var towerH = h * 0.62;
-    var towerW = Math.min(220, w * 0.26);
-    var towerX = w / 2 - towerW / 2;
+    var baseW = Math.min(220, w * 0.26);
+    var towerX = w / 2 - baseW / 2;
     var floorCount = 45;
     var floorH = towerH / floorCount;
     var floors = [];
     for (var f = 0; f < floorCount; f++) {
       var data = (typeof FLOORS !== 'undefined') ? FLOORS[f] : null;
       var active = data ? !data.coming : (f % 4 !== 3);
-      floors.push({ active: active, accent: (f % 7 === 0) ? 'cyan' : 'gold' });
+      var tierScale = f < 15 ? 1 : (f < 30 ? 0.76 : 0.52);
+      floors.push({ active: active, accent: (f % 7 === 0) ? 'cyan' : 'gold', w: baseW * tierScale });
     }
-    return { x: towerX, w: towerW, h: towerH, y: h - towerH, floorH: floorH, floors: floors };
+    var spireH = towerH * 0.22;
+    return { x: towerX, w: baseW, h: towerH, y: h - towerH, floorH: floorH, floors: floors, spireH: spireH };
   }
 
   var bgBuildings = genBackgroundBuildings(W, H);
@@ -1815,39 +1820,59 @@ document.addEventListener('keydown', function(e) {
       });
     });
 
-    // Hero tower — Phoenix Tower, glass + steel, 45 illuminated floors
-    var glassGrad = ctx.createLinearGradient(tower.x, tower.y, tower.x + tower.w, tower.y);
-    glassGrad.addColorStop(0, 'rgba(18,20,30,0.97)');
-    glassGrad.addColorStop(0.5, 'rgba(28,32,44,0.97)');
-    glassGrad.addColorStop(1, 'rgba(14,16,24,0.97)');
-    ctx.fillStyle = glassGrad;
-    ctx.fillRect(tower.x, tower.y, tower.w, tower.h);
-
-    // Vertical LED edge strips
-    ctx.fillStyle = 'rgba(212,175,55,0.55)';
-    ctx.fillRect(tower.x - 2, tower.y, 2, tower.h);
-    ctx.fillRect(tower.x + tower.w, tower.y, 2, tower.h);
+    // Hero tower — Phoenix Tower, glass + steel, 45 illuminated floors,
+    // Dubai-style tapering tiers + spire
+    var centerX = tower.x + tower.w / 2;
 
     tower.floors.forEach(function(fl, i) {
       var fy = tower.y + tower.h - (i + 1) * tower.floorH;
+      var fx = centerX - fl.w / 2;
+      var glassGrad = ctx.createLinearGradient(fx, fy, fx + fl.w, fy);
+      glassGrad.addColorStop(0, 'rgba(18,20,30,0.97)');
+      glassGrad.addColorStop(0.5, 'rgba(28,32,44,0.97)');
+      glassGrad.addColorStop(1, 'rgba(14,16,24,0.97)');
+      ctx.fillStyle = glassGrad;
+      ctx.fillRect(fx, fy, fl.w, tower.floorH);
+
+      // Vertical LED edge strips per tier
+      ctx.fillStyle = 'rgba(212,175,55,0.55)';
+      ctx.fillRect(fx - 2, fy, 2, tower.floorH);
+      ctx.fillRect(fx + fl.w, fy, 2, tower.floorH);
+
       var glow = fl.active ? (fl.accent === 'cyan' ? 'rgba(0,255,255,0.5)' : 'rgba(212,175,55,0.65)') : 'rgba(229,228,226,0.08)';
       ctx.fillStyle = glow;
-      ctx.fillRect(tower.x + 6, fy + 2, tower.w - 12, Math.max(2, tower.floorH - 4));
+      ctx.fillRect(fx + 6, fy + 2, Math.max(2, fl.w - 12), Math.max(2, tower.floorH - 4));
       ctx.strokeStyle = 'rgba(0,0,0,0.4)';
       ctx.lineWidth = 1;
-      ctx.strokeRect(tower.x, fy, tower.w, tower.floorH);
+      ctx.strokeRect(fx, fy, fl.w, tower.floorH);
     });
 
-    // Rooftop beacon
+    // Spire — slender mast above the topmost setback tier (Burj-style)
+    var topFloor = tower.floors[tower.floors.length - 1];
+    var spireBaseY = tower.y;
+    var spireTipY = tower.y - tower.spireH;
+    ctx.fillStyle = 'rgba(28,32,44,0.97)';
+    ctx.beginPath();
+    ctx.moveTo(centerX - topFloor.w * 0.12, spireBaseY);
+    ctx.lineTo(centerX - 1.5, spireTipY);
+    ctx.lineTo(centerX + 1.5, spireTipY);
+    ctx.lineTo(centerX + topFloor.w * 0.12, spireBaseY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(212,175,55,0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Rooftop beacon — at the spire tip
     var beaconPulse = 0.5 + 0.5 * Math.sin(tick * 0.02);
     ctx.fillStyle = 'rgba(212,175,55,' + (0.4 + beaconPulse * 0.4) + ')';
     ctx.beginPath();
-    ctx.arc(tower.x + tower.w / 2, tower.y - 14, 3, 0, Math.PI * 2);
+    ctx.arc(centerX, spireTipY - 4, 3, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = 'rgba(212,175,55,0.3)';
     ctx.beginPath();
-    ctx.moveTo(tower.x + tower.w / 2, tower.y);
-    ctx.lineTo(tower.x + tower.w / 2, tower.y - 14);
+    ctx.moveTo(centerX, spireTipY);
+    ctx.lineTo(centerX, spireTipY - 4);
     ctx.stroke();
 
     // Ground fog
