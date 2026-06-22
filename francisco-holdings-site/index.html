@@ -238,7 +238,8 @@ body.game-ready{padding-top:var(--hud-h)}
 
 /* ── FLOOR SECTIONS ──────────────────── */
 .floor-section{min-height:100vh;border-top:1px solid var(--border-gold);padding:0;display:flex;flex-direction:column;position:relative}
-.floor-inner{flex:1;padding:60px 5% 40px;max-width:1100px;margin:0 auto;width:100%}
+.floor-inner{flex:1;padding:60px 5% 40px;max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1}
+.floor-swarm-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
 .floor-label{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--platinum-dark);text-transform:uppercase;margin-bottom:10px}
 .floor-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;background:linear-gradient(135deg,var(--platinum-mid) 0%,var(--gold) 40%,var(--gold-light) 55%,var(--gold) 70%,var(--platinum-mid) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .floor-sub{color:var(--platinum-mid);font-size:1rem;margin-bottom:1.8rem;max-width:650px}
@@ -1383,8 +1384,28 @@ var PhoenixGame = (function(){
 ══════════════════════════════════════════════════════ */
 var ELEVATOR_FLOOR = 0;
 
+var FLOOR_AGENT_MAP = {1:{id:'sentinel',name:'Sentinel'},2:{id:'counsel',name:'Counsel'},3:{id:'primedox',name:'PrimeDox'},4:{id:'archivist',name:'Archivist'},5:{id:'swarm',name:'Swarm'},6:{id:'vetbot',name:'VetBot'},7:{id:'warden',name:'Warden'},8:{id:'phoenix',name:'Phoenix'},9:{id:'torque',name:'Torque'},10:{id:'chronos',name:'Chronos'},11:{id:'crate',name:'Crate'},12:{id:'maya',name:'Maya'},13:{id:'primedox',name:'PrimeDox'}};
+
+// Per-agent swarm particle style — brand color + glyphs, no image assets.
+// Cyan/blue scoped only to sentinel (OmniGuard) per CLAUDE.md's blue/pink rule.
+var AGENT_SWARM_STYLE = {
+  sentinel: { color:'#00d4ff', glyphs:['🛡️','🔒'] },
+  counsel:  { color:'#00ff88', glyphs:['⚖️','📖'] },
+  primedox: { color:'#00ffff', glyphs:['🧠','💠'] },
+  archivist:{ color:'#8800ff', glyphs:['📚','⚖️'] },
+  swarm:    { color:'#ff8800', glyphs:['⚙️','🤖'] },
+  vetbot:   { color:'#00cccc', glyphs:['🐾','❤️'] },
+  warden:   { color:'#E5E4E2', glyphs:['🛰️','🔭'] },
+  phoenix:  { color:'#FFD700', glyphs:['🔥','👑'] },
+  torque:   { color:'#ff0044', glyphs:['🏎️','⚡'] }
+};
+
 function renderFloor(f) {
   var html = '<section class="floor-section" id="floor-'+f.n+'" data-floor="'+f.n+'">';
+  var faSwarm = FLOOR_AGENT_MAP[f.n];
+  if (faSwarm && !f.coming && !f.secret && AGENT_SWARM_STYLE[faSwarm.id]) {
+    html += '<canvas class="floor-swarm-canvas" data-agent="'+faSwarm.id+'" aria-hidden="true"></canvas>';
+  }
   html += '<div class="floor-inner">';
   html += '<div class="floor-label">FLOOR '+f.n+' &nbsp;·&nbsp; '+escHtml(f.name)+'</div>';
   html += '<h2 class="floor-title">'+escHtml(f.tag)+' '+escHtml(f.name)+'</h2>';
@@ -1492,7 +1513,6 @@ function renderFloor(f) {
   }
 
   // Agent-on-call button for active floors
-  var FLOOR_AGENT_MAP = {1:{id:'sentinel',name:'Sentinel'},2:{id:'counsel',name:'Counsel'},3:{id:'primedox',name:'PrimeDox'},4:{id:'archivist',name:'Archivist'},5:{id:'swarm',name:'Swarm'},6:{id:'vetbot',name:'VetBot'},7:{id:'warden',name:'Warden'},8:{id:'phoenix',name:'Phoenix'},9:{id:'torque',name:'Torque'},10:{id:'chronos',name:'Chronos'},11:{id:'crate',name:'Crate'},12:{id:'maya',name:'Maya'},13:{id:'primedox',name:'PrimeDox'}};
   var fa = FLOOR_AGENT_MAP[f.n];
   if (fa && !f.coming && !f.secret) {
     html += '<div style="margin-top:18px;padding:13px 16px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">';
@@ -1600,6 +1620,101 @@ function escHtml(s) {
   }, { threshold: 0.35 });
 
   document.querySelectorAll('.floor-section').forEach(function(s) { obs.observe(s); });
+})();
+
+/* ══════════════════════════════════════════════════════
+   FLOOR AGENT SWARM — canvas particles, brand color + emoji
+   glyph per agent. No image assets (avoids licensing risk).
+   Animates only while its floor section is in viewport.
+══════════════════════════════════════════════════════ */
+(function FloorSwarm() {
+  var canvases = document.querySelectorAll('.floor-swarm-canvas[data-agent]');
+  if (!canvases.length) return;
+
+  canvases.forEach(function(canvas) {
+    var style = AGENT_SWARM_STYLE[canvas.dataset.agent];
+    if (!style) return;
+    var section = canvas.closest('.floor-section');
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var running = false;
+    var raf = null;
+
+    function resize() {
+      canvas.width = section.clientWidth;
+      canvas.height = section.clientHeight;
+    }
+
+    function seed() {
+      var count = Math.min(100, Math.max(50, Math.round(canvas.width * canvas.height / 14000)));
+      particles = [];
+      for (var i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          size: 10 + Math.random() * 12,
+          glyph: style.glyphs[i % style.glyphs.length],
+          drift: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function tick() {
+      if (!running) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var parX = ((canvas._mx || 0.5) - 0.5) * 12;
+      var parY = ((canvas._my || 0.5) - 0.5) * 12;
+      ctx.shadowColor = style.color;
+      ctx.shadowBlur = 6;
+      particles.forEach(function(p) {
+        p.drift += 0.01;
+        p.x += p.vx + Math.sin(p.drift) * 0.05;
+        p.y += p.vy + Math.cos(p.drift) * 0.05;
+        if (p.x < -20) p.x = canvas.width + 20;
+        if (p.x > canvas.width + 20) p.x = -20;
+        if (p.y < -20) p.y = canvas.height + 20;
+        if (p.y > canvas.height + 20) p.y = -20;
+        ctx.font = p.size + 'px sans-serif';
+        ctx.globalAlpha = 0.35;
+        ctx.fillText(p.glyph, p.x + parX, p.y + parY);
+      });
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      resize();
+      seed();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function stop() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+    }
+
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) start(); else stop();
+      });
+    }, { threshold: 0.1 });
+    io.observe(section);
+
+    window.addEventListener('resize', function() {
+      if (running) { resize(); seed(); }
+    });
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    document.querySelectorAll('.floor-swarm-canvas[data-agent]').forEach(function(c) {
+      c._mx = e.clientX / window.innerWidth;
+      c._my = e.clientY / window.innerHeight;
+    });
+  });
 })();
 
 /* ══════════════════════════════════════════════════════
