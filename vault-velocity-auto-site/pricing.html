@@ -235,7 +235,7 @@ body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;o
         <li>1 active watchlist</li>
       </ul>
       <!-- DEREK: paste your PayPal.me link or PayPal button code here -->
-      <a href="#PASTE-PAYPAL-LINK-HERE" class="pay-btn pay-paypal" data-tier="basic" data-base-price="49" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
+      <a href="https://paypal.me/derekfranciaco1/49CAD" class="pay-btn pay-paypal" data-tier="basic" data-base-price="49" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
     </div>
 
     <!-- PREMIUM -->
@@ -255,7 +255,7 @@ body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;o
         <li>Unlimited watchlists</li>
       </ul>
       <!-- DEREK: paste your PayPal.me link or PayPal button code here -->
-      <a href="#PASTE-PAYPAL-LINK-HERE" class="pay-btn pay-paypal" data-tier="premium" data-base-price="119" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
+      <a href="https://paypal.me/derekfranciaco1/119CAD" class="pay-btn pay-paypal" data-tier="premium" data-base-price="119" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
     </div>
 
     <!-- FLEET -->
@@ -275,7 +275,7 @@ body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;o
         <li>Reduced commission rate</li>
       </ul>
       <!-- DEREK: paste your PayPal.me link or PayPal button code here -->
-      <a href="#PASTE-PAYPAL-LINK-HERE" class="pay-btn pay-paypal" data-tier="fleet" data-base-price="249" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
+      <a href="https://paypal.me/derekfranciaco1/249CAD" class="pay-btn pay-paypal" data-tier="fleet" data-base-price="249" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
     </div>
 
     <!-- DEALER -->
@@ -295,7 +295,7 @@ body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;o
         <li>Lowest commission rate</li>
       </ul>
       <!-- DEREK: paste your PayPal.me link or PayPal button code here -->
-      <a href="#PASTE-PAYPAL-LINK-HERE" class="pay-btn pay-paypal" data-tier="dealer" data-base-price="499" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
+      <a href="https://paypal.me/derekfranciaco1/499CAD" class="pay-btn pay-paypal" data-tier="dealer" data-base-price="499" target="_blank" rel="noopener">🅿️ Pay with PayPal</a>
     </div>
 
   </div>
@@ -390,12 +390,14 @@ function recalcPrices() {
     var originalEl = card.querySelector('.price-original');
     var amountEl = card.querySelector('.price-amount');
     var tagEl = card.querySelector('.price-discount-tag');
+    var payBtn = card.querySelector('.pay-paypal');
+    var finalAmount = base;
 
     if (totalDiscount > 0) {
-      var discounted = base * (1 - totalDiscount / 100);
+      finalAmount = base * (1 - totalDiscount / 100);
       originalEl.style.display = 'inline-block';
       originalEl.firstChild.textContent = '$' + base.toFixed(0);
-      amountEl.textContent = discounted.toFixed(2);
+      amountEl.textContent = finalAmount.toFixed(2);
       tagEl.style.display = 'block';
       tagEl.textContent = '-' + totalDiscount + '% applied';
     } else {
@@ -403,6 +405,10 @@ function recalcPrices() {
       amountEl.textContent = base.toFixed(0);
       tagEl.style.display = 'none';
       tagEl.textContent = '';
+    }
+
+    if (payBtn) {
+      payBtn.href = 'https://paypal.me/derekfranciaco1/' + finalAmount.toFixed(2) + 'CAD';
     }
   });
 }
