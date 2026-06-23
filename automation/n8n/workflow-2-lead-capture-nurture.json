@@ -1,0 +1,169 @@
+{
+  "name": "Workflow 2 - Lead Capture -> Nurture Sequence",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-capture",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Lead Form Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "REPLACE-AFTER-IMPORT-AUTO-GENERATED"
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Insert Lead (Supabase)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Thanks for reaching out",
+        "emailType": "html",
+        "message": "<p>Hi,</p><p>Thanks for your interest in {{ $json.company_interest }}. We received your inquiry and will be in touch shortly. In the meantime, feel free to reply with any questions.</p>",
+        "options": {}
+      },
+      "name": "Send Confirmation Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "credentials": {}
+    },
+    {
+      "parameters": { "amount": 1, "unit": "days" },
+      "name": "Wait 1 Day",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Insert Lead (Supabase)').item.json.email }}",
+        "subject": "A quick resource that might help",
+        "emailType": "html",
+        "message": "<p>Hi,</p><p>Here's a quick explainer on what we offer and how it works. Reply any time with questions.</p>",
+        "options": {}
+      },
+      "name": "Send Educational Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1120, 300],
+      "credentials": {}
+    },
+    {
+      "parameters": { "amount": 2, "unit": "days" },
+      "name": "Wait 2 More Days (= Day 3)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Insert Lead (Supabase)').item.json.email }}",
+        "subject": "Special offer for you",
+        "emailType": "html",
+        "message": "<p>Hi,</p><p>Ready to get started? Here's a limited-time offer. [Add pricing/PayPal link here.]</p>",
+        "options": {}
+      },
+      "name": "Send Offer Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1560, 300],
+      "credentials": {}
+    },
+    {
+      "parameters": { "amount": 4, "unit": "days" },
+      "name": "Wait 4 More Days (= Day 7)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1780, 300]
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "operation": "get",
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": { "conditions": [ { "keyName": "id", "condition": "eq", "keyValue": "={{ $('Insert Lead (Supabase)').item.json.id }}" } ] }
+      },
+      "name": "Check Lead Status",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [2000, 300],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [ { "leftValue": "={{ $json.status }}", "rightValue": "converted", "operator": { "type": "string", "operation": "notEquals" } } ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Still Not Converted?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [2220, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Insert Lead (Supabase)').item.json.email }}",
+        "subject": "Last call - anything we can help with?",
+        "emailType": "html",
+        "message": "<p>Hi,</p><p>Just checking in one last time. Let us know if you have questions or want to move forward.</p>",
+        "options": {}
+      },
+      "name": "Send Final Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [2440, 220],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "sendTo": "franciscoderek7@gmail.com",
+        "subject": "Lead needs personal follow-up: {{ $('Insert Lead (Supabase)').item.json.email }}",
+        "emailType": "html",
+        "message": "<p>This lead went through the full 7-day nurture sequence without converting. Source: {{ $('Insert Lead (Supabase)').item.json.source }}, Interest: {{ $('Insert Lead (Supabase)').item.json.company_interest }}.</p>",
+        "options": {}
+      },
+      "name": "Flag for Derek",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [2440, 380],
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "Lead Form Webhook": { "main": [[{ "node": "Insert Lead (Supabase)", "type": "main", "index": 0 }]] },
+    "Insert Lead (Supabase)": { "main": [[{ "node": "Send Confirmation Email", "type": "main", "index": 0 }]] },
+    "Send Confirmation Email": { "main": [[{ "node": "Wait 1 Day", "type": "main", "index": 0 }]] },
+    "Wait 1 Day": { "main": [[{ "node": "Send Educational Email", "type": "main", "index": 0 }]] },
+    "Send Educational Email": { "main": [[{ "node": "Wait 2 More Days (= Day 3)", "type": "main", "index": 0 }]] },
+    "Wait 2 More Days (= Day 3)": { "main": [[{ "node": "Send Offer Email", "type": "main", "index": 0 }]] },
+    "Send Offer Email": { "main": [[{ "node": "Wait 4 More Days (= Day 7)", "type": "main", "index": 0 }]] },
+    "Wait 4 More Days (= Day 7)": { "main": [[{ "node": "Check Lead Status", "type": "main", "index": 0 }]] },
+    "Check Lead Status": { "main": [[{ "node": "Still Not Converted?", "type": "main", "index": 0 }]] },
+    "Still Not Converted?": { "main": [
+      [
+        { "node": "Send Final Email", "type": "main", "index": 0 },
+        { "node": "Flag for Derek", "type": "main", "index": 0 }
+      ],
+      []
+    ] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}
