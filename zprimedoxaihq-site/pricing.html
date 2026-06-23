@@ -501,10 +501,13 @@
       var base = parseFloat(card.getAttribute('data-base-price'));
       var priceEl = card.querySelector('[data-price-display]');
       var savingsEl = card.querySelector('[data-savings-display]');
+      var payBtn = card.querySelector('.pay-paypal');
       if (!priceEl) return;
 
+      var finalAmount = base;
       if (total > 0) {
         var discounted = base * (1 - total / 100);
+        finalAmount = discounted;
         priceEl.innerHTML =
           '<span class="price-original">$' + formatPrice(base) + '</span>' +
           '$' + formatPrice(discounted) + '<span class="unit">/mo</span>';
@@ -516,6 +519,7 @@
         priceEl.innerHTML = '$' + formatPrice(base) + '<span class="unit">/mo</span>';
         if (savingsEl) { savingsEl.style.display = 'none'; savingsEl.textContent = ''; }
       }
+      if (payBtn) payBtn.href = 'https://paypal.me/derekfranciaco1/' + formatPrice(finalAmount);
     });
   }
 

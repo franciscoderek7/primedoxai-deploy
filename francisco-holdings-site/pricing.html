@@ -527,9 +527,12 @@ footer{
       var base = parseFloat(card.getAttribute('data-base-price'));
       var originalEl = card.querySelector('[data-original]');
       var finalEl = card.querySelector('[data-final]');
+      var payBtn = card.querySelector('.pay-paypal');
+      var finalAmount = base;
 
       if (totalDiscount > 0) {
         var discounted = base - (base * totalDiscount / 100);
+        finalAmount = discounted;
         originalEl.textContent = formatPrice(base);
         originalEl.classList.add('show');
         finalEl.textContent = formatPrice(discounted);
@@ -537,6 +540,7 @@ footer{
         originalEl.classList.remove('show');
         finalEl.textContent = formatPrice(base);
       }
+      if (payBtn) payBtn.href = 'https://paypal.me/derekfranciaco1/' + Math.round(finalAmount * 100) / 100;
     });
   }
 
