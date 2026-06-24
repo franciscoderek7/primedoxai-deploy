@@ -329,18 +329,27 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
   #minimap{bottom:60px}
 }
 
-/* ── ELEVATOR DOORS ─────────────────────── */
+/* ── ELEVATOR DOORS — brushed stainless steel ────── */
 #el-door-left, #el-door-right {
   position: fixed; top: 0; bottom: 0; width: 50.5%; z-index: 8000;
-  background-image: linear-gradient(180deg,rgba(5,5,10,.6) 0%,rgba(10,10,20,.45) 50%,rgba(5,5,10,.65) 100%), url('fh-lobby-elevator.jpg');
-  background-size: 100% 100%, 200% 100%;
-  background-repeat: no-repeat;
+  background-image:
+    repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0px, rgba(255,255,255,.05) 1px, transparent 1px, transparent 3px),
+    linear-gradient(100deg, #3a3d42 0%, #6b6f76 12%, #9a9ea6 24%, #c9cdd3 34%, #eef0f2 42%, #c9cdd3 50%, #9a9ea6 60%, #6b6f76 74%, #3a3d42 88%, #25262a 100%),
+    linear-gradient(180deg,rgba(5,5,10,.6) 0%,rgba(10,10,20,.45) 50%,rgba(5,5,10,.65) 100%), url('fh-lobby-elevator.jpg');
+  background-size: 100% 4px, 100% 100%, 100% 100%, 200% 100%;
+  background-repeat: repeat-y, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: overlay, normal, multiply, normal;
+  box-shadow: inset 0 0 60px rgba(0,0,0,.5);
   pointer-events: none; display: flex; align-items: center;
 }
-#el-door-left { left: 0; transform: translateX(-100%); border-right: 1px solid var(--gold); justify-content: flex-end; background-position: 0 0, left center; }
-#el-door-right { right: 0; transform: translateX(100%); border-left: 1px solid var(--gold); justify-content: flex-start; background-position: 0 0, right center; }
-.el-door-label { padding: 0 28px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 3px; opacity: 0.5; }
+#el-door-left { left: 0; transform: translateX(-100%); border-right: 2px solid var(--gold); justify-content: flex-end; background-position: 0 0, 0 0, 0 0, left center; box-shadow: inset -8px 0 24px rgba(0,0,0,.55), inset 0 0 60px rgba(0,0,0,.5); }
+#el-door-right { right: 0; transform: translateX(100%); border-left: 2px solid var(--gold); justify-content: flex-start; background-position: 0 0, 0 0, 0 0, right center; box-shadow: inset 8px 0 24px rgba(0,0,0,.55), inset 0 0 60px rgba(0,0,0,.5); }
+.el-door-label { padding: 0 28px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: #1a1a1a; letter-spacing: 3px; opacity: 0.65; text-shadow: 0 1px 0 rgba(255,255,255,.25); }
 #el-door-floor { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 8001; font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; color: var(--gold); letter-spacing: 4px; pointer-events: none; opacity: 0; text-shadow: 0 0 40px rgba(212,175,55,0.6); }
+
+/* ── DIGITAL FLOOR READOUT (LED-style) ───────────── */
+#el-readout{display:block;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-align:center;padding:6px 4px;border-bottom:1px solid var(--border-gold);flex-shrink:0;background:#000;color:#ff8a1f;text-shadow:0 0 6px rgba(255,138,31,.7),0 0 14px rgba(255,138,31,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#el-readout .rd-floor{color:var(--gold-light);text-shadow:0 0 6px rgba(212,175,55,.7)}
 
 /* ── CITY SKYLINE CANVAS ────────────────── */
 #city-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -487,6 +496,7 @@ img { max-width: 100%; height: auto; }
   <div id="el-shaft-flash"></div>
   <div id="el-logo" onclick="goToFloor(0)">FH<br>INC</div>
   <div id="el-current">LOBBY</div>
+  <div id="el-readout">Floor: 00 — Lobby</div>
   <div id="el-shaft">
     <button class="el-btn active" data-floor="0" onclick="goToFloor(0)">LOBBY</button>
   </div>
@@ -534,7 +544,7 @@ img { max-width: 100%; height: auto; }
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;max-width:1000px;margin:2.4rem auto 0">
         <div style="background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:16px 18px;flex:1;min-width:230px;max-width:320px;text-align:left">
           <div style="color:var(--gold);font-size:13px;margin-bottom:6px">★★★★★</div>
-          <div style="font-size:12px;color:var(--platinum-mid);line-height:1.6;margin-bottom:8px">"OmniaGuard caught a breach attempt our last vendor missed entirely. Worth every cent of the Warden tier."</div>
+          <div style="font-size:12px;color:var(--platinum-mid);line-height:1.6;margin-bottom:8px">"OmniGuard caught a breach attempt our last vendor missed entirely. Worth every cent of the Warden tier."</div>
           <div style="font-size:10px;color:var(--platinum-dark);font-family:'Orbitron',sans-serif;letter-spacing:.5px">— Enterprise Security Client</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:16px 18px;flex:1;min-width:230px;max-width:320px;text-align:left">
@@ -582,7 +592,7 @@ img { max-width: 100%; height: auto; }
           </div>
           <div class="wf-card">
             <div class="wf-num">#1 IN WORLD</div>
-            <div class="wf-claim"><strong>Empire-Integrated Cybersecurity</strong>First personal empire with its own dedicated AI cybersecurity company (OmniaGuard) protecting all 45 divisions</div>
+            <div class="wf-claim"><strong>Empire-Integrated Cybersecurity</strong>First personal empire with its own dedicated AI cybersecurity company (OmniGuard) protecting all 45 divisions</div>
           </div>
           <div class="wf-card">
             <div class="wf-num">#1 IN WORLD</div>
@@ -645,7 +655,7 @@ img { max-width: 100%; height: auto; }
             <div class="arch-icon-wrap">🏛️</div>
             <div class="arch-label">
               <div class="arch-name">45-DIVISION EMPIRE</div>
-              <div class="arch-desc">OmniaGuard · CCLDR · TechPetCage · CleanSwarm · VaultVelocity · Kiaros + 39 more</div>
+              <div class="arch-desc">OmniGuard · CCLDR · TechPetCage · CleanSwarm · VaultVelocity · Kiaros + 39 more</div>
             </div>
             <div class="arch-pill">LIVE</div>
           </div>
@@ -698,7 +708,7 @@ img { max-width: 100%; height: auto; }
         <div class="dir-grid" id="dir-grid"></div>
       </div>
     </div>
-    <div class="soulstack-badge" style="text-align:center;padding:16px"><span class="dot">●</span> SoulStack Observer · Agent Swarm Technologies · OmniaGuard Secured</div>
+    <div class="soulstack-badge" style="text-align:center;padding:16px"><span class="dot">●</span> SoulStack Observer · Agent Swarm Technologies · OmniGuard Secured</div>
   </section>
 
   <!-- FLOORS 1-45 injected by JS -->
@@ -716,7 +726,7 @@ img { max-width: 100%; height: auto; }
   <div class="footer-badges">
     <div class="fbadge"><span style="color:#22c55e">●</span> SoulStack Observer Active</div>
     <div class="fbadge"><span style="color:var(--gold)">●</span> Agent Swarm Technologies</div>
-    <div class="fbadge"><span style="color:var(--emerald-light)">●</span> OmniaGuard Secured</div>
+    <div class="fbadge"><span style="color:var(--emerald-light)">●</span> OmniGuard Secured</div>
   </div>
   <div class="footer-copy">© 2026 Francisco Holdings Inc. All Rights Reserved.<br>
   Payments via PayPal or Bitcoin · <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a><br>
@@ -884,12 +894,12 @@ window.STRIPE_PK = 'pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6N
    FLOOR DATA — ALL 45 DIVISIONS
 ══════════════════════════════════════════════════════ */
 var FLOORS = [
-  {n:1,name:'OmniaGuard',tag:'🛡️',sub:'14-Layer Enterprise AI Security',
+  {n:1,name:'OmniGuard',tag:'🛡️',sub:'14-Layer Enterprise AI Security',
    desc:'Autonomous AI threat detection, real-time response, and zero-trust architecture for enterprises that cannot afford a breach.',
    feats:['Real-time threat scanning','AI behavioral analysis','Zero-trust identity management','14-layer defense matrix','Executive risk dashboards','SOC 2 & HIPAA compliance','Incident response 4hr SLA','Autonomous countermeasures'],
    pricing:[{tier:'Sentinel',val:'$499/mo',desc:'Up to 50 endpoints · Monitoring + weekly reports',url:'mailto:omniaguard1@gmail.com?subject=Sentinel%20Inquiry',cls:'btn-emerald'},{tier:'Warden',val:'$2,499/mo',desc:'250 endpoints · Active defense · Daily briefings',url:'mailto:omniaguard1@gmail.com?subject=Warden%20Inquiry',cls:'btn-gold',feat:true},{tier:'Archon',val:'$9,999/mo',desc:'Unlimited endpoints · Full fortress · 24/7 SOC',url:'mailto:omniaguard1@gmail.com?subject=Archon%20Inquiry',cls:'btn-platinum'}],
    live:'https://omniaguard.com',liveLabel:'omniaguard.com →',contact:'omniaguard1@gmail.com',loopB:true,
-   boss:{title:'⚔ Secure the Empire',sub:'Deploy OmniaGuard 14-layer defense. Start with the Warden tier.',amount:2499,ach:'cyber_warrior'}},
+   boss:{title:'⚔ Secure the Empire',sub:'Deploy OmniGuard 14-layer defense. Start with the Warden tier.',amount:2499,ach:'cyber_warrior'}},
 
   {n:2,name:'BENO-X / Weedlaw',tag:'⚖️',sub:'Constitutional Defense Framework · 200+ Victories',
    desc:'The BENO-X Framework — 5-pillar constitutional defense: Breach identification, Evidence exclusion, Negotiation leverage, On-record defense, X-multiplier. 20+ years of Charter victories.',
@@ -1015,7 +1025,7 @@ var FLOORS = [
 /* Floor-tag mapping for role highlights & achievement triggers */
 var ROLE_HIGHLIGHT = {
   Advocate: [2,4,23,35],      // CCLDR / legal floors
-  Guardian: [1,7,44]          // OmniaGuard / security floors
+  Guardian: [1,7,44]          // OmniGuard / security floors
 };
 
 /* ══════════════════════════════════════════════════════
@@ -1024,7 +1034,7 @@ var ROLE_HIGHLIGHT = {
 var ACHIEVEMENTS = {
   'lobby_lurker': { name: 'Lobby Lurker', desc: 'Spent 5+ minutes in the lobby', coins: 50, icon: '🏛', trigger: 'time_in_lobby' },
   'first_ascent': { name: 'First Ascent', desc: 'Visited Floor 1', coins: 100, icon: '⬆️', trigger: 'floor_visit_1' },
-  'cyber_warrior': { name: 'Cyber Warrior', desc: 'Explored OmniaGuard floor', coins: 500, icon: '🛡', trigger: 'floor_visit_omniaguard' },
+  'cyber_warrior': { name: 'Cyber Warrior', desc: 'Explored OmniGuard floor', coins: 500, icon: '🛡', trigger: 'floor_visit_omniaguard' },
   'legal_legend': { name: 'Legal Legend', desc: 'Explored CCLDR floor', coins: 500, icon: '⚖', trigger: 'floor_visit_ccldr' },
   'ai_pioneer': { name: 'AI Pioneer', desc: 'Explored PrimeDox AI floor', coins: 300, icon: '🤖', trigger: 'floor_visit_primedox' },
   'empire_5': { name: 'Empire Builder', desc: 'Visited 5 different floors', coins: 2000, icon: '👑', trigger: 'floors_visited_5' },
@@ -1039,7 +1049,7 @@ var CHARACTERS = [
   {id:'entrepreneur',icon:'💼',name:'Entrepreneur',tagline:'Builds from scratch',bonus:'15% referral commission'},
   {id:'investor',icon:'💰',name:'Investor',tagline:'Capital multiplied',bonus:'Investor deck on all floors'},
   {id:'advocate',icon:'⚖',name:'Advocate',tagline:'Rights defended',bonus:'CCLDR / legal floors highlighted'},
-  {id:'guardian',icon:'🛡',name:'Guardian',tagline:'Security first',bonus:'OmniaGuard floors highlighted'}
+  {id:'guardian',icon:'🛡',name:'Guardian',tagline:'Security first',bonus:'OmniGuard floors highlighted'}
 ];
 
 /* ══════════════════════════════════════════════════════
@@ -1846,6 +1856,10 @@ function updateElevatorDisplay(n) {
   ELEVATOR_FLOOR = n;
   var label = n === 0 ? 'LOBBY' : 'F' + n;
   document.getElementById('el-current').textContent = label;
+  var companyName = n === 0 ? 'Lobby' : (FLOORS[n-1] ? FLOORS[n-1].name : 'Unassigned');
+  var floorNum = (n < 10 ? '0' : '') + n;
+  var rd = document.getElementById('el-readout');
+  if (rd) rd.innerHTML = '<span class="rd-floor">Floor: ' + floorNum + '</span> — ' + companyName;
   document.getElementById('mobile-floor-name').textContent = n === 0 ? 'LOBBY' : FLOORS[n-1] ? FLOORS[n-1].name : 'F'+n;
   var hf=document.getElementById('hud-floor'); if(hf) hf.textContent=n;
   document.querySelectorAll('.el-btn').forEach(function(b){ b.classList.remove('active'); });

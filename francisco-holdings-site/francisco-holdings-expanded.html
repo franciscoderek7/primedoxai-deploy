@@ -333,18 +333,27 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
   #minimap{bottom:60px}
 }
 
-/* ── ELEVATOR DOORS ─────────────────────── */
+/* ── ELEVATOR DOORS — brushed stainless steel ────── */
 #el-door-left, #el-door-right {
   position: fixed; top: 0; bottom: 0; width: 50.5%; z-index: 8000;
-  background-image: linear-gradient(180deg,rgba(5,5,10,.6) 0%,rgba(10,10,20,.45) 50%,rgba(5,5,10,.65) 100%), repeating-linear-gradient(115deg,rgba(20,20,24,.95) 0 18px,rgba(8,8,10,.95) 18px 26px,rgba(26,24,18,.4) 26px 28px), radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.18),transparent 65%);
-  background-size: 100% 100%, 200% 100%;
-  background-repeat: no-repeat;
+  background-image:
+    repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0px, rgba(255,255,255,.05) 1px, transparent 1px, transparent 3px),
+    linear-gradient(100deg, #3a3d42 0%, #6b6f76 12%, #9a9ea6 24%, #c9cdd3 34%, #eef0f2 42%, #c9cdd3 50%, #9a9ea6 60%, #6b6f76 74%, #3a3d42 88%, #25262a 100%),
+    linear-gradient(180deg,rgba(5,5,10,.6) 0%,rgba(10,10,20,.45) 50%,rgba(5,5,10,.65) 100%), radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.18),transparent 65%);
+  background-size: 100% 4px, 100% 100%, 100% 100%, 200% 100%;
+  background-repeat: repeat-y, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: overlay, normal, multiply, normal;
+  box-shadow: inset 0 0 60px rgba(0,0,0,.5);
   pointer-events: none; display: flex; align-items: center;
 }
-#el-door-left { left: 0; transform: translateX(-100%); border-right: 1px solid var(--gold); justify-content: flex-end; background-position: 0 0, left center; }
-#el-door-right { right: 0; transform: translateX(100%); border-left: 1px solid var(--gold); justify-content: flex-start; background-position: 0 0, right center; }
-.el-door-label { padding: 0 28px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 3px; opacity: 0.5; }
+#el-door-left { left: 0; transform: translateX(-100%); border-right: 2px solid var(--gold); justify-content: flex-end; background-position: 0 0, 0 0, 0 0, left center; box-shadow: inset -8px 0 24px rgba(0,0,0,.55), inset 0 0 60px rgba(0,0,0,.5); }
+#el-door-right { right: 0; transform: translateX(100%); border-left: 2px solid var(--gold); justify-content: flex-start; background-position: 0 0, 0 0, 0 0, right center; box-shadow: inset 8px 0 24px rgba(0,0,0,.55), inset 0 0 60px rgba(0,0,0,.5); }
+.el-door-label { padding: 0 28px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: #1a1a1a; letter-spacing: 3px; opacity: 0.65; text-shadow: 0 1px 0 rgba(255,255,255,.25); }
 #el-door-floor { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 8001; font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; color: var(--gold); letter-spacing: 4px; pointer-events: none; opacity: 0; text-shadow: 0 0 40px rgba(212,175,55,0.6); }
+
+/* ── DIGITAL FLOOR READOUT (LED-style) ───────────── */
+#el-readout{display:block;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-align:center;padding:6px 4px;border-bottom:1px solid var(--border-gold);flex-shrink:0;background:#000;color:#ff8a1f;text-shadow:0 0 6px rgba(255,138,31,.7),0 0 14px rgba(255,138,31,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#el-readout .rd-floor{color:var(--gold-light);text-shadow:0 0 6px rgba(212,175,55,.7)}
 
 /* ── CITY SKYLINE CANVAS ────────────────── */
 #city-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -491,6 +500,7 @@ img { max-width: 100%; height: auto; }
   <div id="el-shaft-flash"></div>
   <div id="el-logo" onclick="goToFloor(0)">FH<br>INC</div>
   <div id="el-current">LOBBY</div>
+  <div id="el-readout">Floor: 00 — Lobby</div>
   <div id="el-shaft">
     <button class="el-btn active" data-floor="0" onclick="goToFloor(0)">LOBBY</button>
   </div>
@@ -895,7 +905,7 @@ var FLOORS = [
    desc:'Autonomous AI threat detection, real-time response, and zero-trust architecture for enterprises that cannot afford a breach.',
    feats:['Real-time threat scanning','AI behavioral analysis','Zero-trust identity management','14-layer defense matrix','Executive risk dashboards','SOC 2 & HIPAA compliance','Incident response 4hr SLA','Autonomous countermeasures'],
    pricing:[{tier:'Sentinel',val:'$499/mo',desc:'Up to 50 endpoints · Monitoring + weekly reports',url:'mailto:omniaguard1@gmail.com?subject=Sentinel%20Inquiry',cls:'btn-emerald'},{tier:'Warden',val:'$2,499/mo',desc:'250 endpoints · Active defense · Daily briefings',url:'mailto:omniaguard1@gmail.com?subject=Warden%20Inquiry',cls:'btn-gold',feat:true},{tier:'Archon',val:'$9,999/mo',desc:'Unlimited endpoints · Full fortress · 24/7 SOC',url:'mailto:omniaguard1@gmail.com?subject=Archon%20Inquiry',cls:'btn-platinum'}],
-   live:'https://omni-guard.com',liveLabel:'omni-guard.com →',contact:'omniaguard1@gmail.com',loopB:true,
+   live:'https://omniaguard.com',liveLabel:'omniaguard.com →',contact:'omniaguard1@gmail.com',loopB:true,
    boss:{title:'⚔ Secure the Empire',sub:'Deploy OmniGuard 14-layer defense. Start with the Warden tier.',amount:2499,ach:'cyber_warrior'}},
 
   {n:2,name:'BENO-X / Weedlaw',tag:'⚖️',sub:'Constitutional Defense Framework · 200+ Victories',
@@ -1891,6 +1901,10 @@ function updateElevatorDisplay(n) {
   ELEVATOR_FLOOR = n;
   var label = n === 0 ? 'LOBBY' : 'F' + n;
   document.getElementById('el-current').textContent = label;
+  var companyName = n === 0 ? 'Lobby' : (FLOORS[n-1] ? FLOORS[n-1].name : 'Unassigned');
+  var floorNum = (n < 10 ? '0' : '') + n;
+  var rd = document.getElementById('el-readout');
+  if (rd) rd.innerHTML = '<span class="rd-floor">Floor: ' + floorNum + '</span> — ' + companyName;
   document.getElementById('mobile-floor-name').textContent = n === 0 ? 'LOBBY' : FLOORS[n-1] ? FLOORS[n-1].name : 'F'+n;
   var hf=document.getElementById('hud-floor'); if(hf) hf.textContent=n;
   document.querySelectorAll('.el-btn').forEach(function(b){ b.classList.remove('active'); });
