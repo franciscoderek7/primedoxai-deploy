@@ -1,0 +1,2576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="/manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Holdings Inc. — World's First 45-Division AI Empire | 392-Floor Phoenix Tower</title>
+<meta name="description" content="First human in history to build a 45+ company AI-first empire with integrated cybersecurity, agent swarm technology, and full automation. $2.4M ARR. 45 divisions across a 392-floor tower. One man. $100M+ Active Litigation. Phoenix Tower.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#D4AF37">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Francisco Holdings Inc.">
+<meta property="og:title" content="Phoenix Tower: Empire Builder — Francisco Holdings Inc.">
+<meta property="og:description" content="Explore Francisco Holdings Inc. as an interactive 392-floor empire. AI-First divisions, Enterprise Security, Document AI, Legal Services, Real Estate.">
+<meta property="og:url" content="https://franciscoholdingsinc.com/">
+<meta property="og:image" content="https://franciscoholdingsinc.com/fh-boardroom.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@franciscoholdings">
+<meta name="twitter:image" content="https://franciscoholdingsinc.com/fh-boardroom.webp">
+<link rel="canonical" href="https://franciscoholdingsinc.com/">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23000'/><text y='.9em' font-size='80' text-anchor='middle' x='50'>🏛</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --emerald:#0A5C36;--emerald-light:#1A8A50;--emerald-bright:#10B981;
+  --gold:#D4AF37;--gold-light:#F0CC60;
+  --platinum:#E5E4E2;--platinum-mid:#ABABAB;--platinum-dark:#787878;
+  --charcoal:#1A1A1A;--dark:#0A0A0A;--marble:#0A0A0A;--surface:#111118;--card:#17171F;
+  --border-gold:rgba(212,175,55,0.25);--border-em:rgba(10,92,54,0.5);
+  --el-w:72px;--hud-h:46px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--marble);color:var(--platinum);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+body.game-locked{overflow:hidden;height:100vh}
+
+/* ── GAME HUD ─────────────────────────── */
+#game-hud{position:fixed;top:0;left:0;right:0;height:var(--hud-h);background:linear-gradient(180deg,#0A0A0A,rgba(10,10,10,0.92));border-bottom:1px solid var(--border-gold);z-index:1500;display:flex;align-items:center;justify-content:space-between;padding:0 14px;backdrop-filter:blur(6px);font-family:'Orbitron',sans-serif}
+#game-hud .hud-left,#game-hud .hud-right{display:flex;align-items:center;gap:14px}
+.hud-chip{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--platinum-mid);white-space:nowrap}
+.hud-chip .hud-val{color:var(--gold-light)}
+#hud-coins-val{color:var(--gold);font-size:12px;transition:transform .25s}
+#hud-coins-val.bump{transform:scale(1.45);color:var(--gold-light)}
+.hud-role-badge{display:flex;align-items:center;gap:5px;padding:3px 10px;border:1px solid var(--border-gold);border-radius:20px;font-size:9px;color:var(--gold-light);background:rgba(212,175,55,0.08)}
+.hud-btn{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-size:11px;padding:5px 9px;border-radius:4px;cursor:pointer;font-family:'Orbitron',sans-serif;letter-spacing:.5px;transition:all .15s}
+.hud-btn:hover{border-color:var(--gold);color:var(--gold-light);background:rgba(212,175,55,0.08)}
+@media(max-width:768px){
+  .hud-chip.hud-hide-mobile{display:none}
+  #game-hud{padding:0 8px}
+  #game-hud .hud-left,#game-hud .hud-right{gap:8px}
+}
+body.game-ready{padding-top:var(--hud-h)}
+
+/* ── MINIMAP ──────────────────────────── */
+#minimap{position:fixed;right:14px;bottom:14px;width:120px;background:rgba(10,10,10,0.94);border:1px solid var(--border-gold);border-radius:8px;padding:10px;z-index:1400;display:none;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+#minimap.open{display:block}
+#minimap .mm-title{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:8px}
+#minimap .mm-tower{display:flex;flex-direction:column-reverse;gap:1px;max-height:300px;overflow-y:auto}
+#minimap .mm-tower::-webkit-scrollbar{width:3px}
+#minimap .mm-tower::-webkit-scrollbar-thumb{background:var(--emerald)}
+.mm-floor{height:5px;border-radius:1px;background:#2a2a30;cursor:pointer;position:relative;transition:background .2s}
+.mm-floor.explored{background:linear-gradient(90deg,var(--gold),var(--gold-light));box-shadow:0 0 4px rgba(212,175,55,.5)}
+.mm-floor.current{background:var(--emerald-bright);box-shadow:0 0 6px var(--emerald-bright)}
+.mm-floor:hover{outline:1px solid var(--gold)}
+.mm-lobby{height:7px;background:#1a1a22;border:1px solid var(--border-gold);border-radius:1px;cursor:pointer}
+.mm-lobby.current{background:var(--emerald-bright)}
+
+/* ── CINEMATIC OVERLAY ────────────────── */
+#cinematic{position:fixed;inset:0;background:radial-gradient(ellipse at center,#15100A 0%,#0A0A0A 70%);z-index:3000;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+#cinematic.show{display:flex}
+.cine-inner{position:relative;z-index:2}
+.cine-title{font-family:'Orbitron',sans-serif;font-size:clamp(2.6rem,11vw,8rem);font-weight:900;line-height:.95;letter-spacing:-2px;background:linear-gradient(135deg,#7a5a12 0%,var(--gold) 30%,var(--gold-light) 50%,var(--gold) 70%,#7a5a12 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(212,175,55,.45));margin-bottom:.4rem;animation:cineRise 1.4s cubic-bezier(.2,.8,.2,1)}
+.cine-sub{font-family:'Orbitron',sans-serif;font-size:clamp(0.9rem,3vw,1.6rem);letter-spacing:8px;color:var(--platinum-mid);text-transform:uppercase;margin-bottom:3rem;animation:cineFade 2s ease .6s both}
+.cine-press{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:4px;color:var(--gold-light);animation:cinePulse 1.5s ease-in-out infinite}
+.cine-begin-btn{margin-top:1.4rem;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0A0A0A;border:none;font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;letter-spacing:2px;padding:16px 44px;border-radius:6px;cursor:pointer;box-shadow:0 0 30px rgba(212,175,55,.4);transition:transform .15s}
+.cine-begin-btn:hover{transform:scale(1.05)}
+.cine-skip{position:absolute;top:20px;right:24px;background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-size:13px;padding:8px 14px;border-radius:4px;cursor:pointer;z-index:3;font-family:'Orbitron',sans-serif;letter-spacing:1px}
+.cine-skip:hover{color:var(--gold-light);border-color:var(--gold)}
+@keyframes cineRise{0%{opacity:0;transform:translateY(40px) scale(.92)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes cineFade{0%{opacity:0}100%{opacity:1}}
+@keyframes cinePulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ── CHARACTER SELECT ─────────────────── */
+#char-select{position:fixed;inset:0;background:radial-gradient(ellipse at top,#15100A 0%,#0A0A0A 70%);z-index:2900;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 5%;overflow-y:auto}
+#char-select.show{display:flex}
+.cs-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,4vw,2.4rem);font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px;margin-bottom:.3rem;text-align:center}
+.cs-sub{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:3px;color:var(--platinum-mid);text-transform:uppercase;margin-bottom:2.4rem;text-align:center}
+.cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:1000px;width:100%}
+.cs-card{background:linear-gradient(180deg,var(--card),#0d0d14);border:1px solid var(--border-gold);border-radius:10px;padding:22px 18px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.cs-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(212,175,55,.18)}
+.cs-card.selected{border-color:var(--emerald-bright);box-shadow:0 0 30px rgba(16,185,129,.3)}
+.cs-icon{font-size:2.6rem;margin-bottom:10px}
+.cs-name{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:var(--gold-light);letter-spacing:1px;margin-bottom:6px}
+.cs-tagline{font-size:11px;color:var(--platinum-mid);font-style:italic;margin-bottom:10px;min-height:30px}
+.cs-bonus{font-size:10px;color:var(--emerald-bright);background:rgba(16,185,129,.1);border:1px solid var(--border-em);border-radius:4px;padding:6px 8px}
+.cs-confirm{margin-top:2rem;background:linear-gradient(135deg,var(--emerald),var(--emerald-bright));color:#0A0A0A;border:none;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:2px;padding:14px 40px;border-radius:6px;cursor:pointer;opacity:.4;pointer-events:none;transition:opacity .2s}
+.cs-confirm.ready{opacity:1;pointer-events:auto;box-shadow:0 0 24px rgba(16,185,129,.4)}
+
+/* ── ACHIEVEMENT POPUP ────────────────── */
+#ach-stack{position:fixed;top:calc(var(--hud-h) + 12px);right:14px;z-index:2200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.ach-card{background:linear-gradient(135deg,#1a160a,#0A0A0A);border:1px solid var(--gold);border-radius:8px;padding:12px 16px;min-width:280px;box-shadow:0 0 40px rgba(212,175,55,.35);transform:translateX(360px);opacity:0;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s}
+.ach-card.in{transform:translateX(0);opacity:1}
+.ach-head{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.ach-body{display:flex;align-items:center;gap:12px}
+.ach-icon{font-size:2rem}
+.ach-info{flex:1}
+.ach-aname{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--platinum)}
+.ach-adesc{font-size:10px;color:var(--platinum-mid)}
+.ach-coins{font-family:'Orbitron',sans-serif;font-size:12px;color:var(--gold-light);font-weight:700;white-space:nowrap}
+
+/* ── GAME / PAUSE MENU ────────────────── */
+#game-menu{position:fixed;inset:0;background:rgba(10,10,10,.92);z-index:2600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+#game-menu.show{display:flex}
+.gm-box{background:linear-gradient(180deg,var(--surface),#0A0A0A);border:1px solid var(--gold);border-radius:12px;padding:36px 32px;max-width:380px;width:90%;text-align:center;box-shadow:0 0 80px rgba(212,175,55,.25)}
+.gm-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:var(--gold-light);letter-spacing:3px;margin-bottom:22px}
+.gm-btn{display:block;width:100%;background:var(--card);border:1px solid var(--border-gold);color:var(--platinum);font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;padding:13px;border-radius:6px;cursor:pointer;margin-bottom:10px;transition:all .15s}
+.gm-btn:hover{border-color:var(--gold);background:rgba(212,175,55,.1);color:var(--gold-light)}
+.gm-btn.danger:hover{border-color:#9b3944;color:#d46}
+
+/* ── ACHIEVEMENTS PANEL ───────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,10,.88);z-index:2700;align-items:center;justify-content:center}
+.modal-overlay.open,.modal-overlay:not(.hidden){display:flex}
+.modal-overlay.hidden{display:none!important}
+.modal-box{background:var(--surface);border:1px solid var(--border-gold);border-radius:10px;padding:32px;max-width:480px;width:90%;position:relative;max-height:86vh;overflow-y:auto}
+.modal-box h3{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--gold-light);margin-bottom:16px;letter-spacing:1px}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--platinum-mid);font-size:18px;cursor:pointer;padding:4px 8px}
+.ach-list-item{display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--border-gold);border-radius:6px;margin-bottom:8px;background:var(--card)}
+.ach-list-item.locked{opacity:.4;filter:grayscale(1)}
+.ach-list-item.unlocked{border-color:var(--gold)}
+.ach-li-icon{font-size:1.6rem}
+.ach-li-info{flex:1}
+.ach-li-name{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--platinum);font-weight:700}
+.ach-li-desc{font-size:10px;color:var(--platinum-mid)}
+.ach-li-coins{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--gold-light)}
+.char-info-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:14px;margin-bottom:14px}
+.char-info-row .ci-icon{font-size:2.4rem}
+
+/* ── HIDDEN COIN ──────────────────────── */
+.hidden-coin{position:absolute;width:22px;height:22px;cursor:pointer;z-index:50;border-radius:50%;background:radial-gradient(circle,rgba(240,204,96,.9),rgba(212,175,55,.2) 60%,transparent 75%);animation:coinTwinkle 2.2s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:11px}
+.hidden-coin.found{display:none}
+@keyframes coinTwinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.9;transform:scale(1.1)}}
+
+/* ── BOSS GATE ────────────────────────── */
+.boss-gate{margin-top:1.6rem;background:linear-gradient(135deg,#15100A,#0A0A0A);border:1px solid var(--gold);border-radius:10px;padding:24px;text-align:center;box-shadow:0 0 50px rgba(212,175,55,.15);position:relative;overflow:hidden}
+.boss-gate::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(212,175,55,.12),transparent 60%);pointer-events:none}
+.boss-gate.cleared{border-color:var(--emerald-bright)}
+.bg-title{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:var(--gold-light);letter-spacing:2px;margin-bottom:6px;position:relative}
+.bg-sub{font-size:12px;color:var(--platinum-mid);margin-bottom:16px;position:relative}
+.bg-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.bg-pay{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0A0A0A;border:none;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;letter-spacing:1px;padding:13px 26px;border-radius:6px;cursor:pointer;text-decoration:none;display:inline-block}
+.bg-skip{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:1px;padding:13px 22px;border-radius:6px;cursor:pointer}
+.bg-skip:hover{color:var(--gold-light);border-color:var(--gold)}
+.bg-cleared-msg{display:none;color:var(--emerald-bright);font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1px;margin-top:10px}
+.boss-gate.cleared .bg-cleared-msg{display:block}
+.bg-stripe-note{font-size:9px;color:var(--platinum-dark);margin-top:12px;position:relative}
+
+/* ── ELEVATOR SIDEBAR ─────────────────── */
+#elevator{position:fixed;top:var(--hud-h);left:0;bottom:0;width:var(--el-w);background:#08080E;border-right:1px solid var(--border-gold);z-index:900;display:flex;flex-direction:column;overflow:hidden}
+#el-logo{padding:14px 0;text-align:center;border-bottom:1px solid var(--border-gold);flex-shrink:0;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;cursor:pointer}
+#el-current{display:block;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:var(--platinum-mid);letter-spacing:1px;text-align:center;padding:4px 0;border-bottom:1px solid var(--border-gold);flex-shrink:0}
+#el-shaft{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding:4px 4px}
+#el-shaft::-webkit-scrollbar{width:3px}
+#el-shaft::-webkit-scrollbar-thumb{background:var(--emerald);border-radius:2px}
+.el-btn{background:none;border:none;width:100%;padding:5px 4px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:0.5px;color:var(--platinum-dark);border-radius:3px;transition:all .15s;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
+.el-btn:hover{background:rgba(212,175,55,0.12);color:var(--gold-light)}
+.el-btn.active{background:var(--gold);color:var(--dark)}
+.el-btn.visited::after{content:'✓';position:absolute;right:3px;top:3px;font-size:6px;color:var(--emerald-bright)}
+.el-btn.highlight-role{box-shadow:inset 0 0 0 1px var(--emerald-bright)}
+#el-arrows{flex-shrink:0;border-top:1px solid var(--border-gold);display:flex;gap:0}
+#el-arrows button{flex:1;background:none;border:none;color:var(--platinum-mid);font-size:14px;padding:10px 0;cursor:pointer;transition:color .15s}
+#el-arrows button:hover{color:var(--gold)}
+#el-shaft-flash{position:absolute;inset:0;background:var(--gold);opacity:0;pointer-events:none;z-index:1}
+
+/* ── MOBILE DOCK ──────────────────────── */
+#mobile-dock{display:none;position:fixed;bottom:0;left:0;right:0;height:52px;background:#08080E;border-top:1px solid var(--border-gold);z-index:900;align-items:center;justify-content:space-between;padding:0 12px}
+#mobile-dock button{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer}
+#mobile-floor-name{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;color:var(--gold-light);letter-spacing:1px}
+#floor-sheet{display:none;position:fixed;inset:0;background:rgba(10,10,10,0.95);z-index:950;overflow-y:auto;padding:20px}
+#floor-sheet.open{display:block}
+.fsheet-close{float:right;background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);padding:6px 10px;border-radius:4px;cursor:pointer;margin-bottom:12px}
+.fsheet-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;clear:both}
+@media(max-width:380px){.fsheet-grid{grid-template-columns:repeat(4,1fr)}}
+.fsheet-btn{background:var(--card);border:1px solid var(--border-gold);color:var(--platinum-mid);padding:8px 4px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;cursor:pointer;text-align:center;transition:all .15s}
+.fsheet-btn:hover,.fsheet-btn.active{background:var(--gold);color:var(--dark);border-color:var(--gold)}
+
+/* ── MAIN CONTENT AREA ────────────────── */
+#main{margin-left:var(--el-w);min-height:100vh}
+
+/* ── LOBBY ────────────────────────────── */
+#floor-0{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 5% 60px;overflow:hidden;background-image:radial-gradient(ellipse at 50% 0%,rgba(40,32,8,.35) 0%,transparent 60%),linear-gradient(180deg,rgba(5,5,10,.55) 0%,rgba(8,8,16,.78) 55%,rgba(5,5,10,.94) 100%);background-size:cover;background-position:center top;background-repeat:no-repeat}
+.chandelier{position:absolute;top:18px;left:50%;width:140px;height:90px;transform:translateX(-50%);z-index:1;pointer-events:none;opacity:.85}
+.chandelier::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(212,175,55,.95) 0 2px,transparent 3px);background-size:18px 18px;background-position:0 0,9px 14px,18px 0,27px 14px,36px 0,45px 14px,54px 0,63px 14px,72px 0,81px 14px,90px 0,99px 14px,108px 0,117px 14px,126px 0,135px 14px;filter:drop-shadow(0 0 6px rgba(212,175,55,.8))}
+.chandelier::after{content:'';position:absolute;top:30px;left:50%;width:2px;height:60px;background:linear-gradient(180deg,rgba(212,175,55,.7),transparent);transform:translateX(-50%)}
+.lobby-content{position:relative;z-index:1}
+.lobby-monogram{font-family:'Orbitron',sans-serif;font-size:clamp(2.5rem,8vw,6rem);font-weight:900;line-height:1;letter-spacing:-2px;background:linear-gradient(135deg,var(--platinum-mid) 0%,var(--gold) 35%,var(--gold-light) 50%,var(--gold) 65%,var(--platinum-mid) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
+.lobby-sub{font-family:'Orbitron',sans-serif;font-size:clamp(0.875rem,1.6vw,1.5rem);letter-spacing:4px;color:var(--platinum-mid);text-transform:uppercase;margin-bottom:3rem}
+.lobby-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.stat-item{text-align:center}
+.stat-num{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:9px;letter-spacing:2px;color:var(--platinum-dark);text-transform:uppercase;margin-top:2px}
+.lobby-cta{display:inline-block;background:linear-gradient(135deg,var(--emerald),var(--emerald-light));color:var(--gold-light);font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:14px 32px;border-radius:4px;text-decoration:none;margin-bottom:3rem;transition:opacity .2s;cursor:pointer}
+.lobby-cta:hover{opacity:.85}
+
+/* ── DIRECTORY BOARD ─────────────────── */
+.dir-board{width:100%;max-width:900px;background:rgba(17,17,24,0.9);border:1px solid var(--border-gold);border-radius:8px;padding:20px;margin:0 auto 2rem}
+.dir-board h3{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:14px;text-align:center}
+.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:4px}
+.dir-plaque{background:var(--card);border:1px solid var(--border-gold);border-radius:3px;padding:5px 6px;cursor:pointer;transition:all .15s;text-align:left}
+.dir-plaque:hover{border-color:var(--gold);background:rgba(212,175,55,0.08)}
+.dir-num{font-family:'Orbitron',sans-serif;font-size:8px;color:var(--gold);display:block}
+.dir-name{font-size:9px;color:var(--platinum-mid);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── ARR CHART ────────────────────────── */
+.arr-section{width:100%;max-width:700px;margin:0 auto 2rem;background:rgba(17,17,24,0.9);border:1px solid var(--border-gold);border-radius:8px;padding:20px}
+.arr-title{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:14px}
+.arr-bars{display:flex;align-items:flex-end;gap:8px;height:100px;justify-content:center}
+.arr-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.arr-bar{width:100%;border-radius:3px 3px 0 0;transition:height 1.2s cubic-bezier(.4,0,.2,1)}
+.arr-bar.historical{background:linear-gradient(180deg,var(--gold-light),var(--gold))}
+.arr-bar.projected{background:linear-gradient(180deg,var(--emerald-bright),var(--emerald));border:1px dashed var(--emerald-bright);border-bottom:none}
+.arr-bar-label{font-size:8px;color:var(--platinum-dark);text-align:center;white-space:nowrap}
+.arr-bar-val{font-family:'Orbitron',sans-serif;font-size:8px;color:var(--gold-light);text-align:center}
+.arr-legend{display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:8px;color:var(--platinum-dark)}
+.arr-legend span{display:flex;align-items:center;gap:4px}
+.arr-dot{width:8px;height:8px;border-radius:1px;display:inline-block}
+
+/* ── AFFILIATE BANNER ─────────────────── */
+.aff-banner{background:linear-gradient(90deg,var(--emerald),var(--emerald-light));padding:10px 20px;text-align:center;font-size:12px;color:var(--gold-light);font-weight:600}
+.aff-banner a{color:var(--gold-light);font-weight:700;text-decoration:underline}
+
+/* ── PAYMENT NOTICE ──────────────────── */
+.pay-notice{background:rgba(212,175,55,0.08);border:1px solid var(--border-gold);border-radius:4px;padding:8px 12px;font-size:11px;color:var(--platinum-mid);margin-bottom:14px}
+.pay-notice strong{color:var(--gold-light)}
+
+/* ── FLOOR SECTIONS ──────────────────── */
+.floor-section{min-height:100vh;border-top:1px solid var(--border-gold);padding:0;display:flex;flex-direction:column;position:relative;background-repeat:no-repeat;background-size:cover}
+.floor-inner{flex:1;padding:60px 5% 40px;max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1}
+.floor-swarm-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
+.floor-starfield-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.og-planet{position:absolute;top:8%;right:6%;width:120px;height:120px;border-radius:50%;z-index:0;pointer-events:none;
+  background:radial-gradient(circle at 35% 32%,#ffffff,#00d4ff 38%,#0a3a55 78%,#021018 100%);
+  box-shadow:0 0 40px rgba(0,212,255,.45),0 0 90px rgba(255,0,255,.18);
+  animation:ogPlanetSpin 40s linear infinite,ogPlanetPulse 4s ease-in-out infinite}
+.og-planet::before{content:'';position:absolute;left:-35%;top:42%;width:170%;height:14px;border-radius:50%;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,.55),rgba(255,255,255,.7),rgba(255,0,255,.45),transparent);
+  transform:rotate(-18deg);box-shadow:0 0 14px rgba(0,212,255,.4)}
+@keyframes ogPlanetSpin{from{background-position:0 0}to{background-position:120px 0}}
+@keyframes ogPlanetPulse{0%,100%{box-shadow:0 0 40px rgba(0,212,255,.45),0 0 90px rgba(255,0,255,.18)}50%{box-shadow:0 0 60px rgba(0,212,255,.7),0 0 120px rgba(255,0,255,.3)}}
+@media (max-width:680px){.og-planet{width:70px;height:70px;top:4%;right:4%}}
+.floor-label{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:4px;color:var(--platinum-dark);text-transform:uppercase;margin-bottom:10px}
+.floor-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,3.5vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:.6rem;background:linear-gradient(135deg,var(--platinum-mid) 0%,var(--gold) 40%,var(--gold-light) 55%,var(--gold) 70%,var(--platinum-mid) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.floor-sub{color:var(--platinum-mid);font-size:1rem;margin-bottom:1.8rem;max-width:650px}
+.floor-features{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:1.8rem}
+.feat-chip{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--border-em);border-radius:8px;padding:7px 10px;font-size:11px;color:var(--platinum)}
+.floor-pricing{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:1.8rem}
+.price-card{position:relative;background:rgba(23,23,31,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-gold);border-radius:14px;padding:18px 20px;min-width:200px;flex:1;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.price-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,175,55,.15)}
+.price-card.featured{border-color:var(--gold)}
+.price-badge{position:absolute;top:-10px;right:14px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--dark);font-family:'Orbitron',sans-serif;font-size:8px;font-weight:900;letter-spacing:1px;padding:4px 9px;border-radius:10px;box-shadow:0 2px 8px rgba(212,175,55,.4)}
+.guarantee-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,.08);border:1px solid var(--border-em);border-radius:20px;padding:6px 14px;font-size:10px;color:var(--emerald-light);margin-bottom:14px}
+.billing-toggle-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:11px;color:var(--platinum-mid);font-family:'Orbitron',sans-serif;letter-spacing:.5px}
+.billing-toggle{position:relative;width:42px;height:22px;background:var(--card);border:1px solid var(--border-gold);border-radius:11px;cursor:pointer;flex-shrink:0}
+.billing-toggle .knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--gold);transition:left .2s}
+.billing-toggle.on .knob{left:22px;background:var(--emerald-bright)}
+.billing-save{color:var(--emerald-light);font-weight:700}
+.price-tier{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:4px}
+.price-val{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;color:var(--platinum);margin-bottom:4px}
+.price-desc{font-size:11px;color:var(--platinum-dark);margin-bottom:12px}
+.price-btn{display:block;text-align:center;padding:8px;border-radius:4px;font-size:11px;font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:1px;text-decoration:none;transition:opacity .2s}
+.price-btn:hover{opacity:.85}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--dark)}
+.btn-emerald{background:linear-gradient(135deg,var(--emerald),var(--emerald-light));color:var(--gold-light)}
+.btn-platinum{background:linear-gradient(135deg,var(--platinum-dark),var(--platinum-mid));color:var(--dark)}
+.btn-stripe{background:linear-gradient(135deg,#8B0000,#A0002A);color:#fff;border:none;padding:10px 16px;border-radius:4px;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer;transition:opacity .2s;font-family:'Orbitron',sans-serif;display:block;text-align:center;width:100%;margin-top:6px;text-decoration:none}
+.btn-stripe:hover{opacity:.85}
+.floor-links{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.2rem}
+.floor-links a{padding:10px 18px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-decoration:none;transition:opacity .2s}
+.floor-links a:hover{opacity:.85}
+.loop-b-notice{font-size:10px;color:var(--platinum-dark);font-style:italic;margin-bottom:12px}
+.coming-soon-band{background:linear-gradient(90deg,rgba(212,175,55,0.08),rgba(212,175,55,0.15),rgba(212,175,55,0.08));border:1px solid var(--border-gold);border-radius:4px;padding:10px 14px;font-size:11px;color:var(--gold-light);margin-bottom:1.2rem;text-align:center;font-family:'Orbitron',sans-serif;letter-spacing:1.5px}
+.reserved-band.unlocked{background:linear-gradient(90deg,rgba(16,185,129,0.08),rgba(16,185,129,0.18),rgba(16,185,129,0.08))!important;border-color:rgba(16,185,129,0.4)!important;color:#10B981!important}
+.soulstack-badge{font-size:9px;color:var(--platinum-dark);letter-spacing:.5px;padding-top:12px;border-top:1px solid rgba(212,175,55,0.1)}
+.soulstack-badge .dot{color:#22c55e}
+.investor-deck{background:rgba(16,185,129,.06);border:1px solid var(--border-em);border-radius:6px;padding:12px 14px;margin-bottom:1.4rem;font-size:11px;color:var(--platinum-mid);display:none}
+.investor-deck.show{display:block}
+.investor-deck strong{color:var(--emerald-bright);font-family:'Orbitron',sans-serif;letter-spacing:1px;display:block;margin-bottom:4px;font-size:10px}
+.floor-section.role-highlight .floor-title{filter:drop-shadow(0 0 12px rgba(16,185,129,.35))}
+
+/* ── FOOTER ───────────────────────────── */
+footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);padding:32px 5%;text-align:center}
+.footer-badges{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.fbadge{font-size:9px;color:var(--platinum-dark);letter-spacing:1px;display:flex;align-items:center;gap:4px}
+.footer-copy{font-size:10px;color:var(--platinum-dark);margin-top:6px}
+.footer-copy a{color:var(--platinum-dark)}
+
+/* ── MODALS (checkout/dynasty) ────────── */
+.modal-input{width:100%;background:var(--card);border:1px solid var(--border-gold);border-radius:4px;color:var(--platinum);font-size:13px;padding:10px 12px;outline:none;margin-bottom:8px}
+.modal-input:focus{border-color:var(--gold)}
+.modal-btn{display:block;width:100%;padding:12px;border:none;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;cursor:pointer;margin-top:8px;transition:opacity .2s}
+.modal-btn:hover{opacity:.85}
+.ref-code-msg{font-size:11px;min-height:16px;margin-bottom:8px}
+.ref-code-msg.success{color:#22c55e}
+.ref-code-msg.error{color:#ef4444}
+.ref-savings-badge{display:none;background:rgba(26,138,80,.2);border:1px solid var(--border-em);border-radius:3px;padding:3px 8px;font-size:10px;color:var(--emerald-light);margin-bottom:8px}
+.ref-your-code-wrap{background:var(--card);border:1px solid var(--border-gold);border-radius:4px;padding:10px 12px;margin-top:12px;display:flex;align-items:center;justify-content:space-between}
+.ref-copy-btn{background:none;border:1px solid var(--border-gold);color:var(--platinum-mid);font-size:10px;padding:4px 8px;border-radius:3px;cursor:pointer}
+.btc-line{font-size:10px;color:var(--platinum-dark);word-break:break-all;margin-top:8px}
+.btc-line strong{color:var(--gold-light)}
+
+/* ── DYNASTY MODAL ───────────────────── */
+#dynasty-modal{display:none}
+#dynasty-modal.open{display:flex}
+.dynasty-box{background:var(--dark);border:2px solid var(--gold);border-radius:12px;padding:40px;max-width:500px;width:90%;text-align:center;box-shadow:0 0 80px rgba(212,175,55,.3)}
+.dynasty-title{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-bottom:12px}
+.dynasty-body{color:var(--platinum-mid);font-size:13px;line-height:1.7;margin-bottom:24px}
+
+/* ── RESPONSIVE ──────────────────────── */
+@media(max-width:768px){
+  #elevator{display:none}
+  #mobile-dock{display:flex}
+  #main{margin-left:0;padding-bottom:60px}
+  .lobby-stats{gap:1.2rem}
+  .stat-num{font-size:1.4rem}
+  .floor-pricing{flex-direction:column}
+  .price-card{min-width:unset}
+  #minimap{bottom:60px}
+}
+
+/* ── ELEVATOR DOORS ─────────────────────── */
+#el-door-left, #el-door-right {
+  position: fixed; top: 0; bottom: 0; width: 50.5%; z-index: 8000;
+  background-image: linear-gradient(180deg,rgba(5,5,10,.6) 0%,rgba(10,10,20,.45) 50%,rgba(5,5,10,.65) 100%), repeating-linear-gradient(115deg,rgba(20,20,24,.95) 0 18px,rgba(8,8,10,.95) 18px 26px,rgba(26,24,18,.4) 26px 28px), radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.18),transparent 65%);
+  background-size: 100% 100%, 200% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none; display: flex; align-items: center;
+}
+#el-door-left { left: 0; transform: translateX(-100%); border-right: 1px solid var(--gold); justify-content: flex-end; background-position: 0 0, left center; }
+#el-door-right { right: 0; transform: translateX(100%); border-left: 1px solid var(--gold); justify-content: flex-start; background-position: 0 0, right center; }
+.el-door-label { padding: 0 28px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 3px; opacity: 0.5; }
+#el-door-floor { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 8001; font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; color: var(--gold); letter-spacing: 4px; pointer-events: none; opacity: 0; text-shadow: 0 0 40px rgba(212,175,55,0.6); }
+
+/* ── CITY SKYLINE CANVAS ────────────────── */
+#city-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ── CONCIERGE DESK ─────────────────────── */
+.concierge-desk { display: flex; align-items: flex-start; gap: 20px; background: linear-gradient(135deg,rgba(212,175,55,0.07),rgba(16,185,129,0.04)); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 24px; margin: 2rem auto; max-width: 700px; text-align: left; }
+.cd-avatar { font-size: 3rem; flex-shrink: 0; }
+.cd-name { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 2px; margin-bottom: 4px; }
+.cd-greeting { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 14px; line-height: 1.6; }
+.cd-routes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.cd-btn { border: none; border-radius: 6px; font-size: 11px; font-weight: 700; padding: 7px 13px; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 0.5px; transition: opacity 0.2s; }
+.cd-btn:hover { opacity: 0.8; }
+.cd-btn-sec { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
+.cd-btn-gold { background: var(--gold); color: #111; }
+.cd-query-row { display: flex; gap: 8px; }
+.cd-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.2); border-radius: 6px; padding: 9px 13px; color: #fff; font-size: 13px; outline: none; }
+.cd-input:focus { border-color: var(--gold); }
+.cd-send { background: var(--gold); color: #111; border: none; padding: 9px 16px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+@media (max-width: 600px) { .concierge-desk { flex-direction: column; } .cd-routes { gap: 6px; } .cd-btn { font-size: 10px; padding: 6px 10px; } }
+@media (max-width: 480px) {
+  .cd-query-row { flex-wrap: wrap; }
+  .cd-input, .cd-send { min-height: 44px; }
+  .cd-send { width: 100%; justify-content: center; }
+  .floor-cta a, .floor-cta button { min-height: 44px; }
+}
+a, button, [role="button"] { min-height: 44px; }
+img { max-width: 100%; height: auto; }
+/* ── WORLD FIRSTS ──────────────────────────────────────────────── */
+.wf-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.5);border-radius:30px;padding:7px 20px;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold-light);margin-bottom:1.2rem;animation:wfPulse 3s ease-in-out infinite}
+@keyframes wfPulse{0%,100%{box-shadow:0 0 8px rgba(212,175,55,.25)}50%{box-shadow:0 0 24px rgba(212,175,55,.55),0 0 40px rgba(212,175,55,.2)}}
+.lobby-monogram{font-family:'Orbitron',sans-serif;font-size:clamp(2.4rem,8vw,6rem);font-weight:900;line-height:.95;letter-spacing:-2px;background:linear-gradient(135deg,#7a5a12 0%,var(--gold) 30%,var(--gold-light) 55%,var(--gold) 70%,#7a5a12 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(212,175,55,.35));margin-bottom:.6rem}
+.lobby-sub{font-family:'Orbitron',sans-serif;font-size:clamp(9px,1.5vw,12px);letter-spacing:3px;color:var(--platinum-mid);margin-bottom:2.2rem}
+.lobby-stats{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap;margin-bottom:2rem}
+.stat-item{text-align:center}
+.stat-num{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;color:var(--gold);line-height:1}
+.stat-label{font-size:9px;letter-spacing:2px;color:var(--platinum-mid);margin-top:4px}
+.lobby-cta{display:inline-block;margin-top:.5rem;padding:14px 36px;background:linear-gradient(135deg,var(--emerald),var(--emerald-bright));color:#0A0A0A;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:2px;border-radius:6px;text-decoration:none;box-shadow:0 0 24px rgba(16,185,129,.35);transition:transform .15s}
+.lobby-cta:hover{transform:scale(1.04)}
+/* ── LITIGATION TRACKER ──────────────────── */
+.lit-tracker{background:linear-gradient(135deg,rgba(204,34,34,.08),rgba(212,175,55,.05));border:1px solid rgba(204,34,34,.3);border-radius:10px;padding:20px 28px;max-width:720px;margin:2.4rem auto 0;text-align:center;}
+.lit-badge{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;color:#FF6666;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.lit-cases{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
+.lit-case{background:rgba(0,0,0,.3);border:1px solid rgba(204,34,34,.2);border-radius:6px;padding:12px 18px;text-align:center;min-width:160px;}
+.lit-case-name{font-family:'Orbitron',sans-serif;font-size:9px;color:var(--platinum-mid);letter-spacing:1px;margin-bottom:4px;}
+.lit-case-val{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;color:#FF6666;line-height:1;}
+.lit-case-type{font-size:10px;color:var(--platinum-dark);margin-top:4px;}
+.lit-cta{display:inline-block;margin-top:4px;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;color:var(--gold);text-decoration:none;border:1px solid rgba(212,175,55,.3);padding:8px 20px;border-radius:4px;transition:border-color .2s;}
+.lit-cta:hover{border-color:var(--gold);}
+@media(max-width:600px){.lit-cases{flex-direction:column;align-items:center;}.lit-case{min-width:200px;}}
+/* WORLD FIRSTS GRID */
+.wf-section{max-width:900px;margin:2.4rem auto 0;padding:0 20px}
+.wf-section-title{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;color:var(--platinum-mid);text-align:center;margin-bottom:1.2rem}
+.wf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;text-align:left}
+.wf-card{background:linear-gradient(135deg,rgba(212,175,55,.05),rgba(10,0,0,.3));border:1px solid rgba(212,175,55,.18);border-left:3px solid var(--gold);border-radius:8px;padding:16px 18px;transition:border-color .2s}
+.wf-card:hover{border-color:var(--gold)}
+.wf-num{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);margin-bottom:8px;opacity:.8}
+.wf-claim{font-size:12px;color:rgba(255,255,255,.8);line-height:1.55}
+.wf-claim strong{color:var(--gold-light);display:block;margin-bottom:3px;font-size:13px}
+/* EMPIRE ARCHITECTURE */
+.arch-section{max-width:680px;margin:3rem auto 0;padding:0 20px}
+.arch-header{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:3px;color:var(--platinum-mid);text-align:center;margin-bottom:1.4rem}
+.arch-stack{display:flex;flex-direction:column}
+.arch-layer{display:flex;align-items:center;gap:16px;padding:13px 20px;border:1px solid;position:relative;transition:background .2s}
+.arch-layer:not(:last-child){margin-bottom:2px}
+.arch-layer.layer-human{background:rgba(212,175,55,.1);border-color:var(--gold);border-radius:8px 8px 0 0}
+.arch-layer.layer-primedocs{background:rgba(212,175,55,.06);border-color:rgba(212,175,55,.3)}
+.arch-layer.layer-soulstack{background:rgba(16,185,129,.06);border-color:var(--border-em)}
+.arch-layer.layer-security{background:rgba(108,99,255,.07);border-color:rgba(108,99,255,.25)}
+.arch-layer.layer-claude{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1)}
+.arch-layer.layer-empire{background:rgba(212,175,55,.08);border-color:rgba(212,175,55,.35);border-radius:0 0 8px 8px}
+.arch-icon-wrap{font-size:1.5rem;width:36px;text-align:center;flex-shrink:0}
+.arch-label{flex:1;text-align:left}
+.arch-name{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:var(--platinum);margin-bottom:2px}
+.arch-desc{font-size:10px;color:var(--platinum-mid);line-height:1.4}
+.arch-pill{font-size:8px;font-family:'Orbitron',sans-serif;padding:3px 9px;border-radius:3px;letter-spacing:1px;white-space:nowrap;flex-shrink:0}
+.arch-layer.layer-human .arch-pill{background:rgba(212,175,55,.2);color:var(--gold);border:1px solid rgba(212,175,55,.4)}
+.arch-layer.layer-security .arch-pill{background:rgba(108,99,255,.15);color:#b0acff;border:1px solid rgba(108,99,255,.3)}
+.arch-layer.layer-empire .arch-pill{background:rgba(16,185,129,.15);color:var(--emerald-bright);border:1px solid var(--border-em)}
+.arch-connector{display:flex;justify-content:center;align-items:center;height:14px;opacity:.4}
+.arch-connector span{width:2px;height:100%;background:linear-gradient(to bottom,var(--gold),var(--emerald))}
+@media(max-width:600px){.wf-grid{grid-template-columns:1fr 1fr}.arch-layer{padding:10px 12px}.arch-icon-wrap{font-size:1.2rem}}
+@media(max-width:420px){.wf-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════ CINEMATIC OPENING ═══════ -->
+<div id="cinematic">
+  <button class="cine-skip" onclick="PhoenixGame.skipCinematic()">✕ SKIP</button>
+  <div class="cine-inner">
+    <div class="cine-title">PHOENIX<br>TOWER</div>
+    <div class="cine-sub">Empire Builder</div>
+    <div class="cine-press" id="cine-press">PRESS ENTER TO BEGIN</div>
+    <button class="cine-begin-btn" id="cine-begin" onclick="PhoenixGame.beginFromCinematic()">BEGIN</button>
+  </div>
+</div>
+
+<!-- ═══════ CHARACTER SELECT ═══════ -->
+<div id="char-select">
+  <div class="cs-title">CHOOSE YOUR ROLE</div>
+  <div class="cs-sub">How will you build the empire?</div>
+  <div class="cs-grid" id="cs-grid"></div>
+  <button class="cs-confirm" id="cs-confirm" onclick="PhoenixGame.confirmCharacter()">ENTER PHOENIX TOWER →</button>
+</div>
+
+<!-- ═══════ GAME HUD ═══════ -->
+<div id="game-hud" style="display:none">
+  <div class="hud-left">
+    <div class="hud-chip">🏆 <span class="hud-val">Empire Coins:</span> <span id="hud-coins-val">0</span></div>
+    <div class="hud-chip hud-hide-mobile">🏢 Floor <span class="hud-val" id="hud-floor">0</span> / 392</div>
+    <div class="hud-role-badge" id="hud-role"><span id="hud-role-icon">🧠</span> <span id="hud-role-name">Visionary</span></div>
+  </div>
+  <div class="hud-right">
+    <button class="hud-btn" onclick="PhoenixGame.toggleMinimap()" title="Minimap">🗺</button>
+    <button class="hud-btn hud-hide-mobile" onclick="PhoenixGame.save()" title="Save Progress">💾 SAVE</button>
+    <button class="hud-btn" onclick="PhoenixGame.openAchievements()" title="Achievements">🏅 <span id="hud-ach-count">0</span>/10</button>
+    <button class="hud-btn" onclick="PhoenixGame.openMenu()" title="Menu (ESC)">☰</button>
+  </div>
+</div>
+
+<!-- ═══════ MINIMAP ═══════ -->
+<div id="minimap">
+  <div class="mm-title">PHOENIX TOWER</div>
+  <div class="mm-tower" id="mm-tower"></div>
+</div>
+
+<!-- ═══════ ACHIEVEMENT POPUP STACK ═══════ -->
+<div id="ach-stack"></div>
+
+<!-- ═══════ GAME MENU ═══════ -->
+<div id="game-menu">
+  <div class="gm-box">
+    <div class="gm-title">⏸ PAUSED</div>
+    <button class="gm-btn" onclick="PhoenixGame.closeMenu()">▶ RESUME</button>
+    <button class="gm-btn" onclick="PhoenixGame.openAchievements()">🏅 ACHIEVEMENTS</button>
+    <button class="gm-btn" onclick="PhoenixGame.save();PhoenixGame.toast('Progress saved')">💾 SAVE</button>
+    <button class="gm-btn" onclick="PhoenixGame.openCharInfo()">🎭 CHARACTER INFO</button>
+    <button class="gm-btn danger" onclick="PhoenixGame.newGame()">🔄 NEW GAME</button>
+  </div>
+</div>
+
+<!-- ═══════ ELEVATOR SIDEBAR ═══════ -->
+<nav id="elevator">
+  <div id="el-shaft-flash"></div>
+  <div id="el-logo" onclick="goToFloor(0)">FH<br>INC</div>
+  <div id="el-current">LOBBY</div>
+  <div id="el-shaft">
+    <button class="el-btn active" data-floor="0" onclick="goToFloor(0)">LOBBY</button>
+  </div>
+  <div id="el-arrows">
+    <button onclick="goFloorDelta(-1)">▲</button>
+    <button onclick="goFloorDelta(1)">▼</button>
+  </div>
+</nav>
+
+<!-- ═══════ MOBILE DOCK ═══════ -->
+<div id="mobile-dock">
+  <button onclick="goFloorDelta(-1)">▲</button>
+  <div id="mobile-floor-name">LOBBY</div>
+  <button onclick="openFloorSheet()">ALL FLOORS</button>
+  <button onclick="goFloorDelta(1)">▼</button>
+</div>
+<div id="floor-sheet">
+  <button class="fsheet-close" onclick="closeFloorSheet()">✕ Close</button>
+  <div class="fsheet-grid" id="fsheet-grid"></div>
+</div>
+
+<!-- ═══════ MAIN ═══════ -->
+<main id="main">
+
+  <!-- AFFILIATE BANNER -->
+  <div class="aff-banner">Earn 20–40% commission on every referral · <a href="../affiliate/" onclick="return true">Join Affiliate Program →</a></div>
+
+  <!-- LOBBY -->
+  <section class="floor-section" id="floor-0" data-floor="0" style="border-top:none">
+    <canvas id="city-canvas"></canvas>
+    <div class="chandelier" aria-hidden="true"></div>
+    <div class="lobby-content" style="position:relative;z-index:2;padding:80px 5% 60px;text-align:center">
+      <div class="wf-badge">🌍 WORLD'S FIRST &nbsp;·&nbsp; VERIFIED 2026 &nbsp;·&nbsp; 392-FLOOR TOWER · 45 ACTIVE DIVISIONS</div>
+      <div class="lobby-monogram">FRANCISCO<br>HOLDINGS INC.</div>
+      <div style="font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:4px;font-size:clamp(1rem,2.4vw,1.6rem);background:linear-gradient(135deg,#7a5a12 0%,var(--gold) 30%,var(--gold-light) 55%,var(--gold) 70%,#7a5a12 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 18px rgba(212,175,55,.4));margin-bottom:1rem">PHOENIX TOWER</div>
+      <div class="lobby-sub">First Human to Build a 45+ Company AI Empire &nbsp;·&nbsp; Own Cybersecurity &nbsp;·&nbsp; Agent Swarm &nbsp;·&nbsp; Full Automation</div>
+      <div class="lobby-stats">
+        <div class="stat-item"><div class="stat-num" id="ctr-brands">0</div><div class="stat-label">Empire Brands</div></div>
+        <div class="stat-item"><div class="stat-num" id="ctr-clients">0</div><div class="stat-label">Active Clients</div></div>
+        <div class="stat-item"><div class="stat-num" id="ctr-cases">0</div><div class="stat-label">Cases Won</div></div>
+        <div class="stat-item"><div class="stat-num" id="ctr-arr">$0</div><div class="stat-label">ARR 2026</div></div>
+      </div>
+      <a class="lobby-cta" onclick="goToFloor(1);return false">ENTER THE TOWER &nbsp;↓</a>
+
+      <!-- SOCIAL PROOF / TESTIMONIALS -->
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;max-width:1000px;margin:2.4rem auto 0">
+        <div style="background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:16px 18px;flex:1;min-width:230px;max-width:320px;text-align:left">
+          <div style="color:var(--gold);font-size:13px;margin-bottom:6px">★★★★★</div>
+          <div style="font-size:12px;color:var(--platinum-mid);line-height:1.6;margin-bottom:8px">"OmniGuard caught a breach attempt our last vendor missed entirely. Worth every cent of the Warden tier."</div>
+          <div style="font-size:10px;color:var(--platinum-dark);font-family:'Orbitron',sans-serif;letter-spacing:.5px">— Enterprise Security Client</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:16px 18px;flex:1;min-width:230px;max-width:320px;text-align:left">
+          <div style="color:var(--gold);font-size:13px;margin-bottom:6px">★★★★★</div>
+          <div style="font-size:12px;color:var(--platinum-mid);line-height:1.6;margin-bottom:8px">"BENO-X got my charges stayed. Derek's framework is the real deal — 20 years of courtroom experience in a system you can actually use."</div>
+          <div style="font-size:10px;color:var(--platinum-dark);font-family:'Orbitron',sans-serif;letter-spacing:.5px">— CCLDR Member</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:16px 18px;flex:1;min-width:230px;max-width:320px;text-align:left">
+          <div style="color:var(--gold);font-size:13px;margin-bottom:6px">★★★★★</div>
+          <div style="font-size:12px;color:var(--platinum-mid);line-height:1.6;margin-bottom:8px">"PrimeDox AI drafted in minutes what used to take my team a full day. Paid for itself on day one."</div>
+          <div style="font-size:10px;color:var(--platinum-dark);font-family:'Orbitron',sans-serif;letter-spacing:.5px">— PrimeDox Pro Subscriber</div>
+        </div>
+      </div>
+
+      <!-- ACTIVE LITIGATION TRACKER -->
+      <div class="lit-tracker">
+        <div class="lit-badge">⚖️ ACTIVE LITIGATION — 100M+ IN CLAIMS</div>
+        <div class="lit-cases">
+          <div class="lit-case">
+            <div class="lit-case-name">Francisco v. Denby</div>
+            <div class="lit-case-val">$1M</div>
+            <div class="lit-case-type">Property Fraud · CPL Motion June 29</div>
+          </div>
+          <div class="lit-case">
+            <div class="lit-case-name">Francisco v. AG Canada</div>
+            <div class="lit-case-val">$35M</div>
+            <div class="lit-case-type">Constitutional · Charter ss.7/9/12/15</div>
+          </div>
+          <div class="lit-case">
+            <div class="lit-case-name">Francisco v. Kudos/TELUS/CIBC</div>
+            <div class="lit-case-val">$100M+</div>
+            <div class="lit-case-type">Telecom Abuse · Fraud · Bad Faith</div>
+          </div>
+        </div>
+        <a href="https://franciscoderek7.github.io/Ccldr-net/cases.html" class="lit-cta" target="_blank" rel="noopener">Follow Every Case Live at CCLDR →</a>
+      </div>
+
+      <!-- WORLD FIRSTS -->
+      <div class="wf-section">
+        <div class="wf-section-title">▸ VERIFIED WORLD FIRSTS ◂</div>
+        <div class="wf-grid">
+          <div class="wf-card">
+            <div class="wf-num">#1 IN WORLD</div>
+            <div class="wf-claim"><strong>45+ Company AI Empire</strong>First human to build and operate 45+ companies simultaneously with 2 people using full AI automation</div>
+          </div>
+          <div class="wf-card">
+            <div class="wf-num">#1 IN WORLD</div>
+            <div class="wf-claim"><strong>Empire-Integrated Cybersecurity</strong>First personal empire with its own dedicated AI cybersecurity company (OmniGuard) protecting all 45 divisions</div>
+          </div>
+          <div class="wf-card">
+            <div class="wf-num">#1 IN WORLD</div>
+            <div class="wf-claim"><strong>AI Agent Swarm Architecture</strong>First empire run by a coordinated AI Agent Swarm — autonomous execution across legal, tech, finance, and real estate</div>
+          </div>
+          <div class="wf-card">
+            <div class="wf-num">#1 IN WORLD</div>
+            <div class="wf-claim"><strong>Constitutional Cannabis Victory</strong>First person in history to have marijuana returned by a Canadian court — 200+ cases, BENO-X Framework creator</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPIRE ARCHITECTURE -->
+      <div class="arch-section">
+        <div class="arch-header">▸ EMPIRE ARCHITECTURE — THE 6-LAYER AI STACK ◂</div>
+        <div class="arch-stack">
+          <div class="arch-layer layer-human">
+            <div class="arch-icon-wrap">👑</div>
+            <div class="arch-label">
+              <div class="arch-name">DEREK FRANCISCO — PRIMEDOX</div>
+              <div class="arch-desc">Absolute authority · Human decision maker · Empire architect</div>
+            </div>
+            <div class="arch-pill">HUMAN</div>
+          </div>
+          <div class="arch-connector"><span></span></div>
+          <div class="arch-layer layer-primedocs">
+            <div class="arch-icon-wrap">🤖</div>
+            <div class="arch-label">
+              <div class="arch-name">PRIMEDOCS</div>
+              <div class="arch-desc">Override AI layer · Document generation · Strategic activation</div>
+            </div>
+          </div>
+          <div class="arch-connector"><span></span></div>
+          <div class="arch-layer layer-soulstack">
+            <div class="arch-icon-wrap">👁</div>
+            <div class="arch-label">
+              <div class="arch-name">SOULSTACK</div>
+              <div class="arch-desc">Observer AI · Monitors all 45 divisions · Anomaly detection · Reports to PrimeDox</div>
+            </div>
+          </div>
+          <div class="arch-connector"><span></span></div>
+          <div class="arch-layer layer-security">
+            <div class="arch-icon-wrap">🛡️</div>
+            <div class="arch-label">
+              <div class="arch-name">OMNIGUARD</div>
+              <div class="arch-desc">14-layer AI cybersecurity · Zero-trust architecture · Guards all sites and agents</div>
+            </div>
+            <div class="arch-pill">LOOP B</div>
+          </div>
+          <div class="arch-connector"><span></span></div>
+          <div class="arch-layer layer-claude">
+            <div class="arch-icon-wrap">⚙️</div>
+            <div class="arch-label">
+              <div class="arch-name">AGENT SWARM</div>
+              <div class="arch-desc">Builder &amp; executor · Deploys on direct order · No self-authorization</div>
+            </div>
+          </div>
+          <div class="arch-connector"><span></span></div>
+          <div class="arch-layer layer-empire">
+            <div class="arch-icon-wrap">🏛️</div>
+            <div class="arch-label">
+              <div class="arch-name">45-DIVISION EMPIRE</div>
+              <div class="arch-desc">OmniGuard · CCLDR · TechPetCage · CleanSwarm · VaultVelocity · Kiaros + 39 more</div>
+            </div>
+            <div class="arch-pill">LIVE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden coin in lobby -->
+      <span class="hidden-coin" id="coin-lobby" style="top:32%;left:14%" onclick="PhoenixGame.collectCoin('lobby',this)">💰</span>
+
+      <!-- ARR Chart -->
+      <div class="arr-section">
+        <div class="arr-title">ANNUAL RECURRING REVENUE — 5-YEAR PROJECTION</div>
+        <div class="arr-bars" id="arr-bars">
+          <div class="arr-bar-wrap"><div class="arr-bar historical" id="bar-yr1" style="height:0;max-height:100px"></div><div class="arr-bar-val">$180K</div><div class="arr-bar-label">Yr1</div></div>
+          <div class="arr-bar-wrap"><div class="arr-bar historical" id="bar-yr2" style="height:0;max-height:100px"></div><div class="arr-bar-val">$640K</div><div class="arr-bar-label">Yr2</div></div>
+          <div class="arr-bar-wrap"><div class="arr-bar historical" id="bar-yr3" style="height:0;max-height:100px"></div><div class="arr-bar-val">$2.4M</div><div class="arr-bar-label">Yr3</div></div>
+          <div class="arr-bar-wrap"><div class="arr-bar projected" id="bar-yr4" style="height:0;max-height:100px"></div><div class="arr-bar-val" style="color:var(--emerald-bright)">$8.5M</div><div class="arr-bar-label">Yr4 ▲</div></div>
+          <div class="arr-bar-wrap"><div class="arr-bar projected" id="bar-yr5" style="height:0;max-height:100px"></div><div class="arr-bar-val" style="color:var(--emerald-bright)">$22M</div><div class="arr-bar-label">Yr5 ▲</div></div>
+        </div>
+        <div class="arr-legend">
+          <span><span class="arr-dot" style="background:var(--gold)"></span>Historical</span>
+          <span><span class="arr-dot" style="background:var(--emerald);border:1px dashed var(--emerald-bright)"></span>Projected</span>
+        </div>
+      </div>
+
+      <!-- Concierge Desk -->
+      <div class="concierge-desk" id="lobby-concierge">
+        <div class="cd-avatar">🤖</div>
+        <div style="flex:1;min-width:0">
+          <div class="cd-name">PrimeDox AI Concierge</div>
+          <div class="cd-greeting">Welcome to Phoenix Tower. 45 divisions. One empire. How may I direct you?</div>
+          <div class="cd-routes">
+            <button onclick="goToFloor(1)" class="cd-btn cd-btn-sec">🛡️ Security → F1</button>
+            <button onclick="goToFloor(2)" class="cd-btn cd-btn-sec">⚖️ Legal → F2</button>
+            <button onclick="goToFloor(6)" class="cd-btn cd-btn-sec">🐾 Pet Tech → F6</button>
+            <button onclick="goToFloor(11)" class="cd-btn cd-btn-gold">🏛️ Boardroom → F11</button>
+            <button onclick="goToFloor(7)" class="cd-btn cd-btn-sec">⏱️ AI Scheduling → F7</button>
+            <button onclick="goToFloor(22)" class="cd-btn cd-btn-sec">🤖 Agent Swarm → F22</button>
+          </div>
+          <div class="cd-query-row">
+            <input id="cd-query" class="cd-input" type="text" placeholder="Tell me what you need and I'll find your floor…" onkeydown="if(event.key==='Enter')conciergeRoute()" />
+            <button onclick="conciergeRoute()" class="cd-send">Route Me →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Directory Board -->
+      <div class="dir-board">
+        <h3>BUILDING DIRECTORY — 392 FLOORS</h3>
+        <div class="dir-grid" id="dir-grid"></div>
+      </div>
+    </div>
+    <div class="soulstack-badge" style="text-align:center;padding:16px"><span class="dot">●</span> SoulStack Observer · Agent Swarm Technologies · OmniGuard Secured</div>
+  </section>
+
+  <!-- FLOORS 1-45 injected by JS -->
+  <div id="floors-container"></div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:1.5px;color:var(--gold-light);margin-bottom:8px">📧 EMPIRE UPDATES &amp; EARLY ACCESS OFFERS</div>
+  <form id="fn-form" onsubmit="return submitNewsletter(event)" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;max-width:420px;margin:0 auto 18px">
+    <input id="fn-email" type="email" required placeholder="you@email.com" class="modal-input" style="margin-bottom:0;flex:1;min-width:180px">
+    <button type="submit" class="modal-btn btn-gold" style="width:auto;margin:0;padding:10px 16px">Subscribe →</button>
+  </form>
+  <div class="footer-badges">
+    <div class="fbadge"><span style="color:#22c55e">●</span> SoulStack Observer Active</div>
+    <div class="fbadge"><span style="color:var(--gold)">●</span> Agent Swarm Technologies</div>
+    <div class="fbadge"><span style="color:var(--emerald-light)">●</span> OmniGuard Secured</div>
+  </div>
+  <div class="footer-copy">© 2026 Francisco Holdings Inc. All Rights Reserved.<br>
+  Payments via PayPal or Bitcoin · <a href="mailto:franciscoderek7@gmail.com">franciscoderek7@gmail.com</a><br>
+  <a href="../affiliate/">Affiliate Program</a> &nbsp;·&nbsp; <a href="https://paypal.me/techpetcage/500" target="_blank" rel="noopener">Book Strategy Session ($500)</a></div>
+</footer>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay hidden" id="ref-checkout-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCheckoutModal()">✕</button>
+    <h3>💳 CHECKOUT</h3>
+    <div id="checkout-pay-step">
+    <div style="margin-bottom:12px">
+      <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Product</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold-light)" id="ref-product-name"></div>
+    </div>
+    <div class="pay-notice"><strong>Pay via PayPal, Interac e-Transfer, or Bitcoin.</strong> All payment methods active.<br>PayPal: paypal.me/techpetcage · Interac: docweedla@gmail.com · BTC: bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>
+    <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:4px">Price</div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--platinum)" id="ref-orig-price"></div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--gold);display:none;margin-top:4px" id="ref-disc-price"></div>
+    <div class="ref-savings-badge" id="ref-savings-badge"></div>
+    <div id="ref-discount-block" style="margin-top:12px">
+      <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:6px">Do you qualify for a discount?</div>
+      <select class="modal-input" id="ref-honor-select" onchange="applyHonorDiscount(this)" style="margin-bottom:8px">
+        <option value="">— Select if applicable —</option>
+        <option value="TERMINAL">🎗️ Compassion Pricing — Terminal Illness (50% off)</option>
+        <option value="FIXED">♿ Accessibility Pricing — Fixed / Low Income (40% off)</option>
+        <option value="VETERAN">🎖️ Service Pricing — Veterans / Active Military (35% off)</option>
+        <option value="SENIOR">🦉 Wisdom Pricing — Seniors 65+ (30% off)</option>
+        <option value="STUDENT">🎓 Future Builder Pricing — Students (25% off)</option>
+      </select>
+      <div id="ref-honor-msg" style="font-size:11px;color:#6ee7a0;display:none;margin-bottom:8px">We believe you. Thank you for being part of the empire.</div>
+      <div style="font-size:12px;color:var(--platinum-mid);margin-bottom:6px">Have a referral code?</div>
+      <div style="display:flex;gap:6px">
+        <input class="modal-input" id="ref-code-input" placeholder="FH#### / PHOENIX-XXXX / INVESTOR" style="margin-bottom:0;flex:1">
+        <button class="modal-btn btn-emerald" onclick="applyRefCode()" style="width:auto;margin:0;padding:10px 14px;font-size:10px">APPLY</button>
+      </div>
+      <div class="ref-code-msg" id="ref-code-msg"></div>
+      <div id="ref-tier-msg" style="font-size:11px;color:var(--gold-light);margin-top:4px"></div>
+    </div>
+    <button class="modal-btn btn-gold" onclick="proceedToPayPal()">⚡ PAY NOW — PayPal →</button>
+    <a href="mailto:docweedla@gmail.com?subject=Payment%20—%20Francisco%20Holdings&body=Product%3A%20[name%20it]%0AAmount%3A%20[amount]%0ASending%20via%3A%20Interac%20e-Transfer" class="modal-btn" onclick="showOrderConfirmation()" style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10B981;text-decoration:none;display:block;width:100%;padding:12px;text-align:center;font-size:11px;font-weight:700;letter-spacing:1.5px;border-radius:4px;margin-top:8px;box-sizing:border-box;">💸 PAY VIA INTERAC E-TRANSFER →</a>
+    <div class="btc-line" style="margin-top:8px;font-size:10px;color:var(--platinum-mid);">Interac: <strong style="color:#10B981">docweedla@gmail.com</strong> · Include product name in message</div>
+    <div class="btc-line">Or pay with Bitcoin: <strong>bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</strong></div>
+    </div>
+    <div id="order-confirmation" class="hidden" style="text-align:center">
+      <div style="font-size:30px;margin-bottom:6px">✅</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:13px;color:var(--gold-light);margin-bottom:10px;letter-spacing:1px">PAYMENT INITIATED</div>
+      <div style="font-size:11px;color:var(--platinum-mid);line-height:1.8;text-align:left;background:var(--card);border:1px solid var(--border-gold);border-radius:6px;padding:12px 14px;margin-bottom:12px">
+        <strong style="color:var(--emerald-light)">What happens next:</strong><br>
+        1. Complete payment in the tab/app that just opened<br>
+        2. Email your receipt to <strong style="color:var(--gold-light)">docweedla@gmail.com</strong> to confirm it<br>
+        3. Access activates within 1 hour of confirmed payment<br>
+        4. Share your referral link below — earn 25% commission on every sale
+      </div>
+      <button class="modal-btn" style="background:rgba(212,175,55,0.12);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="closeCheckoutModal()">Got it, close</button>
+    </div>
+    <div class="ref-your-code-wrap" style="margin-top:12px">
+      <div>
+        <div style="font-size:9px;color:var(--platinum-dark);letter-spacing:1px;margin-bottom:2px">YOUR REFERRAL CODE</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:12px;color:var(--gold)" id="ref-your-code">–</div>
+      </div>
+      <button class="ref-copy-btn" onclick="copyRefCode()">Copy Link</button>
+    </div>
+    <div id="ref-share-row" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('sms')">📱 SMS</button>
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('email')">✉️ Email</button>
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('whatsapp')">💬 WhatsApp</button>
+      <button class="modal-btn" style="width:auto;margin:0;padding:8px 10px;font-size:10px;background:rgba(212,175,55,0.1);border:1px solid var(--border-gold);color:var(--gold-light)" onclick="shareReferral('social')">🔗 Social</button>
+    </div>
+    <div id="ref-your-tier" style="font-size:10px;color:var(--platinum-mid);margin-top:8px;line-height:1.6"></div>
+  </div>
+</div>
+
+<!-- AFFILIATE SIGNUP MODAL -->
+<div class="modal-overlay hidden" id="aff-signup-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAffModal()">✕</button>
+    <h3>🤝 JOIN EMPIRE AFFILIATE PROGRAM</h3>
+    <p style="font-size:12px;color:var(--platinum-mid);margin-bottom:16px">Earn 20-40% commission. Bronze → Diamond tiers.</p>
+    <div id="aff-form">
+      <input class="modal-input" id="aff-name" placeholder="Your Full Name">
+      <input class="modal-input" id="aff-email" placeholder="Your Email">
+      <button class="modal-btn btn-gold" onclick="generateAffCode()">GET MY AFFILIATE CODE →</button>
+    </div>
+    <div id="aff-result" style="display:none;text-align:center">
+      <div style="font-size:10px;color:var(--platinum-dark);letter-spacing:1px;margin-bottom:6px">YOUR AFFILIATE CODE</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--gold-light);margin-bottom:8px" id="aff-code-display"></div>
+      <div style="font-size:11px;color:var(--platinum-dark);margin-bottom:12px" id="aff-link-display"></div>
+      <button class="modal-btn btn-emerald" onclick="copyAffLink()">Copy Affiliate Link</button>
+      <div id="aff-earnings-dashboard" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(212,175,55,0.2);text-align:left">
+        <div style="font-size:10px;color:var(--platinum-dark);letter-spacing:1px;margin-bottom:10px;text-align:center">MY EARNINGS</div>
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <div style="flex:1;text-align:center;background:rgba(212,175,55,0.07);border-radius:8px;padding:10px">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--gold-light)" id="aff-earn-total">$0.00</div>
+            <div style="font-size:9px;color:var(--platinum-dark)">TOTAL COMMISSION</div>
+          </div>
+          <div style="flex:1;text-align:center;background:rgba(212,175,55,0.07);border-radius:8px;padding:10px">
+            <div style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--gold-light)" id="aff-earn-count">0</div>
+            <div style="font-size:9px;color:var(--platinum-dark)">SALES TRACKED</div>
+          </div>
+        </div>
+        <div id="aff-earn-list" style="font-size:11px;color:var(--platinum-mid);max-height:140px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACHIEVEMENTS PANEL -->
+<div class="modal-overlay hidden" id="achievements-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="PhoenixGame.closeAchievements()">✕</button>
+    <h3>🏅 ACHIEVEMENTS — <span id="ach-modal-count">0</span>/10</h3>
+    <div id="ach-list"></div>
+  </div>
+</div>
+
+<!-- CHARACTER INFO PANEL -->
+<div class="modal-overlay hidden" id="charinfo-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="PhoenixGame.closeCharInfo()">✕</button>
+    <h3>🎭 CHARACTER</h3>
+    <div class="char-info-row">
+      <div class="ci-icon" id="ci-icon">🧠</div>
+      <div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold-light)" id="ci-name">Visionary</div>
+        <div style="font-size:11px;color:var(--platinum-mid);font-style:italic" id="ci-tagline"></div>
+        <div style="font-size:11px;color:var(--emerald-bright);margin-top:4px" id="ci-bonus"></div>
+      </div>
+    </div>
+    <div class="ref-your-code-wrap">
+      <div>
+        <div style="font-size:9px;color:var(--platinum-dark);letter-spacing:1px;margin-bottom:2px">YOUR REFERRAL CODE</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--gold)" id="ci-refcode">PHOENIX-XXXX</div>
+      </div>
+      <button class="ref-copy-btn" onclick="PhoenixGame.copyPhoenixRef()">Copy Link</button>
+    </div>
+    <div style="font-size:10px;color:var(--platinum-dark);margin-top:12px">Share your code — friends get a 5% discount and you build the empire together.</div>
+  </div>
+</div>
+
+<!-- DYNASTY PROTOCOL MODAL -->
+<div class="modal-overlay hidden" id="dynasty-modal">
+  <div class="dynasty-box">
+    <button class="modal-close" onclick="document.getElementById('dynasty-modal').classList.add('hidden')">✕</button>
+    <div class="dynasty-title">⚡ DYNASTY PROTOCOL<br>ACTIVATED</div>
+    <div class="dynasty-body">
+      You found it.<br><br>
+      The empire within the empire. Derek Francisco's private investment track.<br><br>
+      <strong style="color:var(--gold-light)">Floor 392 — Francisco Phoenix</strong><br>
+      Nation-scale partnerships. Sovereign wealth. One seat available.<br><br>
+      Minimum engagement: $5,000,000.<br>
+      Direct equity. No intermediaries. Dynasty-level terms.
+    </div>
+    <a href="mailto:franciscoderek7@gmail.com?subject=DYNASTY%20PROTOCOL%20—%20Floor%20392" class="modal-btn btn-gold" style="display:inline-block;text-decoration:none;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:13px 24px;border-radius:4px">CONTACT DEREK DIRECTLY →</a>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+window.STRIPE_PK = 'pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz';
+
+/* ══════════════════════════════════════════════════════
+   FLOOR DATA — 45 ACTIVE DIVISIONS ACROSS A 392-FLOOR TOWER
+   Floors 1-45: active/coming divisions. 46-391: reserved
+   expansion slots. 392: Francisco Phoenix (Konami/invite only).
+══════════════════════════════════════════════════════ */
+var FLOORS = [
+  {n:1,name:'OmniGuard',tag:'🛡️',sub:'14-Layer Enterprise AI Security',
+   desc:'Autonomous AI threat detection, real-time response, and zero-trust architecture for enterprises that cannot afford a breach.',
+   feats:['Real-time threat scanning','AI behavioral analysis','Zero-trust identity management','14-layer defense matrix','Executive risk dashboards','SOC 2 & HIPAA compliance','Incident response 4hr SLA','Autonomous countermeasures'],
+   pricing:[{tier:'Sentinel',val:'$499/mo',desc:'Up to 50 endpoints · Monitoring + weekly reports',url:'mailto:omniaguard1@gmail.com?subject=Sentinel%20Inquiry',cls:'btn-emerald'},{tier:'Warden',val:'$2,499/mo',desc:'250 endpoints · Active defense · Daily briefings',url:'mailto:omniaguard1@gmail.com?subject=Warden%20Inquiry',cls:'btn-gold',feat:true},{tier:'Archon',val:'$9,999/mo',desc:'Unlimited endpoints · Full fortress · 24/7 SOC',url:'mailto:omniaguard1@gmail.com?subject=Archon%20Inquiry',cls:'btn-platinum'}],
+   live:'https://omni-guard.com',liveLabel:'omni-guard.com →',contact:'omniaguard1@gmail.com',loopB:true,
+   boss:{title:'⚔ Secure the Empire',sub:'Deploy OmniGuard 14-layer defense. Start with the Warden tier.',amount:2499,ach:'cyber_warrior'}},
+
+  {n:2,name:'BENO-X / Weedlaw',tag:'⚖️',sub:'Constitutional Defense Framework · 200+ Victories',
+   desc:'The BENO-X Framework — 5-pillar constitutional defense: Breach identification, Evidence exclusion, Negotiation leverage, On-record defense, X-multiplier. 20+ years of Charter victories.',
+   feats:['Charter s.8/9/10 analysis','Evidence exclusion motions','Crown negotiation strategy','On-record documentation','BENO-X X-multiplier precedent','200+ cases · 4,000 charges stayed','20+ years expertise','Available coast-to-coast'],
+   pricing:[{tier:'BENO-X Playbook',val:'$49',desc:'Full framework PDF + case templates',url:'https://paypal.me/techpetcage/49',cls:'btn-emerald'},{tier:'Strategy Session',val:'$500',desc:'60-min consultation with Derek Francisco',url:'https://paypal.me/techpetcage/500',cls:'btn-gold'}],
+   live:'https://zprimedoxaihq.com',liveLabel:'PrimeDox AI HQ →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day registration hold.'},
+
+  {n:3,name:'CCLDR',tag:'📋',sub:'Constitutional education resource',
+   desc:'A constitutional education network. Charter challenges, evidence exclusion, and constitutional rights education for every province.',
+   feats:['Constitutional charter education','Evidence exclusion filings','Crown negotiation leverage','Know Your Rights training','Case tracking system','Province-wide network','24/7 emergency intake','BENO-X integrated workflow'],
+   pricing:[{tier:'Warrior',val:'$99',desc:'BENO-X starter kit + rights guide',url:'https://paypal.me/techpetcage/99',cls:'btn-platinum'},{tier:'Pro',val:'$299',desc:'Full BENO-X + document templates + case review',url:'https://paypal.me/techpetcage/299',cls:'btn-emerald'},{tier:'Elite',val:'$999',desc:'2 strategy calls + ongoing support',url:'https://paypal.me/techpetcage/999',cls:'btn-gold'},{tier:'Sovereign',val:'$1,499',desc:'Full retainer · unlimited access · dedicated support',url:'https://paypal.me/techpetcage/1499',cls:'btn-gold'}],
+   live:'https://franciscoderek7.github.io/Ccldr-net/',liveLabel:'CCLDR (GitHub Pages) →',contact:'docweedla@gmail.com',note:'Custom domain ccldr.net — 60-day hold. Full launch Q3 2026.',
+   boss:{title:'⚔ Defend Your Rights',sub:'Join CCLDR with the Pro tier — full BENO-X, templates, and case review.',amount:299,ach:'legal_legend'}},
+
+  {n:4,name:'PrimeDox AI',tag:'🤖',sub:'Derek Francisco\'s AI Clone · Document Automation · 24/7',
+   desc:'20 years of constitutional Charter expertise, strategy, and business automation compressed into an AI available around the clock.',
+   feats:['BENO-X defense builder','Charter breach identification','Legal document generation','Court filing templates','Business document automation','Confidential AI sessions','Real-time case analysis','BENO-X full case law library'],
+   pricing:[{tier:'Free',val:'$0',desc:'10 msg/day · 5 docs/mo · 1 BENO-X check',url:'primedox-ai-chat.html',cls:'btn-platinum'},{tier:'Pro',val:'$49/mo',desc:'Unlimited chat · Full BENO-X · All case law',url:'https://paypal.me/techpetcage/49',cls:'btn-emerald',feat:true},{tier:'Elite',val:'$199/mo',desc:'Priority + 30% affiliate + white-glove onboarding',url:'https://paypal.me/techpetcage/199',cls:'btn-gold'}],
+   live:'https://zprimedoxaihq.com',liveLabel:'PrimeDox AI HQ →',contact:'docweedla@gmail.com',note:'First 14 days free. No auto-billing. No credit card.',
+   boss:{title:'⚔ Unleash PrimeDox AI',sub:'Activate the Pro tier — unlimited AI, full BENO-X, all case law.',amount:49,ach:'ai_pioneer'}},
+
+  {n:5,name:'Vault Velocity Auto',tag:'🚗',sub:'AI-Powered Automotive Intelligence',
+   desc:'AI diagnostics, performance optimization, and secure automotive intelligence for high-value vehicles and fleet operations.',
+   feats:['AI vehicle diagnostics','Performance optimization','Fleet management AI','Security & anti-theft intelligence','Predictive maintenance','OBD-II deep integration','Insurance telematics','Custom automotive AI'],
+   pricing:[{tier:'Individual',val:'$99/mo',desc:'1 vehicle · AI diagnostics + alerts',url:'https://paypal.me/techpetcage/99',cls:'btn-emerald'},{tier:'Fleet',val:'$499/mo',desc:'10 vehicles · Full fleet AI management',url:'https://paypal.me/techpetcage/499',cls:'btn-gold'}],
+   live:'https://vaultvelocityauto.com',liveLabel:'Vault Velocity Auto →',contact:'franciscoderek7@gmail.com'},
+
+  {n:6,name:'TechPetCage',tag:'🐾',sub:'Smart Pet Health AI · GPS Monitoring · Behavior Analytics',
+   desc:'AI-powered pet health monitoring with real-time GPS tracking, behavioral analysis, and veterinary alert integration for pet owners worldwide.',
+   feats:['AI health tracking','Real-time GPS monitoring','Veterinary alert integration','Behavioral analysis engine','Multi-pet dashboard','24/7 status updates','Emergency SOS protocol','Worldwide shipping'],
+   pricing:[{tier:'Basic',val:'$19/mo',desc:'1 pet · Basic health monitoring',url:'https://paypal.me/techpetcage/19',cls:'btn-platinum'},{tier:'Plus',val:'$49/mo',desc:'3 pets · Health alerts + GPS + vet alerts',url:'https://paypal.me/techpetcage/49',cls:'btn-emerald',feat:true},{tier:'Family',val:'$149/mo',desc:'Unlimited pets · Full suite + vet integration',url:'https://paypal.me/techpetcage/149',cls:'btn-gold'}],
+   live:'https://franciscoderek7.github.io/techpetcage/',liveLabel:'TechPetCage →',contact:'franciscoderek7@gmail.com'},
+
+  {n:7,name:'Kiaros',tag:'⏱️',sub:'AI Strategy · Precision Timing · Growth Architecture',
+   desc:'Strategic AI consulting for founders who understand that timing is the only moat. Kiaros identifies market windows before they open.',
+   feats:['Market timing analysis','AI growth architecture','Competitor intelligence','Revenue acceleration blueprints','Go-to-market AI modeling','Exit strategy preparation','Monthly strategy calls','Proprietary timing algorithms'],
+   pricing:[{tier:'Engagement',val:'Custom',desc:'Contact for scoped engagement',url:'mailto:kiaros@franciscoholdingsinc.com?subject=Kiaros%20Inquiry',cls:'btn-gold'}],
+   live:'https://kiaros.ai',liveLabel:'kiaros.ai →',contact:'kiaros@franciscoholdingsinc.com',loopB:true},
+
+  {n:8,name:'CleanSwarm AI',tag:'🐝',sub:'Physical & Document Cleaning Intelligence',
+   desc:'AI dispatch for commercial and residential physical cleaning services — private jets, skyscrapers, offices, yachts — and AI-powered document cleanup including OCR and data extraction.',
+   feats:['Private jet cleaning','Skyscraper & commercial cleaning','Office & residential cleaning','Yacht & marine vessel cleaning','OCR document extraction','Batch document processing','AI crew dispatch & scheduling','Quality verification AI'],
+   pricing:[{tier:'Starter',val:'$29/mo',desc:'500 documents · Basic OCR',url:'mailto:hello@cleanswarm.ca?subject=Starter',cls:'btn-platinum'},{tier:'Growth',val:'$99/mo',desc:'5,000 docs · Advanced extraction + physical dispatch',url:'mailto:hello@cleanswarm.ca?subject=Growth',cls:'btn-emerald',feat:true},{tier:'Scale',val:'$299/mo',desc:'Unlimited · Custom models + franchise access',url:'mailto:hello@cleanswarm.ca?subject=Scale',cls:'btn-gold'}],
+   live:false,contact:'hello@cleanswarm.ca',note:'Coming 2026.'},
+
+  {n:9,name:'VIGILAX',tag:'🔒',sub:'Enterprise Threat Response · Zero Compromise',
+   desc:'Government-grade enterprise threat response. Full deployment, ITAR-aware architecture, zero-trust networks, and proactive threat neutralization at scale.',
+   feats:['Nation-state threat detection','Zero-trust network architecture','Proactive threat neutralization','Forensic incident response','ITAR/CIRA compliance ready','Executive protection protocols','Critical infrastructure defense','Custom SLA agreements'],
+   pricing:[{tier:'Custom Engagement',val:'From $5,000',desc:'Scoped per threat surface · $1,000 deposit to initiate',url:'mailto:vigilax@franciscoholdingsinc.com?subject=VIGILAX%20Engagement%20Request',cls:'btn-gold'},{tier:'Retainer',val:'$10,000/mo',desc:'On-call threat team · Proactive monitoring',url:'mailto:vigilax@franciscoholdingsinc.com?subject=VIGILAX%20Retainer',cls:'btn-emerald'}],
+   live:false,contact:'vigilax@franciscoholdingsinc.com',loopB:true},
+
+  {n:10,name:'SoulStack',tag:'👁️',sub:'Empire Observer · Anomaly Detection · Reputation Layer',
+   desc:'The silent layer watching every division for anomalies, drift, and risk — then reporting straight to PrimeDox. SoulStack also issues verified achievement and trust badges across the Francisco Holdings empire.',
+   feats:['24/7 cross-division anomaly monitoring','Automated risk + drift reports','Verified achievement & trust badges','Reputation scoring for partners & affiliates','Direct escalation to PrimeDox','Zero customer-facing AI branding'],
+   live:false,contact:'franciscoderek7@gmail.com',note:'Coming 2026 — waitlist open.',coming:true,comingYear:'2026'},
+
+  {n:11,name:'Francisco Holdings Boardroom',tag:'🏛️',sub:'Investor Relations · Dynasty Partnerships · Floor 11',
+   desc:'The boardroom of the empire. Strategy sessions, investment tiers, and partnership structures for those building at the highest level.',
+   feats:['60-min strategy sessions','Equity partnership tiers','NDA-protected negotiations','AI implementation roadmaps','Revenue acceleration consulting','Brand architecture strategy','Monthly partner calls','Dynasty Protocol access'],
+   pricing:[{tier:'Strategy Session',val:'$500',desc:'60-min with Derek Francisco · No NDA required',url:'https://paypal.me/techpetcage/500',cls:'btn-platinum'},{tier:'Floor — $50K',desc:'Founding investor · Monthly updates · Annual boardroom call',url:'mailto:franciscoderek7@gmail.com?subject=Floor%20Investment%20%2450K',cls:'btn-emerald'},{tier:'Suite — $250K',desc:'5× equity · Quarterly sessions · Co-branding rights',url:'mailto:franciscoderek7@gmail.com?subject=Suite%20Investment%20%24250K',cls:'btn-gold'},{tier:'Penthouse — $1M',desc:'10× equity · Board observer seat · Priority deal flow',url:'mailto:franciscoderek7@gmail.com?subject=Penthouse%20Investment%20%241M',cls:'btn-gold',feat:true}],
+   live:false,contact:'franciscoderek7@gmail.com',
+   pitchDeck:true,projection:'$400M projected revenue across the first 4 years · 45-company empire overview'},
+
+  {n:12,name:'TechPackCage',tag:'📦',sub:'Smart Packaging AI · Supply Chain Intelligence',
+   desc:'AI-powered packaging optimization and supply chain intelligence for e-commerce and manufacturing operations.',
+   feats:['Packaging material AI','Dimension optimization','Supply chain visibility','Carrier rate AI negotiation','Returns reduction AI','Sustainability scoring','Inventory forecasting','Custom packaging design'],
+   pricing:[{tier:'Starter',val:'$49/mo',desc:'Up to 500 shipments · Basic optimization',url:'https://paypal.me/techpetcage/49',cls:'btn-emerald'},{tier:'Growth',val:'$149/mo',desc:'Unlimited shipments · Full AI suite',url:'https://paypal.me/techpetcage/149',cls:'btn-gold'}],
+   live:false,contact:'franciscoderek7@gmail.com'},
+
+  {n:13,name:'MindShift by Michaella',tag:'🧠',sub:'Psychology & Travel AI · Behavioral Transformation',
+   desc:'Combining behavioral psychology and immersive travel experiences to unlock automated income streams and mindset transformation.',
+   feats:['Behavioral modification programs','Automated income systems','Travel lifestyle design','Psychology-based coaching','Digital product creation','Online course platform','Community building','Mindset reprogramming'],
+   pricing:[{tier:'Session',val:'$99',desc:'1-hour coaching session',url:'https://paypal.me/techpetcage/99',cls:'btn-emerald'},{tier:'Package',val:'$299',desc:'Monthly program + travel lifestyle blueprint',url:'https://paypal.me/techpetcage/299',cls:'btn-gold'}],
+   live:false,contact:'franciscoderek7@gmail.com',note:'Coming 2026 — domain not yet registered.'},
+
+  {n:14,name:'CCC-Site',tag:'🌐',sub:'Business Consulting · Compliance & Licensing',
+   desc:'Full-service business consulting — from licensing and compliance to operations, marketing, and expansion strategy.',
+   feats:['Licensing guidance','Compliance management','Operations setup','Marketing strategy','SOP development','Financial modeling','Distribution strategy','Expansion planning'],
+   pricing:[{tier:'Consult',val:'$500',desc:'60-min compliance strategy session',url:'https://paypal.me/techpetcage/500',cls:'btn-emerald'},{tier:'Retainer',val:'$2,000/mo',desc:'Full compliance management + monthly strategy',url:'https://paypal.me/techpetcage/2000',cls:'btn-gold'}],
+   live:false,contact:'docweedla@gmail.com'},
+
+  {n:15,name:'Space Swarm',tag:'🛸',sub:'Space Operations AI · Orbital Logistics · Satellite Intelligence',coming:true},
+  {n:16,name:'Energy Swarm',tag:'⚡',sub:'Renewable Energy AI · Grid Optimization · Carbon Intelligence',coming:true},
+  {n:17,name:'Fintech Swarm',tag:'💹',sub:'AI Finance Intelligence · Algorithmic Trading · Risk Analysis',coming:true},
+  {n:18,name:'Health Swarm',tag:'🏥',sub:'Healthcare AI · Diagnostics · Patient Intelligence',coming:true},
+  {n:19,name:'Biotech Swarm',tag:'🧬',sub:'Biotech AI · Drug Discovery · Genomic Analysis',coming:true},
+  {n:20,name:'Quantum Swarm',tag:'⚛️',sub:'Quantum Computing AI · Cryptography · Optimization',coming:true,comingYear:'2027'},
+  {n:21,name:'Auto Swarm',tag:'🏭',sub:'Automotive Manufacturing AI · Supply Chain Intelligence',coming:true},
+  {n:22,name:'Agent Swarm Tech',tag:'🤖',sub:'Multi-Agent Orchestration · AI Scaling · Swarm Intelligence',
+   desc:'The backbone technology powering all 45 Francisco Holdings divisions. Deploy, manage, and scale AI agent networks.',
+   pricing:[{tier:'Starter',val:'$299/mo',desc:'Up to 5 agents',url:'https://paypal.me/techpetcage/299',cls:'btn-emerald'},{tier:'Growth',val:'$999/mo',desc:'Up to 25 agents + monitoring',url:'https://paypal.me/techpetcage/999',cls:'btn-gold'},{tier:'Enterprise',val:'$2,999/mo',desc:'Unlimited agents + SoulStack integration',url:'mailto:franciscoderek7@gmail.com?subject=Agent%20Swarm%20Enterprise',cls:'btn-platinum'}],
+   live:'https://zprimedoxaihq.com',liveLabel:'PrimeDox HQ →',contact:'franciscoderek7@gmail.com'},
+  {n:23,name:'Francisco Realty',tag:'🏘️',sub:'AI Real Estate · Full-Stack Property Transactions',
+   desc:'End-to-end real estate services powered by AI — buying, selling, investment, and property management across Canada and beyond.',
+   pricing:[{tier:'Listing Commission',val:'2.5%',desc:'AI-powered listing, marketing, and closing',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Realty%20Inquiry',cls:'btn-gold'},{tier:'Buyer Commission',val:'2.5%',desc:'AI property search, negotiation, close',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Realty%20Buyer',cls:'btn-emerald'}],
+   live:false,contact:'franciscoderek7@gmail.com',note:'RECO licensing in progress. Full launch Q4 2026.'},
+  {n:24,name:'Francisco Legal',tag:'⚖️',sub:'Full-Service Educational Resource · 19 Practice Areas',
+   desc:'AI-enhanced legal education across all practice areas. Partner network. PrimeDox AI document generation. Nationwide coverage.',
+   pricing:[{tier:'Consultation',val:'$150/hr',desc:'Initial educational consultation',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Legal%20Consult',cls:'btn-emerald'},{tier:'Retainer',val:'$500/hr',desc:'Ongoing educational guidance',url:'mailto:franciscoderek7@gmail.com?subject=Francisco%20Legal%20Retainer',cls:'btn-gold'}],
+   live:false,contact:'franciscoderek7@gmail.com',note:'Partner network launching Q1 2027.'},
+  {n:25,name:'Francisco Mortgage',tag:'🏦',sub:'AI Mortgage Brokerage · Best Rate Guarantee',coming:true},
+  {n:26,name:'Francisco Insurance',tag:'🛡️',sub:'Home · Auto · Life · Business · Cyber Insurance',coming:true},
+  {n:27,name:'Francisco Title',tag:'📜',sub:'Title Insurance · Escrow Services · $200-500/transaction',coming:true},
+  {n:28,name:'Francisco Paralegal',tag:'👔',sub:'Paralegal Services · Tribunal Representation · $75-150/hr',coming:true},
+  {n:29,name:'Francisco Tax',tag:'🧾',sub:'Personal & Corporate Tax · CRA Disputes · $200-2,000/return',coming:true},
+  {n:30,name:'Francisco Immigration',tag:'✈️',sub:'Visa · Permanent Residence · Citizenship · $2K-10K',coming:true},
+  {n:31,name:'Francisco Family',tag:'👨‍👩‍👧',sub:'Divorce · Custody · Support · Property Division',coming:true},
+  {n:32,name:'Francisco Wills',tag:'📋',sub:'Will Drafting · Estate Planning · Probate · $300-2,000',coming:true},
+  {n:33,name:'Francisco Employment',tag:'💼',sub:'Wrongful Dismissal · HR Compliance · $200-500/hr',coming:true},
+  {n:34,name:'Francisco Corporate',tag:'🏢',sub:'Incorporation · Mergers · Contracts · Governance',coming:true},
+  {n:35,name:'Francisco IP',tag:'💡',sub:'Patents · Trademarks · Copyrights · Litigation',coming:true},
+  {n:36,name:'Francisco Criminal',tag:'⚖️',sub:'Constitutional Education · Constitutional Defenses · $2K-50K/case',coming:true},
+  {n:37,name:'Francisco PI',tag:'🩺',sub:'Personal Injury · Medical Malpractice · 30-40% contingency',coming:true},
+  {n:38,name:'Francisco Environmental',tag:'🌿',sub:'Compliance · Carbon Credits · Litigation · $300-600/hr',coming:true},
+  {n:39,name:'Francisco Construction',tag:'🏗️',sub:'Liens · Contracts · Safety · Disputes · $250-500/hr',coming:true},
+  {n:40,name:'Francisco Entertainment',tag:'🎬',sub:'Contracts · Royalties · Rights Management · $300-800/hr',coming:true},
+  {n:41,name:'Francisco Sports',tag:'🏆',sub:'Athlete Contracts · Agents · Disputes · $300-1,000/hr',coming:true},
+  {n:42,name:'Francisco Maritime',tag:'⚓',sub:'Shipping · Salvage · Offshore · $300-800/hr',coming:true},
+  {n:43,name:'Francisco Aviation',tag:'✈️',sub:'Regulatory · Accidents · Drones · $300-800/hr',coming:true},
+  {n:44,name:'Francisco Banking',tag:'🏛️',sub:'Regulatory · Transactions · Fintech Disputes · $400-1,000/hr',coming:true},
+  {n:45,name:'Francisco Data',tag:'🔐',sub:'GDPR · PIPEDA · Breach Response · Compliance · $300-800/hr',coming:true}
+];
+
+/* Floors 46–391: reserved expansion capacity. Locked visual treatment,
+   still fully elevator/minimap navigable — Konami code reveals them. */
+for (var _rf = 46; _rf <= 391; _rf++) {
+  FLOORS.push({n:_rf,name:'Reserved Division #'+(_rf-45),tag:'🔒',sub:'Reserved Expansion Slot · Locked',
+    desc:'This floor is reserved for a future Francisco Holdings division. Locked pending activation.',
+    live:false,contact:'franciscoderek7@gmail.com',coming:true,reserved:true,comingYear:'2027+'});
+}
+
+FLOORS.push({n:392,name:'Francisco Phoenix',tag:'⚡',sub:'The Phoenix Protocol — Dynasty-Level Partnerships',
+   desc:'CLASSIFIED. Nation-scale partnerships, sovereign wealth fund access, and dynasty-level equity structures. Accessible only by Konami code or direct invitation from Derek Francisco.',
+   pricing:[{tier:'Dynasty Partner',val:'$10M+',desc:'Direct equity · No intermediaries · One seat available',url:'mailto:franciscoderek7@gmail.com?subject=DYNASTY%20PROTOCOL',cls:'btn-gold'}],
+   live:false,contact:'franciscoderek7@gmail.com',note:'Konami Code: ↑↑↓↓←→←→BA',secret:true});
+
+/* Floor-tag mapping for role highlights & achievement triggers */
+var ROLE_HIGHLIGHT = {
+  Advocate: [2,3,24,36],      // CCLDR / legal floors
+  Guardian: [1,9,45]          // OmniGuard / security floors
+};
+
+/* ══════════════════════════════════════════════════════
+   ACHIEVEMENTS
+══════════════════════════════════════════════════════ */
+var ACHIEVEMENTS = {
+  'lobby_lurker': { name: 'Lobby Lurker', desc: 'Spent 5+ minutes in the lobby', coins: 50, icon: '🏛', trigger: 'time_in_lobby' },
+  'first_ascent': { name: 'First Ascent', desc: 'Visited Floor 1', coins: 100, icon: '⬆️', trigger: 'floor_visit_1' },
+  'cyber_warrior': { name: 'Cyber Warrior', desc: 'Explored OmniGuard floor', coins: 500, icon: '🛡', trigger: 'floor_visit_omniaguard' },
+  'legal_legend': { name: 'Legal Legend', desc: 'Explored CCLDR floor', coins: 500, icon: '⚖', trigger: 'floor_visit_ccldr' },
+  'ai_pioneer': { name: 'AI Pioneer', desc: 'Explored PrimeDox AI floor', coins: 300, icon: '🤖', trigger: 'floor_visit_primedox' },
+  'empire_5': { name: 'Empire Builder', desc: 'Visited 5 different floors', coins: 2000, icon: '👑', trigger: 'floors_visited_5' },
+  'secret_keeper': { name: 'Secret Keeper', desc: 'Found a hidden Empire Coin', coins: 100, icon: '💰', trigger: 'hidden_coin_found' },
+  'konami_master': { name: 'Konami Master', desc: 'Entered the Konami code', coins: 1000, icon: '🎮', trigger: 'konami' },
+  'night_owl': { name: 'Night Owl', desc: 'Visited between midnight and 5am', coins: 200, icon: '🦉', trigger: 'night_visit' },
+  'phoenix_rising': { name: 'Phoenix Rising', desc: 'Earned 5 achievements', coins: 5000, icon: '🔥', trigger: 'achievements_5' }
+};
+
+var CHARACTERS = [
+  {id:'visionary',icon:'🧠',name:'Visionary',tagline:'Sees the empire whole',bonus:'All 392 floors unlocked (read-only)'},
+  {id:'entrepreneur',icon:'💼',name:'Entrepreneur',tagline:'Builds from scratch',bonus:'15% referral commission'},
+  {id:'investor',icon:'💰',name:'Investor',tagline:'Capital multiplied',bonus:'Investor deck on all floors'},
+  {id:'advocate',icon:'⚖',name:'Advocate',tagline:'Rights defended',bonus:'CCLDR / legal floors highlighted'},
+  {id:'guardian',icon:'🛡',name:'Guardian',tagline:'Security first',bonus:'OmniGuard floors highlighted'}
+];
+
+/* ══════════════════════════════════════════════════════
+   GAME ENGINE
+══════════════════════════════════════════════════════ */
+var PhoenixGame = (function(){
+  var LS = {
+    visited:'phoenix_visited', coins:'phoenix_coins', floors:'phoenix_floors',
+    ach:'phoenix_achievements', role:'phoenix_role', ref:'phoenix_ref',
+    coinsFound:'phoenix_coins_found', boss:'phoenix_boss_cleared', allUnlocked:'phoenix_all_unlocked'
+  };
+  var state = {
+    coins:0, floors:[], achievements:[], role:null,
+    refCode:'', coinsFound:[], bossCleared:[], allUnlocked:false
+  };
+  var _selectedChar = null;
+  var _lobbyTimer = null;
+  var _lobbyStart = null;
+
+  function load(){
+    state.coins = parseInt(localStorage.getItem(LS.coins)||'0',10);
+    state.floors = safeArr(LS.floors);
+    state.achievements = safeArr(LS.ach);
+    state.role = localStorage.getItem(LS.role) || null;
+    state.coinsFound = safeArr(LS.coinsFound);
+    state.bossCleared = safeArr(LS.boss);
+    state.allUnlocked = localStorage.getItem(LS.allUnlocked) === '1';
+    var r = localStorage.getItem(LS.ref);
+    if(!r){ r = 'PHOENIX-'+randCode(4); localStorage.setItem(LS.ref, r); }
+    state.refCode = r;
+  }
+  function safeArr(k){ try{ return JSON.parse(localStorage.getItem(k)||'[]'); }catch(e){ return []; } }
+  function randCode(n){ var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var i=0;i<n;i++)s+=c[Math.floor(Math.random()*c.length)];return s; }
+
+  function save(){
+    localStorage.setItem(LS.coins, state.coins);
+    localStorage.setItem(LS.floors, JSON.stringify(state.floors));
+    localStorage.setItem(LS.ach, JSON.stringify(state.achievements));
+    if(state.role) localStorage.setItem(LS.role, state.role);
+    localStorage.setItem(LS.coinsFound, JSON.stringify(state.coinsFound));
+    localStorage.setItem(LS.boss, JSON.stringify(state.bossCleared));
+    localStorage.setItem(LS.visited, '1');
+    if(state.allUnlocked) localStorage.setItem(LS.allUnlocked, '1');
+  }
+
+  /* ── KONAMI: UNLOCK ALL FLOORS ── */
+  function unlockAllFloors(){
+    state.allUnlocked = true;
+    save();
+    document.body.classList.add('all-floors-unlocked');
+    document.querySelectorAll('.reserved-band').forEach(function(band){
+      band.textContent = '🔓 UNLOCKED VIA KONAMI CODE';
+      band.classList.add('unlocked');
+    });
+  }
+  function applyUnlockedState(){
+    if(state.allUnlocked) unlockAllFloors();
+  }
+
+  /* ── COINS ── */
+  function addCoins(amt){
+    state.coins += amt;
+    var el = document.getElementById('hud-coins-val');
+    if(el){ el.textContent = state.coins.toLocaleString(); el.classList.add('bump'); setTimeout(function(){el.classList.remove('bump');},260); }
+    save();
+  }
+  function refreshCoins(){ var el=document.getElementById('hud-coins-val'); if(el) el.textContent=state.coins.toLocaleString(); }
+
+  /* ── ACHIEVEMENTS ── */
+  function unlock(id){
+    if(!ACHIEVEMENTS[id] || state.achievements.indexOf(id)!==-1) return;
+    state.achievements.push(id);
+    var a = ACHIEVEMENTS[id];
+    addCoins(a.coins);
+    popAchievement(a);
+    updateAchCount();
+    save();
+    if(state.achievements.length>=5) unlock('phoenix_rising');
+  }
+  function updateAchCount(){
+    var n = state.achievements.length;
+    var hc = document.getElementById('hud-ach-count'); if(hc) hc.textContent=n;
+    var mc = document.getElementById('ach-modal-count'); if(mc) mc.textContent=n;
+  }
+  function popAchievement(a){
+    var stack = document.getElementById('ach-stack');
+    var card = document.createElement('div');
+    card.className='ach-card';
+    card.innerHTML='<div class="ach-head">🏆 ACHIEVEMENT UNLOCKED</div>'+
+      '<div class="ach-body"><div class="ach-icon">'+a.icon+'</div>'+
+      '<div class="ach-info"><div class="ach-aname">'+a.name+'</div><div class="ach-adesc">'+a.desc+'</div></div>'+
+      '<div class="ach-coins">+'+a.coins.toLocaleString()+'</div></div>';
+    stack.appendChild(card);
+    requestAnimationFrame(function(){ card.classList.add('in'); });
+    setTimeout(function(){ card.classList.remove('in'); setTimeout(function(){ if(card.parentNode)card.parentNode.removeChild(card); },600); }, 4200);
+  }
+
+  /* ── FLOOR VISITS ── */
+  function visitFloor(n){
+    if(n<1||n>392) return;
+    if(state.floors.indexOf(n)===-1){
+      state.floors.push(n);
+      addCoins(10);
+      save();
+      markVisitedMinimap();
+      var btn=document.querySelector('[data-floor="'+n+'"].el-btn'); if(btn) btn.classList.add('visited');
+      // achievement triggers tied to specific brands
+      if(n===1){ unlock('first_ascent'); unlock('cyber_warrior'); }
+      if(n===4) unlock('ai_pioneer');
+      if(n===3) unlock('legal_legend');
+      if(state.floors.length>=5) unlock('empire_5');
+    }
+    var hf=document.getElementById('hud-floor'); if(hf) hf.textContent=n;
+    updateMinimapCurrent(n);
+  }
+
+  /* ── HIDDEN COINS ── */
+  function collectCoin(id, el){
+    if(state.coinsFound.indexOf(id)!==-1) return;
+    state.coinsFound.push(id);
+    if(el) el.classList.add('found');
+    addCoins(50);
+    unlock('secret_keeper');
+    toast('+50 Empire Coins — hidden coin found!');
+    save();
+  }
+  function restoreCoins(){
+    state.coinsFound.forEach(function(id){
+      var el=document.getElementById('coin-'+id); if(el) el.classList.add('found');
+    });
+  }
+
+  /* ── BOSS GATES ── */
+  function clearBoss(floorN, ach){
+    if(state.bossCleared.indexOf(floorN)===-1){
+      state.bossCleared.push(floorN);
+      addCoins(500);
+      if(ach) unlock(ach);
+      toast('+500 Empire Coins — commitment honored!');
+      save();
+    }
+    var gate=document.getElementById('boss-'+floorN);
+    if(gate) gate.classList.add('cleared');
+  }
+  function payBoss(floorN, amount, ach){
+    // open PayPal (honor system — cannot verify)
+    window.open('https://paypal.me/techpetcage/'+amount,'_blank','noopener');
+    clearBoss(floorN, ach);
+  }
+  function skipBoss(floorN){
+    var gate=document.getElementById('boss-'+floorN);
+    if(gate){ gate.style.opacity='0.45'; }
+    toast('Skipped — you can commit any time.');
+  }
+
+  /* ── MINIMAP ── */
+  function buildMinimap(){
+    var t=document.getElementById('mm-tower');
+    var h='<div class="mm-lobby" data-mm="0" title="Lobby"></div>';
+    for(var i=1;i<=392;i++){
+      h+='<div class="mm-floor" data-mm="'+i+'" title="Floor '+i+'"></div>';
+    }
+    t.innerHTML=h;
+    t.querySelectorAll('[data-mm]').forEach(function(el){
+      el.addEventListener('click',function(){ goToFloor(parseInt(el.getAttribute('data-mm'),10)); });
+    });
+    markVisitedMinimap();
+  }
+  function markVisitedMinimap(){
+    state.floors.forEach(function(n){
+      var el=document.querySelector('.mm-floor[data-mm="'+n+'"]'); if(el) el.classList.add('explored');
+    });
+  }
+  function updateMinimapCurrent(n){
+    document.querySelectorAll('#mm-tower [data-mm]').forEach(function(el){ el.classList.remove('current'); });
+    var el=document.querySelector('[data-mm="'+n+'"]'); if(el) el.classList.add('current');
+  }
+  function toggleMinimap(){ document.getElementById('minimap').classList.toggle('open'); }
+
+  /* ── TOAST ── */
+  function toast(msg){
+    var t=document.createElement('div');
+    t.textContent=msg;
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0A0A0A;border:1px solid var(--gold);color:var(--gold-light);font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1px;padding:12px 22px;border-radius:6px;z-index:3200;opacity:0;transition:all .35s;box-shadow:0 6px 30px rgba(0,0,0,.6)';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){ t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)'; });
+    setTimeout(function(){ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(20px)'; setTimeout(function(){ if(t.parentNode)t.parentNode.removeChild(t); },400); }, 2400);
+  }
+
+  /* ── Cinematic open (no particles — static gold radial glow only) ── */
+  function startEmbers(){
+    PhoenixGame._stopEmbers=function(){};
+  }
+
+  /* ── FLOW: CINEMATIC → CHARACTER → GAME ── */
+  function boot(){
+    load();
+    buildCharacterCards();
+    buildMinimap();
+    restoreCoins();
+    applyUnlockedState();
+    // role from prior session
+    if(state.role){
+      applyRoleEffects();
+    }
+    var visited = localStorage.getItem(LS.visited);
+    document.body.classList.add('game-locked');
+    if(visited && state.role){
+      // returning player → CONTINUE, skip straight to game
+      document.getElementById('cine-press').textContent='THE TOWER AWAITS YOUR COMMAND';
+      document.getElementById('cine-begin').textContent='CONTINUE';
+      showCinematic(true);
+    } else {
+      showCinematic(false);
+    }
+  }
+
+  function showCinematic(returning){
+    var c=document.getElementById('cinematic');
+    c.classList.add('show');
+    startEmbers();
+    PhoenixGame._returning = returning;
+  }
+  function beginFromCinematic(){
+    if(PhoenixGame._stopEmbers) PhoenixGame._stopEmbers();
+    document.getElementById('cinematic').classList.remove('show');
+    if(PhoenixGame._returning && state.role){
+      enterGame();
+    } else {
+      document.getElementById('char-select').classList.add('show');
+    }
+  }
+  function skipCinematic(){ beginFromCinematic(); }
+
+  function buildCharacterCards(){
+    var g=document.getElementById('cs-grid');
+    g.innerHTML='';
+    CHARACTERS.forEach(function(ch){
+      var card=document.createElement('div');
+      card.className='cs-card';
+      card.innerHTML='<div class="cs-icon">'+ch.icon+'</div><div class="cs-name">'+ch.name+'</div>'+
+        '<div class="cs-tagline">"'+ch.tagline+'"</div><div class="cs-bonus">'+ch.bonus+'</div>';
+      card.onclick=function(){
+        document.querySelectorAll('.cs-card').forEach(function(c){c.classList.remove('selected');});
+        card.classList.add('selected');
+        _selectedChar=ch;
+        document.getElementById('cs-confirm').classList.add('ready');
+      };
+      g.appendChild(card);
+    });
+  }
+  function confirmCharacter(){
+    if(!_selectedChar) return;
+    state.role=_selectedChar.id;
+    save();
+    applyRoleEffects();
+    document.getElementById('char-select').classList.remove('show');
+    enterGame();
+  }
+  function getRoleObj(){ return CHARACTERS.filter(function(c){return c.id===state.role;})[0] || CHARACTERS[0]; }
+
+  function applyRoleEffects(){
+    var role=getRoleObj();
+    // HUD badge
+    document.getElementById('hud-role-icon').textContent=role.icon;
+    document.getElementById('hud-role-name').textContent=role.name;
+    // Investor: show investor decks
+    if(role.id==='investor'){
+      document.querySelectorAll('.investor-deck').forEach(function(d){ d.classList.add('show'); });
+    }
+    // Advocate / Guardian: highlight floors
+    var hl = role.id==='advocate'?ROLE_HIGHLIGHT.Advocate : role.id==='guardian'?ROLE_HIGHLIGHT.Guardian : [];
+    hl.forEach(function(n){
+      var sec=document.getElementById('floor-'+n); if(sec) sec.classList.add('role-highlight');
+      var btn=document.querySelector('[data-floor="'+n+'"].el-btn'); if(btn) btn.classList.add('highlight-role');
+    });
+  }
+
+  function enterGame(){
+    document.body.classList.remove('game-locked');
+    document.body.classList.add('game-ready');
+    document.getElementById('game-hud').style.display='flex';
+    refreshCoins();
+    updateAchCount();
+    // mark previously visited floors
+    state.floors.forEach(function(n){
+      var btn=document.querySelector('[data-floor="'+n+'"].el-btn'); if(btn) btn.classList.add('visited');
+    });
+    startLobbyTimer();
+    nightCheck();
+    toast('Welcome, '+getRoleObj().name+'. Build the empire.');
+  }
+
+  function startLobbyTimer(){
+    _lobbyStart=Date.now();
+    // award lobby_lurker after 5 min if still near lobby
+    setTimeout(function(){
+      if(state.achievements.indexOf('lobby_lurker')===-1 && ELEVATOR_FLOOR<=1){
+        unlock('lobby_lurker');
+      }
+    }, 5*60*1000);
+  }
+  function nightCheck(){
+    var h=new Date().getHours();
+    if(h>=0 && h<5) unlock('night_owl');
+  }
+
+  /* ── MENU ── */
+  function openMenu(){ document.getElementById('game-menu').classList.add('show'); }
+  function closeMenu(){ document.getElementById('game-menu').classList.remove('show'); }
+  function newGame(){
+    if(!confirm('Start a new game? This resets coins, floors, and achievements.')) return;
+    [LS.visited,LS.coins,LS.floors,LS.ach,LS.role,LS.coinsFound,LS.boss].forEach(function(k){ localStorage.removeItem(k); });
+    location.reload();
+  }
+
+  /* ── ACHIEVEMENTS PANEL ── */
+  function openAchievements(){
+    var list=document.getElementById('ach-list');
+    list.innerHTML='';
+    Object.keys(ACHIEVEMENTS).forEach(function(id){
+      var a=ACHIEVEMENTS[id];
+      var got=state.achievements.indexOf(id)!==-1;
+      var row=document.createElement('div');
+      row.className='ach-list-item '+(got?'unlocked':'locked');
+      row.innerHTML='<div class="ach-li-icon">'+a.icon+'</div>'+
+        '<div class="ach-li-info"><div class="ach-li-name">'+a.name+'</div><div class="ach-li-desc">'+a.desc+'</div></div>'+
+        '<div class="ach-li-coins">+'+a.coins.toLocaleString()+'</div>';
+      list.appendChild(row);
+    });
+    updateAchCount();
+    closeMenu();
+    document.getElementById('achievements-modal').classList.remove('hidden');
+  }
+  function closeAchievements(){ document.getElementById('achievements-modal').classList.add('hidden'); }
+
+  function openCharInfo(){
+    var role=getRoleObj();
+    document.getElementById('ci-icon').textContent=role.icon;
+    document.getElementById('ci-name').textContent=role.name;
+    document.getElementById('ci-tagline').textContent='"'+role.tagline+'"';
+    document.getElementById('ci-bonus').textContent='Bonus: '+role.bonus;
+    document.getElementById('ci-refcode').textContent=state.refCode;
+    closeMenu();
+    document.getElementById('charinfo-modal').classList.remove('hidden');
+  }
+  function closeCharInfo(){ document.getElementById('charinfo-modal').classList.add('hidden'); }
+  function copyPhoenixRef(){
+    var link='https://franciscoholdingsinc.com/?ref='+state.refCode;
+    navigator.clipboard.writeText(link).catch(function(){});
+    toast('Referral link copied');
+  }
+
+  function getRefCode(){ return state.refCode; }
+
+  return {
+    boot:boot, save:save, addCoins:addCoins, unlock:unlock,
+    visitFloor:visitFloor, collectCoin:collectCoin,
+    payBoss:payBoss, skipBoss:skipBoss, clearBoss:clearBoss,
+    toggleMinimap:toggleMinimap, updateMinimapCurrent:updateMinimapCurrent,
+    beginFromCinematic:beginFromCinematic, skipCinematic:skipCinematic,
+    confirmCharacter:confirmCharacter,
+    openMenu:openMenu, closeMenu:closeMenu, newGame:newGame,
+    openAchievements:openAchievements, closeAchievements:closeAchievements,
+    openCharInfo:openCharInfo, closeCharInfo:closeCharInfo, copyPhoenixRef:copyPhoenixRef,
+    toast:toast, getRefCode:getRefCode, unlockAllFloors:unlockAllFloors
+  };
+})();
+
+/* ══════════════════════════════════════════════════════
+   RENDER ENGINE
+══════════════════════════════════════════════════════ */
+var ELEVATOR_FLOOR = 0;
+
+var FLOOR_AGENT_MAP = {1:{id:'sentinel',name:'Sentinel'},2:{id:'counsel',name:'Counsel'},3:{id:'archivist',name:'Archivist'},4:{id:'primedox',name:'PrimeDox'},5:{id:'torque',name:'Torque'},6:{id:'vetbot',name:'VetBot'},7:{id:'chronos',name:'Chronos'},8:{id:'swarm',name:'Swarm'},9:{id:'warden',name:'Warden'},10:{id:'observer',name:'Observer'},11:{id:'phoenix',name:'Phoenix'},12:{id:'crate',name:'Crate'},13:{id:'maya',name:'Maya'},14:{id:'primedox',name:'PrimeDox'}};
+
+// Per-agent swarm particle style — brand color + glyphs, no image assets.
+// Cyan/blue scoped only to sentinel (OmniGuard) per CLAUDE.md's blue/pink rule.
+var AGENT_SWARM_STYLE = {
+  sentinel: { color:'#00d4ff', glyphs:['🛡️','🔒'] },
+  counsel:  { color:'#00ff88', glyphs:['⚖️','📖'] },
+  primedox: { color:'#00ffff', glyphs:['🧠','💠'] },
+  archivist:{ color:'#8800ff', glyphs:['📚','⚖️'] },
+  swarm:    { color:'#ff8800', glyphs:['⚙️','🤖'] },
+  vetbot:   { color:'#00cccc', glyphs:['🐾','❤️'] },
+  warden:   { color:'#E5E4E2', glyphs:['🛰️','🔭'] },
+  observer: { color:'#9b59ff', glyphs:['👁️','🔮'] },
+  phoenix:  { color:'#FFD700', glyphs:['🔥','👑'] },
+  torque:   { color:'#ff0044', glyphs:['🏎️','⚡'] }
+};
+
+// Per-floor ambient backdrop — CSS radial-gradients only, no photos.
+// Themed per company per Derek's interior-design spec; keyed by the same
+// agent id as AGENT_SWARM_STYLE so colors stay consistent floor-to-floor.
+var FLOOR_THEME = {
+  sentinel:  'radial-gradient(circle at 20% 18%,rgba(0,212,255,.16),transparent 58%),radial-gradient(circle at 82% 30%,rgba(255,0,255,.10),transparent 55%),radial-gradient(circle at 50% 95%,rgba(102,0,255,.12),transparent 60%)', // OmniGuard — space station
+  counsel:   'radial-gradient(circle at 15% 25%,rgba(0,255,136,.10),transparent 55%),radial-gradient(circle at 85% 80%,rgba(212,175,55,.10),transparent 55%)', // Weedlaw — luxury legal lounge
+  primedox:  'radial-gradient(circle at 25% 22%,rgba(0,255,255,.13),transparent 55%),radial-gradient(circle at 78% 78%,rgba(0,136,255,.12),transparent 55%)', // PrimeDox — AI command center
+  archivist: 'radial-gradient(circle at 18% 20%,rgba(136,0,255,.13),transparent 55%),radial-gradient(circle at 80% 82%,rgba(212,175,55,.09),transparent 55%)', // CCLDR — legal library
+  swarm:     'radial-gradient(circle at 28% 20%,rgba(255,136,0,.11),transparent 55%),radial-gradient(circle at 72% 82%,rgba(192,192,192,.09),transparent 55%)', // CleanSwarm — clean tech lab
+  vetbot:    'radial-gradient(circle at 22% 22%,rgba(0,255,204,.11),transparent 55%),radial-gradient(circle at 78% 78%,rgba(210,105,30,.09),transparent 55%)', // TechPetCage — pet tech showroom
+  warden:    'radial-gradient(circle at 50% 25%,rgba(229,228,226,.07),transparent 55%)', // VIGILAX — neutral command
+  observer:  'radial-gradient(circle at 22% 20%,rgba(155,89,255,.13),transparent 55%),radial-gradient(circle at 78% 80%,rgba(212,175,55,.08),transparent 55%)', // SoulStack — observer hall
+  phoenix:   'radial-gradient(circle at 28% 18%,rgba(212,175,55,.14),transparent 55%),radial-gradient(circle at 74% 82%,rgba(229,228,226,.09),transparent 55%)', // Holdings Boardroom — executive penthouse
+  torque:    'radial-gradient(circle at 24% 28%,rgba(192,192,192,.13),transparent 55%),radial-gradient(circle at 76% 72%,rgba(255,255,255,.06),transparent 55%)' // Vault Velocity — chrome showroom
+};
+
+function renderFloor(f) {
+  var faSwarm = FLOOR_AGENT_MAP[f.n];
+  var theme = faSwarm ? FLOOR_THEME[faSwarm.id] : null;
+  var html = '<section class="floor-section" id="floor-'+f.n+'" data-floor="'+f.n+'"'+(theme?' style="background-image:'+theme+'"':'')+'>';
+  if (faSwarm && !f.coming && !f.secret && AGENT_SWARM_STYLE[faSwarm.id]) {
+    html += '<canvas class="floor-swarm-canvas" data-agent="'+faSwarm.id+'" aria-hidden="true"></canvas>';
+  }
+  if (f.n === 1) {
+    html += '<canvas class="floor-starfield-canvas" aria-hidden="true"></canvas>';
+    html += '<div class="og-planet" aria-hidden="true"></div>';
+  }
+  html += '<div class="floor-inner">';
+  html += '<div class="floor-label">FLOOR '+f.n+' &nbsp;·&nbsp; '+escHtml(f.name)+'</div>';
+  html += '<h2 class="floor-title">'+escHtml(f.tag)+' '+escHtml(f.name)+'</h2>';
+  html += '<p class="floor-sub">'+escHtml(f.sub)+'</p>';
+
+  // Investor deck (shown only for Investor role via CSS class)
+  html += '<div class="investor-deck"><strong>📊 INVESTOR DECK</strong>Projected division contribution to empire ARR. Engagement structures, equity tiers, and partnership terms available on request via the Boardroom (Floor 11).</div>';
+
+  if (f.pitchDeck) {
+    html += '<div class="pay-notice" style="background:rgba(212,175,55,0.12)"><strong>📈 '+escHtml(f.projection||'')+'</strong></div>';
+    html += '<div style="background:var(--card);border:1px solid var(--border-gold);border-radius:8px;padding:16px 18px;margin-bottom:1.4rem">';
+    html += '<div style="font-family:Orbitron,sans-serif;font-size:11px;color:var(--gold-light);letter-spacing:1px;margin-bottom:8px">📊 DOWNLOAD THE FULL INVESTOR PITCH DECK</div>';
+    html += '<div style="display:flex;gap:8px;flex-wrap:wrap"><input type="email" id="pitch-email-'+f.n+'" class="modal-input" placeholder="you@email.com" style="margin-bottom:0;flex:1;min-width:180px"><button class="modal-btn btn-gold" style="width:auto;margin:0;padding:10px 16px" onclick="requestPitchDeck('+f.n+')">Get the Deck →</button></div>';
+    html += '<div style="font-size:10px;color:var(--platinum-dark);margin-top:6px">We\'ll email the full investor deck to your inbox within 24 hours.</div>';
+    html += '</div>';
+  }
+
+  if (f.loopB) {
+    html += '<div class="loop-b-notice">Anonymous division · Contact-only engagement · No public client disclosure</div>';
+  }
+  if (f.note) {
+    html += '<div class="pay-notice">'+escHtml(f.note)+'</div>';
+  }
+
+  if (f.coming) {
+    if (f.reserved) {
+      html += '<div class="coming-soon-band reserved-band" id="lockband-'+f.n+'" style="background:rgba(120,120,140,.12);border-color:rgba(120,120,140,.3);color:#9aa0b0">🔒 RESERVED — LOCKED EXPANSION SLOT</div>';
+      html += '<p style="color:var(--platinum-dark);margin-bottom:1.2rem">'+escHtml(f.sub)+'. Activates as the empire scales — enter the Konami code to preview every floor.</p>';
+    } else {
+      var yr = f.comingYear || '2026';
+      html += '<div class="coming-soon-band">⚡ COMING '+yr+' — WAITLIST OPEN</div>';
+      html += '<p style="color:var(--platinum-mid);margin-bottom:1.2rem">'+escHtml(f.sub)+'. Founding client spots reserved now.</p>';
+      html += '<a href="mailto:franciscoderek7@gmail.com?subject=Waitlist%20F'+f.n+'%20'+encodeURIComponent(f.name)+'" class="floor-links" style="display:inline-flex"><span class="btn-emerald floor-links" style="padding:10px 18px;border-radius:4px;font-family:Orbitron,sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-decoration:none">Join Waitlist →</span></a>';
+    }
+  } else {
+    if (f.desc) {
+      html += '<p style="color:var(--platinum-mid);margin-bottom:1.4rem;max-width:680px">'+escHtml(f.desc)+'</p>';
+    }
+
+    if (f.n === 1) {
+      html += '<div style="display:inline-block;margin-bottom:1.4rem;padding:8px 16px;border:1px solid rgba(0,212,255,.35);border-radius:20px;background:rgba(0,212,255,.06);font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:1.5px;color:#00d4ff">🛡️ OmniGuard Protects Every Floor — 24/7 Threat Monitoring Active</div>';
+    }
+
+    if (f.feats && f.feats.length) {
+      html += '<div class="floor-features">';
+      f.feats.forEach(function(ft){ html += '<div class="feat-chip">'+escHtml(ft)+'</div>'; });
+      html += '</div>';
+    }
+
+    if (!f.secret) {
+      html += '<div class="pay-notice">💳 <strong>Pay via PayPal, Interac e-Transfer, or Bitcoin.</strong> PayPal: <strong>paypal.me/techpetcage</strong> · Interac: <strong>docweedla@gmail.com</strong> · BTC: bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x · Ref: '+escHtml(f.name)+'</div>';
+    }
+
+    if (f.pricing && f.pricing.length) {
+      var _hasMonthly = f.pricing.some(function(p){ return p.val && /\/mo$/.test(p.val); });
+      var _hasPaid = f.pricing.some(function(p){ return p.url && p.url.indexOf('paypal') !== -1; });
+      if (_hasMonthly) {
+        html += '<div class="billing-toggle-wrap"><span>Monthly</span><span class="billing-toggle" id="bt-'+f.n+'" onclick="toggleBilling('+f.n+')"><span class="knob"></span></span><span>Annual <span class="billing-save">(save 20%)</span></span></div>';
+      }
+      html += '<div class="floor-pricing">';
+      f.pricing.forEach(function(p){
+        html += '<div class="price-card'+(p.feat?' featured':'')+'">';
+        if (p.feat) html += '<span class="price-badge">★ MOST POPULAR</span>';
+        html += '<div class="price-tier">'+escHtml(p.tier)+'</div>';
+        if (p.val && /\/mo$/.test(p.val)) {
+          var _mNum = parseFloat((p.val||'').replace(/[^0-9.]/g,'')) || 0;
+          var _aVal = '$'+Math.round(_mNum*12*0.8).toLocaleString()+'/yr';
+          html += '<div class="price-val" data-m="'+escHtml(p.val)+'" data-a="'+escHtml(_aVal)+'">'+escHtml(p.val)+'</div>';
+        } else if (p.val) {
+          html += '<div class="price-val">'+escHtml(p.val)+'</div>';
+        }
+        if (p.desc) html += '<div class="price-desc">'+escHtml(p.desc)+'</div>';
+        if (p.url.includes('paypal')) {
+          var _pid = escHtml(f.name.replace(/[^a-zA-Z0-9_]/g,'_')+'_'+p.tier.replace(/[^a-zA-Z0-9_]/g,'_'));
+          var _amt = (p.val||'0').replace(/[^0-9.]/g,'') || '0';
+          var _lbl = escHtml(f.name+' — '+p.tier);
+          html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" target="_blank" rel="noopener" onclick="event.preventDefault();window.PAYMENT_PROVIDER=\'paypal\';if(window.PrimeDoxPayment&&PrimeDoxPayment.checkout){PrimeDoxPayment.checkout(\''+_pid+'\',\''+_amt+'\',\''+_lbl+'\')}else{window.open(\''+p.url+'\',\'_blank\',\'noopener\')}">💳 PayPal</a>';
+          html += '<button class="btn-stripe" onclick="window.PAYMENT_PROVIDER=\'stripe\';if(window.PrimeDoxPayment&&PrimeDoxPayment.checkout){PrimeDoxPayment.checkout(\''+_pid+'\',\''+_amt+'\',\''+_lbl+'\')}else{alert(\'Stripe checkout loading — please try again in a moment.\')};window.PAYMENT_PROVIDER=\'paypal\'">🔒 Card (Stripe)</button>';
+        } else {
+          html += '<a href="'+p.url+'" class="price-btn '+p.cls+'" '+(p.url.startsWith('http')||p.url.startsWith('mailto')?'target="_blank" rel="noopener"':'')+'>'+(p.url.startsWith('mailto')?'Inquire →':'Learn More →')+'</a>';
+        }
+        html += '</div>';
+      });
+      html += '</div>';
+      if (_hasPaid) {
+        html += '<div class="guarantee-badge">🛡 30-Day Money-Back Guarantee — no questions asked</div>';
+      }
+    }
+
+    var links = [];
+    if (f.live) links.push('<a href="'+f.live+'" class="btn-gold" target="_blank" rel="noopener">'+(f.liveLabel||'Visit →')+'</a>');
+    if (f.contact) links.push('<a href="mailto:'+f.contact+'" class="btn-emerald">Email: '+escHtml(f.contact)+' →</a>');
+    if (links.length) html += '<div class="floor-links">'+links.join('')+'</div>';
+
+    // BOSS GATE
+    if (f.boss) {
+      var b=f.boss;
+      html += '<div class="boss-gate" id="boss-'+f.n+'">';
+      html += '<div class="bg-title">'+escHtml(b.title)+'</div>';
+      html += '<div class="bg-sub">'+escHtml(b.sub)+'</div>';
+      html += '<div class="bg-btns">';
+      html += '<button class="bg-pay" onclick="PhoenixGame.payBoss('+f.n+','+b.amount+',&quot;'+b.ach+'&quot;)">⚔ Ready to Commit? — $'+b.amount+' via PayPal</button>';
+      html += '<button class="bg-skip" onclick="PhoenixGame.skipBoss('+f.n+')">Skip for now</button>';
+      html += '</div>';
+      html += '<div class="bg-cleared-msg">✓ COMMITMENT HONORED — +500 Empire Coins</div>';
+      html += '<div class="bg-stripe-note">Stripe LIVE · PayPal active · Bitcoin: bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>';
+      html += '</div>';
+    }
+  }
+
+  // Hidden coin at the top floor (392)
+  if (f.n === 392) {
+    html += '<span class="hidden-coin" id="coin-top" style="position:relative;display:inline-block;margin-top:18px" onclick="PhoenixGame.collectCoin(\'top\',this)">💰</span>';
+  }
+
+  // Agent-on-call button for active floors
+  var fa = FLOOR_AGENT_MAP[f.n];
+  if (fa && !f.coming && !f.secret) {
+    html += '<div style="margin-top:18px;padding:13px 16px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">';
+    html += '<div><div style="font-size:9px;font-weight:700;color:#10B981;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:2px;">🤖 AI Specialist On Call</div>';
+    html += '<div style="font-size:12px;color:rgba(255,255,255,0.75);">' + escHtml(fa.name) + ' — Ask anything about ' + escHtml(f.name) + '</div></div>';
+    html += '<button onclick="pdFloorChat(&quot;' + fa.id + '&quot;,&quot;Floor ' + f.n + ' — ' + escHtml(f.name) + '&quot;)" style="background:#10B981;color:#111;border:none;padding:8px 16px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:Orbitron,sans-serif;letter-spacing:1px;">Talk to ' + escHtml(fa.name) + ' →</button>';
+    html += '</div>';
+  }
+  html += '<div class="soulstack-badge"><span class="dot">●</span> SoulStack Observer &nbsp;·&nbsp; Agent Swarm Technologies &nbsp;·&nbsp; Floor '+f.n+' Active</div>';
+  html += '</div></section>';
+  return html;
+}
+
+window.requestPitchDeck = function(floorN) {
+  var input = document.getElementById('pitch-email-' + floorN);
+  var email = (input.value || '').trim();
+  if (!email) { alert('Please enter your email.'); return; }
+  try {
+    var list = JSON.parse(localStorage.getItem('fh_pitch_requests') || '[]');
+    list.push({ email: email, ts: Date.now() });
+    localStorage.setItem('fh_pitch_requests', JSON.stringify(list));
+  } catch (err) {}
+  window.location.href = 'mailto:franciscoderek7@gmail.com?subject=' + encodeURIComponent('Pitch Deck Request') + '&body=' + encodeURIComponent('Please send the Francisco Holdings investor pitch deck to: ' + email);
+  input.value = '';
+  alert('Request sent — check your inbox within 24 hours.');
+};
+
+window.submitNewsletter = function(e) {
+  e.preventDefault();
+  var input = document.getElementById('fn-email');
+  var email = (input.value || '').trim();
+  if (!email) return false;
+  try {
+    var list = JSON.parse(localStorage.getItem('fh_newsletter') || '[]');
+    list.push({ email: email, ts: Date.now() });
+    localStorage.setItem('fh_newsletter', JSON.stringify(list));
+  } catch (err) {}
+  window.location.href = 'mailto:franciscoderek7@gmail.com?subject=' + encodeURIComponent('Newsletter Signup') + '&body=' + encodeURIComponent('Please add me to the Francisco Holdings empire updates list: ' + email);
+  input.value = '';
+  return false;
+};
+
+window.toggleBilling = function(floorN) {
+  var toggle = document.getElementById('bt-'+floorN);
+  var section = document.getElementById('floor-'+floorN);
+  if (!toggle || !section) return;
+  var annual = !toggle.classList.contains('on');
+  toggle.classList.toggle('on', annual);
+  section.querySelectorAll('.price-val[data-m]').forEach(function(el){
+    el.textContent = annual ? el.getAttribute('data-a') : el.getAttribute('data-m');
+  });
+};
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ══════════════════════════════════════════════════════
+   INJECT FLOORS + ELEVATOR BUTTONS
+══════════════════════════════════════════════════════ */
+(function buildDOM() {
+  var container = document.getElementById('floors-container');
+  var shaft = document.getElementById('el-shaft');
+  var dirGrid = document.getElementById('dir-grid');
+  var fsheetGrid = document.getElementById('fsheet-grid');
+
+  FLOORS.forEach(function(f) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = renderFloor(f);
+    container.appendChild(tmp.firstElementChild);
+
+    var btn = document.createElement('button');
+    btn.className = 'el-btn';
+    btn.dataset.floor = f.n;
+    btn.title = f.name;
+    btn.textContent = 'F'+f.n+' '+f.name.split(' ')[0].substring(0,7);
+    btn.onclick = (function(n){ return function(){ goToFloor(n); }; })(f.n);
+    shaft.appendChild(btn);
+
+    var plaque = document.createElement('div');
+    plaque.className = 'dir-plaque';
+    plaque.onclick = (function(n){ return function(){ goToFloor(n); }; })(f.n);
+    plaque.innerHTML = '<span class="dir-num">F'+f.n+'</span><span class="dir-name">'+escHtml(f.name)+'</span>';
+    dirGrid.appendChild(plaque);
+
+    var fb = document.createElement('button');
+    fb.className = 'fsheet-btn';
+    fb.textContent = 'F'+f.n+'\n'+f.name.split(' ')[0];
+    fb.dataset.floor = f.n;
+    fb.onclick = (function(n){ return function(){ goToFloor(n); closeFloorSheet(); }; })(f.n);
+    fsheetGrid.appendChild(fb);
+  });
+
+  // IntersectionObserver for auto-highlight + floor visit tracking
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        var n = parseInt(e.target.dataset.floor, 10) || 0;
+        updateElevatorDisplay(n);
+        if (n >= 1) PhoenixGame.visitFloor(n);
+        PhoenixGame.updateMinimapCurrent(n);
+      }
+    });
+  }, { threshold: 0.35 });
+
+  document.querySelectorAll('.floor-section').forEach(function(s) { obs.observe(s); });
+})();
+
+/* ══════════════════════════════════════════════════════
+   FLOOR AGENT SWARM — canvas particles, brand color + emoji
+   glyph per agent. No image assets (avoids licensing risk).
+   Animates only while its floor section is in viewport.
+══════════════════════════════════════════════════════ */
+(function FloorSwarm() {
+  var canvases = document.querySelectorAll('.floor-swarm-canvas[data-agent]');
+  if (!canvases.length) return;
+
+  canvases.forEach(function(canvas) {
+    var style = AGENT_SWARM_STYLE[canvas.dataset.agent];
+    if (!style) return;
+    var section = canvas.closest('.floor-section');
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var running = false;
+    var raf = null;
+
+    function resize() {
+      canvas.width = section.clientWidth;
+      canvas.height = section.clientHeight;
+    }
+
+    function seed() {
+      var count = Math.min(100, Math.max(50, Math.round(canvas.width * canvas.height / 14000)));
+      particles = [];
+      for (var i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          size: 10 + Math.random() * 12,
+          glyph: style.glyphs[i % style.glyphs.length],
+          drift: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function tick() {
+      if (!running) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var parX = ((canvas._mx || 0.5) - 0.5) * 12;
+      var parY = ((canvas._my || 0.5) - 0.5) * 12;
+      ctx.shadowColor = style.color;
+      ctx.shadowBlur = 6;
+      particles.forEach(function(p) {
+        p.drift += 0.01;
+        p.x += p.vx + Math.sin(p.drift) * 0.05;
+        p.y += p.vy + Math.cos(p.drift) * 0.05;
+        if (p.x < -20) p.x = canvas.width + 20;
+        if (p.x > canvas.width + 20) p.x = -20;
+        if (p.y < -20) p.y = canvas.height + 20;
+        if (p.y > canvas.height + 20) p.y = -20;
+        ctx.font = p.size + 'px sans-serif';
+        ctx.globalAlpha = 0.35;
+        ctx.fillText(p.glyph, p.x + parX, p.y + parY);
+      });
+      ctx.globalAlpha = 1;
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      resize();
+      seed();
+      raf = requestAnimationFrame(tick);
+    }
+
+    function stop() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+    }
+
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) start(); else stop();
+      });
+    }, { threshold: 0.1 });
+    io.observe(section);
+
+    window.addEventListener('resize', function() {
+      if (running) { resize(); seed(); }
+    });
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    document.querySelectorAll('.floor-swarm-canvas[data-agent]').forEach(function(c) {
+      c._mx = e.clientX / window.innerWidth;
+      c._my = e.clientY / window.innerHeight;
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   OMNIGUARD STARFIELD — CSS/canvas only, scoped to Floor 1.
+   500-dot starfield, 3 parallax speeds, occasional shooting
+   star. No photos used (per Derek's "CSS only" directive).
+══════════════════════════════════════════════════════ */
+(function Starfield() {
+  var canvas = document.querySelector('.floor-starfield-canvas');
+  if (!canvas) return;
+  var section = canvas.closest('.floor-section');
+  var ctx = canvas.getContext('2d');
+  var stars = [];
+  var running = false;
+  var raf = null;
+  var mx = 0.5, my = 0.5;
+  var shootTimer = 0;
+  var shoot = null;
+
+  function resize() {
+    canvas.width = section.clientWidth;
+    canvas.height = section.clientHeight;
+  }
+
+  function seed() {
+    stars = [];
+    var count = Math.min(550, Math.max(300, Math.round(canvas.width * canvas.height / 2200)));
+    for (var i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.6 + 0.3,
+        speed: [0.15, 0.35, 0.6][i % 3],
+        tw: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function tick() {
+    if (!running) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var parBase = (mx - 0.5);
+    var parBaseY = (my - 0.5);
+    stars.forEach(function(s) {
+      s.tw += 0.02;
+      var alpha = 0.4 + 0.5 * Math.abs(Math.sin(s.tw));
+      var px = s.x + parBase * 20 * s.speed;
+      var py = s.y + parBaseY * 20 * s.speed;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+      ctx.arc(px, py, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    shootTimer++;
+    if (!shoot && shootTimer > 240 && Math.random() < 0.02) {
+      shoot = { x: Math.random() * canvas.width * 0.6, y: Math.random() * canvas.height * 0.3, vx: 6, vy: 3, life: 40 };
+      shootTimer = 0;
+    }
+    if (shoot) {
+      ctx.strokeStyle = 'rgba(0,212,255,0.8)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(shoot.x, shoot.y);
+      ctx.lineTo(shoot.x - shoot.vx * 6, shoot.y - shoot.vy * 6);
+      ctx.stroke();
+      shoot.x += shoot.vx; shoot.y += shoot.vy; shoot.life--;
+      if (shoot.life <= 0 || shoot.x > canvas.width || shoot.y > canvas.height) shoot = null;
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function start() { if (running) return; running = true; resize(); seed(); raf = requestAnimationFrame(tick); }
+  function stop() { running = false; if (raf) cancelAnimationFrame(raf); }
+
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) start(); else stop(); });
+  }, { threshold: 0.1 });
+  io.observe(section);
+
+  window.addEventListener('resize', function() { if (running) { resize(); seed(); } });
+  document.addEventListener('mousemove', function(e) {
+    mx = e.clientX / window.innerWidth;
+    my = e.clientY / window.innerHeight;
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   ELEVATOR MECHANICS
+══════════════════════════════════════════════════════ */
+function updateElevatorDisplay(n) {
+  ELEVATOR_FLOOR = n;
+  var label = n === 0 ? 'LOBBY' : 'F' + n;
+  document.getElementById('el-current').textContent = label;
+  document.getElementById('mobile-floor-name').textContent = n === 0 ? 'LOBBY' : FLOORS[n-1] ? FLOORS[n-1].name : 'F'+n;
+  var hf=document.getElementById('hud-floor'); if(hf) hf.textContent=n;
+  document.querySelectorAll('.el-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.fsheet-btn').forEach(function(b){ b.classList.remove('active'); });
+  var activeBtn = document.querySelector('[data-floor="'+n+'"].el-btn');
+  if (activeBtn) activeBtn.classList.add('active');
+  var activeFSheet = document.querySelector('[data-floor="'+n+'"].fsheet-btn');
+  if (activeFSheet) activeFSheet.classList.add('active');
+}
+
+/* ── Elevator Audio ─────────────────────── */
+function pingDing() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    [880, 1100].forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      osc.connect(gain);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      osc.start(ctx.currentTime + i * 0.14);
+      osc.stop(ctx.currentTime + 0.5);
+    });
+  } catch(e) {}
+}
+
+/* ── Elevator Door Animation ────────────── */
+function elevatorDoorClose(callback) {
+  var dL = document.getElementById('el-door-left');
+  var dR = document.getElementById('el-door-right');
+  if (!dL || !window.gsap) { if (callback) callback(); return; }
+  gsap.timeline({ onComplete: callback })
+    .to(dL, { x: 0, duration: 0.35, ease: 'power3.inOut' }, 0)
+    .to(dR, { x: 0, duration: 0.35, ease: 'power3.inOut' }, 0);
+}
+
+function elevatorDoorOpen(n) {
+  var dL = document.getElementById('el-door-left');
+  var dR = document.getElementById('el-door-right');
+  var flEl = document.getElementById('el-door-floor');
+  if (!dL || !window.gsap) return;
+  var label = n === 0 ? 'LOBBY' : 'FLOOR ' + n;
+  if (flEl) { flEl.textContent = label; gsap.fromTo(flEl, {opacity:0.9},{opacity:0,duration:0.6,delay:0.25}); }
+  gsap.timeline({ delay: 0.1 })
+    .to(dL, { x: '-100%', duration: 0.45, ease: 'power3.inOut' }, 0)
+    .to(dR, { x: '100%', duration: 0.45, ease: 'power3.inOut' }, 0);
+  pingDing();
+  if (n > 0 && FLOORS[n-1]) PhoenixGame.toast('Floor ' + n + ' — ' + FLOORS[n-1].name);
+  else if (n === 0) PhoenixGame.toast('Welcome back to the Lobby');
+}
+
+/* ── Cascading Floor Number ─────────────── */
+function cascadeFloorNumber(target) {
+  var el = document.getElementById('el-current');
+  if (!el) return;
+  var i = 0, steps = 14;
+  var iv = setInterval(function() {
+    i++;
+    el.textContent = i < steps ? 'F' + (Math.floor(Math.random() * 44) + 1) : (target === 0 ? 'LOBBY' : 'F' + target);
+    if (i >= steps) clearInterval(iv);
+  }, 38);
+}
+
+/* ── Concierge Route Logic ──────────────── */
+window.conciergeRoute = function() {
+  var q = ((document.getElementById('cd-query') || {}).value || '').toLowerCase().trim();
+  if (!q) return;
+  var rules = [
+    {k:['security','vpn','cyber','hack','virus','antivirus','omniguard','omniaguard'],f:1},
+    {k:['legal','cannabis','weed','charter','court','defense','cdsa','beno'],f:2},
+    {k:['ccldr','case track','affidavit','motion','template'],f:3},
+    {k:['primedox','ai','document automation'],f:4},
+    {k:['car','auto','vehicle','financing','torque','vault velocity'],f:5},
+    {k:['pet','dog','cat','gps collar','feeder','tracker'],f:6},
+    {k:['schedule','calendar','meeting','kiaros','booking','time'],f:7},
+    {k:['cleaning','cleanswarm','gig','workforce','janitor'],f:8},
+    {k:['vigilax','surveillance','stalker','opsec','spy'],f:9},
+    {k:['badge','achievement','soulstack','reputation'],f:10},
+    {k:['invest','boardroom','partner','equity','dynasty','fund'],f:11},
+    {k:['package','packaging','shipping','supply chain','techpack'],f:12},
+    {k:['mindshift','coaching','mindset','maya','transformation'],f:13},
+  ];
+  for (var i = 0; i < rules.length; i++) {
+    if (rules[i].k.some(function(k){ return q.includes(k); })) {
+      goToFloor(rules[i].f);
+      document.getElementById('cd-query').value = '';
+      return;
+    }
+  }
+  PhoenixGame.toast('Showing all 392 floors — scroll or use the directory below');
+  document.getElementById('cd-query').value = '';
+};
+
+window.goToFloor = function(n) {
+  var target = document.getElementById('floor-' + n);
+  if (!target) return;
+  updateElevatorDisplay(n);
+  cascadeFloorNumber(n);
+  var flash = document.getElementById('el-shaft-flash');
+  if (flash && window.gsap) { gsap.fromTo(flash, {opacity:0.7}, {opacity:0, duration:0.5}); }
+  elevatorDoorClose(function() {
+    target.scrollIntoView({ behavior: 'instant' });
+    elevatorDoorOpen(n);
+    if (n >= 1) PhoenixGame.visitFloor(n);
+    PhoenixGame.updateMinimapCurrent(n);
+  });
+};
+
+window.goFloorDelta = function(delta) {
+  var n = Math.max(0, Math.min(392, ELEVATOR_FLOOR + delta));
+  goToFloor(n);
+};
+
+window.openFloorSheet = function() { document.getElementById('floor-sheet').classList.add('open'); };
+window.closeFloorSheet = function() { document.getElementById('floor-sheet').classList.remove('open'); };
+
+// Keyboard navigation: type floor number + Enter
+var _keyBuf = '';
+document.addEventListener('keydown', function(e) {
+  // Cinematic ENTER-to-begin
+  if (e.key === 'Enter' && document.getElementById('cinematic').classList.contains('show')) {
+    PhoenixGame.beginFromCinematic(); return;
+  }
+  // ESC → game menu (when in game)
+  if (e.key === 'Escape' && document.body.classList.contains('game-ready')) {
+    var gm=document.getElementById('game-menu');
+    if(gm.classList.contains('show')) PhoenixGame.closeMenu(); else PhoenixGame.openMenu();
+    return;
+  }
+  if (e.key >= '0' && e.key <= '9') { _keyBuf += e.key; }
+  else if (e.key === 'Enter' && _keyBuf) {
+    var n = parseInt(_keyBuf, 10);
+    if (n >= 0 && n <= 392) goToFloor(n);
+    _keyBuf = '';
+  } else if (e.key !== 'Shift' && e.key !== 'Control' && e.key !== 'Alt') { _keyBuf = ''; }
+});
+
+/* ── Phoenix Tower Skyline Canvas 2D — supertall hero tower + background skyline ─────────────── */
+(function initCitySkyline() {
+  var canvas = document.getElementById('city-canvas');
+  var section = document.getElementById('floor-0');
+  if (!canvas || !section) return;
+  var W = canvas.width = section.offsetWidth;
+  var H = canvas.height = section.offsetHeight;
+  var ctx = canvas.getContext('2d');
+  var tick = 0;
+
+  function genBackgroundBuildings(w, h) {
+    var bs = [], count = Math.max(14, Math.floor(w / 26));
+    for (var i = 0; i < count; i++) {
+      var bW = 10 + Math.random() * 24;
+      var bH = 40 + Math.random() * (h * 0.34);
+      var x = (i / count) * w + (Math.random() * (w / count * 0.5));
+      var windows = [];
+      var wC = Math.max(1, Math.floor(bW / 7));
+      var wR = Math.max(1, Math.floor(bH / 11));
+      for (var r = 0; r < wR; r++) {
+        for (var c = 0; c < wC; c++) {
+          windows.push({ r: r, c: c, lit: Math.random() > 0.45 });
+        }
+      }
+      bs.push({ x: x, w: bW, h: bH, windows: windows });
+    }
+    return bs;
+  }
+
+  // The hero tower: 392 floors, 45 of them active Francisco Holdings divisions,
+  // 346 reserved capacity, 1 secret summit (Phoenix). Floors with built content
+  // (FLOORS array entries that aren't "coming soon") glow gold/cyan.
+  function genHeroTower(w, h) {
+    // Dubai-style stepped/tapering silhouette: 3 setback tiers narrowing
+    // toward the top, topped with a single slender gold spire (no photoreal
+    // image asset available — this is a stylized vector approximation, not
+    // a photo). Strict gold/platinum/silver palette; cyan reserved for rare
+    // tech-highlight floors only.
+    var towerH = h * 0.74;
+    var baseW = Math.min(320, w * 0.36);
+    var towerX = w / 2 - baseW / 2;
+    var floorCount = 392;
+    var floorH = towerH / floorCount;
+    var floors = [];
+    for (var f = 0; f < floorCount; f++) {
+      var data = (typeof FLOORS !== 'undefined') ? FLOORS[f] : null;
+      var active = data ? !data.coming : (f % 4 !== 3);
+      var tierScale = f < 131 ? 1 : (f < 261 ? 0.76 : 0.52);
+      floors.push({ active: active, accent: (f % 11 === 0) ? 'cyan' : 'gold', w: baseW * tierScale });
+    }
+    var spireH = towerH * 0.18;
+    return { x: towerX, w: baseW, h: towerH, y: h - towerH, floorH: floorH, floors: floors, spireH: spireH };
+  }
+
+  var bgBuildings = genBackgroundBuildings(W, H);
+  var tower = genHeroTower(W, H);
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, 'rgba(4,4,12,0.95)');
+    grad.addColorStop(1, 'rgba(8,8,20,0.98)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Background skyline — dim, out-of-focus city lights
+    bgBuildings.forEach(function(b) {
+      var y = H - b.h;
+      ctx.fillStyle = 'rgba(8,8,16,0.85)';
+      ctx.fillRect(b.x, y, b.w, b.h);
+      b.windows.forEach(function(w) {
+        ctx.fillStyle = w.lit ? 'rgba(229,228,226,0.10)' : 'rgba(255,255,255,0.02)';
+        ctx.fillRect(b.x + w.c * 7 + 1, y + w.r * 11 + 3, 5, 7);
+      });
+    });
+
+    // Hero tower — Phoenix Tower, glass + steel, 45 illuminated floors,
+    // Dubai-style tapering tiers + single gold spire. Strict gold/platinum/
+    // silver palette; cyan reserved for rare tech-highlight floors only.
+    var centerX = tower.x + tower.w / 2;
+    var pulse = 0.5 + 0.5 * Math.sin(tick * 0.02);
+
+    tower.floors.forEach(function(fl, i) {
+      var fy = tower.y + tower.h - (i + 1) * tower.floorH;
+      var fx = centerX - fl.w / 2;
+      var glassGrad = ctx.createLinearGradient(fx, fy, fx + fl.w, fy);
+      glassGrad.addColorStop(0, 'rgba(16,16,18,0.97)');
+      glassGrad.addColorStop(0.5, 'rgba(30,30,34,0.97)');
+      glassGrad.addColorStop(1, 'rgba(16,16,18,0.97)');
+      ctx.fillStyle = glassGrad;
+      ctx.fillRect(fx, fy, fl.w, tower.floorH);
+
+      // Vertical LED edge strips — gold when the floor is active, dim
+      // platinum-grey when inactive ("coming soon")
+      var edgeColor = fl.active ? 'rgba(212,175,55,0.8)' : 'rgba(160,160,165,0.25)';
+      ctx.save();
+      if (fl.active) { ctx.shadowColor = 'rgba(212,175,55,0.85)'; ctx.shadowBlur = 6; }
+      ctx.fillStyle = edgeColor;
+      ctx.fillRect(fx - 2, fy, 2, tower.floorH);
+      ctx.fillRect(fx + fl.w, fy, 2, tower.floorH);
+      ctx.restore();
+
+      var glow = fl.active ? (fl.accent === 'cyan' ? 'rgba(0,229,255,0.5)' : 'rgba(212,175,55,0.7)') : 'rgba(229,228,226,0.08)';
+      ctx.save();
+      if (fl.active) { ctx.shadowColor = glow; ctx.shadowBlur = 5; }
+      ctx.fillStyle = glow;
+      ctx.fillRect(fx + 6, fy + 2, Math.max(2, fl.w - 12), Math.max(2, tower.floorH - 4));
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(fx, fy, fl.w, tower.floorH);
+    });
+
+    // Single tapering gold spire above the topmost tier (Burj-style)
+    var topFloor = tower.floors[tower.floors.length - 1];
+    var spireBaseY = tower.y;
+    var spireTipY = tower.y - tower.spireH;
+    var spireGrad = ctx.createLinearGradient(centerX - topFloor.w * 0.1, spireBaseY, centerX + topFloor.w * 0.1, spireBaseY);
+    spireGrad.addColorStop(0, 'rgba(122,90,18,0.95)');
+    spireGrad.addColorStop(0.5, 'rgba(212,175,55,0.95)');
+    spireGrad.addColorStop(1, 'rgba(122,90,18,0.95)');
+    ctx.fillStyle = spireGrad;
+    ctx.beginPath();
+    ctx.moveTo(centerX - topFloor.w * 0.1, spireBaseY);
+    ctx.lineTo(centerX - 1.5, spireTipY);
+    ctx.lineTo(centerX + 1.5, spireTipY);
+    ctx.lineTo(centerX + topFloor.w * 0.1, spireBaseY);
+    ctx.closePath();
+    ctx.fill();
+
+    // Rooftop beacon — gold, at the spire tip
+    ctx.fillStyle = 'rgba(212,175,55,' + (0.4 + pulse * 0.4) + ')';
+    ctx.beginPath();
+    ctx.arc(centerX, spireTipY - 4, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(212,175,55,0.3)';
+    ctx.beginPath();
+    ctx.moveTo(centerX, spireTipY);
+    ctx.lineTo(centerX, spireTipY - 4);
+    ctx.stroke();
+
+    // Ground fog
+    var fog = ctx.createLinearGradient(0, H - 70, 0, H);
+    fog.addColorStop(0, 'rgba(8,8,16,0)');
+    fog.addColorStop(1, 'rgba(20,22,30,0.55)');
+    ctx.fillStyle = fog;
+    ctx.fillRect(0, H - 70, W, 70);
+
+    tick++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  window.addEventListener('resize', function() {
+    W = canvas.width = section.offsetWidth;
+    H = canvas.height = section.offsetHeight;
+    bgBuildings = genBackgroundBuildings(W, H);
+    tower = genHeroTower(W, H);
+  });
+})();
+
+/* Inject the "elevator section" hidden coin into the elevator sidebar */
+(function addElevatorCoin(){
+  var el = document.getElementById('elevator');
+  if(!el) return;
+  var coin = document.createElement('span');
+  coin.className='hidden-coin';
+  coin.id='coin-elevator';
+  coin.textContent='💰';
+  coin.style.cssText='position:absolute;bottom:52px;left:50%;transform:translateX(-50%)';
+  coin.onclick=function(){ PhoenixGame.collectCoin('elevator', coin); };
+  el.appendChild(coin);
+})();
+
+/* ══════════════════════════════════════════════════════
+   GSAP ANIMATIONS
+══════════════════════════════════════════════════════ */
+(function initGSAP() {
+  if (!window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.floor-section').forEach(function(sec) {
+    gsap.fromTo(sec.querySelector('.floor-inner') || sec,
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: { trigger: sec, start: 'top 80%', once: true }
+      });
+  });
+
+  gsap.fromTo('.lobby-monogram', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.2 });
+  gsap.fromTo('.lobby-sub', { opacity: 0 }, { opacity: 1, duration: 0.8, delay: 0.6 });
+  gsap.fromTo('.lobby-cta', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.9 });
+
+  document.querySelectorAll('.price-card').forEach(function(c) {
+    c.addEventListener('mouseenter', function() { gsap.to(c, {y:-3, duration:0.2}); });
+    c.addEventListener('mouseleave', function() { gsap.to(c, {y:0, duration:0.2}); });
+  });
+
+  var arrBars = document.getElementById('arr-bars');
+  if (arrBars) {
+    var heights = {yr1:18, yr2:32, yr3:52, yr4:78, yr5:100};
+    ScrollTrigger.create({
+      trigger: arrBars, start: 'top 85%', once: true,
+      onEnter: function() {
+        Object.keys(heights).forEach(function(k){
+          var el = document.getElementById('bar-'+k);
+          if (el) gsap.to(el, {height: heights[k]+'px', duration: 1.2, ease: 'power2.out', delay: k==='yr1'?0:k==='yr2'?0.1:k==='yr3'?0.2:k==='yr4'?0.35:0.5});
+        });
+      }
+    });
+  }
+
+  ScrollTrigger.create({
+    trigger: '#ctr-brands', start: 'top 85%', once: true,
+    onEnter: function() {
+      gsap.to({val:0}, {val:45, duration:1.5, ease:'power2.out', onUpdate: function(){ document.getElementById('ctr-brands').textContent=Math.floor(this.targets()[0].val)+'+'; }});
+      gsap.to({val:0}, {val:392, duration:1.8, ease:'power2.out', onUpdate: function(){ document.getElementById('ctr-clients').textContent=Math.floor(this.targets()[0].val); }});
+      gsap.to({val:0}, {val:200, duration:1.6, ease:'power2.out', onUpdate: function(){ document.getElementById('ctr-cases').textContent=Math.floor(this.targets()[0].val)+'+'; }});
+      setTimeout(function(){document.getElementById('ctr-arr').textContent='$2.4M';}, 1200);
+    }
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   KONAMI CODE → DYNASTY PROTOCOL + ACHIEVEMENT
+══════════════════════════════════════════════════════ */
+(function() {
+  var seq = [38,38,40,40,37,39,37,39,66,65];
+  var buf = [];
+  document.addEventListener('keydown', function(e) {
+    buf.push(e.keyCode);
+    if (buf.length > seq.length) buf.shift();
+    if (buf.join(',') === seq.join(',')) {
+      document.getElementById('dynasty-modal').classList.remove('hidden');
+      document.getElementById('dynasty-modal').classList.add('open');
+      PhoenixGame.unlock('konami');
+      PhoenixGame.unlockAllFloors();
+      PhoenixGame.toast('🔓 All 392 floors unlocked');
+    }
+  });
+})();
+
+/* ══════════════════════════════════════════════════════
+   REFERRAL + CHECKOUT ENGINE
+══════════════════════════════════════════════════════ */
+(function() {
+  var REF_KEY = 'fh_ref_v2';
+  var MY_REF_KEY = 'fh_myref_v2';
+  var AFF_KEY = 'fh_affcode_v2';
+  var _checkout = {price:0,discounted:0,product:'',baseUrl:''};
+  var _userRefCode = '';
+
+  // Capture incoming ?ref=
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('ref')) {
+    var incoming = params.get('ref').toUpperCase();
+    localStorage.setItem(REF_KEY, incoming);
+    // PHOENIX referral → 5% discount message
+    if (/^PHOENIX-[A-Z0-9]{4}$/.test(incoming)) {
+      window.addEventListener('load', function(){
+        setTimeout(function(){ PhoenixGame.toast('Referral '+incoming+' applied — 5% discount unlocked!'); }, 1200);
+      });
+    }
+  }
+
+  function getUserRefCode() {
+    // Prefer Phoenix game referral code if present
+    var phx = PhoenixGame.getRefCode && PhoenixGame.getRefCode();
+    if (phx) return phx;
+    var c = localStorage.getItem(MY_REF_KEY);
+    if (!c) { c = 'FH'+Math.floor(1000+Math.random()*9000); localStorage.setItem(MY_REF_KEY, c); }
+    return c;
+  }
+  function isValidCode(c) { return /^(FH\d{4}|AFF-[A-Z]{1,4}-\d{3}|PHOENIX-[A-Z0-9]{4}|VETERAN|SENIOR|FIXED|TERMINAL|STUDENT|INVESTOR)/i.test(c); }
+  // Honor-system discount tiers (self-declared, no documentation required)
+  var HONOR_TIERS = [
+    {key:'terminal', code:'TERMINAL', percent:0.50, label:'Compassion Pricing',    desc:'Terminal Illness'},
+    {key:'fixed',    code:'FIXED',    percent:0.40, label:'Accessibility Pricing', desc:'Fixed / Low Income'},
+    {key:'veteran',  code:'VETERAN',  percent:0.35, label:'Service Pricing',       desc:'Veterans / Active Military'},
+    {key:'senior',   code:'SENIOR',   percent:0.30, label:'Wisdom Pricing',        desc:'Seniors (65+)'},
+    {key:'student',  code:'STUDENT',  percent:0.25, label:'Future Builder Pricing',desc:'Students'}
+  ];
+  // Referrer reward ladder — discount you EARN for your own future purchases based on successful referrals you've made
+  var REFERRER_TIERS = [
+    {min:10, percent:0.50, perk:'+ 1 free month'},
+    {min:5,  percent:0.30, perk:'+ priority support'},
+    {min:3,  percent:0.20, perk:''},
+    {min:1,  percent:0.10, perk:''}
+  ];
+  function getDiscount(c) {
+    if(!isValidCode(c)) return 0;
+    var u = c.toUpperCase();
+    if (/^INVESTOR/.test(u)) return 0.25; // investor referral — 25% for life
+    for (var i=0;i<HONOR_TIERS.length;i++) { if (u.indexOf(HONOR_TIERS[i].code)===0) return HONOR_TIERS[i].percent; }
+    return /^PHOENIX-/i.test(c) ? 0.05 : 0.10;
+  }
+  function getMyReferralCount() {
+    var data = {}; try { data = JSON.parse(localStorage.getItem('pd_referral') || '{}'); } catch(e){}
+    var myCode = (localStorage.getItem(AFF_KEY) || getUserRefCode() || '').toUpperCase();
+    var commissions = data.commissions || [];
+    return commissions.filter(function(c){ return (c.code||'').toUpperCase() === myCode; }).length;
+  }
+  function getReferrerTierDiscount() {
+    var n = getMyReferralCount();
+    for (var i=0;i<REFERRER_TIERS.length;i++) { if (n >= REFERRER_TIERS[i].min) return REFERRER_TIERS[i]; }
+    return null;
+  }
+
+  window.openCheckout = function(productName, priceCAD, paypalUrl, excludeDiscount) {
+    _checkout.price = priceCAD; _checkout.discounted = priceCAD;
+    _checkout.product = productName; _checkout.baseUrl = paypalUrl;
+    document.getElementById('ref-product-name').textContent = productName;
+    document.getElementById('ref-orig-price').textContent = '$'+priceCAD.toLocaleString()+' CAD';
+    document.getElementById('ref-orig-price').style.textDecoration = '';
+    document.getElementById('ref-orig-price').style.color = '';
+    document.getElementById('ref-disc-price').style.display = 'none';
+    document.getElementById('ref-savings-badge').style.display = 'none';
+    document.getElementById('ref-code-msg').textContent = '';
+    document.getElementById('ref-honor-select').value = '';
+    document.getElementById('ref-honor-msg').style.display = 'none';
+    document.getElementById('ref-tier-msg').textContent = '';
+    document.getElementById('ref-discount-block').style.display = excludeDiscount ? 'none' : '';
+    if (excludeDiscount) {
+      var note = document.createElement('div');
+      note.style.cssText = 'font-size:11px;color:var(--platinum-dark);margin-top:8px';
+      note.textContent = 'Penthouse tier — pricing is fixed, no discounts apply.';
+      document.getElementById('ref-discount-block').parentNode.insertBefore(note, document.getElementById('ref-discount-block'));
+    }
+    var stored = localStorage.getItem(REF_KEY) || '';
+    document.getElementById('ref-code-input').value = stored;
+    if (stored && !excludeDiscount) window.applyRefCode();
+    else if (!excludeDiscount) {
+      var rt = getReferrerTierDiscount();
+      if (rt) {
+        var saved = Math.round(_checkout.price * rt.percent * 100) / 100;
+        _checkout.discounted = Math.round((_checkout.price - saved) * 100) / 100;
+        document.getElementById('ref-disc-price').textContent = '$'+_checkout.discounted.toLocaleString()+' CAD';
+        document.getElementById('ref-disc-price').style.display = 'block';
+        document.getElementById('ref-orig-price').style.textDecoration = 'line-through';
+        document.getElementById('ref-orig-price').style.color = 'rgba(234,234,226,0.35)';
+        document.getElementById('ref-tier-msg').textContent = '⭐ Referrer reward applied — '+(rt.percent*100)+'% off ('+getMyReferralCount()+' referrals)'+(rt.perk?' '+rt.perk:'');
+      }
+    }
+    _userRefCode = getUserRefCode();
+    document.getElementById('ref-your-code').textContent = _userRefCode;
+    var myCount = getMyReferralCount();
+    var nextTier = REFERRER_TIERS.slice().reverse().filter(function(t){return t.min>myCount;})[0];
+    document.getElementById('ref-your-tier').textContent = 'Referrals: '+myCount+' · 1=10% · 3=20% · 5=30%+priority · 10=50%+free month · Investor=25% for life'+(nextTier?' — '+(nextTier.min-myCount)+' more to unlock '+(nextTier.percent*100)+'%':'');
+    document.getElementById('ref-checkout-modal').classList.remove('hidden');
+  };
+
+  window.applyHonorDiscount = function(sel) {
+    var code = sel.value;
+    var msg = document.getElementById('ref-honor-msg');
+    if (!code) { msg.style.display = 'none'; if(!document.getElementById('ref-code-input').value) { _checkout.discounted = _checkout.price; document.getElementById('ref-disc-price').style.display='none'; document.getElementById('ref-orig-price').style.textDecoration=''; } return; }
+    document.getElementById('ref-code-input').value = code;
+    window.applyRefCode();
+    msg.style.display = 'block';
+  };
+
+  window.shareReferral = function(channel) {
+    var code = _userRefCode || getUserRefCode();
+    var link = 'https://franciscoholdingsinc.com/?ref='+code;
+    var text = 'I use Francisco Holdings Inc. for AI security, legal defense, and automation — use my code for a discount: '+link;
+    var url;
+    if (channel === 'sms') url = 'sms:?body='+encodeURIComponent(text);
+    else if (channel === 'email') url = 'mailto:?subject='+encodeURIComponent('A referral for you — Francisco Holdings')+'&body='+encodeURIComponent(text);
+    else if (channel === 'whatsapp') url = 'https://wa.me/?text='+encodeURIComponent(text);
+    else url = 'https://twitter.com/intent/tweet?text='+encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener');
+  };
+
+  window.closeCheckoutModal = function() {
+    document.getElementById('ref-checkout-modal').classList.add('hidden');
+    document.getElementById('checkout-pay-step').classList.remove('hidden');
+    document.getElementById('order-confirmation').classList.add('hidden');
+  };
+
+  window.showOrderConfirmation = function() {
+    document.getElementById('checkout-pay-step').classList.add('hidden');
+    document.getElementById('order-confirmation').classList.remove('hidden');
+  };
+
+  window.applyRefCode = function() {
+    var code = document.getElementById('ref-code-input').value.trim().toUpperCase();
+    var msg = document.getElementById('ref-code-msg');
+    if (!code) { msg.textContent = ''; return; }
+    if (isValidCode(code)) {
+      var disc = getDiscount(code);
+      var saved = Math.round(_checkout.price * disc * 100) / 100;
+      _checkout.discounted = Math.round((_checkout.price - saved) * 100) / 100;
+      document.getElementById('ref-disc-price').textContent = '$'+_checkout.discounted.toLocaleString()+' CAD';
+      document.getElementById('ref-disc-price').style.display = 'block';
+      document.getElementById('ref-orig-price').style.textDecoration = 'line-through';
+      document.getElementById('ref-orig-price').style.color = 'rgba(234,234,226,0.35)';
+      document.getElementById('ref-savings-badge').textContent = 'You save $'+saved.toFixed(2)+' with code '+code;
+      document.getElementById('ref-savings-badge').style.display = 'inline-block';
+      var honorMatch = HONOR_TIERS.filter(function(t){return code.indexOf(t.code)===0;})[0];
+      msg.textContent = honorMatch ? '✓ '+honorMatch.label+' — '+(disc*100)+'% off ('+honorMatch.desc+')' : '✓ Code applied — '+(disc*100)+'% discount activated!';
+      msg.className = 'ref-code-msg success';
+      localStorage.setItem(REF_KEY, code);
+    } else {
+      msg.textContent = '✗ Code not recognized.';
+      msg.className = 'ref-code-msg error';
+      _checkout.discounted = _checkout.price;
+    }
+  };
+
+  window.proceedToPayPal = function() {
+    window.open('https://paypal.me/techpetcage/'+_checkout.discounted, '_blank', 'noopener');
+    var referrerCode = localStorage.getItem(REF_KEY) || null;
+    if (referrerCode && window.ReferralEngine && typeof window.ReferralEngine.trackSale === 'function') {
+      window.ReferralEngine.trackSale(_checkout.product, _checkout.discounted, referrerCode);
+    }
+    window.showOrderConfirmation();
+  };
+
+  function renderEarningsDashboard() {
+    var totalEl = document.getElementById('aff-earn-total');
+    var countEl = document.getElementById('aff-earn-count');
+    var listEl = document.getElementById('aff-earn-list');
+    if (!totalEl) return;
+    var data = {};
+    try { data = JSON.parse(localStorage.getItem('pd_referral') || '{}'); } catch (e) {}
+    var commissions = data.commissions || [];
+    var myCode = (localStorage.getItem(AFF_KEY) || '').toUpperCase();
+    var mine = myCode ? commissions.filter(function(c){ return (c.code||'').toUpperCase() === myCode; }) : [];
+    var total = mine.reduce(function(sum, c){ return sum + (c.commission || 0); }, 0);
+    totalEl.textContent = '$' + total.toFixed(2);
+    countEl.textContent = mine.length;
+    if (!mine.length) {
+      listEl.innerHTML = '<div style="text-align:center;color:var(--platinum-dark);padding:8px 0">No sales tracked yet — share your link above.</div>';
+      return;
+    }
+    listEl.innerHTML = mine.slice().reverse().slice(0, 10).map(function(c) {
+      return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)">' +
+        '<span>' + escHtml(c.productId || 'Sale') + ' · ' + c.rate + '</span>' +
+        '<span style="color:var(--gold-light)">+$' + c.commission.toFixed(2) + '</span></div>';
+    }).join('');
+  }
+
+  window.copyRefCode = function() {
+    var code = _userRefCode || getUserRefCode();
+    var link = 'https://franciscoholdingsinc.com/?ref='+code;
+    navigator.clipboard.writeText(link).catch(function(){
+      var el=document.createElement('input');el.value=link;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);
+    });
+    var btn = document.querySelector('.ref-copy-btn');
+    if (btn) { var o=btn.textContent; btn.textContent='✓ Copied!'; setTimeout(function(){btn.textContent=o;},1500); }
+  };
+
+  // Intercept all PayPal links
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href*="paypal.me/techpetcage/"]').forEach(function(link) {
+      var href = link.getAttribute('href');
+      var match = href.match(/\/(\d+)CAD$/i);
+      if (!match) return;
+      var amt = parseInt(match[1], 10);
+      var name = link.closest('.price-card') ? link.closest('.price-card').querySelector('.price-tier').textContent : 'Francisco Holdings Product';
+      link.addEventListener('click', function(e) { e.preventDefault(); window.openCheckout(name, amt, href); });
+    });
+  });
+
+  // Affiliate modal
+  window.openAffModal = function() {
+    var existingCode = localStorage.getItem(AFF_KEY);
+    if (existingCode) {
+      document.getElementById('aff-code-display').textContent = existingCode;
+      document.getElementById('aff-link-display').textContent = 'franciscoholdingsinc.com/?ref='+existingCode;
+      document.getElementById('aff-form').style.display='none';
+      document.getElementById('aff-result').style.display='block';
+      renderEarningsDashboard();
+    } else {
+      document.getElementById('aff-form').style.display='block';
+      document.getElementById('aff-result').style.display='none';
+    }
+    document.getElementById('aff-signup-modal').classList.remove('hidden');
+  };
+  window.closeAffModal = function() { document.getElementById('aff-signup-modal').classList.add('hidden'); };
+  window.generateAffCode = function() {
+    var name = document.getElementById('aff-name').value.trim();
+    var email = document.getElementById('aff-email').value.trim();
+    if (!name||!email) { alert('Name and email required.'); return; }
+    var code = 'AFF-'+name.toUpperCase().replace(/[^A-Z]/g,'').substring(0,4)+'-'+Math.floor(100+Math.random()*900);
+    localStorage.setItem(AFF_KEY, code);
+    document.getElementById('aff-code-display').textContent = code;
+    document.getElementById('aff-link-display').textContent = 'franciscoholdingsinc.com/?ref='+code;
+    document.getElementById('aff-form').style.display='none';
+    document.getElementById('aff-result').style.display='block';
+    renderEarningsDashboard();
+    window.open('mailto:franciscoderek7@gmail.com?subject=New+Affiliate+Signup&body=Name:+'+encodeURIComponent(name)+'%0AEmail:+'+encodeURIComponent(email)+'%0ACode:+'+code,'_blank');
+  };
+  window.copyAffLink = function() {
+    var link = 'franciscoholdingsinc.com/?ref='+document.getElementById('aff-code-display').textContent;
+    navigator.clipboard.writeText(link).catch(function(){});
+    var btn=document.querySelector('#aff-result .modal-btn.btn-emerald');if(btn){var o=btn.textContent;btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=o;},1500);}
+  };
+})();
+
+/* ══════════════════════════════════════════════════════
+   BOOT THE GAME
+══════════════════════════════════════════════════════ */
+window.addEventListener('load', function(){ PhoenixGame.boot(); });
+</script>
+<div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
+
+<!-- Elevator Doors (animate closed/open on floor change) -->
+<div id="el-door-left"><div class="el-door-label">PHOENIX TOWER</div></div>
+<div id="el-door-right"><div class="el-door-label">FRANCISCO HOLDINGS INC.</div></div>
+<div id="el-door-floor">LOBBY</div>
+
+<!-- PrimeDox AI Concierge — Routes to floor specialists -->
+<script>window.PRIMEDOX_API_URL = '';</script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/agent-config.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/chat-widget.js" data-agent="primedox"></script>
+<script>
+function pdFloorChat(agentId, floorName) {
+  var panel = document.getElementById('pd-panel');
+  var bubble = document.getElementById('pd-bubble');
+  if (!panel || !bubble) return;
+  panel.style.display = '';
+  panel.classList.add('open');
+  if (bubble) bubble.classList.add('open');
+  var input = document.getElementById('pd-input');
+  if (input) { input.value = 'I\'m on ' + floorName + '. Talk to ' + agentId; input.focus(); }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/stripe-payment-links.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/payment-provider.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/apex-agent.js"></script>
+<script>
+window.Apex && window.Apex.initStickyBuyBar({
+  text: 'BENO-X Playbook — $49',
+  href: 'https://paypal.me/techpetcage/49',
+  ctaText: 'Pay $49 →',
+  target: '_blank',
+  accent: '#D4AF37'
+});
+window.Apex && window.Apex.initExitIntent({ magnet: 'Francisco Holdings Empire Overview', formspreeId: 'YOUR_FORM_ID' });
+</script>
+</body>
+</html>
