@@ -103,6 +103,14 @@
     .map-link{display:inline-flex;align-items:center;gap:6px;color:var(--green-bright);font-size:13px;font-weight:600;text-decoration:none;margin-top:12px;transition:opacity .2s}
     .map-link:hover{opacity:.8}
 
+    /* CONSULTING INTAKE FORM */
+    .intake-section{background:var(--surface);border:1px solid var(--gold);border-radius:16px;padding:36px;margin-top:48px}
+    .intake-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px}
+    .intake-sub{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+    .intake-success{display:none;background:rgba(0,255,136,.1);border:1px solid var(--green-bright);border-radius:10px;padding:20px;margin-top:20px;text-align:center}
+    .intake-success-title{font-size:16px;font-weight:700;color:var(--green-bright);margin-bottom:6px}
+    .intake-success-text{font-size:13px;color:var(--muted);line-height:1.6}
+
     /* ZPRIMEDOXAI CHAT WIDGET */
     .chat-widget{position:fixed;bottom:32px;right:32px;z-index:999}
     .chat-bubble{width:60px;height:60px;background:linear-gradient(135deg,var(--green),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(46,125,50,.5);transition:transform .2s;font-size:26px;position:relative}
@@ -289,6 +297,49 @@
         📍 View on Google Maps — Lindsay, Ontario K9V 2Z8
       </a>
     </div>
+
+    <!-- CONSULTING INTAKE FORM -->
+    <div class="intake-section" id="intake">
+      <div class="intake-title">Consulting Intake Form</div>
+      <div class="intake-sub">Starting a new engagement with CCC? Fill out this short intake form so Doc WeedLaw and the AI specialist team can prepare before your first conversation.</div>
+      <form id="intake-form" onsubmit="submitIntake(event)">
+        <div class="form-row-2">
+          <div class="form-row" style="margin:0">
+            <label for="intake-name">Full Name</label>
+            <input type="text" id="intake-name" name="intake-name" placeholder="Your name" required>
+          </div>
+          <div class="form-row" style="margin:0">
+            <label for="intake-email">Email Address</label>
+            <input type="email" id="intake-email" name="intake-email" placeholder="you@email.com" required>
+          </div>
+        </div>
+        <div class="form-row-2" style="margin-top:20px">
+          <div class="form-row" style="margin:0">
+            <label for="intake-org">Company / Organization (Optional)</label>
+            <input type="text" id="intake-org" name="intake-org" placeholder="Business or organization name">
+          </div>
+          <div class="form-row" style="margin:0">
+            <label for="intake-contact-method">Preferred Contact Method</label>
+            <select id="intake-contact-method" name="intake-contact-method">
+              <option value="Email">Email</option>
+              <option value="Phone">Phone</option>
+              <option value="Video Call">Video Call</option>
+              <option value="In-Person (Lindsay, ON)">In-Person (Lindsay, ON)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:20px">
+          <label for="intake-need">What do you need help with?</label>
+          <textarea id="intake-need" name="intake-need" placeholder="Describe your situation — licensing, facility build, compliance, legal defense, medical access, or anything else..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Submit Intake Form</button>
+        <div class="form-note">No information is sent anywhere in this preview — this confirms your submission was received locally.</div>
+      </form>
+      <div class="intake-success" id="intake-success">
+        <div class="intake-success-title">✓ Intake Received</div>
+        <div class="intake-success-text">Thank you — Doc WeedLaw's team will review your intake and follow up using your preferred contact method within 24–48 hours.</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -320,5 +371,16 @@
   </div>
 </footer>
 
+<script>
+function submitIntake(e){
+  e.preventDefault();
+  var form = document.getElementById('intake-form');
+  var success = document.getElementById('intake-success');
+  var btn = form.querySelector('.form-submit');
+  form.style.display = 'none';
+  success.style.display = 'block';
+  btn.disabled = true;
+}
+</script>
 </body>
 </html>
