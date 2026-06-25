@@ -1,4 +1,4 @@
-const CACHE_NAME = "primedox-v2";
+const CACHE_NAME = "primedox-v3";
 const CACHE_FILES = [
   "./",
   "./index.html",
