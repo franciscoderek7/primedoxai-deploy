@@ -349,6 +349,9 @@ footer{margin-left:0;background:#07070D;border-top:1px solid var(--border-gold);
 
 /* ── DIGITAL FLOOR READOUT (LED-style) ───────────── */
 #el-readout{display:block;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-align:center;padding:6px 4px;border-bottom:1px solid var(--border-gold);flex-shrink:0;background:#000;color:#ff8a1f;text-shadow:0 0 6px rgba(255,138,31,.7),0 0 14px rgba(255,138,31,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#el-readout.in-transit{animation:rd-pulse 0.6s ease-in-out infinite}
+@keyframes rd-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.el-btn:disabled,#el-arrows button:disabled{opacity:.4;cursor:wait;pointer-events:none}
 #el-readout .rd-floor{color:var(--gold-light);text-shadow:0 0 6px rgba(212,175,55,.7)}
 
 /* ── CITY SKYLINE CANVAS ────────────────── */
@@ -1958,6 +1961,8 @@ window.conciergeRoute = function() {
 window.goToFloor = function(n) {
   var target = document.getElementById('floor-' + n);
   if (!target) return;
+  var destLabel = n === 0 ? 'Lobby' : (FLOORS[n-1] ? FLOORS[n-1].name : ('Floor ' + n));
+  setElevatorTransit(true, n, destLabel);
   updateElevatorDisplay(n);
   cascadeFloorNumber(n);
   var flash = document.getElementById('el-shaft-flash');
@@ -1965,6 +1970,7 @@ window.goToFloor = function(n) {
   elevatorDoorClose(function() {
     target.scrollIntoView({ behavior: 'instant' });
     elevatorDoorOpen(n);
+    setElevatorTransit(false, n, destLabel);
     if (n >= 1) PhoenixGame.visitFloor(n);
     PhoenixGame.updateMinimapCurrent(n);
   });
@@ -1975,8 +1981,44 @@ window.goFloorDelta = function(delta) {
   goToFloor(n);
 };
 
+/* ── In-Transit Loading State ───────────── */
+function setElevatorTransit(active, n, destLabel) {
+  var rd = document.getElementById('el-readout');
+  var dock = document.getElementById('mobile-floor-name');
+  if (rd) {
+    rd.classList.toggle('in-transit', active);
+    if (active) {
+      var verb = (n >= ELEVATOR_FLOOR) ? 'Ascending' : 'Descending';
+      rd.innerHTML = '<span class="rd-floor">' + verb + ' to ' + (n === 0 ? 'Lobby' : 'Floor ' + n) + '…</span>';
+    }
+  }
+  if (dock && active) { dock.textContent = 'Arriving…'; }
+  document.querySelectorAll('.el-btn, #el-arrows button').forEach(function(b){ b.disabled = !!active; });
+}
+
 window.openFloorSheet = function() { document.getElementById('floor-sheet').classList.add('open'); };
 window.closeFloorSheet = function() { document.getElementById('floor-sheet').classList.remove('open'); };
+
+/* ── Scroll-to-change-floor on the elevator sidebar ──────
+   Wheel/trackpad scroll while hovering the elevator panel
+   steps one floor per "tick", throttled to the existing
+   door-animation duration so it can't queue up multiple
+   goToFloor() calls mid-transit. Native #el-shaft list
+   scrolling still works normally (this is a higher-level
+   wheel handler on the whole sidebar, not a scroll hijack
+   of the shaft's own overflow). */
+(function elevatorWheelNav() {
+  var el = document.getElementById('elevator');
+  if (!el) return;
+  var locked = false;
+  el.addEventListener('wheel', function(e) {
+    if (locked) { e.preventDefault(); return; }
+    e.preventDefault();
+    locked = true;
+    goFloorDelta(e.deltaY > 0 ? 1 : -1);
+    setTimeout(function(){ locked = false; }, 950);
+  }, { passive: false });
+})();
 
 // Keyboard navigation: type floor number + Enter
 var _keyBuf = '';
