@@ -7,9 +7,10 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
-    --bg:#0a0d14;--panel:#0d1120;--border:rgba(99,102,241,0.15);
-    --accent:#6366f1;--accent2:#818cf8;--text:#e2e8f0;--muted:#64748b;
-    --user:#1e1b4b;--ai:#0d1628;--green:#10b981;--gold:#f59e0b;
+    --bg:#0a0a0a;--panel:#111111;--border:rgba(192,192,192,0.18);
+    --accent:#00d4ff;--accent2:#4fc3ff;--text:#e8e8e8;--muted:#8892a4;
+    --user:#1c1f26;--ai:#0d0d0d;--green:#10b981;--gold:#d4af37;
+    --red:#ef4444;--silver:#c0c0c0;
   }
   body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;overflow:hidden}
 
@@ -43,10 +44,10 @@
   .msg.user{flex-direction:row-reverse}
   .msg-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;align-self:flex-start;margin-top:2px}
   .msg.ai .msg-avatar{background:linear-gradient(135deg,var(--accent),var(--accent2))}
-  .msg.user .msg-avatar{background:#312e81}
+  .msg.user .msg-avatar{background:#1f2128;border:1px solid var(--gold)}
   .msg-bubble{padding:12px 14px;border-radius:12px;max-width:calc(100% - 60px);font-size:13px;line-height:1.6}
   .msg.ai .msg-bubble{background:var(--ai);border:1px solid var(--border);color:var(--text)}
-  .msg.user .msg-bubble{background:var(--user);color:#c7d2fe}
+  .msg.user .msg-bubble{background:var(--user);color:#cdeeff}
   .msg-bubble h3{font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:8px}
   .msg-bubble h4{font-size:12px;font-weight:700;color:var(--gold);margin:10px 0 4px}
   .msg-bubble ul,.msg-bubble ol{padding-left:18px;margin:6px 0}
@@ -57,8 +58,10 @@
   .msg-bubble .doc-output{background:#050810;border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:14px;margin-top:10px;font-family:'Courier New',monospace;font-size:11px;line-height:1.7;color:#cbd5e1;white-space:pre-wrap;max-height:400px;overflow-y:auto}
   .msg-bubble .doc-output::-webkit-scrollbar{width:3px}
   .msg-bubble .doc-output::-webkit-scrollbar-thumb{background:rgba(99,102,241,0.3);border-radius:2px}
-  .copy-btn{margin-top:8px;padding:5px 12px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:var(--accent2);border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.15s}
-  .copy-btn:hover{background:rgba(99,102,241,0.3)}
+  .copy-btn{margin-top:8px;padding:5px 12px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.3);color:var(--accent2);border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.15s}
+  .copy-btn:hover{background:rgba(0,212,255,0.25)}
+  .copy-btn.starred{background:rgba(212,175,55,0.15);border-color:rgba(212,175,55,0.4);color:var(--gold)}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap}
   .quick-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
   .chip{padding:5px 10px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);color:var(--accent2);border-radius:16px;font-size:11px;cursor:pointer;transition:all 0.15s}
   .chip:hover{background:rgba(99,102,241,0.2)}
@@ -94,6 +97,67 @@
 
   @media(max-width:900px){.doc-panel{display:none}}
   @media(max-width:600px){.sidebar{display:none}}
+
+  /* SEARCH + BREADCRUMB */
+  .search-row{padding:0 20px;margin-top:8px}
+  .search-box{width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12px;outline:none}
+  .search-box:focus{border-color:var(--gold)}
+  .search-box::placeholder{color:var(--muted)}
+  .breadcrumb{padding:8px 20px 0;font-size:11px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .breadcrumb a{color:var(--accent2);text-decoration:none;cursor:pointer}
+  .breadcrumb a:hover{text-decoration:underline}
+  .breadcrumb .sep{color:#3a3a3a}
+  .breadcrumb .current{color:var(--gold)}
+
+  /* CASES */
+  .case-item{padding:8px 12px;cursor:pointer;border-radius:6px;margin:0 8px 2px;font-size:12px;color:#94a3b8;display:flex;justify-content:space-between;align-items:center;gap:6px}
+  .case-item:hover,.case-item.active{background:rgba(0,212,255,0.1);color:var(--accent2)}
+  .case-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .case-dot.urgent{background:var(--red);box-shadow:0 0 6px var(--red)}
+  .case-dot.ok{background:var(--green)}
+  .star-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;padding:0 2px;flex-shrink:0}
+  .star-btn.starred{color:var(--gold)}
+  .add-case-btn{margin:4px 8px 8px;padding:6px 10px;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.35);color:var(--gold);border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;width:calc(100% - 16px)}
+  .add-case-btn:hover{background:rgba(212,175,55,0.2)}
+
+  /* DASHBOARD */
+  .dash-wrap{flex:1;overflow-y:auto;padding:20px}
+  .dash-card{background:var(--ai);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
+  .dash-card h3{font-size:13px;color:var(--gold);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em}
+  .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px}
+  .dash-field{margin-bottom:8px}
+  .dash-field label{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}
+  .dash-field input,.dash-field select,.dash-field textarea{width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;font-family:inherit}
+  .dash-field textarea{resize:vertical;min-height:50px}
+  .timeline-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px}
+  .timeline-item:last-child{border-bottom:none}
+  .timeline-date{color:var(--accent2);font-weight:600;flex-shrink:0;min-width:78px}
+  .timeline-item.urgent .timeline-date{color:var(--red)}
+  .timeline-item.urgent{background:rgba(239,68,68,0.06);border-radius:6px;padding-left:6px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase}
+  .badge.urgent{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.4)}
+  .badge.ok{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.4)}
+  .btn-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .btn-sm{padding:6px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:none;color:var(--text)}
+  .btn-sm.primary{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+  .btn-sm.gold{background:rgba(212,175,55,0.15);color:var(--gold);border-color:rgba(212,175,55,0.4)}
+  .btn-sm.danger{background:rgba(239,68,68,0.1);color:var(--red);border-color:rgba(239,68,68,0.3)}
+  .doc-history-item{font-size:11px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:100}
+  .modal-overlay.open{display:flex}
+  .modal-box{background:var(--panel);border:1px solid var(--gold);border-radius:12px;padding:20px;width:90%;max-width:420px;max-height:85vh;overflow-y:auto}
+  .modal-box h3{color:var(--gold);font-size:14px;margin-bottom:14px}
+
+  .urgent-flag{color:var(--red);font-weight:700}
+  .offscreen{position:absolute;left:-9999px;top:-9999px;white-space:pre-wrap}
+
+  @media print{
+    body *{visibility:hidden}
+    #printArea,#printArea *{visibility:visible}
+    #printArea{position:absolute;top:0;left:0;width:100%;padding:0.75in;font-family:'Times New Roman',Times,serif;font-size:12pt;line-height:1.5;color:#000;background:#fff;white-space:pre-wrap}
+  }
 </style>
 </head>
 <body>
@@ -102,13 +166,28 @@
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-icon">⚖️</div>
+      <div class="sidebar-logo-icon">⚡</div>
       <div class="sidebar-logo-text">
         <h1>PrimeDox AI</h1>
         <p>Legal Intelligence System</p>
       </div>
     </div>
   </div>
+
+  <div class="search-row" style="padding:10px 12px 0">
+    <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search cases, documents, case law..." oninput="runSearch(this.value)">
+  </div>
+
+  <div class="sidebar-section">My Cases</div>
+  <div id="caseList"></div>
+  <button class="add-case-btn" onclick="openCaseModal()">+ Add Case</button>
+  <button class="sidebar-btn" onclick="openMyInfoModal()"><span class="icon">👤</span>My Info / Auto-Fill</button>
+
+  <div class="sidebar-section">Recent Documents</div>
+  <div id="recentList" style="padding-bottom:4px"></div>
+
+  <div class="sidebar-section">Favorites</div>
+  <div id="favList" style="padding-bottom:4px"></div>
 
   <div class="sidebar-section">Knowledge Vault</div>
   <button class="sidebar-btn active" onclick="setMode('chat')"><span class="icon">💬</span>Chat</button>
@@ -150,6 +229,10 @@
     </div>
     <a href="#" onclick="document.querySelector('.upgrade-panel').scrollIntoView({behavior:'smooth'});return false;" style="text-decoration:none"><span class="tier-badge">FREE TIER</span></a>
   </div>
+
+  <div class="breadcrumb" id="breadcrumb"><a onclick="goHome()">Home</a></div>
+
+  <div class="dash-wrap" id="dashWrap" style="display:none"></div>
 
   <div class="chat-wrap" id="chatWrap">
     <!-- Welcome message -->
@@ -231,6 +314,22 @@
     <div class="doc-item-title">Medical Necessity Defense</div>
     <div class="doc-item-sub">R. v. Parker · R. v. Smith · Medical evidence</div>
   </div>
+  <div class="doc-item" onclick="quickPrompt('Generate a Notice of Motion for my upcoming hearing')">
+    <div class="doc-item-title">Notice of Motion</div>
+    <div class="doc-item-sub">Civil/Criminal Motion · Auto-filled from active case</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft a Statement of Claim')">
+    <div class="doc-item-title">Statement of Claim</div>
+    <div class="doc-item-sub">Civil action · Auto-filled from active case</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft a Charter Application — constitutional challenge')">
+    <div class="doc-item-title">Charter Application</div>
+    <div class="doc-item-sub">Constitutional challenge · s.52/s.24 relief</div>
+  </div>
+  <div class="doc-item" onclick="quickPrompt('Draft an HRTO Application to the Human Rights Tribunal of Ontario')">
+    <div class="doc-item-title">HRTO Application</div>
+    <div class="doc-item-sub">Human Rights Tribunal of Ontario · s.34</div>
+  </div>
 
   <div class="upgrade-panel">
     <h3>Upgrade Your Access</h3>
@@ -240,6 +339,61 @@
     <p style="font-size:10px;color:#475569;margin-top:8px;text-align:center;">First 14 days free. No auto-bill.</p>
   </div>
 </div>
+
+<!-- MY INFO MODAL -->
+<div class="modal-overlay" id="myInfoModal">
+  <div class="modal-box">
+    <h3>My Info — Auto-Fill (saved only on this device)</h3>
+    <div class="dash-field"><label>Full Legal Name</label><input id="mi_name" placeholder="Derek Francisco"></div>
+    <div class="dash-field"><label>Address for Service</label><input id="mi_address" placeholder="Street, City, Province, Postal Code"></div>
+    <div class="dash-field"><label>Phone</label><input id="mi_phone" placeholder="705-XXX-XXXX"></div>
+    <div class="dash-field"><label>Email</label><input id="mi_email" placeholder="you@email.com"></div>
+    <div class="dash-field"><label>City / Town (for sworn-at line)</label><input id="mi_city" placeholder="Lindsay"></div>
+    <p style="font-size:10px;color:var(--muted);margin:6px 0 10px;">This stays in your browser's local storage only. It is never sent anywhere or saved to the site.</p>
+    <div class="btn-row">
+      <button class="btn-sm primary" onclick="saveMyInfo()">Save</button>
+      <button class="btn-sm" onclick="closeModal('myInfoModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT CASE MODAL -->
+<div class="modal-overlay" id="caseModal">
+  <div class="modal-box">
+    <h3 id="caseModalTitle">Add Case</h3>
+    <input type="hidden" id="case_id">
+    <div class="dash-field"><label>Case Name</label><input id="case_name" placeholder="e.g. Francisco v. AG"></div>
+    <div class="dash-field"><label>Court File Number</label><input id="case_number" placeholder="CV-26-00000064-0000"></div>
+    <div class="dash-field"><label>Court</label><input id="case_court" placeholder="Ontario Superior Court of Justice — Lindsay"></div>
+    <div class="dash-field"><label>Opposing Party</label><input id="case_opposing" placeholder="Attorney General of Ontario"></div>
+    <div class="dash-field"><label>Status</label>
+      <select id="case_status"><option>Active</option><option>Pending Hearing</option><option>Awaiting Response</option><option>Closed</option></select>
+    </div>
+    <div class="dash-field"><label>Next Deadline (date)</label><input type="date" id="case_deadline"></div>
+    <div class="dash-field"><label>Next Deadline — what is it</label><input id="case_deadline_label" placeholder="e.g. Motion hearing"></div>
+    <div class="dash-field"><label>Notes</label><textarea id="case_notes" placeholder="Anything else to remember about this case"></textarea></div>
+    <div class="btn-row">
+      <button class="btn-sm primary" onclick="saveCase()">Save Case</button>
+      <button class="btn-sm" onclick="closeModal('caseModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TIMELINE EVENT MODAL -->
+<div class="modal-overlay" id="eventModal">
+  <div class="modal-box">
+    <h3>Add Timeline Event</h3>
+    <input type="hidden" id="event_case_id">
+    <div class="dash-field"><label>Date</label><input type="date" id="event_date"></div>
+    <div class="dash-field"><label>Event</label><input id="event_label" placeholder="e.g. Filed Notice of Motion"></div>
+    <div class="btn-row">
+      <button class="btn-sm primary" onclick="saveEvent()">Add</button>
+      <button class="btn-sm" onclick="closeModal('eventModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="printArea" class="offscreen"></div>
 
 <script>
 // ═══════════════════════════════════════════════
@@ -599,7 +753,7 @@ Supreme Court of Canada — per curiam (unanimous, 5 paragraphs)
   // ── DOCUMENTS ────────────────────────────────
   'ncq': {
     title: 'Notice of Constitutional Question — Template',
-    doc: true,
+    doc: true, key: 'ncq',
     content: `ONTARIO SUPERIOR COURT OF JUSTICE
 (NOTICE OF CONSTITUTIONAL QUESTION — Rule 4.11 of the Rules of Criminal Procedure)
 
@@ -659,7 +813,7 @@ SIGNED: ___________________________
 
   's8motion': {
     title: 'Charter s.8 Garofoli Application — Template',
-    doc: true,
+    doc: true, key: 's8motion',
     content: `ONTARIO SUPERIOR COURT OF JUSTICE
 APPLICATION TO EXCLUDE EVIDENCE
 (Charter s.24(2) — Garofoli Application)
@@ -717,7 +871,7 @@ SIGNED: ___________________________
 
   'pintea_letter': {
     title: 'Pintea Accommodation Request Letter',
-    doc: true,
+    doc: true, key: 'pintea_letter',
     content: `[DATE]
 
 VIA EMAIL AND COURT FILING
@@ -768,7 +922,7 @@ cc: Crown Attorney [NAME OR OFFICE], via email/fax`
 
   'affidavit': {
     title: 'Affidavit Template — Cannabis Possession Case',
-    doc: true,
+    doc: true, key: 'affidavit',
     content: `ONTARIO SUPERIOR COURT OF JUSTICE
 
 Court File No.: [COURT FILE NUMBER]
@@ -811,7 +965,7 @@ NOTE: This affidavit must be sworn before a Commissioner of Oaths, Notary Public
 
   'demand_letter': {
     title: 'Demand Letter — Return of Seized Property',
-    doc: true,
+    doc: true, key: 'demand_letter',
     content: `[DATE]
 
 VIA REGISTERED MAIL AND EMAIL
@@ -863,6 +1017,221 @@ Dated: [DATE]
 
 ___________________________
 [YOUR FULL LEGAL NAME]`
+  },
+
+  'notice_of_motion': {
+    title: 'Notice of Motion — Template',
+    doc: true, key: 'notice_of_motion',
+    content: `ONTARIO SUPERIOR COURT OF JUSTICE
+
+Court File No.: [COURT FILE NUMBER]
+
+BETWEEN:
+
+[YOUR FULL LEGAL NAME]
+Plaintiff/Applicant/Moving Party
+
+— and —
+
+[OPPOSING PARTY NAME]
+Defendant/Respondent
+
+NOTICE OF MOTION
+
+[YOUR FULL LEGAL NAME] will make a motion to the court on [HEARING DATE] at [TIME], or as soon after that time as the motion can be heard, at [COURTHOUSE ADDRESS, e.g. "Lindsay Courthouse, 114 Russell Street West, Lindsay, ON"].
+
+PROPOSED METHOD OF HEARING: The motion is to be heard [in writing / by telephone / by video conference / in person] as may be permitted by the court.
+
+THE MOTION IS FOR:
+1. [RELIEF SOUGHT #1 — e.g., "An order extending the time to file the Applicant's responding materials"]
+2. [RELIEF SOUGHT #2]
+3. Costs of this motion; and
+4. Such further and other relief as this Honourable Court deems just.
+
+THE GROUNDS FOR THE MOTION ARE:
+1. [GROUND #1 — state the relevant fact]
+2. [GROUND #2]
+3. [GROUND #3]
+4. Rule [RULE NUMBER] of the Rules of Civil Procedure
+5. Such further and other grounds as counsel may advise and this Honourable Court may permit.
+
+THE FOLLOWING DOCUMENTARY EVIDENCE will be used at the hearing of the motion:
+1. The Affidavit of [YOUR FULL LEGAL NAME], sworn [DATE], and exhibits attached thereto;
+2. [ADDITIONAL DOCUMENT];
+3. Such further and other material as counsel may advise and this Honourable Court may permit.
+
+DATE: [DATE]
+
+___________________________
+[YOUR FULL LEGAL NAME]
+Self-Represented Litigant
+[ADDRESS FOR SERVICE]
+[PHONE / EMAIL]
+
+TO: [OPPOSING PARTY / OPPOSING COUNSEL NAME AND ADDRESS]`
+  },
+
+  'statement_of_claim': {
+    title: 'Statement of Claim — Template',
+    doc: true, key: 'statement_of_claim',
+    content: `ONTARIO SUPERIOR COURT OF JUSTICE
+
+Court File No.: [COURT FILE NUMBER]
+
+BETWEEN:
+
+[YOUR FULL LEGAL NAME]
+Plaintiff
+
+— and —
+
+[DEFENDANT NAME(S)]
+Defendant(s)
+
+STATEMENT OF CLAIM
+
+TO THE DEFENDANT(S)
+
+A LEGAL PROCEEDING HAS BEEN COMMENCED AGAINST YOU in this court. The claim made against you is set out in the following pages.
+
+IF YOU WISH TO DEFEND THIS PROCEEDING, you or an Ontario lawyer acting for you must prepare a statement of defence in Form 18A prescribed by the Rules of Civil Procedure, serve it on the plaintiff's address for service indicated below, and file it, with proof of service, in this court office, WITHIN TWENTY DAYS after this statement of claim is served on you, if you are served in Ontario.
+
+CLAIM:
+1. The Plaintiff claims:
+   (a) Damages in the amount of $[AMOUNT];
+   (b) Pre-judgment and post-judgment interest pursuant to the Courts of Justice Act, RSO 1990, c C.43;
+   (c) Costs of this action; and
+   (d) Such further and other relief as this Honourable Court deems just.
+
+THE PARTIES:
+2. The Plaintiff, [YOUR FULL LEGAL NAME], is an individual residing in [CITY], Ontario.
+3. The Defendant, [DEFENDANT NAME], is [DESCRIBE — e.g., "a corporation incorporated under the laws of Ontario" / "an individual residing at..."].
+
+FACTS:
+4. [STATEMENT OF FACT #1 — what happened, when, where]
+5. [STATEMENT OF FACT #2]
+6. [STATEMENT OF FACT #3 — describe the conduct giving rise to the claim]
+7. As a result of the Defendant's conduct described above, the Plaintiff has suffered damages in the amount of $[AMOUNT], particulars of which include: [DESCRIBE LOSSES — e.g., financial loss, breach of contract, negligence].
+
+CAUSE(S) OF ACTION:
+8. The Defendant's conduct described above constitutes [BREACH OF CONTRACT / NEGLIGENCE / BREACH OF FIDUCIARY DUTY / OTHER], entitling the Plaintiff to the relief claimed.
+
+DATE: [DATE]
+
+___________________________
+[YOUR FULL LEGAL NAME]
+Self-Represented Plaintiff
+[ADDRESS FOR SERVICE]
+[PHONE / EMAIL]`
+  },
+
+  'charter_application': {
+    title: 'Charter Application — Constitutional Challenge Template',
+    doc: true, key: 'charter_application',
+    content: `ONTARIO SUPERIOR COURT OF JUSTICE
+
+Court File No.: [COURT FILE NUMBER]
+
+IN THE MATTER OF an Application pursuant to Section 24(1) of the Canadian Charter of Rights and Freedoms
+
+BETWEEN:
+
+[YOUR FULL LEGAL NAME]
+Applicant
+
+— and —
+
+[RESPONDENT NAME, e.g. "HIS MAJESTY THE KING" / "ATTORNEY GENERAL OF ONTARIO"]
+Respondent
+
+NOTICE OF APPLICATION
+
+APPLICATION FOR CONSTITUTIONAL RELIEF
+
+TO THE RESPONDENT(S):
+
+A LEGAL PROCEEDING HAS BEEN COMMENCED by the Applicant. The relief claimed is set out in the following pages.
+
+THE APPLICATION IS FOR:
+1. A declaration that [STATUTE/PROVISION] violates Section(s) [CHARTER SECTION(S), e.g. "7, 8, 15"] of the Canadian Charter of Rights and Freedoms;
+2. A declaration that the impugned provision is of no force or effect pursuant to Section 52(1) of the Constitution Act, 1982, or alternatively a constitutional exemption;
+3. A remedy pursuant to Section 24(1) of the Charter, including [SPECIFIC REMEDY SOUGHT];
+4. Costs of this Application; and
+5. Such further and other relief as this Honourable Court deems just.
+
+THE GROUNDS FOR THE APPLICATION ARE:
+1. The Applicant is affected by [STATUTE/PROVISION/GOVERNMENT ACTION].
+2. [FACTUAL BASIS — describe how the law or action affects the Applicant personally]
+3. The impugned provision/action violates the Applicant's rights as follows:
+   (a) [SPECIFIC CHARTER VIOLATION AND REASONING]
+4. The violation is not justified under Section 1 of the Charter because:
+   (a) The objective is not pressing and substantial; or
+   (b) The means are not rationally connected to the objective; or
+   (c) The provision does not minimally impair the right; or
+   (d) The deleterious effects outweigh the salutary effects.
+5. Sections 1, 7, 8, 9, 10, 11(b), 15, 24, and 52 of the Canadian Charter of Rights and Freedoms and the Constitution Act, 1982.
+
+THE FOLLOWING DOCUMENTARY EVIDENCE will be used at the hearing of the Application:
+1. The Affidavit of [YOUR FULL LEGAL NAME], sworn [DATE];
+2. [SUPPORTING DOCUMENTS/EVIDENCE];
+3. Such further evidence as counsel may advise and this Honourable Court may permit.
+
+DATE: [DATE]
+
+___________________________
+[YOUR FULL LEGAL NAME]
+Self-Represented Applicant
+[ADDRESS FOR SERVICE]
+[PHONE / EMAIL]`
+  },
+
+  'hrto_application': {
+    title: 'HRTO Application — Human Rights Tribunal of Ontario Template',
+    doc: true, key: 'hrto_application',
+    content: `HUMAN RIGHTS TRIBUNAL OF ONTARIO
+
+APPLICATION UNDER SECTION 34 OF THE HUMAN RIGHTS CODE
+
+File No.: [HRTO FILE NUMBER — leave blank if not yet assigned]
+
+APPLICANT:
+Name: [YOUR FULL LEGAL NAME]
+Address: [ADDRESS FOR SERVICE]
+Phone / Email: [PHONE / EMAIL]
+
+RESPONDENT(S):
+Name: [RESPONDENT NAME, e.g. "CIBC" / "Telus Communications Inc."]
+Address: [RESPONDENT ADDRESS, if known]
+
+1. SOCIAL AREA: This application relates to discrimination in:
+   ☐ Employment  ☐ Housing  ☐ Goods, Services and Facilities  ☐ Contracts  ☐ Membership in vocational associations or trade unions
+
+2. GROUND(S) OF DISCRIMINATION ALLEGED (s.1, Human Rights Code, RSO 1990, c H.19):
+   [GROUND(S) — e.g., disability, race, creed, association]
+
+3. PARTICULARS OF THE INFRINGEMENT:
+   (a) On or about [DATE], the Respondent [DESCRIBE THE CONDUCT — e.g., "denied/terminated services without justification"].
+   (b) [ADDITIONAL FACTS — describe the pattern of treatment, dates, names of individuals involved].
+   (c) The Respondent's conduct treated the Applicant differently/adversely because of [PROTECTED GROUND], contrary to Section [SECTION] of the Human Rights Code.
+   (d) As a result, the Applicant suffered: [DESCRIBE HARM — financial loss, loss of dignity, injury to feelings].
+
+4. DATE OF LAST INCIDENT: [DATE — application must generally be filed within one year of the last incident]
+
+5. REMEDY SOUGHT:
+   (a) General damages for injury to dignity, feelings and self-respect in the amount of $[AMOUNT];
+   (b) Compensation for monetary losses in the amount of $[AMOUNT];
+   (c) A public interest remedy requiring the Respondent to [SPECIFIC REMEDY — e.g., "implement a human rights policy", "provide training"];
+   (d) Such further relief as the Tribunal considers just.
+
+6. HAVE YOU FILED A COMPLAINT ABOUT THIS MATTER ELSEWHERE? [YES/NO — describe, e.g. another tribunal, court, union grievance]
+
+I confirm the information in this Application is true to the best of my knowledge.
+
+DATE: [DATE]
+
+___________________________
+[YOUR FULL LEGAL NAME]
+Self-Represented Applicant`
   }
 };
 
@@ -888,6 +1257,18 @@ function findResponse(query) {
   }
   if (q.includes('demand letter') || (q.includes('return') && q.includes('seized')) || q.includes('s.490') || q.includes('490')) {
     return docResponse(KB.demand_letter);
+  }
+  if (q.includes('notice of motion') || (q.includes('motion') && q.includes('hearing'))) {
+    return docResponse(KB.notice_of_motion);
+  }
+  if (q.includes('statement of claim') || (q.includes('claim') && q.includes('plaintiff'))) {
+    return docResponse(KB.statement_of_claim);
+  }
+  if (q.includes('hrto') || q.includes('human rights tribunal') || q.includes('human rights application')) {
+    return docResponse(KB.hrto_application);
+  }
+  if ((q.includes('charter') && q.includes('application')) || q.includes('constitutional application') || q.includes('charter challenge')) {
+    return docResponse(KB.charter_application);
   }
 
   // Knowledge queries
@@ -971,7 +1352,7 @@ function kbResponse(entry) {
 }
 
 function docResponse(entry) {
-  return { type: 'doc', title: entry.title, body: entry.content };
+  return { type: 'doc', title: entry.title, body: entry.content, key: entry.key };
 }
 
 // ═══════════════════════════════════════════════
@@ -1010,17 +1391,24 @@ function renderTyping() {
 }
 
 function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function formatResponse(res) {
   if (res.type === 'doc') {
-    const escaped = res.body.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const filled = autoFillText(res.body);
+    const escaped = filled.replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const id = 'doc-' + Date.now();
+    const fav = isFavorite(res.key);
     return `<h3>${res.title}</h3>
-<p style="font-size:11px;color:#f59e0b;margin-bottom:8px">⚠️ Template document — replace all [BRACKETED] fields with your specific information. Not educational information.</p>
+<p style="font-size:11px;color:#f59e0b;margin-bottom:8px">⚠️ Template document — auto-filled from your saved "My Info" and active case where possible. Replace any remaining [BRACKETED] fields with your specifics. Not legal advice.</p>
 <div class="doc-output" id="${id}">${escaped}</div>
-<button class="copy-btn" onclick="copyDoc('${id}')">📋 Copy Document</button>`;
+<div class="btn-row">
+<button class="copy-btn" onclick="copyDoc('${id}')">📋 Copy</button>
+<button class="copy-btn" onclick="printDoc('${id}')">🖨️ Print / Save PDF</button>
+<button class="copy-btn" onclick="emailDoc('${id}','${(res.title||'').replace(/'/g,"\\'")}')">✉️ Email</button>
+<button class="copy-btn ${fav?'starred':''}" onclick="toggleFavBtn(this,'${res.key}','${(res.title||'').replace(/'/g,"\\'")}')">${fav?'★ Favorited':'☆ Favorite'}</button>
+</div>`;
   }
 
   if (res.type === 'knowledge' || res.type === 'default') {
@@ -1096,6 +1484,14 @@ function sendMessage() {
     const res = findResponse(q);
     const html = formatResponse(res);
     renderMessage('ai', html);
+    if (res.type === 'doc') {
+      addRecent(res.title, res.key);
+      logDocToActiveCase(res.title);
+      const c = getActiveCase();
+      updateBreadcrumb(c
+        ? [{label:'Home',fn:'goHome()'},{label:c.name,fn:`selectCase('${c.id}')`},{label:res.title,current:true}]
+        : [{label:'Home',fn:'goHome()'},{label:res.title,current:true}]);
+    }
     document.getElementById('sendBtn').disabled = false;
     document.getElementById('inputBox').focus();
   }, 600 + Math.random() * 400);
@@ -1106,6 +1502,17 @@ function quickPrompt(text) {
   sendMessage();
 }
 
+function regenerateDoc(key) {
+  const entry = KB[key];
+  if (!entry) return;
+  renderMessage('user', `Regenerate: ${entry.title}`);
+  const res = docResponse(entry);
+  const html = formatResponse(res);
+  renderMessage('ai', html);
+  addRecent(res.title, res.key);
+  logDocToActiveCase(res.title);
+}
+
 function handleKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
@@ -1114,6 +1521,386 @@ function autoResize(el) {
   el.style.height = '42px';
   el.style.height = Math.min(el.scrollHeight, 140) + 'px';
 }
+
+// ═══════════════════════════════════════════════
+// LOCAL DATA LAYER — browser-only, never sent to server
+// My Info + My Cases live ONLY in this browser's localStorage.
+// ═══════════════════════════════════════════════
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function getMyInfo() {
+  try { return JSON.parse(localStorage.getItem('pd_myinfo') || '{}'); } catch (e) { return {}; }
+}
+function openMyInfoModal() {
+  const info = getMyInfo();
+  document.getElementById('mi_name').value = info.name || '';
+  document.getElementById('mi_address').value = info.address || '';
+  document.getElementById('mi_phone').value = info.phone || '';
+  document.getElementById('mi_email').value = info.email || '';
+  document.getElementById('mi_city').value = info.city || '';
+  document.getElementById('myInfoModal').classList.add('open');
+}
+function saveMyInfo() {
+  const info = {
+    name: document.getElementById('mi_name').value.trim(),
+    address: document.getElementById('mi_address').value.trim(),
+    phone: document.getElementById('mi_phone').value.trim(),
+    email: document.getElementById('mi_email').value.trim(),
+    city: document.getElementById('mi_city').value.trim()
+  };
+  localStorage.setItem('pd_myinfo', JSON.stringify(info));
+  closeModal('myInfoModal');
+}
+
+let activeCaseId = null;
+
+function getCases() {
+  try { return JSON.parse(localStorage.getItem('pd_cases') || '[]'); } catch (e) { return []; }
+}
+function saveCases(cases) { localStorage.setItem('pd_cases', JSON.stringify(cases)); }
+function getActiveCase() {
+  if (!activeCaseId) return null;
+  return getCases().find(c => c.id === activeCaseId) || null;
+}
+
+function openCaseModal(id) {
+  document.getElementById('caseModalTitle').textContent = id ? 'Edit Case' : 'Add Case';
+  document.getElementById('case_id').value = id || '';
+  const fields = ['case_name','case_number','case_court','case_opposing','case_deadline','case_deadline_label','case_notes'];
+  if (id) {
+    const c = getCases().find(x => x.id === id);
+    if (c) {
+      document.getElementById('case_name').value = c.name || '';
+      document.getElementById('case_number').value = c.number || '';
+      document.getElementById('case_court').value = c.court || '';
+      document.getElementById('case_opposing').value = c.opposing || '';
+      document.getElementById('case_status').value = c.status || 'Active';
+      document.getElementById('case_deadline').value = c.deadline || '';
+      document.getElementById('case_deadline_label').value = c.deadlineLabel || '';
+      document.getElementById('case_notes').value = c.notes || '';
+    }
+  } else {
+    fields.forEach(f => document.getElementById(f).value = '');
+    document.getElementById('case_status').value = 'Active';
+  }
+  document.getElementById('caseModal').classList.add('open');
+}
+
+function saveCase() {
+  const id = document.getElementById('case_id').value || ('case_' + Math.random().toString(36).slice(2, 10));
+  const cases = getCases();
+  const existing = cases.find(c => c.id === id);
+  const data = {
+    id,
+    name: document.getElementById('case_name').value.trim() || 'Untitled Case',
+    number: document.getElementById('case_number').value.trim(),
+    court: document.getElementById('case_court').value.trim(),
+    opposing: document.getElementById('case_opposing').value.trim(),
+    status: document.getElementById('case_status').value,
+    deadline: document.getElementById('case_deadline').value,
+    deadlineLabel: document.getElementById('case_deadline_label').value.trim(),
+    notes: document.getElementById('case_notes').value.trim(),
+    timeline: existing ? (existing.timeline || []) : [],
+    docs: existing ? (existing.docs || []) : []
+  };
+  if (existing) Object.assign(existing, data);
+  else cases.push(data);
+  saveCases(cases);
+  closeModal('caseModal');
+  renderCaseList();
+  if (activeCaseId === id) renderCaseDashboard(id);
+}
+
+function deleteCase(id) {
+  if (!confirm('Delete this case? This cannot be undone.')) return;
+  saveCases(getCases().filter(c => c.id !== id));
+  if (activeCaseId === id) goHome();
+  renderCaseList();
+}
+
+function openEventModal(caseId) {
+  document.getElementById('event_case_id').value = caseId;
+  document.getElementById('event_date').value = '';
+  document.getElementById('event_label').value = '';
+  document.getElementById('eventModal').classList.add('open');
+}
+function saveEvent() {
+  const caseId = document.getElementById('event_case_id').value;
+  const date = document.getElementById('event_date').value;
+  const label = document.getElementById('event_label').value.trim();
+  if (!date || !label) { closeModal('eventModal'); return; }
+  const cases = getCases();
+  const c = cases.find(x => x.id === caseId);
+  if (c) {
+    c.timeline = c.timeline || [];
+    c.timeline.push({ date, label });
+    saveCases(cases);
+    renderCaseDashboard(caseId);
+  }
+  closeModal('eventModal');
+}
+
+function logDocToActiveCase(title) {
+  if (!activeCaseId) return;
+  const cases = getCases();
+  const c = cases.find(x => x.id === activeCaseId);
+  if (!c) return;
+  c.docs = c.docs || [];
+  c.docs.push({ title, date: new Date().toLocaleDateString('en-CA') });
+  saveCases(cases);
+  if (document.getElementById('dashWrap').style.display !== 'none') renderCaseDashboard(activeCaseId);
+}
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr + 'T00:00:00');
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  return Math.round((d - now) / 86400000);
+}
+
+function renderCaseList() {
+  const cases = getCases();
+  const wrap = document.getElementById('caseList');
+  if (!cases.length) {
+    wrap.innerHTML = '<div style="padding:6px 12px;font-size:11px;color:var(--muted)">No cases yet — add one above.</div>';
+    return;
+  }
+  wrap.innerHTML = cases.map(c => {
+    const dleft = daysUntil(c.deadline);
+    const urgent = dleft !== null && dleft <= 7;
+    return `<div class="case-item ${activeCaseId === c.id ? 'active' : ''}" onclick="selectCase('${c.id}')">
+      <span style="display:flex;align-items:center;gap:6px;overflow:hidden"><span class="case-dot ${urgent ? 'urgent' : 'ok'}"></span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(c.name)}</span></span>
+    </div>`;
+  }).join('');
+}
+
+function updateBreadcrumb(parts) {
+  const bc = document.getElementById('breadcrumb');
+  bc.innerHTML = parts.map((p, i) => {
+    const sep = i > 0 ? '<span class="sep">/</span>' : '';
+    if (p.current) return `${sep}<span class="current">${escHtml(p.label)}</span>`;
+    return `${sep}<a onclick="${p.fn}">${escHtml(p.label)}</a>`;
+  }).join('');
+}
+
+function goHome() {
+  activeCaseId = null;
+  document.getElementById('dashWrap').style.display = 'none';
+  document.getElementById('chatWrap').style.display = 'flex';
+  renderCaseList();
+  updateBreadcrumb([{ label: 'Home', current: true }]);
+}
+
+function backToChatKeepCase() {
+  document.getElementById('dashWrap').style.display = 'none';
+  document.getElementById('chatWrap').style.display = 'flex';
+  const c = getActiveCase();
+  updateBreadcrumb(c
+    ? [{ label: 'Home', fn: 'goHome()' }, { label: c.name, fn: `selectCase('${activeCaseId}')` }, { label: 'Document', current: true }]
+    : [{ label: 'Home', current: true }]);
+}
+
+function selectCase(id) {
+  activeCaseId = id;
+  renderCaseList();
+  renderCaseDashboard(id);
+  document.getElementById('chatWrap').style.display = 'none';
+  document.getElementById('dashWrap').style.display = 'block';
+  const c = getCases().find(x => x.id === id);
+  updateBreadcrumb([{ label: 'Home', fn: 'goHome()' }, { label: c ? c.name : 'Case', current: true }]);
+}
+
+function renderCaseDashboard(id) {
+  const c = getCases().find(x => x.id === id);
+  const wrap = document.getElementById('dashWrap');
+  if (!c) { wrap.innerHTML = ''; return; }
+  const dleft = daysUntil(c.deadline);
+  const urgent = dleft !== null && dleft <= 7;
+  const deadlineText = c.deadline ? `${c.deadline}${c.deadlineLabel ? ' — ' + c.deadlineLabel : ''}` : 'No deadline set';
+  const reminder = dleft === null ? 'Add a deadline date to get automatic reminders here.'
+    : dleft < 0 ? `<span class="urgent-flag">⚠ This deadline was ${Math.abs(dleft)} day(s) ago — check status immediately.</span>`
+    : dleft === 0 ? `<span class="urgent-flag">⚠ This deadline is TODAY.</span>`
+    : dleft <= 7 ? `<span class="urgent-flag">⚠ ${dleft} day(s) remaining — act now.</span>`
+    : `${dleft} day(s) remaining.`;
+  const timeline = (c.timeline || []).slice().sort((a, b) => a.date < b.date ? 1 : -1);
+  const docs = (c.docs || []).slice().reverse();
+
+  wrap.innerHTML = `
+  <div class="dash-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <h3 style="margin-bottom:2px">${escHtml(c.name)}</h3>
+      <span class="badge ${urgent ? 'urgent' : 'ok'}">${escHtml(c.status)}</span>
+    </div>
+    <div class="dash-grid" style="margin-top:8px">
+      <div><strong style="color:var(--muted);font-size:11px">Court File #:</strong> ${escHtml(c.number) || '—'}</div>
+      <div><strong style="color:var(--muted);font-size:11px">Court:</strong> ${escHtml(c.court) || '—'}</div>
+      <div><strong style="color:var(--muted);font-size:11px">Opposing Party:</strong> ${escHtml(c.opposing) || '—'}</div>
+    </div>
+    ${c.notes ? `<p style="margin-top:8px;font-size:12px;color:var(--muted)">${escHtml(c.notes)}</p>` : ''}
+    <div class="btn-row">
+      <button class="btn-sm gold" onclick="openCaseModal('${c.id}')">Edit Case</button>
+      <button class="btn-sm danger" onclick="deleteCase('${c.id}')">Delete Case</button>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <h3>Next Deadline</h3>
+    <p style="font-size:13px">${escHtml(deadlineText)}</p>
+    <p style="margin-top:4px;font-size:12px">${reminder}</p>
+  </div>
+
+  <div class="dash-card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 style="margin-bottom:0">Status Timeline</h3>
+      <button class="btn-sm" onclick="openEventModal('${c.id}')">+ Add Event</button>
+    </div>
+    <div style="margin-top:8px">
+      ${timeline.length ? timeline.map(t => `<div class="timeline-item"><span class="timeline-date">${escHtml(t.date)}</span><span>${escHtml(t.label)}</span></div>`).join('') : '<p style="font-size:12px;color:var(--muted)">No events logged yet.</p>'}
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <h3>Document History</h3>
+    ${docs.length ? docs.map(d => `<div class="doc-history-item">${escHtml(d.title)} — ${escHtml(d.date)}</div>`).join('') : '<p style="font-size:12px;color:var(--muted)">No documents generated for this case yet. Generate one below and it will be logged here.</p>'}
+  </div>
+
+  <div class="dash-card" style="border-color:rgba(0,212,255,0.3)">
+    <h3>Generate a Document for This Case</h3>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Auto-fill will use this case's court file number and opposing party automatically.</p>
+    <div class="btn-row">
+      <button class="btn-sm primary" onclick="backToChatKeepCase();quickPrompt('Generate a Notice of Motion')">Notice of Motion</button>
+      <button class="btn-sm primary" onclick="backToChatKeepCase();quickPrompt('Draft a Statement of Claim')">Statement of Claim</button>
+      <button class="btn-sm primary" onclick="backToChatKeepCase();quickPrompt('Draft a sworn affidavit')">Affidavit</button>
+      <button class="btn-sm primary" onclick="backToChatKeepCase();quickPrompt('Write a demand letter')">Demand Letter</button>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// AUTO-FILL — fills [BRACKETED] fields from My Info / active case
+// ═══════════════════════════════════════════════
+
+function autoFillText(text) {
+  const info = getMyInfo();
+  const c = getActiveCase();
+  let out = text;
+  const repl = (token, value) => { if (value) out = out.split(token).join(value); };
+  const today = new Date().toLocaleDateString('en-CA');
+
+  repl('[YOUR FULL LEGAL NAME]', info.name);
+  repl('[ADDRESS FOR SERVICE]', info.address);
+  repl('[ADDRESS]', info.address);
+  const pe = [info.phone, info.email].filter(Boolean).join(' / ');
+  repl('[PHONE/EMAIL]', pe);
+  repl('[PHONE / EMAIL]', pe);
+  repl('[EMAIL / PHONE]', pe);
+  repl('[CITY/TOWN]', info.city);
+  repl('[CITY]', info.city);
+  repl('[DATE]', today);
+
+  if (c) {
+    repl('[COURT FILE NUMBER]', c.number);
+    repl('[OPPOSING PARTY NAME]', c.opposing);
+    repl('[DEFENDANT NAME(S)]', c.opposing);
+    repl('[DEFENDANT NAME]', c.opposing);
+    repl('[RESPONDENT NAME, e.g. "HIS MAJESTY THE KING" / "ATTORNEY GENERAL OF ONTARIO"]', c.opposing);
+    repl('[RESPONDENT NAME]', c.opposing);
+    repl('[COURTHOUSE ADDRESS, e.g. "Lindsay Courthouse, 114 Russell Street West, Lindsay, ON"]', c.court);
+  }
+  return out;
+}
+
+// ═══════════════════════════════════════════════
+// RECENT + FAVORITES
+// ═══════════════════════════════════════════════
+
+function getRecent() {
+  try { return JSON.parse(localStorage.getItem('pd_recent') || '[]'); } catch (e) { return []; }
+}
+function addRecent(title, key) {
+  if (!key) return;
+  let recent = getRecent().filter(r => r.key !== key);
+  recent.unshift({ title, key, date: new Date().toLocaleDateString('en-CA') });
+  recent = recent.slice(0, 5);
+  localStorage.setItem('pd_recent', JSON.stringify(recent));
+  renderRecent();
+}
+function renderRecent() {
+  const wrap = document.getElementById('recentList');
+  const recent = getRecent();
+  if (!recent.length) {
+    wrap.innerHTML = '<div style="padding:6px 12px;font-size:11px;color:var(--muted)">No documents generated yet.</div>';
+    return;
+  }
+  wrap.innerHTML = recent.map(r => `<button class="sidebar-btn" onclick="regenerateDoc('${r.key}')"><span class="icon">📄</span>${escHtml(r.title)}</button>`).join('');
+}
+
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem('pd_favorites') || '[]'); } catch (e) { return []; }
+}
+function isFavorite(key) { return getFavorites().some(f => f.key === key); }
+function toggleFavorite(key, title) {
+  let favs = getFavorites();
+  if (favs.some(f => f.key === key)) favs = favs.filter(f => f.key !== key);
+  else favs.push({ key, title });
+  localStorage.setItem('pd_favorites', JSON.stringify(favs));
+  renderFavorites();
+}
+function toggleFavBtn(btn, key, title) {
+  toggleFavorite(key, title);
+  const fav = isFavorite(key);
+  btn.textContent = fav ? '★ Favorited' : '☆ Favorite';
+  btn.classList.toggle('starred', fav);
+}
+function renderFavorites() {
+  const wrap = document.getElementById('favList');
+  const favs = getFavorites();
+  if (!favs.length) {
+    wrap.innerHTML = '<div style="padding:6px 12px;font-size:11px;color:var(--muted)">Star a document to pin it here.</div>';
+    return;
+  }
+  wrap.innerHTML = favs.map(f => `<button class="sidebar-btn" onclick="regenerateDoc('${f.key}')"><span class="icon">★</span>${escHtml(f.title)}</button>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════
+
+function runSearch(value) {
+  const q = value.trim().toLowerCase();
+  document.querySelectorAll('.sidebar-btn, .doc-item, .case-item').forEach(el => {
+    el.style.display = !q || el.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// ═══════════════════════════════════════════════
+// PRINT (12pt Times New Roman) + EMAIL
+// ═══════════════════════════════════════════════
+
+function printDoc(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  document.getElementById('printArea').textContent = el.textContent;
+  window.print();
+}
+
+function emailDoc(id, title) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const subject = encodeURIComponent(title || 'PrimeDox AI Document');
+  const body = encodeURIComponent(el.textContent);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+
+renderCaseList();
+renderRecent();
+renderFavorites();
 </script>
 <div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
 <script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js"></script>
