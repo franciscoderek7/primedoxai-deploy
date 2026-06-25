@@ -5,6 +5,7 @@ on:
     branches: [main, claude/francisco-revenue-sprint-MEva6]
     paths:
       - 'francisco-holdings-site/**'
+      - 'empire/**'
   workflow_dispatch:
 
 jobs:
@@ -49,6 +50,14 @@ jobs:
           echo "franciscoholdingsinc.com" > /tmp/fh/CNAME
           touch /tmp/fh/.nojekyll
           echo "All Francisco Holdings files copied"
+
+      - name: Copy 3D skyscraper engine (empire/)
+        run: |
+          # skyscraper-3d.html imports ./empire/engine.js etc. as a sibling
+          # directory at the deploy target's root — copy the top-level
+          # empire/ folder (engine, scene, floor-registry, floor scenes) in.
+          cp -r empire /tmp/fh/empire
+          echo "empire/ engine copied for 3D skyscraper preview"
 
       - name: Commit and push to francisco-holdings repo
         run: |
