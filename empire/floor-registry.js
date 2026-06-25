@@ -13,10 +13,10 @@
  * governs which scene the elevator shows for a given floor number in the
  * live demo — the two are intentionally decoupled per Derek's instruction.
  *
- * Only Floor 1 is registered for now. Floor 9 (PrimeDox AI HQ,
- * floor9-primedox-ai.js) exists on the claude/francisco-revenue-sprint-MEva6
- * branch but hasn't been authorized for main/deploy yet — add it here once
- * it is.
+ * Floor 9 (PrimeDox AI HQ, floor9-primedox-ai.js) is filed under its
+ * AssetManifest.js number (9), not the "Floor 2" label it arrived under —
+ * same "keep manifest numbers" resolution applied to every floor scene
+ * except the OmniGuard override above.
  */
 
 const REGISTRY = {
@@ -24,6 +24,11 @@ const REGISTRY = {
     loader: () => import('./floors/floor4-omniguard.js'),
     exportName: 'createOmniGuardScene',
     label: 'OmniGuard',
+  },
+  9: {
+    loader: () => import('./floors/floor9-primedox-ai.js'),
+    exportName: 'createPrimeDoxHQScene',
+    label: 'PrimeDox AI HQ',
   },
 };
 
