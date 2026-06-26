@@ -154,3 +154,55 @@ CREATE TABLE IF NOT EXISTS escalations (
 ALTER TABLE escalations ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Allow auth select" ON escalations;
 CREATE POLICY "Allow auth select" ON escalations FOR SELECT USING (auth.role() = 'authenticated');
+
+-- TABLE: content_posts — NEW. One row per piece of AI-generated content from
+-- automation/n8n/content_orchestrator.json (blogs, social, newsletter, investor
+-- update, engagement posts). Not previously defined anywhere.
+CREATE TABLE IF NOT EXISTS content_posts (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  day_of_week text,
+  content_type text,       -- Blog | Social | Newsletter | Investor Update | Engagement
+  body text,
+  status text DEFAULT 'draft',  -- draft | reviewed | published
+  generated_at timestamp with time zone,
+  created_at timestamp with time zone DEFAULT now()
+);
+
+ALTER TABLE content_posts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow auth select" ON content_posts;
+CREATE POLICY "Allow auth select" ON content_posts FOR SELECT USING (auth.role() = 'authenticated');
+
+-- TABLE: agent_logs — NEW. One row per automation run/step (content orchestrator,
+-- weekly report, backup orchestration, etc.), used for the weekly error summary
+-- and for tracing what each automated agent did. Not previously defined anywhere.
+CREATE TABLE IF NOT EXISTS agent_logs (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  agent_name text NOT NULL,   -- e.g. 'content_orchestrator', 'weekly_empire_report', 'backup_orchestration'
+  action text,
+  status text DEFAULT 'success',  -- success | error
+  details text,
+  created_at timestamp with time zone DEFAULT now()
+);
+
+ALTER TABLE agent_logs ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow auth select" ON agent_logs;
+CREATE POLICY "Allow auth select" ON agent_logs FOR SELECT USING (auth.role() = 'authenticated');
+
+-- TABLE: revenue_events — NEW. One row per revenue-generating event across the
+-- empire (PayPal/Stripe payment, subscription renewal, etc.), used by
+-- weekly_empire_report.json to total weekly revenue. Distinct from `payments`
+-- (which is tied to a `users` row) — this table is the raw, source-agnostic
+-- revenue feed n8n appends to, since not every revenue event has a matching
+-- `users` row yet (e.g. one-off PayPal payments before signup is logged).
+CREATE TABLE IF NOT EXISTS revenue_events (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  source text,              -- e.g. 'PayPal', 'Stripe', company name
+  amount numeric NOT NULL,
+  currency text DEFAULT 'CAD',
+  event_type text,          -- e.g. 'payment', 'subscription_renewal', 'refund'
+  created_at timestamp with time zone DEFAULT now()
+);
+
+ALTER TABLE revenue_events ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow auth select" ON revenue_events;
+CREATE POLICY "Allow auth select" ON revenue_events FOR SELECT USING (auth.role() = 'authenticated');

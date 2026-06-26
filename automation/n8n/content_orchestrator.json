@@ -1,0 +1,2115 @@
+{
+  "name": "Content Orchestrator - 7-Day Empire Content Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "name": "Daily Trigger (09:00)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "cond-monday",
+                    "leftValue": "={{ $now.format('cccc') }}",
+                    "rightValue": "Monday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Monday"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "cond-tuesday",
+                    "leftValue": "={{ $now.format('cccc') }}",
+                    "rightValue": "Tuesday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Tuesday"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "cond-wednesday",
+                    "leftValue": "={{ $now.format('cccc') }}",
+                    "rightValue": "Wednesday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Wednesday"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "cond-thursday",
+                    "leftValue": "={{ $now.format('cccc') }}",
+                    "rightValue": "Thursday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Thursday"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "cond-friday",
+                    "leftValue": "={{ $now.format('cccc') }}",
+                    "rightValue": "Friday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Friday"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "cond-saturday",
+                    "leftValue": "={{ $now.format('cccc') }}",
+                    "rightValue": "Saturday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Saturday"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "cond-sunday",
+                    "leftValue": "={{ $now.format('cccc') }}",
+                    "rightValue": "Sunday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Sunday"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "none"
+        }
+      },
+      "name": "Day Router (Mon-Sun)",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        420,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Monday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Blog"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write a 600-800 word blog post for the Francisco Holdings empire (Doc Weedlaw / CCLDR cannabis-law education angle unless otherwise specified). Tone: educational, constitutional-advocacy, not legal advice. Include a clear title and body."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Monday: Blog - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Monday: Blog - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        120
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Monday: Blog - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Monday: Blog - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Monday: Blog - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Monday: Blog - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        120
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_blog"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Monday: Blog - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        120
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Tuesday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Social"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write 3 short social media posts (X/LinkedIn/Facebook, under 280 chars each) promoting Francisco Holdings empire content from this week. Tone: confident, educational, no legal advice claims."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Tuesday: Social - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Tuesday: Social - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        280
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Tuesday: Social - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Tuesday: Social - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Tuesday: Social - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Tuesday: Social - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        280
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_social"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Tuesday: Social - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        280
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Wednesday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Blog"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write a 600-800 word blog post for the Francisco Holdings empire (Doc Weedlaw / CCLDR cannabis-law education angle unless otherwise specified). Tone: educational, constitutional-advocacy, not legal advice. Include a clear title and body."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Wednesday: Blog - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Wednesday: Blog - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        440
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Wednesday: Blog - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Wednesday: Blog - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Wednesday: Blog - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Wednesday: Blog - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        440
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_blog"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Wednesday: Blog - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        440
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Thursday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Social"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write 3 short social media posts (X/LinkedIn/Facebook, under 280 chars each) promoting Francisco Holdings empire content from this week. Tone: confident, educational, no legal advice claims."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Thursday: Social - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Thursday: Social - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        600
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Thursday: Social - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Thursday: Social - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Thursday: Social - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Thursday: Social - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        600
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_social"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Thursday: Social - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        600
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Thursday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Newsletter"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write a weekly newsletter email (300-500 words) summarizing this week's Francisco Holdings empire updates, cases, and offers. Plain-text friendly HTML."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Thursday: Newsletter - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Thursday: Newsletter - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        760
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Thursday: Newsletter - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Thursday: Newsletter - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Thursday: Newsletter - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Thursday: Newsletter - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        760
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_newsletter"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Thursday: Newsletter - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        760
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Friday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Blog"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write a 600-800 word blog post for the Francisco Holdings empire (Doc Weedlaw / CCLDR cannabis-law education angle unless otherwise specified). Tone: educational, constitutional-advocacy, not legal advice. Include a clear title and body."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Friday: Blog - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Friday: Blog - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        920
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Friday: Blog - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Friday: Blog - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Friday: Blog - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Friday: Blog - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        920
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_blog"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Friday: Blog - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        920
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Friday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Investor Update"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write a concise investor-style update (300-400 words) on Francisco Holdings Inc. empire progress this week: revenue signals, new builds, case status, growth notes. No guarantees or forward-looking promises presented as fact."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Friday: Investor Update - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Friday: Investor Update - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        1080
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Friday: Investor Update - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Friday: Investor Update - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Friday: Investor Update - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Friday: Investor Update - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        1080
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_investor_update"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Friday: Investor Update - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        1080
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Saturday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Engagement"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write a light, weekend-appropriate engagement post (poll question, fun fact, or community prompt) for Francisco Holdings empire social channels. Keep it brief and not sales-heavy."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Saturday: Engagement - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        1240
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Saturday: Engagement - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        1240
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Saturday: Engagement - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Saturday: Engagement - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Saturday: Engagement - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        1240
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Saturday: Engagement - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        1240
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_engagement"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Saturday: Engagement - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        1240
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "Sunday"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "Engagement"
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "value": "Write a light, weekend-appropriate engagement post (poll question, fun fact, or community prompt) for Francisco Holdings empire social channels. Keep it brief and not sales-heavy."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Sunday: Engagement - Set Prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        1400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "mode": "list",
+          "value": "gpt-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are the Francisco Holdings empire content agent. Follow the brand/legal disclaimer rules: Derek Francisco is a legal educator and constitutional advocate, not a lawyer. Nothing you write constitutes legal advice."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Sunday: Engagement - Generate (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        900,
+        1400
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "day_of_week",
+              "type": "string",
+              "value": "={{ $('Sunday: Engagement - Set Prompt').item.json.day_of_week }}"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "={{ $('Sunday: Engagement - Set Prompt').item.json.content_type }}"
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "value": "draft"
+            },
+            {
+              "name": "generated_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Sunday: Engagement - Format Output",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        1400
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "insert",
+        "dataToSend": "autoMapInputData"
+      },
+      "name": "Sunday: Engagement - Save (content_posts)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        1400
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "content_orchestrator"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "generate_engagement"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "={{ 'Generated ' + $json.content_type + ' for ' + $json.day_of_week }}"
+            }
+          ]
+        }
+      },
+      "name": "Sunday: Engagement - Log (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        1400
+      ],
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "Daily Trigger (09:00)": {
+      "main": [
+        [
+          {
+            "node": "Day Router (Mon-Sun)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Day Router (Mon-Sun)": {
+      "main": [
+        [
+          {
+            "node": "Monday: Blog - Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tuesday: Social - Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wednesday: Blog - Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Thursday: Social - Set Prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Thursday: Newsletter - Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Friday: Blog - Set Prompt",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Friday: Investor Update - Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Saturday: Engagement - Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sunday: Engagement - Set Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday: Blog - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Monday: Blog - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday: Blog - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Monday: Blog - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday: Blog - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Monday: Blog - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday: Blog - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Monday: Blog - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tuesday: Social - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Tuesday: Social - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tuesday: Social - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Tuesday: Social - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tuesday: Social - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Tuesday: Social - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tuesday: Social - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Tuesday: Social - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wednesday: Blog - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Wednesday: Blog - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wednesday: Blog - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Wednesday: Blog - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wednesday: Blog - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Wednesday: Blog - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wednesday: Blog - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Wednesday: Blog - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Social - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Social - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Social - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Social - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Social - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Social - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Social - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Social - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Newsletter - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Newsletter - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Newsletter - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Newsletter - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Newsletter - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Newsletter - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thursday: Newsletter - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Thursday: Newsletter - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Blog - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Friday: Blog - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Blog - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Friday: Blog - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Blog - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Friday: Blog - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Blog - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Friday: Blog - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Investor Update - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Friday: Investor Update - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Investor Update - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Friday: Investor Update - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Investor Update - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Friday: Investor Update - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Friday: Investor Update - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Friday: Investor Update - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saturday: Engagement - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Saturday: Engagement - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saturday: Engagement - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Saturday: Engagement - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saturday: Engagement - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Saturday: Engagement - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saturday: Engagement - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Saturday: Engagement - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sunday: Engagement - Set Prompt": {
+      "main": [
+        [
+          {
+            "node": "Sunday: Engagement - Generate (OpenAI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sunday: Engagement - Generate (OpenAI)": {
+      "main": [
+        [
+          {
+            "node": "Sunday: Engagement - Format Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sunday: Engagement - Format Output": {
+      "main": [
+        [
+          {
+            "node": "Sunday: Engagement - Save (content_posts)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sunday: Engagement - Save (content_posts)": {
+      "main": [
+        [
+          {
+            "node": "Sunday: Engagement - Log (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "REPLACE-WITH-ERROR-ALERT-WORKFLOW-ID"
+  }
+}

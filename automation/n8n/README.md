@@ -62,6 +62,58 @@ less risk of it failing to import. Uses a zero-cost keyword classifier (no OpenA
 Anthropic key needed) that defaults to "flag for Derek" on anything it doesn't
 recognize — it never guesses on legal/partnership/complaint mail.
 
+## Workflow 4 — Content Orchestrator (7-day content engine)
+
+File: `content_orchestrator.json` (47 nodes). Daily schedule trigger (9:00 AM) →
+day-of-week switch (Mon-Sun) → per day, one or two content pipelines (Set Prompt →
+OpenAI → Format Output → Supabase insert `content_posts` → Supabase insert
+`agent_logs`). Content mix: Mon/Wed = Blog, Tue = Social, Thu = Social + Newsletter,
+Fri = Blog + Investor Update, Sat/Sun = Engagement.
+
+Setup: import the JSON, connect an OpenAI credential to all 9 OpenAI nodes and the
+shared Supabase credential to all 18 Supabase nodes. The OpenAI nodes have
+`retryOnFail`/`maxTries: 3` set at the node level (3 retries, 5s apart) — no extra
+wiring needed for that. **Error alerting**: the workflow's `settings.errorWorkflow`
+field is a placeholder (`REPLACE-WITH-ERROR-ALERT-WORKFLOW-ID`) — n8n alerts on
+failure via a separate referenced "Error Workflow," not inline nodes (this keeps node
+count exactly at the 47 specified instead of padding with a 48th alert node). Build a
+small 2-node workflow (Error Trigger → Gmail to franciscoderek7@gmail.com) and paste
+its workflow ID into that settings field, for this workflow and Workflows 5 and 6.
+
+Requires the new `content_posts` and `agent_logs` tables — see
+`automation/supabase-tables.sql` (run in the SQL Editor, same as the other tables).
+
+## Workflow 5 — Weekly Empire Report
+
+File: `weekly_empire_report.json` (10 nodes). Monday 08:00 America/New_York trigger →
+5 parallel Supabase queries (last 7 days of `revenue_events`, `leads`, `users`,
+`content_posts`, and `agent_logs` filtered to `status = 'error'`) → Code node
+aggregates totals → Set node builds the HTML report body → SendGrid sends it to
+franciscoderek7@gmail.com → Supabase logs the send to `agent_logs`.
+
+Setup: import the JSON, connect the shared Supabase credential to all 5 query nodes
+and the final log node, connect a SendGrid credential to the SendGrid node. Same
+`errorWorkflow` placeholder note as Workflow 4. Requires `content_posts`,
+`agent_logs`, and `revenue_events` — see `automation/supabase-tables.sql`.
+
+## Workflow 6 — Backup Orchestration
+
+File: `backup_orchestration.json` (8 nodes). Nightly 02:00 America/New_York trigger →
+Code node exports all 9 Supabase tables via the REST API (using `$env.SUPABASE_URL` /
+`$env.SUPABASE_SERVICE_ROLE_KEY` — set these two as n8n environment variables, not
+hardcoded) → HTTP Request exports the n8n workflow list (`$env.N8N_HOST`, with an
+HTTP Header Auth credential carrying the n8n API key) → Code node merges both into one
+JSON bundle → Compression node zips it → HTTP Request uploads the zip to a Supabase
+Storage bucket named `empire-backups` (create this bucket once, manually, in the
+Supabase dashboard) → Gmail sends a confirmation to franciscoderek7@gmail.com →
+Supabase logs the run to `agent_logs`.
+
+Setup: set the `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `N8N_HOST` environment
+variables in n8n (Settings → Environments, or your n8n host's env config — never paste
+these into the workflow JSON itself), connect the HTTP Header Auth credential for the
+n8n API call, connect Gmail and Supabase credentials. Same `errorWorkflow` placeholder
+note as Workflow 4.
+
 ## Status of the deployment checklist Derek sent
 
 - [x] Supabase tables defined (`002_subscribers.sql`, `003_full_schema.sql`) —
