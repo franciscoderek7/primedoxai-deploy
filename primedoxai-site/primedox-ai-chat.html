@@ -264,6 +264,9 @@ body[data-theme="high-contrast"] #preview-output { border: 2px solid #ffffff; }
   <button class="btn btn-secondary" onclick="adjustFontSize(0)" aria-label="Reset text size">A</button>
   <button class="btn btn-secondary" onclick="adjustFontSize(1)" aria-label="Increase text size">A+</button>
   <button class="btn btn-secondary" id="large-buttons-btn" onclick="toggleLargeButtons()" aria-label="Toggle large buttons for motor accessibility">🔘 Large Buttons</button>
+  <select id="empire-connect-select" class="btn btn-secondary" style="cursor:pointer;" aria-label="Route to Empire — jump to another company floor" onchange="routeToEmpireFloor(this)">
+    <option value="">🏢 Route to Empire...</option>
+  </select>
 </div>
 
 <div class="stats-grid">
@@ -2797,12 +2800,85 @@ function toggleReadAloud() {
 }
 
 // ============================================
+// EMPIRE CONNECT — jump to another company's floor on the live
+// franciscoholdingsinc.com skyscraper (francisco-holdings-site/index.html,
+// FLOORS array). Floor numbers/names here must match that array exactly —
+// update both places together if floors are renumbered.
+// ============================================
+const EMPIRE_FLOORS = [
+  { n: 1, name: "OmniGuard" },
+  { n: 2, name: "BENO-X / Weedlaw" },
+  { n: 3, name: "PrimeDox AI" },
+  { n: 4, name: "CCLDR" },
+  { n: 5, name: "CleanSwarm AI" },
+  { n: 6, name: "TechPetCage" },
+  { n: 7, name: "VIGILAX" },
+  { n: 8, name: "Francisco Holdings Boardroom" },
+  { n: 9, name: "Vault Velocity Auto" },
+  { n: 10, name: "Kiaros" },
+  { n: 11, name: "TechPackCage" },
+  { n: 12, name: "MindShift by Michaella" },
+  { n: 13, name: "CCC-Site" },
+  { n: 14, name: "Space Swarm" },
+  { n: 15, name: "Energy Swarm" },
+  { n: 16, name: "Fintech Swarm" },
+  { n: 17, name: "Health Swarm" },
+  { n: 18, name: "Biotech Swarm" },
+  { n: 19, name: "Quantum Swarm" },
+  { n: 20, name: "Auto Swarm" },
+  { n: 21, name: "Agent Swarm Tech" },
+  { n: 22, name: "Francisco Realty" },
+  { n: 23, name: "Francisco Legal" },
+  { n: 24, name: "Francisco Mortgage" },
+  { n: 25, name: "Francisco Insurance" },
+  { n: 26, name: "Francisco Title" },
+  { n: 27, name: "Francisco Paralegal" },
+  { n: 28, name: "Francisco Tax" },
+  { n: 29, name: "Francisco Immigration" },
+  { n: 30, name: "Francisco Family" },
+  { n: 31, name: "Francisco Wills" },
+  { n: 32, name: "Francisco Employment" },
+  { n: 33, name: "Francisco Corporate" },
+  { n: 34, name: "Francisco IP" },
+  { n: 35, name: "Francisco Criminal" },
+  { n: 36, name: "Francisco PI" },
+  { n: 37, name: "Francisco Environmental" },
+  { n: 38, name: "Francisco Construction" },
+  { n: 39, name: "Francisco Entertainment" },
+  { n: 40, name: "Francisco Sports" },
+  { n: 41, name: "Francisco Maritime" },
+  { n: 42, name: "Francisco Aviation" },
+  { n: 43, name: "Francisco Banking" },
+  { n: 44, name: "Francisco Data" },
+  { n: 45, name: "Francisco Phoenix" }
+];
+
+function populateEmpireConnect() {
+  const select = document.getElementById("empire-connect-select");
+  if (!select) return;
+  EMPIRE_FLOORS.forEach(function(f) {
+    const opt = document.createElement("option");
+    opt.value = f.n;
+    opt.textContent = "Floor " + f.n + " — " + f.name;
+    select.appendChild(opt);
+  });
+}
+
+function routeToEmpireFloor(select) {
+  const n = select.value;
+  if (!n) return;
+  window.open("https://franciscoholdingsinc.com/#floor-" + n, "_blank");
+  select.value = "";
+}
+
+// ============================================
 // INIT
 // ============================================
 applySavedAccessibilitySettings();
 renderTasks();
 renderProfileForm();
 loadVideoStatements();
+populateEmpireConnect();
 </script>
 
 <div class="upl-disclaimer" style="background:#1a1a1a;border-top:1px solid var(--gold);color:var(--chrome);font-size:0.72rem;line-height:1.4;text-align:center;padding:10px 16px;">

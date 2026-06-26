@@ -1981,6 +1981,19 @@ window.goFloorDelta = function(delta) {
   goToFloor(n);
 };
 
+/* ── Deep-link entry: #floor-N in the URL (e.g. from Empire Connect links
+   in other empire apps) jumps straight to that floor on load instead of
+   landing on the lobby. ───────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  var m = location.hash.match(/^#floor-(\d+)$/);
+  if (m) {
+    var n = parseInt(m[1], 10);
+    if (document.getElementById('floor-' + n)) {
+      setTimeout(function() { goToFloor(n); }, 300);
+    }
+  }
+});
+
 /* ── In-Transit Loading State ───────────── */
 function setElevatorTransit(active, n, destLabel) {
   var rd = document.getElementById('el-readout');
