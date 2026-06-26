@@ -137,6 +137,19 @@ select option { background: var(--bugatti-dark); color: var(--text); }
 .btn-gold:hover { background: #c9a030; box-shadow: 0 0 30px var(--gold-glow); }
 .btn-red { background: var(--red); color: white; box-shadow: 0 0 20px var(--red-glow); }
 .btn-red:hover { background: #c41830; box-shadow: 0 0 30px var(--red-glow); }
+.btn-voice { background: rgba(0,164,224,0.15); color: var(--bugatti-blue); border: 1px solid var(--bugatti-blue); }
+.btn-voice:hover { background: rgba(0,164,224,0.25); }
+.btn-voice.recording { background: var(--red); color: white; border-color: var(--red); animation: pulseRecord 1.2s infinite; }
+@keyframes pulseRecord { 0%,100% { box-shadow: 0 0 10px var(--red-glow); } 50% { box-shadow: 0 0 28px var(--red-glow); } }
+.voice-confirm-panel {
+  background: rgba(0,0,0,0.5); border: 1px solid var(--bugatti-blue);
+  border-radius: 12px; padding: 18px; margin-top: 16px;
+}
+.voice-confirm-panel h3 { margin: 0 0 10px; color: var(--bugatti-blue); font-size: 1rem; }
+.voice-confirm-panel .voice-raw { color: var(--chrome); font-size: 0.8rem; font-style: italic; margin-bottom: 12px; }
+.voice-confirm-panel .voice-field-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+.voice-confirm-panel .voice-field-row .voice-field-label { color: var(--chrome); }
+.voice-confirm-panel .voice-field-row .voice-field-value { color: var(--text); font-weight: 600; text-align: right; }
 #preview-output {
   background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
   border-radius: 12px; padding: 24px; white-space: pre-wrap;
@@ -192,6 +205,11 @@ select option { background: var(--bugatti-dark); color: var(--text); }
 
 <div id="tab-documents" class="card hidden">
   <h2>📄 Document Generator</h2>
+  <div style="margin-bottom: 16px;">
+    <button class="btn btn-voice" id="voice-btn" onclick="toggleVoiceInput()">🎙 Voice Input</button>
+    <span id="voice-status" style="color: var(--chrome); font-size: 0.85rem; margin-left: 10px;"></span>
+  </div>
+  <div id="voice-confirm-panel" class="voice-confirm-panel hidden"></div>
   <div class="form-group">
     <label>Select Document Type <span class="required">*</span></label>
     <select id="doc-type" onchange="loadDocumentType()">
@@ -808,6 +826,195 @@ function loadDocumentType() {
       };
     });
   });
+}
+
+// ============================================
+// VOICE INPUT — speech-to-document field fill
+// Web Speech API requires Chrome/Edge/Safari and an internet
+// connection (recognition audio is sent to the browser vendor's
+// speech service); it is NOT available offline despite the app's
+// "Offline Capability" stat referring to localStorage persistence.
+// ============================================
+let voiceRecognition = null;
+let voiceListening = false;
+let pendingVoiceResult = null;
+
+const VOICE_FIELD_CANDIDATES = {
+  defendant: ["defendant_name", "demand_recipient", "third_party_name", "cd_recipient", "fn_recipient", "nd_party", "sd_debtor", "crossclaim_defendant", "lt_landlord", "hrto_respondent", "eviction_tenant"],
+  amount: ["damages_amount", "demand_amount", "sd_amount", "fn_amount", "inv_amount", "mortgage_amount", "ps_purchase_price", "lease_rent", "lt_rent"],
+  address: ["defendant_address", "demand_recipient_address", "third_party_address", "lt_property", "mortgage_property", "lease_property", "ps_property", "eviction_property", "cl_premises"],
+  facts: ["facts", "crossclaim_facts", "charter_facts", "hrto_facts", "cch_facts", "affidavit_body", "review_grounds"],
+  claims: ["claims", "demand_basis", "motion_grounds"],
+  relief: ["relief", "relief_requested", "demand_consequences", "remedy_sought", "hrto_remedy", "cch_remedy"]
+};
+
+function getVoiceRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return null;
+  const rec = new SpeechRecognition();
+  rec.lang = "en-US";
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  return rec;
+}
+
+function toggleVoiceInput() {
+  if (voiceListening) { voiceRecognition && voiceRecognition.stop(); return; }
+
+  voiceRecognition = getVoiceRecognition();
+  if (!voiceRecognition) {
+    alert("Voice input is not supported in this browser. Try Chrome, Edge, or Safari, and make sure you're online (speech recognition is not available offline).");
+    return;
+  }
+
+  const btn = document.getElementById("voice-btn");
+  const status = document.getElementById("voice-status");
+  voiceListening = true;
+  btn.textContent = "🔴 Listening...";
+  btn.classList.add("recording");
+  status.textContent = "Speak now — e.g. \"Statement of Claim against Bill Denby for property damage at 3900 Highway 35, damages of 3.3 million\"";
+
+  voiceRecognition.onresult = function(e) {
+    const transcript = e.results[0][0].transcript;
+    handleVoiceTranscript(transcript);
+  };
+  voiceRecognition.onerror = function(e) {
+    status.textContent = "Voice input error: " + e.error + ". Please try again or type manually.";
+  };
+  voiceRecognition.onend = function() {
+    voiceListening = false;
+    btn.textContent = "🎙 Voice Input";
+    btn.classList.remove("recording");
+  };
+
+  voiceRecognition.start();
+}
+
+function detectDocTypeFromSpeech(text) {
+  const lower = text.toLowerCase();
+  const select = document.getElementById("doc-type");
+  let best = null, bestLen = 0;
+  Array.from(select.options).forEach(opt => {
+    if (!opt.value) return;
+    const label = opt.textContent.toLowerCase().replace(/\(.*?\)/g, "").trim();
+    if (label && lower.includes(label) && label.length > bestLen) {
+      best = opt.value;
+      bestLen = label.length;
+    }
+  });
+  return best;
+}
+
+function titleCaseWords(s) {
+  return s.replace(/\w\S*/g, t => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase());
+}
+
+function parseVoiceAmount(text) {
+  let m = text.match(/(?:damages|amount|demand(?:ed)?|owed|worth|valued?\s*at|price|rent|sum)\s*(?:of|is|:)?\s*\$?\s*([\d,]+(?:\.\d+)?)\s*(million|thousand|m\b|k\b)?/i);
+  if (!m) m = text.match(/\$\s*([\d,]+(?:\.\d+)?)\s*(million|thousand)?/i);
+  if (!m) return null;
+  let num = parseFloat(m[1].replace(/,/g, ""));
+  const unit = (m[2] || "").toLowerCase();
+  if (unit.startsWith("million") || unit === "m") num *= 1000000;
+  else if (unit.startsWith("thousand") || unit === "k") num *= 1000;
+  return "$" + Math.round(num).toLocaleString();
+}
+
+function parseVoiceDefendant(text) {
+  const m = text.match(/against\s+([a-z][a-z'.-]*(?:\s+[a-z][a-z'.-]*){0,3})/i);
+  if (!m) return null;
+  const name = m[1].split(/\s+(?:for|at|regarding|about|due|because|over)\b/i)[0].trim();
+  return titleCaseWords(name);
+}
+
+function parseVoiceAddress(text) {
+  const m = text.match(/\bat\s+(\d+(?:\s+[a-z0-9]+){1,6}?\s+(?:road|rd|street|st|avenue|ave|highway|hwy|drive|dr|lane|ln|boulevard|blvd|way|court|ct|crescent|cres)\b(?:\s+\d+\w*)?)/i);
+  return m ? titleCaseWords(m[1].trim()) : null;
+}
+
+function handleVoiceTranscript(transcript) {
+  const status = document.getElementById("voice-status");
+  status.textContent = "Heard: \"" + transcript + "\"";
+
+  const detectedDocType = detectDocTypeFromSpeech(transcript);
+  const targetDocType = detectedDocType || currentDocType;
+
+  if (!targetDocType) {
+    status.textContent = "Could not detect a document type from speech. Please select one manually, then try voice input again, or say the document type explicitly (e.g. \"Statement of Claim\").";
+    return;
+  }
+
+  const fields = {};
+  const amount = parseVoiceAmount(transcript);
+  const defendant = parseVoiceDefendant(transcript);
+  const address = parseVoiceAddress(transcript);
+  if (amount) { fields.amount = amount; }
+  if (defendant) { fields.defendant = defendant; }
+  if (address) { fields.address = address; }
+  fields.narrative = transcript;
+
+  pendingVoiceResult = { docType: targetDocType, docTypeChanged: detectedDocType && detectedDocType !== currentDocType, fields: fields, raw: transcript };
+  renderVoiceConfirmPanel(pendingVoiceResult);
+}
+
+function renderVoiceConfirmPanel(result) {
+  const panel = document.getElementById("voice-confirm-panel");
+  const docLabel = document.querySelector('#doc-type option[value="' + result.docType + '"]');
+  let html = "<h3>🎙 Did you say...?</h3>";
+  html += '<div class="voice-raw">"' + escapeHtml(result.raw) + '"</div>';
+  html += '<div class="voice-field-row"><span class="voice-field-label">Document Type</span><span class="voice-field-value">' + (docLabel ? escapeHtml(docLabel.textContent) : result.docType) + '</span></div>';
+  if (result.fields.defendant) html += '<div class="voice-field-row"><span class="voice-field-label">Other Party</span><span class="voice-field-value">' + escapeHtml(result.fields.defendant) + '</span></div>';
+  if (result.fields.amount) html += '<div class="voice-field-row"><span class="voice-field-label">Amount</span><span class="voice-field-value">' + escapeHtml(result.fields.amount) + '</span></div>';
+  if (result.fields.address) html += '<div class="voice-field-row"><span class="voice-field-label">Address</span><span class="voice-field-value">' + escapeHtml(result.fields.address) + '</span></div>';
+  html += '<div style="margin-top:14px;">' +
+    '<button class="btn btn-primary" onclick="applyVoiceResult()">✅ Apply to Form</button>' +
+    '<button class="btn btn-secondary" onclick="discardVoiceResult()">✖ Discard</button>' +
+    '</div>' +
+    '<div class="hint" style="margin-top:8px;">Voice input is best-effort — please review every field before generating or printing.</div>';
+  panel.innerHTML = html;
+  panel.classList.remove("hidden");
+}
+
+function discardVoiceResult() {
+  pendingVoiceResult = null;
+  document.getElementById("voice-confirm-panel").classList.add("hidden");
+  document.getElementById("voice-status").textContent = "";
+}
+
+function fillFirstPresentField(candidateKeys, value) {
+  for (const key of candidateKeys) {
+    const el = document.getElementById("field-" + key);
+    if (el) {
+      el.value = value;
+      currentData[key] = value;
+      const fg = document.getElementById("fg-" + key);
+      if (fg) fg.classList.remove("has-error");
+      return key;
+    }
+  }
+  return null;
+}
+
+function applyVoiceResult() {
+  if (!pendingVoiceResult) return;
+  const result = pendingVoiceResult;
+
+  if (result.docTypeChanged || document.getElementById("doc-type").value !== result.docType) {
+    document.getElementById("doc-type").value = result.docType;
+    loadDocumentType();
+  }
+
+  if (result.fields.defendant) fillFirstPresentField(VOICE_FIELD_CANDIDATES.defendant, result.fields.defendant);
+  if (result.fields.amount) fillFirstPresentField(VOICE_FIELD_CANDIDATES.amount, result.fields.amount);
+  if (result.fields.address) fillFirstPresentField(VOICE_FIELD_CANDIDATES.address, result.fields.address);
+
+  const narrativeNote = "[From voice input — please review]: " + result.fields.narrative;
+  let narrativeFilled = fillFirstPresentField(VOICE_FIELD_CANDIDATES.facts, narrativeNote);
+  if (!narrativeFilled) narrativeFilled = fillFirstPresentField(VOICE_FIELD_CANDIDATES.claims, narrativeNote);
+  if (!narrativeFilled) fillFirstPresentField(VOICE_FIELD_CANDIDATES.relief, narrativeNote);
+
+  discardVoiceResult();
+  document.getElementById("voice-status").textContent = "Form filled from voice input. Please review all fields before generating.";
 }
 
 // ============================================
