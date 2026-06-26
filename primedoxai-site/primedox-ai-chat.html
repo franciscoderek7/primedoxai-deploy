@@ -319,6 +319,12 @@ body[data-theme="high-contrast"] #preview-output { border: 2px solid #ffffff; }
     <video id="video-statement-preview" class="hidden" autoplay muted playsinline style="width:100%;max-width:360px;margin-top:10px;border:1px solid var(--bugatti-blue);border-radius:6px;"></video>
     <div id="video-statement-list" style="margin-top:10px;"></div>
   </div>
+  <div style="margin-bottom: 16px;">
+    <button class="btn btn-secondary" id="ocr-upload-btn" onclick="document.getElementById('ocr-file-input').click()">📷 Upload Document Photo</button>
+    <input type="file" id="ocr-file-input" accept="image/*" capture="environment" class="hidden" onchange="handleOcrFileSelected(event)">
+    <span id="ocr-status" style="color: var(--chrome); font-size: 0.85rem; margin-left: 10px;"></span>
+    <div class="hint" style="margin-top: 6px;">Take or upload a photo of a document (letter, notice, form). Text is read from the photo and run through the same field-detection used for voice input, so it can suggest a document type and fields for you to confirm. Requires an internet connection the first time you use this (one-time download of the on-device text-reading engine); the photo itself is never uploaded anywhere.</div>
+  </div>
   <div id="suggestion-banner" class="reference-panel hidden"></div>
   <div id="draft-banner" class="reference-panel hidden"></div>
   <div id="reference-panel" class="reference-panel hidden"></div>
@@ -1443,6 +1449,88 @@ async function deleteVideoStatement(id) {
   loadVideoStatements();
 }
 
+// ============================================
+// OCR UPLOAD — reuses the same field-detection functions as voice input
+// (detectDocTypeFromSpeech / parseVoiceAmount / parseVoiceDefendant /
+// parseVoiceAddress operate on plain text regardless of where it came from),
+// so "AI suggests form fields" is satisfied honestly via the app's existing
+// heuristic engine rather than a fabricated LLM call. Tesseract.js is loaded
+// from a CDN on first use only — this app has no server, so OCR cannot run
+// fully offline; that limitation is disclosed in the UI hint above the button.
+// ============================================
+let tesseractLoadPromise = null;
+function loadTesseract() {
+  if (window.Tesseract) return Promise.resolve();
+  if (tesseractLoadPromise) return tesseractLoadPromise;
+  tesseractLoadPromise = new Promise(function(resolve, reject) {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+    script.onload = function() { resolve(); };
+    script.onerror = function() { tesseractLoadPromise = null; reject(new Error("cdn-unreachable")); };
+    document.head.appendChild(script);
+  });
+  return tesseractLoadPromise;
+}
+
+function handleOcrFileSelected(e) {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  runOcrOnFile(file);
+}
+
+async function runOcrOnFile(file) {
+  const status = document.getElementById("ocr-status");
+  const btn = document.getElementById("ocr-upload-btn");
+  btn.disabled = true;
+  status.textContent = "Loading text-reading engine...";
+  try {
+    await loadTesseract();
+  } catch (err) {
+    status.textContent = "Could not load the OCR engine — this requires an internet connection the first time you use it (it's cached after that). Please connect and try again.";
+    btn.disabled = false;
+    return;
+  }
+  status.textContent = "Reading text from photo... this can take a few seconds.";
+  try {
+    const result = await Tesseract.recognize(file, "eng");
+    const text = ((result && result.data && result.data.text) || "").trim();
+    btn.disabled = false;
+    if (!text) {
+      status.textContent = "Could not read any text from that photo. Try a clearer, well-lit photo.";
+      return;
+    }
+    handleOcrText(text);
+  } catch (err) {
+    btn.disabled = false;
+    status.textContent = "OCR failed: " + err.message + ". Please try again with a clearer photo.";
+  }
+}
+
+function handleOcrText(text) {
+  const status = document.getElementById("ocr-status");
+  const detectedDocType = detectDocTypeFromSpeech(text);
+  const targetDocType = detectedDocType || currentDocType;
+
+  if (!targetDocType) {
+    status.textContent = "Read the photo but could not detect a document type. Please select one manually, then upload the photo again.";
+    return;
+  }
+
+  const fields = {};
+  const amount = parseVoiceAmount(text);
+  const defendant = parseVoiceDefendant(text);
+  const address = parseVoiceAddress(text);
+  if (amount) fields.amount = amount;
+  if (defendant) fields.defendant = defendant;
+  if (address) fields.address = address;
+  fields.narrative = text;
+
+  pendingVoiceResult = { source: "ocr", docType: targetDocType, docTypeChanged: detectedDocType && detectedDocType !== currentDocType, fields: fields, raw: text };
+  status.textContent = "Extracted text from photo — review the suggestions below.";
+  renderVoiceConfirmPanel(pendingVoiceResult);
+}
+
 function detectDocTypeFromSpeech(text) {
   const lower = text.toLowerCase();
   const select = document.getElementById("doc-type");
@@ -1506,14 +1594,19 @@ function handleVoiceTranscript(transcript) {
   if (address) { fields.address = address; }
   fields.narrative = transcript;
 
-  pendingVoiceResult = { docType: targetDocType, docTypeChanged: detectedDocType && detectedDocType !== currentDocType, fields: fields, raw: transcript };
+  pendingVoiceResult = { source: "voice", docType: targetDocType, docTypeChanged: detectedDocType && detectedDocType !== currentDocType, fields: fields, raw: transcript };
   renderVoiceConfirmPanel(pendingVoiceResult);
+}
+
+function getConfirmStatusEl(source) {
+  return document.getElementById(source === "ocr" ? "ocr-status" : "voice-status");
 }
 
 function renderVoiceConfirmPanel(result) {
   const panel = document.getElementById("voice-confirm-panel");
   const docLabel = document.querySelector('#doc-type option[value="' + result.docType + '"]');
-  let html = "<h3>🎙 Did you say...?</h3>";
+  const isOcr = result.source === "ocr";
+  let html = isOcr ? "<h3>📷 Found in your photo...</h3>" : "<h3>🎙 Did you say...?</h3>";
   html += '<div class="voice-raw">"' + escapeHtml(result.raw) + '"</div>';
   html += '<div class="voice-field-row"><span class="voice-field-label">Document Type</span><span class="voice-field-value">' + (docLabel ? escapeHtml(docLabel.textContent) : result.docType) + '</span></div>';
   if (result.fields.defendant) html += '<div class="voice-field-row"><span class="voice-field-label">Other Party</span><span class="voice-field-value">' + escapeHtml(result.fields.defendant) + '</span></div>';
@@ -1523,15 +1616,17 @@ function renderVoiceConfirmPanel(result) {
     '<button class="btn btn-primary" onclick="applyVoiceResult()">✅ Apply to Form</button>' +
     '<button class="btn btn-secondary" onclick="discardVoiceResult()">✖ Discard</button>' +
     '</div>' +
-    '<div class="hint" style="margin-top:8px;">Voice input is best-effort — please review every field before generating or printing.</div>';
+    '<div class="hint" style="margin-top:8px;">' + (isOcr ? "Photo text-reading is best-effort — please review every field before generating or printing." : "Voice input is best-effort — please review every field before generating or printing.") + '</div>';
   panel.innerHTML = html;
   panel.classList.remove("hidden");
 }
 
 function discardVoiceResult() {
+  const source = pendingVoiceResult ? pendingVoiceResult.source : "voice";
   pendingVoiceResult = null;
   document.getElementById("voice-confirm-panel").classList.add("hidden");
-  document.getElementById("voice-status").textContent = "";
+  const statusEl = getConfirmStatusEl(source);
+  if (statusEl) statusEl.textContent = "";
 }
 
 function fillFirstPresentField(candidateKeys, value) {
@@ -1551,6 +1646,7 @@ function fillFirstPresentField(candidateKeys, value) {
 function applyVoiceResult() {
   if (!pendingVoiceResult) return;
   const result = pendingVoiceResult;
+  const isOcr = result.source === "ocr";
 
   if (result.docTypeChanged || document.getElementById("doc-type").value !== result.docType) {
     document.getElementById("doc-type").value = result.docType;
@@ -1561,13 +1657,14 @@ function applyVoiceResult() {
   if (result.fields.amount) fillFirstPresentField(VOICE_FIELD_CANDIDATES.amount, result.fields.amount);
   if (result.fields.address) fillFirstPresentField(VOICE_FIELD_CANDIDATES.address, result.fields.address);
 
-  const narrativeNote = "[From voice input — please review]: " + result.fields.narrative;
+  const narrativeNote = (isOcr ? "[From document photo — please review]: " : "[From voice input — please review]: ") + result.fields.narrative;
   let narrativeFilled = fillFirstPresentField(VOICE_FIELD_CANDIDATES.facts, narrativeNote);
   if (!narrativeFilled) narrativeFilled = fillFirstPresentField(VOICE_FIELD_CANDIDATES.claims, narrativeNote);
   if (!narrativeFilled) fillFirstPresentField(VOICE_FIELD_CANDIDATES.relief, narrativeNote);
 
   discardVoiceResult();
-  document.getElementById("voice-status").textContent = "Form filled from voice input. Please review all fields before generating.";
+  const statusEl = getConfirmStatusEl(result.source);
+  if (statusEl) statusEl.textContent = isOcr ? "Form filled from document photo. Please review all fields before generating." : "Form filled from voice input. Please review all fields before generating.";
 }
 
 // ============================================
