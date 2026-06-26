@@ -253,6 +253,16 @@ body[data-theme="high-contrast"] #preview-output { border: 2px solid #ffffff; }
 </head>
 <body>
 
+<div id="pin-lock-overlay" class="hidden" style="position:fixed;inset:0;background:var(--bugatti-black,#0a0a0a);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+  <h2 style="color:var(--gold);margin-bottom:14px;">🔒 PrimeDox AI Locked</h2>
+  <input id="pin-lock-input" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="4-digit PIN" style="font-size:1.5rem;text-align:center;letter-spacing:10px;width:160px;padding:10px;border-radius:6px;border:1px solid var(--gold);background:#111;color:#fff;" autocomplete="off">
+  <div style="margin-top:14px;display:flex;gap:10px;">
+    <button class="btn btn-gold" onclick="attemptPinUnlock()">Unlock</button>
+    <button class="btn btn-secondary" id="biometric-unlock-btn" onclick="attemptBiometricUnlock()">👆 Use Biometric</button>
+  </div>
+  <div id="pin-lock-status" style="color:var(--red);margin-top:10px;font-size:0.85rem;"></div>
+</div>
+
 <div class="header">
   <h1>⚡ <span class="gold">PRIME</span><span class="silver">DOX</span> <span class="red">AI</span></h1>
   <div class="subtitle">The Most Dangerous Legal Document Platform in the World</div>
@@ -395,6 +405,13 @@ body[data-theme="high-contrast"] #preview-output { border: 2px solid #ffffff; }
   <div style="margin-top: 20px;">
     <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
     <button class="btn btn-secondary" onclick="loadProfile()">🔄 Reset to Saved</button>
+  </div>
+  <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+    <h3 style="color: var(--gold); margin-bottom: 10px;">🔒 Settings → Security</h3>
+    <div id="security-settings-status" class="hint" style="margin-bottom: 10px;"></div>
+    <button class="btn btn-secondary" id="pin-lock-toggle-btn" onclick="togglePinLockSetting()">Enable PIN Lock</button>
+    <button class="btn btn-secondary hidden" id="biometric-enroll-btn" onclick="enrollBiometric()">👆 Enable Biometric Unlock</button>
+    <div class="hint" style="margin-top: 8px;">PIN Lock requires a 4-digit PIN to open the app and encrypts your saved profile (name, contact, court file info) at rest using a key derived from that PIN — nothing is sent off this device. Biometric unlock uses your device's built-in fingerprint/face authenticator as a convenience gate (it does not replace the PIN, which is still required if biometric is unavailable or fails).</div>
   </div>
 </div>
 
@@ -564,14 +581,31 @@ const profileFields = [
   { key: "court_location", label: "Default Court Location", type: "text", required: false, bindToProfile: "profile.court_location" }
 ];
 
+const PROFILE_DEFAULTS = {
+  name: "", title: "",
+  company: "", address: "",
+  city: "", province: "Ontario", postal: "",
+  phone: "", email: "",
+  lsuc: "", court_file: "", court_location: ""
+};
+
+// profileCache holds the decrypted profile in memory once unlocked (or
+// immediately, if PIN Lock has never been enabled). getProfile()/saveProfile()
+// stay synchronous so none of the ~40 generate*() call sites need to change —
+// only the persistence layer underneath is encryption-aware.
+let profileCache = null;
+
 function getProfile() {
-  return JSON.parse(localStorage.getItem("primedox_profile")) || {
-    name: "", title: "",
-    company: "", address: "",
-    city: "", province: "Ontario", postal: "",
-    phone: "", email: "",
-    lsuc: "", court_file: "", court_location: ""
-  };
+  if (profileCache) return profileCache;
+  const raw = localStorage.getItem("primedox_profile");
+  if (!raw) return { ...PROFILE_DEFAULTS };
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && parsed.__enc) return { ...PROFILE_DEFAULTS }; // still locked this session
+    return { ...PROFILE_DEFAULTS, ...parsed };
+  } catch (e) {
+    return { ...PROFILE_DEFAULTS };
+  }
 }
 
 function renderProfileForm() {
@@ -598,7 +632,9 @@ function saveProfile() {
     profile[f.key] = val;
   });
   if (!valid) { alert("Please fix the highlighted errors before saving."); return; }
-  localStorage.setItem("primedox_profile", JSON.stringify(profile));
+  profileCache = profile;
+  if (pinUnlockKey) encryptAndStoreProfile(profile, pinUnlockKey);
+  else localStorage.setItem("primedox_profile", JSON.stringify(profile));
   alert("Profile saved successfully!");
 }
 
@@ -2800,6 +2836,227 @@ function toggleReadAloud() {
 }
 
 // ============================================
+// PIN LOCK + BIOMETRIC — app-open gate + at-rest encryption for the
+// saved profile (name/contact/court-file info — the most sensitive
+// single object this app persists). Uses the Web Crypto API (PBKDF2 ->
+// AES-GCM); the raw PIN is never stored, only a salt + an encrypted
+// verifier string used to confirm a re-entered PIN derives the same key.
+// Biometric unlock uses WebAuthn's platform authenticator purely as a
+// local convenience gate (no server to verify signatures against) — it
+// is not a substitute for the PIN's encryption role, only for re-proving
+// "this is the same device/person" quickly on return visits.
+// ============================================
+const PIN_LOCK_KEY = "primedox_pin_lock";
+const PIN_VERIFY_STRING = "PRIMEDOX_PIN_OK";
+let pinUnlockKey = null;
+
+function bytesToBase64(bytes) { return btoa(String.fromCharCode.apply(null, bytes)); }
+function base64ToBytes(b64) { return Uint8Array.from(atob(b64), c => c.charCodeAt(0)); }
+
+async function pinDeriveKey(pin, saltB64) {
+  const enc = new TextEncoder();
+  const salt = saltB64 ? base64ToBytes(saltB64) : crypto.getRandomValues(new Uint8Array(16));
+  const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(pin), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
+  return { key: key, salt: salt };
+}
+
+function getPinLockConfig() {
+  try { return JSON.parse(localStorage.getItem(PIN_LOCK_KEY)) || null; } catch (e) { return null; }
+}
+
+async function setupPinLock(pin) {
+  const derived = await pinDeriveKey(pin, null);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, derived.key, enc.encode(PIN_VERIFY_STRING));
+  localStorage.setItem(PIN_LOCK_KEY, JSON.stringify({
+    enabled: true,
+    salt: bytesToBase64(derived.salt),
+    iv: bytesToBase64(iv),
+    verifier: bytesToBase64(new Uint8Array(ciphertext)),
+    biometricCredentialId: null
+  }));
+  pinUnlockKey = derived.key;
+  await migrateProfileEncryption(derived.key);
+}
+
+async function verifyPin(pin) {
+  const config = getPinLockConfig();
+  if (!config) return null;
+  try {
+    const derived = await pinDeriveKey(pin, config.salt);
+    const plain = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: base64ToBytes(config.iv) },
+      derived.key,
+      base64ToBytes(config.verifier)
+    );
+    if (new TextDecoder().decode(plain) === PIN_VERIFY_STRING) return derived.key;
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function migrateProfileEncryption(key) {
+  const raw = localStorage.getItem("primedox_profile");
+  if (!raw) return;
+  let existing;
+  try { existing = JSON.parse(raw); } catch (e) { return; }
+  if (existing && existing.__enc) return;
+  await encryptAndStoreProfile(existing, key);
+}
+
+async function encryptAndStoreProfile(profileObj, key) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, enc.encode(JSON.stringify(profileObj)));
+  localStorage.setItem("primedox_profile", JSON.stringify({ __enc: true, iv: bytesToBase64(iv), data: bytesToBase64(new Uint8Array(ciphertext)) }));
+  profileCache = profileObj;
+}
+
+async function decryptStoredProfile(key) {
+  const raw = localStorage.getItem("primedox_profile");
+  if (!raw) return null;
+  const parsed = JSON.parse(raw);
+  if (!parsed.__enc) return parsed;
+  const plain = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: base64ToBytes(parsed.iv) },
+    key,
+    base64ToBytes(parsed.data)
+  );
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function disablePinLock() {
+  if (!confirm("Disable PIN Lock? Your saved profile will be decrypted back to plain storage on this device.")) return;
+  if (profileCache) localStorage.setItem("primedox_profile", JSON.stringify(profileCache));
+  localStorage.removeItem(PIN_LOCK_KEY);
+  pinUnlockKey = null;
+  renderSecuritySettings();
+}
+
+async function togglePinLockSetting() {
+  const config = getPinLockConfig();
+  if (config && config.enabled) { disablePinLock(); return; }
+  const pin1 = prompt("Choose a 4-digit PIN:");
+  if (!pin1) return;
+  if (!/^\d{4}$/.test(pin1)) { alert("PIN must be exactly 4 digits."); return; }
+  const pin2 = prompt("Confirm your 4-digit PIN:");
+  if (pin1 !== pin2) { alert("PINs did not match. Try again."); return; }
+  await setupPinLock(pin1);
+  alert("PIN Lock enabled. Your profile is now encrypted at rest on this device.");
+  renderSecuritySettings();
+}
+
+function isWebAuthnSupported() {
+  return !!(window.PublicKeyCredential && navigator.credentials);
+}
+
+async function enrollBiometric() {
+  if (!isWebAuthnSupported()) { alert("Biometric unlock isn't supported on this browser/device."); return; }
+  const config = getPinLockConfig();
+  if (!config || !config.enabled) { alert("Enable PIN Lock first."); return; }
+  try {
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rp: { name: "PrimeDox AI" },
+        user: { id: crypto.getRandomValues(new Uint8Array(16)), name: "primedox-user", displayName: "PrimeDox AI User" },
+        pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+        authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
+        timeout: 60000
+      }
+    });
+    config.biometricCredentialId = bytesToBase64(new Uint8Array(credential.rawId));
+    localStorage.setItem(PIN_LOCK_KEY, JSON.stringify(config));
+    alert("Biometric unlock enabled.");
+    renderSecuritySettings();
+  } catch (err) {
+    alert("Could not enroll biometric unlock: " + err.message);
+  }
+}
+
+async function attemptBiometricUnlock() {
+  const config = getPinLockConfig();
+  const status = document.getElementById("pin-lock-status");
+  if (!config || !config.biometricCredentialId) { status.textContent = "Biometric unlock not set up. Use your PIN."; return; }
+  try {
+    await navigator.credentials.get({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        allowCredentials: [{ id: base64ToBytes(config.biometricCredentialId), type: "public-key" }],
+        userVerification: "required",
+        timeout: 60000
+      }
+    });
+    // Biometric success re-proves device/user presence, but the AES key is
+    // PIN-derived — fall back to asking for the PIN once to unlock content,
+    // unless a key from this session is already cached.
+    if (pinUnlockKey) { hidePinLockOverlay(); return; }
+    status.textContent = "Biometric confirmed — enter your PIN once to finish unlocking.";
+  } catch (err) {
+    status.textContent = "Biometric unlock failed or was cancelled.";
+  }
+}
+
+async function attemptPinUnlock() {
+  const input = document.getElementById("pin-lock-input");
+  const status = document.getElementById("pin-lock-status");
+  const key = await verifyPin(input.value.trim());
+  if (!key) { status.textContent = "Incorrect PIN."; input.value = ""; return; }
+  pinUnlockKey = key;
+  try {
+    const decrypted = await decryptStoredProfile(key);
+    if (decrypted) profileCache = decrypted;
+  } catch (e) { /* profile may not exist yet */ }
+  hidePinLockOverlay();
+}
+
+function hidePinLockOverlay() {
+  document.getElementById("pin-lock-overlay").classList.add("hidden");
+  document.getElementById("pin-lock-input").value = "";
+  renderProfileForm();
+}
+
+function showPinLockOverlay() {
+  const overlay = document.getElementById("pin-lock-overlay");
+  overlay.classList.remove("hidden");
+  const config = getPinLockConfig();
+  document.getElementById("biometric-unlock-btn").classList.toggle("hidden", !(config && config.biometricCredentialId && isWebAuthnSupported()));
+  document.getElementById("pin-lock-input").focus();
+}
+
+function renderSecuritySettings() {
+  const config = getPinLockConfig();
+  const toggleBtn = document.getElementById("pin-lock-toggle-btn");
+  const enrollBtn = document.getElementById("biometric-enroll-btn");
+  const status = document.getElementById("security-settings-status");
+  if (!toggleBtn) return;
+  if (config && config.enabled) {
+    toggleBtn.textContent = "Disable PIN Lock";
+    enrollBtn.classList.toggle("hidden", !isWebAuthnSupported() || !!config.biometricCredentialId);
+    status.textContent = config.biometricCredentialId ? "PIN Lock is ON. Biometric unlock is enrolled." : "PIN Lock is ON.";
+  } else {
+    toggleBtn.textContent = "Enable PIN Lock";
+    enrollBtn.classList.add("hidden");
+    status.textContent = "PIN Lock is OFF — profile is stored unencrypted on this device.";
+  }
+}
+
+function initPinLockGate() {
+  const config = getPinLockConfig();
+  if (config && config.enabled) showPinLockOverlay();
+  renderSecuritySettings();
+}
+
+// ============================================
 // EMPIRE CONNECT — jump to another company's floor on the live
 // franciscoholdingsinc.com skyscraper (francisco-holdings-site/index.html,
 // FLOORS array). Floor numbers/names here must match that array exactly —
@@ -2879,6 +3136,9 @@ renderTasks();
 renderProfileForm();
 loadVideoStatements();
 populateEmpireConnect();
+initPinLockGate();
+const pinLockInputEl = document.getElementById("pin-lock-input");
+if (pinLockInputEl) pinLockInputEl.addEventListener("keydown", function(e) { if (e.key === "Enter") attemptPinUnlock(); });
 </script>
 
 <div class="upl-disclaimer" style="background:#1a1a1a;border-top:1px solid var(--gold);color:var(--chrome);font-size:0.72rem;line-height:1.4;text-align:center;padding:10px 16px;">
