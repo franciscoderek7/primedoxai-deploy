@@ -79,6 +79,7 @@ body {
   max-width: 1200px; margin-left: auto; margin-right: auto;
 }
 .card h2 { margin-top: 0; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 10px; }
+.card h3 { color: var(--bugatti-blue); margin-top: 24px; margin-bottom: 12px; font-size: 1.05rem; }
 .hidden { display: none !important; }
 .task-item {
   padding: 14px 16px; border-left: 3px solid var(--bugatti-blue);
@@ -150,6 +151,11 @@ select option { background: var(--bugatti-dark); color: var(--text); }
 .voice-confirm-panel .voice-field-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
 .voice-confirm-panel .voice-field-row .voice-field-label { color: var(--chrome); }
 .voice-confirm-panel .voice-field-row .voice-field-value { color: var(--text); font-weight: 600; text-align: right; }
+.reference-panel {
+  background: rgba(0,0,0,0.5); border: 1px solid var(--gold);
+  border-radius: 12px; padding: 18px; margin-top: 16px;
+}
+.reference-panel h3 { margin: 0 0 10px; color: var(--gold); font-size: 1rem; }
 #preview-output {
   background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
   border-radius: 12px; padding: 24px; white-space: pre-wrap;
@@ -191,6 +197,7 @@ select option { background: var(--bugatti-dark); color: var(--text); }
   <div class="nav-tab" data-tab="documents" onclick="showTab('documents')">📄 Documents</div>
   <div class="nav-tab" data-tab="profile" onclick="showTab('profile')">👤 Profile</div>
   <div class="nav-tab" data-tab="preview" onclick="showTab('preview')">👁 Preview</div>
+  <div class="nav-tab" data-tab="damages" onclick="showTab('damages')">💰 Damages</div>
 </div>
 
 <div id="tab-tasks" class="card">
@@ -211,6 +218,7 @@ select option { background: var(--bugatti-dark); color: var(--text); }
     <div class="hint" style="margin-top: 6px;">Requires Chrome, Edge, or Safari + an internet connection.</div>
   </div>
   <div id="voice-confirm-panel" class="voice-confirm-panel hidden"></div>
+  <div id="reference-panel" class="reference-panel hidden"></div>
   <div class="form-group">
     <label>Select Document Type <span class="required">*</span></label>
     <select id="doc-type" onchange="loadDocumentType()">
@@ -228,12 +236,13 @@ select option { background: var(--bugatti-dark); color: var(--text); }
         <option value="notice_of_intention_to_defend">Notice of Intention to Defend</option>
         <option value="certificate_of_service">Certificate of Service</option>
       </optgroup>
-      <optgroup label="🔴 Criminal (5)">
+      <optgroup label="🔴 Criminal (6)">
         <option value="charter_application">Charter Application (s.24(1))</option>
         <option value="bail_variation">Bail Variation</option>
         <option value="notice_of_appeal_criminal">Notice of Appeal (Criminal)</option>
         <option value="sentencing_submission">Sentencing Submission</option>
         <option value="judicial_review_criminal">Judicial Review Application</option>
+        <option value="private_information">Private Information (Laying a Charge - s.504)</option>
       </optgroup>
       <optgroup label="🏛 Tribunal (5)">
         <option value="hrto_application">HRTO Application</option>
@@ -299,6 +308,81 @@ select option { background: var(--bugatti-dark); color: var(--text); }
 <div id="tab-preview" class="card hidden">
   <h2>👁 Document Preview</h2>
   <pre id="preview-output">Select a document type and generate to see preview...</pre>
+</div>
+
+<div id="tab-damages" class="card hidden">
+  <h2>💰 Damages Calculator</h2>
+  <div class="hint" style="margin-bottom: 16px;">Estimates only — verify the current Courts of Justice Act s.128 prejudgment interest rate and confirm Rule 57.01 Tariff A figures before relying on these in a filing.</div>
+
+  <h3>General, Special &amp; Punitive Damages</h3>
+  <div class="form-group">
+    <label>General Damages ($)</label>
+    <input type="text" id="dmg-general" placeholder="0.00" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Special Damages ($)</label>
+    <input type="text" id="dmg-special" placeholder="0.00" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Punitive / Aggravated Damages ($)</label>
+    <input type="text" id="dmg-punitive" placeholder="0.00" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Damages Subtotal</label>
+    <div id="dmg-subtotal" style="font-size: 1.3rem; color: var(--gold); font-weight: 600;">$0.00</div>
+  </div>
+
+  <h3>Prejudgment Interest (Courts of Justice Act, s.128)</h3>
+  <div class="hint">The Ontario prejudgment interest rate is set quarterly by regulation — confirm the rate applicable to the relevant period on the Ontario Courts website. Do not assume a default rate is current.</div>
+  <div class="form-group">
+    <label>Principal Amount ($)</label>
+    <input type="text" id="pji-principal" placeholder="0.00" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Annual Interest Rate (%)</label>
+    <input type="text" id="pji-rate" placeholder="e.g. 5.00" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Loss / Claim Date</label>
+    <input type="date" id="pji-loss-date" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Calculation Date</label>
+    <input type="date" id="pji-calc-date" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Prejudgment Interest</label>
+    <div id="pji-result" style="font-size: 1.1rem; color: var(--gold); font-weight: 600;">$0.00</div>
+  </div>
+
+  <h3>Costs Estimate (Rule 57.01, Tariff A)</h3>
+  <div class="hint">Rough guideline only — actual costs awards are discretionary and depend on the factors in Rule 57.01(1).</div>
+  <div class="form-group">
+    <label>Estimated Hours</label>
+    <input type="text" id="costs-hours" placeholder="0" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Hourly Rate ($)</label>
+    <input type="text" id="costs-rate" placeholder="0" oninput="calculateDamages()">
+  </div>
+  <div class="form-group">
+    <label>Scale</label>
+    <select id="costs-scale" onchange="calculateDamages()">
+      <option value="0.6">Partial Indemnity (~60%)</option>
+      <option value="0.8">Substantial Indemnity (~80%)</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Estimated Costs</label>
+    <div id="costs-result" style="font-size: 1.1rem; color: var(--gold); font-weight: 600;">$0.00</div>
+  </div>
+
+  <h3>Total</h3>
+  <div class="form-group">
+    <label>Damages + Interest + Costs</label>
+    <div id="dmg-total" style="font-size: 1.6rem; color: var(--bugatti-blue); font-weight: bold;">$0.00</div>
+  </div>
+  <button class="btn btn-gold" onclick="sendDamagesToDocument()">📤 Send Total to Current Document</button>
 </div>
 <script>
 // ============================================
@@ -719,6 +803,18 @@ const fieldRegistry = {
     { key: "will_beneficiaries", label: "Beneficiaries & Bequests", type: "textarea", required: true, minLength: 20 },
     { key: "will_residual", label: "Residual Estate", type: "textarea", required: false },
     { key: "will_date", label: "Date of Will", type: "date", required: true }
+  ],
+  private_info: [
+    { key: "pi_informant_name", label: "Informant Name (Person Laying the Charge)", type: "text", required: true, bindToProfile: "profile.name", minLength: 2 },
+    { key: "pi_informant_address", label: "Informant Address", type: "text", required: true, bindToProfile: "profile.address", minLength: 5 },
+    { key: "pi_accused_name", label: "Accused Name", type: "text", required: true, minLength: 2 },
+    { key: "pi_accused_address", label: "Accused Address (if known)", type: "text", required: false },
+    { key: "pi_offence_description", label: "Description of Alleged Offence", type: "textarea", required: true, minLength: 20 },
+    { key: "pi_cc_sections", label: "Criminal Code Section(s) Alleged", type: "text", required: true, minLength: 2, hint: "e.g. s.264.1(1)(a) — Uttering Threats" },
+    { key: "pi_offence_date", label: "Date of Alleged Offence", type: "date", required: true },
+    { key: "pi_offence_location", label: "Location of Alleged Offence", type: "text", required: true, minLength: 3 },
+    { key: "pi_jp_court", label: "Justice of the Peace / Court Location", type: "text", required: true, bindToProfile: "profile.court_location", minLength: 3 },
+    { key: "pi_witnesses", label: "Witnesses (if any)", type: "textarea", required: false }
   ]
 };
 
@@ -726,22 +822,23 @@ const fieldRegistry = {
 // FULL DOCUMENT TYPE REGISTRY (45+ types)
 // ============================================
 const documentTypes = {
-  statement_of_claim: { category: "Civil Procedure", structure: ["plaintiff", "defendant", "court_info", "facts", "claims", "reliefSought", "damages"] },
-  notice_of_motion: { category: "Civil Procedure", structure: ["court_info", "motion", "supporting_docs"] },
-  affidavit: { category: "Civil Procedure", structure: ["affidavit"] },
-  defence: { category: "Civil Procedure", structure: ["defendant", "defence", "court_info"] },
-  reply: { category: "Civil Procedure", structure: ["plaintiff", "reply", "court_info"] },
-  crossclaim: { category: "Civil Procedure", structure: ["crossclaim"] },
-  third_party_claim: { category: "Civil Procedure", structure: ["third_party", "court_info"] },
-  interrogatories: { category: "Civil Procedure", structure: ["interrogatories"] },
-  request_for_admissions: { category: "Civil Procedure", structure: ["admissions"] },
-  notice_of_intention_to_defend: { category: "Civil Procedure", structure: ["intention_defend", "defendant", "court_info"] },
-  certificate_of_service: { category: "Civil Procedure", structure: ["service_cert"] },
+  statement_of_claim: { category: "Civil Procedure", structure: ["plaintiff", "defendant", "court_info", "facts", "claims", "reliefSought", "damages"], rule: "Rules 14 & 25, Rules of Civil Procedure (Ontario)" },
+  notice_of_motion: { category: "Civil Procedure", structure: ["court_info", "motion", "supporting_docs"], rule: "Rule 37, Rules of Civil Procedure" },
+  affidavit: { category: "Civil Procedure", structure: ["affidavit"], rule: "Rule 4.06 & Rule 39, Rules of Civil Procedure" },
+  defence: { category: "Civil Procedure", structure: ["defendant", "defence", "court_info"], rule: "Rule 18 & Rule 25, Rules of Civil Procedure" },
+  reply: { category: "Civil Procedure", structure: ["plaintiff", "reply", "court_info"], rule: "Rule 25.08, Rules of Civil Procedure" },
+  crossclaim: { category: "Civil Procedure", structure: ["crossclaim"], rule: "Rule 28, Rules of Civil Procedure" },
+  third_party_claim: { category: "Civil Procedure", structure: ["third_party", "court_info"], rule: "Rule 29, Rules of Civil Procedure" },
+  interrogatories: { category: "Civil Procedure", structure: ["interrogatories"], rule: "Rule 35, Rules of Civil Procedure" },
+  request_for_admissions: { category: "Civil Procedure", structure: ["admissions"], rule: "Rule 51, Rules of Civil Procedure" },
+  notice_of_intention_to_defend: { category: "Civil Procedure", structure: ["intention_defend", "defendant", "court_info"], rule: "Rule 18.02, Rules of Civil Procedure" },
+  certificate_of_service: { category: "Civil Procedure", structure: ["service_cert"], rule: "Rule 16.09, Rules of Civil Procedure" },
   charter_application: { category: "Criminal", structure: ["charter_section"] },
   bail_variation: { category: "Criminal", structure: ["bail"] },
   notice_of_appeal_criminal: { category: "Criminal", structure: ["criminal_appeal"] },
   sentencing_submission: { category: "Criminal", structure: ["sentencing"] },
   judicial_review_criminal: { category: "Criminal", structure: ["judicial_review"] },
+  private_information: { category: "Criminal", structure: ["private_info"], rule: "Criminal Code s.504 (laying an Information)" },
   hrto_application: { category: "Tribunal", structure: ["hrto"] },
   landlord_tenant_application: { category: "Tribunal", structure: ["landlord_tenant"] },
   wsib_claim: { category: "Tribunal", structure: ["wsib"] },
@@ -785,10 +882,11 @@ function loadDocumentType() {
   document.getElementById("validation-errors").innerHTML = "";
   currentData = {};
 
-  if (!currentDocType || !documentTypes[currentDocType]) return;
+  if (!currentDocType || !documentTypes[currentDocType]) { renderReferencePanel(null); return; }
 
   const docDef = documentTypes[currentDocType];
   const profile = getProfile();
+  renderReferencePanel(docDef);
 
   docDef.structure.forEach(sectionKey => {
     const fields = fieldRegistry[sectionKey];
@@ -1019,6 +1117,59 @@ function applyVoiceResult() {
 }
 
 // ============================================
+// CASE LAW AUTHORITIES — static, curated only
+// No live CanLII API or deep-link integration (by design,
+// per Derek's explicit "static only for now" decision).
+// ============================================
+const CASE_LAW_AUTHORITIES = {
+  "Civil Procedure": [
+    { case: "Andrews v. Grand & Toy Alberta Ltd.", citation: "[1978] 2 SCR 229", principle: "Framework for assessing pecuniary damages for future care and loss of earning capacity in personal injury claims." },
+    { case: "Mustapha v. Culligan of Canada Ltd.", citation: "2008 SCC 27", principle: "Psychiatric injury claims require proof of a serious, foreseeable injury — not merely upset or distress." },
+    { case: "Hill v. Church of Scientology of Toronto", citation: "[1995] 2 SCR 1130", principle: "Leading authority on general and aggravated damages in defamation actions." },
+    { case: "Whiten v. Pilot Insurance Co.", citation: "2002 SCC 18", principle: "Punitive damages must be rationally connected to the defendant's misconduct and proportionate to it." },
+    { case: "Clements v. Clements", citation: "2012 SCC 32", principle: "Clarifies the 'but for' test for causation in negligence and the narrow material-contribution-to-risk exception." },
+    { case: "Bhasin v. Hrynew", citation: "2014 SCC 71", principle: "Recognizes a general organizing principle of good faith in contractual performance." },
+    { case: "Semelhago v. Paramadevan", citation: "[1996] 2 SCR 415", principle: "Addresses when damages in lieu of specific performance are assessed in real property breach of contract." },
+    { case: "Hadley v. Baxendale", citation: "(1854), 9 Exch 341", principle: "Foundational rule limiting contract damages to losses reasonably foreseeable at the time of contracting." }
+  ],
+  "Criminal": [
+    { case: "R. v. Jordan", citation: "2016 SCC 27", principle: "Sets presumptive ceilings (18/30 months) for unreasonable trial delay under s.11(b) of the Charter." },
+    { case: "R. v. Grant", citation: "2009 SCC 32", principle: "Framework for excluding evidence obtained in breach of Charter rights under s.24(2)." },
+    { case: "R. v. Oakes", citation: "[1986] 1 SCR 103", principle: "The 'Oakes test' for justifying a Charter breach under s.1." },
+    { case: "R. v. Smith", citation: "2015 SCC 34", principle: "Addresses proportionality and constitutionality of mandatory minimum sentencing provisions." }
+  ],
+  "Tribunal": [
+    { case: "Moore v. British Columbia (Education)", citation: "2012 SCC 61", principle: "Sets out the test for establishing prima facie discrimination under human rights legislation." },
+    { case: "British Columbia (PSERC) v. BCGSEU (Meiorin)", citation: "[1999] 3 SCR 3", principle: "Unified approach for bona fide occupational requirement defences and the duty to accommodate." }
+  ],
+  "Corporate": [
+    { case: "BCE Inc. v. 1976 Debentureholders", citation: "2008 SCC 69", principle: "Clarifies directors' fiduciary duties and the 'reasonable expectations' test under the oppression remedy." },
+    { case: "Peoples Department Stores Inc. (Trustee of) v. Wise", citation: "2004 SCC 68", principle: "Directors owe their fiduciary duty to the corporation, not directly to creditors, even near insolvency." }
+  ]
+};
+
+function renderReferencePanel(docDef) {
+  const panel = document.getElementById("reference-panel");
+  if (!panel) return;
+  if (!docDef || (!docDef.rule && !(CASE_LAW_AUTHORITIES[docDef.category] || []).length)) {
+    panel.innerHTML = "";
+    panel.classList.add("hidden");
+    return;
+  }
+  const authorities = CASE_LAW_AUTHORITIES[docDef.category] || [];
+  let html = "<h3>📚 Reference — " + escapeHtml(docDef.category) + "</h3>";
+  if (docDef.rule) {
+    html += '<div class="voice-field-row"><span class="voice-field-label">Applicable Rule / Section</span><span class="voice-field-value">' + escapeHtml(docDef.rule) + '</span></div>';
+  }
+  authorities.forEach(a => {
+    html += '<div style="margin-top:10px;"><div style="color:var(--gold);font-weight:600;">' + escapeHtml(a.case) + ' — ' + escapeHtml(a.citation) + '</div><div style="color:var(--chrome);font-size:0.85rem;margin-top:2px;">' + escapeHtml(a.principle) + '</div></div>';
+  });
+  html += '<div class="hint" style="margin-top:10px;">Curated for reference only — verify current citation, treatment, and subsequent appellate history on CanLII, and confirm rule/section numbers are still in force, before relying on these in a filing.</div>';
+  panel.innerHTML = html;
+  panel.classList.remove("hidden");
+}
+
+// ============================================
 // VALIDATION ENGINE
 // ============================================
 function validateForm() {
@@ -1128,6 +1279,9 @@ function generatePreview() {
       break;
     case "judicial_review_criminal":
       output = generateJudicialReview(p, d);
+      break;
+    case "private_information":
+      output = generatePrivateInformation(p, d);
       break;
     case "hrto_application":
       output = generateHRTO(p, d);
@@ -1491,6 +1645,28 @@ function generateJudicialReview(p, d) {
     (d.review_grounds || "[GROUNDS TO BE INSERTED]") + "\n\n" +
     "Date: " + new Date().toLocaleDateString() + "\n\n" +
     "_________________________\n" + p.name;
+}
+
+function generatePrivateInformation(p, d) {
+  return "ONTARIO COURT OF JUSTICE\n\n" +
+    "INFORMATION\n" +
+    "(Criminal Code of Canada, s.504)\n" +
+    "-------------------------------\n\n" +
+    "THIS IS THE INFORMATION of " + d.pi_informant_name + " of " + d.pi_informant_address + " (the \"Informant\"),\n" +
+    "taken before me this day, who says that they have reasonable grounds to believe and do believe that:\n\n" +
+    d.pi_accused_name + (d.pi_accused_address ? ", of " + d.pi_accused_address + "," : "") + " (the \"Accused\")\n\n" +
+    "did, on or about " + d.pi_offence_date + ", at " + d.pi_offence_location + ",\n" +
+    "commit the following offence(s) contrary to " + d.pi_cc_sections + " of the Criminal Code of Canada:\n\n" +
+    "DESCRIPTION OF ALLEGED OFFENCE\n" +
+    "-------------------------------\n" +
+    (d.pi_offence_description || "[DESCRIPTION TO BE INSERTED]") + "\n\n" +
+    (d.pi_witnesses ? "WITNESSES\n---------\n" + d.pi_witnesses + "\n\n" : "") +
+    "TO BE HEARD BEFORE: " + d.pi_jp_court + "\n\n" +
+    "SWORN/AFFIRMED before me at " + d.pi_jp_court + " this _____ day of __________, " + new Date().getFullYear() + ".\n\n" +
+    "_________________________\n" + d.pi_informant_name + " (Informant)\n\n" +
+    "_________________________\n" + "Justice of the Peace / Provincial Court Judge\n\n" +
+    "-------------------------------\n" +
+    "NOTICE: Laying a private Information under s.504 is procedurally complex. A Justice of the Peace must conduct a pre-enquete hearing (s.507.1/s.788) before process issues, may refer the matter to the Crown Attorney for a decision on intervention, and can decline to issue process. Informants who lay frivolous or vexatious informations may face costs consequences. This document is a draft starting point only — consult a lawyer before swearing an Information.";
 }
 
 function generateHRTO(p, d) {
@@ -1917,6 +2093,60 @@ function clearForm() {
   document.getElementById("preview-output").textContent = "Select a document type and generate to see preview...";
   currentDocType = null;
   currentData = {};
+}
+
+// ============================================
+// DAMAGES CALCULATOR
+// ============================================
+function parseDollarInput(id) {
+  const el = document.getElementById(id);
+  if (!el) return 0;
+  const n = parseFloat((el.value || "0").replace(/[$,]/g, ""));
+  return isNaN(n) ? 0 : n;
+}
+
+function formatDollar(n) {
+  return "$" + n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function calculateDamages() {
+  const general = parseDollarInput("dmg-general");
+  const special = parseDollarInput("dmg-special");
+  const punitive = parseDollarInput("dmg-punitive");
+  const subtotal = general + special + punitive;
+  document.getElementById("dmg-subtotal").textContent = formatDollar(subtotal);
+
+  const principal = parseDollarInput("pji-principal");
+  const rate = parseFloat(document.getElementById("pji-rate").value || "0") || 0;
+  const lossDate = document.getElementById("pji-loss-date").value;
+  const calcDate = document.getElementById("pji-calc-date").value;
+  let interest = 0;
+  if (principal > 0 && rate > 0 && lossDate && calcDate) {
+    const days = Math.max(0, (new Date(calcDate) - new Date(lossDate)) / (1000 * 60 * 60 * 24));
+    interest = principal * (rate / 100) * (days / 365);
+  }
+  document.getElementById("pji-result").textContent = formatDollar(interest);
+
+  const hours = parseFloat(document.getElementById("costs-hours").value || "0") || 0;
+  const hourlyRate = parseFloat(document.getElementById("costs-rate").value || "0") || 0;
+  const scale = parseFloat(document.getElementById("costs-scale").value || "0.6");
+  const costs = hours * hourlyRate * scale;
+  document.getElementById("costs-result").textContent = formatDollar(costs);
+
+  const total = subtotal + interest + costs;
+  document.getElementById("dmg-total").textContent = formatDollar(total);
+  return total;
+}
+
+function sendDamagesToDocument() {
+  const total = calculateDamages();
+  if (!total) { alert("Enter at least one amount above zero before sending a total to a document."); return; }
+  const filled = fillFirstPresentField(VOICE_FIELD_CANDIDATES.amount, formatDollar(total));
+  if (filled) {
+    alert("Sent " + formatDollar(total) + " to the current document's \"" + filled + "\" field.");
+  } else {
+    alert("No matching amount field on the current document. Select a document type with an amount field (e.g. Statement of Claim) in the Documents tab first, then try again.");
+  }
 }
 
 // ============================================
