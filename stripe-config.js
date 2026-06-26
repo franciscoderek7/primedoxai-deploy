@@ -184,21 +184,21 @@
             price:    99,
             recurring:null, // one-time
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_DIGITAL', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/99CAD',
+            paypal:   'https://paypal.me/techpetcage/99CAD',
           },
           premium: {
             label:    'Premium',
             price:    499,
             recurring:null, // one-time
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_PREMIUM', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/499CAD',
+            paypal:   'https://paypal.me/techpetcage/499CAD',
           },
           elite: {
             label:    'Elite',
             price:    1499,
             recurring:null, // one-time
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_CCLDR_ELITE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/1499CAD',
+            paypal:   'https://paypal.me/techpetcage/1499CAD',
           },
         },
       },
@@ -217,21 +217,21 @@
             price:    49,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_INDIVIDUAL', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/49CAD',
+            paypal:   'https://paypal.me/techpetcage/49CAD',
           },
           team: {
             label:    'Team',
             price:    149,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_TEAM', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/149CAD',
+            paypal:   'https://paypal.me/techpetcage/149CAD',
           },
           enterprise: {
             label:    'Enterprise',
             price:    499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_ZPRIMEDOX_ENTERPRISE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/499CAD',
+            paypal:   'https://paypal.me/techpetcage/499CAD',
           },
         },
       },
@@ -252,21 +252,21 @@
             price:    199,
             recurring:null, // one-time
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_TECHPETCAGE_BASIC', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/199CAD',
+            paypal:   'https://paypal.me/techpetcage/199CAD',
           },
           premium: {
             label:    'Premium',
             price:    499,
             recurring:null, // one-time
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_TECHPETCAGE_PREMIUM', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/499CAD',
+            paypal:   'https://paypal.me/techpetcage/499CAD',
           },
           enterprise: {
             label:    'Enterprise',
             price:    999,
             recurring:null, // one-time
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_TECHPETCAGE_ENTERPRISE', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/999CAD',
+            paypal:   'https://paypal.me/techpetcage/999CAD',
           },
           marketplace: {
             label:    'Marketplace',
@@ -294,21 +294,21 @@
             price:    99,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_VVA_LISTING', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/99CAD',
+            paypal:   'https://paypal.me/techpetcage/99CAD',
           },
           featured: {
             label:    'Featured Listing',
             price:    499,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_VVA_FEATURED', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/499CAD',
+            paypal:   'https://paypal.me/techpetcage/499CAD',
           },
           premiumSeller: {
             label:    'Premium Seller',
             price:    999,
             recurring:'mo',
             stripeUrl:'https://buy.stripe.com/PLACEHOLDER_VVA_PREMIUM_SELLER', // STRIPE SWAP ZONE
-            paypal:   'https://paypal.me/derekfranciacao1/999CAD',
+            paypal:   'https://paypal.me/techpetcage/999CAD',
           },
         },
       },
