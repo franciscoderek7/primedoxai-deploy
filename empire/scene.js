@@ -9,14 +9,50 @@
  */
 
 import { loadFloorScene, getFloorLabel } from './floor-registry.js';
+import { generateFallbackHDRI } from './fallbacks/HDRIFallback.js';
 
 const DOOR_OPEN_OFFSET = 1.1;
-const DOOR_HALF_TRANSITION_MS = 450;
+const DOOR_HALF_TRANSITION_MS = 900; // 0.9s per-direction slide, per brushed-steel door spec
+const DOOR_HALF_WIDTH = 0.75; // == doorGeo width/2 exactly, so closed doors touch with zero seam
+
+// Approximates cubic-bezier(0.65, 0, 0.35, 1) — a smooth mechanical ease-in-out,
+// no easing library dependency required for a single curve.
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+// Procedural brushed-steel grain: a normal map built from horizontal-row noise
+// (no external texture asset). Used with MeshPhysicalMaterial.anisotropy to fake
+// the directional micro-scratches of real brushed stainless steel.
+function createBrushedSteelNormalMap(THREE) {
+  const size = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'rgb(128,128,255)';
+  ctx.fillRect(0, 0, size, size);
+  for (let y = 0; y < size; y++) {
+    const jitter = Math.round(Math.random() * 36 - 18);
+    ctx.fillStyle = `rgb(${128 + jitter},128,255)`;
+    ctx.fillRect(0, y, size, 1);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(1, 6);
+  return texture;
+}
 
 function buildLobby(THREE) {
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x000000, 5, 50);
   scene.background = new THREE.Color(0x000000);
+  // Procedural HDR-style environment (zero external .hdr asset) so the brushed
+  // steel doors get real reflections — same fallback generator AssetLoader uses
+  // per-floor, reused here for the lobby/elevator shell. OmniGuard blue accent
+  // since this is the brand permitted to use blue/pink per CLAUDE.md.
+  scene.environment = generateFallbackHDRI(THREE, { themeColor: '#4A90E2', floor: 'lobby' });
 
   const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, 4, 10);
@@ -35,12 +71,25 @@ function buildLobby(THREE) {
   floor.rotation.x = -Math.PI / 2;
   scene.add(floor);
 
-  const doorMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.2 });
-  const doorGeo = new THREE.BoxGeometry(1.5, 4, 0.1);
+  const doorMat = new THREE.MeshPhysicalMaterial({
+    color: 0xb8bcc2,
+    metalness: 1,
+    roughness: 0.28,
+    clearcoat: 1,
+    clearcoatRoughness: 0.05,
+    envMapIntensity: 2,
+    normalMap: createBrushedSteelNormalMap(THREE),
+    normalScale: new THREE.Vector2(0.12, 0.12),
+  });
+  if ('anisotropy' in doorMat) {
+    doorMat.anisotropy = 1;
+    doorMat.anisotropyRotation = Math.PI / 2; // vertical brushed grain, matches real elevator doors
+  }
+  const doorGeo = new THREE.BoxGeometry(DOOR_HALF_WIDTH * 2, 4, 0.1);
   const doorLeft = new THREE.Mesh(doorGeo, doorMat);
   const doorRight = new THREE.Mesh(doorGeo, doorMat);
-  doorLeft.position.set(-0.76, 2, -3);
-  doorRight.position.set(0.76, 2, -3);
+  doorLeft.position.set(-DOOR_HALF_WIDTH, 2, -3);
+  doorRight.position.set(DOOR_HALF_WIDTH, 2, -3);
   scene.add(doorLeft, doorRight);
 
   function update() {
@@ -96,9 +145,9 @@ export class SkyscraperBuilding {
       const toOffset = open ? DOOR_OPEN_OFFSET : 0;
       const step = () => {
         const t = Math.min(1, (performance.now() - start) / DOOR_HALF_TRANSITION_MS);
-        const offset = fromOffset + (toOffset - fromOffset) * t;
-        left.position.x = -0.76 - offset;
-        right.position.x = 0.76 + offset;
+        const offset = fromOffset + (toOffset - fromOffset) * easeInOutCubic(t);
+        left.position.x = -DOOR_HALF_WIDTH - offset;
+        right.position.x = DOOR_HALF_WIDTH + offset;
         if (t < 1) requestAnimationFrame(step);
         else resolve();
       };
@@ -126,6 +175,9 @@ export class SkyscraperBuilding {
       return;
     }
 
+    if (floorScene.scene && !floorScene.scene.environment) {
+      floorScene.scene.environment = this.lobby.scene.environment;
+    }
     this.active = floorScene;
     this.currentFloor = floorNumber;
     this.events.emit('elevator:doors-opening', { floor: floorNumber, label: getFloorLabel(floorNumber) });

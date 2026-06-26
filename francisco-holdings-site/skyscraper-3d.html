@@ -20,6 +20,10 @@
   .floor-btn,#lobby-btn{background:#111;border:1px solid #D4AF37;color:#D4AF37;font-size:12px;
              padding:10px 16px;border-radius:6px;cursor:pointer;letter-spacing:0.5px;transition:all .15s}
   .floor-btn:hover,#lobby-btn:hover{background:#D4AF37;color:#000}
+  #floor-content-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+             opacity:0;transition:opacity 0.4s ease;pointer-events:none;z-index:5}
+  #floor-content-inner{color:#fff;text-align:center;font-family:Inter,Arial,sans-serif;
+             font-size:28px;letter-spacing:1px;text-shadow:0 0 18px rgba(74,144,226,0.6)}
 </style>
 </head>
 <body>
@@ -30,6 +34,8 @@
   <div class="brand">FRANCISCO HOLDINGS — PHOENIX TOWER (3D PREVIEW)</div>
   <div id="status">Lobby</div>
 </div>
+
+<div id="floor-content-overlay"><div id="floor-content-inner"></div></div>
 
 <div id="floor-bar">
   <button id="lobby-btn">Lobby</button>
@@ -49,6 +55,7 @@
   import { Engine } from './empire/engine.js';
   import { SkyscraperBuilding } from './empire/scene.js';
   import { getRegisteredFloors, getFloorLabel } from './empire/floor-registry.js';
+  import { ElevatorAudio } from './empire/audio-engine.js';
 
   const container = document.getElementById('viewport');
   const engine = new Engine(container, { THREE });
@@ -56,11 +63,20 @@
   engine.mount(building);
   engine.start();
 
+  const audio = new ElevatorAudio();
+  audio.connect(building);
+
   const status = document.getElementById('status');
-  building.on('elevator:doors-closing', () => { status.textContent = 'Doors closing...'; });
+  const contentOverlay = document.getElementById('floor-content-overlay');
+  const contentInner = document.getElementById('floor-content-inner');
+  building.on('elevator:doors-closing', () => { status.textContent = 'Doors closing...'; contentOverlay.style.opacity = '0'; });
   building.on('elevator:loading', ({ label }) => { status.textContent = `Loading ${label || 'floor'}...`; });
   building.on('elevator:doors-opening', ({ label }) => { status.textContent = `Arriving: ${label || 'Lobby'}`; });
-  building.on('elevator:arrived', ({ label }) => { status.textContent = `Floor: ${label || 'Lobby'}`; });
+  building.on('elevator:arrived', ({ label }) => {
+    status.textContent = `Floor: ${label || 'Lobby'}`;
+    contentInner.textContent = label || 'Lobby';
+    contentOverlay.style.opacity = '1'; // fades in only once doors are fully open (0.4s ease, per spec)
+  });
   building.on('elevator:error', ({ error }) => { status.textContent = `Error: ${error.message}`; });
 
   const floorBar = document.getElementById('floor-bar');
