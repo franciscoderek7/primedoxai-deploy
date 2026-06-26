@@ -138,10 +138,14 @@ select option { background: var(--bugatti-dark); color: var(--text); }
 .btn-gold:hover { background: #c9a030; box-shadow: 0 0 30px var(--gold-glow); }
 .btn-red { background: var(--red); color: white; box-shadow: 0 0 20px var(--red-glow); }
 .btn-red:hover { background: #c41830; box-shadow: 0 0 30px var(--red-glow); }
-.btn-voice { background: rgba(0,164,224,0.15); color: var(--bugatti-blue); border: 1px solid var(--bugatti-blue); }
-.btn-voice:hover { background: rgba(0,164,224,0.25); }
+.btn-voice { background: rgba(46,204,113,0.15); color: #2ECC71; border: 2px solid #FFD700; animation: pulseVoiceIdle 2s infinite; }
+.btn-voice:hover { background: rgba(46,204,113,0.25); }
 .btn-voice.recording { background: var(--red); color: white; border-color: var(--red); animation: pulseRecord 1.2s infinite; }
+.btn-voice.paused { background: rgba(255,215,0,0.15); color: #FFD700; border-color: #FFD700; animation: pulseVoicePaused 1.5s infinite; }
+.btn-voice.voice-error { background: rgba(227,25,55,0.1); color: var(--red); border-color: var(--red); animation: none; }
 @keyframes pulseRecord { 0%,100% { box-shadow: 0 0 10px var(--red-glow); } 50% { box-shadow: 0 0 28px var(--red-glow); } }
+@keyframes pulseVoiceIdle { 0%,100% { box-shadow: 0 0 6px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 16px rgba(255,215,0,0.6); } }
+@keyframes pulseVoicePaused { 0%,100% { box-shadow: 0 0 6px rgba(255,215,0,0.2); } 50% { box-shadow: 0 0 14px rgba(255,215,0,0.5); } }
 .voice-confirm-panel {
   background: rgba(0,0,0,0.5); border: 1px solid var(--bugatti-blue);
   border-radius: 12px; padding: 18px; margin-top: 16px;
@@ -295,6 +299,13 @@ body[data-theme="high-contrast"] #preview-output { border: 2px solid #ffffff; }
     <div class="hint" style="margin-top: 6px;">Press and hold, speak a full sentence, then release — e.g. "Generate a Notice of Motion for my June 29 hearing." Requires Chrome, Edge, or Safari + an internet connection (speech recognition is not available offline).</div>
   </div>
   <div id="voice-confirm-panel" class="voice-confirm-panel hidden"></div>
+  <div style="margin-bottom: 16px;">
+    <button class="btn btn-secondary" id="video-statement-btn" onclick="toggleVideoStatement()">📹 Record Video Statement</button>
+    <span id="video-statement-status" style="color: var(--chrome); font-size: 0.85rem; margin-left: 10px;"></span>
+    <div class="hint" style="margin-top: 6px;">Records a witness statement / incident report on video (up to 5 minutes). Requires camera + microphone permission. Saved statements are stored on this device only (IndexedDB, not localStorage — video clips exceed localStorage's storage limit).</div>
+    <video id="video-statement-preview" class="hidden" autoplay muted playsinline style="width:100%;max-width:360px;margin-top:10px;border:1px solid var(--bugatti-blue);border-radius:6px;"></video>
+    <div id="video-statement-list" style="margin-top:10px;"></div>
+  </div>
   <div id="suggestion-banner" class="reference-panel hidden"></div>
   <div id="draft-banner" class="reference-panel hidden"></div>
   <div id="reference-panel" class="reference-panel hidden"></div>
@@ -1096,6 +1107,12 @@ function discardDraft(docType) {
 let voiceRecognition = null;
 let voiceListening = false;
 let pendingVoiceResult = null;
+let userHolding = false;
+let voiceSessionStartTime = 0;
+let lastResultTime = 0;
+let voiceSilenceTimer = null;
+const VOICE_MAX_SESSION_MS = 120000;
+const VOICE_SILENCE_THRESHOLD_MS = 3000;
 
 const VOICE_FIELD_CANDIDATES = {
   defendant: ["defendant_name", "demand_recipient", "third_party_name", "cd_recipient", "fn_recipient", "nd_party", "sd_debtor", "crossclaim_defendant", "lt_landlord", "hrto_respondent", "eviction_tenant"],
@@ -1121,51 +1138,270 @@ let voiceTranscriptBuffer = "";
 
 function startVoiceInput(e) {
   if (e) e.preventDefault();
+  userHolding = true;
   if (voiceListening) return;
 
   voiceRecognition = getVoiceRecognition();
   if (!voiceRecognition) {
-    alert("Voice input is not supported in this browser. Try Chrome, Edge, or Safari, and make sure you're online (speech recognition is not available offline).");
+    const status = document.getElementById("voice-status");
+    const btn = document.getElementById("voice-btn");
+    btn.classList.add("voice-error");
+    status.textContent = "Browser not supported. Try Chrome, Edge, or Safari, and make sure you're online (speech recognition is not available offline).";
+    userHolding = false;
     return;
   }
 
   const btn = document.getElementById("voice-btn");
   const status = document.getElementById("voice-status");
+  btn.classList.remove("voice-error", "paused");
   voiceListening = true;
   voiceTranscriptBuffer = "";
+  voiceSessionStartTime = Date.now();
+  lastResultTime = Date.now();
   btn.textContent = "🔴 Listening... (release to stop)";
   btn.classList.add("recording");
   status.textContent = "Speak now — e.g. \"Generate a Notice of Motion for my June 29 hearing.\" Release the button when done.";
+  startVoiceSilenceWatcher();
+  attachVoiceHandlers(voiceRecognition);
+  voiceRecognition.start();
+}
 
-  voiceRecognition.onresult = function(e) {
+function attachVoiceHandlers(rec) {
+  const btn = document.getElementById("voice-btn");
+  const status = document.getElementById("voice-status");
+
+  rec.onresult = function(e) {
     let finalText = "";
     for (let i = e.resultIndex; i < e.results.length; i++) {
       if (e.results[i].isFinal) finalText += e.results[i][0].transcript + " ";
+    }
+    lastResultTime = Date.now();
+    if (btn.classList.contains("paused")) {
+      btn.classList.remove("paused");
+      btn.classList.add("recording");
     }
     if (finalText) {
       voiceTranscriptBuffer += finalText;
       status.textContent = "Heard so far: \"" + voiceTranscriptBuffer.trim() + "\"";
     }
   };
-  voiceRecognition.onerror = function(e) {
-    status.textContent = "Voice input error: " + e.error + ". Please try again or type manually.";
-  };
-  voiceRecognition.onend = function() {
-    voiceListening = false;
-    btn.textContent = "🎙 Hold to Speak";
-    btn.classList.remove("recording");
-    const finalTranscript = voiceTranscriptBuffer.trim();
-    voiceTranscriptBuffer = "";
-    if (finalTranscript) handleVoiceTranscript(finalTranscript);
-    else status.textContent = "No speech detected. Press and hold the mic, then speak.";
+
+  rec.onerror = function(e) {
+    if (e.error === "not-allowed" || e.error === "audio-capture") {
+      status.textContent = "Microphone blocked. Check your browser/site permissions and try again.";
+      btn.classList.add("voice-error");
+    } else if (e.error === "no-speech") {
+      status.textContent = "No speech detected. Press and hold the mic, then speak.";
+    } else {
+      status.textContent = "Voice input error: " + e.error + ". Please try again or type manually.";
+    }
   };
 
-  voiceRecognition.start();
+  rec.onend = function() {
+    const elapsed = Date.now() - voiceSessionStartTime;
+    if (userHolding && elapsed < VOICE_MAX_SESSION_MS) {
+      // Engine timed out on its own (e.g. ~60s internal cutoff) while the user is
+      // still holding the button — restart seamlessly rather than ending the session.
+      voiceRecognition = getVoiceRecognition();
+      attachVoiceHandlers(voiceRecognition);
+      voiceRecognition.start();
+      return;
+    }
+    finishVoiceSession();
+  };
+}
+
+function startVoiceSilenceWatcher() {
+  clearInterval(voiceSilenceTimer);
+  voiceSilenceTimer = setInterval(function() {
+    if (!voiceListening) return;
+    const btn = document.getElementById("voice-btn");
+    const status = document.getElementById("voice-status");
+    if (Date.now() - lastResultTime >= VOICE_SILENCE_THRESHOLD_MS) {
+      if (!btn.classList.contains("paused")) {
+        btn.classList.remove("recording");
+        btn.classList.add("paused");
+        status.textContent = "⏸ Paused — listening for speech...";
+      }
+    }
+    if (Date.now() - voiceSessionStartTime >= VOICE_MAX_SESSION_MS) {
+      userHolding = false;
+      if (voiceRecognition) voiceRecognition.stop();
+    }
+  }, 500);
+}
+
+function finishVoiceSession() {
+  clearInterval(voiceSilenceTimer);
+  voiceListening = false;
+  const btn = document.getElementById("voice-btn");
+  const status = document.getElementById("voice-status");
+  btn.textContent = "🎙 Hold to Speak";
+  btn.classList.remove("recording", "paused");
+  const finalTranscript = voiceTranscriptBuffer.trim();
+  voiceTranscriptBuffer = "";
+  if (finalTranscript) handleVoiceTranscript(finalTranscript);
+  else if (!btn.classList.contains("voice-error")) status.textContent = "No speech detected. Press and hold the mic, then speak.";
 }
 
 function stopVoiceInput(e) {
   if (e) e.preventDefault();
+  userHolding = false;
   if (voiceListening && voiceRecognition) voiceRecognition.stop();
+}
+
+// ============================================
+// VIDEO STATEMENT — witness statement / incident report recording
+// Stored in IndexedDB (not localStorage): a 5-minute video clip is tens of MB,
+// far past localStorage's ~5-10MB per-origin quota, which would throw
+// QuotaExceededError on save. IndexedDB has no such practical ceiling.
+// ============================================
+let videoStream = null;
+let videoRecorder = null;
+let videoChunks = [];
+let videoMaxTimer = null;
+const VIDEO_MAX_MS = 5 * 60 * 1000;
+const VIDEO_DB_NAME = "primedox_video_statements";
+const VIDEO_STORE_NAME = "statements";
+
+function openVideoDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(VIDEO_DB_NAME, 1);
+    req.onupgradeneeded = function(e) {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(VIDEO_STORE_NAME)) {
+        db.createObjectStore(VIDEO_STORE_NAME, { keyPath: "id" });
+      }
+    };
+    req.onsuccess = function(e) { resolve(e.target.result); };
+    req.onerror = function(e) { reject(e.target.error); };
+  });
+}
+
+function toggleVideoStatement() {
+  if (videoRecorder && videoRecorder.state === "recording") stopVideoStatement();
+  else startVideoStatement();
+}
+
+async function startVideoStatement() {
+  const btn = document.getElementById("video-statement-btn");
+  const status = document.getElementById("video-statement-status");
+  const preview = document.getElementById("video-statement-preview");
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+    status.textContent = "Browser not supported for video recording. Try Chrome, Edge, or Safari.";
+    return;
+  }
+
+  try {
+    videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  } catch (err) {
+    if (err.name === "NotAllowedError" || err.name === "SecurityError") {
+      status.textContent = "Microphone/camera blocked. Check your browser/site permissions and try again.";
+    } else if (err.name === "NotFoundError") {
+      status.textContent = "No camera or microphone found on this device.";
+    } else {
+      status.textContent = "Could not start video recording: " + err.message;
+    }
+    return;
+  }
+
+  preview.srcObject = videoStream;
+  preview.classList.remove("hidden");
+  videoChunks = [];
+
+  const mimeType = MediaRecorder.isTypeSupported("video/webm") ? "video/webm" : "";
+  videoRecorder = mimeType ? new MediaRecorder(videoStream, { mimeType }) : new MediaRecorder(videoStream);
+
+  videoRecorder.ondataavailable = function(e) {
+    if (e.data && e.data.size > 0) videoChunks.push(e.data);
+  };
+  videoRecorder.onstop = async function() {
+    clearTimeout(videoMaxTimer);
+    preview.classList.add("hidden");
+    preview.srcObject = null;
+    videoStream.getTracks().forEach(t => t.stop());
+    videoStream = null;
+    const blob = new Blob(videoChunks, { type: videoRecorder.mimeType || "video/webm" });
+    videoChunks = [];
+    if (blob.size > 0) await saveVideoStatement(blob);
+    btn.textContent = "📹 Record Video Statement";
+    btn.classList.remove("recording");
+  };
+
+  videoRecorder.start();
+  btn.textContent = "⏹ Stop Recording";
+  btn.classList.add("recording");
+  status.textContent = "Recording... (max 5 minutes)";
+  videoMaxTimer = setTimeout(stopVideoStatement, VIDEO_MAX_MS);
+}
+
+function stopVideoStatement() {
+  clearTimeout(videoMaxTimer);
+  if (videoRecorder && videoRecorder.state === "recording") videoRecorder.stop();
+}
+
+async function saveVideoStatement(blob) {
+  const status = document.getElementById("video-statement-status");
+  const record = {
+    id: "vs_" + Date.now(),
+    docType: currentDocType || "general",
+    createdAt: new Date().toISOString(),
+    mimeType: blob.type,
+    sizeBytes: blob.size,
+    blob: blob
+  };
+  try {
+    const db = await openVideoDB();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(VIDEO_STORE_NAME, "readwrite");
+      tx.objectStore(VIDEO_STORE_NAME).put(record);
+      tx.oncomplete = resolve;
+      tx.onerror = function(e) { reject(e.target.error); };
+    });
+    status.textContent = "Video statement saved (" + (blob.size / 1024 / 1024).toFixed(1) + " MB).";
+    loadVideoStatements();
+  } catch (err) {
+    status.textContent = "Could not save video statement: " + err.message;
+  }
+}
+
+async function loadVideoStatements() {
+  const list = document.getElementById("video-statement-list");
+  if (!list) return;
+  try {
+    const db = await openVideoDB();
+    const records = await new Promise((resolve, reject) => {
+      const tx = db.transaction(VIDEO_STORE_NAME, "readonly");
+      const req = tx.objectStore(VIDEO_STORE_NAME).getAll();
+      req.onsuccess = function() { resolve(req.result || []); };
+      req.onerror = function(e) { reject(e.target.error); };
+    });
+    if (!records.length) { list.innerHTML = ""; return; }
+    records.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    list.innerHTML = records.map(function(r) {
+      const url = URL.createObjectURL(r.blob);
+      return '<div style="border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px;margin-bottom:8px;">' +
+        '<div style="font-size:0.8rem;color:var(--chrome);margin-bottom:4px;">' + escapeHtml(r.docType) + " — " + new Date(r.createdAt).toLocaleString() + " (" + (r.sizeBytes / 1024 / 1024).toFixed(1) + " MB)</div>" +
+        '<video controls style="width:100%;max-width:360px;border-radius:4px;" src="' + url + '"></video>' +
+        '<div style="margin-top:6px;"><button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="deleteVideoStatement(\'' + r.id + '\')">🗑 Delete</button></div>' +
+        '</div>';
+    }).join("");
+  } catch (err) {
+    list.innerHTML = "";
+  }
+}
+
+async function deleteVideoStatement(id) {
+  if (!confirm("Delete this video statement? This cannot be undone.")) return;
+  const db = await openVideoDB();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction(VIDEO_STORE_NAME, "readwrite");
+    tx.objectStore(VIDEO_STORE_NAME).delete(id);
+    tx.oncomplete = resolve;
+    tx.onerror = function(e) { reject(e.target.error); };
+  });
+  loadVideoStatements();
 }
 
 function detectDocTypeFromSpeech(text) {
@@ -2566,6 +2802,7 @@ function toggleReadAloud() {
 applySavedAccessibilitySettings();
 renderTasks();
 renderProfileForm();
+loadVideoStatements();
 </script>
 
 <div class="upl-disclaimer" style="background:#1a1a1a;border-top:1px solid var(--gold);color:var(--chrome);font-size:0.72rem;line-height:1.4;text-align:center;padding:10px 16px;">
