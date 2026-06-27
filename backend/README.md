@@ -63,6 +63,66 @@ backend/
     test_health.py               Smoke tests for /health and app import
 ```
 
+## API endpoints
+
+| Method | Path | Auth | Module |
+|---|---|---|---|
+| GET | `/health` | none | `health.py` |
+| GET | `/api/health/db` | none | `health.py` |
+| GET | `/api/floors/{floor_id}/state` | none | `floors.py` |
+| GET | `/api/floors` | none | `floors.py` |
+| GET | `/api/floor/{floor_number}` | none | `floors.py` |
+| POST | `/api/floors/{floor_number}/apply` | none | `floor_rentals.py` |
+| GET | `/api/company/{company_id}` | none | `company.py` |
+| POST | `/api/auth/register` | none | `auth.py` |
+| POST | `/api/auth/login` | none | `auth.py` |
+| POST | `/api/auth/refresh` | none | `auth.py` |
+| GET | `/api/auth/me` | bearer | `auth.py` |
+| GET | `/api/user/me` | bearer | `user.py` |
+| POST | `/api/generate` | bearer | `generate.py` |
+| GET | `/api/generate/{document_id}` | bearer | `generate.py` |
+| POST | `/api/generate/webhook` | none (internal) | `generate.py` |
+| POST | `/api/payment/checkout` | bearer | `payment.py` |
+| GET | `/api/payment/portal` | bearer | `payment.py` |
+| POST | `/api/payment/webhook` | Stripe signature | `payment.py` |
+| POST | `/api/floor/{floor_number}/visit` | none | `analytics.py` |
+| GET | `/api/neural-graph` | none | `analytics.py` |
+| GET | `/api/ai/{ai_id}/status` | none | `analytics.py` |
+| GET | `/api/admin/analytics/summary` | bearer, admin | `admin.py` |
+| GET | `/admin/analytics` | (HTML page; token entered client-side) | `admin.py` |
+| GET | `/api/admin/floor-applications` | bearer, admin | `admin.py` |
+| POST | `/api/admin/floor-applications/{id}/approve` | bearer, admin | `admin.py` |
+| GET | `/api/admin/ledger` | bearer, admin | `admin.py` |
+
+"bearer" = `Authorization: Bearer <access_token>` from `/api/auth/login`.
+"admin" = the bearer token's user additionally needs `access_level == "admin"`.
+
+## Stripe credentials needed (provide when available — not required to build or commit this package)
+
+Everything below is read from environment variables in `backend/core/config.py`
+and is already optional at runtime — every Stripe-dependent route returns a
+clean `503 STRIPE_SECRET_KEY is not set` instead of crashing until these are set:
+
+1. **`STRIPE_SECRET_KEY`** (test: `sk_test_...`) — required for both the
+   subscription checkout (`/api/payment/checkout`) and the floor-rental
+   checkout (`/api/floors/{n}/apply`). The `sk_test_`/`sk_live_` prefix alone
+   decides test vs. live mode.
+2. **`STRIPE_WEBHOOK_SECRET`** (`whsec_...`) — required for
+   `/api/payment/webhook` to verify Stripe's signature; without it the
+   webhook handler 503s before it ever reads the payload.
+3. **`STRIPE_PUBLISHABLE_KEY`** (`pk_test_...`) — for the frontend's Stripe.js
+   integration. Note: nothing in `backend/` currently reads or returns this
+   key — no `STRIPE_PUBLISHABLE_KEY` setting exists in `core/config.py` yet.
+   It only matters once a frontend Stripe.js integration is built; flag if
+   you want a config field added ahead of that.
+4. **Stripe Price ID for the Floor 12 rental product** — not actually needed.
+   `floor_rentals.py:apply_for_floor` builds the Checkout line item from
+   `price_data` inline, using `FloorRow.monthly_rate_cents` ($999/mo) at
+   request time — there's no pre-created Stripe Price object to reference.
+   The three Price IDs the code *does* read are for the unrelated
+   subscription plans: `STRIPE_PRICE_STARTER` / `STRIPE_PRICE_PRO` /
+   `STRIPE_PRICE_ENTERPRISE` (created via `scripts/setup_stripe_products.py`).
+
 ## Local setup
 
 ```bash
