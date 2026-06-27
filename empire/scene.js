@@ -127,6 +127,10 @@ export class SkyscraperBuilding {
     this.currentFloor = null;
     this.transitioning = false;
     this.events = new EventBus();
+    // Doors are built closed (offset 0) — track the real offset so
+    // _animateDoors always eases from where the doors actually are,
+    // never from an assumed state. See PrimeDox GitOps note 2026-06-27.
+    this._doorOffset = 0;
   }
 
   on(event, fn) {
@@ -141,15 +145,19 @@ export class SkyscraperBuilding {
     const { left, right } = this.lobby.doors;
     return new Promise((resolve) => {
       const start = performance.now();
-      const fromOffset = open ? 0 : DOOR_OPEN_OFFSET;
+      const fromOffset = this._doorOffset;
       const toOffset = open ? DOOR_OPEN_OFFSET : 0;
       const step = () => {
         const t = Math.min(1, (performance.now() - start) / DOOR_HALF_TRANSITION_MS);
         const offset = fromOffset + (toOffset - fromOffset) * easeInOutCubic(t);
         left.position.x = -DOOR_HALF_WIDTH - offset;
         right.position.x = DOOR_HALF_WIDTH + offset;
+        this._doorOffset = offset;
         if (t < 1) requestAnimationFrame(step);
-        else resolve();
+        else {
+          this._doorOffset = toOffset;
+          resolve();
+        }
       };
       step();
     });
