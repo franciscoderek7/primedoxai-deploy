@@ -34,7 +34,6 @@ const ALLOWED_ORIGINS = [
   'https://ccldr.net',
   'https://cleanswarm.ca',
   'https://techpetcage.com',
-  'https://techpackcage.com',
   'https://vaultvelocityauto.com',
   // GitHub Pages URLs
   'https://franciscoderek7.github.io',

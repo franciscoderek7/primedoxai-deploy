@@ -21,7 +21,6 @@ For EACH repo below, go to the repo URL → Settings → Pages:
 | franciscoderek7/kiaros | github.com/franciscoderek7/kiaros/settings/pages | main / root | kiaros.com |
 | franciscoderek7/vaultvelocityauto | github.com/franciscoderek7/vaultvelocityauto/settings/pages | main / root | vaultvelocityauto.com |
 | franciscoderek7/techpetcage | github.com/franciscoderek7/techpetcage/settings/pages | main / root | techpetcage.com (if owned) |
-| franciscoderek7/techpackcage | github.com/franciscoderek7/techpackcage/settings/pages | main / root | (leave blank) |
 | franciscoderek7/zprimedoxaihq | github.com/franciscoderek7/zprimedoxaihq/settings/pages | main / root | zprimedoxaihq.com |
 
 **Settings → Pages steps:**
@@ -236,7 +235,6 @@ Current CDN URLs reference `primedoxai-deploy@main` for `payment-provider.js` an
 | CCLDR education hub | `ccldr-site/education.html` | ✅ Done |
 | Kiaros pricing | `kiaros-site/index.html` | ✅ Done |
 | Vault Velocity pricing | `vaultvelocityauto-site/index.html` | ✅ Done |
-| TechPackCage pricing | `techpackcage-site/index.html` | ✅ Done |
 | Vigilax pricing tiers | `vigilax-site/pricing.html` | ✅ Done |
 | TechPetCage 3-tier + trust badges | `techpetcage-site/index.html` | ✅ Done |
 | Stripe LIVE banners (all sites) | Empire-wide | ✅ Done |

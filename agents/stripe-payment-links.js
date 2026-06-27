@@ -41,11 +41,6 @@ window.STRIPE_PAYMENT_LINKS = {
   'vaultvelocity-fleet-499':    'REPLACE_WITH_STRIPE_LINK',  // Recurring $499/mo
   'vaultvelocity-enterprise-2500': 'REPLACE_WITH_STRIPE_LINK', // Recurring $2,500/mo
 
-  // ── TechPackCage (Loop A) ────────────────────────────────────────────────
-  'techpack-starter-49':    'REPLACE_WITH_STRIPE_LINK',  // Recurring $49/mo
-  'techpack-growth-149':    'REPLACE_WITH_STRIPE_LINK',  // Recurring $149/mo
-  'techpack-enterprise-499': 'REPLACE_WITH_STRIPE_LINK', // Recurring $499/mo
-
   // ── Vigilax (Loop B) ─────────────────────────────────────────────────────
   'vigilax-sentinel-499':   'REPLACE_WITH_STRIPE_LINK',  // Recurring $499/mo
   'vigilax-guardian-2499':  'REPLACE_WITH_STRIPE_LINK',  // Recurring $2,499/mo

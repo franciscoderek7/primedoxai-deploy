@@ -119,8 +119,7 @@ Below are concrete assignments for every live or near-live site, grouped by clus
 ### F. Consumer product brands
 | Site | Folder | Distinct direction |
 |------|--------|---------------------|
-| Tech Pet Cage | `tech-pet-cage-site` / `techpetcage-site` | Playful consumer hardware: rounded shapes, warm coral + cream, pet-paw iconography (consolidate duplicate folders — flag for Derek, see §6) |
-| Tech Pack Cage | `techpackcage-site` | Travel/storage tech: rugged charcoal + safety yellow, modular-grid packing-cube motif |
+| TechPetCage | `tech-pet-cage-site` / `techpetcage-site` / `techpackcage-site` | Playful consumer hardware: rounded shapes, warm coral + cream, pet-paw iconography (consolidate duplicate folders — flag for Derek, see §6). "Tech Pack Cage" / `techpackcage-site` was never a separate company — confirmed by Derek 2026-06-27 it was a mistake; the folder is orphaned inventory/warehouse content for this same brand, not a distinct travel/storage product. |
 | KoolDuce Motors | `koolduce-motors-site` | Distinct from Vault Velocity Auto — budget/everyday auto marketplace: bright white + cobalt blue, friendly rounded sans, no luxury cues |
 
 ### G. PrimeDox cluster

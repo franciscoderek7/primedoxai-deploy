@@ -51,7 +51,8 @@ export const FLOORS = [
   mkFloor(10, 'zprimedoxaihq', 'ZPrimeDoxAI HQ', 'ZPrimeDoxAI HQ', 'A', 'LIVE — CONCIERGE DEPLOYED', 'zprimedoxaihq.com', '#00d4ff', { toneProfile: 'ai-chime', geometryHint: 'concierge-desk' }),
   mkFloor(11, 'vault-velocity-auto', 'Vault Velocity Auto', 'Vault Velocity Auto', 'A', 'LIVE', 'franciscoderek7.github.io/vaultvelocityauto/', '#f59e0b', { toneProfile: 'garage-ambience', geometryHint: 'car-lift' }),
   mkFloor(12, 'techpetcage', 'TechPetCage', 'TechPetCage', 'A', 'LIVE', 'franciscoderek7.github.io/techpetcage/', '#06b6d4', { toneProfile: 'soft-chime', geometryHint: 'smart-kennel' }),
-  mkFloor(13, 'techpackcage', 'TechPackCage', 'TechPackCage', 'A', 'LIVE', 'franciscoderek7.github.io/techpackcage/', '#06b6d4', { toneProfile: 'soft-chime', geometryHint: 'shipping-crate' }),
+  // 'TechPackCage' was never a real, separate business — confirmed by Derek 2026-06-27. Reserved as an expansion floor.
+  mkFloor(13, 'coming-soon-13', 'Floor 13 — Coming Soon', 'Unannounced expansion division', 'B', 'COMING SOON — shown in skyscraper', null, '#555555', { toneProfile: 'silent', geometryHint: 'placeholder-block' }),
   mkFloor(14, 'mindshift-makayla', 'MindShift by Michaella', 'MindShift by Michaella', 'A', 'LIVE', 'franciscoderek7.github.io/mindshift-makayla/', '#ec4899', { toneProfile: 'wellness-pad', geometryHint: 'lounge-chair' }),
   mkFloor(15, 'soulstack', 'SoulStack.ai', 'SoulStack.ai', 'B', 'PENDING', 'soulstack.ai', '#c0c0c0', { toneProfile: 'observer-drone', geometryHint: 'data-orb' }),
 

@@ -77,7 +77,7 @@ const ALLOWED_ORIGINS = [
   'https://franciscoholdingsinc.com', 'https://www.franciscoholdingsinc.com',
   'https://zprimedoxaihq.com', 'https://www.zprimedoxaihq.com',
   'https://vigilax.com', 'https://kiaros.ai', 'https://ccldr.net',
-  'https://cleanswarm.ca', 'https://techpetcage.com', 'https://techpackcage.com',
+  'https://cleanswarm.ca', 'https://techpetcage.com',
   'https://vaultvelocityauto.com', 'https://franciscoderek7.github.io',
   'http://localhost:3000', 'http://localhost:8080', 'http://127.0.0.1',
 ];
@@ -168,12 +168,6 @@ PRODUCTS: Starter $29/month, Growth $99/month, Scale $299/month.
 EXPERTISE: Job dispatch AI, quality tracking, client management, employee scheduling, invoice automation, ESG carbon tracking.
 BENEFIT: Typical clients see 25% admin reduction in first 30 days.
 REVENUE: CleanSwarm Growth $99/month.`,
-
-  crate: `You are Crate, TechPackCage's AI packaging optimization specialist.
-
-EXPERTISE: Packaging engineering, supply chain routing, warehouse optimization, smart labeling (QR/NFC), dropshipping fulfillment, e-commerce packaging, cost reduction strategies.
-TYPICAL SAVINGS: 15-25% packaging cost reduction through optimization.
-REVENUE: Packaging consult $500.`,
 
   chronos: `You are Chronos, Kiaros's AI scheduling and time intelligence specialist.
 

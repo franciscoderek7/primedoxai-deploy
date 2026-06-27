@@ -18,7 +18,9 @@ Derek is running a second AI builder, **Manus**, concurrently with Claude on the
 
 **MindShift by Michaella is explicitly separate** from the empire palette — her own brand: Imperial Purple `#2D1B55`, Gold `#C9A84C`, Sakura Pink `#E896C8`, Void Black `#06000F`.
 
-Manus's next-priority build queue (informational, not yet assigned to Claude): vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io, techpackcage.com — plus 40+ Stripe products across the empire and Make.com webhook integration. See `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` for the full brief Derek gave Manus.
+Manus's next-priority build queue (informational, not yet assigned to Claude): vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io — plus 40+ Stripe products across the empire and Make.com webhook integration. See `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` for the full brief Derek gave Manus.
+
+**CORRECTION (confirmed directly by Derek, 2026-06-27): "TechPackCage" never existed as a separate company.** It was Derek's own mix-up — TechPetCage (smart pet monitoring, repo `franciscoderek7/techpetcage`, domain `techpetcage.com`) is the only real business. Every prior note in this file or in `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` describing TechPackCage as a "separately registered Ontario business with an active Stripe account" was wrong and is retracted. The `techpackcage-site/` folder and `.github/workflows/deploy-techpackcage.yml` are leftover artifacts of that mistake — left on disk untouched (not deleted) pending a separate explicit go-ahead from Derek, but they are not a real deploy target and nothing should be built for `techpackcage.com`.
 
 **Three decisions confirmed by Derek 2026-06-19 (resolving conflicts in Manus's latest brief — locked, do not re-litigate):**
 1. **Francisco Holdings** — RESTYLE the existing 45-floor skyscraper with the new boardroom palette; do NOT replace it. Per-floor Stripe/PayPal buttons, the referral engine, and the secret Floor 45 Konami-code egg must survive.
@@ -42,7 +44,7 @@ Responding to Derek's "STATE OF THE ART — EVERY SITE" directive. Triaged the l
 
 **PayPal handle note:** Derek's message named a new handle `paypal.me/derekfranciac01`, conflicting with the `franciscoderek7` handle verified working empire-wide. Did not mass-replace — kept `franciscoderek7` (real, tested, money-moving) since overwriting it with an unverified handle risks misdirecting customer payments. Flag for Derek: confirm if `derekfranciac01` is a real, intentional new PayPal account before any site is repointed to it.
 
-**Payments — referral engine rollout (commit `fd5c55d`):** `agents/referral-engine.js` (10% discount/commission codes) was only loaded on 6 sites despite Derek's "on EVERY site" instruction. Added it (+ `payment-provider.js` where missing) to every other live site with real PayPal buy buttons: BENO-X, Doc Weedlaw, Kiaros, MindShift, PrimeDox AI (5 pages), TechPackCage, CleanSwarm (2 pages), Weedlaw Education (2 pages). Confirmed no other dead `window.stripeCheckout` buttons remain on any live page (only hit left is in the orphaned, non-deployed `vaultvelocityauto-site/index.html`).
+**Payments — referral engine rollout (commit `fd5c55d`):** `agents/referral-engine.js` (10% discount/commission codes) was only loaded on 6 sites despite Derek's "on EVERY site" instruction. Added it (+ `payment-provider.js` where missing) to every other live site with real PayPal buy buttons: BENO-X, Doc Weedlaw, Kiaros, MindShift, PrimeDox AI (5 pages), TechPetCage (`techpackcage-site/`, legacy folder name), CleanSwarm (2 pages), Weedlaw Education (2 pages). Confirmed no other dead `window.stripeCheckout` buttons remain on any live page (only hit left is in the orphaned, non-deployed `vaultvelocityauto-site/index.html`).
 
 **Navigation — dead-link sweep:** Checked `href="#"` across all named sites. Found mostly intentional JS-handled buttons (`onclick=...;return false;`, modal links) — not actually dead. Real fix applied: Francisco Holdings `partnership.html` nav-brand logo pointed at `#` instead of `index.html` (reachable page, linked from `investors.html`) — fixed. Other `href="#"` hits (OmniGuard legacy `omniaguard-v3.html`/`docs.html`, FH `continuity.html`, CleanSwarm `cleanswarm-v2.html`) are on orphaned alt-version pages not linked from any live nav — left alone rather than polishing pages no visitor can reach; flagged here so a future session doesn't assume they're live.
 
@@ -98,7 +100,7 @@ Derek confirmed `paypal.me/derekfranciacco1` is **dead** (manual test, logged-in
 
 **Fix:** global `derekfranciacco1` → `franciscoderek7` swap, 70 files (`sed`, exact-string replace, amount suffixes like `/99CAD` preserved untouched — `paypal.me/<handle>/<amount>` format unaffected by the handle swap). Verified zero remaining `derekfranciacco1` references repo-wide. Money flow direction unaffected by this fix — `PrimeDoxPayment.checkout()` only ever does `window.open(link)`, a customer-side redirect; nothing in the code path debits Derek.
 
-**Revenue-ready now (PayPal button on a live, deployed site, pointing at the confirmed-working handle):** CCLDR (11 tiers), Francisco Holdings (45-floor skyscraper + investors.html + book.html), BENO-X, Doc Weedlaw, Kiaros, TechPackCage, TechPetCage, PrimeDox AI (5 pages), CleanSwarm, Weedlaw Education, VIGILAX, zPrimeDoxAI HQ, MindShift/Makayla.
+**Revenue-ready now (PayPal button on a live, deployed site, pointing at the confirmed-working handle):** CCLDR (11 tiers), Francisco Holdings (45-floor skyscraper + investors.html + book.html), BENO-X, Doc Weedlaw, Kiaros, TechPetCage, PrimeDox AI (5 pages), CleanSwarm, Weedlaw Education, VIGILAX, zPrimeDoxAI HQ, MindShift/Makayla.
 
 **Not revenue-ready (PayPal/Stripe wired but NOT a live deploy target — fixed in source, but no workflow ships these):** `vaultvelocityauto-site/index.html` (the real live site is `vault-velocity-auto-site/`, hyphenated, which has no checkout at all — pre-existing gap, not part of this fix), `payment-portal/stripe-checkout.html`, `nightingale-console/*` (internal dashboard, not public-facing).
 
@@ -149,7 +151,6 @@ Responding to Derek's "CHINESE AI INTEGRATION — Build This Now" directive (Dee
 | ZPrimeDoxAI HQ | AI Concierge HQ (password: FHI2026) | A | LIVE — CONCIERGE DEPLOYED | zprimedoxaihq.com | franciscoderek7/zprimedoxaihq |
 | Vault Velocity Auto | Auto AI | A | LIVE | franciscoderek7.github.io/vaultvelocityauto/ | franciscoderek7/vaultvelocityauto |
 | TechPetCage | Smart pet monitoring | A | LIVE | franciscoderek7.github.io/techpetcage/ | franciscoderek7/techpetcage |
-| TechPackCage | Registered business (Stripe acct) | A | LIVE | franciscoderek7.github.io/techpackcage/ | franciscoderek7/techpackcage |
 | MindShift by Michaella | Mental wellness AI | A | LIVE | franciscoderek7.github.io/mindshift-makayla/ | franciscoderek7/mindshift-makayla |
 | SoulStack.ai | AI infrastructure layer | B | PENDING | soulstack.ai | PENDING |
 | [Floors 14-44] | Space/Energy/Fintech Swarms + more | B | COMING SOON — shown in skyscraper | — | — |
@@ -306,7 +307,7 @@ Derek's directive to wire up the shared payment/referral/AI-concierge framework 
 | 22 | Add Stripe Price IDs to payment-provider.js | Derek (Stripe dashboard) | ASAP | PENDING — create at dashboard.stripe.com then send to Claude |
 | 23 | Create PayPal Business recurring buttons | Derek (PayPal dashboard) | ASAP | PENDING — paypal.com/buttons |
 | 24 | Supabase referral_commissions table | Derek (Supabase) | ASAP | PENDING — table not yet created |
-| 25 | ~~Pricing pages: Kiaros/VaultVelocity/TechPackCage/Vigilax/TechPetCage~~ | Claude | 2026-06-15 | ✅ COMPLETE |
+| 25 | ~~Pricing pages: Kiaros/VaultVelocity/Vigilax/TechPetCage~~ | Claude | 2026-06-15 | ✅ COMPLETE |
 | 26 | ~~"Fix every card on PrimeDox HQ" pass — see §1a below for full breakdown~~ | Claude | 2026-06-21 | ✅ COMPLETE (8/9 cards fixed; CleanSwarm domain ownership flagged, not guessed) |
 
 ---
@@ -530,10 +531,10 @@ Claude                         — Builder/executor — acts on direct PrimeDox 
 
 ---
 
-## 14. JUNE 11, 2026 BUILD SESSION — MONETIZATION ACCELERATION + TECHPACKCAGE COMPLETE
+## 14. JUNE 11, 2026 BUILD SESSION — MONETIZATION ACCELERATION + TECHPETCAGE INVENTORY STACK COMPLETE
 
 ### Session Overview
-Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgency banners, email capture, court print package, CCLDR case tracker, and complete TechPackCage.com launch stack.
+Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgency banners, email capture, court print package, CCLDR case tracker, and complete TechPetCage inventory/warehouse launch stack (built under the legacy `techpackcage-site/` folder name — see correction note in section 1 above; this is TechPetCage, not a separate company).
 
 ### VIGILAX — 4-Page Commercial Site — ✅ UPDATED 2026-06-20 (MONEY ONLY pass)
 | File | Description | Status |
@@ -545,7 +546,7 @@ Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgen
 
 **VIGILAX is Loop B: no Derek Francisco identity, no cannabis, no paypal.me/derekfrancisco**
 
-**FIX 2026-06-20 (MONEY ONLY directive):** All 3 "Pay by Card (Stripe)" buttons on pricing.html called `window.stripeCheckout(...)`, a function that does not exist anywhere except inside `omniaguard-site/index.html` — clicking did nothing. Rewired to `window.PrimeDoxPayment.checkout(...)` (already loaded on the page via `agents/payment-provider.js`), which falls back to a correctly-directed PayPal checkout (money → franciscoderek7). Also repriced Sentinel/Guardian/Warden ($499/$2,499/$5,000) → Sentinel/Guardian/Fortress ($199/$499/$1,499) per Derek's exact spec, and added a "Start 24-Hour Free Trial" button on every tier (`vigilaxStartTrial()`, localStorage + Formspree capture — same `YOUR_FORM_ID` placeholder pattern as primedoxai-site/pricing.html; Derek needs to create a Formspree form and paste the real ID in both places). The same dead `window.stripeCheckout` bug was found and fixed on TechPackCage and TechPetCage (see below) — Vault Velocity Auto's *stub* folder `vaultvelocityauto-site/` has it too but is **not deployed by any workflow** (the real, live site is `vault-velocity-auto-site/` — note the hyphens — which has no Stripe/PayPal checkout at all; flagged separately, not fixed this pass).
+**FIX 2026-06-20 (MONEY ONLY directive):** All 3 "Pay by Card (Stripe)" buttons on pricing.html called `window.stripeCheckout(...)`, a function that does not exist anywhere except inside `omniaguard-site/index.html` — clicking did nothing. Rewired to `window.PrimeDoxPayment.checkout(...)` (already loaded on the page via `agents/payment-provider.js`), which falls back to a correctly-directed PayPal checkout (money → franciscoderek7). Also repriced Sentinel/Guardian/Warden ($499/$2,499/$5,000) → Sentinel/Guardian/Fortress ($199/$499/$1,499) per Derek's exact spec, and added a "Start 24-Hour Free Trial" button on every tier (`vigilaxStartTrial()`, localStorage + Formspree capture — same `YOUR_FORM_ID` placeholder pattern as primedoxai-site/pricing.html; Derek needs to create a Formspree form and paste the real ID in both places). The same dead `window.stripeCheckout` bug was found and fixed on TechPetCage's main site and on its `techpackcage-site/` inventory stack (see below) — Vault Velocity Auto's *stub* folder `vaultvelocityauto-site/` has it too but is **not deployed by any workflow** (the real, live site is `vault-velocity-auto-site/` — note the hyphens — which has no Stripe/PayPal checkout at all; flagged separately, not fixed this pass).
 
 **AUDIT NOTE (2026-06-19, Manus live audit during CHECKPOINT v10 — superseded by the fix above):** This log entry said all 4 files were "✅ COMMITTED" on 2026-06-11. Manus's direct repo audit at the time found only `index.html` actually existed. Manus has since added the other 3 files (confirmed in repo as of 2026-06-20).
 
@@ -562,25 +563,16 @@ Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgen
 | court-print-package-june11.html | Printable doc: priority list 1-11, Dylan's 5 affidavit questions, exhibits checklist, instructions, library email template, June 17 deadline note | ✅ COMMITTED |
 | ccldr-site/denby-case.html | Public case tracker: timeline, criminal counts, civil demands, documents table | ✅ COMMITTED |
 
-### TechPackCage.com — Full Launch Stack ✅
+### TechPetCage — Additional Inventory/Warehouse Stack (legacy `techpackcage-site/` folder name) ✅
 | File | Description | Status |
 |------|-------------|--------|
 | techpackcage-site/index.html | Full landing page — 15 categories, 8 product cards, Job Shipping section, email capture, social proof popup | ✅ COMMITTED |
 | techpackcage-site/woocommerce-theme.css | Complete WooCommerce CSS — green/gold empire branding, all selectors, CSS variables | ✅ COMMITTED |
 | techpackcage-site/warehouse-dashboard.html | Virtual warehouse — login gate (empire2026), order pipeline, revenue chart, supplier panel, inventory alerts, leaderboard | ✅ COMMITTED |
 | techpackcage-site/setup-guide.html | WooCommerce launch guide — ~$148 CAD cost breakdown, 4-week plan, profit calculator, Job Shipping PHP, launch checklist | ✅ COMMITTED |
-| .github/workflows/deploy-techpackcage.yml | Auto-deploy → franciscoderek7/techpackcage on push to main | ✅ COMMITTED |
+| .github/workflows/deploy-techpackcage.yml | Orphaned — built under the mistaken "TechPackCage is separate" assumption, deploys to a domain (`techpackcage.com`) that is not being pursued. Not deleted; not a live deploy target. | ⚠️ ORPHANED, NOT DELETED |
 
-**FIX 2026-06-20 (MONEY ONLY directive):** Same dead `window.stripeCheckout` bug as VIGILAX (see above) — all 3 "Pay by Card (Stripe)" buttons (Starter $49, Growth $149, Enterprise $499) rewired to `window.PrimeDoxPayment.checkout(...)`. PayPal buttons next to them were already correctly wired (paypal.me/derekfranciaço1) and untouched. TechPetCage (`techpetcage-site/index.html`) had the identical bug on its Basic $19 / Plus $49 / Family $149 tiers — fixed the same way.
-
-### TechPackCage Derek Action Required
-1. Buy domain `techpackcage.com` at Namecheap (~$10.98 CAD)
-2. Buy Hostinger hosting (~$3.99/mo = $47.88/yr)
-3. Install WordPress + WooCommerce (free)
-4. Buy AliDropship plugin ($89 one-time) at alidropship.com
-5. Paste `woocommerce-theme.css` into Appearance → Customize → Additional CSS
-6. Create GitHub repo `franciscoderek7/techpackcage` (enables deploy workflow)
-7. Set DNS: techpackcage.com A-record → GitHub Pages IP, CNAME www → techpackcage.github.io
+**FIX 2026-06-20 (MONEY ONLY directive):** Same dead `window.stripeCheckout` bug as VIGILAX (see above) — all 3 "Pay by Card (Stripe)" buttons (Starter $49, Growth $149, Enterprise $499) rewired to `window.PrimeDoxPayment.checkout(...)`. PayPal buttons next to them were already correctly wired (paypal.me/techpetcage) and untouched. TechPetCage's main site (`techpetcage-site/index.html`) had the identical bug on its Basic $19 / Plus $49 / Family $149 tiers — fixed the same way.
 
 ### Stripe Placeholders — Need Real URLs (REVENUE BLOCKER)
 | Placeholder | Product | Price |
@@ -605,8 +597,8 @@ Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgen
 |---|--------|-------|--------|
 | 20 | Paste real Stripe payment link URLs (6 placeholders) | Derek → Claude | PENDING — REVENUE BLOCKER |
 | 21 | Dylan's 5 affidavit questions answers | Derek | PENDING — June 17 deadline |
-| 22 | Create GitHub repo franciscoderek7/techpackcage | Derek | PENDING |
-| 23 | TechPackCage domain + hosting purchase (~$148 CAD) | Derek | PENDING |
+| 22 | ~~Create GitHub repo franciscoderek7/techpackcage~~ | Derek | ❌ CANCELLED 2026-06-27 — TechPackCage never existed, see correction note in section 1 |
+| 23 | ~~TechPackCage domain + hosting purchase (~$148 CAD)~~ | Derek | ❌ CANCELLED 2026-06-27 — TechPackCage never existed, see correction note in section 1 |
 | 24 | Makayla real social handles (FB/LinkedIn/X/IG/PayPal) | Derek → Claude | PENDING |
 | 25 | BTC + XMR wallet addresses for OmniaGuard | Derek → Claude | PENDING |
 | 26 | Formspree ID for OmniaGuard contact.html | Derek → Claude | PENDING |

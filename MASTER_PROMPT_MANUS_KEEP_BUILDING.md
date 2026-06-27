@@ -6,7 +6,9 @@
 
 Manus confirmed `.153` is correct and accepted the DNS correction. He finished wiring the PrimeDox email-capture form (`Home.tsx`) to the backend's `leads.subscribe` mutation and saved a checkpoint. He is now starting TechPetCage as a static GitHub Pages build, pushing to `franciscoderek7/techpetcage` — correct repo per EMPIRE.md.
 
-The block below is the prompt to send Manus next: acknowledges progress, flags a real brand mix-up (TechPetCage vs. TechPackCage are two different companies — Manus's pricing/description matches TechPetCage, but the original brief said "techpackcage.com," which is Derek's separately *registered* Ontario business with an active Stripe account, not the pet-tech brand), and re-issues the full build queue/Stripe/color rules so the prompt is self-contained and doesn't depend on Manus remembering the earlier one.
+The block below is the prompt to send Manus next: acknowledges progress and re-issues the full build queue/Stripe/color rules so the prompt is self-contained and doesn't depend on Manus remembering the earlier one.
+
+**RETRACTION (confirmed directly by Derek, 2026-06-27): there is no "TechPackCage."** The "brand mix-up" described below — treating TechPackCage as a separately registered Ontario business with its own Stripe account, distinct from the TechPetCage pet-tech brand — was Derek's own mistake, not a real second company. TechPetCage (repo `franciscoderek7/techpetcage`, domain `techpetcage.com`) is the only real business. Every "ONE CORRECTION" block and "TechPackCage" build instruction in this file from this point through CHECKPOINT v12 below is historical record of that mistake, not a live instruction — do not act on any of it as if TechPackCage needs its own build.
 
 ---
 
