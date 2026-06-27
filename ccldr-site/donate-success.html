@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You for Your Donation — CCLDR.NET</title>
+<meta name="description" content="Thank you for supporting Derek Francisco's constitutional cannabis defense work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#0a0a0a;--card:#141414;--gold:#c9a227;--gold-l:#e0b840;--green:#27ae60;--white:#f5f5f5;--muted:#888;--border:#2a2a2a}
+body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--gold);text-decoration:none}
+nav{background:#111;border-bottom:1px solid var(--border);padding:16px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.nav-logo{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:900;color:var(--gold);letter-spacing:2px}
+.wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 5%}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:56px 40px;max-width:560px;width:100%;text-align:center}
+.icon{font-size:3.4rem;margin-bottom:20px;animation:pop .6s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+h1{font-family:'Cinzel',serif;font-size:clamp(1.6rem,4vw,2.2rem);color:var(--gold);font-weight:900;margin-bottom:14px}
+.sub{color:var(--muted);font-size:1rem;max-width:420px;margin:0 auto 28px;line-height:1.7}
+.amount-box{background:rgba(201,162,39,0.07);border:1px solid var(--border);border-radius:10px;padding:18px 24px;margin-bottom:28px;display:inline-block}
+.amount-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.amount-val{font-family:'Cinzel',serif;font-size:1.8rem;font-weight:900;color:var(--gold-l)}
+.mission-note{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:32px}
+.cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;padding:13px 26px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .2s}
+.btn-gold{background:var(--gold);color:#111}
+.btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.btn:hover{opacity:.85}
+footer{background:#080808;border-top:1px solid var(--border);padding:32px 5%;text-align:center;font-size:12px;color:var(--muted);line-height:1.8}
+footer a{color:var(--gold)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="index.html">CCLDR</a>
+</nav>
+
+<div class="wrap">
+  <div class="card">
+    <div class="icon">⚖️🙏</div>
+    <h1>Thank You for Your Support</h1>
+    <p class="sub">Your donation directly funds case research, document development, and free constitutional education for Canadians who can't afford a lawyer.</p>
+    <div class="amount-box">
+      <div class="amount-label">Donation Confirmed</div>
+      <div class="amount-val" id="donation-amount">Thank You</div>
+    </div>
+    <p class="mission-note">A receipt has been sent to your email by Stripe. CCLDR is not a registered charity — donations are not tax-deductible.</p>
+    <div class="cta">
+      <a href="index.html" class="btn btn-gold">← Back to Home</a>
+      <a href="documents.html" class="btn btn-outline">Browse Documents</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong style="color:var(--gold);display:block;font-family:'Cinzel',serif;margin-bottom:8px">CCLDR — Cannabis Constitutional Defense Legal Resource</strong>
+  <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="donate.html">Donate</a> &nbsp;·&nbsp; <a href="documents.html">Documents</a> &nbsp;·&nbsp; <a href="contact.html">Contact</a><br>
+  © 2026 CCLDR.NET
+</footer>
+
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var amt = params.get('amount');
+  if (amt) {
+    var num = parseFloat(amt);
+    if (!isNaN(num)) {
+      document.getElementById('donation-amount').textContent = '$' + num.toFixed(2);
+    }
+  }
+})();
+</script>
+</body>
+</html>

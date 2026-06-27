@@ -1,0 +1,114 @@
+{
+  "name": "Workflow - Payment to Personalized Welcome Email (PayPal webhook simulation, OpenAI, Supabase)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "payment-received",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Payment Webhook (simulated PayPal IPN - point at real webhook later)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 300],
+      "notes": "Trigger node. Derek will manually point this at a real PayPal webhook later (or swap for a Webhook node if n8n requires a listener instead of an outbound HTTP Request — left as HTTP Request per the build spec). Expected incoming JSON shape: { payer_name, payer_email, company, tier, amount_paid, currency, paypal_txn_id }.",
+      "webhookId": "REPLACE-AFTER-IMPORT-AUTO-GENERATED"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "name": "payer_name", "type": "string", "value": "={{ $json.payer_name }}" },
+            { "name": "payer_email", "type": "string", "value": "={{ $json.payer_email }}" },
+            { "name": "company", "type": "string", "value": "={{ $json.company }}" },
+            { "name": "tier", "type": "string", "value": "={{ $json.tier }}" },
+            { "name": "amount_paid", "type": "number", "value": "={{ $json.amount_paid }}" },
+            { "name": "currency", "type": "string", "value": "={{ $json.currency || 'CAD' }}" },
+            { "name": "paypal_txn_id", "type": "string", "value": "={{ $json.paypal_txn_id }}" },
+            { "name": "logged_at", "type": "string", "value": "={{ $now.toISO() }}" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Normalize Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "modelId": { "mode": "list", "value": "gpt-4o-mini" },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You write a short, warm, personalized welcome email body for a new paying customer of an empire company. Use the per-company prompt from openai-prompts.json (automation/openai-prompts.json) — look up the entry matching the {{ $json.company }} slug and follow its system_prompt for tone, services, and pricing facts; never invent pricing or services not listed there. Output HTML body content only (no <html>/<head> wrapper, no subject line). Keep it under 150 words. Never disclose internal AI tooling or say 'I am an AI' in a way that conflicts with the per-company brand rules (OmniGuard/Kiaros-adjacent brands must never reveal AI branding to end users at all)."
+            },
+            {
+              "role": "user",
+              "content": "Write the welcome email body for: payer_name={{ $json.payer_name }}, company={{ $json.company }}, tier={{ $json.tier }}, amount_paid={{ $json.amount_paid }} {{ $json.currency }}."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Generate Welcome Email (OpenAI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.8,
+      "position": [680, 300],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "tableId": "payments",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "amount", "fieldValue": "={{ $('Normalize Fields').item.json.amount_paid }}" },
+            { "fieldId": "currency", "fieldValue": "={{ $('Normalize Fields').item.json.currency }}" },
+            { "fieldId": "status", "fieldValue": "completed" },
+            { "fieldId": "payment_method", "fieldValue": "PayPal" }
+          ]
+        }
+      },
+      "name": "Insert Payment (Supabase)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "notes": "Inserts into the `payments` table (see automation/supabase-tables.sql). payments.user_id is a FK to users(id) — this node does not set it because matching the payer to an existing `users` row is a separate lookup not scoped here; add a Supabase 'get' node before this one (filter users by email) and map its id into user_id if you want payments linked to users automatically.",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Normalize Fields').item.json.payer_email }}",
+        "subject": "Welcome to {{ $('Normalize Fields').item.json.company }} - Payment Confirmed",
+        "emailType": "html",
+        "message": "={{ $json.message || $json.choices[0].message.content }}",
+        "options": {}
+      },
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1120, 300],
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "Payment Webhook (simulated PayPal IPN - point at real webhook later)": {
+      "main": [[{ "node": "Normalize Fields", "type": "main", "index": 0 }]]
+    },
+    "Normalize Fields": {
+      "main": [[{ "node": "Generate Welcome Email (OpenAI)", "type": "main", "index": 0 }]]
+    },
+    "Generate Welcome Email (OpenAI)": {
+      "main": [[{ "node": "Insert Payment (Supabase)", "type": "main", "index": 0 }]]
+    },
+    "Insert Payment (Supabase)": {
+      "main": [[{ "node": "Send Welcome Email", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

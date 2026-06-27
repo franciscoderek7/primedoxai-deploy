@@ -111,6 +111,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(10,10,10,0.97);backdrop-fi
 .progress-meta{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--muted);margin-bottom:40px;}
 .progress-meta strong{color:var(--gold);}
 .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;}
+.pw-pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:28px 0 32px;}
 .tier-btn{background:var(--card);border:1px solid var(--border);padding:20px 16px;text-align:center;cursor:pointer;border-radius:4px;transition:all 0.2s;text-decoration:none;color:var(--text);display:block;}
 .tier-btn:hover,.tier-btn.selected{background:var(--gold3);border-color:var(--gold);color:var(--gold);}
 .tier-amount{font-size:1.5rem;font-weight:900;margin-bottom:4px;}
@@ -167,6 +168,21 @@ nav{position:sticky;top:0;z-index:200;background:rgba(10,10,10,0.97);backdrop-fi
 .update-badge{display:inline-flex;align-items:center;gap:4px;font-size:0.68rem;font-weight:700;margin-left:8px;padding:2px 8px;border-radius:10px;}
 .badge-new{background:rgba(0,200,100,0.15);color:var(--green);}
 
+/* PAYWALL */
+.pw-gate{position:relative;}
+.pw-gate.pw-locked .pw-gate-body{filter:blur(5px);user-select:none;pointer-events:none;max-height:300px;overflow:hidden;}
+.pw-gate:not(.pw-locked) .pw-gate-overlay{display:none;}
+.pw-gate-overlay{position:absolute;left:0;right:0;bottom:0;top:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:linear-gradient(180deg,rgba(10,10,10,0.05),rgba(10,10,10,0.96) 45%);text-align:center;padding:24px;z-index:5;}
+.pw-lock-icon{font-size:1.8rem;}
+.pw-overlay-text{font-size:0.92rem;color:var(--text);max-width:420px;}
+.pw-overlay-text strong{color:var(--gold);}
+.pw-unlock-form{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.pw-unlock-form input{background:#000;border:1px solid var(--border);color:var(--text);padding:9px 14px;border-radius:4px;font-size:0.85rem;min-width:200px;}
+.pw-unlock-form button{background:var(--gold);color:#000;border:none;padding:9px 18px;border-radius:4px;font-weight:700;cursor:pointer;font-size:0.85rem;}
+.pw-msg{font-size:0.8rem;min-height:1em;}
+.pw-status-banner{display:none;background:rgba(0,200,100,0.1);border:1px solid rgba(0,200,100,0.3);color:var(--green);padding:8px 16px;border-radius:4px;font-size:0.82rem;font-weight:700;text-align:center;margin-bottom:16px;}
+.pw-logout{display:none;font-size:0.75rem;color:var(--muted);text-decoration:underline;cursor:pointer;background:none;border:none;margin-top:10px;}
+
 /* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:500;align-items:center;justify-content:center;padding:24px;}
 .modal-overlay.open{display:flex;}
@@ -197,6 +213,7 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
 @media(max-width:768px){
   .cases-grid{grid-template-columns:1fr;}
   .tier-grid{grid-template-columns:repeat(2,1fr);}
+  .pw-pricing-grid{grid-template-columns:1fr;}
   .payment-methods{grid-template-columns:1fr;}
   .countdown-units{gap:10px;}
   .cd-num{font-size:1.8rem;}
@@ -216,6 +233,8 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
       <a href="cases.html" style="color:var(--gold)">Active Cases</a>
       <a href="denby-case.html">Francisco v. Denby</a>
       <a href="ag-case.html">Francisco v. AG</a>
+      <a href="cibc-case.html">Francisco v. CIBC</a>
+      <a href="#pricing">Subscribe</a>
       <a href="#donate">Support the Fight</a>
       <span class="nav-live"><span class="live-dot"></span> Live</span>
     </div>
@@ -225,14 +244,15 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">⚖ 2 Active Cases · Ontario Superior Court</div>
+    <div class="hero-tag">⚖ 3 Active Cases · Ontario Superior Court</div>
     <h1>Follow the <em>Fight</em><br>in Real Time</h1>
     <p class="hero-motto">Transparency · Accountability · Justice</p>
     <p class="hero-sub">
-      Derek Francisco (Doc Weedlaw) is actively litigating two concurrent cases in Ontario Superior Court — a civil fraud and property rights battle, and a $35M constitutional claim against the Crown. Every filing, every hearing, every outcome — documented publicly.
+      Derek Francisco (Doc Weedlaw) is actively litigating three concurrent matters — a civil fraud and property rights battle, a $35M constitutional claim against the Crown, and a fraud/disability-discrimination claim against CIBC, Kudos, and Telus. Court filings are public record. <strong style="color:var(--gold);">Derek's strategy, full timelines, and document downloads are subscriber-only.</strong>
     </p>
     <div class="hero-ctas">
       <a href="#cases" class="btn-primary">⚖ View Active Cases</a>
+      <a href="#pricing" class="btn-primary" style="background:var(--gold2);">🔓 Subscribe — $49/mo</a>
       <a href="#donate" class="btn-secondary">🤝 Support the Fight</a>
     </div>
   </div>
@@ -243,10 +263,10 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
   <div class="countdown-inner">
     <div>
       <div class="countdown-label">Next Court Date</div>
-      <div class="countdown-title">⚖ June 29, 2026 — CPL Motion · Ontario Superior Court</div>
+      <div class="countdown-title">⚖ July 14, 2026, 9:30 AM — CPL Motion · Lindsay · Ontario Superior Court</div>
     </div>
     <div class="countdown-units">
-      <div class="cd-unit"><div class="cd-num" id="cd-days">15</div><div class="cd-lbl">Days</div></div>
+      <div class="cd-unit"><div class="cd-num" id="cd-days">18</div><div class="cd-lbl">Days</div></div>
       <div class="cd-sep">:</div>
       <div class="cd-unit"><div class="cd-num" id="cd-hours">00</div><div class="cd-lbl">Hours</div></div>
       <div class="cd-sep">:</div>
@@ -261,11 +281,85 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
   </div>
 </div>
 
+<!-- SUBSCRIBE / PRICING -->
+<section class="cases-section" id="pricing" style="padding-top:48px;padding-bottom:56px;background:linear-gradient(160deg,#0c0a00,#0A0A0A);border-bottom:1px solid var(--border);">
+  <div class="cases-inner">
+    <div class="section-label">Follow the Cases Live</div>
+    <h2 class="section-title">Subscribe for Full Case Access</h2>
+    <p style="color:var(--muted);font-size:0.92rem;max-width:760px;margin-bottom:8px;line-height:1.8;">
+      Court filings are public record — free to everyone, always. <strong style="color:var(--gold);">Derek's strategy commentary, full case timelines, document downloads, deadlines, and the live update feed are subscriber-only.</strong> Subscribe via PayPal below and Derek will email your access code to unlock full content on this device.
+    </p>
+    <div class="pw-status-banner"></div>
+
+    <div class="pw-pricing-grid">
+      <div class="pw-tier-card" data-base-price="49" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:28px 22px;">
+        <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Basic Follower</div>
+        <div><span class="pw-price-amount" style="font-size:2.2rem;font-weight:900;color:var(--gold);">$49</span><span style="color:var(--muted);font-size:0.8rem;">/mo</span> <span class="pw-price-original" style="display:none;text-decoration:line-through;color:var(--muted);font-size:0.85rem;margin-left:6px;"></span></div>
+        <div class="pw-discount-tag" style="display:none;color:var(--green);font-size:0.78rem;font-weight:700;margin-top:4px;"></div>
+        <ul style="list-style:none;margin:18px 0;font-size:0.85rem;color:var(--muted);line-height:1.9;">
+          <li>✓ Full case summaries</li>
+          <li>✓ Monthly strategy updates</li>
+          <li>✓ Template downloads</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/49" target="_blank" rel="noopener" class="pw-pay-btn" style="display:block;text-align:center;background:var(--gold);color:#000;padding:12px;border-radius:4px;font-weight:800;text-decoration:none;">💳 Subscribe — $49/mo</a>
+      </div>
+      <div class="pw-tier-card" data-base-price="99" style="background:var(--card);border:1px solid var(--gold);border-radius:8px;padding:28px 22px;">
+        <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Pro Litigant — Most Popular</div>
+        <div><span class="pw-price-amount" style="font-size:2.2rem;font-weight:900;color:var(--gold);">$99</span><span style="color:var(--muted);font-size:0.8rem;">/mo</span> <span class="pw-price-original" style="display:none;text-decoration:line-through;color:var(--muted);font-size:0.85rem;margin-left:6px;"></span></div>
+        <div class="pw-discount-tag" style="display:none;color:var(--green);font-size:0.78rem;font-weight:700;margin-top:4px;"></div>
+        <ul style="list-style:none;margin:18px 0;font-size:0.85rem;color:var(--muted);line-height:1.9;">
+          <li>✓ Everything in Basic</li>
+          <li>✓ Weekly live updates</li>
+          <li>✓ Monthly Q&amp;A with Derek</li>
+          <li>✓ Early access to filings</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/99" target="_blank" rel="noopener" class="pw-pay-btn" style="display:block;text-align:center;background:var(--gold);color:#000;padding:12px;border-radius:4px;font-weight:800;text-decoration:none;">💳 Subscribe — $99/mo</a>
+      </div>
+      <div class="pw-tier-card" data-base-price="299" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:28px 22px;">
+        <div style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Enterprise Firm</div>
+        <div><span class="pw-price-amount" style="font-size:2.2rem;font-weight:900;color:var(--gold);">$299</span><span style="color:var(--muted);font-size:0.8rem;">/mo</span> <span class="pw-price-original" style="display:none;text-decoration:line-through;color:var(--muted);font-size:0.85rem;margin-left:6px;"></span></div>
+        <div class="pw-discount-tag" style="display:none;color:var(--green);font-size:0.78rem;font-weight:700;margin-top:4px;"></div>
+        <ul style="list-style:none;margin:18px 0;font-size:0.85rem;color:var(--muted);line-height:1.9;">
+          <li>✓ Everything in Pro</li>
+          <li>✓ Real-time updates</li>
+          <li>✓ Direct consultation access</li>
+          <li>✓ CLE credit certs (when available)</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/299" target="_blank" rel="noopener" class="pw-pay-btn" style="display:block;text-align:center;background:var(--gold);color:#000;padding:12px;border-radius:4px;font-weight:800;text-decoration:none;">💳 Subscribe — $299/mo</a>
+      </div>
+    </div>
+
+    <form id="pw-pricing-calc" onsubmit="return false;" style="background:rgba(212,175,55,0.04);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:24px;">
+      <div style="font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Eligible for a discount?</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:0.85rem;margin-bottom:12px;">
+        <label><input type="radio" name="pw-category" value="0" checked onchange="pwRecalcPricing()"> None</label>
+        <label><input type="radio" name="pw-category" value="30" onchange="pwRecalcPricing()"> Fixed Income — 30%</label>
+        <label><input type="radio" name="pw-category" value="40" onchange="pwRecalcPricing()"> Veteran — 40%</label>
+        <label><input type="radio" name="pw-category" value="50" onchange="pwRecalcPricing()"> Terminal Illness — 50%</label>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <input type="text" name="pw-referral" placeholder="Referral code (optional, +20%)" oninput="pwRecalcPricing()" style="background:#000;border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:4px;font-size:0.82rem;min-width:220px;">
+        <span style="font-size:0.75rem;color:var(--muted);">Combined discount capped at 65%. Eligibility is confirmed by Derek before an access code is issued.</span>
+      </div>
+    </form>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;text-align:center;">
+      <div style="font-size:0.85rem;color:var(--muted);margin-bottom:10px;">Already subscribed? Enter the access code Derek emailed you to unlock full case content on this device.</div>
+      <form class="pw-unlock-form" onsubmit="return submitAccessCode(this)">
+        <input type="text" name="access-code" placeholder="Access code" required>
+        <button type="submit">Unlock</button>
+      </form>
+      <div class="pw-msg"></div>
+      <button class="pw-logout" onclick="pwLogout()">Log out of this device</button>
+    </div>
+  </div>
+</section>
+
 <!-- STATS -->
 <div class="stats-bar">
   <div class="stats-inner">
     <div class="stat-cell">
-      <div class="stat-num">2</div>
+      <div class="stat-num">3</div>
       <div class="stat-lbl">Active Cases</div>
     </div>
     <div class="stat-cell">
@@ -273,12 +367,12 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
       <div class="stat-lbl">Constitutional Claim</div>
     </div>
     <div class="stat-cell">
-      <div class="stat-num">16</div>
-      <div class="stat-lbl">Criminal Counts Filed</div>
+      <div class="stat-num">$331K</div>
+      <div class="stat-lbl">CIBC/Kudos/Telus Claim</div>
     </div>
     <div class="stat-cell">
-      <div class="stat-num">3</div>
-      <div class="stat-lbl">Civil Defendants</div>
+      <div class="stat-num">16</div>
+      <div class="stat-lbl">Criminal Counts Filed</div>
     </div>
     <div class="stat-cell">
       <div class="stat-num">Jun 29</div>
@@ -308,25 +402,25 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
           <h3 class="card-title">Francisco v. <em>Denby</em></h3>
           <div class="card-parties">Derek Francisco v. Bill Denby, Gwen Denby &amp; 2413319 Ontario Inc.</div>
           <p class="card-summary">
-            Civil fraud, trespass, property rights, defamation, and criminal mischief case. Derek Francisco is pursuing a Certificate of Pending Litigation (CPL) to lock the property, default judgment against defendants who failed to file a defence, and 16 parallel criminal counts through the Ontario Superior Court.
+            Civil fraud, trespass, and defamation case — 6 counts. Derek Francisco is pursuing a Certificate of Pending Litigation (CPL) to lock the property and default judgment against defendants who failed to file a defence. 6 criminal counts (HMK v. Denby) run separately and in parallel — no trespassing charge has been laid against Bill Denby.
           </p>
         </div>
         <div class="card-meta">
           <div class="meta-item">
             <div class="meta-key">Court</div>
-            <div class="meta-val">Ontario Superior Court</div>
+            <div class="meta-val">Ontario Superior Court (Eastern Region)</div>
           </div>
           <div class="meta-item">
             <div class="meta-key">Next Hearing</div>
-            <div class="meta-val red">June 29, 2026</div>
+            <div class="meta-val red">July 14, 2026, 9:30 AM — Lindsay</div>
           </div>
           <div class="meta-item">
             <div class="meta-key">Motion Type</div>
-            <div class="meta-val">CPL + Default Judgment</div>
+            <div class="meta-val">CPL + Default Judgment + Amend Damages to $3.3M</div>
           </div>
           <div class="meta-item">
             <div class="meta-key">Criminal Counts</div>
-            <div class="meta-val gold">16 Counts — HMK v. Denby</div>
+            <div class="meta-val gold">6 Counts — HMK v. Denby</div>
           </div>
         </div>
         <div class="card-footer">
@@ -372,6 +466,43 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         </div>
       </div>
 
+      <!-- CIBC / KUDOS / TELUS -->
+      <div class="case-card" onclick="window.location.href='cibc-case.html'">
+        <div class="card-header">
+          <div class="card-status">
+            <span class="status-badge badge-critical">⏳ Pre-Litigation — Demand Sent</span>
+            <span class="case-num">Demand Letters Pending Response</span>
+          </div>
+          <h3 class="card-title">Francisco v. <em>CIBC / Kudos / Telus</em></h3>
+          <div class="card-parties">Derek Francisco v. CIBC, Kudos &amp; Telus</div>
+          <p class="card-summary">
+            Fraud, theft, and disability discrimination claim against CIBC, Kudos, and Telus totalling $331,313.21. Formal demand letters have been sent to all three respondents; this matter proceeds to a Statement of Claim if no adequate response is received.
+          </p>
+        </div>
+        <div class="card-meta">
+          <div class="meta-item">
+            <div class="meta-key">Stage</div>
+            <div class="meta-val">Demand Letters Sent</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-key">Claim Value</div>
+            <div class="meta-val gold">$331,313.21</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-key">Grounds</div>
+            <div class="meta-val">Fraud · Theft · Disability Discrimination</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-key">Respondents</div>
+            <div class="meta-val">CIBC, Kudos, Telus</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="cibc-case.html" class="card-cta" onclick="event.stopPropagation()">View Full Case →</a>
+          <span class="status-badge badge-critical" style="font-size:0.66rem;">Response Pending</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -381,49 +512,66 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
   <div class="updates-inner">
     <div class="section-label">Case Activity Log</div>
     <h2 class="section-title" style="font-size:1.8rem;margin-bottom:0;">Recent Updates</h2>
-    <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Last updated: <strong style="color:var(--gold);">June 14, 2026</strong></p>
+    <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Last updated: <strong style="color:var(--gold);">June 22, 2026</strong></p>
     <div class="update-feed">
       <div class="update-item">
-        <div class="update-date-col">Jun 14<br>2026</div>
+        <div class="update-date-col">Jun 22<br>2026</div>
         <div class="update-content">
-          <div class="update-case-tag tag-denby">Francisco v. Denby</div>
-          <div class="update-text"><strong>CPL Motion scheduled for June 29, 2026.</strong> Certificate of Pending Litigation motion to lock property at 27 O'Reilly Lane. Full document package prepared. <span class="update-badge badge-new">🔴 Next Hearing</span></div>
+          <div class="update-case-tag" style="background:rgba(85,153,255,0.12);color:#5599FF;border:1px solid rgba(85,153,255,0.25);">Francisco v. CIBC/Kudos/Telus</div>
+          <div class="update-text"><strong>Demand letters sent to CIBC, Kudos, and Telus.</strong> $331,313.21 claim for fraud, theft, and disability discrimination. <span class="update-badge badge-new">🆕 New Case</span></div>
         </div>
       </div>
-      <div class="update-item">
-        <div class="update-date-col">Jun 14<br>2026</div>
-        <div class="update-content">
-          <div class="update-case-tag tag-ag">Francisco v. AG</div>
-          <div class="update-text"><strong>$35M Notice of Claim filed against the Crown (Ontario).</strong> Constitutional challenge targeting Health Canada and the AG of Canada for violations of Charter ss. 7, 9, 12, 15.</div>
+    </div>
+
+    <div class="pw-gate" data-paywall="basic" style="margin-top:0;">
+      <div class="pw-gate-body update-feed">
+        <div class="update-item">
+          <div class="update-date-col">Jun 14<br>2026</div>
+          <div class="update-content">
+            <div class="update-case-tag tag-denby">Francisco v. Denby</div>
+            <div class="update-text"><strong>CPL Motion scheduled for July 14, 2026, 9:30 AM (Lindsay).</strong> Certificate of Pending Litigation motion to lock property at 27 O'Reilly Lane. Full document package prepared. <span class="update-badge badge-new">🔴 Next Hearing</span></div>
+          </div>
+        </div>
+        <div class="update-item">
+          <div class="update-date-col">Jun 14<br>2026</div>
+          <div class="update-content">
+            <div class="update-case-tag tag-ag">Francisco v. AG</div>
+            <div class="update-text"><strong>$35M Notice of Claim filed against the Crown (Ontario).</strong> Constitutional challenge targeting Health Canada and the AG of Canada for violations of Charter ss. 7, 9, 12, 15.</div>
+          </div>
+        </div>
+        <div class="update-item">
+          <div class="update-date-col">Jun 8<br>2026</div>
+          <div class="update-content">
+            <div class="update-case-tag tag-denby">Francisco v. Denby</div>
+            <div class="update-text"><strong>2413319 Ontario Inc. ONBIS corporate profile obtained.</strong> Directors confirmed. Added to affidavit exhibit package for default judgment proceedings against the numbered company.</div>
+          </div>
+        </div>
+        <div class="update-item">
+          <div class="update-date-col">Jun 3<br>2026</div>
+          <div class="update-content">
+            <div class="update-case-tag tag-denby">Francisco v. Denby</div>
+            <div class="update-text"><strong>Silver spray paint vandalism documented.</strong> Criminal mischief evidence secured — photos, video, and witness (Dylan) present. Four-wheeler intimidation incident observed and recorded.</div>
+          </div>
+        </div>
+        <div class="update-item">
+          <div class="update-date-col">May 2026</div>
+          <div class="update-content">
+            <div class="update-case-tag tag-ag">Francisco v. AG</div>
+            <div class="update-text"><strong>Health Canada demand letter sent.</strong> Formal demand for accounting of regulatory interference with Derek Francisco's medical cannabis access rights.</div>
+          </div>
+        </div>
+        <div class="update-item">
+          <div class="update-date-col">Jun 2024</div>
+          <div class="update-content">
+            <div class="update-case-tag tag-denby">Francisco v. Denby</div>
+            <div class="update-text"><strong>Statement of Claim filed — Francisco v. Denby.</strong> Original civil claim filed in Ontario Superior Court against Bill Denby, Gwen Denby, and 2413319 Ontario Inc. Defendants served.</div>
+          </div>
         </div>
       </div>
-      <div class="update-item">
-        <div class="update-date-col">Jun 8<br>2026</div>
-        <div class="update-content">
-          <div class="update-case-tag tag-denby">Francisco v. Denby</div>
-          <div class="update-text"><strong>2413319 Ontario Inc. ONBIS corporate profile obtained.</strong> Directors confirmed. Added to affidavit exhibit package for default judgment proceedings against the numbered company.</div>
-        </div>
-      </div>
-      <div class="update-item">
-        <div class="update-date-col">Jun 3<br>2026</div>
-        <div class="update-content">
-          <div class="update-case-tag tag-denby">Francisco v. Denby</div>
-          <div class="update-text"><strong>Silver spray paint vandalism documented.</strong> Criminal mischief evidence secured — photos, video, and witness (Dylan) present. Four-wheeler intimidation incident observed and recorded.</div>
-        </div>
-      </div>
-      <div class="update-item">
-        <div class="update-date-col">May 2026</div>
-        <div class="update-content">
-          <div class="update-case-tag tag-ag">Francisco v. AG</div>
-          <div class="update-text"><strong>Health Canada demand letter sent.</strong> Formal demand for accounting of regulatory interference with Derek Francisco's medical cannabis access rights.</div>
-        </div>
-      </div>
-      <div class="update-item">
-        <div class="update-date-col">Jun 2024</div>
-        <div class="update-content">
-          <div class="update-case-tag tag-denby">Francisco v. Denby</div>
-          <div class="update-text"><strong>Statement of Claim filed — Francisco v. Denby.</strong> Original civil claim filed in Ontario Superior Court against Bill Denby, Gwen Denby, and 2413319 Ontario Inc. Defendants served.</div>
-        </div>
+      <div class="pw-gate-overlay">
+        <div class="pw-lock-icon">🔒</div>
+        <div class="pw-overlay-text"><strong>Full update history is subscriber-only.</strong> Subscribe to see every filing, hearing outcome, and strategy note as it happens.</div>
+        <a href="#pricing" class="btn-primary" style="margin-top:4px;">Subscribe — $49/mo</a>
       </div>
     </div>
   </div>
@@ -444,7 +592,7 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         <div class="doc-desc">Original claim against Bill Denby, Gwen Denby, and 2413319 Ontario Inc. for fraud, trespass, defamation, and property interference.</div>
         <div class="doc-actions">
           <button class="doc-btn doc-view" onclick="openDocModal('Amended Statement of Claim','Francisco v. Denby · CV-26-00000064-0000','This document has been filed with the Ontario Superior Court of Justice. Contact franciscoderek7@gmail.com for document requests.')">View Summary</button>
-          <button class="doc-btn doc-donor" onclick="scrollToDonate()">🔒 Full PDF (Donors)</button>
+          <button class="doc-btn doc-donor" onclick="scrollToPricing()">🔒 Full PDF (Subscribers)</button>
         </div>
       </div>
 
@@ -455,7 +603,7 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         <div class="doc-desc">Default proceedings against Bill Denby personally for failure to file a Statement of Defence within the required time.</div>
         <div class="doc-actions">
           <button class="doc-btn doc-view" onclick="openDocModal('Form 19A — Default (Bill Denby)','Francisco v. Denby · CV-26-00000064-0000','Default proceedings prepared and filed. Bill Denby failed to file a Statement of Defence.')">View Summary</button>
-          <button class="doc-btn doc-donor" onclick="scrollToDonate()">🔒 Full PDF (Donors)</button>
+          <button class="doc-btn doc-donor" onclick="scrollToPricing()">🔒 Full PDF (Subscribers)</button>
         </div>
       </div>
 
@@ -466,7 +614,7 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         <div class="doc-desc">Corporate default proceedings against the numbered company associated with the Denby defendants.</div>
         <div class="doc-actions">
           <button class="doc-btn doc-view" onclick="openDocModal('Form 19A — Default (2413319 Ontario Inc.)','Francisco v. Denby · CV-26-00000064-0000','Corporate default proceedings. 2413319 Ontario Inc. failed to defend the claim.')">View Summary</button>
-          <button class="doc-btn doc-donor" onclick="scrollToDonate()">🔒 Full PDF (Donors)</button>
+          <button class="doc-btn doc-donor" onclick="scrollToPricing()">🔒 Full PDF (Subscribers)</button>
         </div>
       </div>
 
@@ -474,10 +622,10 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         <div class="doc-type type-pending">⏳ Motion Pending</div>
         <div class="doc-title">CPL Motion — Certificate of Pending Litigation</div>
         <div class="doc-case">CV-26-00000064-0000</div>
-        <div class="doc-desc">Motion to lock 27 O'Reilly Lane against any transfer, sale, or encumbrance pending resolution of the civil claim. Hearing: June 29, 2026.</div>
+        <div class="doc-desc">Motion to lock 27 O'Reilly Lane against any transfer, sale, or encumbrance pending resolution of the civil claim. Hearing: July 14, 2026, 9:30 AM (Lindsay).</div>
         <div class="doc-actions">
-          <button class="doc-btn doc-view" onclick="openDocModal('CPL Motion — Certificate of Pending Litigation','June 29, 2026 · Ontario Superior Court','A Certificate of Pending Litigation would prevent the property at 27 O\'Reilly Lane from being sold, transferred, or encumbered while the case proceeds.')">View Details</button>
-          <button class="doc-btn doc-donor" onclick="scrollToDonate()">🔒 Motion Materials (Donors)</button>
+          <button class="doc-btn doc-view" onclick="openDocModal('CPL Motion — Certificate of Pending Litigation','July 14, 2026, 9:30 AM · Ontario Superior Court (Lindsay)','A Certificate of Pending Litigation would prevent the property at 27 O\'Reilly Lane from being sold, transferred, or encumbered while the case proceeds.')">View Details</button>
+          <button class="doc-btn doc-donor" onclick="scrollToPricing()">🔒 Motion Materials (Subscribers)</button>
         </div>
       </div>
 
@@ -488,7 +636,7 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         <div class="doc-desc">$35M constitutional claim filed against the Attorney General of Canada and Health Canada. Targeting systemic Charter violations relating to medical cannabis rights.</div>
         <div class="doc-actions">
           <button class="doc-btn doc-view" onclick="openDocModal('Notice of Claim — Ontario Crown','Francisco v. AG · CV-26-00000063-0000','$35 million constitutional claim. Charter sections: 7 (life/liberty/security), 9 (arbitrary detention), 12 (cruel treatment), 15 (equality). Filed with Ontario Superior Court.')">View Summary</button>
-          <button class="doc-btn doc-donor" onclick="scrollToDonate()">🔒 Full Claim (Donors)</button>
+          <button class="doc-btn doc-donor" onclick="scrollToPricing()">🔒 Full Claim (Subscribers)</button>
         </div>
       </div>
 
@@ -499,15 +647,15 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         <div class="doc-desc">Formal demand to Health Canada for accounting of regulatory interference with Derek Francisco's access to medical cannabis and constitutional remediation.</div>
         <div class="doc-actions">
           <button class="doc-btn doc-view" onclick="openDocModal('Health Canada Demand Letter','Francisco v. AG · Pre-Litigation','Formal demand letter sent to Health Canada. Demanding accounting of regulatory interference and constitutional remedy for violations of Derek Francisco\'s medical rights.')">View Summary</button>
-          <button class="doc-btn doc-donor" onclick="scrollToDonate()">🔒 Full Letter (Donors)</button>
+          <button class="doc-btn doc-donor" onclick="scrollToPricing()">🔒 Full Letter (Subscribers)</button>
         </div>
       </div>
 
       <div class="doc-card">
         <div class="doc-type type-pending">⏳ This Week</div>
-        <div class="doc-title">Information — 16 Criminal Counts (HMK v. Denby)</div>
+        <div class="doc-title">Information — 6 Criminal Counts (HMK v. Denby)</div>
         <div class="doc-case">HMK v. Denby — Criminal</div>
-        <div class="doc-desc">Private information containing 16 criminal counts to be sworn before a Justice of the Peace. Criminal proceedings running parallel to civil case.</div>
+        <div class="doc-desc">Private information containing 6 criminal counts sworn before a Justice of the Peace (June 26, 2026). Criminal proceedings run parallel to, and separately from, the civil case.</div>
         <div class="doc-actions">
           <button class="doc-btn doc-locked" disabled>Pending Filing</button>
         </div>
@@ -520,7 +668,7 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
         <div class="doc-desc">Full constitutional arguments challenging federal cannabis regulation as it applies to Derek Francisco's medical rights and personal liberty under the Charter.</div>
         <div class="doc-actions">
           <button class="doc-btn doc-view" onclick="openDocModal('Charter Challenge Factum','Francisco v. AG · Constitutional','Charter argument targets: s.7 (right to life/liberty/security of the person), s.9 (right not to be arbitrarily detained), s.12 (right not to be subjected to cruel and unusual treatment), s.15 (equality rights).')">View Overview</button>
-          <button class="doc-btn doc-donor" onclick="scrollToDonate()">🔒 Full Factum (Donors)</button>
+          <button class="doc-btn doc-donor" onclick="scrollToPricing()">🔒 Full Factum (Subscribers)</button>
         </div>
       </div>
 
@@ -542,7 +690,7 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
     </div>
     <div class="progress-meta">
       <span>Raised: <strong>$2,300</strong></span>
-      <span>Goal: <strong>$10,000 for June 29 CPL Motion</strong></span>
+      <span>Goal: <strong>$10,000 for July 14 CPL Motion</strong></span>
     </div>
 
     <div class="tier-grid" id="tier-grid">
@@ -614,6 +762,8 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
           <a href="cases.html">Active Cases Hub</a>
           <a href="denby-case.html">Francisco v. Denby</a>
           <a href="ag-case.html">Francisco v. AG ($35M)</a>
+          <a href="cibc-case.html">Francisco v. CIBC/Kudos/Telus</a>
+          <a href="#pricing">Subscribe</a>
           <a href="#documents">Filed Documents</a>
           <a href="#updates">Case Updates</a>
         </div>
@@ -665,8 +815,8 @@ footer{background:#080808;border-top:1px solid var(--border);padding:48px 5% 32p
 </div>
 
 <script>
-// Countdown to June 29, 2026 9:00 AM EDT (13:00 UTC)
-var target = new Date('2026-06-29T13:00:00Z');
+// Countdown to July 14, 2026 9:30 AM EDT (13:30 UTC)
+var target = new Date('2026-07-14T13:30:00Z');
 function updateCountdown(){
   var now = new Date();
   var diff = target - now;
@@ -717,7 +867,35 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeDo
 function scrollToDonate(){
   document.getElementById('donate').scrollIntoView({behavior:'smooth'});
 }
+function scrollToPricing(){
+  document.getElementById('pricing').scrollIntoView({behavior:'smooth'});
+}
 </script>
+
+<!-- SUBSCRIBER COMMENTS -->
+<section style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="cases-inner">
+    <div class="section-label">Subscriber Discussion</div>
+    <h2 class="section-title" style="font-size:1.8rem;">Comments</h2>
+    <div class="pw-gate" data-paywall="basic">
+      <div class="pw-gate-body">
+        <form onsubmit="return pwPostComment('cases', this)" style="margin-bottom:20px;">
+          <textarea name="comment" rows="3" placeholder="Share a question or note for other subscribers…" style="width:100%;background:#000;border:1px solid var(--border);color:var(--text);padding:12px;border-radius:4px;font-size:0.88rem;font-family:inherit;" required></textarea>
+          <button type="submit" class="btn-primary" style="margin-top:10px;">Post Comment</button>
+        </form>
+        <div id="pw-comments-cases"></div>
+      </div>
+      <div class="pw-gate-overlay">
+        <div class="pw-lock-icon">🔒</div>
+        <div class="pw-overlay-text"><strong>Subscriber comments are locked.</strong> Subscribe to ask Derek questions and discuss the cases with other followers.</div>
+        <a href="#pricing" class="btn-primary" style="margin-top:4px;">Subscribe — $49/mo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="case-paywall.js"></script>
+<script>document.addEventListener('DOMContentLoaded', function(){ pwRenderComments('cases'); });</script>
 
 </body>
 </html>

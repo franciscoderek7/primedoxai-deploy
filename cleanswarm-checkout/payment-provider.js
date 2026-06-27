@@ -17,9 +17,9 @@
   // PAYPAL SWAP ZONE: Replace paypal.me URLs with PayPal Business payment links
   // from paypal.com/buttons once Derek creates them.
   // Loop A (franciscoderek7@gmail.com): CCLDR, BENO-X, PrimeDox, FH, TechPet
-  // Loop B (omniaguard1@gmail.com): OmniaGuard, Vigilax — marked with LOOP-B
+  // Loop B (omniaguard1@gmail.com): OmniGuard, Vigilax — marked with LOOP-B
   var PAYPAL_LINKS = {
-    // ── OmniaGuard (Loop B — omniaguard1@gmail.com) ─────────────────────────
+    // ── OmniGuard (Loop B — omniaguard1@gmail.com) ─────────────────────────
     'omniguard-vpn-99':          'https://paypal.me/techpetcage/99',   // SWAP → omniaguard1 link
     'omniguard-vault-99':        'https://paypal.me/techpetcage/99',   // SWAP → omniaguard1 link
     'omniguard-bundle-149':      'https://paypal.me/techpetcage/149',  // SWAP → omniaguard1 link

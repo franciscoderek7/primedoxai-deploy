@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OmniGuard — AI Security That Defends Your Digital Universe</title>
+<meta name="description" content="OmniGuard deploys a 14-agent AI security swarm with autonomous threat detection, zero-trust architecture, and human AI oversight. Live 3D Security Operations Center.">
+<meta property="og:title" content="OmniGuard — AI Security That Defends Your Digital Universe">
+<meta property="og:description" content="14-layer autonomous AI defense. Agent Swarm Technology. Zero-trust architecture for enterprises that cannot afford a breach.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23090918'/><text y='.68em' font-size='62' text-anchor='middle' x='50'>🛡️</text></svg>">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Inter',Arial,sans-serif}
+  #viewport{position:fixed;inset:0}
+  #viewport canvas{display:block}
+  #hud{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+       padding:14px 18px;background:linear-gradient(180deg,rgba(0,0,0,0.85),rgba(0,0,0,0));
+       z-index:10;pointer-events:none}
+  #hud .brand{color:#4A90E2;font-weight:700;letter-spacing:1px;font-size:14px;pointer-events:auto;
+       background:linear-gradient(90deg,#4A90E2,#E91E63);-webkit-background-clip:text;background-clip:text;color:transparent}
+  #status{color:#c0c0c0;font-size:12px;pointer-events:auto}
+  #floor-bar{position:fixed;bottom:0;left:0;right:0;display:flex;gap:10px;justify-content:center;
+             padding:16px;background:linear-gradient(0deg,rgba(0,0,0,0.85),rgba(0,0,0,0));z-index:10}
+  .floor-btn,#lobby-btn{background:#111;border:1px solid #4A90E2;color:#7db4ed;font-size:12px;
+             padding:10px 16px;border-radius:6px;cursor:pointer;letter-spacing:0.5px;transition:all .15s}
+  .floor-btn:hover,#lobby-btn:hover{background:linear-gradient(135deg,#4A90E2,#E91E63);color:#fff}
+  #floor-content-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+             opacity:0;transition:opacity 0.4s ease;pointer-events:none;z-index:5}
+  #floor-content-inner{color:#fff;text-align:center;font-family:Inter,Arial,sans-serif;
+             font-size:28px;letter-spacing:1px;text-shadow:0 0 18px rgba(74,144,226,0.6)}
+
+  #pricing-overlay{position:fixed;left:0;right:0;bottom:88px;display:flex;gap:14px;justify-content:center;
+             flex-wrap:wrap;padding:0 16px;opacity:0;pointer-events:none;transition:opacity 0.4s ease 0.2s;z-index:8}
+  #pricing-overlay.visible{opacity:1;pointer-events:auto}
+  .pricing-card{width:170px;background:linear-gradient(160deg,rgba(10,14,24,0.92),rgba(20,10,20,0.92));
+             border:1px solid #4A90E2;border-radius:10px;padding:16px 14px;text-align:center;color:#fff;
+             box-shadow:0 0 18px rgba(74,144,226,0.25)}
+  .pricing-card.critical{border-color:#E91E63;box-shadow:0 0 18px rgba(233,30,99,0.3)}
+  .pricing-card h4{font-size:12px;letter-spacing:1px;color:#7db4ed;margin-bottom:8px;text-transform:uppercase}
+  .pricing-card .price{font-size:24px;font-weight:700;margin-bottom:10px}
+  .pricing-card .price span{font-size:12px;font-weight:400;color:#999}
+  .pricing-card a{display:inline-block;background:linear-gradient(135deg,#4A90E2,#E91E63);color:#fff;
+             font-size:12px;font-weight:600;padding:8px 10px;border-radius:6px;text-decoration:none;width:100%}
+</style>
+</head>
+<body>
+
+<div id="viewport"></div>
+
+<div id="hud">
+  <div class="brand">OMNIGUARD — AI SECURITY OPERATIONS CENTER</div>
+  <div id="status">Lobby</div>
+</div>
+
+<div id="floor-content-overlay"><div id="floor-content-inner"></div></div>
+
+<div id="pricing-overlay">
+  <div class="pricing-card">
+    <h4>Personal</h4>
+    <div class="price">$39<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Personal%20-%20%2439%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+  <div class="pricing-card">
+    <h4>Business</h4>
+    <div class="price">$89<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Business%20-%20%2489%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+  <div class="pricing-card">
+    <h4>Enterprise</h4>
+    <div class="price">$179<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Enterprise%20-%20%24179%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+  <div class="pricing-card critical">
+    <h4>Critical</h4>
+    <div class="price">$349<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Critical%20-%20%24349%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+</div>
+
+<div id="floor-bar">
+  <button id="lobby-btn">Lobby</button>
+  <!-- single OmniGuard entry button injected below — this production registry only carries Floor 1 -->
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from 'three';
+  import { Engine } from './empire/engine.js';
+  import { SkyscraperBuilding } from './empire/scene.js';
+  import { getRegisteredFloors, getFloorLabel } from './empire/floor-registry.js';
+  import { ElevatorAudio } from './empire/audio-engine.js';
+
+  const container = document.getElementById('viewport');
+  const engine = new Engine(container, { THREE });
+  const building = new SkyscraperBuilding(THREE);
+  engine.mount(building);
+  engine.start();
+
+  const audio = new ElevatorAudio();
+  audio.connect(building);
+
+  const status = document.getElementById('status');
+  const contentOverlay = document.getElementById('floor-content-overlay');
+  const contentInner = document.getElementById('floor-content-inner');
+  const pricingOverlay = document.getElementById('pricing-overlay');
+  const OMNIGUARD_FLOOR = 1; // the only floor in this production registry
+  building.on('elevator:doors-closing', () => {
+    status.textContent = 'Doors closing...';
+    contentOverlay.style.opacity = '0';
+    pricingOverlay.classList.remove('visible');
+  });
+  building.on('elevator:loading', ({ label }) => { status.textContent = `Loading ${label || 'floor'}...`; });
+  building.on('elevator:doors-opening', ({ label }) => { status.textContent = `Arriving: ${label || 'Lobby'}`; });
+  building.on('elevator:arrived', ({ floor, label }) => {
+    status.textContent = `Floor: ${label || 'Lobby'}`;
+    contentInner.textContent = label || 'Lobby';
+    contentOverlay.style.opacity = '1'; // fades in only once doors are fully open (0.4s ease, per spec)
+    pricingOverlay.classList.toggle('visible', floor === OMNIGUARD_FLOOR);
+  });
+  building.on('elevator:error', ({ error }) => { status.textContent = `Error: ${error.message}`; });
+
+  const floorBar = document.getElementById('floor-bar');
+  getRegisteredFloors().forEach((floor) => {
+    const btn = document.createElement('button');
+    btn.className = 'floor-btn';
+    btn.textContent = `Enter ${getFloorLabel(floor)}`;
+    btn.onclick = () => building.goToFloor(floor);
+    floorBar.appendChild(btn);
+  });
+
+  document.getElementById('lobby-btn').onclick = () => building.returnToLobby();
+</script>
+
+</body>
+</html>

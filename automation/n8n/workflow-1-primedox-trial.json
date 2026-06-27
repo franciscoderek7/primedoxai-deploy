@@ -1,0 +1,103 @@
+{
+  "name": "Workflow 1 - PrimeDox $49 Trial (Payment to Access) v1 - no API keys",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "New Subscriber - Payment Received",
+        "formDescription": "Fill this in right after you see a PayPal payment land. Takes 20 seconds.",
+        "formFields": {
+          "values": [
+            { "fieldLabel": "Payer Name", "requiredField": true },
+            { "fieldLabel": "Payer Email", "fieldType": "email", "requiredField": true },
+            {
+              "fieldLabel": "Tier",
+              "fieldType": "dropdown",
+              "fieldOptions": { "values": [
+                { "option": "PrimeDox Basic - $49/mo" },
+                { "option": "OmniGuard - $29" },
+                { "option": "Weedlaw Basic Follower - $49/mo" },
+                { "option": "Weedlaw Pro Litigant - $99/mo" },
+                { "option": "Weedlaw Enterprise Firm - $299/mo" }
+              ] },
+              "requiredField": true
+            },
+            { "fieldLabel": "Amount Paid (CAD)", "fieldType": "number", "requiredField": true },
+            { "fieldLabel": "PayPal Transaction ID", "requiredField": false }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Payment Logged (Form)",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [240, 300],
+      "webhookId": "REPLACE-AFTER-IMPORT-AUTO-GENERATED"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "name": "payer_name", "type": "string", "value": "={{ $json['Payer Name'] }}" },
+            { "name": "payer_email", "type": "string", "value": "={{ $json['Payer Email'] }}" },
+            { "name": "tier", "type": "string", "value": "={{ $json['Tier'] }}" },
+            { "name": "amount_paid", "type": "number", "value": "={{ $json['Amount Paid (CAD)'] }}" },
+            { "name": "txn_id", "type": "string", "value": "={{ $json['PayPal Transaction ID'] }}" },
+            { "name": "logged_at", "type": "string", "value": "={{ $now.toISO() }}" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Normalize Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.payer_email }}",
+        "subject": "Welcome to PrimeDox AI - Your Access Confirmation",
+        "emailType": "html",
+        "message": "<p>Hi {{ $json.payer_name }},</p><p>Thank you for subscribing to <strong>{{ $json.tier }}</strong> (${{ $json.amount_paid }} CAD received).</p><p>Derek will follow up shortly with your access link / login details. If you don't hear back within 24 hours, reply to this email.</p><p>- PrimeDox AI</p>",
+        "options": {}
+      },
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [680, 220],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": { "mode": "list", "value": "REPLACE-WITH-YOUR-GOOGLE-SHEET-ID" },
+        "sheetName": { "mode": "list", "value": "Subscribers" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.logged_at }}",
+            "Name": "={{ $json.payer_name }}",
+            "Email": "={{ $json.payer_email }}",
+            "Tier": "={{ $json.tier }}",
+            "Amount": "={{ $json.amount_paid }}",
+            "PayPal Txn ID": "={{ $json.txn_id }}"
+          }
+        },
+        "options": {}
+      },
+      "name": "Log to Google Sheet (CRM)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [680, 380],
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "Payment Logged (Form)": { "main": [[{ "node": "Normalize Fields", "type": "main", "index": 0 }]] },
+    "Normalize Fields": { "main": [[
+      { "node": "Send Welcome Email", "type": "main", "index": 0 },
+      { "node": "Log to Google Sheet (CRM)", "type": "main", "index": 0 }
+    ]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

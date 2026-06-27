@@ -1,11 +1,12 @@
-// referral-engine.js — PrimeDox Empire Referral Engine v1.0
+// referral-engine.js — PrimeDox Empire Referral Engine v2.0
 // CDN: https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js
 //
 // Discount tiers (by code prefix), per Derek's 2026-06-22 spec:
 //   TERMINAL* → 50% | FIXED* → 40% | VETERAN* → 35% | SENIOR* → 30% | STUDENT* → 25% | INVESTOR* → 25% | general → 10%
 //
-// Commission rates:
-//   First sale → 25% | Recurring → 20%
+// Commission rate (Francisco Holdings Rewards, per Derek's 2026-06-24 spec):
+//   Flat 15% on every sale, no first/recurring split. Matches francisco-holdings-site/refer/
+//   and the FHI-[NAME]-[NUMBER] code format issued there.
 //
 // localStorage key: pd_referral
 
@@ -38,9 +39,8 @@
     { min: 1,  percent: 10, perk: '' },
   ];
 
-  // Commission rates (stored in localStorage; Supabase if available)
-  var COMMISSION_FIRST     = 0.25;
-  var COMMISSION_RECURRING = 0.20;
+  // Flat commission rate (stored in localStorage; Supabase if available)
+  var COMMISSION_FLAT = 0.15;
 
   // ─── Internal Helpers ─────────────────────────────────────────────────────
 
@@ -321,8 +321,7 @@
         if (!data.commissions) data.commissions = [];
 
         var commissions = data.commissions;
-        var isFirst     = !commissions.some(function (c) { return c.productId === productId; });
-        var rate        = isFirst ? COMMISSION_FIRST : COMMISSION_RECURRING;
+        var rate        = COMMISSION_FLAT;
         var commission  = Math.round(parseFloat(amount) * rate * 100) / 100;
 
         var entry = {
@@ -330,7 +329,6 @@
           amount:      parseFloat(amount),
           commission:  commission,
           rate:        (rate * 100) + '%',
-          type:        isFirst ? 'first' : 'recurring',
           referrerId:  referrerId || null,
           code:        data.code || null,
           ts:          Date.now(),
@@ -344,7 +342,6 @@
           amount:      parseFloat(amount),
           commission:  commission,
           rate:        entry.rate,
-          type:        entry.type,
           referrer_id: referrerId || null,
           ref_code:    data.code || null,
           ts:          new Date().toISOString(),

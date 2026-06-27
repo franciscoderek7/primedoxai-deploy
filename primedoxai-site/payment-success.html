@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Payment confirmed. Welcome to PrimeDox AI. Your subscription is now active.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Confirmed — PrimeDox AI</title>
+<link rel="canonical" href="https://primedoxai.com/payment-success.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PrimeDox AI">
+<meta property="og:title" content="Payment Confirmed — PrimeDox AI">
+<meta property="og:description" content="Payment confirmed. Welcome to PrimeDox AI.">
+<meta property="og:url" content="https://primedoxai.com/payment-success.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Payment Confirmed — PrimeDox AI">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#08070f;color:#f0eede;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;line-height:1.6}
+  .card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.2);border-radius:24px;padding:56px 48px;max-width:560px;width:100%;text-align:center;backdrop-filter:blur(16px)}
+  .icon{font-size:64px;margin-bottom:24px}
+  h1{font-size:28px;font-weight:900;margin-bottom:12px;color:#ffd700}
+  p{color:#9e9a86;font-size:16px;line-height:1.7;margin-bottom:20px}
+  .tier-badge{display:inline-block;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#ffd700;font-size:0.85rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:8px 22px;border-radius:100px;margin-bottom:24px}
+  .steps{background:rgba(255,255,255,0.03);border:1px solid rgba(255,215,0,0.1);border-radius:12px;padding:24px;text-align:left;margin:28px 0}
+  .step{display:flex;gap:16px;align-items:flex-start;margin-bottom:16px}
+  .step:last-child{margin-bottom:0}
+  .step-num{background:#ffd700;color:#08070f;font-weight:800;font-size:13px;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+  .step-text{color:#f0eede;font-size:14px;line-height:1.5}
+  .step-text span{color:#9e9a86;font-size:13px;display:block;margin-top:2px}
+  .btn{display:inline-block;background:linear-gradient(135deg,#ffd700 0%,#e6a800 100%);color:#08070f;font-weight:800;font-size:14px;padding:12px 28px;border-radius:10px;text-decoration:none;margin:8px}
+  .btn-ghost{background:transparent;border:1px solid rgba(255,215,0,0.3);color:#ffd700}
+  .nav{margin-bottom:32px}
+  .nav a{color:#ffd700;text-decoration:none;font-weight:700;font-size:16px}
+  .fineprint{margin-top:24px;font-size:13px;color:#5c5848}
+  .fineprint a{color:#ffd700;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="nav"><a href="index.html">&#x2190; PrimeDox AI</a></div>
+  <div class="icon">&#x2705;</div>
+  <h1>You're In.</h1>
+  <p id="tier-greeting">Payment confirmed. Welcome to PrimeDox AI.</p>
+  <div class="tier-badge" id="tier-badge">Subscription Active</div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Check your email for account access
+        <span>Sent to the address on your Stripe receipt within 15 minutes</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Log in and start your first AI session
+        <span>All 14 AI Heroes are available immediately on Pro and above</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Questions or onboarding help
+        <span>Reference your Stripe receipt number when you reach out</span>
+      </div>
+    </div>
+  </div>
+
+  <a href="index.html" class="btn">Go to PrimeDox AI →</a>
+  <a href="pricing.html" class="btn btn-ghost">View Pricing</a>
+
+  <p class="fineprint">Questions? Email <a href="mailto:franciscoderek7@gmail.com?subject=PrimeDox%20AI%20Onboarding%20Question">franciscoderek7@gmail.com</a> — we respond within 24 hours.</p>
+</div>
+<script>
+(function () {
+  'use strict';
+  var TIER_NAMES = {
+    pro: 'Pro — $49/mo',
+    elite: 'Elite — $199/mo',
+    enterprise: 'Sovereign (Enterprise) — $999/mo',
+    sovereign: 'Sovereign (Enterprise) — $999/mo'
+  };
+
+  function getQueryParam(name) {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      return params.get(name) || null;
+    } catch (e) {
+      var match = window.location.search.match(new RegExp('[?&]' + name + '=([^&]*)'));
+      return match ? decodeURIComponent(match[1]) : null;
+    }
+  }
+
+  var tierParam = (getQueryParam('tier') || '').toLowerCase();
+  var tierLabel = TIER_NAMES[tierParam];
+  var badge = document.getElementById('tier-badge');
+  var greeting = document.getElementById('tier-greeting');
+
+  if (tierLabel) {
+    badge.textContent = tierLabel + ' Active';
+    greeting.textContent = 'Payment confirmed. Welcome to PrimeDox AI ' + tierLabel.split(' — ')[0] + '.';
+  }
+})();
+</script>
+</body>
+</html>

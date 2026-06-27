@@ -78,8 +78,34 @@ footer a{color:var(--gold)}
     <div class="impact-card"><div class="impact-amount">$500</div><div class="impact-desc">Sponsors a full case education package for one person who cannot afford any legal help.</div></div>
   </div>
 
-  <h2>Make a Donation</h2>
-  <p class="section-sub">Choose an amount or enter your own. All donations support CCLDR educational operations.</p>
+  <h2>Make a Donation — Pay by Card (Stripe)</h2>
+  <p class="section-sub">Choose an amount to donate instantly by card via Stripe. All donations support CCLDR educational operations.</p>
+  <!-- TODO(Derek/Manus): replace with real Stripe Payment Link, created in Stripe Dashboard -->
+  <div class="donate-grid">
+    <div class="donate-card"><div class="donate-amount">$25</div><div class="donate-label">Supporter</div>
+      <a href="https://buy.stripe.com/PLACEHOLDER_CCLDR_DONATE_25" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:12px;font-size:13px;padding:10px">Donate $25 →</a>
+    </div>
+    <div class="donate-card"><div class="donate-amount">$50</div><div class="donate-label">Contributor</div>
+      <a href="https://buy.stripe.com/PLACEHOLDER_CCLDR_DONATE_50" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:12px;font-size:13px;padding:10px">Donate $50 →</a>
+    </div>
+    <div class="donate-card"><div class="donate-amount">$100</div><div class="donate-label">Advocate</div>
+      <a href="https://buy.stripe.com/PLACEHOLDER_CCLDR_DONATE_100" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:12px;font-size:13px;padding:10px">Donate $100 →</a>
+    </div>
+    <div class="donate-card"><div class="donate-amount">$250</div><div class="donate-label">Champion</div>
+      <a href="https://buy.stripe.com/PLACEHOLDER_CCLDR_DONATE_250" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:12px;font-size:13px;padding:10px">Donate $250 →</a>
+    </div>
+    <div class="donate-card"><div class="donate-amount">$500</div><div class="donate-label">Warrior</div>
+      <a href="https://buy.stripe.com/PLACEHOLDER_CCLDR_DONATE_500" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:12px;font-size:13px;padding:10px">Donate $500 →</a>
+    </div>
+    <div class="donate-card">
+      <div class="donate-amount" style="font-size:1.3rem">Custom</div><div class="donate-label">Any Amount</div>
+      <input type="number" class="custom-input" id="stripe-custom-amount" placeholder="$ Amount" min="1" style="width:100%;margin-top:10px;text-align:center">
+      <a href="#" id="stripe-custom-btn" onclick="stripeCustomDonate();return false;" class="btn btn-gold" style="margin-top:10px;font-size:13px;padding:10px">Donate →</a>
+    </div>
+  </div>
+
+  <h2 style="margin-top:40px">Other Ways to Give</h2>
+  <p class="section-sub">Prefer PayPal or Bitcoin? Choose an amount or enter your own.</p>
   <div class="donate-grid">
     <div class="donate-card" onclick="selectAmount(25,this)"><div class="donate-amount">$25</div><div class="donate-label">Supporter</div></div>
     <div class="donate-card" onclick="selectAmount(49,this)"><div class="donate-amount">$49</div><div class="donate-label">Contributor</div></div>
@@ -136,6 +162,12 @@ function donatePay() {
 }
 function copyBTC(el) {
   navigator.clipboard.writeText(el.textContent.trim()).then(function(){ el.style.color='var(--green)'; setTimeout(function(){ el.style.color=''; },1500); });
+}
+function stripeCustomDonate() {
+  var amt = parseFloat(document.getElementById('stripe-custom-amount').value);
+  if (!amt || amt < 1) { alert('Please enter a custom donation amount ($1 minimum).'); return; }
+  // TODO(Derek/Manus): replace with real Stripe Payment Link, created in Stripe Dashboard
+  window.open('https://buy.stripe.com/PLACEHOLDER_CCLDR_DONATE_CUSTOM?amount=' + encodeURIComponent(amt), '_blank');
 }
 </script>
 </body>

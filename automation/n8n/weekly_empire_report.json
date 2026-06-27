@@ -1,0 +1,367 @@
+{
+  "name": "Weekly Empire Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0,
+              "triggerAtDayOfWeek": 1
+            }
+          ]
+        },
+        "timezone": "America/New_York"
+      },
+      "name": "Monday 08:00 EST Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "revenue_events",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "created_at",
+              "condition": "gte",
+              "keyValue": "={{ $now.minus({days:7}).toISO() }}"
+            }
+          ]
+        }
+      },
+      "name": "Get Revenue Events (7d)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        420,
+        200
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "created_at",
+              "condition": "gte",
+              "keyValue": "={{ $now.minus({days:7}).toISO() }}"
+            }
+          ]
+        }
+      },
+      "name": "Get Leads (7d)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        420,
+        340
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "tableId": "users",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "created_at",
+              "condition": "gte",
+              "keyValue": "={{ $now.minus({days:7}).toISO() }}"
+            }
+          ]
+        }
+      },
+      "name": "Get New Users (7d)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        420,
+        480
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "tableId": "content_posts",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "created_at",
+              "condition": "gte",
+              "keyValue": "={{ $now.minus({days:7}).toISO() }}"
+            }
+          ]
+        }
+      },
+      "name": "Get Content Posts (7d)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        420,
+        620
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "created_at",
+              "condition": "gte",
+              "keyValue": "={{ $now.minus({days:7}).toISO() }}"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "error"
+            }
+          ]
+        }
+      },
+      "name": "Get Agent Errors (7d)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        420,
+        760
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "jsCode": "const revenue = $('Get Revenue Events (7d)').all().map(i => i.json);\nconst leads = $('Get Leads (7d)').all().map(i => i.json);\nconst users = $('Get New Users (7d)').all().map(i => i.json);\nconst posts = $('Get Content Posts (7d)').all().map(i => i.json);\nconst errors = $('Get Agent Errors (7d)').all().map(i => i.json);\nconst totalRevenue = revenue.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);\nreturn [{\n  json: {\n    total_revenue: totalRevenue,\n    revenue_count: revenue.length,\n    new_leads: leads.length,\n    new_users: users.length,\n    content_posts_published: posts.length,\n    agent_errors: errors.length,\n    error_details: errors.map(e => `${e.agent_name}: ${e.details}`).join('; '),\n    week_ending: new Date().toISOString().slice(0,10)\n  }\n}];"
+      },
+      "name": "Aggregate Weekly Stats (Code)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "report_html",
+              "type": "string",
+              "value": "=<h1>Francisco Holdings Empire \u2014 Weekly Report</h1><p>Week ending {{ $json.week_ending }}</p><ul><li>Total Revenue: ${{ $json.total_revenue }} ({{ $json.revenue_count }} events)</li><li>New Leads: {{ $json.new_leads }}</li><li>New Users: {{ $json.new_users }}</li><li>Content Posts Published: {{ $json.content_posts_published }}</li><li>Agent Errors: {{ $json.agent_errors }}</li></ul><p>Error details: {{ $json.error_details || 'None' }}</p>"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Build HTML Report",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "reports@franciscoholdings.com",
+        "toEmail": "franciscoderek7@gmail.com",
+        "subject": "=Francisco Holdings Empire \u2014 Weekly Report ({{ $json.week_ending }})",
+        "contentType": "html",
+        "html": "={{ $json.report_html }}"
+      },
+      "name": "Send Weekly Report (SendGrid)",
+      "type": "n8n-nodes-base.sendGrid",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        400
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "weekly_empire_report"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "send_weekly_report"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "=Report sent for week ending {{ $('Build HTML Report').item.json.report_html ? $json.week_ending : '' }}"
+            }
+          ]
+        }
+      },
+      "name": "Log Report Sent (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        400
+      ],
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "Monday 08:00 EST Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Revenue Events (7d)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Leads (7d)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get New Users (7d)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Content Posts (7d)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Agent Errors (7d)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Revenue Events (7d)": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Weekly Stats (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Leads (7d)": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Weekly Stats (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get New Users (7d)": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Weekly Stats (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Content Posts (7d)": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Weekly Stats (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Agent Errors (7d)": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Weekly Stats (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Weekly Stats (Code)": {
+      "main": [
+        [
+          {
+            "node": "Build HTML Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build HTML Report": {
+      "main": [
+        [
+          {
+            "node": "Send Weekly Report (SendGrid)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Weekly Report (SendGrid)": {
+      "main": [
+        [
+          {
+            "node": "Log Report Sent (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "REPLACE-WITH-ERROR-ALERT-WORKFLOW-ID"
+  }
+}

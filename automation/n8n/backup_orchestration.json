@@ -1,0 +1,242 @@
+{
+  "name": "Backup Orchestration",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 2,
+              "triggerAtMinute": 0
+            }
+          ]
+        },
+        "timezone": "America/New_York"
+      },
+      "name": "Nightly 02:00 EST Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const tables = ['leads','users','payments','cases','email_logs','escalations','content_posts','agent_logs','revenue_events'];\nconst baseUrl = $env.SUPABASE_URL;\nconst serviceKey = $env.SUPABASE_SERVICE_ROLE_KEY;\nconst exportData = {};\nfor (const table of tables) {\n  const res = await this.helpers.httpRequest({\n    method: 'GET',\n    url: `${baseUrl}/rest/v1/${table}?select=*`,\n    headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },\n    json: true\n  });\n  exportData[table] = res;\n}\nreturn [{ json: { tables_exported: tables, export_data: exportData, exported_at: new Date().toISOString() } }];"
+      },
+      "name": "Export All Supabase Tables (Code)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        420,
+        400
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.N8N_HOST }}/rest/workflows",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "Export n8n Workflows (HTTP Request)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        400
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "jsCode": "const tableExport = $('Export All Supabase Tables (Code)').first().json;\nconst workflows = $json;\nconst bundle = {\n  generated_at: tableExport.exported_at,\n  supabase_tables: tableExport.export_data,\n  n8n_workflows: workflows\n};\nreturn [{ json: {}, binary: { backup_json: { data: Buffer.from(JSON.stringify(bundle)).toString('base64'), mimeType: 'application/json', fileName: `backup-${tableExport.exported_at.slice(0,10)}.json` } } }];"
+      },
+      "name": "Build Backup Bundle (Code)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        900,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "compress",
+        "binaryPropertyName": "backup_json",
+        "outputFormat": "zip",
+        "fileName": "=backup-{{ $now.toISO().slice(0,10) }}.zip"
+      },
+      "name": "Compress to ZIP",
+      "type": "n8n-nodes-base.compression",
+      "typeVersion": 1.1,
+      "position": [
+        1140,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SUPABASE_URL }}/storage/v1/object/empire-backups/backup-{{ $now.toISO().slice(0,10) }}.zip",
+        "sendBinaryData": true,
+        "binaryPropertyName": "data",
+        "options": {}
+      },
+      "name": "Upload to Supabase Storage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1380,
+        400
+      ],
+      "credentials": {},
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "sendTo": "franciscoderek7@gmail.com",
+        "subject": "=Empire Backup Complete \u2014 {{ $now.toISO().slice(0,10) }}",
+        "emailType": "html",
+        "message": "=<p>Nightly backup completed successfully.</p><p>Tables exported: leads, users, payments, cases, email_logs, escalations, content_posts, agent_logs, revenue_events.</p><p>n8n workflows exported and bundled.</p><p>File: backup-{{ $now.toISO().slice(0,10) }}.zip uploaded to Supabase storage bucket empire-backups.</p>",
+        "options": {}
+      },
+      "name": "Send Backup Confirmation",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1620,
+        400
+      ],
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "tableId": "agent_logs",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "agent_name",
+              "fieldValue": "backup_orchestration"
+            },
+            {
+              "fieldId": "action",
+              "fieldValue": "nightly_backup"
+            },
+            {
+              "fieldId": "status",
+              "fieldValue": "success"
+            },
+            {
+              "fieldId": "details",
+              "fieldValue": "=Backup uploaded for {{ $now.toISO().slice(0,10) }}"
+            }
+          ]
+        }
+      },
+      "name": "Log Backup (agent_logs)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1860,
+        400
+      ],
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "Nightly 02:00 EST Trigger": {
+      "main": [
+        [
+          {
+            "node": "Export All Supabase Tables (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export All Supabase Tables (Code)": {
+      "main": [
+        [
+          {
+            "node": "Export n8n Workflows (HTTP Request)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export n8n Workflows (HTTP Request)": {
+      "main": [
+        [
+          {
+            "node": "Build Backup Bundle (Code)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Backup Bundle (Code)": {
+      "main": [
+        [
+          {
+            "node": "Compress to ZIP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compress to ZIP": {
+      "main": [
+        [
+          {
+            "node": "Upload to Supabase Storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Supabase Storage": {
+      "main": [
+        [
+          {
+            "node": "Send Backup Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Backup Confirmation": {
+      "main": [
+        [
+          {
+            "node": "Log Backup (agent_logs)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "REPLACE-WITH-ERROR-ALERT-WORKFLOW-ID"
+  }
+}

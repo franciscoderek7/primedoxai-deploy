@@ -138,10 +138,14 @@ select option { background: var(--bugatti-dark); color: var(--text); }
 .btn-gold:hover { background: #c9a030; box-shadow: 0 0 30px var(--gold-glow); }
 .btn-red { background: var(--red); color: white; box-shadow: 0 0 20px var(--red-glow); }
 .btn-red:hover { background: #c41830; box-shadow: 0 0 30px var(--red-glow); }
-.btn-voice { background: rgba(0,164,224,0.15); color: var(--bugatti-blue); border: 1px solid var(--bugatti-blue); }
-.btn-voice:hover { background: rgba(0,164,224,0.25); }
+.btn-voice { background: rgba(46,204,113,0.15); color: #2ECC71; border: 2px solid #FFD700; animation: pulseVoiceIdle 2s infinite; }
+.btn-voice:hover { background: rgba(46,204,113,0.25); }
 .btn-voice.recording { background: var(--red); color: white; border-color: var(--red); animation: pulseRecord 1.2s infinite; }
+.btn-voice.paused { background: rgba(255,215,0,0.15); color: #FFD700; border-color: #FFD700; animation: pulseVoicePaused 1.5s infinite; }
+.btn-voice.voice-error { background: rgba(227,25,55,0.1); color: var(--red); border-color: var(--red); animation: none; }
 @keyframes pulseRecord { 0%,100% { box-shadow: 0 0 10px var(--red-glow); } 50% { box-shadow: 0 0 28px var(--red-glow); } }
+@keyframes pulseVoiceIdle { 0%,100% { box-shadow: 0 0 6px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 16px rgba(255,215,0,0.6); } }
+@keyframes pulseVoicePaused { 0%,100% { box-shadow: 0 0 6px rgba(255,215,0,0.2); } 50% { box-shadow: 0 0 14px rgba(255,215,0,0.5); } }
 .voice-confirm-panel {
   background: rgba(0,0,0,0.5); border: 1px solid var(--bugatti-blue);
   border-radius: 12px; padding: 18px; margin-top: 16px;
@@ -162,12 +166,21 @@ select option { background: var(--bugatti-dark); color: var(--text); }
   font-family: 'Courier New', monospace; font-size: 0.9rem;
   line-height: 1.6; color: var(--text); min-height: 300px; overflow-x: auto;
 }
+.print-header, .print-footer { display: none; }
+#preview-display.print-style { background: white; border-radius: 12px; padding: 24px; }
+#preview-display.print-style #preview-output { background: white; color: black; font-family: 'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; border: none; }
+#preview-display.print-style .print-header, #preview-display.print-style .print-footer { display: block; font-family: 'Times New Roman', Times, serif; color: #333; }
+#preview-display.print-style .print-header { font-size: 10pt; text-align: center; border-bottom: 1px solid #999; padding-bottom: 6px; margin-bottom: 16px; }
+#preview-display.print-style .print-footer { font-size: 9pt; text-align: center; border-top: 1px solid #999; padding-top: 6px; margin-top: 16px; }
 @media print {
+  @page { margin: 1in; }
   body { background: white; color: black; }
-  .header, .nav-tabs, .stats-grid, .btn, .upl-disclaimer, .card:not(#tab-preview) { display: none !important; }
+  .header, .nav-tabs, .stats-grid, .btn, .upl-disclaimer, .accessibility-bar, .preview-toolbar, .card:not(#tab-preview), #voice-confirm-panel, #reference-panel { display: none !important; }
   #tab-preview { display: block !important; }
   #tab-preview h2 { display: none; }
-  #preview-output { background: white; border: none; color: black; font-family: 'Times New Roman', serif; white-space: pre-wrap; }
+  #preview-output { background: white; border: none; color: black; font-family: 'Times New Roman', Times, serif; font-size: 12pt; line-height: 1.5; white-space: pre-wrap; }
+  .print-header { display: block; font-family: 'Times New Roman', Times, serif; font-size: 10pt; text-align: center; color: #333; border-bottom: 1px solid #999; padding-bottom: 6px; margin-bottom: 16px; }
+  .print-footer { display: block; font-family: 'Times New Roman', Times, serif; font-size: 9pt; text-align: center; color: #333; border-top: 1px solid #999; padding-top: 6px; margin-top: 16px; }
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .card { animation: fadeIn 0.3s ease-out; }
@@ -176,13 +189,94 @@ select option { background: var(--bugatti-dark); color: var(--text); }
   .nav-tab { padding: 10px 14px; font-size: 0.85rem; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ACCESSIBILITY BAR */
+.accessibility-bar {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+  padding: 8px 15px; max-width: 1200px; margin: 0 auto;
+}
+.accessibility-bar .btn { margin: 0; padding: 8px 14px; font-size: 0.85rem; }
+.accessibility-bar .btn.active { outline: 2px solid var(--gold); }
+
+/* LARGE BUTTONS MODE (motor accessibility) */
+body.large-buttons .btn { padding: 18px 30px; font-size: 1.15rem; margin-right: 12px; margin-top: 12px; }
+body.large-buttons .nav-tab { padding: 18px 26px; font-size: 1.05rem; }
+body.large-buttons input, body.large-buttons textarea, body.large-buttons select { padding: 16px 16px; font-size: 1.05rem; }
+
+/* LIGHT THEME */
+body[data-theme="light"] {
+  --text: #1a1a1a;
+  --chrome: #555555;
+  background: linear-gradient(135deg, #f5f5f7, #e8e8ea, #f0f0f2);
+}
+body[data-theme="light"] .stat-card,
+body[data-theme="light"] .card,
+body[data-theme="light"] .voice-confirm-panel,
+body[data-theme="light"] .reference-panel { background: rgba(255,255,255,0.9); border-color: rgba(0,0,0,0.08); }
+body[data-theme="light"] .nav-tab { background: rgba(0,0,0,0.05); }
+body[data-theme="light"] .nav-tab:hover { background: rgba(0,164,224,0.15); }
+body[data-theme="light"] .task-item { background: rgba(0,0,0,0.04); }
+body[data-theme="light"] .form-group .hint { color: rgba(0,0,0,0.45); }
+body[data-theme="light"] input, body[data-theme="light"] textarea, body[data-theme="light"] select {
+  background: rgba(255,255,255,0.85); color: #1a1a1a; border-color: rgba(0,0,0,0.15);
+}
+body[data-theme="light"] input::placeholder, body[data-theme="light"] textarea::placeholder { color: rgba(0,0,0,0.35); }
+body[data-theme="light"] select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23555555'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+}
+body[data-theme="light"] #preview-output { border-color: rgba(0,0,0,0.1); }
+body[data-theme="light"] .btn-secondary { background: rgba(0,0,0,0.06); color: #1a1a1a; border-color: rgba(0,0,0,0.1); }
+body[data-theme="light"] .btn-secondary:hover { background: rgba(0,0,0,0.1); }
+
+/* HIGH CONTRAST THEME */
+body[data-theme="high-contrast"] {
+  --text: #ffffff;
+  --chrome: #ffffff;
+  --gold: #ffff00;
+  --bugatti-blue: #00d9ff;
+  background: #000000;
+}
+body[data-theme="high-contrast"] .stat-card,
+body[data-theme="high-contrast"] .card,
+body[data-theme="high-contrast"] .voice-confirm-panel,
+body[data-theme="high-contrast"] .reference-panel,
+body[data-theme="high-contrast"] .nav-tab,
+body[data-theme="high-contrast"] .task-item { background: #000000; border: 2px solid #ffffff; }
+body[data-theme="high-contrast"] input,
+body[data-theme="high-contrast"] textarea,
+body[data-theme="high-contrast"] select { background: #000000; color: #ffffff; border: 2px solid #ffffff; }
+body[data-theme="high-contrast"] input::placeholder, body[data-theme="high-contrast"] textarea::placeholder { color: #cccccc; }
+body[data-theme="high-contrast"] .btn-secondary { background: #000000; color: #ffffff; border: 2px solid #ffffff; }
+body[data-theme="high-contrast"] .btn-primary { background: #ffff00; color: #000000; }
+body[data-theme="high-contrast"] #preview-output { border: 2px solid #ffffff; }
 </style>
 </head>
 <body>
 
+<div id="pin-lock-overlay" class="hidden" style="position:fixed;inset:0;background:var(--bugatti-black,#0a0a0a);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+  <h2 style="color:var(--gold);margin-bottom:14px;">🔒 PrimeDox AI Locked</h2>
+  <input id="pin-lock-input" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" placeholder="4-digit PIN" style="font-size:1.5rem;text-align:center;letter-spacing:10px;width:160px;padding:10px;border-radius:6px;border:1px solid var(--gold);background:#111;color:#fff;" autocomplete="off">
+  <div style="margin-top:14px;display:flex;gap:10px;">
+    <button class="btn btn-gold" onclick="attemptPinUnlock()">Unlock</button>
+    <button class="btn btn-secondary" id="biometric-unlock-btn" onclick="attemptBiometricUnlock()">👆 Use Biometric</button>
+  </div>
+  <div id="pin-lock-status" style="color:var(--red);margin-top:10px;font-size:0.85rem;"></div>
+</div>
+
 <div class="header">
   <h1>⚡ <span class="gold">PRIME</span><span class="silver">DOX</span> <span class="red">AI</span></h1>
   <div class="subtitle">The Most Dangerous Legal Document Platform in the World</div>
+</div>
+
+<div class="accessibility-bar" role="toolbar" aria-label="Accessibility controls">
+  <button class="btn btn-secondary" id="theme-btn" onclick="cycleTheme()" aria-label="Cycle color theme: dark, light, high contrast">🌓 Theme</button>
+  <button class="btn btn-secondary" onclick="adjustFontSize(-1)" aria-label="Decrease text size">A-</button>
+  <button class="btn btn-secondary" onclick="adjustFontSize(0)" aria-label="Reset text size">A</button>
+  <button class="btn btn-secondary" onclick="adjustFontSize(1)" aria-label="Increase text size">A+</button>
+  <button class="btn btn-secondary" id="large-buttons-btn" onclick="toggleLargeButtons()" aria-label="Toggle large buttons for motor accessibility">🔘 Large Buttons</button>
+  <select id="empire-connect-select" class="btn btn-secondary" style="cursor:pointer;" aria-label="Route to Empire — jump to another company floor" onchange="routeToEmpireFloor(this)">
+    <option value="">🏢 Route to Empire...</option>
+  </select>
 </div>
 
 <div class="stats-grid">
@@ -213,11 +307,26 @@ select option { background: var(--bugatti-dark); color: var(--text); }
 <div id="tab-documents" class="card hidden">
   <h2>📄 Document Generator</h2>
   <div style="margin-bottom: 16px;">
-    <button class="btn btn-voice" id="voice-btn" onclick="toggleVoiceInput()">🎙 Voice Input</button>
+    <button class="btn btn-voice" id="voice-btn" onpointerdown="startVoiceInput(event)" onpointerup="stopVoiceInput(event)" onpointerleave="stopVoiceInput(event)" onpointercancel="stopVoiceInput(event)" aria-label="Press and hold to record voice input">🎙 Hold to Speak</button>
     <span id="voice-status" style="color: var(--chrome); font-size: 0.85rem; margin-left: 10px;"></span>
-    <div class="hint" style="margin-top: 6px;">Requires Chrome, Edge, or Safari + an internet connection.</div>
+    <div class="hint" style="margin-top: 6px;">Press and hold, speak a full sentence, then release — e.g. "Generate a Notice of Motion for my June 29 hearing." Requires Chrome, Edge, or Safari + an internet connection (speech recognition is not available offline).</div>
   </div>
   <div id="voice-confirm-panel" class="voice-confirm-panel hidden"></div>
+  <div style="margin-bottom: 16px;">
+    <button class="btn btn-secondary" id="video-statement-btn" onclick="toggleVideoStatement()">📹 Record Video Statement</button>
+    <span id="video-statement-status" style="color: var(--chrome); font-size: 0.85rem; margin-left: 10px;"></span>
+    <div class="hint" style="margin-top: 6px;">Records a witness statement / incident report on video (up to 5 minutes). Requires camera + microphone permission. Saved statements are stored on this device only (IndexedDB, not localStorage — video clips exceed localStorage's storage limit).</div>
+    <video id="video-statement-preview" class="hidden" autoplay muted playsinline style="width:100%;max-width:360px;margin-top:10px;border:1px solid var(--bugatti-blue);border-radius:6px;"></video>
+    <div id="video-statement-list" style="margin-top:10px;"></div>
+  </div>
+  <div style="margin-bottom: 16px;">
+    <button class="btn btn-secondary" id="ocr-upload-btn" onclick="document.getElementById('ocr-file-input').click()">📷 Upload Document Photo</button>
+    <input type="file" id="ocr-file-input" accept="image/*" capture="environment" class="hidden" onchange="handleOcrFileSelected(event)">
+    <span id="ocr-status" style="color: var(--chrome); font-size: 0.85rem; margin-left: 10px;"></span>
+    <div class="hint" style="margin-top: 6px;">Take or upload a photo of a document (letter, notice, form). Text is read from the photo and run through the same field-detection used for voice input, so it can suggest a document type and fields for you to confirm. Requires an internet connection the first time you use this (one-time download of the on-device text-reading engine); the photo itself is never uploaded anywhere.</div>
+  </div>
+  <div id="suggestion-banner" class="reference-panel hidden"></div>
+  <div id="draft-banner" class="reference-panel hidden"></div>
   <div id="reference-panel" class="reference-panel hidden"></div>
   <div class="form-group">
     <label>Select Document Type <span class="required">*</span></label>
@@ -303,11 +412,35 @@ select option { background: var(--bugatti-dark); color: var(--text); }
     <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
     <button class="btn btn-secondary" onclick="loadProfile()">🔄 Reset to Saved</button>
   </div>
+  <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+    <h3 style="color: var(--gold); margin-bottom: 10px;">🔒 Settings → Security</h3>
+    <div id="security-settings-status" class="hint" style="margin-bottom: 10px;"></div>
+    <button class="btn btn-secondary" id="pin-lock-toggle-btn" onclick="togglePinLockSetting()">Enable PIN Lock</button>
+    <button class="btn btn-secondary hidden" id="biometric-enroll-btn" onclick="enrollBiometric()">👆 Enable Biometric Unlock</button>
+    <div class="hint" style="margin-top: 8px;">PIN Lock requires a 4-digit PIN to open the app and encrypts your saved profile (name, contact, court file info) at rest using a key derived from that PIN — nothing is sent off this device. Biometric unlock uses your device's built-in fingerprint/face authenticator as a convenience gate (it does not replace the PIN, which is still required if biometric is unavailable or fails).</div>
+  </div>
 </div>
 
 <div id="tab-preview" class="card hidden">
   <h2>👁 Document Preview</h2>
-  <pre id="preview-output">Select a document type and generate to see preview...</pre>
+  <div class="preview-toolbar">
+    <div style="margin-bottom: 16px;">
+      <button class="btn btn-secondary" onclick="printDocument()" aria-label="Print document">🖨 Print / Save as PDF</button>
+      <button class="btn btn-secondary" onclick="copyPreviewToClipboard()" aria-label="Copy document text to clipboard">📋 Copy</button>
+      <button class="btn btn-secondary" onclick="downloadAs('txt')" aria-label="Download as text file">⬇ TXT</button>
+      <button class="btn btn-secondary" onclick="downloadAs('doc')" aria-label="Download as Word-compatible file">⬇ Word</button>
+      <button class="btn btn-secondary" onclick="shareDocument()" aria-label="Share document">📤 Share</button>
+      <button class="btn btn-secondary" onclick="toggleReadAloud()" id="read-aloud-btn" aria-label="Read document aloud">🔊 Read Aloud</button>
+      <button class="btn btn-secondary" id="print-preview-toggle" onclick="togglePrintPreview()" aria-label="Toggle print-style preview">📄 Print Preview</button>
+    </div>
+    <div class="hint" style="margin-bottom: 10px;">"Print / Save as PDF" opens your browser's print dialog — choose a physical printer, or pick "Save as PDF" (available on every modern phone, tablet, and desktop browser) if you don't have one nearby. "Download Word" produces an HTML-based .doc file that opens in Word and Google Docs — not a native .docx file.</div>
+    <div id="share-panel" class="reference-panel hidden"></div>
+  </div>
+  <div id="preview-display" class="app-preview">
+    <div class="print-header">Generated by PrimeDox AI — Derek Francisco</div>
+    <pre id="preview-output">Select a document type and generate to see preview...</pre>
+    <div class="print-footer">EDUCATIONAL CONTENT ONLY — NOT LEGAL ADVICE</div>
+  </div>
 </div>
 
 <div id="tab-damages" class="card hidden">
@@ -454,14 +587,31 @@ const profileFields = [
   { key: "court_location", label: "Default Court Location", type: "text", required: false, bindToProfile: "profile.court_location" }
 ];
 
+const PROFILE_DEFAULTS = {
+  name: "", title: "",
+  company: "", address: "",
+  city: "", province: "Ontario", postal: "",
+  phone: "", email: "",
+  lsuc: "", court_file: "", court_location: ""
+};
+
+// profileCache holds the decrypted profile in memory once unlocked (or
+// immediately, if PIN Lock has never been enabled). getProfile()/saveProfile()
+// stay synchronous so none of the ~40 generate*() call sites need to change —
+// only the persistence layer underneath is encryption-aware.
+let profileCache = null;
+
 function getProfile() {
-  return JSON.parse(localStorage.getItem("primedox_profile")) || {
-    name: "", title: "",
-    company: "", address: "",
-    city: "", province: "Ontario", postal: "",
-    phone: "", email: "",
-    lsuc: "", court_file: "", court_location: ""
-  };
+  if (profileCache) return profileCache;
+  const raw = localStorage.getItem("primedox_profile");
+  if (!raw) return { ...PROFILE_DEFAULTS };
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && parsed.__enc) return { ...PROFILE_DEFAULTS }; // still locked this session
+    return { ...PROFILE_DEFAULTS, ...parsed };
+  } catch (e) {
+    return { ...PROFILE_DEFAULTS };
+  }
 }
 
 function renderProfileForm() {
@@ -488,7 +638,9 @@ function saveProfile() {
     profile[f.key] = val;
   });
   if (!valid) { alert("Please fix the highlighted errors before saving."); return; }
-  localStorage.setItem("primedox_profile", JSON.stringify(profile));
+  profileCache = profile;
+  if (pinUnlockKey) encryptAndStoreProfile(profile, pinUnlockKey);
+  else localStorage.setItem("primedox_profile", JSON.stringify(profile));
   alert("Profile saved successfully!");
 }
 
@@ -914,7 +1066,7 @@ function loadDocumentType() {
         inputHtml += '>';
       }
 
-      div.innerHTML = '<label>' + f.label + (f.required ? '<span class="required">*</span>' : '') + '</label>' + inputHtml + (f.hint ? '<div class="hint">' + f.hint + '</div>' : '') + '<div class="error" id="err-' + f.key + '">This field is required or invalid</div>';
+      div.innerHTML = '<label for="field-' + f.key + '">' + f.label + (f.required ? '<span class="required">*</span>' : '') + '</label>' + inputHtml + (f.hint ? '<div class="hint">' + f.hint + '</div>' : '') + '<div class="error" id="err-' + f.key + '" role="alert">This field is required or invalid</div>';
       form.appendChild(div);
 
       // Bind oninput
@@ -922,9 +1074,72 @@ function loadDocumentType() {
       inputEl.oninput = function(e) {
         currentData[f.key] = e.target.value;
         document.getElementById("fg-" + f.key).classList.remove("has-error");
+        scheduleAutosave();
       };
     });
   });
+
+  checkForDraft(currentDocType);
+  renderSuggestionBanner();
+}
+
+// ============================================
+// AUTOSAVE — continuous draft persistence (separate from
+// the manual "Save" button, which saves to the finished-docs list)
+// ============================================
+let autosaveTimer = null;
+
+function scheduleAutosave() {
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(autosaveNow, 800);
+}
+
+function autosaveNow() {
+  if (!currentDocType) return;
+  const draft = { docType: currentDocType, data: currentData, savedAt: new Date().toISOString() };
+  localStorage.setItem("primedox_autosave_" + currentDocType, JSON.stringify(draft));
+  const status = document.getElementById("voice-status");
+  if (status && !voiceListening) status.textContent = "Draft autosaved at " + new Date(draft.savedAt).toLocaleTimeString();
+}
+
+function checkForDraft(docType) {
+  const banner = document.getElementById("draft-banner");
+  if (!banner) return;
+  if (!docType) { banner.innerHTML = ""; banner.classList.add("hidden"); return; }
+  const raw = localStorage.getItem("primedox_autosave_" + docType);
+  if (!raw) { banner.innerHTML = ""; banner.classList.add("hidden"); return; }
+  let draft;
+  try { draft = JSON.parse(raw); } catch (e) { banner.classList.add("hidden"); return; }
+  if (!draft || !draft.data || !Object.keys(draft.data).length) { banner.classList.add("hidden"); return; }
+
+  banner.innerHTML = '<h3>💾 Unsaved Draft Found</h3>' +
+    '<div class="voice-raw">Autosaved ' + new Date(draft.savedAt).toLocaleString() + '</div>' +
+    '<button class="btn btn-primary" onclick="restoreDraft(\'' + docType + '\')">↩ Restore Draft</button> ' +
+    '<button class="btn btn-secondary" onclick="discardDraft(\'' + docType + '\')">✖ Discard</button>';
+  banner.classList.remove("hidden");
+}
+
+function restoreDraft(docType) {
+  const raw = localStorage.getItem("primedox_autosave_" + docType);
+  if (!raw) return;
+  let draft;
+  try { draft = JSON.parse(raw); } catch (e) { return; }
+  Object.keys(draft.data).forEach(key => {
+    const el = document.getElementById("field-" + key);
+    if (el) {
+      el.value = draft.data[key];
+      currentData[key] = draft.data[key];
+      const fg = document.getElementById("fg-" + key);
+      if (fg) fg.classList.remove("has-error");
+    }
+  });
+  discardDraft(docType);
+}
+
+function discardDraft(docType) {
+  localStorage.removeItem("primedox_autosave_" + docType);
+  const banner = document.getElementById("draft-banner");
+  if (banner) { banner.innerHTML = ""; banner.classList.add("hidden"); }
 }
 
 // ============================================
@@ -937,6 +1152,12 @@ function loadDocumentType() {
 let voiceRecognition = null;
 let voiceListening = false;
 let pendingVoiceResult = null;
+let userHolding = false;
+let voiceSessionStartTime = 0;
+let lastResultTime = 0;
+let voiceSilenceTimer = null;
+const VOICE_MAX_SESSION_MS = 120000;
+const VOICE_SILENCE_THRESHOLD_MS = 3000;
 
 const VOICE_FIELD_CANDIDATES = {
   defendant: ["defendant_name", "demand_recipient", "third_party_name", "cd_recipient", "fn_recipient", "nd_party", "sd_debtor", "crossclaim_defendant", "lt_landlord", "hrto_respondent", "eviction_tenant"],
@@ -953,40 +1174,361 @@ function getVoiceRecognition() {
   const rec = new SpeechRecognition();
   rec.lang = "en-US";
   rec.interimResults = false;
+  rec.continuous = true;
   rec.maxAlternatives = 1;
   return rec;
 }
 
-function toggleVoiceInput() {
-  if (voiceListening) { voiceRecognition && voiceRecognition.stop(); return; }
+let voiceTranscriptBuffer = "";
+
+function startVoiceInput(e) {
+  if (e) e.preventDefault();
+  userHolding = true;
+  if (voiceListening) return;
 
   voiceRecognition = getVoiceRecognition();
   if (!voiceRecognition) {
-    alert("Voice input is not supported in this browser. Try Chrome, Edge, or Safari, and make sure you're online (speech recognition is not available offline).");
+    const status = document.getElementById("voice-status");
+    const btn = document.getElementById("voice-btn");
+    btn.classList.add("voice-error");
+    status.textContent = "Browser not supported. Try Chrome, Edge, or Safari, and make sure you're online (speech recognition is not available offline).";
+    userHolding = false;
     return;
   }
 
   const btn = document.getElementById("voice-btn");
   const status = document.getElementById("voice-status");
+  btn.classList.remove("voice-error", "paused");
   voiceListening = true;
-  btn.textContent = "🔴 Listening...";
+  voiceTranscriptBuffer = "";
+  voiceSessionStartTime = Date.now();
+  lastResultTime = Date.now();
+  btn.textContent = "🔴 Listening... (release to stop)";
   btn.classList.add("recording");
-  status.textContent = "Speak now — e.g. \"Statement of Claim against Bill Denby for property damage at 3900 Highway 35, damages of 3.3 million\"";
+  status.textContent = "Speak now — e.g. \"Generate a Notice of Motion for my June 29 hearing.\" Release the button when done.";
+  startVoiceSilenceWatcher();
+  attachVoiceHandlers(voiceRecognition);
+  voiceRecognition.start();
+}
 
-  voiceRecognition.onresult = function(e) {
-    const transcript = e.results[0][0].transcript;
-    handleVoiceTranscript(transcript);
+function attachVoiceHandlers(rec) {
+  const btn = document.getElementById("voice-btn");
+  const status = document.getElementById("voice-status");
+
+  rec.onresult = function(e) {
+    let finalText = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finalText += e.results[i][0].transcript + " ";
+    }
+    lastResultTime = Date.now();
+    if (btn.classList.contains("paused")) {
+      btn.classList.remove("paused");
+      btn.classList.add("recording");
+    }
+    if (finalText) {
+      voiceTranscriptBuffer += finalText;
+      status.textContent = "Heard so far: \"" + voiceTranscriptBuffer.trim() + "\"";
+    }
   };
-  voiceRecognition.onerror = function(e) {
-    status.textContent = "Voice input error: " + e.error + ". Please try again or type manually.";
+
+  rec.onerror = function(e) {
+    if (e.error === "not-allowed" || e.error === "audio-capture") {
+      status.textContent = "Microphone blocked. Check your browser/site permissions and try again.";
+      btn.classList.add("voice-error");
+    } else if (e.error === "no-speech") {
+      status.textContent = "No speech detected. Press and hold the mic, then speak.";
+    } else {
+      status.textContent = "Voice input error: " + e.error + ". Please try again or type manually.";
+    }
   };
-  voiceRecognition.onend = function() {
-    voiceListening = false;
-    btn.textContent = "🎙 Voice Input";
+
+  rec.onend = function() {
+    const elapsed = Date.now() - voiceSessionStartTime;
+    if (userHolding && elapsed < VOICE_MAX_SESSION_MS) {
+      // Engine timed out on its own (e.g. ~60s internal cutoff) while the user is
+      // still holding the button — restart seamlessly rather than ending the session.
+      voiceRecognition = getVoiceRecognition();
+      attachVoiceHandlers(voiceRecognition);
+      voiceRecognition.start();
+      return;
+    }
+    finishVoiceSession();
+  };
+}
+
+function startVoiceSilenceWatcher() {
+  clearInterval(voiceSilenceTimer);
+  voiceSilenceTimer = setInterval(function() {
+    if (!voiceListening) return;
+    const btn = document.getElementById("voice-btn");
+    const status = document.getElementById("voice-status");
+    if (Date.now() - lastResultTime >= VOICE_SILENCE_THRESHOLD_MS) {
+      if (!btn.classList.contains("paused")) {
+        btn.classList.remove("recording");
+        btn.classList.add("paused");
+        status.textContent = "⏸ Paused — listening for speech...";
+      }
+    }
+    if (Date.now() - voiceSessionStartTime >= VOICE_MAX_SESSION_MS) {
+      userHolding = false;
+      if (voiceRecognition) voiceRecognition.stop();
+    }
+  }, 500);
+}
+
+function finishVoiceSession() {
+  clearInterval(voiceSilenceTimer);
+  voiceListening = false;
+  const btn = document.getElementById("voice-btn");
+  const status = document.getElementById("voice-status");
+  btn.textContent = "🎙 Hold to Speak";
+  btn.classList.remove("recording", "paused");
+  const finalTranscript = voiceTranscriptBuffer.trim();
+  voiceTranscriptBuffer = "";
+  if (finalTranscript) handleVoiceTranscript(finalTranscript);
+  else if (!btn.classList.contains("voice-error")) status.textContent = "No speech detected. Press and hold the mic, then speak.";
+}
+
+function stopVoiceInput(e) {
+  if (e) e.preventDefault();
+  userHolding = false;
+  if (voiceListening && voiceRecognition) voiceRecognition.stop();
+}
+
+// ============================================
+// VIDEO STATEMENT — witness statement / incident report recording
+// Stored in IndexedDB (not localStorage): a 5-minute video clip is tens of MB,
+// far past localStorage's ~5-10MB per-origin quota, which would throw
+// QuotaExceededError on save. IndexedDB has no such practical ceiling.
+// ============================================
+let videoStream = null;
+let videoRecorder = null;
+let videoChunks = [];
+let videoMaxTimer = null;
+const VIDEO_MAX_MS = 5 * 60 * 1000;
+const VIDEO_DB_NAME = "primedox_video_statements";
+const VIDEO_STORE_NAME = "statements";
+
+function openVideoDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(VIDEO_DB_NAME, 1);
+    req.onupgradeneeded = function(e) {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(VIDEO_STORE_NAME)) {
+        db.createObjectStore(VIDEO_STORE_NAME, { keyPath: "id" });
+      }
+    };
+    req.onsuccess = function(e) { resolve(e.target.result); };
+    req.onerror = function(e) { reject(e.target.error); };
+  });
+}
+
+function toggleVideoStatement() {
+  if (videoRecorder && videoRecorder.state === "recording") stopVideoStatement();
+  else startVideoStatement();
+}
+
+async function startVideoStatement() {
+  const btn = document.getElementById("video-statement-btn");
+  const status = document.getElementById("video-statement-status");
+  const preview = document.getElementById("video-statement-preview");
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+    status.textContent = "Browser not supported for video recording. Try Chrome, Edge, or Safari.";
+    return;
+  }
+
+  try {
+    videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  } catch (err) {
+    if (err.name === "NotAllowedError" || err.name === "SecurityError") {
+      status.textContent = "Microphone/camera blocked. Check your browser/site permissions and try again.";
+    } else if (err.name === "NotFoundError") {
+      status.textContent = "No camera or microphone found on this device.";
+    } else {
+      status.textContent = "Could not start video recording: " + err.message;
+    }
+    return;
+  }
+
+  preview.srcObject = videoStream;
+  preview.classList.remove("hidden");
+  videoChunks = [];
+
+  const mimeType = MediaRecorder.isTypeSupported("video/webm") ? "video/webm" : "";
+  videoRecorder = mimeType ? new MediaRecorder(videoStream, { mimeType }) : new MediaRecorder(videoStream);
+
+  videoRecorder.ondataavailable = function(e) {
+    if (e.data && e.data.size > 0) videoChunks.push(e.data);
+  };
+  videoRecorder.onstop = async function() {
+    clearTimeout(videoMaxTimer);
+    preview.classList.add("hidden");
+    preview.srcObject = null;
+    videoStream.getTracks().forEach(t => t.stop());
+    videoStream = null;
+    const blob = new Blob(videoChunks, { type: videoRecorder.mimeType || "video/webm" });
+    videoChunks = [];
+    if (blob.size > 0) await saveVideoStatement(blob);
+    btn.textContent = "📹 Record Video Statement";
     btn.classList.remove("recording");
   };
 
-  voiceRecognition.start();
+  videoRecorder.start();
+  btn.textContent = "⏹ Stop Recording";
+  btn.classList.add("recording");
+  status.textContent = "Recording... (max 5 minutes)";
+  videoMaxTimer = setTimeout(stopVideoStatement, VIDEO_MAX_MS);
+}
+
+function stopVideoStatement() {
+  clearTimeout(videoMaxTimer);
+  if (videoRecorder && videoRecorder.state === "recording") videoRecorder.stop();
+}
+
+async function saveVideoStatement(blob) {
+  const status = document.getElementById("video-statement-status");
+  const record = {
+    id: "vs_" + Date.now(),
+    docType: currentDocType || "general",
+    createdAt: new Date().toISOString(),
+    mimeType: blob.type,
+    sizeBytes: blob.size,
+    blob: blob
+  };
+  try {
+    const db = await openVideoDB();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(VIDEO_STORE_NAME, "readwrite");
+      tx.objectStore(VIDEO_STORE_NAME).put(record);
+      tx.oncomplete = resolve;
+      tx.onerror = function(e) { reject(e.target.error); };
+    });
+    status.textContent = "Video statement saved (" + (blob.size / 1024 / 1024).toFixed(1) + " MB).";
+    loadVideoStatements();
+  } catch (err) {
+    status.textContent = "Could not save video statement: " + err.message;
+  }
+}
+
+async function loadVideoStatements() {
+  const list = document.getElementById("video-statement-list");
+  if (!list) return;
+  try {
+    const db = await openVideoDB();
+    const records = await new Promise((resolve, reject) => {
+      const tx = db.transaction(VIDEO_STORE_NAME, "readonly");
+      const req = tx.objectStore(VIDEO_STORE_NAME).getAll();
+      req.onsuccess = function() { resolve(req.result || []); };
+      req.onerror = function(e) { reject(e.target.error); };
+    });
+    if (!records.length) { list.innerHTML = ""; return; }
+    records.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    list.innerHTML = records.map(function(r) {
+      const url = URL.createObjectURL(r.blob);
+      return '<div style="border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px;margin-bottom:8px;">' +
+        '<div style="font-size:0.8rem;color:var(--chrome);margin-bottom:4px;">' + escapeHtml(r.docType) + " — " + new Date(r.createdAt).toLocaleString() + " (" + (r.sizeBytes / 1024 / 1024).toFixed(1) + " MB)</div>" +
+        '<video controls style="width:100%;max-width:360px;border-radius:4px;" src="' + url + '"></video>' +
+        '<div style="margin-top:6px;"><button class="btn btn-secondary" style="font-size:0.75rem;padding:4px 10px;" onclick="deleteVideoStatement(\'' + r.id + '\')">🗑 Delete</button></div>' +
+        '</div>';
+    }).join("");
+  } catch (err) {
+    list.innerHTML = "";
+  }
+}
+
+async function deleteVideoStatement(id) {
+  if (!confirm("Delete this video statement? This cannot be undone.")) return;
+  const db = await openVideoDB();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction(VIDEO_STORE_NAME, "readwrite");
+    tx.objectStore(VIDEO_STORE_NAME).delete(id);
+    tx.oncomplete = resolve;
+    tx.onerror = function(e) { reject(e.target.error); };
+  });
+  loadVideoStatements();
+}
+
+// ============================================
+// OCR UPLOAD — reuses the same field-detection functions as voice input
+// (detectDocTypeFromSpeech / parseVoiceAmount / parseVoiceDefendant /
+// parseVoiceAddress operate on plain text regardless of where it came from),
+// so "AI suggests form fields" is satisfied honestly via the app's existing
+// heuristic engine rather than a fabricated LLM call. Tesseract.js is loaded
+// from a CDN on first use only — this app has no server, so OCR cannot run
+// fully offline; that limitation is disclosed in the UI hint above the button.
+// ============================================
+let tesseractLoadPromise = null;
+function loadTesseract() {
+  if (window.Tesseract) return Promise.resolve();
+  if (tesseractLoadPromise) return tesseractLoadPromise;
+  tesseractLoadPromise = new Promise(function(resolve, reject) {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+    script.onload = function() { resolve(); };
+    script.onerror = function() { tesseractLoadPromise = null; reject(new Error("cdn-unreachable")); };
+    document.head.appendChild(script);
+  });
+  return tesseractLoadPromise;
+}
+
+function handleOcrFileSelected(e) {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  runOcrOnFile(file);
+}
+
+async function runOcrOnFile(file) {
+  const status = document.getElementById("ocr-status");
+  const btn = document.getElementById("ocr-upload-btn");
+  btn.disabled = true;
+  status.textContent = "Loading text-reading engine...";
+  try {
+    await loadTesseract();
+  } catch (err) {
+    status.textContent = "Could not load the OCR engine — this requires an internet connection the first time you use it (it's cached after that). Please connect and try again.";
+    btn.disabled = false;
+    return;
+  }
+  status.textContent = "Reading text from photo... this can take a few seconds.";
+  try {
+    const result = await Tesseract.recognize(file, "eng");
+    const text = ((result && result.data && result.data.text) || "").trim();
+    btn.disabled = false;
+    if (!text) {
+      status.textContent = "Could not read any text from that photo. Try a clearer, well-lit photo.";
+      return;
+    }
+    handleOcrText(text);
+  } catch (err) {
+    btn.disabled = false;
+    status.textContent = "OCR failed: " + err.message + ". Please try again with a clearer photo.";
+  }
+}
+
+function handleOcrText(text) {
+  const status = document.getElementById("ocr-status");
+  const detectedDocType = detectDocTypeFromSpeech(text);
+  const targetDocType = detectedDocType || currentDocType;
+
+  if (!targetDocType) {
+    status.textContent = "Read the photo but could not detect a document type. Please select one manually, then upload the photo again.";
+    return;
+  }
+
+  const fields = {};
+  const amount = parseVoiceAmount(text);
+  const defendant = parseVoiceDefendant(text);
+  const address = parseVoiceAddress(text);
+  if (amount) fields.amount = amount;
+  if (defendant) fields.defendant = defendant;
+  if (address) fields.address = address;
+  fields.narrative = text;
+
+  pendingVoiceResult = { source: "ocr", docType: targetDocType, docTypeChanged: detectedDocType && detectedDocType !== currentDocType, fields: fields, raw: text };
+  status.textContent = "Extracted text from photo — review the suggestions below.";
+  renderVoiceConfirmPanel(pendingVoiceResult);
 }
 
 function detectDocTypeFromSpeech(text) {
@@ -1052,14 +1594,19 @@ function handleVoiceTranscript(transcript) {
   if (address) { fields.address = address; }
   fields.narrative = transcript;
 
-  pendingVoiceResult = { docType: targetDocType, docTypeChanged: detectedDocType && detectedDocType !== currentDocType, fields: fields, raw: transcript };
+  pendingVoiceResult = { source: "voice", docType: targetDocType, docTypeChanged: detectedDocType && detectedDocType !== currentDocType, fields: fields, raw: transcript };
   renderVoiceConfirmPanel(pendingVoiceResult);
+}
+
+function getConfirmStatusEl(source) {
+  return document.getElementById(source === "ocr" ? "ocr-status" : "voice-status");
 }
 
 function renderVoiceConfirmPanel(result) {
   const panel = document.getElementById("voice-confirm-panel");
   const docLabel = document.querySelector('#doc-type option[value="' + result.docType + '"]');
-  let html = "<h3>🎙 Did you say...?</h3>";
+  const isOcr = result.source === "ocr";
+  let html = isOcr ? "<h3>📷 Found in your photo...</h3>" : "<h3>🎙 Did you say...?</h3>";
   html += '<div class="voice-raw">"' + escapeHtml(result.raw) + '"</div>';
   html += '<div class="voice-field-row"><span class="voice-field-label">Document Type</span><span class="voice-field-value">' + (docLabel ? escapeHtml(docLabel.textContent) : result.docType) + '</span></div>';
   if (result.fields.defendant) html += '<div class="voice-field-row"><span class="voice-field-label">Other Party</span><span class="voice-field-value">' + escapeHtml(result.fields.defendant) + '</span></div>';
@@ -1069,15 +1616,17 @@ function renderVoiceConfirmPanel(result) {
     '<button class="btn btn-primary" onclick="applyVoiceResult()">✅ Apply to Form</button>' +
     '<button class="btn btn-secondary" onclick="discardVoiceResult()">✖ Discard</button>' +
     '</div>' +
-    '<div class="hint" style="margin-top:8px;">Voice input is best-effort — please review every field before generating or printing.</div>';
+    '<div class="hint" style="margin-top:8px;">' + (isOcr ? "Photo text-reading is best-effort — please review every field before generating or printing." : "Voice input is best-effort — please review every field before generating or printing.") + '</div>';
   panel.innerHTML = html;
   panel.classList.remove("hidden");
 }
 
 function discardVoiceResult() {
+  const source = pendingVoiceResult ? pendingVoiceResult.source : "voice";
   pendingVoiceResult = null;
   document.getElementById("voice-confirm-panel").classList.add("hidden");
-  document.getElementById("voice-status").textContent = "";
+  const statusEl = getConfirmStatusEl(source);
+  if (statusEl) statusEl.textContent = "";
 }
 
 function fillFirstPresentField(candidateKeys, value) {
@@ -1097,6 +1646,7 @@ function fillFirstPresentField(candidateKeys, value) {
 function applyVoiceResult() {
   if (!pendingVoiceResult) return;
   const result = pendingVoiceResult;
+  const isOcr = result.source === "ocr";
 
   if (result.docTypeChanged || document.getElementById("doc-type").value !== result.docType) {
     document.getElementById("doc-type").value = result.docType;
@@ -1107,13 +1657,14 @@ function applyVoiceResult() {
   if (result.fields.amount) fillFirstPresentField(VOICE_FIELD_CANDIDATES.amount, result.fields.amount);
   if (result.fields.address) fillFirstPresentField(VOICE_FIELD_CANDIDATES.address, result.fields.address);
 
-  const narrativeNote = "[From voice input — please review]: " + result.fields.narrative;
+  const narrativeNote = (isOcr ? "[From document photo — please review]: " : "[From voice input — please review]: ") + result.fields.narrative;
   let narrativeFilled = fillFirstPresentField(VOICE_FIELD_CANDIDATES.facts, narrativeNote);
   if (!narrativeFilled) narrativeFilled = fillFirstPresentField(VOICE_FIELD_CANDIDATES.claims, narrativeNote);
   if (!narrativeFilled) fillFirstPresentField(VOICE_FIELD_CANDIDATES.relief, narrativeNote);
 
   discardVoiceResult();
-  document.getElementById("voice-status").textContent = "Form filled from voice input. Please review all fields before generating.";
+  const statusEl = getConfirmStatusEl(result.source);
+  if (statusEl) statusEl.textContent = isOcr ? "Form filled from document photo. Please review all fields before generating." : "Form filled from voice input. Please review all fields before generating.";
 }
 
 // ============================================
@@ -2078,21 +2629,118 @@ function saveDocument() {
   let saved = JSON.parse(localStorage.getItem("primedox_saved_docs")) || [];
   saved.push(docData);
   localStorage.setItem("primedox_saved_docs", JSON.stringify(saved));
+  discardDraft(currentDocType);
   alert("Document saved! Total saved: " + saved.length);
 }
 
+function getPreviewText() {
+  const el = document.getElementById("preview-output");
+  return el && el.textContent !== "Select a document type and generate to see preview..." ? el.textContent : "";
+}
+
 function printDocument() {
-  if (!currentDocType) { alert("Please select a document type and generate preview first."); return; }
+  if (!getPreviewText()) { alert("Please select a document type and generate a preview first."); return; }
   window.print();
 }
 
 function clearForm() {
+  if (currentDocType) discardDraft(currentDocType);
   document.getElementById("doc-type").value = "";
   document.getElementById("dynamic-form").innerHTML = "";
   document.getElementById("validation-errors").innerHTML = "";
   document.getElementById("preview-output").textContent = "Select a document type and generate to see preview...";
+  renderReferencePanel(null);
   currentDocType = null;
   currentData = {};
+}
+
+// ============================================
+// COPY / DOWNLOAD / SHARE
+// ============================================
+function triggerDownload(filename, content, mime) {
+  const blob = new Blob([content], { type: mime + ";charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand("copy");
+    alert("Copied to clipboard.");
+  } catch (e) {
+    alert("Could not copy automatically. Please select and copy the text manually.");
+  }
+  document.body.removeChild(ta);
+}
+
+function copyPreviewToClipboard() {
+  const text = getPreviewText();
+  if (!text) { alert("Please generate a preview first."); return; }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => alert("Copied to clipboard."),
+      () => fallbackCopy(text)
+    );
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function downloadAs(format) {
+  const text = getPreviewText();
+  if (!text) { alert("Please generate a preview first."); return; }
+  const headerText = document.querySelector(".print-header").textContent;
+  const footerText = document.querySelector(".print-footer").textContent;
+  const filenameBase = "primedox_" + (currentDocType || "document") + "_" + new Date().toISOString().slice(0, 10);
+
+  if (format === "txt") {
+    triggerDownload(filenameBase + ".txt", headerText + "\n\n" + text + "\n\n" + footerText, "text/plain");
+  } else if (format === "doc") {
+    const html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
+      '<head><meta charset="utf-8"><title>PrimeDox AI Document</title></head>' +
+      '<body style="font-family:\'Times New Roman\',serif;font-size:12pt;">' +
+      '<p style="text-align:center;font-size:10pt;color:#333;border-bottom:1px solid #999;">' + escapeHtml(headerText) + '</p>' +
+      '<pre style="font-family:\'Times New Roman\',serif;font-size:12pt;white-space:pre-wrap;">' + escapeHtml(text) + '</pre>' +
+      '<p style="text-align:center;font-size:9pt;color:#333;border-top:1px solid #999;">' + escapeHtml(footerText) + '</p>' +
+      '</body></html>';
+    triggerDownload(filenameBase + ".doc", html, "application/msword");
+  }
+}
+
+function shareDocument() {
+  const text = getPreviewText();
+  if (!text) { alert("Please generate a preview first."); return; }
+  if (navigator.share) {
+    navigator.share({ title: "PrimeDox AI Document", text: text }).catch(() => {});
+    return;
+  }
+  const panel = document.getElementById("share-panel");
+  const encoded = encodeURIComponent(text);
+  panel.innerHTML = '<h3>📤 Share Via</h3>' +
+    '<a class="btn btn-secondary" href="mailto:?subject=PrimeDox%20AI%20Document&body=' + encoded + '" target="_blank" rel="noopener">📧 Email</a> ' +
+    '<a class="btn btn-secondary" href="sms:?body=' + encoded + '" target="_blank" rel="noopener">💬 Text / SMS</a> ' +
+    '<a class="btn btn-secondary" href="https://wa.me/?text=' + encoded + '" target="_blank" rel="noopener">📱 WhatsApp</a>';
+  panel.classList.remove("hidden");
+}
+
+function togglePrintPreview() {
+  const display = document.getElementById("preview-display");
+  const btn = document.getElementById("print-preview-toggle");
+  const active = display.classList.toggle("print-style");
+  btn.textContent = active ? "📄 App View" : "📄 Print Preview";
 }
 
 // ============================================
@@ -2160,10 +2808,434 @@ function escapeHtml(text) {
 }
 
 // ============================================
+// ACCESSIBILITY: THEME / FONT SIZE / LARGE BUTTONS
+// ============================================
+const THEME_ORDER = ["dark", "light", "high-contrast"];
+const THEME_LABELS = { dark: "🌓 Theme", light: "☀ Theme", "high-contrast": "◐ Theme" };
+
+function applyTheme(theme) {
+  if (theme === "dark") { document.body.removeAttribute("data-theme"); }
+  else { document.body.setAttribute("data-theme", theme); }
+  const btn = document.getElementById("theme-btn");
+  if (btn) btn.textContent = THEME_LABELS[theme] || "🌓 Theme";
+  localStorage.setItem("primedox_theme", theme);
+}
+
+function cycleTheme() {
+  const current = localStorage.getItem("primedox_theme") || "dark";
+  const next = THEME_ORDER[(THEME_ORDER.indexOf(current) + 1) % THEME_ORDER.length];
+  applyTheme(next);
+}
+
+function adjustFontSize(direction) {
+  let pct = parseInt(localStorage.getItem("primedox_font_pct") || "100", 10);
+  if (direction === 0) pct = 100;
+  else pct = Math.min(150, Math.max(80, pct + direction * 10));
+  document.documentElement.style.fontSize = pct + "%";
+  localStorage.setItem("primedox_font_pct", String(pct));
+}
+
+function toggleLargeButtons() {
+  const on = document.body.classList.toggle("large-buttons");
+  localStorage.setItem("primedox_large_buttons", on ? "1" : "0");
+  const btn = document.getElementById("large-buttons-btn");
+  if (btn) btn.classList.toggle("active", on);
+}
+
+function applySavedAccessibilitySettings() {
+  applyTheme(localStorage.getItem("primedox_theme") || "dark");
+  const pct = parseInt(localStorage.getItem("primedox_font_pct") || "100", 10);
+  document.documentElement.style.fontSize = pct + "%";
+  if (localStorage.getItem("primedox_large_buttons") === "1") {
+    document.body.classList.add("large-buttons");
+    const btn = document.getElementById("large-buttons-btn");
+    if (btn) btn.classList.add("active");
+  }
+}
+
+// ============================================
+// TEMPLATE SUGGESTIONS (deadline-aware)
+// ============================================
+const DOC_TYPE_KEYWORDS = [
+  [/motion|hearing/i, "notice_of_motion", "Notice of Motion"],
+  [/affidavit/i, "affidavit", "Affidavit"],
+  [/defence|defense/i, "defence", "Defence"],
+  [/claim/i, "statement_of_claim", "Statement of Claim"],
+  [/reply/i, "reply", "Reply"]
+];
+
+function guessDocTypeForTask(title) {
+  for (const [re, value, label] of DOC_TYPE_KEYWORDS) {
+    if (re.test(title)) return { value: value, label: label };
+  }
+  return null;
+}
+
+function renderSuggestionBanner() {
+  const banner = document.getElementById("suggestion-banner");
+  if (!banner) return;
+  const now = new Date();
+  const soon = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  const upcoming = tasks
+    .filter(function (t) { return t.status !== "completed" && t.deadline; })
+    .map(function (t) { return Object.assign({}, t, { _d: new Date(t.deadline) }); })
+    .filter(function (t) { return t._d > now && t._d <= soon; })
+    .sort(function (a, b) { return a._d - b._d; });
+
+  if (!upcoming.length) { banner.classList.add("hidden"); banner.innerHTML = ""; return; }
+
+  const task = upcoming[0];
+  const guess = guessDocTypeForTask(task.title) || { value: "notice_of_motion", label: "Notice of Motion" };
+  const dismissKey = "primedox_suggest_dismissed_" + task.title + task.deadline;
+  if (sessionStorage.getItem(dismissKey)) { banner.classList.add("hidden"); banner.innerHTML = ""; return; }
+
+  const dateStr = task._d.toLocaleDateString("en-CA", { month: "long", day: "numeric" });
+  banner.classList.remove("hidden");
+  banner.innerHTML =
+    '<h3>💡 Suggestion</h3>' +
+    '<div style="margin-bottom:10px;">You have <strong>' + escapeHtml(task.title) + '</strong> on ' + dateStr + ' — generate a ' + guess.label + '?</div>' +
+    '<button class="btn btn-primary" onclick="applySuggestion(\'' + guess.value + '\')">Generate ' + guess.label + '</button> ' +
+    '<button class="btn btn-secondary" onclick="dismissSuggestion(\'' + dismissKey.replace(/'/g, "\\'") + '\')">Dismiss</button>';
+}
+
+function applySuggestion(docTypeValue) {
+  const sel = document.getElementById("doc-type");
+  if (sel) { sel.value = docTypeValue; loadDocumentType(); }
+}
+
+function dismissSuggestion(key) {
+  sessionStorage.setItem(key, "1");
+  renderSuggestionBanner();
+}
+
+// ============================================
+// VOICE OUTPUT (read generated document aloud)
+// ============================================
+let ttsUtterance = null;
+
+function toggleReadAloud() {
+  const btn = document.getElementById("read-aloud-btn");
+  if (!("speechSynthesis" in window)) { alert("Voice output isn't supported in this browser."); return; }
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (btn) { btn.textContent = "🔊 Read Aloud"; btn.classList.remove("active"); }
+    return;
+  }
+  const text = getPreviewText();
+  if (!text) { alert("Generate a document first."); return; }
+  ttsUtterance = new SpeechSynthesisUtterance(text);
+  ttsUtterance.rate = 0.95;
+  ttsUtterance.onend = function () {
+    if (btn) { btn.textContent = "🔊 Read Aloud"; btn.classList.remove("active"); }
+  };
+  if (btn) { btn.textContent = "⏹ Stop Reading"; btn.classList.add("active"); }
+  window.speechSynthesis.speak(ttsUtterance);
+}
+
+// ============================================
+// PIN LOCK + BIOMETRIC — app-open gate + at-rest encryption for the
+// saved profile (name/contact/court-file info — the most sensitive
+// single object this app persists). Uses the Web Crypto API (PBKDF2 ->
+// AES-GCM); the raw PIN is never stored, only a salt + an encrypted
+// verifier string used to confirm a re-entered PIN derives the same key.
+// Biometric unlock uses WebAuthn's platform authenticator purely as a
+// local convenience gate (no server to verify signatures against) — it
+// is not a substitute for the PIN's encryption role, only for re-proving
+// "this is the same device/person" quickly on return visits.
+// ============================================
+const PIN_LOCK_KEY = "primedox_pin_lock";
+const PIN_VERIFY_STRING = "PRIMEDOX_PIN_OK";
+let pinUnlockKey = null;
+
+function bytesToBase64(bytes) { return btoa(String.fromCharCode.apply(null, bytes)); }
+function base64ToBytes(b64) { return Uint8Array.from(atob(b64), c => c.charCodeAt(0)); }
+
+async function pinDeriveKey(pin, saltB64) {
+  const enc = new TextEncoder();
+  const salt = saltB64 ? base64ToBytes(saltB64) : crypto.getRandomValues(new Uint8Array(16));
+  const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(pin), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
+  return { key: key, salt: salt };
+}
+
+function getPinLockConfig() {
+  try { return JSON.parse(localStorage.getItem(PIN_LOCK_KEY)) || null; } catch (e) { return null; }
+}
+
+async function setupPinLock(pin) {
+  const derived = await pinDeriveKey(pin, null);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, derived.key, enc.encode(PIN_VERIFY_STRING));
+  localStorage.setItem(PIN_LOCK_KEY, JSON.stringify({
+    enabled: true,
+    salt: bytesToBase64(derived.salt),
+    iv: bytesToBase64(iv),
+    verifier: bytesToBase64(new Uint8Array(ciphertext)),
+    biometricCredentialId: null
+  }));
+  pinUnlockKey = derived.key;
+  await migrateProfileEncryption(derived.key);
+}
+
+async function verifyPin(pin) {
+  const config = getPinLockConfig();
+  if (!config) return null;
+  try {
+    const derived = await pinDeriveKey(pin, config.salt);
+    const plain = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: base64ToBytes(config.iv) },
+      derived.key,
+      base64ToBytes(config.verifier)
+    );
+    if (new TextDecoder().decode(plain) === PIN_VERIFY_STRING) return derived.key;
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function migrateProfileEncryption(key) {
+  const raw = localStorage.getItem("primedox_profile");
+  if (!raw) return;
+  let existing;
+  try { existing = JSON.parse(raw); } catch (e) { return; }
+  if (existing && existing.__enc) return;
+  await encryptAndStoreProfile(existing, key);
+}
+
+async function encryptAndStoreProfile(profileObj, key) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, enc.encode(JSON.stringify(profileObj)));
+  localStorage.setItem("primedox_profile", JSON.stringify({ __enc: true, iv: bytesToBase64(iv), data: bytesToBase64(new Uint8Array(ciphertext)) }));
+  profileCache = profileObj;
+}
+
+async function decryptStoredProfile(key) {
+  const raw = localStorage.getItem("primedox_profile");
+  if (!raw) return null;
+  const parsed = JSON.parse(raw);
+  if (!parsed.__enc) return parsed;
+  const plain = await crypto.subtle.decrypt(
+    { name: "AES-GCM", iv: base64ToBytes(parsed.iv) },
+    key,
+    base64ToBytes(parsed.data)
+  );
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function disablePinLock() {
+  if (!confirm("Disable PIN Lock? Your saved profile will be decrypted back to plain storage on this device.")) return;
+  if (profileCache) localStorage.setItem("primedox_profile", JSON.stringify(profileCache));
+  localStorage.removeItem(PIN_LOCK_KEY);
+  pinUnlockKey = null;
+  renderSecuritySettings();
+}
+
+async function togglePinLockSetting() {
+  const config = getPinLockConfig();
+  if (config && config.enabled) { disablePinLock(); return; }
+  const pin1 = prompt("Choose a 4-digit PIN:");
+  if (!pin1) return;
+  if (!/^\d{4}$/.test(pin1)) { alert("PIN must be exactly 4 digits."); return; }
+  const pin2 = prompt("Confirm your 4-digit PIN:");
+  if (pin1 !== pin2) { alert("PINs did not match. Try again."); return; }
+  await setupPinLock(pin1);
+  alert("PIN Lock enabled. Your profile is now encrypted at rest on this device.");
+  renderSecuritySettings();
+}
+
+function isWebAuthnSupported() {
+  return !!(window.PublicKeyCredential && navigator.credentials);
+}
+
+async function enrollBiometric() {
+  if (!isWebAuthnSupported()) { alert("Biometric unlock isn't supported on this browser/device."); return; }
+  const config = getPinLockConfig();
+  if (!config || !config.enabled) { alert("Enable PIN Lock first."); return; }
+  try {
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rp: { name: "PrimeDox AI" },
+        user: { id: crypto.getRandomValues(new Uint8Array(16)), name: "primedox-user", displayName: "PrimeDox AI User" },
+        pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+        authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
+        timeout: 60000
+      }
+    });
+    config.biometricCredentialId = bytesToBase64(new Uint8Array(credential.rawId));
+    localStorage.setItem(PIN_LOCK_KEY, JSON.stringify(config));
+    alert("Biometric unlock enabled.");
+    renderSecuritySettings();
+  } catch (err) {
+    alert("Could not enroll biometric unlock: " + err.message);
+  }
+}
+
+async function attemptBiometricUnlock() {
+  const config = getPinLockConfig();
+  const status = document.getElementById("pin-lock-status");
+  if (!config || !config.biometricCredentialId) { status.textContent = "Biometric unlock not set up. Use your PIN."; return; }
+  try {
+    await navigator.credentials.get({
+      publicKey: {
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        allowCredentials: [{ id: base64ToBytes(config.biometricCredentialId), type: "public-key" }],
+        userVerification: "required",
+        timeout: 60000
+      }
+    });
+    // Biometric success re-proves device/user presence, but the AES key is
+    // PIN-derived — fall back to asking for the PIN once to unlock content,
+    // unless a key from this session is already cached.
+    if (pinUnlockKey) { hidePinLockOverlay(); return; }
+    status.textContent = "Biometric confirmed — enter your PIN once to finish unlocking.";
+  } catch (err) {
+    status.textContent = "Biometric unlock failed or was cancelled.";
+  }
+}
+
+async function attemptPinUnlock() {
+  const input = document.getElementById("pin-lock-input");
+  const status = document.getElementById("pin-lock-status");
+  const key = await verifyPin(input.value.trim());
+  if (!key) { status.textContent = "Incorrect PIN."; input.value = ""; return; }
+  pinUnlockKey = key;
+  try {
+    const decrypted = await decryptStoredProfile(key);
+    if (decrypted) profileCache = decrypted;
+  } catch (e) { /* profile may not exist yet */ }
+  hidePinLockOverlay();
+}
+
+function hidePinLockOverlay() {
+  document.getElementById("pin-lock-overlay").classList.add("hidden");
+  document.getElementById("pin-lock-input").value = "";
+  renderProfileForm();
+}
+
+function showPinLockOverlay() {
+  const overlay = document.getElementById("pin-lock-overlay");
+  overlay.classList.remove("hidden");
+  const config = getPinLockConfig();
+  document.getElementById("biometric-unlock-btn").classList.toggle("hidden", !(config && config.biometricCredentialId && isWebAuthnSupported()));
+  document.getElementById("pin-lock-input").focus();
+}
+
+function renderSecuritySettings() {
+  const config = getPinLockConfig();
+  const toggleBtn = document.getElementById("pin-lock-toggle-btn");
+  const enrollBtn = document.getElementById("biometric-enroll-btn");
+  const status = document.getElementById("security-settings-status");
+  if (!toggleBtn) return;
+  if (config && config.enabled) {
+    toggleBtn.textContent = "Disable PIN Lock";
+    enrollBtn.classList.toggle("hidden", !isWebAuthnSupported() || !!config.biometricCredentialId);
+    status.textContent = config.biometricCredentialId ? "PIN Lock is ON. Biometric unlock is enrolled." : "PIN Lock is ON.";
+  } else {
+    toggleBtn.textContent = "Enable PIN Lock";
+    enrollBtn.classList.add("hidden");
+    status.textContent = "PIN Lock is OFF — profile is stored unencrypted on this device.";
+  }
+}
+
+function initPinLockGate() {
+  const config = getPinLockConfig();
+  if (config && config.enabled) showPinLockOverlay();
+  renderSecuritySettings();
+}
+
+// ============================================
+// EMPIRE CONNECT — jump to another company's floor on the live
+// franciscoholdingsinc.com skyscraper (francisco-holdings-site/index.html,
+// FLOORS array). Floor numbers/names here must match that array exactly —
+// update both places together if floors are renumbered.
+// ============================================
+const EMPIRE_FLOORS = [
+  { n: 1, name: "OmniGuard" },
+  { n: 2, name: "BENO-X / Weedlaw" },
+  { n: 3, name: "PrimeDox AI" },
+  { n: 4, name: "CCLDR" },
+  { n: 5, name: "CleanSwarm AI" },
+  { n: 6, name: "TechPetCage" },
+  { n: 7, name: "VIGILAX" },
+  { n: 8, name: "Francisco Holdings Boardroom" },
+  { n: 9, name: "Vault Velocity Auto" },
+  { n: 10, name: "Kiaros" },
+  { n: 11, name: "TechPackCage" },
+  { n: 12, name: "MindShift by Michaella" },
+  { n: 13, name: "CCC-Site" },
+  { n: 14, name: "Space Swarm" },
+  { n: 15, name: "Energy Swarm" },
+  { n: 16, name: "Fintech Swarm" },
+  { n: 17, name: "Health Swarm" },
+  { n: 18, name: "Biotech Swarm" },
+  { n: 19, name: "Quantum Swarm" },
+  { n: 20, name: "Auto Swarm" },
+  { n: 21, name: "Agent Swarm Tech" },
+  { n: 22, name: "Francisco Realty" },
+  { n: 23, name: "Francisco Legal" },
+  { n: 24, name: "Francisco Mortgage" },
+  { n: 25, name: "Francisco Insurance" },
+  { n: 26, name: "Francisco Title" },
+  { n: 27, name: "Francisco Paralegal" },
+  { n: 28, name: "Francisco Tax" },
+  { n: 29, name: "Francisco Immigration" },
+  { n: 30, name: "Francisco Family" },
+  { n: 31, name: "Francisco Wills" },
+  { n: 32, name: "Francisco Employment" },
+  { n: 33, name: "Francisco Corporate" },
+  { n: 34, name: "Francisco IP" },
+  { n: 35, name: "Francisco Criminal" },
+  { n: 36, name: "Francisco PI" },
+  { n: 37, name: "Francisco Environmental" },
+  { n: 38, name: "Francisco Construction" },
+  { n: 39, name: "Francisco Entertainment" },
+  { n: 40, name: "Francisco Sports" },
+  { n: 41, name: "Francisco Maritime" },
+  { n: 42, name: "Francisco Aviation" },
+  { n: 43, name: "Francisco Banking" },
+  { n: 44, name: "Francisco Data" },
+  { n: 45, name: "Francisco Phoenix" }
+];
+
+function populateEmpireConnect() {
+  const select = document.getElementById("empire-connect-select");
+  if (!select) return;
+  EMPIRE_FLOORS.forEach(function(f) {
+    const opt = document.createElement("option");
+    opt.value = f.n;
+    opt.textContent = "Floor " + f.n + " — " + f.name;
+    select.appendChild(opt);
+  });
+}
+
+function routeToEmpireFloor(select) {
+  const n = select.value;
+  if (!n) return;
+  window.open("https://franciscoholdingsinc.com/#floor-" + n, "_blank");
+  select.value = "";
+}
+
+// ============================================
 // INIT
 // ============================================
+applySavedAccessibilitySettings();
 renderTasks();
 renderProfileForm();
+loadVideoStatements();
+populateEmpireConnect();
+initPinLockGate();
+const pinLockInputEl = document.getElementById("pin-lock-input");
+if (pinLockInputEl) pinLockInputEl.addEventListener("keydown", function(e) { if (e.key === "Enter") attemptPinUnlock(); });
 </script>
 
 <div class="upl-disclaimer" style="background:#1a1a1a;border-top:1px solid var(--gold);color:var(--chrome);font-size:0.72rem;line-height:1.4;text-align:center;padding:10px 16px;">
