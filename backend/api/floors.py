@@ -8,8 +8,12 @@ never random data.
 
 import time
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
+from ..core.db import get_db
+from ..db_models.company import Company
+from ..db_models.floor_state_db import FloorRow
 from ..models import FloorState
 from ..state_store import get_floor_state
 
@@ -38,3 +42,36 @@ def get_state(floor_id: int):
 
     state = FloorState(**stored)
     return {**state.model_dump(), "status": stored.get("status", "active")}
+
+
+@router.get("/floor/{floor_number}")
+def get_floor_config(floor_number: int, db: Session = Depends(get_db)):
+    """Full floor config (company, scene, audio) — distinct from the
+    ephemeral /floors/{id}/state endpoint above, which the live skyscraper
+    polls and must not change shape."""
+    floor_row = db.query(FloorRow).filter(FloorRow.floor_number == floor_number).first()
+    if not floor_row:
+        raise HTTPException(status_code=404, detail=f"Floor {floor_number} is not registered")
+
+    company = None
+    if floor_row.company_id:
+        company = db.query(Company).filter(Company.id == floor_row.company_id).first()
+
+    return {
+        "floor_number": floor_row.floor_number,
+        "scene_config": floor_row.scene_config,
+        "audio_config": floor_row.audio_config,
+        "neural_graph_nodes": floor_row.neural_graph_nodes,
+        "visit_count": floor_row.visit_count,
+        "company": (
+            {
+                "id": company.id,
+                "name": company.name,
+                "industry": company.industry,
+                "colors": company.colors,
+                "services": company.services,
+            }
+            if company
+            else None
+        ),
+    }
