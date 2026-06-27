@@ -22,6 +22,7 @@ from ..core.db import get_db
 from ..db_models.analytics import AnalyticsVisit
 from ..db_models.document import Document
 from ..db_models.floor_application import FloorApplication
+from ..db_models.floor_ledger import FloorLedgerEntry
 from ..db_models.payment import Payment
 from ..db_models.user import User
 from .deps import get_current_user
@@ -187,3 +188,27 @@ def approve_floor_application(
     application.status = "approved"
     db.commit()
     return {"status": "approved"}
+
+
+@router.get("/api/admin/ledger")
+def list_floor_ledger(
+    _admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    entries = db.query(FloorLedgerEntry).order_by(FloorLedgerEntry.created_at.desc()).all()
+    return {
+        "ledger": [
+            {
+                "id": e.id,
+                "floor_number": e.floor_number,
+                "application_id": e.application_id,
+                "transaction_type": e.transaction_type,
+                "amount_cents": e.amount_cents,
+                "currency": e.currency,
+                "stripe_charge_id": e.stripe_charge_id,
+                "status": e.status,
+                "created_at": e.created_at,
+            }
+            for e in entries
+        ]
+    }

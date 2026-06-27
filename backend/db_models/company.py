@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.sql import func
 
@@ -19,4 +19,9 @@ class Company(Base):
     services = Column(JSONB, default=list)
     team = Column(JSONB, default=list)
     is_active = Column(Boolean, default=True)
+    # Skyscraper display content — what the frontend renders for this floor.
+    theme = Column(String, nullable=True)  # comma-separated hex colors
+    description = Column(Text, nullable=True)
+    cta_text = Column(String, nullable=True)
+    cta_link = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

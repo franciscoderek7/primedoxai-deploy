@@ -22,6 +22,7 @@ from ..core.config import settings
 from ..core.db import get_db
 from ..db_models.company import Company
 from ..db_models.floor_application import FloorApplication
+from ..db_models.floor_ledger import FloorLedgerEntry
 from ..db_models.floor_state_db import FloorRow
 from ..db_models.user import ApiKey, User
 from ..schemas import CheckoutRequest
@@ -109,13 +110,6 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
                 application.amount_cents = data.get("amount_total")
                 application.paid_at = datetime.now(timezone.utc)
 
-                floor_row = (
-                    db.query(FloorRow).filter(FloorRow.floor_number == application.floor_number).first()
-                )
-                if floor_row:
-                    floor_row.status = "active"
-                    floor_row.billing_status = "paid"
-
                 company = (
                     db.query(Company).filter(Company.floor_number == application.floor_number).first()
                 )
@@ -123,7 +117,29 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
                     company.name = application.company_name
                     company.is_active = True
                 else:
-                    db.add(Company(floor_number=application.floor_number, name=application.company_name))
+                    company = Company(floor_number=application.floor_number, name=application.company_name)
+                    db.add(company)
+                    db.flush()  # assign company.id before linking it below
+
+                floor_row = (
+                    db.query(FloorRow).filter(FloorRow.floor_number == application.floor_number).first()
+                )
+                if floor_row:
+                    floor_row.status = "active"
+                    floor_row.billing_status = "paid"
+                    floor_row.company_id = company.id
+
+                db.add(
+                    FloorLedgerEntry(
+                        floor_number=application.floor_number,
+                        application_id=application.id,
+                        transaction_type="payment",
+                        amount_cents=data.get("amount_total") or 0,
+                        currency=data.get("currency") or "usd",
+                        stripe_charge_id=data.get("payment_intent"),
+                        status="completed",
+                    )
+                )
 
                 db.commit()
             return {"received": True}

@@ -24,4 +24,8 @@ def get_company(company_id: UUID, db: Session = Depends(get_db)):
         "services": company.services,
         "team": company.team,
         "is_active": company.is_active,
+        "theme": company.theme,
+        "description": company.description,
+        "cta_text": company.cta_text,
+        "cta_link": company.cta_link,
     }

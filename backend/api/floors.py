@@ -44,6 +44,44 @@ def get_state(floor_id: int):
     return {**state.model_dump(), "status": stored.get("status", "active")}
 
 
+def _company_summary(company: Company) -> dict:
+    return {
+        "id": company.id,
+        "name": company.name,
+        "industry": company.industry,
+        "colors": company.colors,
+        "services": company.services,
+        "theme": company.theme,
+        "description": company.description,
+        "cta_text": company.cta_text,
+        "cta_link": company.cta_link,
+    }
+
+
+def _floor_summary(floor_row: FloorRow, company: Company | None) -> dict:
+    return {
+        "floor_number": floor_row.floor_number,
+        "status": floor_row.status,
+        "tier": floor_row.tier,
+        "monthly_rate_cents": floor_row.monthly_rate_cents,
+        "billing_status": floor_row.billing_status,
+        "company": _company_summary(company) if company else None,
+    }
+
+
+@router.get("/floors")
+def list_floors(db: Session = Depends(get_db)):
+    """All floors 1-11. The skyscraper frontend renders from this list."""
+    floor_rows = db.query(FloorRow).order_by(FloorRow.floor_number).all()
+    companies = {c.id: c for c in db.query(Company).all()}
+    return {
+        "floors": [
+            _floor_summary(row, companies.get(row.company_id))
+            for row in floor_rows
+        ]
+    }
+
+
 @router.get("/floor/{floor_number}")
 def get_floor_config(floor_number: int, db: Session = Depends(get_db)):
     """Full floor config (company, scene, audio) — distinct from the
@@ -67,15 +105,5 @@ def get_floor_config(floor_number: int, db: Session = Depends(get_db)):
         "tier": floor_row.tier,
         "monthly_rate_cents": floor_row.monthly_rate_cents,
         "billing_status": floor_row.billing_status,
-        "company": (
-            {
-                "id": company.id,
-                "name": company.name,
-                "industry": company.industry,
-                "colors": company.colors,
-                "services": company.services,
-            }
-            if company
-            else None
-        ),
+        "company": _company_summary(company) if company else None,
     }
