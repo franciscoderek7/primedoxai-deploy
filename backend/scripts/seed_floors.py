@@ -1,8 +1,8 @@
 """
 backend/scripts/seed_floors.py
 
-Seeds display content (name/description/CTA/theme) for floors 1-10 and
-marks Floor 11 vacant and rentable at $999/mo. Idempotent — re-running it
+Seeds display content (name/description/CTA/theme) for floors 1-11 and
+marks Floor 12 vacant and rentable at $999/mo. Idempotent — re-running it
 updates existing rows by floor_number instead of creating duplicates.
 
 CTA links use only domains confirmed owned this session. Two corrections
@@ -14,8 +14,9 @@ from the original draft:
 Floors 2/3/8/9 (OmniGuard, PrimeDox AI, Kiaros, Vigilax) are Derek's own
 products with their own already-standardized SaaS pricing — they are NOT
 floors for rent, so this script deliberately leaves their FloorRow
-tier/monthly_rate_cents/billing_status null. Only Floor 11 carries real
-rental terms.
+tier/monthly_rate_cents/billing_status null. Floor 11 (MindShift by
+Makayla) is occupied the same way. Only Floor 12 carries real rental
+terms.
 
 Usage:
     python -m backend.scripts.seed_floors
@@ -109,9 +110,17 @@ OCCUPIED_FLOORS = [
         "cta_text": "Coming Soon",
         "cta_link": "#",
     },
+    {
+        "floor_number": 11,
+        "name": "MindShift by Makayla",
+        "theme": "#800080,#FFD700,#FFFFFF",
+        "description": "Mental wellness coaching. Mindset transformation. Psychology-backed programs.",
+        "cta_text": "Begin Your Shift",
+        "cta_link": "https://franciscoderek7.github.io/mindshift-makayla",  # mindshift-makayla.com not yet owned
+    },
 ]
 
-VACANT_FLOOR_NUMBER = 11
+VACANT_FLOOR_NUMBER = 12
 VACANT_TIER = "premium"
 VACANT_MONTHLY_RATE_CENTS = 99900  # $999/mo
 

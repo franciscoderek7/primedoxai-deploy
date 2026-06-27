@@ -19,7 +19,7 @@ from ..state_store import get_floor_state
 
 router = APIRouter()
 
-VALID_FLOOR_IDS = set(range(1, 12))  # 1-11: Floor 11 is the rentable floor
+VALID_FLOOR_IDS = set(range(1, 13))  # 1-12: Floor 12 is the rentable floor
 
 
 def _default_state(floor_id: int) -> dict:
@@ -71,7 +71,7 @@ def _floor_summary(floor_row: FloorRow, company: Company | None) -> dict:
 
 @router.get("/floors")
 def list_floors(db: Session = Depends(get_db)):
-    """All floors 1-11. The skyscraper frontend renders from this list."""
+    """All floors 1-12. The skyscraper frontend renders from this list."""
     floor_rows = db.query(FloorRow).order_by(FloorRow.floor_number).all()
     companies = {c.id: c for c in db.query(Company).all()}
     return {

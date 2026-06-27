@@ -26,8 +26,8 @@ class FloorRow(Base):
     neural_graph_nodes = Column(JSONB, default=list)
     visit_count = Column(Integer, default=0)
     revenue_stats = Column(JSONB, default=dict)
-    # Rental state — only meaningful for floors offered for rent (e.g. Floor 11).
-    # status defaults to "active" since floors 1-10 are already occupied;
+    # Rental state — only meaningful for floors offered for rent (e.g. Floor 12).
+    # status defaults to "active" since floors 1-11 are already occupied;
     # a floor must be explicitly seeded as "vacant" to accept applications.
     status = Column(String, default="active")  # active, vacant, pending, suspended
     tier = Column(String, nullable=True)  # standard, premium, empire
