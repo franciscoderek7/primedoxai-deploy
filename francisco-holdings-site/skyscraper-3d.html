@@ -24,6 +24,20 @@
              opacity:0;transition:opacity 0.4s ease;pointer-events:none;z-index:5}
   #floor-content-inner{color:#fff;text-align:center;font-family:Inter,Arial,sans-serif;
              font-size:28px;letter-spacing:1px;text-shadow:0 0 18px rgba(74,144,226,0.6)}
+
+  /* OmniGuard-only pricing cards (blue/pink — the one brand permitted those colors). */
+  #pricing-overlay{position:fixed;left:0;right:0;bottom:88px;display:flex;gap:14px;justify-content:center;
+             flex-wrap:wrap;padding:0 16px;opacity:0;pointer-events:none;transition:opacity 0.4s ease 0.2s;z-index:8}
+  #pricing-overlay.visible{opacity:1;pointer-events:auto}
+  .pricing-card{width:170px;background:linear-gradient(160deg,rgba(10,14,24,0.92),rgba(20,10,20,0.92));
+             border:1px solid #4A90E2;border-radius:10px;padding:16px 14px;text-align:center;color:#fff;
+             box-shadow:0 0 18px rgba(74,144,226,0.25)}
+  .pricing-card.critical{border-color:#E91E63;box-shadow:0 0 18px rgba(233,30,99,0.3)}
+  .pricing-card h4{font-size:12px;letter-spacing:1px;color:#7db4ed;margin-bottom:8px;text-transform:uppercase}
+  .pricing-card .price{font-size:24px;font-weight:700;margin-bottom:10px}
+  .pricing-card .price span{font-size:12px;font-weight:400;color:#999}
+  .pricing-card a{display:inline-block;background:linear-gradient(135deg,#4A90E2,#E91E63);color:#fff;
+             font-size:12px;font-weight:600;padding:8px 10px;border-radius:6px;text-decoration:none;width:100%}
 </style>
 </head>
 <body>
@@ -36,6 +50,29 @@
 </div>
 
 <div id="floor-content-overlay"><div id="floor-content-inner"></div></div>
+
+<div id="pricing-overlay">
+  <div class="pricing-card">
+    <h4>Personal</h4>
+    <div class="price">$39<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Personal%20-%20%2439%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+  <div class="pricing-card">
+    <h4>Business</h4>
+    <div class="price">$89<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Business%20-%20%2489%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+  <div class="pricing-card">
+    <h4>Enterprise</h4>
+    <div class="price">$179<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Enterprise%20-%20%24179%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+  <div class="pricing-card critical">
+    <h4>Critical</h4>
+    <div class="price">$349<span>/mo</span></div>
+    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Critical%20-%20%24349%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+  </div>
+</div>
 
 <div id="floor-bar">
   <button id="lobby-btn">Lobby</button>
@@ -69,13 +106,20 @@
   const status = document.getElementById('status');
   const contentOverlay = document.getElementById('floor-content-overlay');
   const contentInner = document.getElementById('floor-content-inner');
-  building.on('elevator:doors-closing', () => { status.textContent = 'Doors closing...'; contentOverlay.style.opacity = '0'; });
+  const pricingOverlay = document.getElementById('pricing-overlay');
+  const OMNIGUARD_FLOOR = 1; // floor-registry.js's "FLOOR 1 OVERRIDE" — OmniGuard is the pricing-card floor
+  building.on('elevator:doors-closing', () => {
+    status.textContent = 'Doors closing...';
+    contentOverlay.style.opacity = '0';
+    pricingOverlay.classList.remove('visible');
+  });
   building.on('elevator:loading', ({ label }) => { status.textContent = `Loading ${label || 'floor'}...`; });
   building.on('elevator:doors-opening', ({ label }) => { status.textContent = `Arriving: ${label || 'Lobby'}`; });
-  building.on('elevator:arrived', ({ label }) => {
+  building.on('elevator:arrived', ({ floor, label }) => {
     status.textContent = `Floor: ${label || 'Lobby'}`;
     contentInner.textContent = label || 'Lobby';
     contentOverlay.style.opacity = '1'; // fades in only once doors are fully open (0.4s ease, per spec)
+    pricingOverlay.classList.toggle('visible', floor === OMNIGUARD_FLOOR);
   });
   building.on('elevator:error', ({ error }) => { status.textContent = `Error: ${error.message}`; });
 
