@@ -1,11 +1,10 @@
-const CACHE_NAME = "primedox-v4";
+const CACHE_NAME = "francisco-holdings-v1";
 const CACHE_FILES = [
-  "./",
-  "./index.html",
-  "./pricing.html",
-  "./get-help-now.html",
-  "./primedox-ai-chat.html",
-  "./manifest.json"
+  "/",
+  "/index.html",
+  "/manifest.json",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -31,7 +30,6 @@ self.addEventListener("fetch", (event) => {
     event.request.headers.get("accept")?.includes("text/html");
 
   if (isHTML) {
-    // Network-first for HTML so deployed changes (e.g. the lock-screen code) show up immediately.
     event.respondWith(
       fetch(event.request).then((response) => {
         if (response.ok) {
