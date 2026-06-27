@@ -59,3 +59,12 @@ class CheckoutRequest(BaseModel):
     plan_id: str
     success_url: str
     cancel_url: str
+
+
+class FloorApplyRequest(BaseModel):
+    company_name: str
+    contact_email: EmailStr
+    website_url: Optional[str] = None
+    tier_requested: Optional[str] = None
+    success_url: str
+    cancel_url: str

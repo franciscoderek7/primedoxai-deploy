@@ -11,6 +11,8 @@ so the HTML is returned as a plain string — fine at this size, swap to
 Jinja2 if this dashboard grows past one page.
 """
 
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse
 from sqlalchemy import func
@@ -19,6 +21,7 @@ from sqlalchemy.orm import Session
 from ..core.db import get_db
 from ..db_models.analytics import AnalyticsVisit
 from ..db_models.document import Document
+from ..db_models.floor_application import FloorApplication
 from ..db_models.payment import Payment
 from ..db_models.user import User
 from .deps import get_current_user
@@ -145,3 +148,42 @@ if (stored) load();
 </script>
 </body>
 </html>"""
+
+
+@router.get("/api/admin/floor-applications")
+def list_floor_applications(
+    _admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    apps = db.query(FloorApplication).order_by(FloorApplication.created_at.desc()).all()
+    return {
+        "applications": [
+            {
+                "id": a.id,
+                "floor_number": a.floor_number,
+                "company_name": a.company_name,
+                "contact_email": a.contact_email,
+                "website_url": a.website_url,
+                "tier_requested": a.tier_requested,
+                "status": a.status,
+                "amount_cents": a.amount_cents,
+                "paid_at": a.paid_at,
+                "created_at": a.created_at,
+            }
+            for a in apps
+        ]
+    }
+
+
+@router.post("/api/admin/floor-applications/{application_id}/approve")
+def approve_floor_application(
+    application_id: UUID,
+    _admin: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    application = db.query(FloorApplication).filter(FloorApplication.id == application_id).first()
+    if not application:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Application not found")
+    application.status = "approved"
+    db.commit()
+    return {"status": "approved"}

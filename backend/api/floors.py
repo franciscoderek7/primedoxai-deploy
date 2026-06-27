@@ -19,7 +19,7 @@ from ..state_store import get_floor_state
 
 router = APIRouter()
 
-VALID_FLOOR_IDS = set(range(1, 11))
+VALID_FLOOR_IDS = set(range(1, 12))  # 1-11: Floor 11 is the rentable floor
 
 
 def _default_state(floor_id: int) -> dict:
@@ -63,6 +63,10 @@ def get_floor_config(floor_number: int, db: Session = Depends(get_db)):
         "audio_config": floor_row.audio_config,
         "neural_graph_nodes": floor_row.neural_graph_nodes,
         "visit_count": floor_row.visit_count,
+        "status": floor_row.status,
+        "tier": floor_row.tier,
+        "monthly_rate_cents": floor_row.monthly_rate_cents,
+        "billing_status": floor_row.billing_status,
         "company": (
             {
                 "id": company.id,

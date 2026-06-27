@@ -8,7 +8,7 @@ depends on for the in-memory GET /api/floors/{id}/state endpoint.
 
 import uuid
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.sql import func
 
@@ -26,4 +26,11 @@ class FloorRow(Base):
     neural_graph_nodes = Column(JSONB, default=list)
     visit_count = Column(Integer, default=0)
     revenue_stats = Column(JSONB, default=dict)
+    # Rental state — only meaningful for floors offered for rent (e.g. Floor 11).
+    # status defaults to "active" since floors 1-10 are already occupied;
+    # a floor must be explicitly seeded as "vacant" to accept applications.
+    status = Column(String, default="active")  # active, vacant, pending, suspended
+    tier = Column(String, nullable=True)  # standard, premium, empire
+    monthly_rate_cents = Column(Integer, nullable=True)
+    billing_status = Column(String, nullable=True)  # paid, overdue, trial
     created_at = Column(DateTime(timezone=True), server_default=func.now())

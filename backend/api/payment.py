@@ -12,12 +12,17 @@ identified in the checkout session is always the end user, never the
 account owner.
 """
 
+from datetime import datetime, timezone
+
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from ..core.config import settings
 from ..core.db import get_db
+from ..db_models.company import Company
+from ..db_models.floor_application import FloorApplication
+from ..db_models.floor_state_db import FloorRow
 from ..db_models.user import ApiKey, User
 from ..schemas import CheckoutRequest
 from .deps import get_current_user
@@ -92,6 +97,37 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
     data = event["data"]["object"]
 
     if event_type == "checkout.session.completed":
+        floor_application_id = (data.get("metadata") or {}).get("floor_application_id")
+        if floor_application_id:
+            application = (
+                db.query(FloorApplication).filter(FloorApplication.id == floor_application_id).first()
+            )
+            if application:
+                application.status = "paid"
+                application.stripe_customer_id = data.get("customer")
+                application.stripe_subscription_id = data.get("subscription")
+                application.amount_cents = data.get("amount_total")
+                application.paid_at = datetime.now(timezone.utc)
+
+                floor_row = (
+                    db.query(FloorRow).filter(FloorRow.floor_number == application.floor_number).first()
+                )
+                if floor_row:
+                    floor_row.status = "active"
+                    floor_row.billing_status = "paid"
+
+                company = (
+                    db.query(Company).filter(Company.floor_number == application.floor_number).first()
+                )
+                if company:
+                    company.name = application.company_name
+                    company.is_active = True
+                else:
+                    db.add(Company(floor_number=application.floor_number, name=application.company_name))
+
+                db.commit()
+            return {"received": True}
+
         user_id = data.get("client_reference_id")
         customer_id = data.get("customer")
         user = db.query(User).filter(User.id == user_id).first()
