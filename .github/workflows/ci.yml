@@ -1,0 +1,54 @@
+name: CI — Runtime Engine + Backend
+
+on:
+  push:
+    branches: [dev, staging, main]
+  pull_request:
+    branches: [dev, staging, main]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt pytest httpx
+      - name: Run backend tests
+        run: python -m pytest backend/tests/ -v
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Syntax-check runtime engine + floor modules
+        run: |
+          for f in $(find engine floors -name '*.js'); do
+            node --check "$f"
+          done
+
+  health-check:
+    runs-on: ubuntu-latest
+    needs: [backend-test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+      - name: Boot backend and verify /health
+        run: |
+          pip install uvicorn
+          (cd "${GITHUB_WORKSPACE}" && python -m uvicorn backend.main:app --port 8000 &)
+          for i in $(seq 1 10); do
+            if curl -sf http://localhost:8000/health > /tmp/health.json; then break; fi
+            sleep 1
+          done
+          cat /tmp/health.json
+          grep -q '"status":"ok"' /tmp/health.json || grep -q '"status": "ok"' /tmp/health.json
