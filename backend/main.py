@@ -9,7 +9,7 @@ truth; the frontend never invents floor state, it always fetches.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api import analytics, auth, company, floors, generate, health, payment, user
+from .api import admin, analytics, auth, company, floors, generate, health, payment, user
 from .core.db import init_db
 
 app = FastAPI(title="Francisco Holdings Skyscraper API", version="0.2.0")
@@ -56,3 +56,4 @@ app.include_router(payment.router)
 app.include_router(company.router)
 app.include_router(analytics.router)
 app.include_router(user.router)
+app.include_router(admin.router)
