@@ -18,7 +18,7 @@ Modal shows:
 - Product name + original price
 - Input: "Have a referral code? Enter it here" (pre-filled from localStorage if stored)
 - On valid code: apply 10% discount → "You save $X with code DEREK001!"
-- "Confirm & Pay" → redirect to `https://paypal.me/derekfrancisco/DISCOUNTED_AMOUNTcad`
+- "Confirm & Pay" → redirect to `https://paypal.me/techpetcage/DISCOUNTED_AMOUNTcad`
 - If no code: redirect at full price
 
 ### 3. Valid Codes Array
@@ -118,7 +118,7 @@ function openCheckout(productName, price, paypalBase) {
   var storedRef = localStorage.getItem('fh_ref_code') || '';
   // Build and show modal with productName, price, storedRef pre-filled
   // On confirm with valid code: finalPrice = (price * 0.9).toFixed(2)
-  // Redirect: 'https://paypal.me/derekfrancisco/' + finalPrice + 'cad'
+  // Redirect: 'https://paypal.me/techpetcage/' + finalPrice + 'cad'
   // On confirm no code: redirect at full price
 }
 

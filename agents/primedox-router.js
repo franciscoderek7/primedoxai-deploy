@@ -39,9 +39,6 @@
     // Cleaning/workforce
     { patterns: ['clean','cleaning','janitor','sweep','mop','workforce','gig','worker','dispatch','cleanswarm'], agentId: 'swarm', company: 'CleanSwarm' },
 
-    // Packaging/logistics
-    { patterns: ['package','packaging','supply chain','logistics','shipping','warehouse','box','storage','packing','crate'], agentId: 'crate', company: 'TechPackCage' },
-
     // Mortgage/real estate
     { patterns: ['mortgage','rate','lender','home loan','refinance','heloc','amortization','house','property','real estate','condo','freehold'], agentId: 'ratehawk', company: 'Francisco Mortgage / Francisco Realty' },
 
@@ -66,7 +63,6 @@
     chronos:    [{ label: '⏱️ Kiaros Professional — $79/month',     url: 'https://kiaros.ai',                     primary: true }, { label: '🆓 Start Free Trial', url: 'https://kiaros.ai', primary: false }],
     phoenix:    [{ label: '💎 Boardroom Session — $500',            url: 'https://paypal.me/techpetcage/500', primary: true }, { label: '🏢 Francisco Holdings', url: 'https://franciscoholdingsinc.com', primary: false }],
     swarm:      [{ label: '🧹 CleanSwarm Business — $299/year',     url: 'https://paypal.me/techpetcage/299', primary: true }, { label: '💬 Book Demo', url: 'https://cleanswarm.ca', primary: false }],
-    crate:      [{ label: '📦 Packaging Consult — $500',            url: 'https://paypal.me/techpetcage/500', primary: true }, { label: '💬 Request Quote', url: 'mailto:franciscoderek7@gmail.com?subject=TechPackCage+Quote', primary: false }],
     ratehawk:   [{ label: '🏠 Mortgage Strategy — $500',            url: 'https://paypal.me/techpetcage/500', primary: true }, { label: '💬 Free Rate Check', url: 'mailto:franciscoderek7@gmail.com?subject=Rate+Check', primary: false }],
     gavel:      [{ label: '⚖️ Employment Rights Review — $149',     url: 'https://paypal.me/techpetcage/149', primary: true }, { label: '📄 Wrongful Dismissal Brief — $299', url: 'https://paypal.me/techpetcage/299', primary: false }],
     cipher:     [{ label: '🔐 Privacy Audit — $499',                url: 'https://paypal.me/techpetcage/499', primary: true }, { label: '📋 Privacy Policy — $99', url: 'https://paypal.me/techpetcage/99', primary: false }],
@@ -78,7 +74,7 @@
     sentinel: 'Sentinel (OmniGuard)', warden: 'Warden (VIGILAX)', counsel: 'Counsel (BENO-X)',
     defender: 'Defender', archivist: 'Archivist (CCLDR)', vetbot: 'VetBot (TechPetCage)',
     torque: 'Torque (Vault Velocity)', chronos: 'Chronos (Kiaros)', phoenix: 'Phoenix',
-    swarm: 'Swarm (CleanSwarm)', crate: 'Crate (TechPackCage)', ratehawk: 'RateHawk',
+    swarm: 'Swarm (CleanSwarm)', ratehawk: 'RateHawk',
     gavel: 'Gavel', cipher: 'Cipher', visapath: 'VisaPath', primedox: 'PrimeDox',
   };
 
@@ -93,7 +89,6 @@
     chronos:   "Chronos activated. Time optimization analysis ready. Kiaros AI identifies where your time is actually going — then protects it. What scheduling challenge are you facing?",
     phoenix:   "Phoenix here. Dynasty-level strategy is different from business strategy. I work with clients building generational wealth, not just quarterly revenue. State your vision.",
     swarm:     "Swarm online. CleanSwarm automation initiated. I help cleaning businesses run leaner, dispatch faster, and track quality in real time. What's your operational challenge?",
-    crate:     "Crate active. Packaging optimization analysis ready. The right packaging strategy can reduce costs 15-25% while improving customer experience. What's your situation?",
     ratehawk:  "RateHawk engaged. Canadian mortgage market analysis ready. Educational guidance only — not regulated advice. What's your mortgage situation?",
     gavel:     "Gavel online. Employment rights analysis ready. Whether it's wrongful dismissal, constructive dismissal, or severance negotiation — know your rights first. Educational only.",
     cipher:    "Cipher active. Privacy compliance analysis ready. Canadian privacy law (PIPEDA, Quebec Law 25) imposes real obligations on businesses. What's your data privacy situation?",

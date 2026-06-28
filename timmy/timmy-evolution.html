@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timmy — Rule Scoring Dashboard</title>
+<meta name="description" content="Timmy's static rule scorer: scores every rule against Derek's principles and flags lifecycle changes for human approval. Nothing here rewrites itself — Derek reviews and approves every promotion, demotion, or disable.">
+<style>
+  :root{
+    --bg:#05050A; --card:#0D1117; --border:rgba(212,175,55,0.18);
+    --gold:#D4AF37; --gold-l:#F0CB5A; --emerald:#10B981; --red:#EF4444;
+    --orange:#F59E0B; --platinum:#E5E7EB; --muted:#8b8f9a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--platinum);font-family:'Segoe UI',Inter,Arial,sans-serif;padding:20px;min-height:100vh}
+  h1{font-size:1.5rem;letter-spacing:1px}
+  .gold{color:var(--gold)}
+  header{border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:18px}
+  .subtitle{color:var(--muted);font-size:0.85rem;margin-top:4px}
+  .lesson{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;font-size:0.88rem;line-height:1.6;color:var(--platinum)}
+  .lesson summary{cursor:pointer;color:var(--gold);font-weight:600}
+  .grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:1rem;color:var(--gold-l);margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;font-size:0.85rem}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.06)}
+  th{color:var(--muted);font-weight:500;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:0.7rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
+  .badge.core{background:rgba(212,175,55,0.18);color:var(--gold-l)}
+  .badge.core_under_review{background:rgba(245,158,11,0.18);color:var(--orange)}
+  .badge.active{background:rgba(16,185,129,0.15);color:var(--emerald)}
+  .badge.sandbox{background:rgba(255,255,255,0.08);color:var(--platinum)}
+  .badge.disabled{background:rgba(239,68,68,0.15);color:var(--red)}
+  .score-pos{color:var(--emerald);font-weight:700}
+  .score-neg{color:var(--red);font-weight:700}
+  select,input,button,textarea{font-family:inherit;font-size:0.85rem}
+  select,input,textarea{background:#11141c;border:1px solid var(--border);color:var(--platinum);border-radius:6px;padding:8px;width:100%;margin-bottom:8px}
+  button{background:linear-gradient(135deg,var(--gold),#9c7a1f);color:#0a0a0a;font-weight:700;border:none;border-radius:6px;padding:9px 12px;cursor:pointer;width:100%}
+  button.secondary{background:#1a1f2b;color:var(--platinum);border:1px solid var(--border)}
+  .outcome-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+  .outcome-row button{font-size:0.75rem;padding:8px 4px}
+  #toast{position:fixed;top:16px;right:16px;max-width:340px;z-index:50}
+  .toast-item{background:var(--card);border:1px solid var(--gold);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:0.82rem;animation:fadein .25s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  .empty{color:var(--muted);font-size:0.82rem;padding:10px 0}
+  .rank{color:var(--muted);font-size:0.75rem}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚙ <span class="gold">TIMMY</span> — Rule Scoring Dashboard</h1>
+  <div class="subtitle">Domain: empire-wide anomaly &amp; threat-pattern oversight · static rule scorer — flags changes, never applies them itself</div>
+</header>
+
+<details class="lesson" open>
+  <summary>How this actually works (read me first)</summary>
+  <p style="margin-top:10px">
+  Every rule below starts with a score of 0. Every time a rule fires and you find out whether it was
+  right, you log that as an <strong>outcome</strong> — a reward signal. Blocking a real threat is worth <strong>+1</strong>.
+  A false positive costs <strong>-2</strong> — deliberately worse, because one false alarm burns more trust than one
+  quiet correct block earns. Missing a real threat costs <strong>-3</strong> — the worst outcome of all.
+  </p>
+  <p style="margin-top:8px">
+  Timmy is a <strong>static rule scorer, not a self-modifying AI.</strong> When a score crosses a lifecycle
+  threshold — Sandbox → Active → Core Policy, or any of those → Disabled — Timmy does not make that change.
+  It raises a <strong>pending suggestion</strong> in the "Needs your approval" panel and stops. Nothing about a
+  rule's pattern, action, or enforcement changes until <em>you</em> click Approve. A Core rule that regresses
+  still only gets flagged for your review, exactly like before — reaffirm or retire it yourself.
+  </p>
+  <p style="margin-top:8px">
+  Nobody is hand-editing the scores — the scoreboard does that part automatically. But every actual change to
+  what Timmy enforces is a human decision. See <code>engine/rl-rule-engine.js</code> for the source (the
+  <code>approveSuggestion</code> / <code>dismissSuggestion</code> methods are the only ones that ever change a
+  rule's status), and the bottom of this page's sibling file for how the exact same engine — same file, just a
+  different name — runs PrimeDox AI's own rule lab too.
+  </p>
+</details>
+
+<div class="grid">
+  <div>
+    <div class="card">
+      <h2>🏆 Rule Leaderboard</h2>
+      <table>
+        <thead><tr><th>#</th><th>Rule</th><th>Status</th><th>Score</th><th>Trials</th></tr></thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+    </div>
+
+    <div class="card" id="approval-card" style="display:none">
+      <h2>📋 Needs your approval</h2>
+      <div id="approval-list"></div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:6px">Timmy never applies these on its own — until a real text/call/email alert is wired up (needs infra credentials Claude doesn't hold), this panel is the only notification. Check back here.</div>
+    </div>
+
+    <div class="card">
+      <h2>🧪 Sandbox — experiments in progress</h2>
+      <div id="sandbox-list"></div>
+    </div>
+
+    <div class="card">
+      <h2>🚫 Disabled — by your approval</h2>
+      <div id="disabled-list"></div>
+    </div>
+
+    <div class="card" id="review-card" style="display:none">
+      <h2>⚠ Core rules flagged for your review</h2>
+      <div id="review-list"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>▶ Simulate an outcome</h2>
+      <label style="font-size:0.78rem;color:var(--muted)">Rule</label>
+      <select id="sim-rule-select"></select>
+      <div class="outcome-row">
+        <button onclick="simulate('blocked_threat')">✅ Blocked threat (+1)</button>
+        <button onclick="simulate('true_negative')" class="secondary">➖ Correctly quiet (+0.1)</button>
+        <button onclick="simulate('false_positive')" class="secondary" style="border-color:var(--orange)">❌ False positive (-2)</button>
+        <button onclick="simulate('missed_threat')" class="secondary" style="border-color:var(--red)">👁 Missed threat (-3)</button>
+      </div>
+      <div style="font-size:0.75rem;color:var(--muted)">In production these calls come from real detections, not buttons — this panel exists so you can watch the controller make decisions live.</div>
+    </div>
+
+    <div class="card">
+      <h2>➕ Propose a new rule (sandbox)</h2>
+      <label style="font-size:0.78rem;color:var(--muted)">Description</label>
+      <input id="new-rule-desc" placeholder="e.g. Flag 3+ failed logins from one IP in 60s">
+      <label style="font-size:0.78rem;color:var(--muted)">Pattern it watches for</label>
+      <input id="new-rule-pattern" placeholder="e.g. failed_login_burst">
+      <label style="font-size:0.78rem;color:var(--muted)">Action it takes</label>
+      <input id="new-rule-action" placeholder="e.g. throttle_ip_60s">
+      <button onclick="proposeRule()">Add to Sandbox</button>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:6px">New rules never go straight to enforcement — they earn their way to Active by scoring +10 over at least 5 trials.</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+  import { PrimeDoxRuleEngine, LocalStorageAdapter, RULE_STATUS } from '../engine/rl-rule-engine.js';
+
+  // "Timmy" is this engine wearing the empire-oversight costume. The
+  // storage key keeps Timmy's policy separate from any other brand
+  // instance running the same engine elsewhere (e.g. PrimeDox AI's own
+  // rule lab uses 'primedox_rules' — see primedoxai-site/primedox-rule-lab.html).
+  const timmy = new PrimeDoxRuleEngine('Timmy', 'empire-anomaly-detection', {
+    storage: new LocalStorageAdapter('timmy_rules'),
+  });
+
+  // Seed a few starter rules the first time this loads on a device, so the
+  // leaderboard isn't empty. Real deployments would seed these from Timmy's
+  // actual historical detections instead.
+  if (timmy.rules.size === 0) {
+    timmy.addActiveRule({ description: 'Flag repeated failed-login bursts across any floor', pattern: 'failed_login_burst', action: 'flag_and_throttle' });
+    timmy.addActiveRule({ description: 'Flag API key usage spiking 10x above baseline', pattern: 'api_key_spike', action: 'rate_limit' });
+    timmy.addActiveRule({ description: 'Flag cross-company data access outside a user\'s own floor', pattern: 'cross_floor_access', action: 'block_and_alert' });
+    timmy.proposeCandidateRule({ description: 'Flag document downloads at unusual hours (2am-5am)', pattern: 'odd_hour_download', action: 'soft_flag' });
+  }
+
+  window.simulate = (outcomeType) => {
+    const ruleId = document.getElementById('sim-rule-select').value;
+    if (!ruleId) return;
+    const { suggestion } = timmy.recordOutcome(ruleId, outcomeType, 'simulated from dashboard');
+    if (suggestion) showToast(suggestion, ruleId);
+    render();
+  };
+
+  window.proposeRule = () => {
+    const description = document.getElementById('new-rule-desc').value.trim();
+    const pattern = document.getElementById('new-rule-pattern').value.trim();
+    const action = document.getElementById('new-rule-action').value.trim();
+    if (!description || !pattern || !action) return;
+    timmy.proposeCandidateRule({ description, pattern, action });
+    document.getElementById('new-rule-desc').value = '';
+    document.getElementById('new-rule-pattern').value = '';
+    document.getElementById('new-rule-action').value = '';
+    render();
+  };
+
+  const SUGGESTION_LABELS = {
+    graduated_to_active: (id) => `📋 "${ruleName(id)}" — Sandbox → Active suggested. Needs your approval.`,
+    promoted_to_core: (id) => `📋 "${ruleName(id)}" — promotion to CORE POLICY suggested. Needs your approval.`,
+    auto_disabled: (id) => `📋 "${ruleName(id)}" — disable suggested, score dropped too low. Needs your approval.`,
+    sandbox_failed: (id) => `📋 "${ruleName(id)}" — failed in sandbox, disable suggested. Needs your approval.`,
+    flagged_for_review: (id) => `⚠ "${ruleName(id)}" regressed — flagged for your review`,
+  };
+  const APPLIED_LABELS = {
+    graduated_to_active: (id) => `⬆ "${ruleName(id)}" graduated Sandbox → Active (approved)`,
+    promoted_to_core: (id) => `🏆 "${ruleName(id)}" promoted to CORE POLICY (approved)`,
+    auto_disabled: (id) => `🚫 "${ruleName(id)}" disabled (approved)`,
+    sandbox_failed: (id) => `🚫 "${ruleName(id)}" disabled — failed in sandbox (approved)`,
+  };
+  function ruleName(id) { return timmy.rules.get(id)?.description ?? id; }
+
+  function showToast(key, ruleId, applied = false) {
+    const labels = applied ? APPLIED_LABELS : SUGGESTION_LABELS;
+    const el = document.createElement('div');
+    el.className = 'toast-item';
+    el.textContent = labels[key] ? labels[key](ruleId) : key;
+    document.getElementById('toast').appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }
+
+  function statusBadge(status) {
+    const labels = { core: 'Core', core_under_review: 'Under Review', active: 'Active', sandbox: 'Sandbox', disabled: 'Disabled' };
+    return `<span class="badge ${status}">${labels[status]}</span>`;
+  }
+
+  function render() {
+    const board = timmy.leaderboard();
+
+    // Leaderboard — every non-disabled rule, ranked by score, status visible.
+    const ranked = board.ranked.filter((r) => r.status !== RULE_STATUS.DISABLED);
+    document.getElementById('leaderboard-body').innerHTML = ranked.length ? ranked.map((r, i) => `
+      <tr>
+        <td class="rank">#${i + 1}</td>
+        <td>${r.description}</td>
+        <td>${statusBadge(r.status)}</td>
+        <td class="${r.score >= 0 ? 'score-pos' : 'score-neg'}">${r.score.toFixed(1)}</td>
+        <td>${r.trials}</td>
+      </tr>`).join('') : `<tr><td colspan="5" class="empty">No rules yet.</td></tr>`;
+
+    document.getElementById('sandbox-list').innerHTML = board.sandbox.length ? board.sandbox.map((r) => `
+      <div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem">
+        ${r.description} — <span class="${r.score >= 0 ? 'score-pos' : 'score-neg'}">${r.score.toFixed(1)} pts</span>, ${r.trials} trials
+        <span style="color:var(--muted)"> (needs ${10} pts over ${5}+ trials to graduate)</span>
+      </div>`).join('') : `<div class="empty">No experiments running.</div>`;
+
+    document.getElementById('disabled-list').innerHTML = board.disabled.length ? board.disabled.map((r) => `
+      <div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem;color:var(--muted)">
+        ${r.description} — final score ${r.score.toFixed(1)}
+      </div>`).join('') : `<div class="empty">Nothing disabled yet.</div>`;
+
+    const approvalCard = document.getElementById('approval-card');
+    if (board.pendingApproval.length) {
+      approvalCard.style.display = 'block';
+      document.getElementById('approval-list').innerHTML = board.pendingApproval.map((r) => `
+        <div style="margin-bottom:10px;font-size:0.85rem">
+          ${SUGGESTION_LABELS[r.pendingSuggestion] ? SUGGESTION_LABELS[r.pendingSuggestion](r.id) : r.pendingSuggestion}
+          <div style="color:var(--muted);font-size:0.78rem">score ${r.score.toFixed(1)}, ${r.trials} trials, currently ${r.status}</div>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button style="width:auto;padding:6px 10px" onclick="approveSuggestion('${r.id}')">Approve</button>
+            <button class="secondary" style="width:auto;padding:6px 10px" onclick="dismissSuggestion('${r.id}')">Dismiss</button>
+          </div>
+        </div>`).join('');
+    } else {
+      approvalCard.style.display = 'none';
+    }
+
+    const reviewCard = document.getElementById('review-card');
+    if (board.coreUnderReview.length) {
+      reviewCard.style.display = 'block';
+      document.getElementById('review-list').innerHTML = board.coreUnderReview.map((r) => `
+        <div style="margin-bottom:10px;font-size:0.85rem">
+          ${r.description} — peak ${r.peakScore.toFixed(1)}, now ${r.score.toFixed(1)}
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button style="width:auto;padding:6px 10px" onclick="reaffirm('${r.id}')">Reaffirm</button>
+            <button class="secondary" style="width:auto;padding:6px 10px;border-color:var(--red)" onclick="retire('${r.id}')">Retire</button>
+          </div>
+        </div>`).join('');
+    } else {
+      reviewCard.style.display = 'none';
+    }
+
+    // Sim panel rule picker — only rules still capable of receiving outcomes
+    const pickable = board.ranked.filter((r) => r.status !== RULE_STATUS.DISABLED);
+    document.getElementById('sim-rule-select').innerHTML = pickable.map((r) =>
+      `<option value="${r.id}">${r.description} (${r.status})</option>`).join('');
+  }
+
+  window.reaffirm = (id) => { timmy.reaffirmCoreRule(id); render(); };
+  window.retire = (id) => { timmy.retireCoreRule(id); render(); };
+  window.approveSuggestion = (id) => {
+    const { transition } = timmy.approveSuggestion(id);
+    if (transition) showToast(transition, id, true);
+    render();
+  };
+  window.dismissSuggestion = (id) => { timmy.dismissSuggestion(id); render(); };
+
+  render();
+</script>
+
+</body>
+</html>

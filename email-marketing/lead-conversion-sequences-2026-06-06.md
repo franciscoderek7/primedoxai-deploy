@@ -74,7 +74,7 @@ Quick one — for the leads who've engaged with us this week, we're opening **20
 This isn't a permanent offer — it closes once our enterprise onboarding queue fills for the quarter.
 
 Ready to lock it in?
-💳 PayPal: paypal.me/derekfrancisco
+💳 PayPal: paypal.me/techpetcage
 🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "OmniaGuard — 20% Offer — [First Name]" in the message)
 📅 Or book a call first: mailto:franciscoderek7@gmail.com?subject=OmniaGuard%20Onboarding%20Call
 
@@ -92,7 +92,7 @@ This is the last note in this sequence — and the last call on the 20%-off offe
 If your AI agents are processing customer data, internal documents, or anything from the open web, the question isn't *if* someone will try to manipulate them. It's *when*.
 
 Let's get ahead of it together:
-💳 PayPal: paypal.me/derekfrancisco
+💳 PayPal: paypal.me/techpetcage
 🏦 Interac e-Transfer: franciscoderek7@gmail.com
 📅 Book a call: mailto:franciscoderek7@gmail.com?subject=OmniaGuard%20Final%20Call
 
@@ -179,7 +179,7 @@ For the people who've been with me since they joined this list — I want to mak
 Join the **Warrior tier** ($149/mo) this week and get full access to the BENO-X framework, the 12-Appearance timeline tracker, and the complete case law library — everything you need to actually understand your situation before your next court date.
 
 Ready?
-💳 PayPal: paypal.me/derekfrancisco
+💳 PayPal: paypal.me/techpetcage
 🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "CCLDR Warrior — [First Name]")
 🔗 Or enroll directly: ccldr.net/index.html#pricing
 
@@ -200,7 +200,7 @@ That instinct was right. The system moves fast, and it doesn't wait for you to c
 
 If you haven't yet, this is the moment to get the full toolkit behind you:
 🔗 ccldr.net/index.html#pricing
-💳 PayPal: paypal.me/derekfrancisco
+💳 PayPal: paypal.me/techpetcage
 🏦 Interac: franciscoderek7@gmail.com
 📅 Or just reply — tell me where you're at, and I'll point you to exactly what you need next.
 
@@ -286,7 +286,7 @@ If you're reading this because something just happened — a charge, a court dat
 
 🚨 **Emergency Defense package — $99 one-time** — instant access, no appointment needed. Gets you a framework walkthrough for your exact situation and a Charter rights reference card for the next 24-72 hours.
 
-💳 PayPal: paypal.me/derekfrancisco
+💳 PayPal: paypal.me/techpetcage
 🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "PrimeDox Emergency Defense" in the message)
 📅 Or book a call: mailto:franciscoderek7@gmail.com?subject=PrimeDox%20Emergency%20Call
 
@@ -301,7 +301,7 @@ You don't have to wait for office hours to start understanding what's happening 
 ## Notes — please read before sending
 
 - **All "Schedule a Call" / booking links** route to `mailto:franciscoderek7@gmail.com` — replace with a Calendly link if/when one exists.
-- **PayPal links** use `paypal.me/derekfrancisco` per the payment info on file. Confirm amounts match what's live on each pricing page before including specific dollar figures in any automated send.
+- **PayPal links** use `paypal.me/techpetcage` per the payment info on file. Confirm amounts match what's live on each pricing page before including specific dollar figures in any automated send.
 - **OmniaGuard "20% off first month" (Day 7/14):** this is a promotional offer drafted per your brief — confirm you actually want to run it (and for how long) before activating, since it isn't reflected on the live OmniaGuard pricing page yet.
 - **Sending mechanism:** Claude has no email-sending or scheduling capability — load these into ConvertKit, Mailchimp, or your tool of choice, or send manually. Replace `[First Name]` with your merge-tag syntax.
 - **Brand voice:** OmniaGuard sequence is written in the anonymous "team" voice (per the zero-bleed rule — no Derek Francisco branding on OmniaGuard). CCLDR and PrimeDox sequences are written in Derek's voice, since both brands have his identity attached.

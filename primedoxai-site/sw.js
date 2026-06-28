@@ -1,9 +1,10 @@
-const CACHE_NAME = "primedox-v3";
+const CACHE_NAME = "primedox-v4";
 const CACHE_FILES = [
   "./",
   "./index.html",
   "./pricing.html",
   "./get-help-now.html",
+  "./primedox-ai-chat.html",
   "./manifest.json"
 ];
 

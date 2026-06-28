@@ -1,0 +1,77 @@
+{
+  "name": "Workflow 7 - OmniGuard Lead Capture (Webhook -> Supabase -> Gmail -> Telegram)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "omniguard-leads",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "OmniGuard Lead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "notes": "Expects JSON body: { name, email, company, message }. Matches the fields submitted by omni-guard-site/lead-form.html.",
+      "webhookId": "REPLACE-AFTER-IMPORT-AUTO-GENERATED"
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "name", "fieldValue": "={{ $json.name }}" },
+            { "fieldId": "email", "fieldValue": "={{ $json.email }}" },
+            { "fieldId": "company", "fieldValue": "={{ $json.company }}" },
+            { "fieldId": "message", "fieldValue": "={{ $json.message }}" },
+            { "fieldId": "source", "fieldValue": "omniguard-site" },
+            { "fieldId": "company_interest", "fieldValue": "OmniGuard" }
+          ]
+        }
+      },
+      "name": "Insert Lead (Supabase)",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "notes": "Requires the `message` column added by automation/supabase-omniguard-leads-update.sql. Uses the `leads` table from automation/supabase-tables.sql — same table as Workflow 2, distinguished by source = 'omniguard-site'.",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Insert Lead (Supabase)').item.json.email }}",
+        "subject": "We received your security inquiry",
+        "emailType": "html",
+        "message": "<p>Hi {{ $('Insert Lead (Supabase)').item.json.name }},</p><p>Thanks for reaching out to OmniGuard. We've logged your inquiry and a member of the team will follow up shortly.</p><p>— The OmniGuard Team</p>",
+        "options": {}
+      },
+      "name": "Send Confirmation Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "notes": "Anonymous sign-off per CLAUDE.md zero-bleed rules — OmniGuard never surfaces Derek's name or personal contact info to end users.",
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "chatId": "REPLACE-WITH-DEREK-TELEGRAM-CHAT-ID",
+        "text": "=New OmniGuard lead:\nName: {{ $('Insert Lead (Supabase)').item.json.name }}\nEmail: {{ $('Insert Lead (Supabase)').item.json.email }}\nCompany: {{ $('Insert Lead (Supabase)').item.json.company }}\nMessage: {{ $('Insert Lead (Supabase)').item.json.message }}",
+        "additionalFields": {}
+      },
+      "name": "Notify Derek (Telegram)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [900, 300],
+      "notes": "chatId is a placeholder — Derek must replace it with his real Telegram chat ID (message @userinfobot on Telegram to get it) and attach a Telegram Bot credential before activating.",
+      "credentials": {}
+    }
+  ],
+  "connections": {
+    "OmniGuard Lead Webhook": { "main": [[{ "node": "Insert Lead (Supabase)", "type": "main", "index": 0 }]] },
+    "Insert Lead (Supabase)": { "main": [[{ "node": "Send Confirmation Email", "type": "main", "index": 0 }]] },
+    "Send Confirmation Email": { "main": [[{ "node": "Notify Derek (Telegram)", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

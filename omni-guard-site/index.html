@@ -8,6 +8,9 @@
 <meta property="og:title" content="OmniGuard — AI Security That Defends Your Digital Universe">
 <meta property="og:description" content="14-layer autonomous AI defense. Agent Swarm Technology. Zero-trust architecture for enterprises that cannot afford a breach.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23090918'/><text y='.68em' font-size='62' text-anchor='middle' x='50'>🛡️</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4A90E2">
+<link rel="apple-touch-icon" href="icon-192.svg">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Inter',Arial,sans-serif}
@@ -16,7 +19,7 @@
   #hud{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
        padding:14px 18px;background:linear-gradient(180deg,rgba(0,0,0,0.85),rgba(0,0,0,0));
        z-index:10;pointer-events:none}
-  #hud .brand{color:#4A90E2;font-weight:700;letter-spacing:1px;font-size:14px;pointer-events:auto;
+  #hud .brand{color:#4A90E2;font-weight:700;letter-spacing:1px;font-size:14px;pointer-events:auto;text-transform:uppercase;
        background:linear-gradient(90deg,#4A90E2,#E91E63);-webkit-background-clip:text;background-clip:text;color:transparent}
   #status{color:#c0c0c0;font-size:12px;pointer-events:auto}
   #floor-bar{position:fixed;bottom:0;left:0;right:0;display:flex;gap:10px;justify-content:center;
@@ -48,7 +51,7 @@
 <div id="viewport"></div>
 
 <div id="hud">
-  <div class="brand">OMNIGUARD — AI SECURITY OPERATIONS CENTER</div>
+  <div class="brand">OmniGuard — AI Security Operations Center</div>
   <div id="status">Lobby</div>
 </div>
 
@@ -56,24 +59,19 @@
 
 <div id="pricing-overlay">
   <div class="pricing-card">
-    <h4>Personal</h4>
-    <div class="price">$39<span>/mo</span></div>
-    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Personal%20-%20%2439%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+    <h4>Basic Protection</h4>
+    <div class="price">Free</div>
+    <a href="./omni-guard.html#link-scanner">Start Free</a>
   </div>
   <div class="pricing-card">
-    <h4>Business</h4>
-    <div class="price">$89<span>/mo</span></div>
-    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Business%20-%20%2489%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
-  </div>
-  <div class="pricing-card">
-    <h4>Enterprise</h4>
-    <div class="price">$179<span>/mo</span></div>
-    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Enterprise%20-%20%24179%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+    <h4>Pro Shield</h4>
+    <div class="price">$9.99<span>/mo</span></div>
+    <a href="./omni-guard.html#pricing">Get Pro Shield</a>
   </div>
   <div class="pricing-card critical">
-    <h4>Critical</h4>
-    <div class="price">$349<span>/mo</span></div>
-    <a href="mailto:omniaguard1@gmail.com?subject=OmniGuard%20Critical%20-%20%24349%2Fmo%20via%20PayPal" target="_blank" rel="noopener noreferrer">🅿️ PayPal</a>
+    <h4>Enterprise Guard</h4>
+    <div class="price">$49.99<span>/mo</span></div>
+    <a href="https://paypal.me/techpetcage/79.98CAD" target="_blank" rel="noopener noreferrer">🅿️ Get Enterprise Guard</a>
   </div>
 </div>
 
@@ -110,7 +108,7 @@
   const contentOverlay = document.getElementById('floor-content-overlay');
   const contentInner = document.getElementById('floor-content-inner');
   const pricingOverlay = document.getElementById('pricing-overlay');
-  const OMNIGUARD_FLOOR = 1; // the only floor in this production registry
+  const omniGuardFloor = 1; // the only floor in this production registry
   building.on('elevator:doors-closing', () => {
     status.textContent = 'Doors closing...';
     contentOverlay.style.opacity = '0';
@@ -122,7 +120,7 @@
     status.textContent = `Floor: ${label || 'Lobby'}`;
     contentInner.textContent = label || 'Lobby';
     contentOverlay.style.opacity = '1'; // fades in only once doors are fully open (0.4s ease, per spec)
-    pricingOverlay.classList.toggle('visible', floor === OMNIGUARD_FLOOR);
+    pricingOverlay.classList.toggle('visible', floor === omniGuardFloor);
   });
   building.on('elevator:error', ({ error }) => { status.textContent = `Error: ${error.message}`; });
 
@@ -136,6 +134,12 @@
   });
 
   document.getElementById('lobby-btn').onclick = () => building.returnToLobby();
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
 </script>
 
 </body>

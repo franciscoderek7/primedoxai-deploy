@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeDox AI — Rule Lab</title>
+<meta name="description" content="PrimeDox AI's own rule lab — the same static rule scorer running Timmy, now scoring PrimeDox's document and citation suggestion rules. Suggests lifecycle changes; Derek approves every one.">
+<style>
+  :root{
+    --bugatti-black:#0a0a0a; --bugatti-blue:#00A4E0; --chrome:#C0C0C0;
+    --gold:#D4AF37; --text:#f5f5f5; --red:#E31937; --green:#22c55e; --orange:#f59e0b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:linear-gradient(135deg,#0a0a0a,#1a1a1a,#0d0d0d);color:var(--text);font-family:'Segoe UI',Tahoma,Arial,sans-serif;padding:20px;min-height:100vh}
+  h1{font-size:1.5rem;letter-spacing:1px}
+  .gold{color:var(--gold)} .blue{color:var(--bugatti-blue)}
+  header{border-bottom:2px solid var(--bugatti-blue);padding-bottom:14px;margin-bottom:18px}
+  .subtitle{color:var(--chrome);font-size:0.85rem;margin-top:4px}
+  .lesson{background:#111;border:1px solid rgba(212,175,55,0.3);border-radius:10px;padding:16px;margin-bottom:18px;font-size:0.88rem;line-height:1.6}
+  .lesson summary{cursor:pointer;color:var(--gold);font-weight:600}
+  .grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:#111;border:1px solid rgba(0,164,224,0.25);border-radius:10px;padding:16px;margin-bottom:18px}
+  .card h2{font-size:1rem;color:var(--bugatti-blue);margin-bottom:10px}
+  table{width:100%;border-collapse:collapse;font-size:0.85rem}
+  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid rgba(255,255,255,0.06)}
+  th{color:var(--chrome);font-weight:500;font-size:0.75rem;text-transform:uppercase}
+  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase}
+  .badge.core{background:rgba(212,175,55,0.18);color:var(--gold)}
+  .badge.core_under_review{background:rgba(245,158,11,0.18);color:var(--orange)}
+  .badge.active{background:rgba(34,197,94,0.15);color:var(--green)}
+  .badge.sandbox{background:rgba(255,255,255,0.08);color:var(--text)}
+  .score-pos{color:var(--green);font-weight:700}
+  .score-neg{color:var(--red);font-weight:700}
+  select,input,button{font-family:inherit;font-size:0.85rem}
+  select,input{background:#1a1a1a;border:1px solid rgba(0,164,224,0.3);color:var(--text);border-radius:6px;padding:8px;width:100%;margin-bottom:8px}
+  button{background:linear-gradient(135deg,var(--bugatti-blue),#0077a8);color:#fff;font-weight:700;border:none;border-radius:6px;padding:9px 12px;cursor:pointer;width:100%}
+  button.secondary{background:#1a1f2b;color:var(--text);border:1px solid rgba(255,255,255,0.15)}
+  .outcome-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+  .outcome-row button{font-size:0.72rem;padding:8px 4px}
+  #toast{position:fixed;top:16px;right:16px;max-width:340px;z-index:50}
+  .toast-item{background:#111;border:1px solid var(--bugatti-blue);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:0.82rem}
+  .empty{color:var(--chrome);font-size:0.82rem;padding:10px 0}
+  .rank{color:var(--chrome);font-size:0.75rem}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚡ <span class="gold">PRIME</span><span class="blue">DOX</span> — Rule Lab</h1>
+  <div class="subtitle">Same scorer as Timmy, different costume: scoring PrimeDox AI's own document &amp; citation suggestion rules — Derek approves every lifecycle change.</div>
+</header>
+
+<details class="lesson">
+  <summary>Why this page exists</summary>
+  <p style="margin-top:10px">
+  "PrimeDox will wear many names, A to Z, but will always be PrimeDox." This page is that instruction made
+  literal: <code>engine/rl-rule-engine.js</code> — the exact file backing Timmy's leaderboard — is imported here
+  too, just constructed as <code>new PrimeDoxRuleEngine('PrimeDox AI', 'document-suggestion-optimization', ...)</code>
+  instead of <code>'Timmy'</code>. One scorer, two brands, separate policy storage so they never collide.
+  </p>
+  <p style="margin-top:8px">
+  The outcome vocabulary is generic on purpose — <code>blocked_threat / false_positive / missed_threat / true_negative</code>
+  aren't security-specific, they're just "correctly acted / wrongly acted / wrongly silent / correctly silent." Here
+  that maps to: a document-type or citation suggestion the user <strong>accepted</strong> (+1), one they
+  <strong>dismissed</strong> as irrelevant (-2), a moment PrimeDox <strong>should have suggested something and
+  didn't</strong> (-3), and correctly staying quiet when nothing applied (+0.1).
+  </p>
+  <p style="margin-top:8px">
+  This is a <strong>static rule scorer, not a self-evolving AI</strong>, and it is not wired to PrimeDox AI's
+  actual system prompt (<code>primedox-ai-backend/main.py</code>) at all — that prompt stays a static string a
+  human edits directly. When a rule's score crosses a lifecycle threshold here, the engine raises a
+  <strong>pending suggestion</strong> in the "Needs your approval" panel below and stops. Derek reviews and
+  clicks Approve or Dismiss — nothing promotes, demotes, or disables itself. The lifecycle ladder (sandbox →
+  active → core, or anything → disabled) and the human-review safety valve on Core rules both come along for
+  free, the same as on Timmy's dashboard.
+  </p>
+</details>
+
+<div class="grid">
+  <div>
+    <div class="card">
+      <h2>🏆 Rule Leaderboard</h2>
+      <table>
+        <thead><tr><th>#</th><th>Rule</th><th>Status</th><th>Score</th><th>Trials</th></tr></thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+    </div>
+    <div class="card" id="approval-card" style="display:none">
+      <h2>📋 Needs your approval</h2>
+      <div id="approval-list"></div>
+      <div style="font-size:0.75rem;color:var(--chrome);margin-top:6px">PrimeDox never applies these on its own — until a real text/call/email alert is wired up (needs infra credentials Claude doesn't hold), this panel is the only notification. Check back here.</div>
+    </div>
+    <div class="card">
+      <h2>🧪 Sandbox — experimental suggestions</h2>
+      <div id="sandbox-list"></div>
+    </div>
+    <div class="card" id="review-card" style="display:none">
+      <h2>⚠ Core rules flagged for your review</h2>
+      <div id="review-list"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>▶ Log a suggestion outcome</h2>
+      <label style="font-size:0.78rem;color:var(--chrome)">Rule</label>
+      <select id="sim-rule-select"></select>
+      <div class="outcome-row">
+        <button onclick="simulate('blocked_threat')">✅ User accepted (+1)</button>
+        <button onclick="simulate('true_negative')" class="secondary">➖ Correctly quiet (+0.1)</button>
+        <button onclick="simulate('false_positive')" class="secondary" style="border-color:var(--orange)">❌ User dismissed (-2)</button>
+        <button onclick="simulate('missed_threat')" class="secondary" style="border-color:var(--red)">👁 Should've suggested (-3)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>➕ Propose a new suggestion rule</h2>
+      <label style="font-size:0.78rem;color:var(--chrome)">Description</label>
+      <input id="new-rule-desc" placeholder="e.g. Suggest Pintea letter on 'self-represented'+'disability'">
+      <label style="font-size:0.78rem;color:var(--chrome)">Trigger pattern</label>
+      <input id="new-rule-pattern" placeholder="e.g. self_rep_disability_keywords">
+      <label style="font-size:0.78rem;color:var(--chrome)">Action</label>
+      <input id="new-rule-action" placeholder="e.g. suggest_pintea_letter">
+      <button onclick="proposeRule()">Add to Sandbox</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+  import { PrimeDoxRuleEngine, LocalStorageAdapter, RULE_STATUS } from '../engine/rl-rule-engine.js';
+
+  const primedox = new PrimeDoxRuleEngine('PrimeDox AI', 'document-suggestion-optimization', {
+    storage: new LocalStorageAdapter('primedox_rules'),
+  });
+
+  if (primedox.rules.size === 0) {
+    primedox.addActiveRule({ description: "Suggest Notice of Motion when user mentions an urgent hearing", pattern: 'urgent_hearing_keywords', action: 'suggest_notice_of_motion' });
+    primedox.addActiveRule({ description: "Suggest Garofoli citation on warrant/ITO-related keywords", pattern: 'warrant_ito_keywords', action: 'suggest_garofoli_citation' });
+    primedox.proposeCandidateRule({ description: "Suggest s.11(b) Jordan application when a delay is mentioned", pattern: 'delay_keywords', action: 'suggest_jordan_application' });
+  }
+
+  window.simulate = (outcomeType) => {
+    const ruleId = document.getElementById('sim-rule-select').value;
+    if (!ruleId) return;
+    const { suggestion } = primedox.recordOutcome(ruleId, outcomeType, 'logged from rule lab');
+    if (suggestion) showToast(suggestion, ruleId);
+    render();
+  };
+
+  window.proposeRule = () => {
+    const description = document.getElementById('new-rule-desc').value.trim();
+    const pattern = document.getElementById('new-rule-pattern').value.trim();
+    const action = document.getElementById('new-rule-action').value.trim();
+    if (!description || !pattern || !action) return;
+    primedox.proposeCandidateRule({ description, pattern, action });
+    document.getElementById('new-rule-desc').value = '';
+    document.getElementById('new-rule-pattern').value = '';
+    document.getElementById('new-rule-action').value = '';
+    render();
+  };
+
+  const SUGGESTION_LABELS = {
+    graduated_to_active: (id) => `📋 "${ruleName(id)}" — Sandbox → Active suggested. Needs your approval.`,
+    promoted_to_core: (id) => `📋 "${ruleName(id)}" — promotion to CORE POLICY suggested. Needs your approval.`,
+    auto_disabled: (id) => `📋 "${ruleName(id)}" — disable suggested, score dropped too low. Needs your approval.`,
+    sandbox_failed: (id) => `📋 "${ruleName(id)}" — failed in sandbox, disable suggested. Needs your approval.`,
+    flagged_for_review: (id) => `⚠ "${ruleName(id)}" regressed — flagged for your review`,
+  };
+  const APPLIED_LABELS = {
+    graduated_to_active: (id) => `⬆ "${ruleName(id)}" graduated Sandbox → Active (approved)`,
+    promoted_to_core: (id) => `🏆 "${ruleName(id)}" promoted to CORE POLICY (approved)`,
+    auto_disabled: (id) => `🚫 "${ruleName(id)}" disabled (approved)`,
+    sandbox_failed: (id) => `🚫 "${ruleName(id)}" disabled — failed in sandbox (approved)`,
+  };
+  function ruleName(id) { return primedox.rules.get(id)?.description ?? id; }
+
+  function showToast(key, ruleId, applied = false) {
+    const labels = applied ? APPLIED_LABELS : SUGGESTION_LABELS;
+    const el = document.createElement('div');
+    el.className = 'toast-item';
+    el.textContent = labels[key] ? labels[key](ruleId) : key;
+    document.getElementById('toast').appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }
+
+  function statusBadge(status) {
+    const labels = { core: 'Core', core_under_review: 'Under Review', active: 'Active', sandbox: 'Sandbox', disabled: 'Disabled' };
+    return `<span class="badge ${status}">${labels[status]}</span>`;
+  }
+
+  function render() {
+    const board = primedox.leaderboard();
+    const ranked = board.ranked.filter((r) => r.status !== RULE_STATUS.DISABLED);
+
+    document.getElementById('leaderboard-body').innerHTML = ranked.length ? ranked.map((r, i) => `
+      <tr>
+        <td class="rank">#${i + 1}</td>
+        <td>${r.description}</td>
+        <td>${statusBadge(r.status)}</td>
+        <td class="${r.score >= 0 ? 'score-pos' : 'score-neg'}">${r.score.toFixed(1)}</td>
+        <td>${r.trials}</td>
+      </tr>`).join('') : `<tr><td colspan="5" class="empty">No rules yet.</td></tr>`;
+
+    document.getElementById('sandbox-list').innerHTML = board.sandbox.length ? board.sandbox.map((r) => `
+      <div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem">
+        ${r.description} — <span class="${r.score >= 0 ? 'score-pos' : 'score-neg'}">${r.score.toFixed(1)} pts</span>, ${r.trials} trials
+      </div>`).join('') : `<div class="empty">No experiments running.</div>`;
+
+    const approvalCard = document.getElementById('approval-card');
+    if (board.pendingApproval.length) {
+      approvalCard.style.display = 'block';
+      document.getElementById('approval-list').innerHTML = board.pendingApproval.map((r) => `
+        <div style="margin-bottom:10px;font-size:0.85rem">
+          ${SUGGESTION_LABELS[r.pendingSuggestion] ? SUGGESTION_LABELS[r.pendingSuggestion](r.id) : r.pendingSuggestion}
+          <div style="color:var(--chrome);font-size:0.78rem">score ${r.score.toFixed(1)}, ${r.trials} trials, currently ${r.status}</div>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button style="width:auto;padding:6px 10px" onclick="approveSuggestion('${r.id}')">Approve</button>
+            <button class="secondary" style="width:auto;padding:6px 10px" onclick="dismissSuggestion('${r.id}')">Dismiss</button>
+          </div>
+        </div>`).join('');
+    } else {
+      approvalCard.style.display = 'none';
+    }
+
+    const reviewCard = document.getElementById('review-card');
+    if (board.coreUnderReview.length) {
+      reviewCard.style.display = 'block';
+      document.getElementById('review-list').innerHTML = board.coreUnderReview.map((r) => `
+        <div style="margin-bottom:10px;font-size:0.85rem">
+          ${r.description} — peak ${r.peakScore.toFixed(1)}, now ${r.score.toFixed(1)}
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button style="width:auto;padding:6px 10px" onclick="reaffirm('${r.id}')">Reaffirm</button>
+            <button class="secondary" style="width:auto;padding:6px 10px;border-color:var(--red)" onclick="retire('${r.id}')">Retire</button>
+          </div>
+        </div>`).join('');
+    } else {
+      reviewCard.style.display = 'none';
+    }
+
+    const pickable = board.ranked.filter((r) => r.status !== RULE_STATUS.DISABLED);
+    document.getElementById('sim-rule-select').innerHTML = pickable.map((r) =>
+      `<option value="${r.id}">${r.description} (${r.status})</option>`).join('');
+  }
+
+  window.reaffirm = (id) => { primedox.reaffirmCoreRule(id); render(); };
+  window.retire = (id) => { primedox.retireCoreRule(id); render(); };
+  window.approveSuggestion = (id) => {
+    const { transition } = primedox.approveSuggestion(id);
+    if (transition) showToast(transition, id, true);
+    render();
+  };
+  window.dismissSuggestion = (id) => { primedox.dismissSuggestion(id); render(); };
+
+  render();
+</script>
+
+</body>
+</html>

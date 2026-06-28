@@ -62,7 +62,7 @@
       color: '#f59e0b',
       accent: '#b45309',
       greeting: "Hey! CleanSwarm here. Need AI-powered document cleanup? Tell me about your workflow.",
-      consultLink: 'mailto:hello@cleanswarm.ca?subject=CleanSwarm%20Inquiry',
+      consultLink: 'mailto:franciscoderek7@gmail.com?subject=CleanSwarm%20Inquiry',
       consultLabel: 'Contact CleanSwarm →',
     },
     'default': {

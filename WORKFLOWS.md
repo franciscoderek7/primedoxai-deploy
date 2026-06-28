@@ -99,7 +99,7 @@ Need help? Reply to this email or contact omniaguard1@gmail.com
 ### Security Remediation ($1,500 flat — from free-scan.html upsell)
 
 1. Customer emails omniaguard1@gmail.com requesting remediation
-2. Send PayPal.Me link: paypal.me/derekfrancisco/1500
+2. Send PayPal.Me link: paypal.me/techpetcage/1500
 3. After payment confirmed:
    - Request FTP/SSH access OR WordPress admin access
    - Fix critical + high findings from their scan report
@@ -120,7 +120,7 @@ Need help? Reply to this email or contact omniaguard1@gmail.com
 ## BENO-X / CCLDR STRATEGY SESSION ($500)
 
 1. Customer books via email (until Calendly set up): franciscoderek7@gmail.com
-2. Send PayPal.Me link: paypal.me/derekfrancisco/500
+2. Send PayPal.Me link: paypal.me/techpetcage/500
 3. Confirm payment → send Zoom link manually (or Google Meet)
 4. 60-min constitutional education session on their specific situation
 5. Follow-up: Send educational resources (links to CCLDR content)
