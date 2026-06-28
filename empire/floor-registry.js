@@ -4,23 +4,22 @@
  * Maps a floor number to its Three.js scene module, dynamically import()'d
  * the first time that floor is visited and cached after that.
  *
- * FLOOR 1 OVERRIDE (direct instruction, not a bug): Derek explicitly said
- * "Wire floor4-omniguard.js as Floor 1" for this live skyscraper-demo
- * registry. That deliberately does NOT match AssetManifest.js, where
- * OmniGuard is Floor 4 and Floor 1 is Francisco Holdings Inc. (the parent
- * holding company / lobby), per EMPIRE.md's Holding Structure table.
- * AssetManifest.js governs the asset-loading pipeline; this registry
- * governs which scene the elevator shows for a given floor number in the
- * live demo — the two are intentionally decoupled per Derek's instruction.
- *
- * Floor 9 (PrimeDox AI HQ, floor9-primedox-ai.js) is filed under its
- * AssetManifest.js number (9), not the "Floor 2" label it arrived under —
- * same "keep manifest numbers" resolution applied to every floor scene
- * except the OmniGuard override above.
+ * RESOLVED FLOOR-1 OVERRIDE: this registry previously wired
+ * floor4-omniguard.js to key 1 as a live-demo-only override, flagged in
+ * comments as a likely mismatch against AssetManifest.js (Floor 1 =
+ * Francisco Holdings Inc., Floor 4 = OmniGuard, per EMPIRE.md's Holding
+ * Structure table). Now that floor1-francisco-holdings.js exists, both
+ * floors are filed under their real manifest numbers and the override
+ * comment no longer applies.
  */
 
 const REGISTRY = {
   1: {
+    loader: () => import('./floors/floor1-francisco-holdings.js'),
+    exportName: 'createFranciscoHoldingsScene',
+    label: 'Francisco Holdings Inc.',
+  },
+  4: {
     loader: () => import('./floors/floor4-omniguard.js'),
     exportName: 'createOmniGuardScene',
     label: 'OmniGuard',
