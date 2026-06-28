@@ -366,13 +366,30 @@
       document.body.appendChild(bar);
     }
 
+    // Other fixed-position widgets (chat bubble, discount panel, etc.) read
+    // this class + CSS var to shift themselves above the bar instead of
+    // being covered by it — see index.html's coordinated-widget-stack rules.
+    function markActive() {
+      document.documentElement.style.setProperty('--apex-stickybar-h', bar.offsetHeight + 'px');
+      document.body.classList.add('apex-stickybar-active');
+    }
+    function markInactive() {
+      document.body.classList.remove('apex-stickybar-active');
+    }
+
+    var origClose = close.onclick;
+    close.onclick = function () { markInactive(); origClose(); };
+
     var shown = false;
     function onScroll() {
       if (shown) return;
       if (window.scrollY >= threshold) {
         shown = true;
         if (!bar) build();
-        requestAnimationFrame(function () { bar.style.transform = 'translateY(0)'; });
+        requestAnimationFrame(function () {
+          bar.style.transform = 'translateY(0)';
+          markActive();
+        });
         window.removeEventListener('scroll', onScroll);
       }
     }
