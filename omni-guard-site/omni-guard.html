@@ -8,6 +8,9 @@
 <meta property="og:title" content="OmniGuard — AI Security That Defends Your Digital Universe">
 <meta property="og:description" content="14-layer autonomous AI defense. Agent Swarm Technology. Timmy AI Oversight. Zero-trust architecture for enterprises that cannot afford a breach.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23090918'/><text y='.68em' font-size='62' text-anchor='middle' x='50'>🛡️</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4A90E2">
+<link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -173,6 +176,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:56px 0 3
   <div class="nav-inner">
     <a href="#top" class="logo"><span class="logo-mark">🛡️</span>OmniGuard</a>
     <div class="nav-links">
+      <a href="#link-scanner">Link Scanner</a>
       <a href="#swarm">Agent Swarm</a>
       <a href="#threat-dashboard">Threat Intel</a>
       <a href="#features">14-Layer Defense</a>
@@ -241,6 +245,128 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:56px 0 3
   </div>
 </section>
 
+<section id="link-scanner">
+  <div class="wrap">
+    <div class="sec-tag">Free Tool — Live Right Now</div>
+    <h2 class="sec-title">Suspicious Link &amp; Email Scanner</h2>
+    <p class="sec-sub">Paste a link or the text of a suspicious email below. This runs entirely in your browser — nothing is sent to a server — and checks for the patterns real phishing attempts use: lookalike domains, link shorteners, IP-address links, and high-pressure urgency language.</p>
+    <div class="feed-panel" style="max-width:760px">
+      <textarea id="scan-input" placeholder="Paste a URL or the body of a suspicious email here..." style="width:100%;min-height:120px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;color:var(--white);font-family:inherit;font-size:14px;padding:14px;resize:vertical"></textarea>
+      <button class="btn btn-primary" id="scan-btn" style="margin-top:14px">Scan for Threats</button>
+      <div id="scan-result" style="margin-top:18px"></div>
+      <p id="scan-count" style="font-size:11px;color:var(--gray-dim);margin-top:14px"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var SUSPICIOUS_TLDS = ['zip','mov','top','xyz','click','work','loan','gq','tk','ml','cf','ga','rest','win','vip','icu'];
+  var SHORTENERS = ['bit.ly','tinyurl.com','t.co','goo.gl','ow.ly','is.gd','buff.ly','rebrand.ly','cutt.ly','rb.gy'];
+  var URGENCY_PHRASES = [
+    'verify your account','account suspended','suspended','click here immediately','act now',
+    'confirm your payment','unusual activity','account locked','verify your identity',
+    'claim your refund','wire transfer','gift card','final notice','your account will be closed',
+    'security alert','update your billing','limited time','immediate action required'
+  ];
+
+  function extractUrls(text){
+    var matches = text.match(/\bhttps?:\/\/[^\s<>"]+/gi) || [];
+    var bare = text.match(/\b[a-z0-9-]+\.[a-z]{2,}(?:\.[a-z]{2,})?\/[^\s<>"]*/gi) || [];
+    return matches.concat(bare).slice(0, 20);
+  }
+
+  function hostOf(url){
+    try{
+      var u = /^https?:\/\//i.test(url) ? url : 'http://' + url;
+      return new URL(u).hostname.toLowerCase();
+    }catch(e){ return null; }
+  }
+
+  function scan(text){
+    var findings = [];
+    var score = 0;
+    var urls = extractUrls(text);
+
+    urls.forEach(function(url){
+      var host = hostOf(url);
+      if(!host) return;
+      if(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host)){
+        findings.push({sev:'sev-high', text:'Raw IP address link ('+host+') — legitimate services almost never link by bare IP.'});
+        score += 30;
+      }
+      if(host.indexOf('xn--') !== -1){
+        findings.push({sev:'sev-high', text:'Punycode/lookalike domain detected in "'+host+'" — common homoglyph-spoofing technique.'});
+        score += 30;
+      }
+      var dotCount = host.split('.').length;
+      if(dotCount >= 5){
+        findings.push({sev:'sev-med', text:'Unusually long subdomain chain ("'+host+'") — often used to bury the real domain.'});
+        score += 15;
+      }
+      var tld = host.split('.').pop();
+      if(SUSPICIOUS_TLDS.indexOf(tld) !== -1){
+        findings.push({sev:'sev-med', text:'Domain uses ".'+tld+'" — a TLD frequently abused for short-lived phishing campaigns.'});
+        score += 15;
+      }
+      SHORTENERS.forEach(function(s){
+        if(host === s){
+          findings.push({sev:'sev-low', text:'Link uses shortener "'+s+'" — the real destination is hidden until clicked.'});
+          score += 10;
+        }
+      });
+    });
+
+    var lower = text.toLowerCase();
+    var hitPhrases = URGENCY_PHRASES.filter(function(p){ return lower.indexOf(p) !== -1; });
+    if(hitPhrases.length){
+      findings.push({sev: hitPhrases.length > 2 ? 'sev-high' : 'sev-med', text:'High-pressure language detected: "'+hitPhrases.slice(0,3).join('", "')+'" — classic urgency manipulation.'});
+      score += Math.min(hitPhrases.length * 10, 30);
+    }
+
+    if(!urls.length && !hitPhrases.length){
+      findings.push({sev:'sev-low', text:'No links found and no urgency language detected in the pasted text.'});
+    }
+
+    return { score: Math.min(score, 100), findings: findings, urlCount: urls.length };
+  }
+
+  function render(result){
+    var box = document.getElementById('scan-result');
+    var verdict, color;
+    if(result.score >= 50){ verdict = '⚠️ High Risk — treat as phishing'; color = 'var(--pink)'; }
+    else if(result.score >= 20){ verdict = '🟡 Use Caution'; color = 'var(--blue-light)'; }
+    else { verdict = '✅ No Strong Red Flags Found'; color = '#10B981'; }
+
+    var html = '<div style="border:1px solid '+color+';border-radius:10px;padding:16px;margin-bottom:12px">'
+      + '<div style="font-family:Orbitron,sans-serif;font-weight:700;color:'+color+';margin-bottom:4px">'+verdict+'</div>'
+      + '<div style="font-size:12px;color:var(--gray)">Risk score: '+result.score+'/100 · '+result.urlCount+' link(s) scanned</div></div>';
+
+    result.findings.forEach(function(f){
+      html += '<div class="feed-row" style="opacity:1;animation:none;margin-bottom:8px">'
+        + '<span class="sev '+f.sev+'">'+f.sev.replace('sev-','').toUpperCase()+'</span>'
+        + '<span>'+f.text+'</span></div>';
+    });
+    html += '<p style="font-size:11.5px;color:var(--gray-dim);margin-top:10px">This is a heuristic check, not a guarantee. When in doubt, don\'t click — verify directly with the sender through a channel you already trust.</p>';
+    box.innerHTML = html;
+  }
+
+  document.getElementById('scan-btn').addEventListener('click', function(){
+    var text = document.getElementById('scan-input').value.trim();
+    if(!text) return;
+    render(scan(text));
+    var n = parseInt(localStorage.getItem('og_scan_count') || '0', 10) + 1;
+    localStorage.setItem('og_scan_count', String(n));
+    document.getElementById('scan-count').textContent = 'Scans run on this device: ' + n;
+  });
+
+  var existing = parseInt(localStorage.getItem('og_scan_count') || '0', 10);
+  if(existing > 0){
+    document.getElementById('scan-count').textContent = 'Scans run on this device: ' + existing;
+  }
+})();
+</script>
+
 <section id="swarm">
   <div class="wrap">
     <div class="sec-tag">Agent Swarm Technology</div>
@@ -276,13 +402,30 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:56px 0 3
     <h2 class="sec-title">Choose Your Defense Tier</h2>
     <p class="sec-sub">All tiers include the full agent swarm and Timmy AI Oversight. Scale endpoints and SLA as you grow.</p>
 
-    <div class="pro-cta-card">
-      <div class="pro-cta-tag">Individuals &amp; Home Networks</div>
-      <div class="pro-cta-price">$9.99<span>/mo</span></div>
-      <p class="pro-cta-desc">OmniGuard Pro — the full agent swarm and Timmy AI Oversight, sized for one person and their devices.</p>
-      <!-- TODO(Derek/Manus): replace with real Stripe Payment Link for OmniGuard Pro $9.99/mo recurring, created in Stripe Dashboard -->
-      <a href="https://buy.stripe.com/PLACEHOLDER_OMNIGUARD_PRO" class="btn btn-primary">Get OmniGuard Pro — $9.99/mo →</a>
+    <div class="sec-tag" style="text-align:center;margin-bottom:18px">Personal &amp; Family Plans</div>
+    <div class="pricing-grid" style="margin-bottom:48px">
+      <div class="price-card">
+        <div class="price-tier">Basic Protection</div>
+        <div class="price-val">Free</div>
+        <div class="price-desc">Real-time phishing &amp; suspicious-link detection for one device. No card required.</div>
+        <a href="#link-scanner" class="btn btn-outline">Start Free →</a>
+      </div>
+      <div class="price-card feat">
+        <div class="price-tier">Pro Shield</div>
+        <div class="price-val">$9.99<span style="font-size:14px;color:var(--gray)">/mo</span></div>
+        <div class="price-desc">Everything in Basic, plus VPN and advanced threat blocking across your devices.</div>
+        <!-- TODO(Derek/Manus): replace with real Stripe Payment Link for OmniGuard Pro Shield $9.99/mo recurring, created in Stripe Dashboard -->
+        <a href="https://buy.stripe.com/PLACEHOLDER_OMNI_GUARD_PRO" class="btn btn-primary">Get Pro Shield — $9.99/mo →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Enterprise Guard</div>
+        <div class="price-val">$49.99<span style="font-size:14px;color:var(--gray)">/mo</span></div>
+        <div class="price-desc">Multi-device coverage, dark web breach monitoring, priority support. +$29.99 one-time setup.</div>
+        <!-- TODO(Derek/Manus): replace with real Stripe Payment Link for Enterprise Guard $49.99/mo + $29.99 setup fee -->
+        <a href="mailto:omniaguard1@gmail.com?subject=Enterprise%20Guard%20-%20%2449.99%2Fmo%20%2B%20%2429.99%20setup" class="btn btn-outline">Get Enterprise Guard →</a>
+      </div>
     </div>
+    <p class="stripe-note" style="margin-top:-28px;margin-bottom:48px">VPN and dark web monitoring are activating as vendor integrations come online — phishing/link detection is live today on every tier.</p>
 
     <div class="sec-tag" style="text-align:center;margin-bottom:18px">Business &amp; Enterprise Tiers</div>
     <div class="pricing-grid">
@@ -312,6 +455,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:56px 0 3
   </div>
 </section>
 
+<div class="wrap" style="padding:36px 16px;text-align:center">
+  <div style="display:inline-block;max-width:560px;padding:20px 24px;border:1px solid var(--blue);border-radius:12px;background:linear-gradient(160deg,rgba(74,144,226,0.08),rgba(233,30,99,0.06))">
+    <p style="font-size:14px;color:var(--gray);margin-bottom:10px">Facing a legal threat — a scam contract, a demand letter, a dispute? PrimeDox AI can help you respond.</p>
+    <a href="https://zprimedoxaihq.com" target="_blank" rel="noopener" class="btn btn-outline">Get Help from PrimeDox AI →</a>
+  </div>
+</div>
 <footer id="contact">
   <div class="wrap footer-inner">
     <div class="footer-logo">🛡️ OmniGuard</div>
@@ -656,6 +805,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:56px 0 3
 })();
 
 if(window.gsap && window.ScrollTrigger){ gsap.registerPlugin(ScrollTrigger); }
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
 </script>
 </body>
 </html>
