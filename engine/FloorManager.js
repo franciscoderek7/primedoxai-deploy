@@ -29,10 +29,21 @@ export class FloorManager {
     return this.activeFloorId;
   }
 
+  /**
+   * Falls back to {} when the backend is unreachable or returns non-OK,
+   * so floors still mount and render in environments with no live API
+   * (e.g. static hosting, local file testing) — floors only use this for
+   * optional live-data hooks, never for initial render.
+   */
   async fetchFloorState(floorId) {
-    const res = await fetch(`${this.apiBase}/floors/${floorId}/state`);
-    if (!res.ok) throw new Error(`FloorManager: state fetch failed for floor ${floorId} (${res.status})`);
-    return res.json();
+    try {
+      const res = await fetch(`${this.apiBase}/floors/${floorId}/state`);
+      if (!res.ok) throw new Error(`status ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      console.warn(`FloorManager: state fetch failed for floor ${floorId} (${err.message}) — mounting with {}`);
+      return {};
+    }
   }
 
   /**
