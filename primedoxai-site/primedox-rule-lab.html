@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PrimeDox AI — Rule Lab</title>
-<meta name="description" content="PrimeDox AI's own reinforcement-learning rule lab — the same self-modifying engine running Timmy, now scoring PrimeDox's document and citation suggestion rules.">
+<meta name="description" content="PrimeDox AI's own rule lab — the same static rule scorer running Timmy, now scoring PrimeDox's document and citation suggestion rules. Suggests lifecycle changes; Derek approves every one.">
 <style>
   :root{
     --bugatti-black:#0a0a0a; --bugatti-blue:#00A4E0; --chrome:#C0C0C0;
@@ -48,7 +48,7 @@
 
 <header>
   <h1>⚡ <span class="gold">PRIME</span><span class="blue">DOX</span> — Rule Lab</h1>
-  <div class="subtitle">Same engine as Timmy, different costume: scoring PrimeDox AI's own document &amp; citation suggestion rules.</div>
+  <div class="subtitle">Same scorer as Timmy, different costume: scoring PrimeDox AI's own document &amp; citation suggestion rules — Derek approves every lifecycle change.</div>
 </header>
 
 <details class="lesson">
@@ -57,16 +57,23 @@
   "PrimeDox will wear many names, A to Z, but will always be PrimeDox." This page is that instruction made
   literal: <code>engine/rl-rule-engine.js</code> — the exact file backing Timmy's leaderboard — is imported here
   too, just constructed as <code>new PrimeDoxRuleEngine('PrimeDox AI', 'document-suggestion-optimization', ...)</code>
-  instead of <code>'Timmy'</code>. One brain, two brands, separate policy storage so they never collide.
+  instead of <code>'Timmy'</code>. One scorer, two brands, separate policy storage so they never collide.
   </p>
   <p style="margin-top:8px">
   The outcome vocabulary is generic on purpose — <code>blocked_threat / false_positive / missed_threat / true_negative</code>
   aren't security-specific, they're just "correctly acted / wrongly acted / wrongly silent / correctly silent." Here
   that maps to: a document-type or citation suggestion the user <strong>accepted</strong> (+1), one they
   <strong>dismissed</strong> as irrelevant (-2), a moment PrimeDox <strong>should have suggested something and
-  didn't</strong> (-3), and correctly staying quiet when nothing applied (+0.1). Spin up a third instance for any
-  other brand the same way — the lifecycle ladder (sandbox → active → core, or anything → disabled) and the
-  human-review safety valve on Core rules both come along for free.
+  didn't</strong> (-3), and correctly staying quiet when nothing applied (+0.1).
+  </p>
+  <p style="margin-top:8px">
+  This is a <strong>static rule scorer, not a self-evolving AI</strong>, and it is not wired to PrimeDox AI's
+  actual system prompt (<code>primedox-ai-backend/main.py</code>) at all — that prompt stays a static string a
+  human edits directly. When a rule's score crosses a lifecycle threshold here, the engine raises a
+  <strong>pending suggestion</strong> in the "Needs your approval" panel below and stops. Derek reviews and
+  clicks Approve or Dismiss — nothing promotes, demotes, or disables itself. The lifecycle ladder (sandbox →
+  active → core, or anything → disabled) and the human-review safety valve on Core rules both come along for
+  free, the same as on Timmy's dashboard.
   </p>
 </details>
 
@@ -78,6 +85,11 @@
         <thead><tr><th>#</th><th>Rule</th><th>Status</th><th>Score</th><th>Trials</th></tr></thead>
         <tbody id="leaderboard-body"></tbody>
       </table>
+    </div>
+    <div class="card" id="approval-card" style="display:none">
+      <h2>📋 Needs your approval</h2>
+      <div id="approval-list"></div>
+      <div style="font-size:0.75rem;color:var(--chrome);margin-top:6px">PrimeDox never applies these on its own — until a real text/call/email alert is wired up (needs infra credentials Claude doesn't hold), this panel is the only notification. Check back here.</div>
     </div>
     <div class="card">
       <h2>🧪 Sandbox — experimental suggestions</h2>
@@ -133,8 +145,8 @@
   window.simulate = (outcomeType) => {
     const ruleId = document.getElementById('sim-rule-select').value;
     if (!ruleId) return;
-    const { transition } = primedox.recordOutcome(ruleId, outcomeType, 'logged from rule lab');
-    if (transition) showToast(transition, ruleId);
+    const { suggestion } = primedox.recordOutcome(ruleId, outcomeType, 'logged from rule lab');
+    if (suggestion) showToast(suggestion, ruleId);
     render();
   };
 
@@ -150,19 +162,26 @@
     render();
   };
 
-  const TRANSITION_LABELS = {
-    graduated_to_active: (id) => `⬆ "${ruleName(id)}" graduated Sandbox → Active`,
-    promoted_to_core: (id) => `🏆 "${ruleName(id)}" promoted to CORE POLICY`,
-    auto_disabled: (id) => `🚫 "${ruleName(id)}" auto-disabled — score dropped too low`,
-    sandbox_failed: (id) => `🚫 "${ruleName(id)}" failed in sandbox — never went live`,
+  const SUGGESTION_LABELS = {
+    graduated_to_active: (id) => `📋 "${ruleName(id)}" — Sandbox → Active suggested. Needs your approval.`,
+    promoted_to_core: (id) => `📋 "${ruleName(id)}" — promotion to CORE POLICY suggested. Needs your approval.`,
+    auto_disabled: (id) => `📋 "${ruleName(id)}" — disable suggested, score dropped too low. Needs your approval.`,
+    sandbox_failed: (id) => `📋 "${ruleName(id)}" — failed in sandbox, disable suggested. Needs your approval.`,
     flagged_for_review: (id) => `⚠ "${ruleName(id)}" regressed — flagged for your review`,
+  };
+  const APPLIED_LABELS = {
+    graduated_to_active: (id) => `⬆ "${ruleName(id)}" graduated Sandbox → Active (approved)`,
+    promoted_to_core: (id) => `🏆 "${ruleName(id)}" promoted to CORE POLICY (approved)`,
+    auto_disabled: (id) => `🚫 "${ruleName(id)}" disabled (approved)`,
+    sandbox_failed: (id) => `🚫 "${ruleName(id)}" disabled — failed in sandbox (approved)`,
   };
   function ruleName(id) { return primedox.rules.get(id)?.description ?? id; }
 
-  function showToast(transition, ruleId) {
+  function showToast(key, ruleId, applied = false) {
+    const labels = applied ? APPLIED_LABELS : SUGGESTION_LABELS;
     const el = document.createElement('div');
     el.className = 'toast-item';
-    el.textContent = TRANSITION_LABELS[transition] ? TRANSITION_LABELS[transition](ruleId) : transition;
+    el.textContent = labels[key] ? labels[key](ruleId) : key;
     document.getElementById('toast').appendChild(el);
     setTimeout(() => el.remove(), 6000);
   }
@@ -190,6 +209,22 @@
         ${r.description} — <span class="${r.score >= 0 ? 'score-pos' : 'score-neg'}">${r.score.toFixed(1)} pts</span>, ${r.trials} trials
       </div>`).join('') : `<div class="empty">No experiments running.</div>`;
 
+    const approvalCard = document.getElementById('approval-card');
+    if (board.pendingApproval.length) {
+      approvalCard.style.display = 'block';
+      document.getElementById('approval-list').innerHTML = board.pendingApproval.map((r) => `
+        <div style="margin-bottom:10px;font-size:0.85rem">
+          ${SUGGESTION_LABELS[r.pendingSuggestion] ? SUGGESTION_LABELS[r.pendingSuggestion](r.id) : r.pendingSuggestion}
+          <div style="color:var(--chrome);font-size:0.78rem">score ${r.score.toFixed(1)}, ${r.trials} trials, currently ${r.status}</div>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button style="width:auto;padding:6px 10px" onclick="approveSuggestion('${r.id}')">Approve</button>
+            <button class="secondary" style="width:auto;padding:6px 10px" onclick="dismissSuggestion('${r.id}')">Dismiss</button>
+          </div>
+        </div>`).join('');
+    } else {
+      approvalCard.style.display = 'none';
+    }
+
     const reviewCard = document.getElementById('review-card');
     if (board.coreUnderReview.length) {
       reviewCard.style.display = 'block';
@@ -212,6 +247,12 @@
 
   window.reaffirm = (id) => { primedox.reaffirmCoreRule(id); render(); };
   window.retire = (id) => { primedox.retireCoreRule(id); render(); };
+  window.approveSuggestion = (id) => {
+    const { transition } = primedox.approveSuggestion(id);
+    if (transition) showToast(transition, id, true);
+    render();
+  };
+  window.dismissSuggestion = (id) => { primedox.dismissSuggestion(id); render(); };
 
   render();
 </script>

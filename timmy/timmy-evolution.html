@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Timmy — Reinforcement Learning Controller</title>
-<meta name="description" content="Timmy's self-modifying rule engine: scores every rule, auto-disables losers, promotes winners to core policy, experiments with new rules in sandbox mode.">
+<title>Timmy — Rule Scoring Dashboard</title>
+<meta name="description" content="Timmy's static rule scorer: scores every rule against Derek's principles and flags lifecycle changes for human approval. Nothing here rewrites itself — Derek reviews and approves every promotion, demotion, or disable.">
 <style>
   :root{
     --bg:#05050A; --card:#0D1117; --border:rgba(212,175,55,0.18);
@@ -50,30 +50,31 @@
 <body>
 
 <header>
-  <h1>⚙ <span class="gold">TIMMY</span> — Reinforcement Learning Controller</h1>
-  <div class="subtitle">Domain: empire-wide anomaly &amp; threat-pattern oversight · self-modifying rule engine, scored in real time</div>
+  <h1>⚙ <span class="gold">TIMMY</span> — Rule Scoring Dashboard</h1>
+  <div class="subtitle">Domain: empire-wide anomaly &amp; threat-pattern oversight · static rule scorer — flags changes, never applies them itself</div>
 </header>
 
 <details class="lesson" open>
   <summary>How this actually works (read me first)</summary>
   <p style="margin-top:10px">
   Every rule below starts with a score of 0. Every time a rule fires and you find out whether it was
-  right, you log that as an <strong>outcome</strong> — a reward signal, same idea as in any reinforcement-learning
-  system. Blocking a real threat is worth <strong>+1</strong>. A false positive costs <strong>-2</strong> — deliberately worse,
-  because one false alarm burns more trust than one quiet correct block earns. Missing a real threat costs <strong>-3</strong> —
-  the worst outcome of all.
+  right, you log that as an <strong>outcome</strong> — a reward signal. Blocking a real threat is worth <strong>+1</strong>.
+  A false positive costs <strong>-2</strong> — deliberately worse, because one false alarm burns more trust than one
+  quiet correct block earns. Missing a real threat costs <strong>-3</strong> — the worst outcome of all.
   </p>
   <p style="margin-top:8px">
-  The engine checks the score after <em>every single outcome</em> and moves the rule along a ladder:
-  <strong>Sandbox</strong> (experimental, scored but not enforced) → <strong>Active</strong> (enforced, still earning trust) →
-  <strong>Core Policy</strong> (promoted — the empire trusts it). A rule that scores too low gets auto-disabled at
-  any stage except Core — a Core rule that regresses gets flagged for <em>you</em> to review instead of being
-  silently killed, because something the system fully trusted shouldn't be undone by the algorithm alone.
+  Timmy is a <strong>static rule scorer, not a self-modifying AI.</strong> When a score crosses a lifecycle
+  threshold — Sandbox → Active → Core Policy, or any of those → Disabled — Timmy does not make that change.
+  It raises a <strong>pending suggestion</strong> in the "Needs your approval" panel and stops. Nothing about a
+  rule's pattern, action, or enforcement changes until <em>you</em> click Approve. A Core rule that regresses
+  still only gets flagged for your review, exactly like before — reaffirm or retire it yourself.
   </p>
   <p style="margin-top:8px">
-  Nobody is hand-editing these rules. The scoreboard does it. That's the whole trick — see
-  <code>engine/rl-rule-engine.js</code> for the commented source, and the bottom of this page for how the exact
-  same engine — same file, just a different name — runs PrimeDox AI's own rule lab too.
+  Nobody is hand-editing the scores — the scoreboard does that part automatically. But every actual change to
+  what Timmy enforces is a human decision. See <code>engine/rl-rule-engine.js</code> for the source (the
+  <code>approveSuggestion</code> / <code>dismissSuggestion</code> methods are the only ones that ever change a
+  rule's status), and the bottom of this page's sibling file for how the exact same engine — same file, just a
+  different name — runs PrimeDox AI's own rule lab too.
   </p>
 </details>
 
@@ -87,13 +88,19 @@
       </table>
     </div>
 
+    <div class="card" id="approval-card" style="display:none">
+      <h2>📋 Needs your approval</h2>
+      <div id="approval-list"></div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:6px">Timmy never applies these on its own — until a real text/call/email alert is wired up (needs infra credentials Claude doesn't hold), this panel is the only notification. Check back here.</div>
+    </div>
+
     <div class="card">
       <h2>🧪 Sandbox — experiments in progress</h2>
       <div id="sandbox-list"></div>
     </div>
 
     <div class="card">
-      <h2>🚫 Disabled — scored themselves out</h2>
+      <h2>🚫 Disabled — by your approval</h2>
       <div id="disabled-list"></div>
     </div>
 
@@ -157,8 +164,8 @@
   window.simulate = (outcomeType) => {
     const ruleId = document.getElementById('sim-rule-select').value;
     if (!ruleId) return;
-    const { transition } = timmy.recordOutcome(ruleId, outcomeType, 'simulated from dashboard');
-    if (transition) showToast(transition, ruleId);
+    const { suggestion } = timmy.recordOutcome(ruleId, outcomeType, 'simulated from dashboard');
+    if (suggestion) showToast(suggestion, ruleId);
     render();
   };
 
@@ -174,19 +181,26 @@
     render();
   };
 
-  const TRANSITION_LABELS = {
-    graduated_to_active: (id) => `⬆ "${ruleName(id)}" graduated Sandbox → Active`,
-    promoted_to_core: (id) => `🏆 "${ruleName(id)}" promoted to CORE POLICY`,
-    auto_disabled: (id) => `🚫 "${ruleName(id)}" auto-disabled — score dropped too low`,
-    sandbox_failed: (id) => `🚫 "${ruleName(id)}" failed in sandbox — never went live`,
+  const SUGGESTION_LABELS = {
+    graduated_to_active: (id) => `📋 "${ruleName(id)}" — Sandbox → Active suggested. Needs your approval.`,
+    promoted_to_core: (id) => `📋 "${ruleName(id)}" — promotion to CORE POLICY suggested. Needs your approval.`,
+    auto_disabled: (id) => `📋 "${ruleName(id)}" — disable suggested, score dropped too low. Needs your approval.`,
+    sandbox_failed: (id) => `📋 "${ruleName(id)}" — failed in sandbox, disable suggested. Needs your approval.`,
     flagged_for_review: (id) => `⚠ "${ruleName(id)}" regressed — flagged for your review`,
+  };
+  const APPLIED_LABELS = {
+    graduated_to_active: (id) => `⬆ "${ruleName(id)}" graduated Sandbox → Active (approved)`,
+    promoted_to_core: (id) => `🏆 "${ruleName(id)}" promoted to CORE POLICY (approved)`,
+    auto_disabled: (id) => `🚫 "${ruleName(id)}" disabled (approved)`,
+    sandbox_failed: (id) => `🚫 "${ruleName(id)}" disabled — failed in sandbox (approved)`,
   };
   function ruleName(id) { return timmy.rules.get(id)?.description ?? id; }
 
-  function showToast(transition, ruleId) {
+  function showToast(key, ruleId, applied = false) {
+    const labels = applied ? APPLIED_LABELS : SUGGESTION_LABELS;
     const el = document.createElement('div');
     el.className = 'toast-item';
-    el.textContent = TRANSITION_LABELS[transition] ? TRANSITION_LABELS[transition](ruleId) : transition;
+    el.textContent = labels[key] ? labels[key](ruleId) : key;
     document.getElementById('toast').appendChild(el);
     setTimeout(() => el.remove(), 6000);
   }
@@ -221,6 +235,22 @@
         ${r.description} — final score ${r.score.toFixed(1)}
       </div>`).join('') : `<div class="empty">Nothing disabled yet.</div>`;
 
+    const approvalCard = document.getElementById('approval-card');
+    if (board.pendingApproval.length) {
+      approvalCard.style.display = 'block';
+      document.getElementById('approval-list').innerHTML = board.pendingApproval.map((r) => `
+        <div style="margin-bottom:10px;font-size:0.85rem">
+          ${SUGGESTION_LABELS[r.pendingSuggestion] ? SUGGESTION_LABELS[r.pendingSuggestion](r.id) : r.pendingSuggestion}
+          <div style="color:var(--muted);font-size:0.78rem">score ${r.score.toFixed(1)}, ${r.trials} trials, currently ${r.status}</div>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button style="width:auto;padding:6px 10px" onclick="approveSuggestion('${r.id}')">Approve</button>
+            <button class="secondary" style="width:auto;padding:6px 10px" onclick="dismissSuggestion('${r.id}')">Dismiss</button>
+          </div>
+        </div>`).join('');
+    } else {
+      approvalCard.style.display = 'none';
+    }
+
     const reviewCard = document.getElementById('review-card');
     if (board.coreUnderReview.length) {
       reviewCard.style.display = 'block';
@@ -244,6 +274,12 @@
 
   window.reaffirm = (id) => { timmy.reaffirmCoreRule(id); render(); };
   window.retire = (id) => { timmy.retireCoreRule(id); render(); };
+  window.approveSuggestion = (id) => {
+    const { transition } = timmy.approveSuggestion(id);
+    if (transition) showToast(transition, id, true);
+    render();
+  };
+  window.dismissSuggestion = (id) => { timmy.dismissSuggestion(id); render(); };
 
   render();
 </script>
