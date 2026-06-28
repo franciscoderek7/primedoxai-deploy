@@ -35,6 +35,8 @@ class Settings:
     SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
     SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", "")
 
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
+
     @property
     def stripe_live(self) -> bool:
         return self.STRIPE_SECRET_KEY.startswith("sk_live_")

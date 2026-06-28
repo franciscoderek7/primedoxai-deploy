@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Doc Weedlaw AI — Constitutional Advocate & Empire Commander</title>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js" defer></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -725,6 +726,7 @@ main { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
               <div style="display:flex;gap:8px;">
                 <button class="btn btn-green" style="padding:6px 12px;font-size:12px;" onclick="generateDoc()">⚡ Generate</button>
                 <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;" onclick="copyDoc()">Copy</button>
+                <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;" onclick="downloadDocPDF()">⬇ PDF</button>
               </div>
             </div>
             <div class="doc-output-body" id="doc-output-body">
@@ -1208,6 +1210,17 @@ async function refineDoc() {
 
 function copyDoc() {
   navigator.clipboard.writeText(document.getElementById('doc-output-body').innerText);
+}
+
+function downloadDocPDF() {
+  const output = document.getElementById('doc-output-body');
+  if (!output.innerText.trim() || typeof html2pdf === 'undefined') return;
+  html2pdf().set({
+    margin: 20,
+    filename: 'doc-weedlaw-ai-document.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'pt', format: 'letter' },
+  }).from(output).save();
 }
 
 // ===== EMPIRE =====

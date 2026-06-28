@@ -17,6 +17,7 @@ from ..core.db import get_db
 from ..db_models.document import Document
 from ..db_models.user import User
 from ..schemas import GenerateRequest, GenerateResponse
+from ..services.drafting import draft_document
 from ..services.pdf import render_text_to_pdf
 from ..services.storage import upload_pdf
 from .deps import get_current_user
@@ -30,12 +31,7 @@ def _run_generation(document_id: UUID, db: Session) -> None:
         return
 
     try:
-        # Placeholder text generation — wire to OpenAI/Gemma here.
-        body = (
-            f"DOCUMENT TYPE: {doc.type}\n\n{doc.prompt}\n\n"
-            "[Generated content placeholder — wire to the LLM of your choice "
-            "in backend/api/generate.py:_run_generation]"
-        )
+        body = draft_document(doc.type, doc.prompt)
         doc.content = body
 
         pdf_bytes = render_text_to_pdf(doc.type.replace("_", " ").title(), body)
