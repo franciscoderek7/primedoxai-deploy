@@ -114,6 +114,25 @@ these into the workflow JSON itself), connect the HTTP Header Auth credential fo
 n8n API call, connect Gmail and Supabase credentials. Same `errorWorkflow` placeholder
 note as Workflow 4.
 
+## Workflow 7 — OmniGuard Lead Capture
+
+File: `workflow-7-omniguard-lead-capture.json`. Webhook receives `{name, email,
+company, message}` from `omni-guard-site/lead-form.html` -> inserts into the
+`leads` table (Supabase, `source = 'omniguard-site'`) -> confirmation email to
+the lead (anonymous sign-off, no Derek-identifying info per CLAUDE.md zero-bleed
+rules) -> Telegram alert to Derek.
+
+Requires the `message` column on `leads` — run
+`automation/supabase-omniguard-leads-update.sql` first if it hasn't been added
+yet (it's separate from the original `leads` columns in
+`automation/supabase-tables.sql`).
+
+Full step-by-step setup (Supabase, n8n import, Telegram bot creation, wiring the
+webhook URL into the form) is in `OMNIGUARD-LEAD-CAPTURE-CHECKLIST.md` — the
+Telegram chat ID and bot token are not filled in anywhere; that's a one-time
+manual step only Derek can do (Telegram has no API key Claude can generate on
+his behalf).
+
 ## Status of the deployment checklist Derek sent
 
 - [x] Supabase tables defined (`002_subscribers.sql`, `003_full_schema.sql`) —
