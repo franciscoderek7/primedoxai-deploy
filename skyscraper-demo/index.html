@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Francisco Holdings — 3D Skyscraper Demo</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: -apple-system, Arial, sans-serif; }
+  #viewport { position: fixed; inset: 0; }
+  #viewport canvas { display: block; touch-action: none; }
+  #hud { position: fixed; top: 0; left: 0; right: 0; padding: 14px 18px; display: flex;
+         justify-content: space-between; align-items: center; pointer-events: none; z-index: 5; }
+  #hud .brand { color: #FFD700; font-weight: 700; font-size: 14px; letter-spacing: 1px; }
+  #hud .floor-label { color: #ccc; font-size: 12px; }
+  #enter-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 5;
+               background: linear-gradient(135deg, #FFD700, #D4AF37); color: #0a0a0a; border: none;
+               border-radius: 8px; padding: 14px 28px; font-size: 14px; font-weight: 700;
+               letter-spacing: 1px; cursor: pointer; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+  #enter-btn.floor2 { background: linear-gradient(135deg, #00BFFF, #FF1493); color: #000;
+                       box-shadow: 0 0 20px rgba(0,191,255,0.4); }
+</style>
+</head>
+<body>
+
+<div id="viewport"></div>
+
+<div id="hud">
+  <div class="brand">FRANCISCO HOLDINGS — 3D PREVIEW</div>
+  <div class="floor-label" id="floor-label">Floor 1 — Francisco Holdings HQ</div>
+</div>
+
+<button id="enter-btn">ENTER THE TOWER — FLOOR 2</button>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script type="module">
+  import { createEngine } from './js/engine.js';
+  import { Floor1CorporateHQ } from './js/floor1.js';
+  import { Floor2OmniGuard } from './js/floor2.js';
+  import { wirePayments } from './js/payments.js';
+
+  const container = document.getElementById('viewport');
+  const engine = createEngine(container);
+
+  const floors = { 1: Floor1CorporateHQ, 2: Floor2OmniGuard };
+  let currentFloor = 1;
+  let buttons = engine.applyTemplate(floors[currentFloor]).buttons;
+
+  const payments = wirePayments(engine, () => buttons);
+
+  const enterBtn = document.getElementById('enter-btn');
+  const floorLabel = document.getElementById('floor-label');
+
+  enterBtn.onclick = () => {
+    currentFloor = currentFloor === 1 ? 2 : 1;
+    const config = floors[currentFloor];
+    buttons = engine.applyTemplate(config).buttons;
+    floorLabel.textContent = `Floor ${currentFloor} — ${config.name}`;
+    enterBtn.textContent = currentFloor === 1 ? 'ENTER THE TOWER — FLOOR 2' : 'BACK TO LOBBY — FLOOR 1';
+    enterBtn.classList.toggle('floor2', currentFloor === 2);
+
+    if (window.gsap) {
+      gsap.fromTo(engine.camera.position, { y: engine.camera.position.y + 4 }, { y: 6, duration: 1, ease: 'power2.out' });
+    }
+  };
+
+  engine.animate(payments.pulse);
+</script>
+
+</body>
+</html>
