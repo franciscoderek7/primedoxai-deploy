@@ -1,7 +1,7 @@
 # Weedlaw Education — Email Sequence
 # 3-Email Series | Deploy via Mailchimp / ConvertKit
 # FROM: derek@weedlaw.education | Reply-To: franciscoderek7@gmail.com
-# Payment: paypal.me/derekfrancisco | Interac: franciscoderek7@gmail.com
+# Payment: paypal.me/techpetcage | Interac: franciscoderek7@gmail.com
 # Trigger: Email capture on weedlaw-education site
 
 ---
@@ -44,7 +44,7 @@ You asked for the checklist. Here it is.
 
 This checklist is just the surface. The BENO-X Framework covers the full constitutional defense strategy — the exact approach used in 200+ cases.
 
-**Warrior tier — $149 one-time:** ccldr.net or paypal.me/derekfrancisco/149CAD
+**Warrior tier — $149 one-time:** ccldr.net or paypal.me/techpetcage/149CAD
 
 Questions? Reply to this email.
 
@@ -81,10 +81,10 @@ This is called the BENO-X Framework. I built it over 20 years. It's been used su
 
 **Ready to learn the full framework?**
 
-→ Warrior tier ($149): Stages 1-2, basic BENO-X intro — paypal.me/derekfrancisco/149CAD
-→ Professional tier ($499): Stages 1-5, full BENO-X, case law library — paypal.me/derekfrancisco/499CAD
-→ Elite tier ($999): Stages 1-9, trial preparation — paypal.me/derekfrancisco/999CAD
-→ Sovereign ($1,499): All 12 stages, complete arsenal — paypal.me/derekfrancisco/1499CAD
+→ Warrior tier ($149): Stages 1-2, basic BENO-X intro — paypal.me/techpetcage/149CAD
+→ Professional tier ($499): Stages 1-5, full BENO-X, case law library — paypal.me/techpetcage/499CAD
+→ Elite tier ($999): Stages 1-9, trial preparation — paypal.me/techpetcage/999CAD
+→ Sovereign ($1,499): All 12 stages, complete arsenal — paypal.me/techpetcage/1499CAD
 
 Or pay via Interac e-Transfer: franciscoderek7@gmail.com (include tier name in subject)
 
@@ -120,8 +120,8 @@ The Weedlaw Education Sovereign tier is $1,499 — one time, lifetime access, al
 
 That's less than one hour of a Toronto criminal lawyer's time.
 
-→ Get Sovereign — $1,499 lifetime: paypal.me/derekfrancisco/1499CAD
-→ Or start with Warrior — $149: paypal.me/derekfrancisco/149CAD
+→ Get Sovereign — $1,499 lifetime: paypal.me/techpetcage/1499CAD
+→ Or start with Warrior — $149: paypal.me/techpetcage/149CAD
 
 Any questions — reply directly. I read every email.
 

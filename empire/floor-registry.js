@@ -19,6 +19,11 @@ const REGISTRY = {
     exportName: 'createFranciscoHoldingsScene',
     label: 'Francisco Holdings Inc.',
   },
+  3: {
+    loader: () => import('./floors/floor3-ccldr.js'),
+    exportName: 'createCcldrScene',
+    label: 'CCLDR',
+  },
   4: {
     loader: () => import('./floors/floor4-omniguard.js'),
     exportName: 'createOmniGuardScene',

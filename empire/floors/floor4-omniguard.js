@@ -31,11 +31,30 @@
  * globe with surface "blips"; three canvas-texture holographic data panels
  * were added (procedural text, no external asset, same CanvasTexture
  * approach scene.js uses for the brushed-steel door normal map).
+ *
+ * COMBAT ADDITIONS (Derek's "BUILD FOUR 3D SITES" order, SITE 2 spec): a
+ * robot squad patrols the floor, detects the three enemy types named in
+ * that spec (ransomware blobs, prompt injection snakes, data broker gangs),
+ * and destroys them with a laser-beam strike when in range; a clickable
+ * "VPN CLOAK" panel temporarily drops the squad's opacity to simulate the
+ * spec's invisibility effect. Pricing-tier buy buttons (paypal.me/techpetcage
+ * amounts copied verbatim from stripe-config.js's omniguard block) use the
+ * shared empire/payments.js Option A floating-button system.
  */
+
+import { createBuyButtonMesh, PaymentHotspots } from '../payments.js';
 
 const BLUE = { r: 0x4a, g: 0x90, b: 0xe2 };
 const PINK = { r: 0xe9, g: 0x1e, b: 0x63 };
 const SHIELD_LAYERS = 14;
+const ROBOT_COUNT = 4;
+const MAX_ENEMIES = 6;
+const ENEMY_TYPES = ['ransomware', 'injection', 'databroker'];
+const OMNIGUARD_PLANS = [
+  { label: 'OMNIGUARD ENTRY', priceLabel: '$99 CAD', paypalUrl: 'https://paypal.me/techpetcage/99CAD' },
+  { label: 'OMNIGUARD MID', priceLabel: '$299 CAD', paypalUrl: 'https://paypal.me/techpetcage/299CAD' },
+  { label: 'OMNIGUARD PREMIUM', priceLabel: '$999 CAD', paypalUrl: 'https://paypal.me/techpetcage/999CAD' },
+];
 
 function lerpColorHex(c1, c2, t) {
   const r = Math.round(c1.r + (c2.r - c1.r) * t);
@@ -157,6 +176,79 @@ function createHoloPanel(THREE, title, value) {
   return new THREE.Mesh(geo, mat);
 }
 
+// Random spawn point on the combat floor, away from the camera's start.
+function randomSpawnPoint() {
+  const angle = Math.random() * Math.PI * 2;
+  const radius = 6 + Math.random() * 9;
+  return { x: Math.cos(angle) * radius, z: Math.sin(angle) * radius - 4 };
+}
+
+function createEnemy(THREE, type) {
+  let mesh;
+  if (type === 'ransomware') {
+    mesh = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.5, 1),
+      new THREE.MeshStandardMaterial({ color: 0xff3355, emissive: 0x550011, emissiveIntensity: 0.6, wireframe: false })
+    );
+  } else if (type === 'injection') {
+    mesh = new THREE.Mesh(
+      new THREE.TorusKnotGeometry(0.35, 0.12, 64, 8, 2, 3),
+      new THREE.MeshStandardMaterial({ color: 0x84cc16, emissive: 0x223300, emissiveIntensity: 0.5 })
+    );
+  } else {
+    mesh = new THREE.Group();
+    for (let i = 0; i < 5; i++) {
+      const cube = new THREE.Mesh(
+        new THREE.BoxGeometry(0.28, 0.28, 0.28),
+        new THREE.MeshStandardMaterial({ color: 0x2a2a33, emissive: 0x111118, emissiveIntensity: 0.4 })
+      );
+      cube.position.set((Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 0.6);
+      mesh.add(cube);
+    }
+  }
+  const spawn = randomSpawnPoint();
+  mesh.position.set(spawn.x, 1.4, spawn.z);
+  mesh.userData.type = type;
+  mesh.userData.alive = true;
+  mesh.userData.dying = false;
+  return mesh;
+}
+
+function createRobot(THREE, index) {
+  const group = new THREE.Group();
+  const accent = index % 2 === 0 ? 0x4a90e2 : 0xe91e63;
+
+  const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.25, 0.3, 0.7, 12),
+    new THREE.MeshStandardMaterial({ color: 0xc8ccd4, metalness: 0.9, roughness: 0.25 })
+  );
+  const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 16, 16),
+    new THREE.MeshStandardMaterial({ color: accent, emissive: accent, emissiveIntensity: 0.7 })
+  );
+  head.position.y = 0.55;
+  group.add(body, head);
+  group.position.y = 1.2;
+
+  group.userData = {
+    patrolAngle: (index / ROBOT_COUNT) * Math.PI * 2,
+    patrolRadius: 10,
+    state: 'patrol', // 'patrol' | 'engaging'
+    target: null,
+    laser: null,
+    laserUntil: 0,
+  };
+  return group;
+}
+
+function createLaserBeam(THREE, color) {
+  const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.9 });
+  const line = new THREE.Line(geo, mat);
+  line.visible = false;
+  return line;
+}
+
 export function createOmniGuardScene(THREE) {
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x05070d, 10, 60);
@@ -276,6 +368,55 @@ export function createOmniGuardScene(THREE) {
   holoPanels[2].position.set(0, 6.4, -3.5);
   holoPanels.forEach((p) => scene.add(p));
 
+  // ROBOT SQUAD + ENEMY COMBAT (Derek's SITE 2 spec: patrol, detect, destroy)
+  const robots = [];
+  for (let i = 0; i < ROBOT_COUNT; i++) {
+    const robot = createRobot(THREE, i);
+    const laser = createLaserBeam(THREE, i % 2 === 0 ? 0x4a90e2 : 0xe91e63);
+    scene.add(robot, laser);
+    robot.userData.laser = laser;
+    robots.push(robot);
+  }
+
+  const enemies = [];
+  for (let i = 0; i < MAX_ENEMIES; i++) {
+    const enemy = createEnemy(THREE, ENEMY_TYPES[i % ENEMY_TYPES.length]);
+    scene.add(enemy);
+    enemies.push(enemy);
+  }
+
+  function respawnEnemy(enemy) {
+    const type = ENEMY_TYPES[Math.floor(Math.random() * ENEMY_TYPES.length)];
+    const fresh = createEnemy(THREE, type);
+    scene.remove(enemy);
+    scene.add(fresh);
+    enemies[enemies.indexOf(enemy)] = fresh;
+  }
+
+  // VPN CLOAK — clickable holo panel, toggles squad invisibility for 5s
+  const cloakPanel = createHoloPanel(THREE, 'VPN CLOAK', 'CLICK TO ENGAGE');
+  cloakPanel.position.set(-7, 2.2, 4);
+  scene.add(cloakPanel);
+  let cloakUntil = 0;
+
+  // PRICING BUY BUTTONS — Option A floating holographic buttons
+  const hotspots = new PaymentHotspots(THREE, camera);
+  OMNIGUARD_PLANS.forEach((plan, i) => {
+    const mesh = createBuyButtonMesh(THREE, { ...plan, accentColor: i === 1 ? '#E91E63' : '#4A90E2' });
+    mesh.position.set(-3 + i * 3, 1.6, 9);
+    scene.add(mesh);
+    hotspots.add(mesh);
+  });
+
+  function onCombatClick(event) {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(cloakPanel);
+    if (hits.length) cloakUntil = performance.now() + 5000;
+  }
+  window.addEventListener('mousedown', onCombatClick);
+
   // ANIMATION LOOP
   function update() {
     const now = Date.now();
@@ -317,11 +458,79 @@ export function createOmniGuardScene(THREE) {
     holoPanels.forEach((p, i) => {
       p.position.y += Math.sin(now * 0.0015 + i) * 0.0015;
     });
+
+    // ROBOT PATROL / DETECT / DESTROY
+    const cloaked = performance.now() < cloakUntil;
+    robots.forEach((robot) => {
+      const ud = robot.userData;
+      if (ud.state === 'patrol') {
+        ud.patrolAngle += 0.006;
+        robot.position.x = Math.cos(ud.patrolAngle) * ud.patrolRadius;
+        robot.position.z = Math.sin(ud.patrolAngle) * ud.patrolRadius - 4;
+        robot.position.y = 1.2 + Math.sin(now * 0.003) * 0.05;
+
+        const nearby = enemies.find((e) => e.userData.alive && !e.userData.dying && e.position.distanceTo(robot.position) < 4.5);
+        if (nearby) {
+          ud.state = 'engaging';
+          ud.target = nearby;
+        }
+      } else if (ud.state === 'engaging' && ud.target) {
+        const target = ud.target;
+        if (!target.userData.alive) {
+          ud.state = 'patrol';
+          ud.target = null;
+        } else {
+          const dir = new THREE.Vector3().subVectors(target.position, robot.position);
+          const dist = dir.length();
+          if (dist > 0.6) {
+            dir.normalize();
+            robot.position.addScaledVector(dir, 0.05);
+            robot.lookAt(target.position.x, robot.position.y, target.position.z);
+          } else if (!target.userData.dying) {
+            target.userData.dying = true;
+            ud.laser.visible = true;
+            ud.laser.geometry.setFromPoints([robot.position.clone(), target.position.clone()]);
+            ud.laserUntil = now + 220;
+            setTimeout(() => {
+              target.userData.alive = false;
+              respawnEnemy(target);
+              ud.state = 'patrol';
+              ud.target = null;
+            }, 220);
+          }
+        }
+      }
+
+      if (ud.laser && now > ud.laserUntil) ud.laser.visible = false;
+
+      robot.children.forEach((child) => {
+        const mat = child.material;
+        if (mat && 'opacity' in mat) {
+          mat.transparent = true;
+          mat.opacity += ((cloaked ? 0.15 : 1) - mat.opacity) * 0.15;
+        }
+      });
+    });
+
+    enemies.forEach((enemy, i) => {
+      if (!enemy.userData.dying) {
+        enemy.rotation.y += 0.02;
+        enemy.position.y = 1.4 + Math.sin(now * 0.0018 + i) * 0.15;
+      } else {
+        enemy.scale.multiplyScalar(0.85);
+      }
+    });
+
+    cloakPanel.rotation.y = cloaked ? Math.sin(now * 0.02) * 0.4 : 0;
+
+    hotspots.update();
   }
 
   function dispose() {
     window.removeEventListener('mousemove', onPointerMove);
     window.removeEventListener('mousedown', onPointerDown);
+    window.removeEventListener('mousedown', onCombatClick);
+    hotspots.dispose();
   }
 
   return {

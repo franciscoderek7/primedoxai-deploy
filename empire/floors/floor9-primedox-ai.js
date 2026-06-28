@@ -13,7 +13,74 @@
  * Self-contained primitive-built scene (does not depend on
  * empire/AssetLoader.js) — returns { scene, camera, update } for a future
  * engine.js to mount and drive.
+ *
+ * ASSEMBLY-LINE ADDITIONS (Derek's "BUILD FOUR 3D SITES" order, SITE 3
+ * spec: "robots building documents on conveyor belts, click to generate"):
+ * a conveyor belt now carries document panels past a robot arm that stamps
+ * each one; clicking the belt spawns a fresh document immediately ("click
+ * to generate"). Pricing-tier buy buttons (paypal.me/techpetcage amounts
+ * copied verbatim from stripe-config.js's zprimedox block — the same
+ * standardized tiers used on zprimedoxaihq.com) use the shared
+ * empire/payments.js Option A floating-button system.
  */
+
+import { createBuyButtonMesh, PaymentHotspots } from '../payments.js';
+
+const PRIMEDOX_PLANS = [
+  { label: 'INDIVIDUAL', priceLabel: '$49 CAD', paypalUrl: 'https://paypal.me/techpetcage/49CAD' },
+  { label: 'TEAM', priceLabel: '$149 CAD', paypalUrl: 'https://paypal.me/techpetcage/149CAD' },
+  { label: 'ENTERPRISE', priceLabel: '$499 CAD', paypalUrl: 'https://paypal.me/techpetcage/499CAD' },
+];
+
+function createDocumentPanel(THREE) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 200;
+  canvas.height = 256;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#f4f4f8';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(3, 3, canvas.width - 6, canvas.height - 6);
+  ctx.fillStyle = '#1f2937';
+  for (let y = 30; y < canvas.height - 20; y += 16) {
+    ctx.fillRect(16, y, canvas.width - 32 - Math.random() * 40, 6);
+  }
+  const mat = new THREE.MeshBasicMaterial({
+    map: new THREE.CanvasTexture(canvas),
+    transparent: true,
+    side: THREE.DoubleSide,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 1), mat);
+  mesh.rotation.x = -Math.PI / 2;
+  return mesh;
+}
+
+function createConveyorBelt(THREE) {
+  const group = new THREE.Group();
+  const belt = new THREE.Mesh(
+    new THREE.BoxGeometry(2, 0.2, 14),
+    new THREE.MeshStandardMaterial({ color: 0x1a1a2e, metalness: 0.6, roughness: 0.4 })
+  );
+  group.add(belt);
+
+  const armBase = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.18, 0.22, 1.4, 12),
+    new THREE.MeshStandardMaterial({ color: 0x6d28d9, emissive: 0x2e1065, emissiveIntensity: 0.4, metalness: 0.8 })
+  );
+  armBase.position.set(1.4, 0.9, 0);
+  group.add(armBase);
+
+  const armHead = new THREE.Mesh(
+    new THREE.ConeGeometry(0.18, 0.5, 8),
+    new THREE.MeshStandardMaterial({ color: 0xfbbf24, emissive: 0xfbbf24, emissiveIntensity: 0.6 })
+  );
+  armHead.position.set(1.4, 1.7, 0);
+  armHead.rotation.x = Math.PI;
+  group.add(armHead);
+
+  return { group, armHead, beltLength: 14 };
+}
 
 export function createPrimeDoxHQScene(THREE) {
   const scene = new THREE.Scene();
@@ -144,22 +211,78 @@ export function createPrimeDoxHQScene(THREE) {
   table.position.set(0, 1, 0);
   scene.add(table);
 
+  // DOCUMENT ASSEMBLY LINE — conveyor belt + stamping robot arm, per SITE 3
+  // spec ("robots building documents on conveyor belts, click to generate")
+  const { group: conveyor, armHead, beltLength } = createConveyorBelt(THREE);
+  conveyor.position.set(8, 0.6, 0);
+  scene.add(conveyor);
+
+  const documents = [];
+  function spawnDocument(zOffset = 0) {
+    const doc = createDocumentPanel(THREE);
+    doc.position.set(8, 0.85, -beltLength / 2 + zOffset);
+    scene.add(doc);
+    documents.push(doc);
+  }
+  for (let i = 0; i < 4; i++) spawnDocument(i * 3.2);
+
+  // PRICING BUY BUTTONS — Option A floating holographic buttons
+  const hotspots = new PaymentHotspots(THREE, camera);
+  PRIMEDOX_PLANS.forEach((plan, i) => {
+    const mesh = createBuyButtonMesh(THREE, { ...plan, accentColor: '#00d4ff' });
+    mesh.position.set(-3 + i * 3, 5, 9);
+    scene.add(mesh);
+    hotspots.add(mesh);
+  });
+
+  // CLICK-TO-GENERATE — clicking the conveyor belt spawns a new document
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  function onPointerDown(event) {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(conveyor, true);
+    if (hits.length) spawnDocument();
+  }
+  window.addEventListener('mousedown', onPointerDown);
+
   // SIMPLE ANIMATION LOOP
   function update() {
+    const now = Date.now();
     core.rotation.y += 0.01;
 
     panels.forEach((p, i) => {
-      p.material.opacity = 0.25 + Math.sin(Date.now() * 0.001 + i) * 0.1;
+      p.material.opacity = 0.25 + Math.sin(now * 0.001 + i) * 0.1;
     });
 
     avatars.forEach((a, i) => {
-      a.position.y = 1 + Math.sin(Date.now() * 0.001 + i) * 0.1;
+      a.position.y = 1 + Math.sin(now * 0.001 + i) * 0.1;
     });
+
+    armHead.position.y = 1.7 + Math.abs(Math.sin(now * 0.004)) * -0.3; // stamp motion
+
+    for (let i = documents.length - 1; i >= 0; i--) {
+      const doc = documents[i];
+      doc.position.z += 0.025;
+      if (doc.position.z > beltLength / 2) {
+        scene.remove(doc);
+        documents.splice(i, 1);
+      }
+    }
+
+    hotspots.update();
+  }
+
+  function dispose() {
+    window.removeEventListener('mousedown', onPointerDown);
+    hotspots.dispose();
   }
 
   return {
     scene,
     camera,
-    update
+    update,
+    dispose,
   };
 }

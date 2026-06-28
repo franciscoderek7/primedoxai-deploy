@@ -25,7 +25,7 @@ All five funnel pages and the email sequence doc are **built, committed, and pus
 | # | Funnel | Source file (in repo) | Expected live URL (confirm after deploy) | Activation step |
 |---|--------|----------------------|-------------------------------------------|-----------------|
 | 1 | CCLDR Legal Partners Portal | `ccldr-site/legal-partners.html` | `ccldr.net/legal-partners.html` | Deploy `ccldr-site/` → confirm page loads → test the signup form (it opens a pre-filled email to `franciscoderek7@gmail.com`) |
-| 2 | PrimeDox Emergency Defense | `primedoxai-site/emergency-defense.html` | `primedoxai.com/emergency-defense.html` (per your own draft post) | Deploy `primedoxai-site/` → confirm "I NEED HELP NOW" button opens PayPal (`paypal.me/derekfrancisco/99cad`) |
+| 2 | PrimeDox Emergency Defense | `primedoxai-site/emergency-defense.html` | `primedoxai.com/emergency-defense.html` (per your own draft post) | Deploy `primedoxai-site/` → confirm "I NEED HELP NOW" button opens PayPal (`paypal.me/techpetcage/99cad`) |
 | 3 | CleanSwarm for Cleaning Businesses | `cleanswarm-checkout/for-cleaning-businesses.html` | `cleanswarm.ca/for-cleaning-businesses.html` | Deploy `cleanswarm-checkout/` → confirm trial-signup form opens correctly |
 | 4 | Weedlaw Course Sales | `weedlaw-education/course-sales.html` | *(confirm weedlaw-education's live domain — not listed with a public URL in EMPIRE.md)* | Deploy `weedlaw-education/` → confirm course-buy buttons open PayPal at correct amounts ($149/$499/$999/$1,499) |
 | 5 | Francisco Holdings Investor Page | `francisco-holdings-site/investors.html` | `franciscoholdings.com/investors.html` *(EMPIRE.md lists this domain as still PENDING registration — confirm it's live before sending to BDC contacts)* | Deploy site → confirm investor inquiry form + PayPal/e-transfer info display correctly |
@@ -226,7 +226,7 @@ We're raising to accelerate deployment across the existing portfolio and fund th
 
 **LET'S TALK:**
 📧 franciscoderek7@gmail.com
-💳 PayPal: paypal.me/derekfrancisco | 🏦 Interac: franciscoderek7@gmail.com
+💳 PayPal: paypal.me/techpetcage | 🏦 Interac: franciscoderek7@gmail.com
 🔗 Full breakdown + inquiry form: franciscoholdings.com/investors.html
 
 *This is informational only and does not constitute an offer to sell securities. Forward-looking projections are estimates; actual results may vary. All investments carry risk.*
