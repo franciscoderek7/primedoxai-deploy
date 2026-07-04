@@ -1,0 +1,121 @@
+{
+  "name": "Workflow 8 - Weedlaw Email → PDF Parse → Court Response Draft",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": { "item": [{ "mode": "everyMinute" }] },
+        "filters": {
+          "q": "has:attachment filename:pdf to:docweedlaw@gmail.com",
+          "readStatus": "unread"
+        },
+        "options": {
+          "downloadAttachments": true,
+          "attachmentsPrefix": "attachment_"
+        }
+      },
+      "name": "Gmail: Watch for PDF Attachments",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300],
+      "notes": "Polls docweedlaw@gmail.com every minute for unread emails with PDF attachments. Credentials: attach Derek's Gmail OAuth2 credential. The filter `has:attachment filename:pdf` limits to PDFs only — ignores promotional/non-court emails."
+    },
+    {
+      "parameters": {
+        "operation": "binaryToJson",
+        "binaryPropertyName": "={{ $json.attachments[0].name }}",
+        "outputFormat": "textOnly",
+        "options": {}
+      },
+      "name": "Extract PDF Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "notes": "Uses n8n's built-in PDF extraction (no external API needed). Outputs the raw text content of the first PDF attachment. If multiple attachments exist, add a Loop node upstream to process each — for now assumes single-attachment emails."
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.item.json.text || '';\nconst email = $input.item.json.from || '';\nconst subject = $input.item.json.subject || '';\n\n// Extract date patterns (e.g. 2026-05-14 or May 14, 2026)\nconst dateMatch = text.match(/\\b(\\d{4}-\\d{2}-\\d{2}|[A-Z][a-z]+ \\d{1,2},? \\d{4})\\b/);\n\n// Extract court file numbers (Ontario format: CV-24-12345 or court file #)\nconst fileNumMatch = text.match(/(?:court file|file no\\.?|CV|CL|SC|OCJ)[\\s#:\\-]*(\\d{2,}-[\\w\\-]+|\\d{5,})/i);\n\n// Detect document type from keywords\nconst docType = /notice of motion/i.test(text) ? 'Notice of Motion'\n  : /statement of claim/i.test(text) ? 'Statement of Claim'\n  : /affidavit/i.test(text) ? 'Affidavit'\n  : /response to/i.test(text) ? 'Response'\n  : /factum/i.test(text) ? 'Factum'\n  : /demand letter/i.test(text) ? 'Demand Letter'\n  : 'Court Document';\n\nreturn [{\n  json: {\n    rawText: text,\n    fromEmail: email,\n    emailSubject: subject,\n    documentType: docType,\n    hearingDate: dateMatch ? dateMatch[0] : 'Not found',\n    courtFileNumber: fileNumMatch ? fileNumMatch[0] : 'Not found',\n    charCount: text.length\n  }\n}];"
+      },
+      "name": "Parse: Extract Case Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300],
+      "notes": "Lightweight client-side parsing — no API cost. Extracts doc type, hearing date, and court file number from the raw text using regex patterns tuned for Ontario Superior Court document formats. Expand patterns here as new document types are encountered."
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "message",
+        "model": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a legal document assistant for a self-represented litigant in Ontario, Canada. You help draft court response templates based on incoming documents. Always include: (1) proper Ontario Superior Court header format, (2) court file number, (3) responding party section, (4) grounds for the response, (5) order sought, (6) a note that this is a draft for review by a licensed paralegal or lawyer before filing. Never give legal advice — only structural drafting assistance."
+            },
+            {
+              "role": "user",
+              "content": "=A court document has been received. Document type: {{ $json.documentType }}. Court file number: {{ $json.courtFileNumber }}. Hearing date: {{ $json.hearingDate }}.\n\nDocument text (first 3000 characters):\n{{ $json.rawText.substring(0, 3000) }}\n\nPlease draft a response template to this {{ $json.documentType }} in proper Ontario Superior Court format. Include all required sections. Mark any section requiring Derek's specific facts as [INSERT: description]."
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 2000,
+          "temperature": 0.3
+        }
+      },
+      "name": "AI: Draft Court Response",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.3,
+      "position": [900, 300],
+      "notes": "Uses OpenAI gpt-4o-mini (cost-efficient for structured drafting). Credential: attach Derek's OpenAI API key. Temperature 0.3 keeps output deterministic and structured. To switch to Claude (preferred for legal), replace node type with n8n-nodes-base.anthropic, model claude-3-5-haiku-20241022, same message structure — Claude follows Ontario court formatting instructions more reliably."
+    },
+    {
+      "parameters": {
+        "tableId": "court_responses",
+        "operation": "insert",
+        "dataToSend": "defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "source_email", "fieldValue": "={{ $('Parse: Extract Case Metadata').item.json.fromEmail }}" },
+            { "fieldId": "email_subject", "fieldValue": "={{ $('Parse: Extract Case Metadata').item.json.emailSubject }}" },
+            { "fieldId": "document_type", "fieldValue": "={{ $('Parse: Extract Case Metadata').item.json.documentType }}" },
+            { "fieldId": "court_file_number", "fieldValue": "={{ $('Parse: Extract Case Metadata').item.json.courtFileNumber }}" },
+            { "fieldId": "hearing_date", "fieldValue": "={{ $('Parse: Extract Case Metadata').item.json.hearingDate }}" },
+            { "fieldId": "draft_response", "fieldValue": "={{ $json.choices[0].message.content }}" },
+            { "fieldId": "status", "fieldValue": "draft_pending_review" }
+          ]
+        }
+      },
+      "name": "Save Draft to Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1120, 300],
+      "notes": "Saves the draft to the `court_responses` Supabase table. Create this table: court_responses(id uuid PK, source_email text, email_subject text, document_type text, court_file_number text, hearing_date text, draft_response text, status text, created_at timestamptz default now()). Uses the same Supabase credential as Workflows 2 and 7."
+    },
+    {
+      "parameters": {
+        "sendTo": "docweedlaw@gmail.com",
+        "subject": "=📋 Draft Response Ready: {{ $('Parse: Extract Case Metadata').item.json.documentType }} — {{ $('Parse: Extract Case Metadata').item.json.courtFileNumber }}",
+        "emailType": "html",
+        "message": "=<h2>Court Response Draft Ready</h2><p><strong>Document Type:</strong> {{ $('Parse: Extract Case Metadata').item.json.documentType }}<br><strong>Court File:</strong> {{ $('Parse: Extract Case Metadata').item.json.courtFileNumber }}<br><strong>Hearing Date:</strong> {{ $('Parse: Extract Case Metadata').item.json.hearingDate }}</p><hr><h3>Draft Response</h3><pre style=\"white-space:pre-wrap;font-family:Georgia,serif;font-size:14px\">{{ $('AI: Draft Court Response').item.json.choices[0].message.content }}</pre><hr><p style=\"color:#888;font-size:12px\">⚠️ This is an AI-generated draft. Review with a licensed paralegal or lawyer before filing. Saved to your Supabase court_responses table (status: draft_pending_review).</p>",
+        "options": {}
+      },
+      "name": "Email Draft to Derek",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1340, 300],
+      "notes": "Sends the draft back to docweedlaw@gmail.com so Derek can review it directly in his inbox. Subject includes court file number for easy filtering. Same Gmail credential as the trigger node."
+    }
+  ],
+  "connections": {
+    "Gmail: Watch for PDF Attachments": { "main": [[{ "node": "Extract PDF Text", "type": "main", "index": 0 }]] },
+    "Extract PDF Text": { "main": [[{ "node": "Parse: Extract Case Metadata", "type": "main", "index": 0 }]] },
+    "Parse: Extract Case Metadata": { "main": [[{ "node": "AI: Draft Court Response", "type": "main", "index": 0 }]] },
+    "AI: Draft Court Response": { "main": [[{ "node": "Save Draft to Supabase", "type": "main", "index": 0 }]] },
+    "Save Draft to Supabase": { "main": [[{ "node": "Email Draft to Derek", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "notes": "SETUP CHECKLIST (all one-time actions Derek must do in n8n UI before activating):\n1. Import this JSON into n8n (Settings → Import Workflow)\n2. Attach Gmail OAuth2 credential to both Gmail nodes (same credential)\n3. Attach OpenAI API key credential to 'AI: Draft Court Response' node — OR swap to Anthropic node (see node notes)\n4. Attach Supabase credential to 'Save Draft to Supabase' node\n5. Create the court_responses table in Supabase (SQL in node notes above)\n6. Activate the workflow — it will poll docweedlaw@gmail.com every minute for new PDFs"
+}
