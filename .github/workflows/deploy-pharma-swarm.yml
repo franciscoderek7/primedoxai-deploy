@@ -1,0 +1,44 @@
+name: Deploy PharmaSwarm
+
+on:
+  push:
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
+    paths:
+      - 'pharma-swarm-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone or init pharma-swarm repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/pharma-swarm.git /tmp/pharma-swarm 2>/dev/null || {
+            mkdir -p /tmp/pharma-swarm
+            cd /tmp/pharma-swarm
+            git init -b main
+            git remote add origin https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/pharma-swarm.git
+          }
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe and copy site files
+        run: |
+          find /tmp/pharma-swarm -mindepth 1 -not -path '/tmp/pharma-swarm/.git*' -delete 2>/dev/null || true
+          cp -r pharma-swarm-site/. /tmp/pharma-swarm/
+          touch /tmp/pharma-swarm/.nojekyll
+          echo "Copied $(ls pharma-swarm-site/*.html 2>/dev/null | wc -l) HTML files"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/pharma-swarm
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Empire Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: pharma-swarm @ ${{ github.sha }}" || echo "Nothing to commit"
+          git push origin main || git push --set-upstream origin main
+          echo "Live: franciscoderek7.github.io/pharma-swarm"
