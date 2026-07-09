@@ -349,6 +349,24 @@ footer{background:#050610;border-top:1px solid var(--border);padding:48px clamp(
   </div>
 </nav>
 
+<!-- URGENCY BANNER -->
+<div id="kiaros-urgency" style="background:linear-gradient(90deg,#050a07,#040a04,#050a07);border-bottom:1px solid rgba(16,185,129,0.3);padding:9px 16px;text-align:center;font-size:13px;color:#888;position:relative;z-index:998;">
+  <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;">
+    <span style="width:7px;height:7px;border-radius:50%;background:#10b981;display:inline-block;animation:kpulse 2s infinite;flex-shrink:0;"></span>
+    <strong style="color:#f5f5f5;">LIMITED TIME — Founding Member rates end soon. Only 8 slots remaining.</strong>
+    Offer expires in: <strong id="kiaros-countdown" style="color:#10b981;font-family:monospace;letter-spacing:1px;">--:--:--</strong>
+    <a href="#pricing" style="color:#fbbf24;font-weight:800;text-decoration:none;margin-left:4px;">Lock In Your Rate →</a>
+    <button onclick="document.getElementById('kiaros-urgency').style.display='none'" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#444;font-size:18px;line-height:1;background:none;border:none;cursor:pointer;padding:4px;">&times;</button>
+  </span>
+</div>
+<style>@keyframes kpulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+<script>
+(function(){
+  function kUpdateCd(){var el=document.getElementById('kiaros-countdown');if(!el)return;var now=new Date(),end=new Date();end.setHours(23,59,59,0);var diff=end-now;if(diff<0)diff=0;var h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);el.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+  setInterval(kUpdateCd,1000);kUpdateCd();
+})();
+</script>
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-chip"><div class="dot"></div> Now live — Kiaros Intelligence Platform</div>

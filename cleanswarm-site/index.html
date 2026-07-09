@@ -1,0 +1,2056 @@
+<!-- .nojekyll -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CleanSwarm — Deploy autonomous AI-powered robot cleaning swarms for commercial facilities. 24/7 operation, zero human intervention, ROI in 90 days.">
+  <meta name="keywords" content="autonomous cleaning robots, commercial cleaning AI, robot swarm cleaning, warehouse cleaning automation, hospital cleaning robots">
+  <meta name="author" content="CleanSwarm">
+  <meta property="og:title" content="CleanSwarm — Autonomous Robot Cleaning Intelligence">
+  <meta property="og:description" content="Deploy an army of AI-powered cleaning bots. 24/7 operation. No humans required.">
+  <meta property="og:url" content="https://cleanswarm.com">
+  <title>CleanSwarm — Autonomous Robot Cleaning Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0A0A0A;
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; }
+    button { cursor: pointer; border: none; outline: none; }
+    ul { list-style: none; }
+
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --cyan: #00D4AA;
+      --cyan-dim: rgba(0, 212, 170, 0.15);
+      --cyan-glow: 0 0 24px rgba(0, 212, 170, 0.4);
+      --obsidian: #0A0A0A;
+      --near-white-bg: #F0F4F8;
+      --dark-card: #111418;
+      --border: rgba(0, 212, 170, 0.2);
+      --text-muted: #8A9BB0;
+      --font-headline: 'Orbitron', monospace;
+    }
+
+    /* ===== UTILITIES ===== */
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-headline);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border: 1px solid var(--border);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+    .cyan-text { color: var(--cyan); }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--cyan);
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: #00F5C4;
+      transform: translateY(-2px);
+      box-shadow: var(--cyan-glow);
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    /* ===== STICKY NAV ===== */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      height: 68px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--cyan);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-headline);
+      font-size: 14px;
+      font-weight: 900;
+      color: #000;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-family: var(--font-headline);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: var(--cyan);
+      color: #000 !important;
+      font-weight: 700 !important;
+      padding: 9px 20px;
+      border-radius: 7px;
+      font-size: 14px !important;
+      transition: all 0.2s !important;
+      display: inline-block;
+    }
+    .nav-cta:hover {
+      background: #00F5C4 !important;
+      color: #000 !important;
+      box-shadow: var(--cyan-glow);
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px; left: 0; right: 0;
+      background: rgba(10, 10, 10, 0.98);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 17px;
+      font-weight: 500;
+      color: #fff;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .mobile-menu a.nav-cta {
+      border: none;
+      text-align: center;
+      padding: 14px;
+      margin-top: 8px;
+    }
+
+    /* ===== HERO SECTION ===== */
+    #hero {
+      position: relative;
+      background: var(--obsidian);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 68px;
+      overflow: hidden;
+    }
+    /* Grid overlay */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    /* Radial glow */
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(0,212,170,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 860px;
+      padding: 80px 0;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-headline);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--cyan);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      background: rgba(0,212,170,0.06);
+    }
+    .hero-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+    .hero-h1 {
+      font-family: var(--font-headline);
+      font-size: clamp(38px, 6.5vw, 80px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 28px;
+      color: #fff;
+    }
+    .hero-h1 .gradient-word {
+      background: linear-gradient(90deg, var(--cyan) 0%, #00FFD0 50%, #7BFFF0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2.2vw, 20px);
+      color: var(--text-muted);
+      max-width: 620px;
+      line-height: 1.75;
+      margin-bottom: 44px;
+      font-weight: 400;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 72px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      overflow: hidden;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      flex: 1;
+      min-width: 160px;
+      padding: 24px 28px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-value {
+      font-family: var(--font-headline);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* CSS Particles */
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--cyan);
+      opacity: 0;
+      animation: particle-rise linear infinite;
+    }
+    @keyframes particle-rise {
+      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(1); }
+      10%  { opacity: 0.7; }
+      80%  { opacity: 0.5; }
+      100% { opacity: 0; transform: translateY(-95vh) translateX(var(--dx)) scale(0.3); }
+    }
+    /* Individual particle seeds */
+    .p1  { width:3px; height:3px; left:5%;  bottom:0; animation-duration:9s;  animation-delay:0s;   --dx:30px; }
+    .p2  { width:5px; height:5px; left:12%; bottom:0; animation-duration:12s; animation-delay:1.5s; --dx:-20px; }
+    .p3  { width:2px; height:2px; left:20%; bottom:0; animation-duration:8s;  animation-delay:3s;   --dx:15px; }
+    .p4  { width:4px; height:4px; left:30%; bottom:0; animation-duration:14s; animation-delay:0.5s; --dx:-35px; }
+    .p5  { width:3px; height:3px; left:40%; bottom:0; animation-duration:10s; animation-delay:2s;   --dx:25px; }
+    .p6  { width:6px; height:6px; left:50%; bottom:0; animation-duration:11s; animation-delay:4s;   --dx:-10px; }
+    .p7  { width:2px; height:2px; left:60%; bottom:0; animation-duration:9s;  animation-delay:1s;   --dx:40px; }
+    .p8  { width:4px; height:4px; left:70%; bottom:0; animation-duration:13s; animation-delay:2.5s; --dx:-30px; }
+    .p9  { width:3px; height:3px; left:80%; bottom:0; animation-duration:10s; animation-delay:0.8s; --dx:20px; }
+    .p10 { width:5px; height:5px; left:88%; bottom:0; animation-duration:12s; animation-delay:3.5s; --dx:-15px; }
+    .p11 { width:2px; height:2px; left:7%;  bottom:0; animation-duration:7s;  animation-delay:5s;   --dx:10px; }
+    .p12 { width:4px; height:4px; left:16%; bottom:0; animation-duration:15s; animation-delay:1.2s; --dx:-45px; }
+    .p13 { width:3px; height:3px; left:25%; bottom:0; animation-duration:11s; animation-delay:6s;   --dx:35px; }
+    .p14 { width:5px; height:5px; left:35%; bottom:0; animation-duration:9s;  animation-delay:2.8s; --dx:-25px; }
+    .p15 { width:2px; height:2px; left:45%; bottom:0; animation-duration:13s; animation-delay:0.3s; --dx:18px; }
+    .p16 { width:4px; height:4px; left:55%; bottom:0; animation-duration:8s;  animation-delay:4.5s; --dx:-38px; }
+    .p17 { width:3px; height:3px; left:65%; bottom:0; animation-duration:16s; animation-delay:1.8s; --dx:28px; }
+    .p18 { width:6px; height:6px; left:75%; bottom:0; animation-duration:10s; animation-delay:3.2s; --dx:-12px; }
+    .p19 { width:2px; height:2px; left:82%; bottom:0; animation-duration:12s; animation-delay:5.5s; --dx:22px; }
+    .p20 { width:4px; height:4px; left:92%; bottom:0; animation-duration:9s;  animation-delay:0.7s; --dx:-32px; }
+    .p21 { width:3px; height:3px; left:2%;  bottom:0; animation-duration:11s; animation-delay:2.2s; --dx:14px; background:#7BFFF0; }
+    .p22 { width:5px; height:5px; left:22%; bottom:0; animation-duration:14s; animation-delay:4.8s; --dx:-22px; background:#7BFFF0; }
+    .p23 { width:2px; height:2px; left:48%; bottom:0; animation-duration:7s;  animation-delay:1.6s; --dx:42px; background:#7BFFF0; }
+    .p24 { width:4px; height:4px; left:72%; bottom:0; animation-duration:13s; animation-delay:6.5s; --dx:-18px; background:#7BFFF0; }
+    .p25 { width:3px; height:3px; left:95%; bottom:0; animation-duration:10s; animation-delay:3.8s; --dx:8px; background:#7BFFF0; }
+
+    /* ===== SWARM VISUALIZATION ===== */
+    #swarm {
+      background: var(--obsidian);
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .swarm-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .swarm-header .section-title { margin-bottom: 8px; }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-headline);
+      font-size: 12px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #00FF00;
+      border-radius: 50%;
+      animation: live-pulse 1.2s ease-in-out infinite;
+      box-shadow: 0 0 8px #00FF00;
+    }
+    @keyframes live-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+    .swarm-arena {
+      position: relative;
+      background: #060A0D;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      max-width: 900px;
+      margin: 0 auto;
+      height: 340px;
+    }
+    /* Floor grid */
+    .swarm-arena::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,170,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,170,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .arena-label {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      font-family: var(--font-headline);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      opacity: 0.7;
+    }
+    .arena-stats {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      display: flex;
+      gap: 16px;
+    }
+    .arena-stat {
+      font-family: var(--font-headline);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .arena-stat span {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+    /* Bot elements */
+    .bot {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: var(--cyan);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0,212,170,0.6);
+    }
+    .bot::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px; right: 2px; bottom: 2px;
+      border: 1px solid rgba(0,0,0,0.4);
+      border-radius: 2px;
+    }
+    .bot.dim { background: rgba(0,212,170,0.4); box-shadow: 0 0 6px rgba(0,212,170,0.2); }
+    /* Swarm row formations */
+    @keyframes row1 {
+      0%   { transform: translateX(0px); }
+      50%  { transform: translateX(680px); }
+      50.01% { transform: translateX(680px) scaleX(-1); }
+      100% { transform: translateX(0px) scaleX(-1); }
+    }
+    @keyframes row2 {
+      0%   { transform: translateX(680px); }
+      50%  { transform: translateX(0px); }
+      50.01% { transform: translateX(0px); }
+      100% { transform: translateX(680px); }
+    }
+    @keyframes col1 {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(260px); }
+      100% { transform: translateY(0px); }
+    }
+    @keyframes col2 {
+      0%   { transform: translateY(260px); }
+      50%  { transform: translateY(0px); }
+      100% { transform: translateY(260px); }
+    }
+    @keyframes diagonal1 {
+      0%   { transform: translate(0px, 0px); }
+      33%  { transform: translate(340px, 130px); }
+      66%  { transform: translate(680px, 0px); }
+      100% { transform: translate(0px, 0px); }
+    }
+    @keyframes diagonal2 {
+      0%   { transform: translate(680px, 0px); }
+      33%  { transform: translate(340px, 130px); }
+      66%  { transform: translate(0px, 260px); }
+      100% { transform: translate(680px, 0px); }
+    }
+    @keyframes sweep {
+      0%   { transform: translateX(0px); }
+      100% { transform: translateX(680px); }
+    }
+    /* Trail effect */
+    .bot-trail {
+      position: absolute;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan));
+      opacity: 0.3;
+      border-radius: 2px;
+      pointer-events: none;
+    }
+    /* Coverage fill animation */
+    .coverage-fill {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 4px;
+      background: var(--cyan);
+      animation: coverage 12s linear infinite;
+      opacity: 0.6;
+    }
+    @keyframes coverage {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    .coverage-label {
+      position: absolute;
+      bottom: 16px;
+      right: 18px;
+      font-family: var(--font-headline);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .coverage-label span { color: var(--cyan); }
+
+    /* ===== SOLUTIONS SECTION ===== */
+    #solutions {
+      background: var(--near-white-bg);
+      padding: 100px 0;
+    }
+    #solutions .section-label { color: #0A0A0A; border-color: rgba(0,0,0,0.15); background: rgba(0,212,170,0.12); }
+    #solutions .section-title { color: #0A0A0A; }
+    #solutions .section-sub { color: #4A5568; }
+    .solutions-header { margin-bottom: 60px; }
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+    .solution-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      padding: 40px 36px;
+      position: relative;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    .solution-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), #7BFFF0);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .solution-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+    .solution-card:hover::before { opacity: 1; }
+    .card-icon {
+      width: 56px; height: 56px;
+      background: rgba(0,212,170,0.1);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      margin-bottom: 24px;
+    }
+    .card-name {
+      font-family: var(--font-headline);
+      font-size: 17px;
+      font-weight: 700;
+      color: #0A0A0A;
+      margin-bottom: 6px;
+    }
+    .card-price {
+      font-family: var(--font-headline);
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--cyan);
+      margin-bottom: 4px;
+    }
+    .card-price-sub {
+      font-size: 13px;
+      color: #718096;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    .card-features {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .card-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #2D3748;
+    }
+    .card-feature::before {
+      content: '✓';
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px; height: 20px;
+      background: rgba(0,212,170,0.15);
+      color: #008A6F;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .card-btn {
+      width: 100%;
+      background: #0A0A0A;
+      color: #fff;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.25s;
+    }
+    .card-btn:hover {
+      background: var(--cyan);
+      color: #000;
+      transform: translateY(-1px);
+    }
+
+    /* ===== ROI CALCULATOR ===== */
+    #roi {
+      background: var(--obsidian);
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #roi::before {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(0,212,170,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .roi-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .roi-left .section-sub { margin-bottom: 32px; }
+    .roi-features {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .roi-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .roi-feature-icon {
+      width: 40px; height: 40px;
+      background: var(--cyan-dim);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .roi-feature-text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+    .roi-feature-text span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .roi-calculator {
+      background: #111418;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+    }
+    .calc-title {
+      font-family: var(--font-headline);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .calc-title::before {
+      content: '📊';
+      font-size: 20px;
+    }
+    .calc-field {
+      margin-bottom: 24px;
+    }
+    .calc-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .calc-input {
+      width: 100%;
+      background: #0D1117;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 16px;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .calc-input:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+    .calc-input[type="range"] {
+      padding: 8px 0;
+      accent-color: var(--cyan);
+      cursor: pointer;
+    }
+    .range-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .range-value {
+      font-family: var(--font-headline);
+      font-size: 14px;
+      color: var(--cyan);
+      font-weight: 700;
+      text-align: right;
+    }
+    .calc-results {
+      background: #0D1117;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 28px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .result-item {}
+    .result-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .result-value {
+      font-family: var(--font-headline);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+    .calc-cta {
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ===== PRICING SECTION ===== */
+    #pricing {
+      background: var(--near-white-bg);
+      padding: 100px 0;
+    }
+    #pricing .section-label { color: #0A0A0A; border-color: rgba(0,0,0,0.15); background: rgba(0,212,170,0.12); }
+    #pricing .section-title { color: #0A0A0A; }
+    #pricing .section-sub { color: #4A5568; }
+    .pricing-header { text-align: center; margin-bottom: 60px; }
+    .pricing-header .section-label { margin-bottom: 20px; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+    .pricing-card {
+      background: #fff;
+      border: 2px solid rgba(0,0,0,0.08);
+      border-radius: 20px;
+      padding: 40px 36px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .pricing-card.popular {
+      background: #0A0A0A;
+      border-color: var(--cyan);
+      color: #fff;
+      transform: scale(1.03);
+      box-shadow: 0 0 50px rgba(0,212,170,0.15), 0 30px 60px rgba(0,0,0,0.3);
+    }
+    .pricing-card:not(.popular):hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    }
+    .popular-badge {
+      display: none;
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--cyan);
+      color: #000;
+      font-family: var(--font-headline);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 5px 16px;
+      border-radius: 100px;
+    }
+    .pricing-card.popular .popular-badge { display: block; }
+    .plan-name {
+      font-family: var(--font-headline);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      margin-bottom: 16px;
+    }
+    .plan-price {
+      font-family: var(--font-headline);
+      font-size: 42px;
+      font-weight: 900;
+      color: #0A0A0A;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    .pricing-card.popular .plan-price { color: #fff; }
+    .plan-price-note {
+      font-size: 13px;
+      color: #718096;
+      margin-bottom: 8px;
+    }
+    .pricing-card.popular .plan-price-note { color: rgba(255,255,255,0.5); }
+    .plan-tagline {
+      font-size: 13px;
+      color: #4A5568;
+      margin-bottom: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      line-height: 1.6;
+    }
+    .pricing-card.popular .plan-tagline {
+      color: rgba(255,255,255,0.6);
+      border-bottom-color: rgba(255,255,255,0.1);
+    }
+    .plan-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .plan-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #2D3748;
+    }
+    .pricing-card.popular .plan-feature { color: rgba(255,255,255,0.85); }
+    .plan-feature::before {
+      content: '✓';
+      width: 20px; height: 20px;
+      background: rgba(0,212,170,0.15);
+      color: #008A6F;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pricing-card.popular .plan-feature::before {
+      background: rgba(0,212,170,0.2);
+      color: var(--cyan);
+    }
+    .plan-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.25s;
+      background: #F0F4F8;
+      color: #0A0A0A;
+      border: 1.5px solid rgba(0,0,0,0.1);
+    }
+    .plan-btn:hover { background: var(--cyan); border-color: var(--cyan); transform: translateY(-2px); }
+    .pricing-card.popular .plan-btn {
+      background: var(--cyan);
+      color: #000;
+      border-color: var(--cyan);
+    }
+    .pricing-card.popular .plan-btn:hover {
+      background: #00F5C4;
+      box-shadow: var(--cyan-glow);
+    }
+
+    /* ===== ASSESSMENT FORM ===== */
+    #assessment {
+      background: var(--obsidian);
+      padding: 100px 0;
+      position: relative;
+    }
+    #assessment::before {
+      content: '';
+      position: absolute;
+      top: -150px; left: -150px;
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(0,212,170,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .assessment-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .assessment-left .section-sub { margin-bottom: 40px; }
+    .trust-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .trust-icon {
+      font-size: 22px;
+      width: 44px; height: 44px;
+      background: var(--cyan-dim);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .trust-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .trust-text strong { color: #fff; display: block; margin-bottom: 2px; }
+    .assessment-form-box {
+      background: #111418;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 44px;
+    }
+    .form-title {
+      font-family: var(--font-headline);
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .form-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .form-input,
+    .form-select {
+      background: #0D1117;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      width: 100%;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+    .form-select option { background: #111418; color: #fff; }
+    .form-submit {
+      width: 100%;
+      margin-top: 24px;
+      background: var(--cyan);
+      color: #000;
+      padding: 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .form-submit:hover {
+      background: #00F5C4;
+      transform: translateY(-2px);
+      box-shadow: var(--cyan-glow);
+    }
+    .form-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #060809;
+      border-top: 1px solid var(--border);
+      padding: 60px 0 40px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .logo-text { font-size: 18px; margin-bottom: 16px; display: block; }
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .footer-email {
+      font-size: 14px;
+      color: var(--cyan);
+      font-weight: 500;
+    }
+    .footer-email:hover { color: #fff; }
+    .footer-col-title {
+      font-family: var(--font-headline);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-links a {
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #fff; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .primedox-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(0,212,170,0.07);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-family: var(--font-headline);
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .primedox-badge span { color: var(--cyan); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .roi-inner { grid-template-columns: 1fr; gap: 48px; }
+      .assessment-inner { grid-template-columns: 1fr; gap: 48px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 680px) {
+      .hero-ctas { flex-direction: column; }
+      .hero-stats { flex-direction: column; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat-item:last-child { border-bottom: none; }
+      .form-grid { grid-template-columns: 1fr; }
+      .calc-results { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card.popular { transform: none; }
+      .solutions-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .swarm-arena { height: 240px; }
+      .assessment-form-box { padding: 28px 20px; }
+    }
+
+    /* ===== SCROLL REVEAL (pure CSS) ===== */
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity 0.65s ease, transform 0.65s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== STICKY NAVIGATION ===== -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="CleanSwarm Home">
+      <div class="logo-icon">CS</div>
+      <span class="logo-text">CLEANSWARM</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#assessment">Deploy</a></li>
+      <li><a href="#assessment">Contact</a></li>
+      <li><a href="#assessment" class="nav-cta">Get Assessment</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobile navigation">
+  <a href="#solutions" class="mobile-link">Solutions</a>
+  <a href="#pricing" class="mobile-link">Pricing</a>
+  <a href="#assessment" class="mobile-link">Deploy</a>
+  <a href="#assessment" class="mobile-link">Contact</a>
+  <a href="#assessment" class="nav-cta mobile-link">Get Free Assessment</a>
+</div>
+
+<!-- URGENCY BANNER -->
+<div id="cs-urgency" style="background:linear-gradient(90deg,#050507,#050a07,#050507);border-bottom:1px solid rgba(139,92,246,0.3);padding:9px 16px;text-align:center;font-size:13px;color:#888;position:relative;z-index:998;">
+  <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;">
+    <span style="width:7px;height:7px;border-radius:50%;background:#8b5cf6;display:inline-block;animation:cspulse 2s infinite;flex-shrink:0;"></span>
+    <strong style="color:#f5f5f5;">LIMITED TIME — Q3 deployment slots almost full. Only 5 enterprise slots left this quarter.</strong>
+    Offer expires in: <strong id="cs-countdown" style="color:#8b5cf6;font-family:monospace;letter-spacing:1px;">--:--:--</strong>
+    <a href="#pricing" style="color:#fbbf24;font-weight:800;text-decoration:none;margin-left:4px;">Reserve Your Slot →</a>
+    <button onclick="document.getElementById('cs-urgency').style.display='none'" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#444;font-size:18px;line-height:1;background:none;border:none;cursor:pointer;padding:4px;">&times;</button>
+  </span>
+</div>
+<style>@keyframes cspulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+<script>
+(function(){
+  function csUpdateCd(){var el=document.getElementById('cs-countdown');if(!el)return;var now=new Date(),end=new Date();end.setHours(23,59,59,0);var diff=end-now;if(diff<0)diff=0;var h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);el.textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+  setInterval(csUpdateCd,1000);csUpdateCd();
+})();
+</script>
+
+<!-- ===== HERO SECTION ===== -->
+<section id="hero" aria-label="Hero">
+  <!-- CSS Particles -->
+  <div class="particles" aria-hidden="true">
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+    <div class="particle p6"></div>
+    <div class="particle p7"></div>
+    <div class="particle p8"></div>
+    <div class="particle p9"></div>
+    <div class="particle p10"></div>
+    <div class="particle p11"></div>
+    <div class="particle p12"></div>
+    <div class="particle p13"></div>
+    <div class="particle p14"></div>
+    <div class="particle p15"></div>
+    <div class="particle p16"></div>
+    <div class="particle p17"></div>
+    <div class="particle p18"></div>
+    <div class="particle p19"></div>
+    <div class="particle p20"></div>
+    <div class="particle p21"></div>
+    <div class="particle p22"></div>
+    <div class="particle p23"></div>
+    <div class="particle p24"></div>
+    <div class="particle p25"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge" aria-label="Product badge">AUTONOMOUS CLEANING INTELLIGENCE</div>
+
+      <h1 class="hero-h1">
+        The Future of Clean<br>
+        is <span class="gradient-word">Autonomous</span>
+      </h1>
+
+      <p class="hero-sub">
+        Deploy an army of AI-powered cleaning bots. 24/7 operation. No humans required.
+        Your facility, perfectly maintained — every square foot, every shift, forever.
+      </p>
+
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="window.open('https://paypal.me/cleanswarm1/4997','_blank')" aria-label="Deploy CleanSwarm for $4,997">
+          Deploy CleanSwarm — $4,997 &rarr;
+        </button>
+        <a href="#assessment" class="btn-outline">Free Facility Assessment</a>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="hero-stats" role="list" aria-label="Key statistics">
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">99.7%</span>
+          <span class="stat-label">Floor Coverage</span>
+        </div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">24/7</span>
+          <span class="stat-label">Operation</span>
+        </div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">0</span>
+          <span class="stat-label">Human Intervention</span>
+        </div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">90 Days</span>
+          <span class="stat-label">ROI Guarantee</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SWARM VISUALIZATION ===== -->
+<section id="swarm" aria-label="Live swarm visualization">
+  <div class="container">
+    <div class="swarm-header reveal">
+      <div class="live-badge">
+        <div class="live-dot" aria-hidden="true"></div>
+        LIVE SYSTEM STATUS
+      </div>
+      <h2 class="section-title">Swarm in Motion</h2>
+      <p class="section-sub" style="margin:0 auto;text-align:center;">Watch the autonomous fleet navigate, clean, and adapt — in real time.</p>
+    </div>
+
+    <div class="swarm-arena" role="img" aria-label="Animated visualization of 47 cleaning bots moving across a facility floor grid">
+      <span class="arena-label">FACILITY FLOOR — SECTOR A</span>
+      <div class="arena-stats">
+        <span class="arena-stat">BOTS: <span>47</span></span>
+        <span class="arena-stat">COVERAGE: <span id="coverageNum">--</span>%</span>
+        <span class="arena-stat">STATUS: <span style="color:#00FF00">ACTIVE</span></span>
+      </div>
+
+      <!-- Bot Layer 1: Horizontal sweepers -->
+      <style>
+        /* Bots with individual animations */
+        #b1  { top:14%; left:6px;  animation: row1 8s linear infinite; animation-delay:0s; }
+        #b2  { top:14%; left:24px; animation: row1 8s linear infinite; animation-delay:0.3s; }
+        #b3  { top:14%; left:42px; animation: row1 8s linear infinite; animation-delay:0.6s; }
+        #b4  { top:28%; left:6px;  animation: row2 10s linear infinite; animation-delay:0s; }
+        #b5  { top:28%; left:24px; animation: row2 10s linear infinite; animation-delay:0.4s; }
+        #b6  { top:28%; left:42px; animation: row2 10s linear infinite; animation-delay:0.8s; }
+        #b7  { top:28%; left:60px; animation: row2 10s linear infinite; animation-delay:1.2s; }
+        #b8  { top:44%; left:6px;  animation: row1 9s linear infinite; animation-delay:1s; }
+        #b9  { top:44%; left:24px; animation: row1 9s linear infinite; animation-delay:1.4s; }
+        #b10 { top:44%; left:42px; animation: row1 9s linear infinite; animation-delay:1.8s; }
+        #b11 { top:58%; left:6px;  animation: row2 11s linear infinite; animation-delay:2s; }
+        #b12 { top:58%; left:24px; animation: row2 11s linear infinite; animation-delay:2.4s; }
+        #b13 { top:58%; left:42px; animation: row2 11s linear infinite; animation-delay:2.8s; }
+        #b14 { top:72%; left:6px;  animation: row1 7s  linear infinite; animation-delay:0.5s; }
+        #b15 { top:72%; left:24px; animation: row1 7s  linear infinite; animation-delay:0.9s; }
+        /* Vertical patrollers */
+        #b16 { top:6px; left:20%; animation: col1 6s ease-in-out infinite; animation-delay:0s; }
+        #b17 { top:6px; left:30%; animation: col2 6s ease-in-out infinite; animation-delay:0s; }
+        #b18 { top:6px; left:40%; animation: col1 7s ease-in-out infinite; animation-delay:1s; }
+        #b19 { top:6px; left:50%; animation: col2 7s ease-in-out infinite; animation-delay:1s; }
+        #b20 { top:6px; left:60%; animation: col1 8s ease-in-out infinite; animation-delay:2s; }
+        #b21 { top:6px; left:70%; animation: col2 8s ease-in-out infinite; animation-delay:2s; }
+        #b22 { top:6px; left:80%; animation: col1 6s ease-in-out infinite; animation-delay:3s; }
+        /* Diagonal scouts */
+        #b23 { top:6px; left:10px; animation: diagonal1 12s linear infinite; animation-delay:0s; background:rgba(0,212,170,0.6); }
+        #b24 { top:6px; left:10px; animation: diagonal2 12s linear infinite; animation-delay:0s; background:rgba(0,212,170,0.6); }
+        /* Small dim bots */
+        #b25 { top:20%; left:50%; animation: row1 13s linear infinite; animation-delay:3s; }
+        #b26 { top:35%; left:65%; animation: row2 14s linear infinite; animation-delay:5s; }
+        #b27 { top:50%; left:70%; animation: col1 9s ease-in-out infinite; animation-delay:4s; }
+        #b28 { top:65%; left:55%; animation: row1 10s linear infinite; animation-delay:6s; }
+        #b29 { top:80%; left:45%; animation: row2 12s linear infinite; animation-delay:2s; }
+        #b30 { top:10%; left:75%; animation: col2 11s ease-in-out infinite; animation-delay:1.5s; }
+      </style>
+
+      <div class="bot" id="b1"></div>
+      <div class="bot" id="b2"></div>
+      <div class="bot" id="b3"></div>
+      <div class="bot" id="b4"></div>
+      <div class="bot" id="b5"></div>
+      <div class="bot" id="b6"></div>
+      <div class="bot" id="b7"></div>
+      <div class="bot" id="b8"></div>
+      <div class="bot" id="b9"></div>
+      <div class="bot" id="b10"></div>
+      <div class="bot" id="b11"></div>
+      <div class="bot" id="b12"></div>
+      <div class="bot" id="b13"></div>
+      <div class="bot" id="b14"></div>
+      <div class="bot" id="b15"></div>
+      <div class="bot" id="b16"></div>
+      <div class="bot" id="b17"></div>
+      <div class="bot" id="b18"></div>
+      <div class="bot" id="b19"></div>
+      <div class="bot" id="b20"></div>
+      <div class="bot" id="b21"></div>
+      <div class="bot" id="b22"></div>
+      <div class="bot dim" id="b23"></div>
+      <div class="bot dim" id="b24"></div>
+      <div class="bot dim" id="b25"></div>
+      <div class="bot dim" id="b26"></div>
+      <div class="bot dim" id="b27"></div>
+      <div class="bot dim" id="b28"></div>
+      <div class="bot dim" id="b29"></div>
+      <div class="bot dim" id="b30"></div>
+
+      <div class="coverage-fill" aria-hidden="true"></div>
+      <div class="coverage-label">AREA CLEANED: <span id="coveragePct">0</span>%</div>
+    </div>
+
+    <!-- Swarm metrics below arena -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;max-width:900px;margin:24px auto 0;">
+      <div style="background:#111418;border:1px solid var(--border);border-radius:10px;padding:18px 20px;text-align:center;">
+        <div style="font-family:var(--font-headline);font-size:22px;font-weight:700;color:var(--cyan);">47</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Bots Active</div>
+      </div>
+      <div style="background:#111418;border:1px solid var(--border);border-radius:10px;padding:18px 20px;text-align:center;">
+        <div style="font-family:var(--font-headline);font-size:22px;font-weight:700;color:var(--cyan);">12,400</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Sq Ft Covered</div>
+      </div>
+      <div style="background:#111418;border:1px solid var(--border);border-radius:10px;padding:18px 20px;text-align:center;">
+        <div style="font-family:var(--font-headline);font-size:22px;font-weight:700;color:var(--cyan);">0.0%</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Error Rate</div>
+      </div>
+      <div style="background:#111418;border:1px solid var(--border);border-radius:10px;padding:18px 20px;text-align:center;">
+        <div style="font-family:var(--font-headline);font-size:22px;font-weight:700;color:#00FF00;">ONLINE</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">System Status</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOLUTIONS SECTION ===== -->
+<section id="solutions" aria-label="Solutions">
+  <div class="container">
+    <div class="solutions-header reveal">
+      <div class="section-label">DEPLOYMENT SOLUTIONS</div>
+      <h2 class="section-title" style="color:#0A0A0A;">Built for Every Facility</h2>
+      <p class="section-sub">From compact warehouses to international airports — CleanSwarm deploys the right configuration for your environment.</p>
+    </div>
+    <div class="solutions-grid">
+      <!-- Card 1: Warehouse -->
+      <div class="solution-card reveal">
+        <div class="card-icon">🏭</div>
+        <div class="card-name">Warehouse Automation</div>
+        <div class="card-price">$4,997</div>
+        <div class="card-price-sub">One-time deployment · 10-bot swarm included</div>
+        <ul class="card-features">
+          <li class="card-feature">10-unit autonomous cleaning swarm</li>
+          <li class="card-feature">AI route optimization for pallet aisles</li>
+          <li class="card-feature">Obstacle detection &amp; avoidance</li>
+          <li class="card-feature">Remote fleet monitoring dashboard</li>
+        </ul>
+        <button class="card-btn" onclick="window.open('https://paypal.me/cleanswarm1/4997','_blank')">
+          Deploy Now — $4,997 &rarr;
+        </button>
+      </div>
+
+      <!-- Card 2: Hospital -->
+      <div class="solution-card reveal">
+        <div class="card-icon">🏥</div>
+        <div class="card-name">Hospital &amp; Medical</div>
+        <div class="card-price">$9,997</div>
+        <div class="card-price-sub">One-time deployment · 20-bot UV swarm</div>
+        <ul class="card-features">
+          <li class="card-feature">20-unit UV-C sanitization + floor cleaning</li>
+          <li class="card-feature">Hospital-grade pathogen elimination</li>
+          <li class="card-feature">Clean-room protocol compliance</li>
+          <li class="card-feature">Real-time sanitization reporting</li>
+        </ul>
+        <button class="card-btn" onclick="window.open('https://paypal.me/cleanswarm1/9997','_blank')">
+          Deploy Now — $9,997 &rarr;
+        </button>
+      </div>
+
+      <!-- Card 3: Airport -->
+      <div class="solution-card reveal">
+        <div class="card-icon">✈️</div>
+        <div class="card-name">Airport &amp; Transit</div>
+        <div class="card-price">$24,997</div>
+        <div class="card-price-sub">One-time deployment · Full terminal solution</div>
+        <ul class="card-features">
+          <li class="card-feature">50-unit full terminal deployment</li>
+          <li class="card-feature">Multi-zone coordination &amp; scheduling</li>
+          <li class="card-feature">Passenger-aware navigation AI</li>
+          <li class="card-feature">24/7 ops center + priority support</li>
+        </ul>
+        <button class="card-btn" onclick="window.open('https://paypal.me/cleanswarm1/24997','_blank')">
+          Deploy Now — $24,997 &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROI CALCULATOR ===== -->
+<section id="roi" aria-label="ROI Calculator">
+  <div class="container">
+    <div class="roi-inner">
+      <div class="roi-left reveal">
+        <div class="section-label">ROI CALCULATOR</div>
+        <h2 class="section-title">See Your Savings</h2>
+        <p class="section-sub">Calculate exactly how fast CleanSwarm pays for itself. Most facilities break even in under 90 days.</p>
+
+        <div class="roi-features">
+          <div class="roi-feature">
+            <div class="roi-feature-icon">⚡</div>
+            <div class="roi-feature-text">
+              <strong>65% Cost Reduction</strong>
+              <span>Average savings vs. traditional cleaning contracts</span>
+            </div>
+          </div>
+          <div class="roi-feature">
+            <div class="roi-feature-icon">🕐</div>
+            <div class="roi-feature-text">
+              <strong>Zero Overtime Costs</strong>
+              <span>Bots run nights, weekends, and holidays — same price</span>
+            </div>
+          </div>
+          <div class="roi-feature">
+            <div class="roi-feature-icon">📈</div>
+            <div class="roi-feature-text">
+              <strong>No Staffing Headaches</strong>
+              <span>Eliminate recruiting, training, and turnover costs</span>
+            </div>
+          </div>
+          <div class="roi-feature">
+            <div class="roi-feature-icon">🔒</div>
+            <div class="roi-feature-text">
+              <strong>Fixed One-Time Price</strong>
+              <span>No monthly subscriptions. Own your swarm outright.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculator -->
+      <div class="roi-calculator reveal">
+        <div class="calc-title">ROI Calculator</div>
+
+        <div class="calc-field">
+          <label class="calc-label" for="facilitySizeInput">Facility Size (sq ft)</label>
+          <input
+            type="range"
+            class="calc-input"
+            id="facilitySizeInput"
+            min="1000"
+            max="500000"
+            step="1000"
+            value="25000"
+            aria-label="Facility size slider"
+          >
+          <div class="range-display">
+            <span>1,000 sq ft</span>
+            <span class="range-value" id="facilityDisplay">25,000 sq ft</span>
+            <span>500,000 sq ft</span>
+          </div>
+        </div>
+
+        <div class="calc-field">
+          <label class="calc-label" for="monthlyCostInput">Current Monthly Cleaning Cost ($)</label>
+          <input
+            type="number"
+            class="calc-input"
+            id="monthlyCostInput"
+            placeholder="e.g. 8000"
+            min="0"
+            value="8000"
+            aria-label="Monthly cleaning cost"
+          >
+        </div>
+
+        <div class="calc-results" aria-live="polite" aria-label="ROI calculation results">
+          <div class="result-item">
+            <div class="result-label">Annual Savings</div>
+            <div class="result-value" id="annualSavings">$62,400</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Payback Period</div>
+            <div class="result-value" id="paybackPeriod">0.96 mo</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">5-Year Savings</div>
+            <div class="result-value" id="fiveYearSavings">$312,000</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Monthly Savings</div>
+            <div class="result-value" id="monthlySavings">$5,200</div>
+          </div>
+        </div>
+
+        <div class="calc-cta">
+          <a
+            href="mailto:cleanswarm1@gmail.com?subject=CleanSwarm+ROI+Quote&body=Hi+CleanSwarm+team%2C+I+would+like+a+custom+quote+based+on+my+facility."
+            class="btn-primary"
+            style="width:100%;justify-content:center;"
+          >
+            Request Your Custom Quote &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING SECTION ===== -->
+<section id="pricing" aria-label="Pricing">
+  <div class="container">
+    <div class="pricing-header reveal">
+      <div class="section-label">TRANSPARENT PRICING</div>
+      <h2 class="section-title" style="color:#0A0A0A;">One Price. Own It Forever.</h2>
+      <p class="section-sub" style="margin:0 auto;text-align:center;">No subscriptions. No monthly fees. No surprises. Deploy your swarm and it's yours.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Starter -->
+      <div class="pricing-card reveal">
+        <div class="plan-name">STARTER</div>
+        <div class="plan-price">$4,997</div>
+        <div class="plan-price-note">one-time · no subscriptions</div>
+        <div class="plan-tagline">Perfect for warehouses and office buildings up to 50,000 sq ft.</div>
+        <ul class="plan-features">
+          <li class="plan-feature">10-bot autonomous swarm</li>
+          <li class="plan-feature">Warehouse &amp; office environments</li>
+          <li class="plan-feature">AI route optimization</li>
+          <li class="plan-feature">Obstacle detection system</li>
+          <li class="plan-feature">Remote monitoring app</li>
+          <li class="plan-feature">90-day support included</li>
+        </ul>
+        <button class="plan-btn" onclick="window.open('https://paypal.me/cleanswarm1/4997','_blank')">
+          Deploy Starter — $4,997
+        </button>
+      </div>
+
+      <!-- Commercial (Most Popular) -->
+      <div class="pricing-card popular reveal">
+        <div class="popular-badge">MOST POPULAR</div>
+        <div class="plan-name">COMMERCIAL</div>
+        <div class="plan-price" style="color:#fff;">$14,997</div>
+        <div class="plan-price-note">one-time · no subscriptions</div>
+        <div class="plan-tagline">Best for multi-floor facilities, malls, and medical centres up to 200,000 sq ft.</div>
+        <ul class="plan-features">
+          <li class="plan-feature">25-bot autonomous swarm</li>
+          <li class="plan-feature">Multi-floor coordination</li>
+          <li class="plan-feature">UV-C sanitization module</li>
+          <li class="plan-feature">Fleet performance dashboard</li>
+          <li class="plan-feature">Priority support — 1-year</li>
+          <li class="plan-feature">Custom cleaning schedules</li>
+          <li class="plan-feature">Swarm firmware updates</li>
+        </ul>
+        <button class="plan-btn" onclick="window.open('https://paypal.me/cleanswarm1/14997','_blank')">
+          Deploy Commercial — $14,997
+        </button>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card reveal">
+        <div class="plan-name">ENTERPRISE</div>
+        <div class="plan-price">$49,997</div>
+        <div class="plan-price-note">one-time · no subscriptions</div>
+        <div class="plan-tagline">Airports, hospitals, and large-scale facilities requiring full intelligent deployment.</div>
+        <ul class="plan-features">
+          <li class="plan-feature">100+ bot autonomous swarm</li>
+          <li class="plan-feature">Full facility deployment</li>
+          <li class="plan-feature">Custom AI training for your layout</li>
+          <li class="plan-feature">24/7 dedicated support</li>
+          <li class="plan-feature">Advanced analytics &amp; reporting</li>
+          <li class="plan-feature">Multi-sector zone management</li>
+          <li class="plan-feature">On-site integration team</li>
+        </ul>
+        <button class="plan-btn" onclick="window.open('https://paypal.me/cleanswarm1/49997','_blank')">
+          Deploy Enterprise — $49,997
+        </button>
+      </div>
+    </div>
+
+    <!-- All plans note -->
+    <p style="text-align:center;font-size:14px;color:#718096;margin-top:40px;line-height:1.7;">
+      All plans include: free facility assessment · deployment guide · AI calibration · 30-day money-back guarantee<br>
+      Questions? Email <a href="mailto:cleanswarm1@gmail.com" style="color:#00D4AA;font-weight:600;">cleanswarm1@gmail.com</a> — we respond within 4 business hours.
+    </p>
+  </div>
+</section>
+
+<!-- ===== FREE FACILITY ASSESSMENT ===== -->
+<section id="assessment" aria-label="Free facility assessment form">
+  <div class="container">
+    <div class="assessment-inner">
+      <!-- Left: Trust signals -->
+      <div class="assessment-left reveal">
+        <div class="section-label">FREE ASSESSMENT</div>
+        <h2 class="section-title">Get Your Free<br>Facility Assessment</h2>
+        <p class="section-sub">Tell us about your space. We'll build a custom deployment plan with exact bot count, coverage map, and ROI projection — free, in 4 hours.</p>
+
+        <div class="trust-items">
+          <div class="trust-item">
+            <div class="trust-icon">⚡</div>
+            <div class="trust-text">
+              <strong>4-Hour Response</strong>
+              We respond to every assessment request within 4 business hours with a full deployment plan.
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🗺️</div>
+            <div class="trust-text">
+              <strong>Custom Coverage Map</strong>
+              Receive a visualized map showing exactly where each bot will operate in your facility.
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">💰</div>
+            <div class="trust-text">
+              <strong>Zero Obligation</strong>
+              The assessment is 100% free. No pushy sales calls. Just data and your custom plan.
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon">🤖</div>
+            <div class="trust-text">
+              <strong>Swarm-Matched Configuration</strong>
+              We match the exact bot count and model configuration to your facility type and size.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="assessment-form-box reveal">
+        <div class="form-title">Start Your Assessment</div>
+        <div class="form-sub">Fill in your details — we'll take it from there.</div>
+
+        <form id="assessmentForm" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="fname">Full Name *</label>
+              <input type="text" id="fname" class="form-input" placeholder="Jane Smith" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fcompany">Company *</label>
+              <input type="text" id="fcompany" class="form-input" placeholder="Acme Corp" required>
+            </div>
+            <div class="form-group full">
+              <label class="form-label" for="femail">Email Address *</label>
+              <input type="email" id="femail" class="form-input" placeholder="jane@company.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ftype">Facility Type *</label>
+              <select id="ftype" class="form-select" required>
+                <option value="" disabled selected>Select type...</option>
+                <option value="Warehouse">Warehouse</option>
+                <option value="Hospital / Medical">Hospital / Medical</option>
+                <option value="Airport / Transit">Airport / Transit</option>
+                <option value="Office">Office</option>
+                <option value="Mall / Retail">Mall / Retail</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fsize">Facility Size *</label>
+              <select id="fsize" class="form-select" required>
+                <option value="" disabled selected>Select size...</option>
+                <option value="Under 5,000 sq ft">Under 5,000 sq ft</option>
+                <option value="5,000 – 25,000 sq ft">5,000 – 25,000 sq ft</option>
+                <option value="25,000 – 100,000 sq ft">25,000 – 100,000 sq ft</option>
+                <option value="100,000+ sq ft">100,000+ sq ft</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fcost">Monthly Cleaning Cost</label>
+              <input type="text" id="fcost" class="form-input" placeholder="e.g. $5,000/month">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="fdate">Preferred Start Date</label>
+              <input type="date" id="fdate" class="form-input">
+            </div>
+          </div>
+
+          <button type="submit" class="form-submit">
+            Get My Free Assessment &rarr;
+          </button>
+          <p class="form-note">
+            We'll respond within 4 business hours with a custom deployment plan.
+            No spam. No obligation.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-inner">
+      <!-- Brand -->
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:16px;">
+          <div class="logo-icon">CS</div>
+          <span class="logo-text" style="font-size:17px;">CLEANSWARM</span>
+        </div>
+        <p class="footer-tagline">
+          Autonomous Cleaning Intelligence.<br>
+          Deploy your swarm. Reclaim your facility.
+        </p>
+        <a href="mailto:cleanswarm1@gmail.com" class="footer-email">cleanswarm1@gmail.com</a>
+      </div>
+
+      <!-- Solutions -->
+      <div>
+        <div class="footer-col-title">Solutions</div>
+        <ul class="footer-links">
+          <li><a href="#solutions">Warehouse Automation</a></li>
+          <li><a href="#solutions">Hospital &amp; Medical</a></li>
+          <li><a href="#solutions">Airport &amp; Transit</a></li>
+          <li><a href="#assessment">Custom Deployment</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#roi">ROI Calculator</a></li>
+          <li><a href="#assessment">Deploy</a></li>
+          <li><a href="#assessment">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Get Started -->
+      <div>
+        <div class="footer-col-title">Get Started</div>
+        <ul class="footer-links">
+          <li><a href="#assessment">Free Assessment</a></li>
+          <li><a href="javascript:void(0)" onclick="window.open('https://paypal.me/cleanswarm1/4997','_blank')">Starter — $4,997</a></li>
+          <li><a href="javascript:void(0)" onclick="window.open('https://paypal.me/cleanswarm1/14997','_blank')">Commercial — $14,997</a></li>
+          <li><a href="javascript:void(0)" onclick="window.open('https://paypal.me/cleanswarm1/49997','_blank')">Enterprise — $49,997</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer bottom -->
+    <div class="footer-bottom">
+      <span class="footer-copy">
+        &copy; 2026 CleanSwarm — A Francisco Holdings Inc. Company. All rights reserved.
+      </span>
+      <div class="primedox-badge">
+        Powered by <span>&nbsp;PrimeDox AI</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== INLINE JAVASCRIPT ===== -->
+<script>
+(function() {
+  'use strict';
+
+  /* ── Hamburger Menu ── */
+  var hamburger = document.getElementById('hamburgerBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', function() {
+    var isOpen = mobileMenu.classList.contains('open');
+    mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', (!isOpen).toString());
+  });
+
+  // Close mobile menu when a link is clicked
+  var mobileLinks = mobileMenu.querySelectorAll('a');
+  mobileLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  /* ── Nav scroll effect ── */
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 60) {
+      nav.style.background = 'rgba(10,10,10,0.98)';
+    } else {
+      nav.style.background = 'rgba(10,10,10,0.92)';
+    }
+  }, { passive: true });
+
+  /* ── ROI Calculator ── */
+  var sizeInput    = document.getElementById('facilitySizeInput');
+  var sizeDisplay  = document.getElementById('facilityDisplay');
+  var costInput    = document.getElementById('monthlyCostInput');
+  var annualEl     = document.getElementById('annualSavings');
+  var paybackEl    = document.getElementById('paybackPeriod');
+  var fiveYearEl   = document.getElementById('fiveYearSavings');
+  var monthlyEl    = document.getElementById('monthlySavings');
+
+  function formatCurrency(n) {
+    if (n >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000)    return '$' + Math.round(n).toLocaleString();
+    return '$' + Math.round(n);
+  }
+
+  function calcROI() {
+    var sqft        = parseInt(sizeInput.value, 10) || 0;
+    var monthly     = parseFloat(costInput.value) || 0;
+    var monthlySave = monthly * 0.65;
+    var annual      = monthlySave * 12;
+    var fiveYear    = annual * 5;
+    var payback     = monthly > 0 ? (4997 / monthlySave) : 0;
+
+    sizeDisplay.textContent  = sqft.toLocaleString() + ' sq ft';
+    annualEl.textContent     = formatCurrency(annual);
+    fiveYearEl.textContent   = formatCurrency(fiveYear);
+    monthlyEl.textContent    = formatCurrency(monthlySave);
+
+    if (payback > 0) {
+      paybackEl.textContent = payback.toFixed(1) + ' mo';
+    } else {
+      paybackEl.textContent = '—';
+    }
+  }
+
+  sizeInput.addEventListener('input', calcROI);
+  costInput.addEventListener('input', calcROI);
+  calcROI(); // initialize
+
+  /* ── Coverage percentage ticker ── */
+  var coveragePct = document.getElementById('coveragePct');
+  var coverageNum = document.getElementById('coverageNum');
+  var pct = 0;
+  var coverageInterval = setInterval(function() {
+    pct = (pct + 0.08) % 100;
+    var display = Math.min(99.7, pct).toFixed(1);
+    if (coveragePct) coveragePct.textContent = display;
+    if (coverageNum) coverageNum.textContent = display;
+  }, 120);
+
+  /* ── Assessment Form Submission ── */
+  var assessmentForm = document.getElementById('assessmentForm');
+  assessmentForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var name    = document.getElementById('fname').value.trim();
+    var company = document.getElementById('fcompany').value.trim();
+    var email   = document.getElementById('femail').value.trim();
+    var type    = document.getElementById('ftype').value;
+    var size    = document.getElementById('fsize').value;
+    var cost    = document.getElementById('fcost').value.trim();
+    var date    = document.getElementById('fdate').value;
+
+    // Basic validation
+    if (!name || !company || !email || !type || !size) {
+      alert('Please fill in all required fields (marked with *).');
+      return;
+    }
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    var subject = 'CleanSwarm+Facility+Assessment+Request';
+    var body = [
+      'CleanSwarm Facility Assessment Request',
+      '=====================================',
+      '',
+      'Name: ' + name,
+      'Company: ' + company,
+      'Email: ' + email,
+      'Facility Type: ' + type,
+      'Facility Size: ' + size,
+      'Monthly Cleaning Cost: ' + (cost || 'Not provided'),
+      'Preferred Start Date: ' + (date || 'Not specified'),
+      '',
+      'Submitted via cleanswarm.com assessment form.',
+    ].join('%0A');
+
+    var mailtoUrl = 'mailto:cleanswarm1@gmail.com'
+      + '?subject=' + subject
+      + '&body=' + body;
+
+    window.location.href = mailtoUrl;
+
+    // Visual feedback
+    var btn = assessmentForm.querySelector('.form-submit');
+    var original = btn.innerHTML;
+    btn.innerHTML = 'Assessment Sent! Check your email client ✓';
+    btn.style.background = '#00AA88';
+    setTimeout(function() {
+      btn.innerHTML = original;
+      btn.style.background = '';
+    }, 4000);
+  });
+
+  /* ── Scroll Reveal ── */
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      revealObserver.observe(el);
+    });
+  } else {
+    // Fallback: show all
+    document.querySelectorAll('.reveal').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
