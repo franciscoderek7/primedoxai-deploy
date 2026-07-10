@@ -112,10 +112,23 @@ async function sendAlert(alert) {
   }
 
   // SMS for risk_score >= 90 (CRITICAL only)
+  // Fallback: if Twilio not configured, send 3 additional emails instead
   if ((normalized.risk_score ?? 0) >= 90) {
-    await sendSmsAlert(normalized).catch(err =>
-      console.warn('[vigilax] SMS failed:', err.message)
-    );
+    const hasTwilio = process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN &&
+                      process.env.TWILIO_FROM_NUMBER && process.env.SMS_ALERT_NUMBER;
+    if (hasTwilio) {
+      await sendSmsAlert(normalized).catch(err =>
+        console.warn('[vigilax] SMS failed:', err.message)
+      );
+    } else {
+      // No Twilio — send 3 redundant critical emails with 2s spacing
+      for (let i = 0; i < 3; i++) {
+        await new Promise(r => setTimeout(r, i * 2000));
+        await sendEmailAlert({ ...normalized, subject_prefix: `[CRITICAL RESEND ${i + 1}/3]` })
+          .catch(err => console.warn(`[vigilax] Critical email resend ${i + 1} failed:`, err.message));
+      }
+      console.log('[vigilax] SMS not configured — sent 3x critical email fallback');
+    }
   }
 
   return normalized;
@@ -151,7 +164,7 @@ async function sendEmailAlert(alert) {
   const info = await t.sendMail({
     from: `"VIGILAX Sentinel" <${process.env.SMTP_USER || 'sentinel@vigilax.com'}>`,
     to: ALERT_EMAIL,
-    subject: `[VIGILAX ${alert.severity}] ${alert.engine?.toUpperCase() || 'FRAUD'} — Score ${alert.risk_score}/100`,
+    subject: `${alert.subject_prefix ? alert.subject_prefix + ' ' : ''}[VIGILAX ${alert.severity}] ${alert.engine?.toUpperCase() || 'FRAUD'} — Score ${alert.risk_score}/100`,
     html,
     text: `VIGILAX ALERT — ${alert.severity}\nEngine: ${alert.engine}\nVerdict: ${alert.verdict}\nRisk Score: ${alert.risk_score}/100\nAction: ${alert.recommended_action}`,
   });
