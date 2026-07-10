@@ -224,11 +224,141 @@ values ('FHI-DEREK-2026', 'franciscoderek7@gmail.com', 20)
 on conflict (code) do nothing;
 
 -- ─────────────────────────────────────────────────
+-- AGENT MARKETPLACE
+-- ─────────────────────────────────────────────────
+
+create table if not exists public.marketplace_agents (
+  id                  text        primary key,
+  name                text        not null,
+  tagline             text,
+  description         text,
+  category            text,
+  industries          text[]      default '{}',
+  creator             text,
+  creator_id          text,
+  creator_email       text,
+  verified            boolean     default false,
+  featured            boolean     default false,
+  status              text        not null default 'pending_review',  -- 'active' | 'pending_review' | 'rejected'
+  setup_price_cad     numeric(10,2),
+  monthly_price_cad   numeric(10,2),
+  one_time            boolean     default false,
+  rating_avg          numeric(3,1) default 0,
+  review_count        integer     default 0,
+  installs            integer     default 0,
+  skills              text[]      default '{}',
+  permissions         text[]      default '{}',
+  demo_url            text,
+  manifest_version    text        default '1.0',
+  kpis                jsonb,
+  submitted_at        timestamptz default now(),
+  created_at          timestamptz not null default now(),
+  updated_at          timestamptz not null default now()
+);
+
+create index if not exists marketplace_agents_category_idx  on public.marketplace_agents(category);
+create index if not exists marketplace_agents_status_idx    on public.marketplace_agents(status);
+create index if not exists marketplace_agents_creator_idx   on public.marketplace_agents(creator_id);
+create index if not exists marketplace_agents_installs_idx  on public.marketplace_agents(installs desc);
+
+alter table public.marketplace_agents enable row level security;
+drop policy if exists "marketplace_agents_public_read" on public.marketplace_agents;
+create policy "marketplace_agents_public_read" on public.marketplace_agents
+  for select using (status = 'active');
+drop policy if exists "marketplace_agents_admin_all" on public.marketplace_agents;
+create policy "marketplace_agents_admin_all" on public.marketplace_agents
+  for all using (auth.role() = 'service_role');
+
+-- ─────────────────────────────────────────────────
+
+create table if not exists public.agent_purchases (
+  id              bigserial   primary key,
+  agent_id        text        not null references public.marketplace_agents(id),
+  user_id         uuid        references auth.users(id),
+  customer_email  text,
+  stripe_session_id text,
+  amount_cad      numeric(10,2),
+  creator_pct     numeric(4,3) default 0.700,
+  platform_pct    numeric(4,3) default 0.200,
+  ops_pct         numeric(4,3) default 0.100,
+  status          text        not null default 'pending',  -- 'pending' | 'completed' | 'refunded'
+  created_at      timestamptz not null default now()
+);
+
+create index if not exists agent_purchases_agent_idx  on public.agent_purchases(agent_id);
+create index if not exists agent_purchases_user_idx   on public.agent_purchases(user_id);
+create index if not exists agent_purchases_status_idx on public.agent_purchases(status);
+
+alter table public.agent_purchases enable row level security;
+drop policy if exists "agent_purchases_owner_read" on public.agent_purchases;
+create policy "agent_purchases_owner_read" on public.agent_purchases
+  for select using (auth.uid() = user_id);
+drop policy if exists "agent_purchases_admin_all" on public.agent_purchases;
+create policy "agent_purchases_admin_all" on public.agent_purchases
+  for all using (auth.role() = 'service_role');
+
+-- ─────────────────────────────────────────────────
+
+create table if not exists public.agent_reviews (
+  id              bigserial   primary key,
+  agent_id        text        not null references public.marketplace_agents(id),
+  user_id         uuid        references auth.users(id),
+  reviewer_name   text        default 'Anonymous',
+  rating          integer     not null check (rating >= 1 and rating <= 5),
+  review_text     text,
+  helpful_votes   integer     default 0,
+  created_at      timestamptz not null default now()
+);
+
+create index if not exists agent_reviews_agent_idx on public.agent_reviews(agent_id);
+create unique index if not exists agent_reviews_user_agent_uniq on public.agent_reviews(user_id, agent_id);
+
+alter table public.agent_reviews enable row level security;
+drop policy if exists "agent_reviews_public_read" on public.agent_reviews;
+create policy "agent_reviews_public_read" on public.agent_reviews
+  for select using (true);
+drop policy if exists "agent_reviews_auth_insert" on public.agent_reviews;
+create policy "agent_reviews_auth_insert" on public.agent_reviews
+  for insert with check (auth.uid() = user_id);
+
+-- ─────────────────────────────────────────────────
+-- GAP SCAN RESULTS (optional — stores past scans for CRM)
+-- ─────────────────────────────────────────────────
+
+create table if not exists public.gap_scans (
+  id              bigserial   primary key,
+  url             text        not null,
+  domain          text,
+  detected_industry text,
+  gap_score       integer,
+  present_score   integer,
+  gaps_count      integer,
+  gaps_json       jsonb,
+  quote_json      jsonb,
+  customer_email  text,
+  user_id         uuid        references auth.users(id),
+  created_at      timestamptz not null default now()
+);
+
+create index if not exists gap_scans_domain_idx  on public.gap_scans(domain);
+create index if not exists gap_scans_email_idx   on public.gap_scans(customer_email);
+create index if not exists gap_scans_score_idx   on public.gap_scans(gap_score desc);
+
+alter table public.gap_scans enable row level security;
+drop policy if exists "gap_scans_public_insert" on public.gap_scans;
+create policy "gap_scans_public_insert" on public.gap_scans
+  for insert with check (true);
+drop policy if exists "gap_scans_admin_read" on public.gap_scans;
+create policy "gap_scans_admin_read" on public.gap_scans
+  for select using (auth.role() = 'service_role');
+
+-- ─────────────────────────────────────────────────
 -- VERIFY (run these to confirm tables exist)
 -- ─────────────────────────────────────────────────
 -- select table_name from information_schema.tables where table_schema = 'public' order by table_name;
--- Expected: apex_events, documents, payments, referral_commissions, referrals, sessions, user_profiles
+-- Expected: agent_purchases, agent_reviews, apex_events, documents, gap_scans,
+--           marketplace_agents, payments, referral_commissions, referrals, sessions, user_profiles
 
 -- ─────────────────────────────────────────────────
--- DONE — 7 tables created with RLS policies
+-- DONE — 11 tables created with RLS policies
 -- ─────────────────────────────────────────────────

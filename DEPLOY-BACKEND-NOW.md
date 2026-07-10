@@ -102,7 +102,7 @@ Paste this in SQL Editor → Run:
 ```sql
 select table_name from information_schema.tables where table_schema = 'public' order by table_name;
 ```
-Expected tables: apex_events, documents, payments, referral_commissions, referrals, sessions, user_profiles
+Expected tables: agent_purchases, agent_reviews, apex_events, documents, gap_scans, marketplace_agents, payments, referral_commissions, referrals, sessions, user_profiles
 
 ---
 

@@ -47,6 +47,8 @@ const { chineseAIComplete } = require('./chinese-ai-providers');
 const Stripe    = require('stripe');
 const jwt       = require('jsonwebtoken');
 const crypto    = require('crypto');
+const gapScanner   = require('./gap-scanner');
+const marketplace  = require('./marketplace');
 
 // ── Stripe (Task 4) ─────────────────────────────────────────────────
 const stripe = process.env.STRIPE_SECRET_KEY ? Stripe(process.env.STRIPE_SECRET_KEY) : null;
@@ -112,6 +114,7 @@ function getClient(agentId) {
 
 // ── Express setup ──────────────────────────────────────────────────
 const app = express();
+app.set('stripe', stripe);  // makes stripe accessible inside route handlers via req.app.get('stripe')
 
 const ALLOWED_ORIGINS = [
   'https://omniaguard.com', 'https://www.omniaguard.com',
@@ -134,6 +137,9 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '32kb' }));
 app.use('/chat', rateLimit({ windowMs: 60_000, max: 30, standardHeaders: true, legacyHeaders: false }));
+
+const generalLimiter = rateLimit({ windowMs: 60_000, max: 60, standardHeaders: true, legacyHeaders: false });
+const scanLimiter    = rateLimit({ windowMs: 60_000, max: 10, standardHeaders: true, legacyHeaders: false });
 
 // ── In-memory conversation history (swap for Redis in production) ──
 // key: sessionId → [{ role, content }, ...]
@@ -848,6 +854,10 @@ app.get('/api/admin/revenue', requireAdmin, async (req, res) => {
   const total = (data || []).reduce((s, p) => s + parseFloat(p.amount), 0);
   res.json({ total_cad: total.toFixed(2), count: data.length, payments: data });
 });
+
+// ── Task 3: Gap Detection + Task 5: Marketplace ────────────────────
+gapScanner.registerRoutes(app, scanLimiter);
+marketplace.registerRoutes(app, generalLimiter, requireAuth, requireAdmin, supa);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
