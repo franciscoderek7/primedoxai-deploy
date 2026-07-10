@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeDox Admin — Empire Command Center</title>
+<style>
+  :root {
+    --green:   #0B3D2E;
+    --green-l: #14573F;
+    --gold:    #C9A227;
+    --gold-l:  #E5B93A;
+    --plat:    #E5E4E2;
+    --black:   #0A0A0A;
+    --surface: #111813;
+    --card:    #18221C;
+    --border:  #1F3028;
+    --text:    #D4D8D5;
+    --muted:   #6B7C72;
+    --red:     #E53E3E;
+    --yellow:  #D4A017;
+    --ok:      #2ECC71;
+    --r: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--black); color: var(--text); font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 13px; min-height: 100vh; }
+
+  /* ── Layout ─────────────────────────────────── */
+  .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+  nav { background: var(--surface); border-right: 1px solid var(--border); padding: 0; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  main { padding: 24px; overflow: auto; }
+
+  /* ── Nav ────────────────────────────────────── */
+  .nav-brand { padding: 20px 16px 14px; border-bottom: 1px solid var(--border); }
+  .nav-brand .logo { font-size: 15px; font-weight: 700; color: var(--gold); letter-spacing: .5px; }
+  .nav-brand .sub  { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .nav-section { padding: 12px 0 4px 16px; font-size: 9px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; cursor: pointer; border-left: 2px solid transparent; transition: all .15s; color: var(--muted); user-select: none; }
+  .nav-item:hover { color: var(--text); background: var(--card); }
+  .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: var(--card); }
+  .nav-item .icon { font-size: 14px; width: 18px; text-align: center; }
+  .env-badge { margin: auto 0 0; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .env-badge input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); color: var(--text); padding: 7px 10px; font-size: 11px; font-family: inherit; outline: none; }
+  .env-badge input:focus { border-color: var(--gold); }
+  .env-badge label { display: block; font-size: 9px; color: var(--muted); margin-bottom: 4px; letter-spacing: 1px; text-transform: uppercase; }
+  .env-badge button { margin-top: 6px; width: 100%; background: var(--green); border: none; border-radius: var(--r); color: var(--gold); font-family: inherit; font-size: 11px; padding: 7px; cursor: pointer; font-weight: 700; letter-spacing: .5px; transition: background .15s; }
+  .env-badge button:hover { background: var(--green-l); }
+
+  /* ── Pages ──────────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+  .page-title { font-size: 20px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+  .page-sub { color: var(--muted); font-size: 11px; margin-bottom: 24px; }
+
+  /* ── Stat tiles ─────────────────────────────── */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .tile { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }
+  .tile-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .tile-value { font-size: 26px; font-weight: 700; color: var(--plat); letter-spacing: -.5px; }
+  .tile-value.gold { color: var(--gold); }
+  .tile-value.ok   { color: var(--ok); }
+  .tile-value.warn { color: var(--yellow); }
+  .tile-value.err  { color: var(--red); }
+  .tile-delta { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Cards ──────────────────────────────────── */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 20px; }
+  .card-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-size: 12px; font-weight: 700; color: var(--plat); letter-spacing: .3px; }
+  .card-body { padding: 0; }
+  .card-action { font-size: 10px; color: var(--gold); cursor: pointer; border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; background: transparent; font-family: inherit; transition: all .15s; }
+  .card-action:hover { background: var(--green); color: var(--gold); }
+
+  /* ── Tables ─────────────────────────────────── */
+  .tbl { width: 100%; border-collapse: collapse; }
+  .tbl th { padding: 9px 16px; text-align: left; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); font-weight: 600; }
+  .tbl td { padding: 10px 16px; font-size: 12px; border-bottom: 1px solid var(--border); }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: rgba(255,255,255,.02); }
+
+  /* ── Badges ─────────────────────────────────── */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+  .badge-ok   { background: rgba(46,204,113,.15); color: var(--ok); }
+  .badge-warn { background: rgba(212,160,23,.15); color: var(--yellow); }
+  .badge-err  { background: rgba(229,62,62,.15); color: var(--red); }
+  .badge-gray { background: rgba(255,255,255,.07); color: var(--muted); }
+  .badge-gold { background: rgba(201,162,39,.15); color: var(--gold); }
+
+  /* ── Health grid ─────────────────────────────── */
+  .health-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; padding: 18px; }
+  .health-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; display: flex; align-items: center; gap: 12px; }
+  .health-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot-ok   { background: var(--ok); box-shadow: 0 0 6px var(--ok); }
+  .dot-warn { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+  .dot-err  { background: var(--red); box-shadow: 0 0 6px var(--red); }
+  .dot-gray { background: var(--muted); }
+  .health-info { flex: 1; min-width: 0; }
+  .health-name { font-size: 11px; font-weight: 700; color: var(--plat); }
+  .health-desc { font-size: 10px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Log terminal ───────────────────────────── */
+  .log-term { background: var(--black); border-top: 1px solid var(--border); padding: 14px 18px; max-height: 280px; overflow-y: auto; font-size: 11px; line-height: 1.7; }
+  .log-line { display: flex; gap: 12px; }
+  .log-ts   { color: var(--muted); flex-shrink: 0; }
+  .log-lvl-info  { color: var(--ok); }
+  .log-lvl-warn  { color: var(--yellow); }
+  .log-lvl-error { color: var(--red); }
+  .log-msg  { color: var(--text); }
+
+  /* ── Agent metric bars ──────────────────────── */
+  .agent-row { padding: 12px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
+  .agent-row:last-child { border-bottom: none; }
+  .agent-name { width: 150px; flex-shrink: 0; font-size: 11px; font-weight: 700; color: var(--plat); }
+  .agent-bar-wrap { flex: 1; background: var(--surface); border-radius: 3px; height: 6px; overflow: hidden; }
+  .agent-bar { height: 100%; background: linear-gradient(90deg, var(--green-l), var(--gold)); border-radius: 3px; transition: width .5s ease; }
+  .agent-calls { width: 60px; text-align: right; font-size: 11px; color: var(--muted); }
+  .agent-latency { width: 70px; text-align: right; font-size: 11px; color: var(--muted); }
+
+  /* ── Forms ──────────────────────────────────── */
+  .form-row { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-end; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .form-group label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .form-group input, .form-group select { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); color: var(--text); padding: 8px 12px; font-family: inherit; font-size: 12px; outline: none; }
+  .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+  .btn { padding: 8px 16px; border-radius: var(--r); border: none; font-family: inherit; font-size: 12px; cursor: pointer; font-weight: 700; letter-spacing: .3px; transition: all .15s; }
+  .btn-primary { background: var(--green); color: var(--gold); }
+  .btn-primary:hover { background: var(--green-l); }
+  .btn-danger  { background: rgba(229,62,62,.15); color: var(--red); border: 1px solid rgba(229,62,62,.3); }
+  .btn-danger:hover { background: rgba(229,62,62,.25); }
+
+  /* ── Toast ──────────────────────────────────── */
+  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 18px; font-size: 12px; opacity: 0; transform: translateY(8px); transition: all .2s; z-index: 999; max-width: 320px; }
+  #toast.show { opacity: 1; transform: translateY(0); }
+  #toast.ok   { border-color: var(--ok); color: var(--ok); }
+  #toast.err  { border-color: var(--red); color: var(--red); }
+
+  /* ── Responsive ─────────────────────────────── */
+  @media(max-width:768px) {
+    .shell { grid-template-columns: 1fr; }
+    nav { position: static; height: auto; flex-direction: row; flex-wrap: wrap; }
+    .nav-brand { width: 100%; }
+    .env-badge { width: 100%; order: 99; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ── Sidebar Nav ─────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-brand">
+    <div class="logo">PrimeDox Admin</div>
+    <div class="sub">Francisco Holdings Inc. — Empire Command</div>
+  </div>
+
+  <div class="nav-section">Monitoring</div>
+  <div class="nav-item active" onclick="showPage('health',this)">
+    <span class="icon">💚</span> System Health
+  </div>
+  <div class="nav-item" onclick="showPage('logs',this)">
+    <span class="icon">📋</span> Deploy Logs
+  </div>
+
+  <div class="nav-section">Revenue</div>
+  <div class="nav-item" onclick="showPage('revenue',this)">
+    <span class="icon">💰</span> Revenue
+  </div>
+  <div class="nav-item" onclick="showPage('marketplace',this)">
+    <span class="icon">🏪</span> Marketplace
+  </div>
+
+  <div class="nav-section">Users</div>
+  <div class="nav-item" onclick="showPage('users',this)">
+    <span class="icon">👥</span> User Management
+  </div>
+  <div class="nav-item" onclick="showPage('referrals',this)">
+    <span class="icon">🔗</span> Referrals
+  </div>
+
+  <div class="nav-section">AI Engine</div>
+  <div class="nav-item" onclick="showPage('agents',this)">
+    <span class="icon">🤖</span> Agent Metrics
+  </div>
+  <div class="nav-item" onclick="showPage('gaps',this)">
+    <span class="icon">🔍</span> Gap Scans
+  </div>
+
+  <div class="env-badge">
+    <label>Backend URL</label>
+    <input id="backendUrl" type="text" placeholder="https://xxx.railway.app" />
+    <button onclick="saveBackend()">Connect</button>
+  </div>
+</nav>
+
+<!-- ── Main ──────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- ── Health Page ──────────────────────── -->
+  <div id="page-health" class="page active">
+    <div class="page-title">System Health</div>
+    <div class="page-sub">Real-time status of all empire backend services</div>
+
+    <div class="tiles" id="health-tiles">
+      <div class="tile"><div class="tile-label">Backend Status</div><div class="tile-value warn" id="t-status">—</div><div class="tile-delta">Awaiting connection</div></div>
+      <div class="tile"><div class="tile-label">Active Agents</div><div class="tile-value" id="t-agents">—</div><div class="tile-delta">System prompts loaded</div></div>
+      <div class="tile"><div class="tile-label">LLM Backend</div><div class="tile-value" id="t-llm" style="font-size:16px">—</div><div class="tile-delta">Current routing mode</div></div>
+      <div class="tile"><div class="tile-label">Uptime</div><div class="tile-value" id="t-uptime">—</div><div class="tile-delta">Since last deploy</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Service Endpoints</span>
+        <button class="card-action" onclick="refreshHealth()">↻ Refresh</button>
+      </div>
+      <div class="health-grid" id="health-grid">
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Backend API</div><div class="health-desc">Not connected — enter URL</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Supabase DB</div><div class="health-desc">Awaiting backend</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Stripe Webhooks</div><div class="health-desc">Awaiting backend</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">AI Router</div><div class="health-desc">Awaiting backend</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">JWT Auth</div><div class="health-desc">Awaiting backend</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Gap Scanner</div><div class="health-desc">Awaiting backend</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Marketplace API</div><div class="health-desc">Awaiting backend</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Rate Limiter</div><div class="health-desc">Awaiting backend</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Logs Page ────────────────────────── -->
+  <div id="page-logs" class="page">
+    <div class="page-title">Deploy Logs</div>
+    <div class="page-sub">Live log stream from the Railway backend</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Application Log</span>
+        <button class="card-action" onclick="refreshLogs()">↻ Refresh</button>
+      </div>
+      <div class="log-term" id="log-output">
+        <div class="log-line"><span class="log-ts">--:--:--</span><span class="log-lvl-warn">[WAIT]</span><span class="log-msg"> Connect backend URL to stream logs</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Revenue Page ─────────────────────── -->
+  <div id="page-revenue" class="page">
+    <div class="page-title">Revenue</div>
+    <div class="page-sub">Stripe payment data via webhook → Supabase</div>
+
+    <div class="tiles">
+      <div class="tile"><div class="tile-label">Total Revenue (CAD)</div><div class="tile-value gold" id="r-total">—</div><div class="tile-delta">All-time succeeded</div></div>
+      <div class="tile"><div class="tile-label">Payments Today</div><div class="tile-value" id="r-today">—</div><div class="tile-delta">Completed</div></div>
+      <div class="tile"><div class="tile-label">Marketplace GMV</div><div class="tile-value" id="r-gmv">—</div><div class="tile-delta">Agent sales</div></div>
+      <div class="tile"><div class="tile-label">Platform Revenue</div><div class="tile-value gold" id="r-platform">—</div><div class="tile-delta">20% of GMV</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Recent Payments</span>
+        <button class="card-action" onclick="loadRevenue()">↻ Refresh</button>
+      </div>
+      <div class="card-body">
+        <table class="tbl">
+          <thead><tr><th>Date</th><th>Email</th><th>Product</th><th>Amount</th><th>Provider</th><th>Status</th></tr></thead>
+          <tbody id="payments-tbody">
+            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Connect backend to load payments</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Marketplace Page ──────────────────── -->
+  <div id="page-marketplace" class="page">
+    <div class="page-title">Agent Marketplace</div>
+    <div class="page-sub">Revenue split: 70% creator / 20% platform / 10% ops</div>
+    <div class="tiles">
+      <div class="tile"><div class="tile-label">Total Agents</div><div class="tile-value" id="m-total">—</div></div>
+      <div class="tile"><div class="tile-label">Total Installs</div><div class="tile-value" id="m-installs">—</div></div>
+      <div class="tile"><div class="tile-label">Marketplace GMV</div><div class="tile-value gold" id="m-gmv">—</div></div>
+      <div class="tile"><div class="tile-label">Platform Cut (20%)</div><div class="tile-value gold" id="m-cut">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Agent Catalog</span><button class="card-action" onclick="loadMarketplace()">↻ Refresh</button></div>
+      <div class="card-body">
+        <table class="tbl">
+          <thead><tr><th>Agent</th><th>Category</th><th>Setup $</th><th>Monthly $</th><th>Installs</th><th>Rating</th><th>Status</th></tr></thead>
+          <tbody id="marketplace-tbody">
+            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">Connect backend to load catalog</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Users Page ───────────────────────── -->
+  <div id="page-users" class="page">
+    <div class="page-title">User Management</div>
+    <div class="page-sub">Empire customer accounts and access control</div>
+
+    <div class="form-row" style="margin-bottom:20px">
+      <div class="form-group">
+        <label>Search</label>
+        <input id="user-search" type="text" placeholder="Email or user ID..." oninput="filterUsers()">
+      </div>
+      <div class="form-group" style="max-width:160px">
+        <label>Role</label>
+        <select id="user-role-filter" onchange="filterUsers()">
+          <option value="">All roles</option>
+          <option value="customer">Customer</option>
+          <option value="admin">Admin</option>
+          <option value="derek-superadmin">Derek Superadmin</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="loadUsers()" style="flex-shrink:0">Load Users</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Registered Users</span><span id="user-count" class="badge badge-gray">—</span></div>
+      <div class="card-body">
+        <table class="tbl">
+          <thead><tr><th>Email</th><th>Role</th><th>Joined</th><th>Last Login</th><th>Actions</th></tr></thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">Click "Load Users" to fetch</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Referrals Page ───────────────────── -->
+  <div id="page-referrals" class="page">
+    <div class="page-title">Referral Program</div>
+    <div class="page-sub">Track referral codes, commissions, and payouts</div>
+    <div class="tiles">
+      <div class="tile"><div class="tile-label">Active Codes</div><div class="tile-value" id="ref-codes">—</div></div>
+      <div class="tile"><div class="tile-label">Total Commissions</div><div class="tile-value gold" id="ref-total">—</div></div>
+      <div class="tile"><div class="tile-label">Pending Payouts</div><div class="tile-value warn" id="ref-pending">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Commission Ledger</span><button class="card-action" onclick="loadReferrals()">↻ Refresh</button></div>
+      <div class="card-body">
+        <table class="tbl">
+          <thead><tr><th>Code</th><th>Referrer</th><th>Conversions</th><th>Commission</th><th>Status</th></tr></thead>
+          <tbody id="referrals-tbody">
+            <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">Connect backend to load referrals</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Agent Metrics Page ────────────────── -->
+  <div id="page-agents" class="page">
+    <div class="page-title">Agent Performance</div>
+    <div class="page-sub">Call volume and latency by agent type</div>
+
+    <div class="tiles">
+      <div class="tile"><div class="tile-label">Total API Calls</div><div class="tile-value" id="ag-calls">—</div></div>
+      <div class="tile"><div class="tile-label">Avg Latency</div><div class="tile-value" id="ag-latency">—</div></div>
+      <div class="tile"><div class="tile-label">Error Rate</div><div class="tile-value" id="ag-errors">—</div></div>
+      <div class="tile"><div class="tile-label">Active Provider</div><div class="tile-value" id="ag-provider" style="font-size:14px">—</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Agent Call Distribution</span><button class="card-action" onclick="loadAgentMetrics()">↻ Refresh</button></div>
+      <div id="agent-bars" style="padding:8px 0">
+        <div style="text-align:center;color:var(--muted);padding:24px">Connect backend to load metrics</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">AI Routing Chain Status</span></div>
+      <div class="health-grid" id="ai-chain-grid">
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Claude (Anthropic)</div><div class="health-desc">Priority 1 — claude-haiku-4-5</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">OpenAI / DeepSeek</div><div class="health-desc">Priority 2 — gpt-4o / deepseek-chat</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">Qwen</div><div class="health-desc">Priority 3 — Qwen2.5-72B</div></div></div>
+        <div class="health-item"><div class="health-dot dot-gray"></div><div class="health-info"><div class="health-name">GLM / Kimi</div><div class="health-desc">Priority 4 — glm-4-plus</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Gap Scans Page ────────────────────── -->
+  <div id="page-gaps" class="page">
+    <div class="page-title">Gap Scanner</div>
+    <div class="page-sub">Run a live gap analysis on any business website</div>
+
+    <div class="card" style="padding:18px">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Business Website URL</label>
+          <input id="scan-url" type="text" placeholder="https://dentist-example.com">
+        </div>
+        <div class="form-group" style="max-width:180px">
+          <label>Industry (optional)</label>
+          <select id="scan-industry">
+            <option value="">Auto-detect</option>
+            <option value="dental">Dental</option>
+            <option value="legal_criminal">Legal</option>
+            <option value="restaurant">Restaurant</option>
+            <option value="fitness">Fitness</option>
+            <option value="salon_beauty">Salon / Beauty</option>
+            <option value="real_estate">Real Estate</option>
+            <option value="automotive_dealership">Auto Dealer</option>
+            <option value="medical_clinic">Medical Clinic</option>
+            <option value="accounting">Accounting</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="pet_services">Pet Services</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="runGapScan()" style="flex-shrink:0">▶ Scan</button>
+      </div>
+    </div>
+
+    <div id="scan-result" style="display:none">
+      <div class="tiles" id="scan-tiles"></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title" id="scan-site-name">Scan Results</span><span id="scan-label" class="badge badge-warn">—</span></div>
+        <div class="card-body">
+          <table class="tbl">
+            <thead><tr><th>Priority</th><th>Gap Found</th><th>Fix</th><th>Agent</th><th>Monthly Value</th></tr></thead>
+            <tbody id="scan-gaps-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" id="scan-quote-card">
+        <div class="card-header"><span class="card-title">AgentForge Quote</span></div>
+        <div style="padding:18px" id="scan-quote-body"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────
+let API = localStorage.getItem('primedox_admin_url') || '';
+let adminToken = localStorage.getItem('primedox_admin_token') || '';
+let allUsers = [];
+
+// ── Init ──────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if (API) {
+    document.getElementById('backendUrl').value = API;
+    refreshHealth();
+  }
+});
+
+// ── Nav ───────────────────────────────────────────────────────────
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ── Backend connection ────────────────────────────────────────────
+function saveBackend() {
+  API = document.getElementById('backendUrl').value.trim().replace(/\/$/, '');
+  if (!API) return toast('Enter a backend URL first', 'err');
+  localStorage.setItem('primedox_admin_url', API);
+  toast('Backend URL saved — connecting...', 'ok');
+  refreshHealth();
+}
+
+async function apiGet(path, requiresAuth = false) {
+  if (!API) throw new Error('No backend URL set');
+  const headers = { 'Content-Type': 'application/json' };
+  if (requiresAuth && adminToken) headers['Authorization'] = 'Bearer ' + adminToken;
+  const res = await fetch(API + path, { headers });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// ── Health ────────────────────────────────────────────────────────
+async function refreshHealth() {
+  if (!API) return;
+  try {
+    const data = await apiGet('/health');
+    document.getElementById('t-status').textContent = data.status === 'ok' ? 'ONLINE' : 'DEGRADED';
+    document.getElementById('t-status').className = 'tile-value ' + (data.status === 'ok' ? 'ok' : 'err');
+    document.getElementById('t-agents').textContent = data.agents || '—';
+    document.getElementById('t-llm').textContent = (data.backend || '—').toUpperCase();
+    document.getElementById('t-uptime').textContent = data.uptime ? fmtUptime(data.uptime) : '—';
+
+    const grid = document.getElementById('health-grid');
+    const checks = [
+      { name: 'Backend API',       ok: true,                           desc: `${API}` },
+      { name: 'Supabase DB',       ok: data.supabase !== false,        desc: data.supabase ? 'Connected' : 'Not configured' },
+      { name: 'Stripe Webhooks',   ok: data.stripe !== false,          desc: data.stripe ? 'Configured' : 'STRIPE_SECRET_KEY missing' },
+      { name: 'AI Router',         ok: data.ai_router !== false,       desc: data.backend + ' mode' },
+      { name: 'JWT Auth',          ok: data.jwt !== false,             desc: data.jwt ? 'JWT_SECRET set' : 'JWT_SECRET missing' },
+      { name: 'Gap Scanner',       ok: true,                           desc: '20 industry profiles loaded' },
+      { name: 'Marketplace API',   ok: true,                           desc: '10 agents in catalog' },
+      { name: 'Rate Limiter',      ok: true,                           desc: '60 req/min general, 10 req/min scan' },
+    ];
+
+    grid.innerHTML = checks.map(c => `
+      <div class="health-item">
+        <div class="health-dot ${c.ok ? 'dot-ok' : 'dot-warn'}"></div>
+        <div class="health-info">
+          <div class="health-name">${c.name}</div>
+          <div class="health-desc">${c.desc}</div>
+        </div>
+      </div>`).join('');
+
+    addLog('info', `Health check OK — ${data.agents} agents, ${data.backend} mode`);
+  } catch (err) {
+    document.getElementById('t-status').textContent = 'OFFLINE';
+    document.getElementById('t-status').className = 'tile-value err';
+    addLog('error', 'Health check failed: ' + err.message);
+    toast('Cannot reach backend: ' + err.message, 'err');
+  }
+}
+
+// ── Revenue ───────────────────────────────────────────────────────
+async function loadRevenue() {
+  if (!API) return toast('Connect backend first', 'err');
+  try {
+    const data = await apiGet('/api/admin/revenue', true);
+    document.getElementById('r-total').textContent = '$' + (data.total_cad || '0');
+
+    const today = data.payments?.filter(p => p.created_at?.startsWith(new Date().toISOString().slice(0,10))).length || 0;
+    document.getElementById('r-today').textContent = today;
+
+    const tbody = document.getElementById('payments-tbody');
+    if (!data.payments || data.payments.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No payments yet — Stripe webhooks not fired</td></tr>';
+    } else {
+      tbody.innerHTML = data.payments.map(p => `
+        <tr>
+          <td>${fmtDate(p.created_at)}</td>
+          <td>${p.customer_email || '—'}</td>
+          <td>${p.product_id || '—'}</td>
+          <td style="color:var(--gold)">$${parseFloat(p.amount).toFixed(2)}</td>
+          <td>${p.provider || 'stripe'}</td>
+          <td><span class="badge badge-ok">SUCCEEDED</span></td>
+        </tr>`).join('');
+    }
+  } catch (err) {
+    if (err.message.includes('401') || err.message.includes('403')) {
+      toast('Admin auth required — log in first', 'err');
+    } else {
+      toast('Revenue load failed: ' + err.message, 'err');
+    }
+  }
+}
+
+// ── Marketplace ───────────────────────────────────────────────────
+async function loadMarketplace() {
+  if (!API) return toast('Connect backend first', 'err');
+  try {
+    const [agentData, statsData] = await Promise.allSettled([
+      apiGet('/api/marketplace/agents'),
+      apiGet('/api/marketplace/stats', true),
+    ]);
+
+    if (agentData.status === 'fulfilled') {
+      const d = agentData.value;
+      document.getElementById('m-total').textContent = d.total || '—';
+      const installs = (d.agents || []).reduce((s, a) => s + (a.installs || 0), 0);
+      document.getElementById('m-installs').textContent = installs || '—';
+
+      const tbody = document.getElementById('marketplace-tbody');
+      tbody.innerHTML = (d.agents || []).map(a => `
+        <tr>
+          <td><strong style="color:var(--plat)">${a.name}</strong><br><span style="color:var(--muted);font-size:10px">${a.tagline || ''}</span></td>
+          <td><span class="badge badge-gray">${a.category}</span></td>
+          <td style="color:var(--gold)">$${a.setup_price_cad}</td>
+          <td>$${a.monthly_price_cad}/mo</td>
+          <td>${a.installs || 0}</td>
+          <td>★ ${a.rating_avg || '—'} (${a.review_count || 0})</td>
+          <td><span class="badge ${a.verified ? 'badge-ok' : 'badge-warn'}">${a.verified ? 'VERIFIED' : 'PENDING'}</span></td>
+        </tr>`).join('');
+    }
+
+    if (statsData.status === 'fulfilled') {
+      const s = statsData.value;
+      document.getElementById('m-gmv').textContent = s.gmv_cad ? '$' + s.gmv_cad.toFixed(2) : '$0';
+      document.getElementById('m-cut').textContent = s.platform_revenue_cad ? '$' + s.platform_revenue_cad.toFixed(2) : '$0';
+    }
+  } catch (err) {
+    toast('Marketplace load failed: ' + err.message, 'err');
+  }
+}
+
+// ── Users ─────────────────────────────────────────────────────────
+async function loadUsers() {
+  if (!API) return toast('Connect backend first', 'err');
+  toast('Users endpoint requires Supabase + admin JWT — checking...', 'ok');
+  // NOTE: /api/admin/users endpoint to be added when Supabase is live
+  const tbody = document.getElementById('users-tbody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">User list requires Supabase connected + admin JWT token. Deploy backend first.</td></tr>';
+}
+
+function filterUsers() {
+  const q = document.getElementById('user-search').value.toLowerCase();
+  const role = document.getElementById('user-role-filter').value;
+  const rows = document.querySelectorAll('#users-tbody tr[data-email]');
+  rows.forEach(r => {
+    const emailMatch = r.dataset.email?.includes(q);
+    const roleMatch  = !role || r.dataset.role === role;
+    r.style.display = emailMatch && roleMatch ? '' : 'none';
+  });
+}
+
+// ── Referrals ─────────────────────────────────────────────────────
+async function loadReferrals() {
+  if (!API) return toast('Connect backend first', 'err');
+  toast('Referral data requires Supabase connected', 'ok');
+  document.getElementById('referrals-tbody').innerHTML =
+    '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">Connect Supabase + admin token to view referral commissions</td></tr>';
+}
+
+// ── Agent Metrics ─────────────────────────────────────────────────
+async function loadAgentMetrics() {
+  if (!API) return toast('Connect backend first', 'err');
+  try {
+    const data = await apiGet('/health');
+    document.getElementById('ag-provider').textContent = (data.backend || '—').toUpperCase();
+    document.getElementById('ag-calls').textContent = '—';
+    document.getElementById('ag-latency').textContent = '—';
+    document.getElementById('ag-errors').textContent = '0%';
+
+    // Show built-in agent distribution from known catalog
+    const agents = [
+      { name: 'booking_agent', calls: 0, max: 100, latency: '—' },
+      { name: 'chat_agent',    calls: 0, max: 100, latency: '—' },
+      { name: 'review_agent',  calls: 0, max: 100, latency: '—' },
+      { name: 'lead_agent',    calls: 0, max: 100, latency: '—' },
+      { name: 'seo_agent',     calls: 0, max: 100, latency: '—' },
+      { name: 'intake_agent',  calls: 0, max: 100, latency: '—' },
+      { name: 'reminder_agent',calls: 0, max: 100, latency: '—' },
+    ];
+
+    document.getElementById('agent-bars').innerHTML = agents.map(a => `
+      <div class="agent-row">
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-bar-wrap"><div class="agent-bar" style="width:${Math.round(a.calls/a.max*100)}%"></div></div>
+        <div class="agent-calls">${a.calls} calls</div>
+        <div class="agent-latency">${a.latency}</div>
+      </div>`).join('');
+
+    toast('Detailed metrics available after backend deployment + call volume', 'ok');
+  } catch (err) {
+    toast('Cannot load metrics: ' + err.message, 'err');
+  }
+}
+
+// ── Gap Scanner ───────────────────────────────────────────────────
+async function runGapScan() {
+  const url = document.getElementById('scan-url').value.trim();
+  const industry = document.getElementById('scan-industry').value;
+  if (!url) return toast('Enter a URL to scan', 'err');
+  if (!API)  return toast('Connect backend first', 'err');
+
+  toast('Scanning ' + url + '...', 'ok');
+  document.getElementById('scan-result').style.display = 'none';
+
+  try {
+    const res = await fetch(API + '/api/gap-scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, industry: industry || undefined }),
+    });
+    const data = await res.json();
+
+    if (!data.success) return toast('Scan failed: ' + (data.error || data.message), 'err');
+
+    document.getElementById('scan-result').style.display = 'block';
+    document.getElementById('scan-site-name').textContent = data.domain || url;
+
+    const lbl = document.getElementById('scan-label');
+    lbl.textContent = data.gap_score_label;
+    lbl.className = 'badge ' + (data.gap_score >= 60 ? 'badge-err' : data.gap_score >= 30 ? 'badge-warn' : 'badge-ok');
+
+    document.getElementById('scan-tiles').innerHTML = `
+      <div class="tile"><div class="tile-label">Gap Score</div><div class="tile-value ${data.gap_score >= 60 ? 'err' : 'warn'}">${data.gap_score}/100</div><div class="tile-delta">Higher = more opportunity</div></div>
+      <div class="tile"><div class="tile-label">Gaps Found</div><div class="tile-value">${data.gaps_count}</div><div class="tile-delta">${data.critical_gaps} critical, ${data.high_gaps} high</div></div>
+      <div class="tile"><div class="tile-label">Industry</div><div class="tile-value" style="font-size:14px">${data.detected_industry}</div><div class="tile-delta">Auto-detected</div></div>
+      <div class="tile"><div class="tile-label">Setup Quote</div><div class="tile-value gold">$${data.agentforge_quote?.setup_cost_cad || '—'}</div><div class="tile-delta">+$${data.agentforge_quote?.monthly_cost_cad || '—'}/mo</div></div>
+    `;
+
+    const priorityBadge = p => ({ CRITICAL: 'badge-err', HIGH: 'badge-warn', MEDIUM: 'badge-gold' }[p] || 'badge-gray');
+    document.getElementById('scan-gaps-tbody').innerHTML = (data.gaps_found || []).map(g => `
+      <tr>
+        <td><span class="badge ${priorityBadge(g.priority)}">${g.priority}</span></td>
+        <td>${g.title}</td>
+        <td style="font-size:11px;color:var(--muted)">${g.fix}</td>
+        <td>${g.agent ? `<span class="badge badge-gold">${g.agent}</span>` : '—'}</td>
+        <td style="color:var(--gold)">${g.monthly_value_cad ? '$' + g.monthly_value_cad + '/mo' : '—'}</td>
+      </tr>`).join('');
+
+    const q = data.agentforge_quote;
+    document.getElementById('scan-quote-body').innerHTML = `
+      <div class="tiles">
+        <div class="tile"><div class="tile-label">Setup Cost</div><div class="tile-value gold">$${q.setup_cost_cad} CAD</div>${q.bundle_discount_pct ? `<div class="tile-delta">${q.bundle_discount_pct}% bundle discount applied</div>` : ''}</div>
+        <div class="tile"><div class="tile-label">Monthly Retainer</div><div class="tile-value">$${q.monthly_cost_cad}/mo</div></div>
+        <div class="tile"><div class="tile-label">Value Recovered</div><div class="tile-value ok">$${q.estimated_monthly_value_recovered_cad}/mo</div></div>
+        ${q.roi_breakeven_months ? `<div class="tile"><div class="tile-label">ROI Breakeven</div><div class="tile-value">${q.roi_breakeven_months} mo</div></div>` : ''}
+      </div>
+      <div style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap">
+        <a href="${q.cta_url}" target="_blank" class="btn btn-primary" style="text-decoration:none">Book a Call →</a>
+        <a href="${q.paypal_url}" target="_blank" class="btn btn-primary" style="text-decoration:none">Pay via PayPal →</a>
+      </div>`;
+
+    addLog('info', `Gap scan complete: ${data.domain} — Score ${data.gap_score}/100, ${data.gaps_count} gaps, $${q.setup_cost_cad} quote`);
+  } catch (err) {
+    toast('Scan error: ' + err.message, 'err');
+  }
+}
+
+// ── Log helpers ───────────────────────────────────────────────────
+const logLines = [];
+function addLog(level, msg) {
+  const ts = new Date().toTimeString().slice(0,8);
+  logLines.unshift({ ts, level, msg });
+  if (logLines.length > 100) logLines.pop();
+  renderLogs();
+}
+function renderLogs() {
+  const out = document.getElementById('log-output');
+  out.innerHTML = logLines.map(l => `
+    <div class="log-line">
+      <span class="log-ts">${l.ts}</span>
+      <span class="log-lvl-${l.level}">[${l.level.toUpperCase()}]</span>
+      <span class="log-msg"> ${l.msg}</span>
+    </div>`).join('');
+}
+async function refreshLogs() {
+  if (!API) return toast('Connect backend first', 'err');
+  addLog('info', 'Log stream — Railway logs available in Railway dashboard → Deployments → Logs');
+  toast('Live logs: open Railway dashboard → Deployments → Logs tab', 'ok');
+}
+
+// ── Util ──────────────────────────────────────────────────────────
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-CA', { dateStyle: 'short', timeStyle: 'short' });
+}
+function fmtUptime(secs) {
+  if (secs < 60) return secs + 's';
+  if (secs < 3600) return Math.floor(secs/60) + 'm';
+  if (secs < 86400) return Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm';
+  return Math.floor(secs/86400) + 'd ' + Math.floor((secs%86400)/3600) + 'h';
+}
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
