@@ -44,6 +44,47 @@ const helmet    = require('helmet');
 const rateLimit = require('express-rate-limit');
 const OpenAI    = require('openai');
 const { chineseAIComplete } = require('./chinese-ai-providers');
+const Stripe    = require('stripe');
+const jwt       = require('jsonwebtoken');
+const crypto    = require('crypto');
+
+// ── Stripe (Task 4) ─────────────────────────────────────────────────
+const stripe = process.env.STRIPE_SECRET_KEY ? Stripe(process.env.STRIPE_SECRET_KEY) : null;
+
+// ── JWT config (Task 6) ──────────────────────────────────────────────
+const JWT_SECRET  = process.env.JWT_SECRET || 'REPLACE_WITH_RANDOM_SECRET_32_CHARS';
+const JWT_EXPIRES = process.env.JWT_EXPIRES_IN || '7d';
+
+// ── Supabase service client (for auth + session storage) ─────────────
+let supa = null;
+if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY) {
+  const { createClient } = require('@supabase/supabase-js');
+  supa = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+}
+
+// ── Auth middleware — verifies JWT on protected routes ───────────────
+function requireAuth(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Missing auth token' });
+  }
+  try {
+    req.user = jwt.verify(header.slice(7), JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: 'Invalid or expired token' });
+  }
+}
+
+// ── Admin middleware ─────────────────────────────────────────────────
+function requireAdmin(req, res, next) {
+  requireAuth(req, res, () => {
+    if (req.user.role !== 'admin' && req.user.role !== 'derek-superadmin') {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+    next();
+  });
+}
 
 // ── Backend selection ──────────────────────────────────────────────
 const LLM_BACKEND  = process.env.LLM_BACKEND  || 'gemma';  // 'gemma' | 'openai' | 'hybrid'
@@ -548,6 +589,264 @@ app.post('/suggest-fix', async (req, res) => {
   } catch (err) {
     res.status(503).json({ error: 'No AI provider available. ' + err.message });
   }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// TASK 4 — STRIPE WEBHOOK HANDLER
+// ═══════════════════════════════════════════════════════════════════
+// Receives Stripe events, writes to Supabase payments table,
+// triggers referral commission logging.
+// Webhook secret: set STRIPE_WEBHOOK_SECRET in Railway env vars.
+// Register at: dashboard.stripe.com/webhooks → Add endpoint →
+//   URL: https://YOUR-RAILWAY-URL.railway.app/webhooks/stripe
+//   Events: payment_intent.succeeded, checkout.session.completed,
+//           customer.subscription.created, customer.subscription.deleted
+app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  if (!stripe) return res.status(503).json({ error: 'Stripe not configured' });
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('[stripe webhook] signature verification failed:', err.message);
+    return res.status(400).json({ error: 'Invalid signature' });
+  }
+
+  const data = event.data.object;
+  console.log('[stripe webhook]', event.type, data.id);
+
+  if (supa) {
+    try {
+      // Log to payments table
+      if (event.type === 'checkout.session.completed' || event.type === 'payment_intent.succeeded') {
+        const email   = data.customer_details?.email || data.receipt_email || null;
+        const amount  = (data.amount_total || data.amount_received || 0) / 100;
+        const refCode = data.metadata?.referral_code || null;
+
+        const { error: payErr } = await supa.from('payments').insert({
+          stripe_event_id: event.id,
+          provider:        'stripe',
+          status:          'succeeded',
+          amount,
+          currency:        (data.currency || 'cad').toUpperCase(),
+          product_id:      data.metadata?.product_id || null,
+          customer_email:  email,
+          customer_name:   data.customer_details?.name || null,
+          referral_code:   refCode,
+          metadata:        data.metadata || {},
+        });
+        if (payErr) console.error('[stripe webhook] payments insert:', payErr.message);
+
+        // Log referral commission if code present
+        if (refCode && email) {
+          const { data: ref } = await supa.from('referrals').select('referrer_email, discount_percent').eq('code', refCode).single();
+          if (ref) {
+            await supa.from('referral_commissions').insert({
+              referral_code:   refCode,
+              referrer_email:  ref.referrer_email,
+              buyer_email:     email,
+              product:         data.metadata?.product_id || 'unknown',
+              sale_amount:     amount,
+              commission_rate: ref.discount_percent,
+              stripe_payment_id: data.payment_intent || data.id,
+              status:          'pending',
+            });
+            // Increment uses counter
+            await supa.from('referrals').update({ uses: supa.raw('uses + 1') }).eq('code', refCode);
+          }
+        }
+      }
+    } catch (dbErr) {
+      console.error('[stripe webhook] db error:', dbErr.message);
+    }
+  }
+
+  res.json({ received: true });
+});
+
+// Restore JSON parsing for all other routes (must come after raw webhook parser)
+app.use(express.json({ limit: '32kb' }));
+
+// ═══════════════════════════════════════════════════════════════════
+// TASK 6 — JWT AUTHENTICATION
+// ═══════════════════════════════════════════════════════════════════
+// Uses Supabase Auth as the user store; issues empire JWTs with role.
+// All auth routes: /auth/register, /auth/login, /auth/refresh,
+//                 /auth/reset-password, /auth/me, /auth/logout
+
+app.post('/auth/register', async (req, res) => {
+  const { email, password, referral_code } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'email and password required' });
+  if (!supa) return res.status(503).json({ error: 'Auth service not configured' });
+
+  const { data, error } = await supa.auth.admin.createUser({ email, password, email_confirm: true });
+  if (error) return res.status(400).json({ error: error.message });
+
+  // Attach referral code to profile if provided
+  if (referral_code) {
+    await supa.from('user_profiles').update({ discount_tier: 'referral' })
+      .eq('id', data.user.id);
+    await supa.from('referrals').update({ uses: supa.raw('uses + 1') }).eq('code', referral_code);
+  }
+
+  const token = jwt.sign(
+    { sub: data.user.id, email: data.user.email, role: 'customer' },
+    JWT_SECRET, { expiresIn: JWT_EXPIRES }
+  );
+  res.json({ token, user: { id: data.user.id, email: data.user.email, role: 'customer' } });
+});
+
+app.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'email and password required' });
+  if (!supa) return res.status(503).json({ error: 'Auth service not configured' });
+
+  const { data, error } = await supa.auth.signInWithPassword({ email, password });
+  if (error) return res.status(401).json({ error: 'Invalid credentials' });
+
+  const { data: profile } = await supa.from('user_profiles').select('role, tier').eq('id', data.user.id).single();
+  const role = profile?.role || 'customer';
+  const tier = profile?.tier || 'free';
+
+  const token = jwt.sign(
+    { sub: data.user.id, email: data.user.email, role, tier },
+    JWT_SECRET, { expiresIn: JWT_EXPIRES }
+  );
+
+  // Store session hash
+  if (supa) {
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    await supa.from('sessions').insert({
+      user_id: data.user.id, token_hash: tokenHash,
+      ip_address: req.ip, user_agent: req.get('user-agent'),
+      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    }).catch(() => {});
+  }
+
+  res.json({ token, user: { id: data.user.id, email: data.user.email, role, tier } });
+});
+
+app.post('/auth/refresh', requireAuth, (req, res) => {
+  const token = jwt.sign(
+    { sub: req.user.sub, email: req.user.email, role: req.user.role, tier: req.user.tier },
+    JWT_SECRET, { expiresIn: JWT_EXPIRES }
+  );
+  res.json({ token });
+});
+
+app.post('/auth/reset-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'email required' });
+  if (!supa) return res.status(503).json({ error: 'Auth service not configured' });
+  await supa.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://zprimedoxaihq.com/reset-password',
+  });
+  // Always return success to avoid email enumeration
+  res.json({ message: 'If that email exists, a reset link has been sent.' });
+});
+
+app.get('/auth/me', requireAuth, async (req, res) => {
+  if (!supa) return res.json({ user: req.user });
+  const { data: profile } = await supa.from('user_profiles')
+    .select('email, full_name, role, tier, referral_code, stripe_customer_id, created_at')
+    .eq('id', req.user.sub).single();
+  res.json({ user: { ...req.user, ...profile } });
+});
+
+app.post('/auth/logout', requireAuth, async (req, res) => {
+  if (supa) {
+    const authHeader = req.headers.authorization?.slice(7);
+    if (authHeader) {
+      const tokenHash = crypto.createHash('sha256').update(authHeader).digest('hex');
+      await supa.from('sessions').update({ revoked: true }).eq('token_hash', tokenHash).catch(() => {});
+    }
+  }
+  res.json({ message: 'Logged out' });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// TASK 7 — AI ROUTING WITH INTELLIGENT FALLBACK CHAIN
+// ═══════════════════════════════════════════════════════════════════
+// Chain: Claude → OpenAI → DeepSeek → Qwen → GLM
+// All keys stored in Railway env vars — NEVER hardcoded.
+// Per-tier rate limits: free=10/hr, pro=100/hr, enterprise=1000/hr
+const AI_ROUTE_LIMITS = {
+  free:       rateLimit({ windowMs: 3_600_000, max: 10,   keyGenerator: r => r.user?.sub || r.ip, standardHeaders: true, legacyHeaders: false }),
+  pro:        rateLimit({ windowMs: 3_600_000, max: 100,  keyGenerator: r => r.user?.sub || r.ip, standardHeaders: true, legacyHeaders: false }),
+  enterprise: rateLimit({ windowMs: 3_600_000, max: 1000, keyGenerator: r => r.user?.sub || r.ip, standardHeaders: true, legacyHeaders: false }),
+};
+
+app.post('/api/ai/route', requireAuth, async (req, res) => {
+  const tier = req.user.tier || 'free';
+  const limiter = AI_ROUTE_LIMITS[tier] || AI_ROUTE_LIMITS.free;
+  limiter(req, res, async () => {
+    const { messages, agent_id, max_tokens } = req.body;
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'messages array required' });
+    }
+
+    const systemPrompt = agent_id && AGENT_PROMPTS[agent_id] ? AGENT_PROMPTS[agent_id] : AGENT_PROMPTS['primedox'];
+    const fullMessages = [{ role: 'system', content: systemPrompt }, ...messages];
+    const maxTok = Math.min(max_tokens || 1024, tier === 'free' ? 512 : 2048);
+
+    // Try Claude first (Anthropic SDK)
+    if (process.env.ANTHROPIC_API_KEY) {
+      try {
+        const Anthropic = require('@anthropic-ai/sdk');
+        const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+        const resp = await anthropic.messages.create({
+          model: process.env.CLAUDE_MODEL || 'claude-haiku-4-5-20251001',
+          max_tokens: maxTok,
+          system: systemPrompt,
+          messages: messages,
+        });
+        return res.json({
+          content: resp.content[0]?.text || '',
+          provider: 'claude',
+          model: resp.model,
+          agent_id: agent_id || 'primedox',
+        });
+      } catch (e) {
+        console.warn('[ai/route] Claude failed:', e.message);
+      }
+    }
+
+    // Fallback: OpenAI → DeepSeek → Qwen → GLM (via existing chineseAIComplete)
+    try {
+      // Try OpenAI directly
+      if (process.env.OPENAI_API_KEY) {
+        const { client, model } = getClient(agent_id || 'primedox');
+        const completion = await client.chat.completions.create({
+          model, messages: fullMessages, max_tokens: maxTok, temperature: 0.7,
+        });
+        return res.json({
+          content: completion.choices[0]?.message?.content || '',
+          provider: 'openai',
+          model,
+          agent_id: agent_id || 'primedox',
+        });
+      }
+      // Final fallback: Chinese AI chain
+      const result = await chineseAIComplete(fullMessages, ['deepseek', 'qwen', 'glm', 'kimi'], { maxTokens: maxTok });
+      return res.json({ ...result, agent_id: agent_id || 'primedox' });
+    } catch (err) {
+      res.status(503).json({ error: 'All AI providers exhausted. Add API keys to Railway env vars.', detail: err.message });
+    }
+  });
+});
+
+// Admin endpoint: view empire revenue summary
+app.get('/api/admin/revenue', requireAdmin, async (req, res) => {
+  if (!supa) return res.status(503).json({ error: 'Supabase not configured' });
+  const { data, error } = await supa.from('payments')
+    .select('provider, status, amount, currency, product_id, customer_email, created_at')
+    .eq('status', 'succeeded')
+    .order('created_at', { ascending: false })
+    .limit(100);
+  if (error) return res.status(500).json({ error: error.message });
+  const total = (data || []).reduce((s, p) => s + parseFloat(p.amount), 0);
+  res.json({ total_cad: total.toFixed(2), count: data.length, payments: data });
 });
 
 const PORT = process.env.PORT || 3001;
