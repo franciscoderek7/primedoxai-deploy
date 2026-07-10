@@ -1,1388 +1,962 @@
-<title>Francisco Holdings Inc. — Floor 1 Command Center</title>
+<!doctype html>
+<title>Claude Empire Command — Francisco Holdings Inc.</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-/* ══════════════════════════════════════════════════════
-   DESIGN TOKENS — Brutalist Command Center
-   Palette: Void / Sentinel Green / Empire Gold / Command Blue / Threat Red
-   ══════════════════════════════════════════════════════ */
 :root {
-  --void:        #020C14;
-  --hull:        #071828;
-  --bulkhead:    #0A1E30;
-  --glass:       rgba(7,24,40,0.85);
-  --border:      rgba(0,229,160,0.10);
-  --border-hi:   rgba(0,229,160,0.32);
-  --sentinel:    #00E5A0;
-  --sentinel-2:  #00B37D;
-  --sent-bg:     rgba(0,229,160,0.07);
-  --gold:        #C9A227;
-  --gold-hi:     #F5C842;
-  --gold-bg:     rgba(201,162,39,0.08);
-  --cmd:         #2196F3;
-  --cmd-bg:      rgba(33,150,243,0.08);
-  --threat:      #FF3D5E;
-  --threat-bg:   rgba(255,61,94,0.08);
-  --cannabis:    #FF6B35;
-  --canna-bg:    rgba(255,107,53,0.08);
-  --t1: #E4F0FF;
-  --t2: #7BA8C8;
-  --t3: #3A5A7A;
-  --t4: #152638;
-  --sidebar-w: 224px;
-  --top-h:     52px;
-  --r:         6px;
-  --r-lg:      10px;
-  --mono:      'Courier New', Courier, monospace;
-  --sans:      system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body {
-  height: 100%;
-  background: var(--void);
-  color: var(--t1);
-  font-family: var(--sans);
-  font-size: 13px;
-  line-height: 1.5;
-  overflow: hidden;
-}
-
-/* Structural grid watermark */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(0,229,160,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,229,160,0.018) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── TOPBAR ─────────────────────────────────────────── */
-.topbar {
-  position: fixed; top: 0; left: 0; right: 0;
-  height: var(--top-h);
-  background: rgba(2,12,20,0.97);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center;
-  padding: 0 18px; gap: 14px;
-  z-index: 1000;
-  backdrop-filter: blur(14px);
-}
-
-.logo-block {
-  font-family: var(--mono);
-  font-size: 10px;
-  line-height: 1.3;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gold);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.logo-block b { color: var(--sentinel); letter-spacing: 0.2em; }
-
-.vdiv { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
-
-.status-strip {
-  display: flex; align-items: center; gap: 10px; flex: 1; overflow: hidden;
-}
-
-.spill {
-  display: flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: 10px; color: var(--t2);
-  white-space: nowrap;
-}
-
-.dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--sentinel);
-  animation: blink 2.2s ease-in-out infinite;
-  flex-shrink: 0;
-}
-.dot.gold  { background: var(--gold); }
-.dot.red   { background: var(--threat); animation-duration: 0.9s; }
-
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
-
-.topbar-right {
-  display: flex; align-items: center; gap: 12px; margin-left: auto;
-}
-
-#live-clock {
-  font-family: var(--mono); font-size: 13px; color: var(--sentinel);
-  letter-spacing: 0.06em; min-width: 76px; text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.bell {
-  position: relative; cursor: pointer; color: var(--t2);
-  font-size: 15px; transition: color .2s; user-select: none;
-}
-.bell:hover { color: var(--gold); }
-.bell-badge {
-  position: absolute; top: -5px; right: -6px;
-  background: var(--threat); color: #fff;
-  font-size: 8px; font-weight: 700; font-family: var(--mono);
-  width: 14px; height: 14px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  animation: blink .9s ease-in-out infinite;
-}
-
-.avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  border: 1px solid var(--gold);
-  background: linear-gradient(135deg, rgba(201,162,39,.15) 0%, var(--bulkhead) 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: var(--gold);
-  cursor: pointer; font-family: var(--mono);
-}
-
-/* ── SIDEBAR ─────────────────────────────────────────── */
-.sidebar {
-  position: fixed;
-  top: var(--top-h); left: 0; bottom: 0;
-  width: var(--sidebar-w);
-  background: rgba(7,24,40,0.98);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  z-index: 900; overflow: hidden;
-}
-
-.sb-label {
-  padding: 18px 15px 7px;
-  font: 8px/1 var(--mono);
-  letter-spacing: .20em; text-transform: uppercase; color: var(--t3);
-}
-
-.nav-item {
-  display: flex; align-items: center; gap: 9px;
-  padding: 10px 15px;
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: all .14s;
-  color: var(--t2); user-select: none;
-}
-.nav-item:hover { background: var(--sent-bg); color: var(--t1); border-left-color: rgba(0,229,160,.4); }
-.nav-item.active { background: var(--sent-bg); color: var(--sentinel); border-left-color: var(--sentinel); }
-
-.nav-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-.nav-label { font-size: 12.5px; flex: 1; }
-
-.nbadge {
-  margin-left: auto; background: var(--threat-bg); color: var(--threat);
-  font-size: 9px; font-family: var(--mono); font-weight: 700;
-  padding: 1px 6px; border-radius: 10px; min-width: 20px; text-align: center;
-}
-.nbadge.g { background: var(--gold-bg); color: var(--gold); }
-
-.sb-floor-widget {
-  padding: 12px 15px; border-top: 1px solid var(--border); flex-shrink: 0;
-}
-.sb-floor-label { font: 8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--t3); margin-bottom:5px; }
-.sb-floor-num   { font: 700 28px/1 var(--mono); color: var(--gold); letter-spacing:-.02em; }
-.sb-floor-name  { font: 9px/1.3 var(--mono); color: var(--t3); margin-top:3px; }
-
-.sb-health {
-  padding: 12px 15px; border-top: 1px solid var(--border); flex-shrink: 0;
-}
-.health-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 3px 0; font: 10px/1.4 var(--mono); color: var(--t2);
-}
-.hv     { color: var(--sentinel); font-weight: 700; }
-.hv.w   { color: var(--gold); }
-.hv.err { color: var(--threat); }
-
-/* ── MAIN ─────────────────────────────────────────── */
-.main {
-  position: fixed;
-  top: var(--top-h); left: var(--sidebar-w);
-  right: 0; bottom: 0;
-  overflow-y: auto; overflow-x: hidden;
-  z-index: 1;
-}
-
-.main::-webkit-scrollbar { width: 4px; }
-.main::-webkit-scrollbar-track { background: transparent; }
-.main::-webkit-scrollbar-thumb { background: var(--t4); border-radius: 2px; }
-
-.section {
-  display: none; padding: 22px;
-  min-height: 100%;
-  animation: fade-up .22s ease;
-}
-.section.active { display: block; }
-
-@keyframes fade-up {
-  from { opacity:0; transform: translateY(10px); }
-  to   { opacity:1; transform: translateY(0); }
-}
-
-/* ── SHARED COMPONENTS ─────────────────────────────── */
-.eyebrow {
-  font: 8px/1 var(--mono);
-  letter-spacing:.22em; text-transform:uppercase; color:var(--sentinel);
-  margin-bottom: 5px;
-}
-.section-title {
-  font-size: 21px; font-weight: 600; color: var(--t1);
-  letter-spacing:-.02em; margin-bottom: 20px;
-}
-
-.card {
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  transition: border-color .2s;
-}
-.card:hover { border-color: var(--border-hi); }
-
-.card-hd {
-  padding: 12px 16px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.card-title { font: 9px/1 var(--mono); letter-spacing:.13em; text-transform:uppercase; color:var(--t2); }
-.card-body  { padding: 16px; }
-
-/* ── HOME — METRICS ─────────────────────────────────── */
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(6,1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-@media(max-width:1200px){.metrics-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:780px) {.metrics-grid{grid-template-columns:repeat(2,1fr);}}
-
-.mtile {
-  background: var(--glass); border: 1px solid var(--border);
-  border-radius: var(--r-lg); padding: 16px;
-  position: relative; overflow: hidden;
-  transition: all .16s; cursor: default;
-}
-.mtile:hover { border-color: var(--border-hi); transform: translateY(-1px); }
-.mtile::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background: var(--ta, var(--sentinel)); opacity:.65;
-}
-.mtile.g  { --ta: var(--gold); }
-.mtile.b  { --ta: var(--cmd); }
-.mtile.r  { --ta: var(--threat); }
-
-.mtile-label {
-  font: 8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase;
-  color: var(--t3); margin-bottom: 8px;
-}
-.mtile-val {
-  font: 700 28px/1 var(--mono); letter-spacing:-.02em;
-  color: var(--ta, var(--sentinel));
-  font-variant-numeric: tabular-nums;
-}
-.mtile-val.flicker { animation: flicker 4s ease-in-out infinite; }
-@keyframes flicker { 0%,94%,100%{opacity:1} 97%{opacity:.6} }
-
-.mtile-sub { font: 10px/1 var(--mono); color: var(--t3); margin-top: 6px; }
-
-.mtile-bar { margin-top: 10px; height: 2px; background: var(--t4); border-radius: 1px; overflow:hidden; }
-.mtile-bar-fill {
-  height: 100%; background: var(--ta, var(--sentinel)); border-radius: 1px;
-  box-shadow: 0 0 6px var(--ta, var(--sentinel));
-  transition: width 2s cubic-bezier(.22,.61,.36,1);
-}
-
-/* ── HOME — LOWER ─────────────────────────────────── */
-.home-lower {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-}
-@media(max-width:780px){.home-lower{grid-template-columns:1fr;}}
-
-/* Agent quick */
-.aq-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; border-bottom: 1px solid var(--border);
-  transition: background .14s;
-}
-.aq-item:hover { background: var(--sent-bg); }
-.aq-item:last-child { border-bottom:none; }
-.aq-dot { width:7px;height:7px;border-radius:50%;flex-shrink:0;animation: blink 2s ease-in-out infinite; }
-.aq-dot.green  { background:var(--sentinel);box-shadow:0 0 7px var(--sentinel); }
-.aq-dot.gold   { background:var(--gold);box-shadow:0 0 7px var(--gold); }
-.aq-dot.dim    { background:var(--t3);box-shadow:none;animation:none; }
-.aq-name { font:11px/1 var(--mono); color:var(--t1); flex:1; }
-.aq-action { font:10px/1 var(--mono); color:var(--t3); max-width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.aq-load { font:10px/1 var(--mono); color:var(--sentinel); min-width:28px; text-align:right; }
-
-/* Threat feed */
-.threat-feed-scroll { max-height: 290px; overflow-y:auto; }
-.threat-feed-scroll::-webkit-scrollbar{width:3px;}
-.threat-feed-scroll::-webkit-scrollbar-thumb{background:var(--t4);border-radius:2px;}
-
-.tf-item {
-  display:flex; align-items:center; gap:8px;
-  padding: 8px 14px; border-bottom: 1px solid rgba(255,61,94,.06);
-  font: 10px/1.4 var(--mono); transition: background .14s;
-}
-.tf-item:hover { background: var(--threat-bg); }
-.tf-item.canna { background: var(--canna-bg); }
-
-.sev-badge {
-  font:700 8px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase;
-  padding: 2px 5px; border-radius: 3px; flex-shrink: 0; min-width: 48px; text-align:center;
-}
-.sev-c { background:var(--threat-bg); color:var(--threat); border:1px solid rgba(255,61,94,.25); }
-.sev-h { background:var(--canna-bg);  color:var(--cannabis); border:1px solid rgba(255,107,53,.25); }
-.sev-m { background:var(--gold-bg);   color:var(--gold); border:1px solid rgba(201,162,39,.25); }
-
-.tf-desc { flex:1; color:var(--t2); }
-.tf-time { color:var(--t3); font-size:9px; }
-
-/* ── TOWER ─────────────────────────────────────────── */
-.tower-wrap {
-  display:grid; grid-template-columns: 270px 1fr; gap:18px;
-  height: calc(100vh - var(--top-h) - 86px);
-}
-@media(max-width:900px){.tower-wrap{grid-template-columns:1fr;}}
-
-.building-card {
-  background:var(--glass); border:1px solid var(--border);
-  border-radius:var(--r-lg); display:flex; flex-direction:column; overflow:hidden;
-}
-
-.building-inner {
-  flex:1; display:flex; overflow:hidden;
-}
-
-.floors-col {
-  flex:1; overflow-y:auto; padding:6px 0;
-}
-.floors-col::-webkit-scrollbar{width:3px;}
-.floors-col::-webkit-scrollbar-thumb{background:var(--t4);border-radius:2px;}
-
-.floor-strip {
-  display:flex; align-items:center; gap:7px;
-  padding: 1.5px 8px; cursor:pointer;
-  transition: background .1s;
-}
-.floor-strip:hover { background: rgba(0,229,160,.05); }
-.floor-strip.sel   { background: rgba(0,229,160,.09); }
-.floor-strip.sel .f-bar { box-shadow: 0 0 6px currentColor; }
-
-.f-num { font:8px/1 var(--mono); color:var(--t3); width:26px; text-align:right; flex-shrink:0; }
-.f-bar { flex:1; height:7px; border-radius:2px; }
-.f-bar.live     { background:var(--sentinel); }
-.f-bar.building { background:var(--gold); }
-.f-bar.planned  { background:var(--cmd); opacity:.35; }
-.f-bar.empty    { background:var(--t4); }
-.f-name { font:8px/1 var(--mono); color:var(--t3); width:88px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-/* Elevator */
-.elev-shaft {
-  width: 22px; background: rgba(2,12,20,.7);
-  border-left: 1px solid var(--border); position:relative; overflow:hidden; flex-shrink:0;
-}
-.elev-track {
-  position:absolute; left:50%; top:6px; bottom:6px; width:1px;
-  background:var(--border); transform:translateX(-50%);
-}
-.elev-car {
-  position:absolute; left:3px; right:3px; height:12px;
-  background:var(--gold); border-radius:2px;
-  box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(201,162,39,.3);
-  transition: top .85s cubic-bezier(.45,.05,.55,.95);
-}
-
-/* Floor legend */
-.tower-legend {
-  display:flex; gap:14px; padding:10px 14px; border-top:1px solid var(--border);
-  flex-shrink:0;
-}
-.leg-item { display:flex; align-items:center; gap:5px; font:9px/1 var(--mono); color:var(--t2); }
-.leg-dot  { width:7px; height:7px; border-radius:2px; }
-
-/* Tower detail */
-.tower-detail { display:flex; flex-direction:column; gap:14px; }
-
-.floor-hero {
-  display:flex; align-items:center; gap:16px;
-  padding: 18px;
-}
-.floor-big-num {
-  font: 700 56px/1 var(--mono);
-  color: var(--gold);
-  letter-spacing:-.03em;
-  text-shadow: 0 0 30px rgba(201,162,39,.3);
-}
-.floor-meta-company { font-size:17px; font-weight:600; color:var(--t1); margin-bottom:6px; }
-.status-pill {
-  display:inline-flex; align-items:center; gap:5px;
-  font: 700 9px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase;
-  padding: 3px 10px; border-radius: 20px;
-}
-.sp-live     { background:var(--sent-bg); color:var(--sentinel); border:1px solid rgba(0,229,160,.25); }
-.sp-building { background:var(--gold-bg); color:var(--gold);     border:1px solid rgba(201,162,39,.25); }
-.sp-planned  { background:var(--cmd-bg);  color:var(--cmd);      border:1px solid rgba(33,150,243,.25); }
-.sp-empty    { background:var(--t4);      color:var(--t3);       border:1px solid var(--border); }
-
-.floor-stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding: 0 18px 18px; }
-.fstat { background:rgba(7,24,40,.5); border:1px solid var(--border); border-radius:var(--r); padding:10px 12px; }
-.fstat-label { font:8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3); margin-bottom:5px; }
-.fstat-val   { font:700 18px/1 var(--mono); color:var(--t1); font-variant-numeric:tabular-nums; }
-
-/* ── AGENTS ─────────────────────────────────────────── */
-.agents-grid {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
-}
-@media(max-width:1100px){.agents-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:700px) {.agents-grid{grid-template-columns:1fr;}}
-
-.agent-card {
-  background:var(--glass); border:1px solid var(--border);
-  border-radius:var(--r-lg); overflow:hidden;
-  transition: all .2s; cursor:pointer;
-}
-.agent-card:hover { border-color:var(--border-hi); transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,229,160,.05); }
-
-.ac-top {
-  padding: 14px 16px; display:flex; align-items:flex-start; gap:10px;
-  border-bottom: 1px solid var(--border);
-}
-.ac-icon {
-  width:36px; height:36px; border-radius:8px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:17px; flex-shrink:0;
-}
-.ac-name { font:600 13px/1.2 var(--sans); color:var(--t1); margin-bottom:3px; }
-.ac-role { font:9px/1 var(--mono); text-transform:uppercase; letter-spacing:.10em; color:var(--t3); }
-
-.sbadge {
-  margin-left:auto; font:700 8px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase;
-  padding: 3px 7px; border-radius:20px; flex-shrink:0;
-}
-.sb-act  { background:var(--sent-bg); color:var(--sentinel); border:1px solid rgba(0,229,160,.3); }
-.sb-busy { background:var(--gold-bg); color:var(--gold);     border:1px solid rgba(201,162,39,.3); }
-.sb-idle { background:rgba(30,50,70,.4); color:var(--t3);    border:1px solid var(--border); }
-
-.ac-body { padding:12px 16px; }
-
-.load-row { display:flex; align-items:center; gap:7px; margin-bottom:8px; }
-.load-lbl { font:8px/1 var(--mono); text-transform:uppercase; letter-spacing:.10em; color:var(--t3); width:26px; }
-.load-bar { flex:1; height:3px; background:var(--t4); border-radius:2px; overflow:hidden; }
-.load-fill {
-  height:100%; border-radius:2px; background:var(--sentinel);
-  box-shadow: 0 0 5px var(--sentinel);
-  transition: width 2.2s ease;
-}
-.load-fill.hi   { background:var(--gold);   box-shadow:0 0 5px var(--gold); }
-.load-fill.crit { background:var(--threat); box-shadow:0 0 5px var(--threat); }
-.load-pct { font:9px/1 var(--mono); color:var(--t2); min-width:28px; text-align:right; }
-
-.ac-last {
-  font:9px/1.4 var(--mono); color:var(--t3);
-  border-top:1px solid var(--border); padding-top:8px; margin-top:4px;
-}
-.ac-last span { color:var(--t2); }
-
-/* ── REVENUE ─────────────────────────────────────────── */
-.revenue-layout { display:grid; grid-template-columns:1fr 300px; gap:16px; }
-@media(max-width:900px){.revenue-layout{grid-template-columns:1fr;}}
-
-.target-bar-wrap {
-  margin-bottom: 18px;
-  padding: 14px 18px;
-  background: var(--sent-bg); border: 1px solid rgba(0,229,160,.18); border-radius:var(--r);
-}
-.target-label { font:8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--sentinel); margin-bottom:8px; }
-.target-row   { display:flex; align-items:center; gap:10px; }
-.t-edge { font:9px/1 var(--mono); color:var(--t3); }
-.t-bar  { flex:1; height:5px; background:var(--t4); border-radius:3px; overflow:hidden; }
-.t-fill {
-  height:100%; background:var(--sentinel); border-radius:3px;
-  box-shadow:0 0 8px var(--sentinel);
-  width:0%; transition: width 2.5s cubic-bezier(.22,.61,.36,1);
-}
-.t-pct { font:700 12px/1 var(--mono); color:var(--sentinel); min-width:32px; text-align:right; }
-
-#revenue-canvas { width:100%; height:280px; display:block; }
-
-.rev-table { width:100%; border-collapse:collapse; font:11px/1.4 var(--mono); }
-.rev-table th {
-  padding: 7px 12px; text-align:left;
-  font:8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3);
-  border-bottom: 1px solid var(--border); background:rgba(7,24,40,.5);
-}
-.rev-table td { padding:8px 12px; border-bottom:1px solid rgba(0,229,160,.04); color:var(--t2); font-variant-numeric:tabular-nums; }
-.rev-table tr:hover td { background:var(--sent-bg); }
-.rev-amt { color:var(--sentinel); font-weight:700; }
-
-/* ── THREATS ─────────────────────────────────────────── */
-.threats-layout { display:grid; grid-template-columns:1fr 270px; gap:16px; }
-@media(max-width:900px){.threats-layout{grid-template-columns:1fr;}}
-
-.thr-table { width:100%; border-collapse:collapse; font:10px/1.4 var(--mono); }
-.thr-table th {
-  padding:8px 12px; text-align:left;
-  font:8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3);
-  border-bottom:1px solid var(--border); background:rgba(7,24,40,.5);
-}
-.thr-table td { padding:9px 12px; border-bottom:1px solid rgba(255,61,94,.05); color:var(--t2); }
-.thr-table tr:hover td { background:var(--threat-bg); }
-.thr-table tr.canna td { border-left:2px solid var(--cannabis); }
-.thr-table tr.canna:hover td { background:var(--canna-bg); }
-
-.threat-big-panel { display:flex; flex-direction:column; }
-.threat-count-hero {
-  padding: 22px 18px; text-align:center; border-bottom:1px solid var(--border);
-}
-.thr-num {
-  font:700 60px/1 var(--mono); color:var(--threat);
-  text-shadow:0 0 30px rgba(255,61,94,.4);
-  animation: flicker 5s ease-in-out infinite;
-  font-variant-numeric:tabular-nums;
-}
-.thr-num-label { font:9px/1 var(--mono); letter-spacing:.20em; text-transform:uppercase; color:var(--t3); margin-top:5px; }
-
-.engine-bars { padding:14px 16px; border-bottom:1px solid var(--border); }
-.engine-bar-lbl { font:8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--t3); margin-bottom:10px; }
-.eng-row { margin-bottom:7px; }
-.eng-name-row { display:flex; justify-content:space-between; margin-bottom:3px; }
-.eng-name { font:8px/1 var(--mono); color:var(--t3); text-transform:uppercase; }
-.eng-count{ font:700 9px/1 var(--mono); }
-.eng-bar-bg { height:3px; background:var(--t4); border-radius:2px; overflow:hidden; }
-.eng-bar-fill { height:100%; border-radius:2px; }
-
-.escal-path { padding:14px 16px; }
-.escal-label { font:8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--t3); margin-bottom:10px; }
-.escal-row { display:flex; align-items:center; gap:4px; font:9px/1 var(--mono); flex-wrap:wrap; }
-.escal-step { padding:4px 8px; border-radius:4px; }
-.escal-arrow { color:var(--t4); }
-
-/* ── REVIEW QUEUE ─────────────────────────────────────── */
-.review-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:18px; }
-.rv-stat { background:var(--glass); border:1px solid var(--border); border-radius:var(--r); padding:12px 14px; text-align:center; }
-.rv-stat-num   { font:700 26px/1 var(--mono); font-variant-numeric:tabular-nums; }
-.rv-stat-label { font:9px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3); margin-top:4px; }
-
-.queue-meta-bar {
-  font:8px/1 var(--mono); letter-spacing:.10em; text-transform:uppercase;
-  color:var(--t3); margin-bottom:10px;
-}
-
-.queue-list { display:flex; flex-direction:column; gap:7px; }
-
-.q-item {
-  background:var(--glass); border:1px solid var(--border);
-  border-radius:var(--r-lg); padding:11px 14px;
-  display:flex; align-items:center; gap:11px;
-  cursor:grab; transition:all .14s; user-select:none;
-}
-.q-item:hover { border-color:var(--border-hi); transform:translateX(2px); }
-.q-item.canna-q { border-color:rgba(255,107,53,.25); background:rgba(255,107,53,.03); }
-.q-item.dragging { opacity:.4; cursor:grabbing; }
-
-.q-handle { color:var(--t4); font-size:11px; cursor:grab; }
-
-.q-priority {
-  font:700 10px/1 var(--mono);
-  width:22px; height:22px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-}
-.p1{background:var(--threat-bg);color:var(--threat);}
-.p2{background:var(--canna-bg);color:var(--cannabis);}
-.p3{background:var(--gold-bg);color:var(--gold);}
-.p4{background:var(--cmd-bg);color:var(--cmd);}
-
-.q-content { flex:1; min-width:0; }
-.q-title { font:500 12px/1.3 var(--sans); color:var(--t1); margin-bottom:2px; }
-.q-meta  { font:9px/1 var(--mono); color:var(--t3); }
-
-.canna-tag {
-  font:700 8px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase;
-  background:var(--canna-bg); color:var(--cannabis);
-  border:1px solid rgba(255,107,53,.3); padding:2px 7px; border-radius:3px; flex-shrink:0;
-}
-
-.q-actions { display:flex; gap:5px; }
-
-.btn {
-  font:700 9px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase;
-  padding: 5px 9px; border-radius:3px; border:1px solid; cursor:pointer;
-  background:transparent; transition:all .14s;
-}
-.btn-ok  { color:var(--sentinel); border-color:rgba(0,229,160,.3); }
-.btn-ok:hover  { background:var(--sentinel); color:var(--void); }
-.btn-rev { color:var(--gold); border-color:rgba(201,162,39,.3); }
-.btn-rev:hover { background:var(--gold); color:var(--void); }
-.btn-esc { color:var(--threat); border-color:rgba(255,61,94,.3); }
-.btn-esc:hover { background:var(--threat); color:#fff; }
-
-/* ── SETTINGS ─────────────────────────────────────────── */
-.settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-@media(max-width:780px){.settings-grid{grid-template-columns:1fr;}}
-
-.s-row {
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 9px 0; border-bottom:1px solid var(--border);
-  font:11px/1 var(--mono);
-}
-.s-row:last-child { border-bottom:none; }
-.s-key { color:var(--t2); }
-.s-val { color:var(--sentinel); }
-.s-val.dim { color:var(--t3); letter-spacing:.08em; }
-.s-val.w   { color:var(--gold); }
-
-/* ── TOAST ─────────────────────────────────────────── */
-.toast-wrap {
-  position:fixed; bottom:22px; right:22px;
-  display:flex; flex-direction:column; gap:7px; z-index:9999;
-  pointer-events:none;
-}
-.toast {
-  background:var(--bulkhead); border:1px solid var(--border-hi);
-  border-radius:var(--r); padding:10px 14px;
-  font:11px/1.4 var(--mono); color:var(--t1);
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-  animation: toast-in .22s ease, toast-out .28s ease 2.7s forwards;
-  max-width:300px; pointer-events:auto;
-}
-.toast.ok  { border-color:rgba(0,229,160,.45); color:var(--sentinel); }
-.toast.w   { border-color:rgba(201,162,39,.45); color:var(--gold); }
-.toast.err { border-color:rgba(255,61,94,.45);  color:var(--threat); }
-
-@keyframes toast-in  { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
-@keyframes toast-out { from{opacity:1;transform:translateX(0)}     to{opacity:0;transform:translateX(16px)} }
+  --void:    #020A16;
+  --bulkhead:#0C1E35;
+  --plasma:  #05F2C7;
+  --amber:   #F0A500;
+  --empire:  #1247DB;
+  --hot:     #FF1F4E;
+  --dim:     #1A3050;
+  --text:    #C8D8E8;
+  --muted:   #4A6880;
+  --ok:      #00E676;
+  --grid:    rgba(5,242,199,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);font-family:'Courier New',monospace;font-size:13px}
+#app{display:flex;height:100vh;overflow:hidden}
+#sidebar{width:180px;min-width:180px;background:var(--bulkhead);display:flex;flex-direction:column;border-right:1px solid var(--dim);overflow:hidden}
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+#logo{padding:16px 12px 10px;border-bottom:1px solid var(--dim)}
+.logo-top{font-size:10px;letter-spacing:0.22em;color:var(--muted);text-transform:uppercase}
+.logo-name{font-size:15px;font-weight:700;color:var(--plasma);letter-spacing:-0.02em;margin-top:3px}
+.logo-sub{font-size:9px;color:var(--muted);letter-spacing:0.18em;margin-top:1px}
+#nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;border-left:3px solid transparent;transition:all 0.15s;color:var(--muted);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;user-select:none}
+.nav-item:hover{color:var(--text);background:rgba(5,242,199,0.05)}
+.nav-item.active{color:var(--plasma);border-left-color:var(--plasma);background:rgba(5,242,199,0.08)}
+.nav-icon{font-size:14px;width:18px;text-align:center}
+.nav-key{margin-left:auto;font-size:9px;background:var(--dim);padding:1px 4px;border-radius:2px;color:var(--muted)}
+#sidebar-footer{padding:10px 12px;border-top:1px solid var(--dim)}
+.sf-line{font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:3px}
+.sf-status{display:flex;align-items:center;gap:6px;font-size:9px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+#topbar{height:44px;background:var(--bulkhead);border-bottom:1px solid var(--dim);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0}
+.tb-sect{font-size:10px;letter-spacing:0.20em;color:var(--plasma);text-transform:uppercase;white-space:nowrap}
+.tb-sep{color:var(--dim)}
+.tb-title{font-size:12px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-metrics{display:flex;gap:16px;align-items:center;flex-shrink:0}
+.tbm{font-size:9px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+.tbm span{color:var(--text);font-size:11px;font-weight:700;margin-left:4px}
+#clock{font-size:11px;color:var(--amber);letter-spacing:0.08em;font-variant-numeric:tabular-nums;flex-shrink:0}
+#content{flex:1;overflow:hidden}
+.panel{display:none;height:100%;overflow-y:auto;overflow-x:hidden}
+.panel.active{display:block}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.section-head{padding:18px 24px 14px;border-bottom:1px solid var(--dim);flex-shrink:0}
+.sh-eye{font-size:9px;letter-spacing:0.22em;color:var(--plasma);text-transform:uppercase;margin-bottom:3px}
+.sh-title{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.03em}
+.sh-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.mini-label{font-size:9px;letter-spacing:0.20em;color:var(--plasma);text-transform:uppercase;margin-bottom:8px}
+/* HOME */
+#p-home.active{display:grid;grid-template-columns:240px 1fr 1fr;grid-template-rows:1fr 1fr;height:100%}
+.home-building{grid-row:1/3;background:var(--bulkhead);border-right:1px solid var(--dim);display:flex;flex-direction:column;align-items:center;padding:12px 0 0}
+#bcanvas{cursor:crosshair;display:block;flex-shrink:0}
+.floor-detail{padding:10px 14px;width:100%;border-top:1px solid var(--dim);margin-top:auto}
+.fd-floor{font-size:9px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase}
+.fd-name{font-size:13px;color:var(--plasma);font-weight:700;margin:3px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fd-meta{font-size:9px;color:var(--muted)}
+.home-top-right{padding:14px 18px;border-bottom:1px solid var(--dim);overflow:hidden}
+.home-top-right2{padding:14px 18px;border-bottom:1px solid var(--dim);border-left:1px solid var(--dim);overflow:hidden}
+.home-bot-left{padding:14px 18px;overflow:hidden}
+.home-bot-right{padding:14px 18px;border-left:1px solid var(--dim);overflow:hidden}
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.metric-card{background:var(--void);border:1px solid var(--dim);border-radius:3px;padding:10px 12px}
+.mc-label{font-size:8px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
+.mc-value{font-size:24px;font-weight:700;letter-spacing:-0.04em;color:var(--text);margin:3px 0 1px;font-variant-numeric:tabular-nums}
+.mc-value.plasma{color:var(--plasma)}.mc-value.amber{color:var(--amber)}.mc-value.hot{color:var(--hot)}
+.mc-sub{font-size:8px;color:var(--muted)}
+.cctv-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.cctv-cell{background:#000;border:1px solid var(--dim);border-radius:3px;aspect-ratio:16/9;position:relative;overflow:hidden}
+.cctv-corner{position:absolute;width:9px;height:9px;border-color:var(--plasma);border-style:solid;opacity:0.5}
+.cctv-corner.tl{top:3px;left:3px;border-width:1px 0 0 1px}
+.cctv-corner.tr{top:3px;right:3px;border-width:1px 1px 0 0}
+.cctv-corner.bl{bottom:3px;left:3px;border-width:0 0 1px 1px}
+.cctv-corner.br{bottom:3px;right:3px;border-width:0 1px 1px 0}
+.cctv-label{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:7px;letter-spacing:0.12em;color:rgba(5,242,199,0.45)}
+.cctv-status{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:7px;color:rgba(255,31,78,0.65);letter-spacing:0.10em;white-space:nowrap}
+.cctv-cross{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;opacity:0.12}
+.cctv-cross::before,.cctv-cross::after{content:'';position:absolute;background:var(--muted)}
+.cctv-cross::before{width:1px;height:100%;left:50%;transform:translateX(-50%)}
+.cctv-cross::after{height:1px;width:100%;top:50%;transform:translateY(-50%)}
+/* CHIPS */
+.chip{display:inline-block;padding:1px 5px;border-radius:2px;font-size:8px;letter-spacing:0.10em;text-transform:uppercase;font-weight:700}
+.chip.crit{background:rgba(255,31,78,0.12);color:var(--hot);border:1px solid rgba(255,31,78,0.25)}
+.chip.high{background:rgba(240,165,0,0.12);color:var(--amber);border:1px solid rgba(240,165,0,0.25)}
+.chip.med{background:rgba(18,71,219,0.12);color:#5B8CF5;border:1px solid rgba(18,71,219,0.25)}
+.chip.low{background:rgba(0,230,118,0.10);color:var(--ok);border:1px solid rgba(0,230,118,0.2)}
+.chip.live{background:rgba(5,242,199,0.10);color:var(--plasma);border:1px solid rgba(5,242,199,0.25)}
+.chip.plan{background:rgba(18,71,219,0.10);color:#5B8CF5;border:1px solid rgba(18,71,219,0.2)}
+.chip.idle{background:rgba(74,104,128,0.18);color:var(--muted);border:1px solid var(--dim)}
+/* MICRO TABLE */
+.mt{width:100%;border-collapse:collapse}
+.mt th{font-size:8px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;padding:3px 6px 3px 0;border-bottom:1px solid var(--dim);font-weight:400;text-align:left}
+.mt td{padding:5px 6px 5px 0;font-size:11px;vertical-align:middle;border-bottom:1px solid rgba(26,48,80,0.35)}
+.mt tr:hover td{background:rgba(5,242,199,0.04)}
+/* TOWER */
+#p-tower.active{display:flex;flex-direction:row;height:100%}
+.tower-main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at center,rgba(5,242,199,0.04) 0%,transparent 70%)}
+.tower-sidebar{width:260px;background:var(--bulkhead);border-left:1px solid var(--dim);overflow-y:auto;padding:14px}
+#tcanvas{cursor:crosshair}
+/* AGENTS */
+#p-agents.active{display:flex;flex-direction:column;height:100%}
+.agent-body{flex:1;display:grid;grid-template-columns:1fr 300px;min-height:0;overflow:hidden}
+.agent-cards{padding:18px;overflow-y:auto}
+.agent-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+.agent-card{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;padding:12px;transition:border-color 0.2s}
+.agent-card:hover{border-color:rgba(5,242,199,0.3)}
+.ac-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ac-icon{font-size:18px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--dim);border-radius:3px;flex-shrink:0}
+.ac-name{font-size:11px;font-weight:700;color:var(--text)}
+.ac-role{font-size:8px;color:var(--muted);letter-spacing:0.06em;margin-top:1px}
+.ac-status{margin-bottom:7px}
+.ac-load{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.load-bar{flex:1;height:2px;background:var(--dim);border-radius:2px;overflow:hidden}
+.load-fill{height:100%;background:var(--plasma);border-radius:2px;transition:width 1.2s}
+.load-fill.warn{background:var(--amber)}.load-fill.hot{background:var(--hot)}
+.load-pct{font-size:9px;color:var(--muted);width:26px;text-align:right;font-variant-numeric:tabular-nums}
+.ac-last{font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agent-net-panel{border-left:1px solid var(--dim);padding:16px;display:flex;flex-direction:column;overflow:hidden}
+.anp-title{font-size:9px;letter-spacing:0.22em;color:var(--plasma);text-transform:uppercase;margin-bottom:10px}
+/* REVENUE */
+#p-revenue.active{display:flex;flex-direction:column;height:100%}
+.rev-body{flex:1;padding:18px;overflow-y:auto}
+.rev-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.kpi{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;padding:12px 14px}
+.kpi-label{font-size:8px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
+.kpi-val{font-size:28px;font-weight:700;letter-spacing:-0.04em;margin:5px 0 2px;font-variant-numeric:tabular-nums}
+.kpi-sub{font-size:9px;color:var(--muted)}
+#rcanvas{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;display:block;width:100%}
+/* THREATS */
+#p-threats.active{display:flex;flex-direction:column;height:100%}
+.threats-body{flex:1;overflow-y:auto;padding:0 20px 20px}
+.threat-filters{display:flex;gap:6px;padding:10px 0 12px}
+.tf-btn{background:var(--bulkhead);border:1px solid var(--dim);padding:4px 10px;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-radius:2px;font-family:inherit;transition:all 0.15s}
+.tf-btn:hover,.tf-btn.active{border-color:var(--plasma);color:var(--plasma)}
+.threat-row{display:grid;grid-template-columns:44px 68px 88px 60px 1fr 70px 110px;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid rgba(26,48,80,0.45);cursor:pointer;transition:background 0.1s}
+.threat-row:hover{background:rgba(5,242,199,0.03)}
+.threat-row.hdr{font-size:8px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--dim);padding-bottom:7px;cursor:default}
+.threat-row.hdr:hover{background:none}
+.tr-score{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.04em}
+.s-crit{color:var(--hot)}.s-high{color:var(--amber)}.s-med{color:#5B8CF5}.s-low{color:var(--ok)}
+.engine-tag{font-size:8px;padding:2px 5px;background:var(--dim);border-radius:2px;letter-spacing:0.06em;color:var(--text)}
+/* QUEUE */
+#p-queue.active{display:flex;flex-direction:column;height:100%}
+.queue-body{flex:1;padding:0 20px 20px;overflow-y:auto}
+.queue-stats{display:flex;gap:10px;padding:10px 0 14px}
+.qs{background:var(--bulkhead);border:1px solid var(--dim);border-radius:3px;padding:7px 12px;font-size:9px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
+.qs span{font-size:15px;font-weight:700;display:block;letter-spacing:-0.02em;margin-bottom:1px;font-variant-numeric:tabular-nums}
+.queue-item{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;padding:11px 13px;margin-bottom:7px;cursor:grab;transition:border-color 0.15s,transform 0.1s}
+.queue-item:hover{border-color:rgba(5,242,199,0.25)}
+.queue-item.dragging{opacity:0.35;transform:scale(0.97)}
+.queue-item.drag-over{border-color:var(--plasma);background:rgba(5,242,199,0.05)}
+.qi-top{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.qi-prio{width:3px;height:32px;border-radius:2px;flex-shrink:0}
+.qi-prio.p1{background:var(--hot)}.qi-prio.p2{background:var(--amber)}.qi-prio.p3{background:#5B8CF5}.qi-prio.p4{background:var(--muted)}
+.qi-title{font-size:11px;font-weight:700;color:var(--text);flex:1}
+.qi-meta{font-size:9px;color:var(--muted);margin-bottom:7px;padding-left:10px}
+.qi-actions{display:flex;gap:5px;padding-left:10px}
+.qi-btn{background:none;border:1px solid var(--dim);padding:3px 9px;font-size:9px;letter-spacing:0.10em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-radius:2px;font-family:inherit;transition:all 0.15s}
+.qi-btn:hover{border-color:var(--plasma);color:var(--plasma)}
+.qi-btn.approve{border-color:rgba(0,230,118,0.25);color:var(--ok)}.qi-btn.approve:hover{background:rgba(0,230,118,0.08)}
+.qi-btn.escalate{border-color:rgba(255,31,78,0.25);color:var(--hot)}.qi-btn.escalate:hover{background:rgba(255,31,78,0.08)}
+/* SETTINGS */
+#p-settings.active{display:block;height:100%}
+.settings-body{padding:22px;max-width:600px;overflow-y:auto;height:100%}
+.ss-title{font-size:9px;letter-spacing:0.22em;color:var(--plasma);text-transform:uppercase;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--dim)}
+.settings-section{margin-bottom:24px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(26,48,80,0.35)}
+.sr-label{font-size:11px;color:var(--text)}
+.sr-sub{font-size:9px;color:var(--muted);margin-top:2px}
+.toggle{width:34px;height:17px;background:var(--dim);border-radius:9px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0}
+.toggle.on{border:1px solid rgba(5,242,199,0.4)}
+.toggle::after{content:'';position:absolute;width:11px;height:11px;background:var(--muted);border-radius:50%;top:3px;left:3px;transition:all 0.2s}
+.toggle.on::after{background:var(--plasma);left:20px}
+/* TOAST */
+#toast{position:fixed;bottom:18px;right:18px;background:var(--bulkhead);border:1px solid var(--plasma);border-radius:4px;padding:9px 14px;font-size:11px;color:var(--plasma);letter-spacing:0.08em;opacity:0;transition:opacity 0.3s;z-index:100;pointer-events:none}
+#toast.show{opacity:1}
+#toast.err{border-color:var(--hot);color:var(--hot)}
 </style>
 
-<!-- ══ TOPBAR ══════════════════════════════════════════ -->
-<div class="topbar">
-  <div class="logo-block">
-    FRANCISCO HOLDINGS INC<br>
-    <b>FLOOR&nbsp;1 ·&nbsp;COMMAND CENTER</b>
+<div id="app">
+<div id="sidebar">
+  <div id="logo">
+    <div class="logo-top">Francisco Holdings</div>
+    <div class="logo-name">EMPIRE</div>
+    <div class="logo-sub">Command v2.0</div>
   </div>
-  <div class="vdiv"></div>
-  <div class="status-strip">
-    <div class="spill"><div class="dot"></div>API ONLINE</div>
-    <div class="spill"><div class="dot"></div>DB CONNECTED</div>
-    <div class="spill"><div class="dot gold"></div>18 PENDING REVIEWS</div>
-    <div class="spill"><div class="dot red"></div><span id="top-threat" style="color:var(--threat)">247</span>&nbsp;THREATS</div>
-  </div>
-  <div class="topbar-right">
-    <div id="live-clock">00:00:00</div>
-    <div class="vdiv"></div>
-    <div class="bell" onclick="toast('18 items await review','w')">&#9993;<div class="bell-badge">18</div></div>
-    <div class="avatar" title="Derek Francisco · CEO">DF</div>
+  <nav id="nav">
+    <div class="nav-item active" onclick="go('home')"><span class="nav-icon">⌂</span>Home<span class="nav-key">H</span></div>
+    <div class="nav-item" onclick="go('tower')"><span class="nav-icon">▲</span>Tower<span class="nav-key">2</span></div>
+    <div class="nav-item" onclick="go('agents')"><span class="nav-icon">◈</span>Agents<span class="nav-key">A</span></div>
+    <div class="nav-item" onclick="go('revenue')"><span class="nav-icon">◎</span>Revenue<span class="nav-key">4</span></div>
+    <div class="nav-item" onclick="go('threats')"><span class="nav-icon">⚡</span>Threats<span class="nav-key">5</span></div>
+    <div class="nav-item" onclick="go('queue')"><span class="nav-icon">⊟</span>Review<span class="nav-key">6</span></div>
+    <div class="nav-item" onclick="go('settings')"><span class="nav-icon">⚙</span>Settings<span class="nav-key">7</span></div>
+  </nav>
+  <div id="sidebar-footer">
+    <div class="sf-line">VIGILAX SENTINEL</div>
+    <div class="sf-status"><div class="dot"></div><span style="font-size:9px;color:var(--ok)">ALL SYSTEMS NOMINAL</span></div>
   </div>
 </div>
 
-<!-- ══ SIDEBAR ══════════════════════════════════════════ -->
-<aside class="sidebar">
-  <div class="sb-label">Empire</div>
-  <div class="nav-item active" onclick="go('home')" data-s="home"><div class="nav-icon">⬡</div><div class="nav-label">Command Center</div></div>
-  <div class="nav-item" onclick="go('tower')" data-s="tower"><div class="nav-icon">▤</div><div class="nav-label">392-Floor Tower</div></div>
-  <div class="nav-item" onclick="go('agents')" data-s="agents"><div class="nav-icon">◈</div><div class="nav-label">Agent Swarm</div></div>
-  <div class="nav-item" onclick="go('revenue')" data-s="revenue"><div class="nav-icon">◎</div><div class="nav-label">Revenue Tracker</div></div>
-  <div class="sb-label">Security</div>
-  <div class="nav-item" onclick="go('threats')" data-s="threats"><div class="nav-icon">◉</div><div class="nav-label">VIGILAX Threats</div><div class="nbadge" id="sb-threats">247</div></div>
-  <div class="nav-item" onclick="go('review')" data-s="review"><div class="nav-icon">◐</div><div class="nav-label">Review Queue</div><div class="nbadge g">18</div></div>
-  <div class="sb-label">System</div>
-  <div class="nav-item" onclick="go('settings')" data-s="settings"><div class="nav-icon">⊞</div><div class="nav-label">Settings</div></div>
-
-  <div class="sb-floor-widget">
-    <div class="sb-floor-label">Selected Floor</div>
-    <div class="sb-floor-num" id="sb-floor-num">—</div>
-    <div class="sb-floor-name" id="sb-floor-name">Select a floor</div>
-  </div>
-
-  <div class="sb-health">
-    <div class="sb-label" style="padding:0 0 8px">System Health</div>
-    <div class="health-row"><span>VIGILAX</span><span class="hv" id="h-api">ONLINE</span></div>
-    <div class="health-row"><span>DATABASE</span><span class="hv" id="h-db">CONNECTED</span></div>
-    <div class="health-row"><span>WEBSOCKET</span><span class="hv" id="h-ws">ACTIVE</span></div>
-    <div class="health-row"><span>AI LOAD</span><span class="hv w" id="h-ai">64%</span></div>
-    <div class="health-row"><span>AGENTS</span><span class="hv" id="h-ag">312</span></div>
-  </div>
-</aside>
-
-<!-- ══ MAIN ══════════════════════════════════════════ -->
-<main class="main">
-
-<!-- ── HOME ── -->
-<section class="section active" id="s-home">
-  <div class="eyebrow">Mission Control</div>
-  <div class="section-title">Empire Overview</div>
-
-  <div class="metrics-grid">
-    <div class="mtile g"><div class="mtile-label">Companies</div><div class="mtile-val" id="m-co">0</div><div class="mtile-sub">47 total entities</div></div>
-    <div class="mtile"><div class="mtile-label">AI Agents</div><div class="mtile-val" id="m-ag">0</div><div class="mtile-sub">Distributed swarm</div></div>
-    <div class="mtile b"><div class="mtile-label">Monthly Revenue</div><div class="mtile-val" id="m-rev" style="font-size:22px">$0</div><div class="mtile-sub">Target $100K</div><div class="mtile-bar"><div class="mtile-bar-fill" id="rev-fill" style="width:0%"></div></div></div>
-    <div class="mtile r"><div class="mtile-label">Active Threats</div><div class="mtile-val flicker" id="m-thr">0</div><div class="mtile-sub">VIGILAX Sentinel</div></div>
-    <div class="mtile g"><div class="mtile-label">Review Queue</div><div class="mtile-val" id="m-q">0</div><div class="mtile-sub">Awaiting decision</div></div>
-    <div class="mtile"><div class="mtile-label">Floors Occupied</div><div class="mtile-val" id="m-fl">0</div><div class="mtile-sub">Of 392 total</div><div class="mtile-bar"><div class="mtile-bar-fill" id="fl-fill" style="width:0%"></div></div></div>
-  </div>
-
-  <div class="home-lower">
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Agent Swarm — Live</span><span style="font:9px/1 var(--mono);color:var(--sentinel)">● ACTIVE</span></div>
-      <div id="aq-list"></div>
+<div id="main">
+  <div id="topbar">
+    <span class="tb-sect" id="tb-sect">HOME</span>
+    <span class="tb-sep">|</span>
+    <span class="tb-title" id="tb-title">Francisco Holdings Inc. — Empire Command Center</span>
+    <div class="tb-metrics">
+      <div class="tbm">THREATS<span id="tb-threats">10</span></div>
+      <div class="tbm">QUEUE<span id="tb-queue">18</span></div>
+      <div class="tbm">AGENTS<span id="tb-agents">9</span></div>
     </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Live Threat Feed</span><span style="font:9px/1 var(--mono);color:var(--threat)" id="tf-count">247 ACTIVE</span></div>
-      <div class="threat-feed-scroll" id="tf-home"></div>
-    </div>
+    <div id="clock">--:--:--</div>
   </div>
-</section>
 
-<!-- ── TOWER ── -->
-<section class="section" id="s-tower">
-  <div class="eyebrow">Skyscraper Navigation</div>
-  <div class="section-title">Francisco Holdings Tower — 392 Floors</div>
+  <div id="content">
 
-  <div class="tower-wrap">
-    <div class="building-card">
-      <div class="building-inner">
-        <div class="floors-col" id="floors-col"></div>
-        <div class="elev-shaft">
-          <div class="elev-track"></div>
-          <div class="elev-car" id="elev-car" style="top:95%"></div>
+    <!-- HOME -->
+    <div class="panel active" id="p-home">
+      <!-- building col -->
+      <div class="home-building">
+        <div class="mini-label" style="padding:0 14px">392-Floor Tower</div>
+        <canvas id="bcanvas" width="212" height="440"></canvas>
+        <div class="floor-detail" id="floor-detail">
+          <div class="fd-floor">Click to explore</div>
+          <div class="fd-name">—</div>
+          <div class="fd-meta">Interactive building</div>
         </div>
       </div>
-      <div class="tower-legend">
-        <div class="leg-item"><div class="leg-dot" style="background:var(--sentinel)"></div>Live</div>
-        <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Building</div>
-        <div class="leg-item"><div class="leg-dot" style="background:var(--cmd);opacity:.4"></div>Planned</div>
-        <div class="leg-item"><div class="leg-dot" style="background:var(--t4)"></div>Empty</div>
+      <!-- metrics -->
+      <div class="home-top-right">
+        <div class="mini-label">Empire Metrics</div>
+        <div class="metrics-grid">
+          <div class="metric-card"><div class="mc-label">Live Companies</div><div class="mc-value plasma" id="mc-companies">0</div><div class="mc-sub">of 392 floors</div></div>
+          <div class="metric-card"><div class="mc-label">Active Agents</div><div class="mc-value amber" id="mc-agents">0</div><div class="mc-sub">AI workforce</div></div>
+          <div class="metric-card"><div class="mc-label">Open Threats</div><div class="mc-value hot" id="mc-threats">0</div><div class="mc-sub">pending review</div></div>
+          <div class="metric-card"><div class="mc-label">MRR Pipeline</div><div class="mc-value amber">$4.7k</div><div class="mc-sub">activating Q3</div></div>
+        </div>
+      </div>
+      <!-- cctv -->
+      <div class="home-top-right2">
+        <div class="mini-label">CCTV Surveillance</div>
+        <div class="cctv-grid">
+          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-01</div><div class="cctv-status">● OFFLINE</div></div>
+          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-02</div><div class="cctv-status">● OFFLINE</div></div>
+          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-03</div><div class="cctv-status">● OFFLINE</div></div>
+          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-04</div><div class="cctv-status">● OFFLINE</div></div>
+        </div>
+      </div>
+      <!-- bottom left: threats -->
+      <div class="home-bot-left" style="border-top:1px solid var(--dim)">
+        <div class="mini-label">Recent Threats</div>
+        <table class="mt" id="home-threat-table"></table>
+      </div>
+      <!-- bottom right: agents -->
+      <div class="home-bot-right" style="border-top:1px solid var(--dim)">
+        <div class="mini-label">Agent Status</div>
+        <div id="home-agent-list"></div>
       </div>
     </div>
 
-    <div class="tower-detail">
-      <div class="card">
-        <div class="floor-hero">
-          <div class="floor-big-num" id="d-num">—</div>
-          <div>
-            <div class="floor-meta-company" id="d-company">Select a floor</div>
-            <div style="margin-top:8px"><span class="status-pill sp-live" id="d-pill">● OPERATIONAL</span></div>
+    <!-- TOWER -->
+    <div class="panel" id="p-tower">
+      <div class="tower-main">
+        <div>
+          <div style="font-size:9px;letter-spacing:0.20em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;text-align:center">Interactive 2.5D Tower · 392 Floors</div>
+          <div style="position:relative;display:inline-block">
+            <canvas id="tcanvas" width="280" height="540"></canvas>
+            <div id="elevator" style="position:absolute;left:42px;width:154px;height:7px;background:rgba(5,242,199,0.2);border:1px solid var(--plasma);box-shadow:0 0 8px var(--plasma);transition:top 0.65s cubic-bezier(0.45,0.05,0.55,0.95);pointer-events:none;top:510px"></div>
           </div>
         </div>
-        <div class="floor-stats-grid">
-          <div class="fstat"><div class="fstat-label">Industry</div><div class="fstat-val" id="d-ind" style="font-size:11px;color:var(--t1)">—</div></div>
-          <div class="fstat"><div class="fstat-label">Active Agents</div><div class="fstat-val" id="d-ag">—</div></div>
-          <div class="fstat"><div class="fstat-label">MRR</div><div class="fstat-val" id="d-mrr" style="color:var(--sentinel)">—</div></div>
-          <div class="fstat"><div class="fstat-label">Threat Score</div><div class="fstat-val" id="d-thr">—</div></div>
-          <div class="fstat"><div class="fstat-label">Status</div><div class="fstat-val" id="d-status" style="font-size:12px">—</div></div>
-          <div class="fstat"><div class="fstat-label">Floor Area</div><div class="fstat-val" id="d-area" style="font-size:12px">—</div></div>
-        </div>
       </div>
+      <div class="tower-sidebar">
+        <div style="font-size:9px;letter-spacing:0.20em;color:var(--plasma);text-transform:uppercase;margin-bottom:12px">Floor Directory</div>
+        <div id="tower-detail" style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--dim)"></div>
+        <div style="font-size:9px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Named Floors</div>
+        <div id="floor-list"></div>
+      </div>
+    </div>
 
-      <div class="card">
-        <div class="card-hd"><span class="card-title">Tower Stats</span></div>
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
-            <div>
-              <div style="font:8px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:5px">Live</div>
-              <div style="font:700 24px/1 var(--mono);color:var(--sentinel)">23</div>
-            </div>
-            <div>
-              <div style="font:8px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:5px">Building</div>
-              <div style="font:700 24px/1 var(--mono);color:var(--gold)">24</div>
-            </div>
-            <div>
-              <div style="font:8px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:5px">Planned</div>
-              <div style="font:700 24px/1 var(--mono);color:var(--cmd)">345</div>
-            </div>
+    <!-- AGENTS -->
+    <div class="panel" id="p-agents">
+      <div class="section-head">
+        <div class="sh-eye">Workforce</div>
+        <div class="sh-title">Agent Swarm</div>
+        <div class="sh-sub">AI agents powering the Francisco Holdings empire</div>
+      </div>
+      <div class="agent-body">
+        <div class="agent-cards">
+          <div class="agent-grid" id="agent-grid"></div>
+        </div>
+        <div class="agent-net-panel">
+          <div class="anp-title">Agent Network</div>
+          <canvas id="netcanvas" width="268" height="268"></canvas>
+          <div style="margin-top:10px;font-size:9px;color:var(--muted)">
+            <div style="margin-bottom:3px"><span style="color:var(--plasma)">●</span> Active</div>
+            <div style="margin-bottom:3px"><span style="color:var(--amber)">●</span> Processing</div>
+            <div><span style="color:var(--muted)">●</span> Standby</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ── AGENTS ── -->
-<section class="section" id="s-agents">
-  <div class="eyebrow">AI Infrastructure</div>
-  <div class="section-title">Agent Swarm <span style="font-size:12px;color:var(--sentinel);font-family:var(--mono);font-weight:400">312 ACTIVE</span></div>
-  <div class="agents-grid" id="agents-grid"></div>
-</section>
-
-<!-- ── REVENUE ── -->
-<section class="section" id="s-revenue">
-  <div class="eyebrow">Financial Intelligence</div>
-  <div class="section-title">Revenue Tracker</div>
-  <div class="target-bar-wrap">
-    <div class="target-label">$100K / Month Target</div>
-    <div class="target-row">
-      <div class="t-edge">$0</div>
-      <div class="t-bar"><div class="t-fill" id="t-fill"></div></div>
-      <div class="t-edge">$100K</div>
-      <div class="t-pct">0%</div>
-    </div>
-  </div>
-  <div class="revenue-layout">
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Monthly Revenue by Company</span><span style="font:9px/1 var(--mono);color:var(--t3)">Jul 2026</span></div>
-      <div class="card-body" style="padding-top:10px"><canvas id="revenue-canvas"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Company Breakdown</span></div>
-      <div style="overflow-x:auto">
-        <table class="rev-table">
-          <thead><tr><th>Company</th><th>Tier</th><th>MRR</th></tr></thead>
-          <tbody id="rev-tbody"></tbody>
-        </table>
+    <!-- REVENUE -->
+    <div class="panel" id="p-revenue">
+      <div class="section-head">
+        <div class="sh-eye">Financial</div>
+        <div class="sh-title">Revenue Tracker</div>
+        <div class="sh-sub">MRR pipeline across all Francisco Holdings entities</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── THREATS ── -->
-<section class="section" id="s-threats">
-  <div class="eyebrow">Bad Actor Detection</div>
-  <div class="section-title">VIGILAX — Active Threats</div>
-  <div class="threats-layout">
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Threat Registry</span><span style="font:9px/1 var(--mono);color:var(--threat)">● MONITORING</span></div>
-      <div style="overflow-x:auto">
-        <table class="thr-table">
-          <thead><tr><th>Severity</th><th>Engine</th><th>Target</th><th>Score</th><th>Time</th><th>Status</th></tr></thead>
-          <tbody id="thr-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="card threat-big-panel">
-      <div class="threat-count-hero">
-        <div class="thr-num" id="thr-big">247</div>
-        <div class="thr-num-label">Active Threats</div>
-      </div>
-      <div class="engine-bars">
-        <div class="engine-bar-lbl">By Detection Engine</div>
-        <div id="eng-bars"></div>
-      </div>
-      <div class="escal-path">
-        <div class="escal-label">Escalation Path</div>
-        <div class="escal-row">
-          <span class="escal-step" style="background:var(--cmd-bg);color:var(--cmd)">AI</span>
-          <span class="escal-arrow">→</span>
-          <span class="escal-step" style="background:var(--gold-bg);color:var(--gold)">Human</span>
-          <span class="escal-arrow">→</span>
-          <span class="escal-step" style="background:var(--threat-bg);color:var(--threat)">Legal</span>
-          <span class="escal-arrow">→</span>
-          <span class="escal-step" style="background:var(--t4);color:var(--t2)">Authority</span>
+      <div class="rev-body">
+        <div class="rev-kpis" id="rev-kpis"></div>
+        <canvas id="rcanvas" height="190"></canvas>
+        <div style="margin-top:18px">
+          <div class="mini-label">Revenue by Entity</div>
+          <table class="mt" id="rev-table"></table>
         </div>
-        <div style="margin-top:9px;font:8px/1.5 var(--mono);color:var(--t4)">REVIEW REQUIRED. No action without<br>human investigator sign-off.</div>
       </div>
     </div>
+
+    <!-- THREATS -->
+    <div class="panel" id="p-threats">
+      <div class="section-head">
+        <div class="sh-eye">VIGILAX Sentinel</div>
+        <div class="sh-title">Threat Intelligence</div>
+        <div class="sh-sub">Real-time fraud detection · Review required for all findings</div>
+      </div>
+      <div class="threats-body">
+        <div class="threat-filters">
+          <button class="tf-btn active" onclick="filterThreats('ALL',this)">All</button>
+          <button class="tf-btn" onclick="filterThreats('CRITICAL',this)">Critical</button>
+          <button class="tf-btn" onclick="filterThreats('HIGH',this)">High</button>
+          <button class="tf-btn" onclick="filterThreats('MEDIUM',this)">Medium</button>
+        </div>
+        <div class="threat-row hdr">
+          <div>Score</div><div>Severity</div><div>Engine</div><div>Time</div>
+          <div>Target / Description</div><div>Status</div><div>Actions</div>
+        </div>
+        <div id="threat-list"></div>
+      </div>
+    </div>
+
+    <!-- QUEUE -->
+    <div class="panel" id="p-queue">
+      <div class="section-head">
+        <div class="sh-eye">Human-in-the-Loop</div>
+        <div class="sh-title">Review Queue</div>
+        <div class="sh-sub">All items require human sign-off. Drag to reprioritize.</div>
+      </div>
+      <div class="queue-body">
+        <div class="queue-stats" id="queue-stats"></div>
+        <div id="queue-list"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="panel" id="p-settings">
+      <div class="section-head">
+        <div class="sh-eye">Configuration</div>
+        <div class="sh-title">Settings</div>
+        <div class="sh-sub">Empire command center preferences and detection engine controls</div>
+      </div>
+      <div class="settings-body" id="settings-body"></div>
+    </div>
+
   </div>
-</section>
+</div>
+</div>
 
-<!-- ── REVIEW ── -->
-<section class="section" id="s-review">
-  <div class="eyebrow">Human-in-the-Loop</div>
-  <div class="section-title">Derek's Action Queue</div>
-  <div class="review-stats">
-    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--threat)">3</div><div class="rv-stat-label">Critical</div></div>
-    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--cannabis)">7</div><div class="rv-stat-label">High</div></div>
-    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--gold)">6</div><div class="rv-stat-label">Medium</div></div>
-    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--cmd)">2</div><div class="rv-stat-label">Low</div></div>
-  </div>
-  <div class="queue-meta-bar">Drag to reprioritize · 🌿 Cannabis items flagged · All decisions logged</div>
-  <div class="queue-list" id="queue-list"></div>
-</section>
-
-<!-- ── SETTINGS ── -->
-<section class="section" id="s-settings">
-  <div class="eyebrow">System Configuration</div>
-  <div class="section-title">Environment & Connections</div>
-  <div class="settings-grid">
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Backend Connections</span></div>
-      <div class="card-body">
-        <div class="s-row"><span class="s-key">VIGILAX API</span><span class="s-val">● ONLINE :3002</span></div>
-        <div class="s-row"><span class="s-key">MAIN API</span><span class="s-val">● ONLINE :3001</span></div>
-        <div class="s-row"><span class="s-key">DATABASE</span><span class="s-val">● Supabase Free</span></div>
-        <div class="s-row"><span class="s-key">WEBSOCKET</span><span class="s-val">● ACTIVE</span></div>
-        <div class="s-row"><span class="s-key">EMAIL</span><span class="s-val">Gmail SMTP</span></div>
-        <div class="s-row"><span class="s-key">SLACK</span><span class="s-val">Webhook Active</span></div>
-        <div class="s-row"><span class="s-key">SMS</span><span class="s-val w">3× Email Fallback</span></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">API Keys</span></div>
-      <div class="card-body">
-        <div class="s-row"><span class="s-key">VIGILAX_API_KEY</span><span class="s-val dim">••••••••••••••••</span></div>
-        <div class="s-row"><span class="s-key">ADMIN_SECRET</span><span class="s-val dim">••••••••••••••••</span></div>
-        <div class="s-row"><span class="s-key">DATABASE_URL</span><span class="s-val dim">postgresql://••••</span></div>
-        <div class="s-row"><span class="s-key">SMTP_PASS</span><span class="s-val dim">••••••••••••••••</span></div>
-        <div class="s-row"><span class="s-key">SLACK_WEBHOOK</span><span class="s-val dim">hooks.slack.com/•</span></div>
-        <div class="s-row"><span class="s-key">NODE_ENV</span><span class="s-val">production</span></div>
-        <div class="s-row"><span class="s-key">PORT</span><span class="s-val">3002</span></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Keyboard Shortcuts</span></div>
-      <div class="card-body">
-        <div class="s-row"><span class="s-key">H</span><span class="s-val">Command Center</span></div>
-        <div class="s-row"><span class="s-key">2</span><span class="s-val">Tower View</span></div>
-        <div class="s-row"><span class="s-key">A</span><span class="s-val">Agent Swarm</span></div>
-        <div class="s-row"><span class="s-key">4</span><span class="s-val">Revenue</span></div>
-        <div class="s-row"><span class="s-key">5</span><span class="s-val">Threats</span></div>
-        <div class="s-row"><span class="s-key">6</span><span class="s-val">Review Queue</span></div>
-        <div class="s-row"><span class="s-key">7</span><span class="s-val">Settings</span></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><span class="card-title">Zero-Budget Stack</span></div>
-      <div class="card-body">
-        <div class="s-row"><span class="s-key">HOSTING</span><span class="s-val">Render.com Free</span></div>
-        <div class="s-row"><span class="s-key">DATABASE</span><span class="s-val">Supabase 500MB</span></div>
-        <div class="s-row"><span class="s-key">EMAIL</span><span class="s-val">Gmail SMTP</span></div>
-        <div class="s-row"><span class="s-key">DOMAIN</span><span class="s-val" style="font-size:9px">franciscoholdingsinc.com</span></div>
-        <div class="s-row"><span class="s-key">SSL</span><span class="s-val">Let's Encrypt</span></div>
-        <div class="s-row"><span class="s-key">MONTHLY COST</span><span class="s-val">$0.00</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<!-- Toast -->
-<div class="toast-wrap" id="toast-wrap"></div>
+<div id="toast"></div>
 
 <script>
-// ══ DATA ══════════════════════════════════════════════
+'use strict';
+
 const COMPANIES = [
-  {f:1,  name:'Francisco Holdings Inc.',  ind:'Holding Company',       st:'live',     ag:8,  mrr:0, tier:'Gov',   thr:12},
-  {f:2,  name:'VIGILAX Sentinel',         ind:'Fraud Detection',        st:'live',     ag:47, mrr:0, tier:'Pro',   thr:5},
-  {f:3,  name:'OmniGuard',                ind:'Cybersecurity',          st:'live',     ag:31, mrr:0, tier:'Pro',   thr:3},
-  {f:4,  name:'SoulStack',                ind:'AI Infrastructure',      st:'live',     ag:24, mrr:0, tier:'Pro',   thr:2},
-  {f:5,  name:'Kiaros',                   ind:'Strategy & AI',          st:'live',     ag:18, mrr:0, tier:'Basic', thr:1},
-  {f:6,  name:'PrimeDox AI',              ind:'AI Concierge',           st:'live',     ag:29, mrr:0, tier:'Pro',   thr:4},
-  {f:7,  name:'AgentForge',               ind:'Agent Marketplace',      st:'live',     ag:22, mrr:0, tier:'Pro',   thr:2},
-  {f:8,  name:'Doc Weedlaw',              ind:'Cannabis Legal Ed.',     st:'live',     ag:14, mrr:0, tier:'Basic', thr:8},
-  {f:9,  name:'CCLDR',                    ind:'Cannabis Law Directory', st:'live',     ag:12, mrr:0, tier:'Basic', thr:14},
-  {f:10, name:'GapScanner',               ind:'Market Intelligence',    st:'live',     ag:19, mrr:0, tier:'Pro',   thr:1},
-  {f:11, name:'Francisco Agent',          ind:'CEO AI Clone',           st:'live',     ag:35, mrr:0, tier:'Gov',   thr:0},
-  {f:12, name:'Gemma 31B Orchestrator',   ind:'AI Orchestration',       st:'live',     ag:53, mrr:0, tier:'Gov',   thr:0},
-  {f:13, name:'Empire Analytics',         ind:'Business Intelligence',  st:'building', ag:6,  mrr:0, tier:'Pro',   thr:0},
-  {f:14, name:'ContentForge',             ind:'Content AI',             st:'building', ag:4,  mrr:0, tier:'Basic', thr:0},
-  {f:15, name:'LeadEngine',               ind:'Sales Automation',       st:'building', ag:3,  mrr:0, tier:'Pro',   thr:0},
-  {f:16, name:'ReviewShield',             ind:'Review Management',      st:'building', ag:5,  mrr:0, tier:'Pro',   thr:0},
-  {f:17, name:'GrantFinder Pro',          ind:'Government Grants',      st:'building', ag:2,  mrr:0, tier:'Gov',   thr:0},
-  {f:18, name:'WeedMapper',               ind:'Cannabis Analytics',     st:'building', ag:3,  mrr:0, tier:'Basic', thr:6},
-  {f:19, name:'BidRadar',                 ind:'Procurement Intel.',     st:'building', ag:4,  mrr:0, tier:'Gov',   thr:0},
-  {f:20, name:'ClientBot',                ind:'Client Automation',      st:'building', ag:2,  mrr:0, tier:'Basic', thr:0},
-  {f:21, name:'Derek Holdings Media',     ind:'Media & Publishing',     st:'building', ag:3,  mrr:0, tier:'Basic', thr:0},
-  {f:22, name:'EvidenceVault',            ind:'Legal Tech',             st:'building', ag:5,  mrr:0, tier:'Gov',   thr:2},
-  {f:23, name:'ThreatMap',               ind:'Geospatial Security',    st:'building', ag:4,  mrr:0, tier:'Pro',   thr:1},
+  {f:1,  n:'Francisco Holdings Inc.',   d:'Holding Company',          st:'live', ag:8,  mrr:0},
+  {f:2,  n:'CCLDR / Doc Weedlaw',       d:'Cannabis Legal & Media',   st:'live', ag:3,  mrr:850},
+  {f:3,  n:'OmniGuard',                 d:'AI Security SaaS',         st:'live', ag:4,  mrr:2400},
+  {f:4,  n:'Kiaros',                    d:'Time Intelligence',         st:'live', ag:2,  mrr:0},
+  {f:5,  n:'SoulStack',                 d:'AI Observer Platform',      st:'live', ag:5,  mrr:0},
+  {f:6,  n:'VIGILAX Sentinel',          d:'Fraud Detection API',       st:'live', ag:6,  mrr:1200},
+  {f:7,  n:'Francisco Media Group',     d:'Digital Media',             st:'live', ag:2,  mrr:0},
+  {f:8,  n:'PrimeDox AI',               d:'AI Orchestration',          st:'live', ag:9,  mrr:0},
+  {f:9,  n:'LegalFlow AI',              d:'Legal Automation',          st:'dev',  ag:1,  mrr:0},
+  {f:10, n:'Sentinel Network',          d:'Threat Intelligence',       st:'dev',  ag:2,  mrr:0},
+  {f:11, n:'DocWeedlaw.ca',             d:'Cannabis Compliance',       st:'live', ag:1,  mrr:320},
+  {f:12, n:'Francisco Capital',         d:'Investment Vehicle',        st:'plan', ag:0,  mrr:0},
+  {f:13, n:'OmniAudit',                 d:'Compliance Audit SaaS',     st:'dev',  ag:2,  mrr:0},
+  {f:14, n:'Recon AI',                  d:'OSINT Platform',            st:'plan', ag:0,  mrr:0},
+  {f:15, n:'Francisco Labs',            d:'R&D',                       st:'plan', ag:0,  mrr:0},
+  {f:16, n:'CloudSentry',               d:'Cloud Security',            st:'dev',  ag:1,  mrr:0},
+  {f:17, n:'InfluenceIQ',               d:'Influencer Analytics',      st:'dev',  ag:1,  mrr:0},
+  {f:18, n:'GovTracker',                d:'Government Intelligence',   st:'plan', ag:0,  mrr:0},
+  {f:19, n:'Francisco Ventures',        d:'VC Fund',                   st:'plan', ag:0,  mrr:0},
+  {f:20, n:'NullTrace',                 d:'Privacy Engineering',       st:'plan', ag:0,  mrr:0},
+  {f:21, n:'AdShield',                  d:'Ad Fraud Prevention',       st:'dev',  ag:1,  mrr:0},
+  {f:22, n:'Meridian Consulting',       d:'Strategic Advisory',        st:'plan', ag:0,  mrr:0},
+  {f:23, n:'Francisco Trust',           d:'Asset Management',          st:'plan', ag:0,  mrr:0},
+  {f:24, n:'Empire Analytics',          d:'BI & Data Platform',        st:'dev',  ag:1,  mrr:0},
 ];
-for(let i=24;i<=392;i++){
-  COMPANIES.push({f:i,name:i<=47?'Division '+i:'',ind:i<=47?'Planned':'',
-    st:i<=47?'planned':'empty',ag:0,mrr:0,tier:'—',thr:0});
+for(let i=25;i<=392;i++) COMPANIES.push({f:i,n:`Floor ${i}`,d:'Available',st:'empty',ag:0,mrr:0});
+
+const AGENTS = [
+  {id:'primedox', n:'PrimeDox AI',        r:'Orchestrator / Concierge',   i:'🤖', st:'active', load:72, l:'Processing CEO briefing request'},
+  {id:'primedocs',n:'PrimeDocs',           r:'Override / Memory Layer',    i:'📋', st:'standby',load:18, l:'Monitoring authority chain'},
+  {id:'soulstack',n:'SoulStack Observer',  r:'Empire Monitor',             i:'👁', st:'active', load:55, l:'Scanning 24 live entities'},
+  {id:'omni',     n:'OmniGuard AI',        r:'Security Intelligence',      i:'🛡', st:'active', load:88, l:'Threat correlation running'},
+  {id:'vigilax',  n:'VIGILAX Sentinel',    r:'Fraud Detection',            i:'⚡', st:'active', load:91, l:'6 engines processing scan'},
+  {id:'kiaros',   n:'Kiaros Time AI',      r:'Temporal Intelligence',      i:'⏱', st:'active', load:43, l:'Indexing 1,440 time signals'},
+  {id:'legal',    n:'Legal AI',            r:'Cannabis Compliance',        i:'⚖', st:'standby',load:12, l:'Awaiting CCLDR document'},
+  {id:'adshield', n:'AdShield',            r:'Ad Fraud Monitor',           i:'🎯', st:'active', load:67, l:'CTR anomaly detected ×3'},
+  {id:'govint',   n:'GovInt',              r:'Government Intelligence',    i:'🏛', st:'standby',load:8,  l:'Monitoring 47 procurement feeds'},
+];
+
+const THREATS = [
+  {id:'T001',score:97,sev:'CRITICAL',engine:'VIGILAX', target:'Campaign CBD-2024-RX',   desc:'Click fraud Z-score 4.8σ — 3 IP clusters',        time:'08:14',st:'pending',  c:true},
+  {id:'T002',score:94,sev:'CRITICAL',engine:'GOV',     target:'Tender RFP-GOV-1142',    desc:'Cover bidding detected — 4 bids within 2.1%',     time:'07:52',st:'pending',  c:false},
+  {id:'T003',score:89,sev:'HIGH',    engine:'REVIEW',  target:'BrandX Reviews (48)',    desc:'Jaccard similarity 0.81 — duplicate cluster',      time:'07:38',st:'pending',  c:false},
+  {id:'T004',score:86,sev:'HIGH',    engine:'INFL',    target:'@influencer_macro_12',   desc:'Engagement rate 0.8% vs 3.2% tier benchmark',     time:'07:21',st:'reviewing',c:false},
+  {id:'T005',score:82,sev:'HIGH',    engine:'AD',      target:'DemandSide DSP-88',      desc:'IVT rate 34% — MFA domain pattern match',          time:'06:59',st:'pending',  c:false},
+  {id:'T006',score:78,sev:'HIGH',    engine:'CANNABIS',target:'@unlicensed_disp_bc',    desc:'Illicit keyword score 62 — no license displayed', time:'06:41',st:'pending',  c:true},
+  {id:'T007',score:71,sev:'MEDIUM',  engine:'REVIEW',  target:'ServiceCo Reviews (22)', desc:'TTR 0.31 — below authentic threshold (0.45)',      time:'06:10',st:'reviewing',c:false},
+  {id:'T008',score:67,sev:'MEDIUM',  engine:'VIGILAX', target:'Campaign SEM-AUTO-99',   desc:'Conversion velocity anomaly — 3.4× baseline',     time:'05:44',st:'pending',  c:false},
+  {id:'T009',score:58,sev:'MEDIUM',  engine:'GOV',     target:'Expenditure Q2-2024',    desc:'Threshold splitting $4,950 × 6 — structuring',    time:'05:20',st:'pending',  c:false},
+  {id:'T010',score:41,sev:'LOW',     engine:'AD',      target:'Programmatic-Pool-7',    desc:'Pixel load anomaly — tracking discrepancy 18%',   time:'04:55',st:'reviewing',c:false},
+];
+
+const QUEUE_DATA = [
+  {id:'Q001',p:1,t:'Cannabis Unlicensed Outlet — BC',      m:'Score 97 · VIGILAX · Cannabis flag · Immediate legal review',c:true},
+  {id:'Q002',p:1,t:'Gov Procurement Cover Bidding',         m:'Score 94 · GOV ENGINE · 4 vendors coordinated — RFP-1142'},
+  {id:'Q003',p:1,t:'Macro Influencer Fraud Cluster',        m:'Score 89 · INFL ENGINE · Campaign #2024-FH-88'},
+  {id:'Q004',p:2,t:'Review Duplicate Farm — BrandX',        m:'Score 86 · REVIEW ENGINE · 48 suspicious reviews'},
+  {id:'Q005',p:2,t:'IVT Spike DSP-88',                      m:'Score 82 · AD ENGINE · $4,200 spend at risk'},
+  {id:'Q006',p:2,t:'Cannabis Social Signal',                 m:'Score 78 · CANNABIS MONITOR · Public post — human sign-off required',c:true},
+  {id:'Q007',p:2,t:'Click Fraud Campaign SEM-AUTO',          m:'Score 71 · VIGILAX · Velocity anomaly confirmed'},
+  {id:'Q008',p:3,t:'Expenditure Pattern Q2',                 m:'Score 67 · GOV ENGINE · Municipal contract clustering'},
+  {id:'Q009',p:3,t:'TTR Below Threshold — ServiceCo',        m:'Score 58 · REVIEW ENGINE · 22 reviews analyzed'},
+  {id:'Q010',p:3,t:'Pixel Tracking Discrepancy',             m:'Score 41 · AD ENGINE · Minor — monitor'},
+  {id:'Q011',p:3,t:'New Influencer Audit Batch',             m:'Scheduled · INFL ENGINE · 14 accounts queued'},
+  {id:'Q012',p:4,t:'Weekly Gov Procurement Sweep',           m:'Scheduled · GOV ENGINE · Ontario tenders'},
+  {id:'Q013',p:4,t:'Cannabis Monitor Daily Report',          m:'Scheduled · CANNABIS MONITOR · Public signals only',c:true},
+  {id:'Q014',p:4,t:'Review Corpus Refresh',                  m:'Scheduled · REVIEW ENGINE · 500 new reviews'},
+  {id:'Q015',p:4,t:'Ad Network Baseline Update',             m:'Scheduled · AD ENGINE · IVT benchmarks'},
+  {id:'Q016',p:4,t:'Influencer Tier Calibration',            m:'Scheduled · INFL ENGINE · ER benchmark refresh'},
+  {id:'Q017',p:4,t:'VIGILAX Threshold Review',               m:'Scheduled · SYSTEM · Quarterly threshold audit'},
+  {id:'Q018',p:4,t:'Audit Log Export',                       m:'Scheduled · SYSTEM · SHA256 chain of custody'},
+];
+
+const REV_ENTITIES=[
+  {n:'VIGILAX Sentinel',mrr:1200,st:'live',q3:4800},
+  {n:'OmniGuard',       mrr:2400,st:'live',q3:9600},
+  {n:'CCLDR',           mrr:850, st:'live',q3:3400},
+  {n:'DocWeedlaw.ca',   mrr:320, st:'live',q3:1280},
+  {n:'Kiaros',          mrr:0,   st:'dev', q3:2000},
+  {n:'SoulStack',       mrr:0,   st:'dev', q3:5000},
+  {n:'LegalFlow AI',    mrr:0,   st:'dev', q3:1500},
+  {n:'AdShield',        mrr:0,   st:'dev', q3:800},
+];
+
+let curSection='home', selFloor=1, hovFloor=-1, threatFilter='ALL';
+let queueData=[...QUEUE_DATA], dragSrc=null, simThreats=THREATS.length;
+
+// clock
+setInterval(()=>{
+  const n=new Date();
+  document.getElementById('clock').textContent=
+    `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+},1000);
+
+// counter
+function counter(el,target,dur=1100){
+  if(!el)return;
+  let t0=null;
+  const frame=ts=>{
+    if(!t0)t0=ts;
+    const p=Math.min((ts-t0)/dur,1);
+    el.textContent=Math.round((1-Math.pow(1-p,3))*target);
+    if(p<1)requestAnimationFrame(frame); else el.textContent=target;
+  };
+  requestAnimationFrame(frame);
 }
 
-const AGENTS=[
-  {id:'primedox',  name:'PrimeDox AI',         role:'Concierge / Orchestrator', icon:'🤖', st:'active', load:72, last:'Processing CEO briefing request'},
-  {id:'omniguard', name:'OmniGuard',            role:'Security Layer',           icon:'🛡️', st:'active', load:58, last:'Scanning 12 endpoints for anomalies'},
-  {id:'vigilax',   name:'VIGILAX Sentinel',     role:'Fraud Detection',          icon:'🔍', st:'busy',   load:91, last:'Processing 247 active threat signals'},
-  {id:'gemma',     name:'Gemma 31B',            role:'AI Orchestrator',          icon:'⬡',  st:'busy',   load:84, last:'Routing 18 tasks across agent swarm'},
-  {id:'docweed',   name:'Doc Weedlaw',          role:'Cannabis Legal Ed.',       icon:'⚖️', st:'active', load:34, last:'Generating Ontario compliance FAQ'},
-  {id:'francisco', name:'Francisco Agent',      role:"Derek's AI Clone",         icon:'👤', st:'idle',   load:8,  last:'Awaiting next directive from PrimeDox'},
-  {id:'gap',       name:'GapScanner',           role:'Market Intelligence',      icon:'◎',  st:'active', load:41, last:'Scanning 3 new industry URLs'},
-  {id:'evidence',  name:'EvidenceVault',        role:'Chain of Custody',         icon:'🔐', st:'active', load:22, last:'Packaging SHA256 evidence bundle'},
-  {id:'forge',     name:'AgentForge',           role:'Agent Marketplace',        icon:'⬢',  st:'busy',   load:67, last:'Processing 3 agent purchase requests'},
-];
-
-const THREATS=[
-  {sev:'CRITICAL',eng:'cannabis_monitor',tgt:'unlicensed-delivery.ca',sc:97,t:'2m ago',status:'ESCALATED',canna:true},
-  {sev:'CRITICAL',eng:'gov_fraud',tgt:'MuniContract-2024-18A',sc:94,t:'7m ago',status:'REVIEW',canna:false},
-  {sev:'CRITICAL',eng:'review_fraud',tgt:'GreenLeaf Dispensary',sc:92,t:'11m ago',status:'REVIEW',canna:true},
-  {sev:'HIGH',eng:'click_fraud',tgt:'Campaign CAD-4412',sc:87,t:'18m ago',status:'PENDING',canna:false},
-  {sev:'HIGH',eng:'ad_fraud',tgt:'weedexpress-on.xyz',sc:85,t:'23m ago',status:'PENDING',canna:true},
-  {sev:'HIGH',eng:'influencer_fraud',tgt:'@cannabisqueen_on',sc:82,t:'31m ago',status:'PENDING',canna:true},
-  {sev:'HIGH',eng:'gov_fraud',tgt:'Vendor-PSPC-2026-7',sc:81,t:'45m ago',status:'PENDING',canna:false},
-  {sev:'MEDIUM',eng:'review_fraud',tgt:'AcmePlumbing Toronto',sc:74,t:'1h ago',status:'MONITOR',canna:false},
-  {sev:'MEDIUM',eng:'click_fraud',tgt:'Campaign ADV-9921',sc:71,t:'1h 12m',status:'MONITOR',canna:false},
-  {sev:'MEDIUM',eng:'influencer_fraud',tgt:'@techreviewer_ca',sc:68,t:'1h 34m',status:'MONITOR',canna:false},
-];
-
-const ENGINES=[
-  {name:'cannabis_monitor',count:89,color:'#FF6B35'},
-  {name:'gov_fraud',count:61,color:'#FF3D5E'},
-  {name:'review_fraud',count:47,color:'#C9A227'},
-  {name:'click_fraud',count:31,color:'#2196F3'},
-  {name:'influencer_fraud',count:12,color:'#00E5A0'},
-  {name:'ad_fraud',count:7,color:'#7BA8C8'},
-];
-
-let QUEUE=[
-  {id:'q1',p:1,title:'CRITICAL: Unlicensed cannabis delivery service detected',meta:'cannabis_monitor · Score 97 · unlicensed-delivery.ca',canna:true},
-  {id:'q2',p:1,title:'CRITICAL: Suspected bid rigging — MuniContract-2024-18A',meta:'gov_fraud · Score 94 · 3 vendors implicated',canna:false},
-  {id:'q3',p:1,title:'CRITICAL: Cannabis dispensary fake review burst (47 in 2h)',meta:'review_fraud · Score 92 · GreenLeaf Dispensary',canna:true},
-  {id:'q4',p:2,title:'HIGH: Click fraud campaign — $12,400 ad spend affected',meta:'click_fraud · Score 87 · Campaign CAD-4412',canna:false},
-  {id:'q5',p:2,title:'HIGH: MFA domain serving cannabis ads without license',meta:'ad_fraud · Score 85 · weedexpress-on.xyz',canna:true},
-  {id:'q6',p:2,title:'HIGH: Influencer follower spike — 40K in 48h',meta:'influencer_fraud · Score 82 · @cannabisqueen_on',canna:true},
-  {id:'q7',p:2,title:'HIGH: Government vendor — sole source abuse pattern',meta:'gov_fraud · Score 81 · Vendor-PSPC-2026-7',canna:false},
-  {id:'q8',p:3,title:'MEDIUM: Review fraud — plumbing company manipulation',meta:'review_fraud · Score 74 · AcmePlumbing Toronto',canna:false},
-  {id:'q9',p:3,title:'MEDIUM: Sustained bot traffic — 3 days active',meta:'click_fraud · Score 71 · Campaign ADV-9921',canna:false},
-  {id:'q10',p:3,title:'MEDIUM: Influencer engagement ratio anomaly',meta:'influencer_fraud · Score 68 · @techreviewer_ca',canna:false},
-  {id:'q11',p:3,title:'MEDIUM: Review burst — restaurant chain (12 locations)',meta:'review_fraud · Score 66 · Multi-location',canna:false},
-  {id:'q12',p:3,title:'MEDIUM: Ad domain spoofing — finance sector',meta:'ad_fraud · Score 64 · 8 publisher domains',canna:false},
-  {id:'q13',p:4,title:'LOW: Engagement anomaly — minor influencer account',meta:'influencer_fraud · Score 51 · @micro_influencer',canna:false},
-  {id:'q14',p:4,title:'LOW: Expenditure clustering near $10K threshold',meta:'gov_fraud · Score 48 · Municipal vendor',canna:false},
-  {id:'q15',p:4,title:'MONITOR: Clickthrough rate slightly elevated',meta:'click_fraud · Score 42 · Continue observation',canna:false},
-  {id:'q16',p:4,title:'MONITOR: Review velocity marginally elevated',meta:'review_fraud · Score 39 · Continue observation',canna:false},
-  {id:'q17',p:4,title:'LOW: Minor TTR anomaly in reviews',meta:'review_fraud · Score 35 · Low confidence',canna:false},
-  {id:'q18',p:4,title:'MONITOR: Domain registered < 30 days — watch list',meta:'ad_fraud · Score 31 · newcannabissite.ca',canna:true},
-];
-
-// ══ NAVIGATION ══════════════════════════════════════
+// navigation
 function go(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const sec=document.getElementById('s-'+id);
-  if(sec)sec.classList.add('active');
-  const nav=document.querySelector('[data-s="'+id+'"]');
-  if(nav)nav.classList.add('active');
-  if(id==='revenue'){renderRevenueChart();setTimeout(()=>{const f=document.getElementById('t-fill');if(f)f.style.width='0%';},100);}
-  if(id==='tower'&&!towerReady){buildTower();towerReady=true;}
+  curSection=id;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+id)?.classList.add('active');
+  document.querySelectorAll('#nav .nav-item').forEach((n,i)=>{
+    n.classList.toggle('active',['home','tower','agents','revenue','threats','queue','settings'][i]===id);
+  });
+  document.getElementById('tb-sect').textContent=id.toUpperCase();
+  document.getElementById('tb-title').textContent={
+    home:'Francisco Holdings Inc. — Empire Command Center',
+    tower:'392-Floor Skyscraper · Interactive Tower View',
+    agents:'AI Agent Swarm · Francisco Holdings Inc.',
+    revenue:'Revenue Tracker · MRR Pipeline',
+    threats:'VIGILAX Sentinel · Threat Intelligence',
+    queue:'Human Review Queue · Pending Sign-off',
+    settings:'System Settings · Configuration',
+  }[id]||'';
+  if(id==='agents')setTimeout(drawNetwork,60);
+  if(id==='revenue')setTimeout(drawRevChart,60);
+  if(id==='tower')setTimeout(()=>drawBuilding('tcanvas',280,540,true),60);
 }
 
 document.addEventListener('keydown',e=>{
-  if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;
-  const m={h:'home',H:'home','2':'tower',a:'agents',A:'agents','4':'revenue','5':'threats','6':'review','7':'settings'};
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  const m={h:'home','2':'tower',a:'agents','4':'revenue','5':'threats','6':'queue','7':'settings'};
   if(m[e.key])go(m[e.key]);
 });
 
-// ══ CLOCK ══════════════════════════════════════════
-function tick(){
-  const n=new Date();
-  document.getElementById('live-clock').textContent=
-    [n.getHours(),n.getMinutes(),n.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
-}
-tick();setInterval(tick,1000);
+// building
+function drawBuilding(cid,CW,CH,interactive){
+  const cv=document.getElementById(cid);
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,CW,CH);
 
-// ══ COUNTERS ══════════════════════════════════════
-function counter(el,target,dur=1600,pre='',suf=''){
-  if(!el)return;
-  let v=0;const step=target/(dur/16);
-  const t=setInterval(()=>{
-    v=Math.min(v+step,target);
-    el.textContent=pre+Math.round(v).toLocaleString()+suf;
-    if(v>=target)clearInterval(t);
-  },16);
+  const fx=38,fy=16,fw=156,fh=CH-36;
+  const dx=34,dy=-18;
+  const fph=fh/392;
+
+  // right face
+  ctx.beginPath();
+  ctx.moveTo(fx+fw,fy); ctx.lineTo(fx+fw+dx,fy+dy);
+  ctx.lineTo(fx+fw+dx,fy+dy+fh); ctx.lineTo(fx+fw,fy+fh);
+  ctx.closePath();
+  ctx.fillStyle='#060F20';
+  ctx.fill();
+  // right face floor bands
+  for(let i=0;i<392;i++){
+    const comp=COMPANIES[i];
+    const y=fy+fh-(i+1)*fph;
+    if(comp.st==='live'){
+      const xL=fx+fw, yL=y;
+      const xR=fx+fw+dx, yR=yL+dy*(i/392)*0;
+      ctx.fillStyle='rgba(5,242,199,0.18)';
+      const h2=Math.max(fph,0.5);
+      const xOff=dx*(i/392)*0.15;
+      ctx.fillRect(xL,yL,dx,h2);
+    }
+  }
+  ctx.strokeStyle='rgba(5,242,199,0.12)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(fx+fw,fy);ctx.lineTo(fx+fw+dx,fy+dy);ctx.lineTo(fx+fw+dx,fy+dy+fh);ctx.lineTo(fx+fw,fy+fh);ctx.stroke();
+
+  // roof
+  ctx.beginPath();
+  ctx.moveTo(fx,fy);ctx.lineTo(fx+fw,fy);ctx.lineTo(fx+fw+dx,fy+dy);ctx.lineTo(fx+dx,fy+dy);
+  ctx.closePath();
+  ctx.fillStyle='rgba(5,242,199,0.15)';ctx.fill();
+  ctx.strokeStyle='rgba(5,242,199,0.45)';ctx.lineWidth=1;ctx.stroke();
+
+  // front base
+  ctx.fillStyle='#080E1A';ctx.fillRect(fx,fy,fw,fh);
+  ctx.strokeStyle='rgba(5,242,199,0.18)';ctx.lineWidth=1;ctx.strokeRect(fx,fy,fw,fh);
+
+  // floor bands
+  for(let i=0;i<392;i++){
+    const comp=COMPANIES[i];
+    const y=fy+fh-(i+1)*fph;
+    const h=Math.max(fph-0.2,0.4);
+    if(comp.st==='live'){
+      const a=0.35+0.4*(comp.ag/10);
+      ctx.fillStyle=`rgba(5,242,199,${Math.min(a,0.85)})`;
+      ctx.fillRect(fx+1,y,fw-2,Math.max(h,1.4));
+    } else if(comp.st==='dev'){
+      ctx.fillStyle='rgba(240,165,0,0.22)';
+      ctx.fillRect(fx+1,y,fw-2,Math.max(h,0.9));
+    } else if(comp.st==='plan'){
+      ctx.fillStyle='rgba(18,71,219,0.15)';
+      ctx.fillRect(fx+1,y,fw-2,Math.max(h,0.7));
+    }
+  }
+
+  // window grid
+  ctx.strokeStyle='rgba(5,242,199,0.055)';ctx.lineWidth=0.5;
+  for(let c=0;c<7;c++){
+    const x=fx+10+c*(fw-20)/6;
+    ctx.beginPath();ctx.moveTo(x,fy+4);ctx.lineTo(x,fy+fh-4);ctx.stroke();
+  }
+
+  // hover
+  if(hovFloor>=0&&hovFloor<392){
+    const y=fy+fh-(hovFloor+1)*fph;
+    ctx.fillStyle='rgba(255,255,255,0.1)';
+    ctx.fillRect(fx+1,y-1,fw-2,fph+2);
+  }
+
+  // selected
+  if(selFloor>=1&&selFloor<=392){
+    const ii=selFloor-1;
+    const y=fy+fh-(ii+1)*fph;
+    const sc=COMPANIES[ii].st==='live'?'#05F2C7':COMPANIES[ii].st==='dev'?'#F0A500':'#1247DB';
+    ctx.strokeStyle=sc;ctx.lineWidth=1.5;
+    ctx.shadowBlur=8;ctx.shadowColor=sc;
+    ctx.strokeRect(fx+1,y-1,fw-2,Math.max(fph+2,2.5));
+    ctx.shadowBlur=0;
+  }
+
+  // floor labels
+  ctx.fillStyle='rgba(5,242,199,0.45)';ctx.font='7px Courier New';ctx.textAlign='right';
+  [1,50,100,150,200,250,300,350,392].forEach(n=>{
+    const y=fy+fh-n*fph;ctx.fillText(n,fx-3,y+3);
+  });
+  ctx.textAlign='left';
+
+  // elevator shaft
+  ctx.fillStyle='rgba(0,0,0,0.35)';ctx.fillRect(fx+5,fy+4,7,fh-8);
+
+  // legend
+  [{c:'rgba(5,242,199,0.7)',l:'Live'},{c:'rgba(240,165,0,0.55)',l:'Dev'},{c:'rgba(18,71,219,0.55)',l:'Plan'}].forEach((lg,i)=>{
+    ctx.fillStyle=lg.c;ctx.fillRect(CW-62,8+i*13,7,5);
+    ctx.fillStyle='rgba(200,216,232,0.55)';ctx.font='7px Courier New';ctx.textAlign='left';
+    ctx.fillText(lg.l,CW-52,13+i*13);
+  });
+
+  if(interactive){
+    cv.onmousemove=e=>{
+      const r=cv.getBoundingClientRect();
+      const mx=e.clientX-r.left,my=e.clientY-r.top;
+      if(mx>=fx&&mx<=fx+fw&&my>=fy&&my<=fy+fh){
+        const nf=Math.floor((fy+fh-my)/fph);
+        if(nf!==hovFloor){hovFloor=nf;drawBuilding(cid,CW,CH,interactive);}
+      } else if(hovFloor!==-1){hovFloor=-1;drawBuilding(cid,CW,CH,interactive);}
+    };
+    cv.onclick=e=>{
+      const r=cv.getBoundingClientRect();
+      const my=e.clientY-r.top;
+      if(my>=fy&&my<=fy+fh){
+        const f=Math.floor((fy+fh-my)/fph)+1;
+        if(f>=1&&f<=392)pickFloor(f,cid==='bcanvas');
+      }
+    };
+    cv.onmouseleave=()=>{hovFloor=-1;drawBuilding(cid,CW,CH,interactive);};
+  }
 }
 
-// ══ AGENT QUICK LIST ══════════════════════════════
-function renderAQ(){
-  const c=document.getElementById('aq-list');
-  if(!c)return;
-  c.innerHTML=AGENTS.map(a=>`
-    <div class="aq-item">
-      <div class="aq-dot ${a.st==='busy'?'gold':a.st==='idle'?'dim':'green'}"></div>
-      <div class="aq-name">${a.name}</div>
-      <div class="aq-action">${a.last}</div>
-      <div class="aq-load">${Math.round(a.load)}%</div>
+function pickFloor(f,isHome){
+  selFloor=f;
+  const c=COMPANIES[f-1];
+  if(isHome){
+    drawBuilding('bcanvas',212,440,true);
+    const fd=document.getElementById('floor-detail');
+    if(fd)fd.innerHTML=`
+      <div class="fd-floor">Floor ${f}</div>
+      <div class="fd-name">${c.n}</div>
+      <div class="fd-meta">${c.d}${c.ag?' · '+c.ag+' agents':''}${c.mrr?' · $'+c.mrr+'/mo':''}</div>
+    `;
+  } else {
+    drawBuilding('tcanvas',280,540,true);
+    const fh=540-36;
+    const yPct=(16+fh-f*(fh/392))/540;
+    const el=document.getElementById('elevator');
+    if(el)el.style.top=Math.round(yPct*540-3)+'px';
+    const td=document.getElementById('tower-detail');
+    if(td)td.innerHTML=`
+      <div class="fd-floor">Floor ${f}</div>
+      <div class="fd-name" style="font-size:14px;margin:3px 0">${c.n}</div>
+      <div style="margin-top:5px"><span class="chip ${c.st==='live'?'live':c.st==='dev'?'high':'plan'}">${c.st.toUpperCase()}</span></div>
+      <div class="fd-meta" style="margin-top:7px">${c.d}</div>
+      ${c.ag?`<div class="fd-meta" style="margin-top:3px">${c.ag} active agents</div>`:''}
+      ${c.mrr?`<div class="fd-meta" style="margin-top:3px">MRR $${c.mrr.toLocaleString()}/mo</div>`:''}
+    `;
+  }
+}
+
+// init home
+function initHome(){
+  counter(document.getElementById('mc-companies'),24);
+  counter(document.getElementById('mc-agents'),9);
+  counter(document.getElementById('mc-threats'),THREATS.length);
+  drawBuilding('bcanvas',212,440,true);
+
+  document.getElementById('home-threat-table').innerHTML=
+    `<tr><th>Score</th><th>Sev</th><th>Engine</th><th>Target</th><th>Status</th></tr>`+
+    THREATS.slice(0,6).map(t=>`<tr>
+      <td style="font-weight:700;font-variant-numeric:tabular-nums;color:${t.score>=90?'var(--hot)':t.score>=70?'var(--amber)':'#5B8CF5'}">${t.score}</td>
+      <td><span class="chip ${sClass(t.sev)}">${t.sev.slice(0,4)}</span></td>
+      <td><span class="engine-tag">${t.engine}</span></td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px">${t.target}</td>
+      <td><span class="chip ${t.st==='pending'?'crit':'high'}">${t.st}</span></td>
+    </tr>`).join('');
+
+  document.getElementById('home-agent-list').innerHTML=AGENTS.map(a=>`
+    <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid rgba(26,48,80,0.35)">
+      <span style="font-size:13px">${a.i}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:700">${a.n}</div><div style="font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.l}</div></div>
+      <span class="chip ${a.st==='active'?'live':'idle'}">${a.st}</span>
     </div>`).join('');
 }
 
-// ══ THREAT FEED ══════════════════════════════════
-function renderTF(){
-  const c=document.getElementById('tf-home');
-  if(!c)return;
-  c.innerHTML=THREATS.slice(0,8).map(t=>`
-    <div class="tf-item ${t.canna?'canna':''}">
-      <span class="sev-badge sev-${t.sev==='CRITICAL'?'c':t.sev==='HIGH'?'h':'m'}">${t.sev}</span>
-      <span class="tf-desc">${t.eng.replace(/_/g,' ')} — ${t.tgt}</span>
-      <span class="tf-time">${t.t}</span>
+function sClass(s){return{CRITICAL:'crit',HIGH:'high',MEDIUM:'med',LOW:'low'}[s]||'idle';}
+
+// init tower
+function initTower(){
+  const fl=document.getElementById('floor-list');
+  fl.innerHTML=COMPANIES.filter(c=>c.st!=='empty').map(c=>`
+    <div onclick="pickFloor(${c.f},false)" style="padding:4px 0;border-bottom:1px solid rgba(26,48,80,0.3);cursor:pointer;display:flex;align-items:center;gap:5px">
+      <span style="font-size:9px;color:var(--muted);width:22px;flex-shrink:0;font-variant-numeric:tabular-nums">${c.f}</span>
+      <span style="font-size:10px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.n}</span>
+      <span class="chip ${c.st==='live'?'live':c.st==='dev'?'high':'plan'}" style="flex-shrink:0">${c.st}</span>
     </div>`).join('');
 }
 
-// ══ AGENTS GRID ══════════════════════════════════
-function renderAgents(){
-  const c=document.getElementById('agents-grid');
-  if(!c)return;
-  c.innerHTML=AGENTS.map(a=>{
-    const lc=a.load>80?'crit':a.load>60?'hi':'';
-    const bc=a.st==='active'?'sb-act':a.st==='busy'?'sb-busy':'sb-idle';
-    const bl=a.st==='active'?'ACTIVE':a.st==='busy'?'BUSY':'IDLE';
-    return`<div class="agent-card" onclick="toast('${a.name}: ${a.last.replace(/'/g,"&#39;")}','${a.st==='busy'?'w':'ok'}')">
-      <div class="ac-top">
-        <div class="ac-icon" style="background:rgba(0,229,160,.08)">${a.icon}</div>
-        <div style="flex:1;min-width:0">
-          <div class="ac-name">${a.name}</div>
-          <div class="ac-role">${a.role}</div>
-        </div>
-        <span class="sbadge ${bc}">${bl}</span>
-      </div>
-      <div class="ac-body">
-        <div class="load-row">
-          <div class="load-lbl">CPU</div>
-          <div class="load-bar"><div class="load-fill ${lc}" style="width:${a.load}%"></div></div>
-          <div class="load-pct">${Math.round(a.load)}%</div>
-        </div>
-        <div class="ac-last">Last: <span>${a.last}</span></div>
-      </div>
+// init agents
+function initAgents(){
+  document.getElementById('agent-grid').innerHTML=AGENTS.map(a=>{
+    const lc=a.load>=80?'hot':a.load>=55?'warn':'';
+    return `<div class="agent-card">
+      <div class="ac-top"><div class="ac-icon">${a.i}</div><div><div class="ac-name">${a.n}</div><div class="ac-role">${a.r}</div></div></div>
+      <div class="ac-status"><span class="chip ${a.st==='active'?'live':'idle'}">${a.st.toUpperCase()}</span></div>
+      <div class="ac-load"><div class="load-bar"><div class="load-fill ${lc}" style="width:${a.load}%" id="lb-${a.id}"></div></div><div class="load-pct" id="lp-${a.id}">${a.load}%</div></div>
+      <div class="ac-last">${a.l}</div>
     </div>`;
   }).join('');
 }
 
-// ══ REVENUE CHART ══════════════════════════════
-function renderRevenueChart(){
-  const canvas=document.getElementById('revenue-canvas');
-  if(!canvas)return;
-  const dpr=window.devicePixelRatio||1;
-  const W=canvas.offsetWidth||700,H=280;
-  canvas.width=W*dpr;canvas.height=H*dpr;
-  const ctx=canvas.getContext('2d');
-  ctx.scale(dpr,dpr);
-
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul'];
-  const PAD={t:28,r:24,b:36,l:56};
-  const cw=W-PAD.l-PAD.r,ch=H-PAD.t-PAD.b;
-  const MAX=100000;
-
-  // Grid lines
-  for(let i=0;i<=5;i++){
-    const y=PAD.t+(ch/5)*i;
-    ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+cw,y);
-    ctx.strokeStyle='rgba(0,229,160,0.06)';ctx.lineWidth=1;ctx.stroke();
-    const val=MAX-(MAX/5)*i;
-    ctx.fillStyle='#3A5A7A';ctx.font='8px Courier New';ctx.textAlign='right';
-    ctx.fillText('$'+(val>=1000?(val/1000).toFixed(0)+'K':val),PAD.l-5,y+3);
-  }
-
-  // X axis
-  months.forEach((m,i)=>{
-    const x=PAD.l+(cw/(months.length-1))*i;
-    ctx.fillStyle='#3A5A7A';ctx.font='8px Courier New';ctx.textAlign='center';
-    ctx.fillText(m,x,H-6);
-    ctx.beginPath();ctx.moveTo(x,PAD.t);ctx.lineTo(x,PAD.t+ch);
-    ctx.strokeStyle='rgba(0,229,160,0.03)';ctx.stroke();
+function drawNetwork(){
+  const cv=document.getElementById('netcanvas');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const W=268,H=268,cx=W/2,cy=H/2,r=98;
+  ctx.clearRect(0,0,W,H);
+  const nodes=AGENTS.map((a,i)=>{
+    const ang=(i/AGENTS.length)*Math.PI*2-Math.PI/2;
+    return{x:cx+r*Math.cos(ang),y:cy+r*Math.sin(ang),...a};
   });
-
-  // Target dashed line
-  ctx.setLineDash([4,4]);ctx.beginPath();
-  ctx.moveTo(PAD.l,PAD.t);ctx.lineTo(PAD.l+cw,PAD.t);
-  ctx.strokeStyle='rgba(0,229,160,0.22)';ctx.lineWidth=1;ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle='#00E5A0';ctx.font='8px Courier New';ctx.textAlign='left';
-  ctx.fillText('$100K TARGET',PAD.l+4,PAD.t-4);
-
-  // All zero series (current state)
-  const series=[
-    {label:'Francisco Holdings',color:'#C9A227',data:[0,0,0,0,0,0,0]},
-    {label:'VIGILAX',color:'#FF3D5E',data:[0,0,0,0,0,0,0]},
-    {label:'AgentForge',color:'#00E5A0',data:[0,0,0,0,0,0,0]},
-  ];
-
-  series.forEach(s=>{
-    ctx.beginPath();
-    s.data.forEach((v,i)=>{
-      const x=PAD.l+(cw/(months.length-1))*i;
-      const y=PAD.t+ch-(v/MAX)*ch;
-      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-    });
-    ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.stroke();
-    s.data.forEach((v,i)=>{
-      const x=PAD.l+(cw/(months.length-1))*i;
-      const y=PAD.t+ch-(v/MAX)*ch;
-      ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=s.color;ctx.fill();
-    });
+  // connections
+  nodes.forEach(n=>{
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(n.x,n.y);
+    const g=ctx.createLinearGradient(cx,cy,n.x,n.y);
+    g.addColorStop(0,'rgba(5,242,199,0.28)');g.addColorStop(1,'rgba(5,242,199,0)');
+    ctx.strokeStyle=g;ctx.lineWidth=n.st==='active'?1.2:0.5;ctx.stroke();
   });
-
-  // Legend
-  series.forEach((s,i)=>{
-    const x=PAD.l+i*130;
-    ctx.beginPath();ctx.moveTo(x,18);ctx.lineTo(x+14,18);
-    ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.stroke();
-    ctx.fillStyle='#7BA8C8';ctx.font='8px Courier New';ctx.textAlign='left';
-    ctx.fillText(s.label,x+18,21);
+  // hub
+  ctx.beginPath();ctx.arc(cx,cy,13,0,Math.PI*2);
+  ctx.fillStyle='rgba(5,242,199,0.12)';ctx.fill();
+  ctx.strokeStyle='#05F2C7';ctx.lineWidth=1.5;
+  ctx.shadowBlur=10;ctx.shadowColor='#05F2C7';ctx.stroke();ctx.shadowBlur=0;
+  ctx.fillStyle='#05F2C7';ctx.font='8px Courier New';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('FH',cx,cy);
+  // nodes
+  nodes.forEach(n=>{
+    const col=n.st==='active'?'#05F2C7':n.load>55?'#F0A500':'#4A6880';
+    ctx.beginPath();ctx.arc(n.x,n.y,n.st==='active'?7:5,0,Math.PI*2);
+    ctx.fillStyle='rgba(5,242,199,0.08)';ctx.fill();
+    ctx.strokeStyle=col;ctx.lineWidth=1.2;
+    if(n.st==='active'){ctx.shadowBlur=5;ctx.shadowColor=col;}
+    ctx.stroke();ctx.shadowBlur=0;
+    ctx.fillStyle='rgba(200,216,232,0.65)';ctx.font='7px Courier New';
+    ctx.textAlign=n.x<cx?'right':'left';ctx.textBaseline='middle';
+    ctx.fillText(n.n.split(' ')[0],n.x+(n.x<cx?-11:11),n.y);
   });
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';
 }
 
-function renderRevTable(){
-  const tb=document.getElementById('rev-tbody');
-  if(!tb)return;
-  tb.innerHTML=COMPANIES.filter(c=>c.name&&c.st==='live').map(c=>`
-    <tr><td>${c.name}</td><td style="color:var(--t3)">${c.tier}</td><td class="rev-amt">$${c.mrr.toLocaleString()}</td></tr>`).join('');
-}
+// init revenue
+function initRevenue(){
+  const total=REV_ENTITIES.reduce((s,e)=>s+e.mrr,0);
+  document.getElementById('rev-kpis').innerHTML=[
+    {l:'Current MRR',  v:`$${total.toLocaleString()}`, col:'amber'},
+    {l:'Q3 Pipeline',  v:`$${(REV_ENTITIES.reduce((s,e)=>s+e.q3,0)/1000).toFixed(0)}k MRR`, col:'plasma'},
+    {l:'Live Entities',v:'4',  col:'ok'},
+    {l:'In Development',v:`${REV_ENTITIES.filter(e=>e.st==='dev').length}`, col:'amber'},
+  ].map(k=>`<div class="kpi"><div class="kpi-label">${k.l}</div><div class="kpi-val" style="color:var(--${k.col})">${k.v}</div></div>`).join('');
 
-// ══ THREATS ══════════════════════════════════════
-function renderThreats(){
-  const tb=document.getElementById('thr-tbody');
-  if(!tb)return;
-  tb.innerHTML=THREATS.map(t=>`
-    <tr class="${t.canna?'canna':''}">
-      <td><span class="sev-badge sev-${t.sev==='CRITICAL'?'c':t.sev==='HIGH'?'h':'m'}">${t.sev}</span></td>
-      <td>${t.eng.replace(/_/g,' ')}</td>
-      <td style="color:var(--t1)">${t.tgt}</td>
-      <td style="font-weight:700;color:${t.sc>=90?'var(--threat)':t.sc>=75?'var(--cannabis)':'var(--gold)'}">${t.sc}</td>
-      <td>${t.t}</td>
-      <td style="font:8px/1 var(--mono);text-transform:uppercase;color:var(--t3)">${t.status}</td>
+  document.getElementById('rev-table').innerHTML=
+    `<tr><th>Entity</th><th>Status</th><th>Current MRR</th><th>Q3 Target</th></tr>`+
+    REV_ENTITIES.map(e=>`<tr>
+      <td>${e.n}</td>
+      <td><span class="chip ${e.st==='live'?'live':'high'}">${e.st}</span></td>
+      <td style="font-variant-numeric:tabular-nums;font-weight:700;color:${e.mrr?'var(--amber)':'var(--muted)'}">${e.mrr?'$'+e.mrr.toLocaleString():'—'}</td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--plasma)">$${e.q3.toLocaleString()}</td>
     </tr>`).join('');
+}
 
-  const eb=document.getElementById('eng-bars');
-  if(!eb)return;
-  const total=ENGINES.reduce((s,e)=>s+e.count,0);
-  eb.innerHTML=ENGINES.map(e=>`
-    <div class="eng-row">
-      <div class="eng-name-row">
-        <span class="eng-name">${e.name.replace(/_/g,' ')}</span>
-        <span class="eng-count" style="color:${e.color}">${e.count}</span>
+function drawRevChart(){
+  const cv=document.getElementById('rcanvas');
+  if(!cv)return;
+  cv.width=cv.offsetWidth||800;
+  const W=cv.width,H=190;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  const pad={t:16,r:20,b:28,l:48};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+  const maxV=5500,months=['Jan','Feb','Mar','Apr','May','Jun','Jul'],n=months.length;
+  const xSt=cw/(n-1);
+  const series=[
+    {d:[0,0,400,800,1200,1200,1200],col:'#05F2C7',lb:'VIGILAX'},
+    {d:[0,0,0,1200,2400,2400,2400],col:'#F0A500',lb:'OmniGuard'},
+    {d:[0,200,500,850,850,850,850],col:'#1247DB',lb:'CCLDR'},
+  ];
+  // grid
+  ctx.strokeStyle='rgba(26,48,80,0.55)';ctx.lineWidth=0.5;
+  ctx.fillStyle='rgba(74,104,128,0.75)';ctx.font='8px Courier New';ctx.textAlign='right';
+  for(let i=0;i<=4;i++){
+    const y=pad.t+ch*(1-i/4);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
+    ctx.fillText('$'+(maxV*i/4/1000).toFixed(1)+'k',pad.l-5,y+3);
+  }
+  // target
+  const ty=pad.t+ch*(1-5000/maxV);
+  ctx.strokeStyle='rgba(240,165,0,0.35)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+  ctx.beginPath();ctx.moveTo(pad.l,ty);ctx.lineTo(pad.l+cw,ty);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(240,165,0,0.6)';ctx.textAlign='right';ctx.font='7px Courier New';
+  ctx.fillText('TARGET $5k MRR',pad.l+cw,ty-3);
+  // months
+  ctx.fillStyle='rgba(74,104,128,0.75)';ctx.textAlign='center';ctx.font='8px Courier New';
+  months.forEach((m,i)=>ctx.fillText(m,pad.l+i*xSt,H-6));
+  // total area
+  const stacked=months.map((_,i)=>series.reduce((s,sr)=>s+sr.d[i],0));
+  const ag=ctx.createLinearGradient(0,pad.t,0,pad.t+ch);
+  ag.addColorStop(0,'rgba(5,242,199,0.1)');ag.addColorStop(1,'rgba(5,242,199,0)');
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t+ch);
+  stacked.forEach((v,i)=>ctx.lineTo(pad.l+i*xSt,pad.t+ch*(1-v/maxV)));
+  ctx.lineTo(pad.l+(n-1)*xSt,pad.t+ch);ctx.closePath();
+  ctx.fillStyle=ag;ctx.fill();
+  // series lines
+  series.forEach(sr=>{
+    ctx.beginPath();
+    sr.d.forEach((v,i)=>{const x=pad.l+i*xSt,y=pad.t+ch*(1-v/maxV);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.strokeStyle=sr.col;ctx.lineWidth=1.8;ctx.stroke();
+    const li=n-1;
+    if(sr.d[li]>0){
+      ctx.beginPath();ctx.arc(pad.l+li*xSt,pad.t+ch*(1-sr.d[li]/maxV),3.5,0,Math.PI*2);
+      ctx.fillStyle=sr.col;ctx.fill();
+      ctx.fillStyle=sr.col;ctx.font='8px Courier New';ctx.textAlign='left';
+      ctx.fillText(sr.lb+' $'+sr.d[li].toLocaleString(),pad.l+li*xSt+7,pad.t+ch*(1-sr.d[li]/maxV)+3);
+    }
+  });
+  ctx.textAlign='left';
+}
+
+// init threats
+function initThreats(){renderThreats();}
+function renderThreats(){
+  const ft=threatFilter==='ALL'?THREATS:THREATS.filter(t=>t.sev===threatFilter);
+  document.getElementById('threat-list').innerHTML=ft.map(t=>`
+    <div class="threat-row">
+      <div class="tr-score s-${sClass(t.sev)}">${t.score}</div>
+      <div><span class="chip ${sClass(t.sev)}">${t.sev.slice(0,4)}</span></div>
+      <div><span class="engine-tag">${t.engine}</span></div>
+      <div style="font-size:9px;color:var(--muted);font-variant-numeric:tabular-nums">${t.time}</div>
+      <div>
+        <div style="font-size:10px;font-weight:700">${t.target}${t.c?'<span style="font-size:8px;color:var(--amber);margin-left:5px">🌿</span>':''}</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:1px">${t.desc}</div>
+        <div style="font-size:8px;color:rgba(255,31,78,0.7);margin-top:2px;letter-spacing:0.07em">REVIEW REQUIRED. No auto-action.</div>
       </div>
-      <div class="eng-bar-bg">
-        <div class="eng-bar-fill" style="width:${Math.round(e.count/total*100)}%;background:${e.color}"></div>
+      <div><span class="chip ${t.st==='pending'?'crit':'high'}">${t.st}</span></div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="qi-btn" onclick="toast('Added to review queue','ok')">Queue</button>
+        <button class="qi-btn escalate" onclick="toast('Escalated to PrimeDox','warn')">Escalate</button>
       </div>
     </div>`).join('');
 }
+function filterThreats(s,btn){
+  threatFilter=s;
+  document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderThreats();
+}
 
-// ══ QUEUE ══════════════════════════════════════
-let dragSrc=null;
-
+// init queue
+function initQueue(){renderQueue();}
 function renderQueue(){
-  const c=document.getElementById('queue-list');
-  if(!c)return;
-  c.innerHTML=QUEUE.map(item=>`
-    <div class="q-item ${item.canna?'canna-q':''}"
-         id="qi-${item.id}" draggable="true"
-         ondragstart="dStart(event,'${item.id}')"
-         ondragover="dOver(event)"
-         ondrop="dDrop(event,'${item.id}')">
-      <div class="q-handle">⣿</div>
-      <div class="q-priority p${item.p}">${item.p}</div>
-      <div class="q-content">
-        <div class="q-title">${item.canna?'🌿 ':''}${item.title}</div>
-        <div class="q-meta">${item.meta}</div>
+  const cnt=[1,2,3,4].map(p=>queueData.filter(q=>q.p===p).length);
+  document.getElementById('queue-stats').innerHTML=[
+    {l:'Critical',v:cnt[0],c:'hot'},{l:'High',v:cnt[1],c:'amber'},
+    {l:'Medium',v:cnt[2],c:'empire'},{l:'Total',v:queueData.length,c:'text'},
+  ].map(k=>`<div class="qs"><span style="color:var(--${k.c})">${k.v}</span>${k.l}</div>`).join('');
+  document.getElementById('tb-queue').textContent=queueData.length;
+  document.getElementById('queue-list').innerHTML=queueData.map(q=>`
+    <div class="queue-item" id="qi-${q.id}" draggable="true"
+      ondragstart="dStart(event,'${q.id}')"
+      ondragover="dOver(event)"
+      ondrop="dDrop(event,'${q.id}')"
+      ondragleave="this.classList.remove('drag-over')">
+      <div class="qi-top">
+        <div class="qi-prio p${q.p}"></div>
+        <div class="qi-title">${q.t}${q.c?'<span style="font-size:8px;color:var(--amber);margin-left:5px">🌿</span>':''}</div>
+        <span class="chip ${q.p===1?'crit':q.p===2?'high':q.p===3?'med':'idle'}" style="flex-shrink:0">P${q.p}</span>
       </div>
-      ${item.canna?'<span class="canna-tag">CANNABIS</span>':''}
-      <div class="q-actions">
-        <button class="btn btn-ok"  onclick="qAct('${item.id}','ok')">✓</button>
-        <button class="btn btn-rev" onclick="qAct('${item.id}','rev')">◉</button>
-        <button class="btn btn-esc" onclick="qAct('${item.id}','esc')">↑</button>
+      <div class="qi-meta">${q.m}</div>
+      <div class="qi-actions">
+        <button class="qi-btn approve" onclick="qAct('${q.id}','approve')">Approve</button>
+        <button class="qi-btn" onclick="qAct('${q.id}','review')">Review</button>
+        <button class="qi-btn escalate" onclick="qAct('${q.id}','escalate')">Escalate</button>
       </div>
     </div>`).join('');
-}
-
-function dStart(e,id){dragSrc=id;e.currentTarget.classList.add('dragging');}
-function dOver(e){e.preventDefault();}
-function dDrop(e,tid){
-  e.preventDefault();
-  if(!dragSrc||dragSrc===tid)return;
-  const si=QUEUE.findIndex(i=>i.id===dragSrc);
-  const ti=QUEUE.findIndex(i=>i.id===tid);
-  const [item]=QUEUE.splice(si,1);QUEUE.splice(ti,0,item);
-  document.querySelectorAll('.q-item').forEach(el=>el.classList.remove('dragging'));
-  dragSrc=null;renderQueue();toast('Queue reprioritized','ok');
 }
 function qAct(id,act){
-  const item=QUEUE.find(i=>i.id===id);if(!item)return;
-  const msgs={ok:`Approved: ${item.id.toUpperCase()}`,rev:`Flagged for review: ${item.id.toUpperCase()}`,esc:`ESCALATED to Legal: ${item.id.toUpperCase()}`};
-  const types={ok:'ok',rev:'w',esc:'err'};
-  toast(msgs[act],types[act]);
-  if(act==='ok'){QUEUE=QUEUE.filter(i=>i.id!==id);renderQueue();}
+  if(act==='approve'){queueData=queueData.filter(q=>q.id!==id);renderQueue();toast('Approved and archived','ok');}
+  else if(act==='review')toast('Flagged for detailed review','ok');
+  else toast('Escalated to PrimeDox — awaiting sign-off','warn');
+}
+function dStart(e,id){dragSrc=id;document.getElementById('qi-'+id)?.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+function dOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function dDrop(e,tid){
+  e.preventDefault();e.currentTarget.classList.remove('drag-over');
+  if(!dragSrc||dragSrc===tid)return;
+  const si=queueData.findIndex(q=>q.id===dragSrc),ti=queueData.findIndex(q=>q.id===tid);
+  if(si<0||ti<0)return;
+  const[item]=queueData.splice(si,1);queueData.splice(ti,0,item);
+  renderQueue();dragSrc=null;
 }
 
-// ══ TOWER ══════════════════════════════════════
-let towerReady=false;
-
-function buildTower(){
-  const col=document.getElementById('floors-col');
-  if(!col)return;
-  const frag=document.createDocumentFragment();
-  for(let i=392;i>=1;i--){
-    const co=COMPANIES.find(c=>c.f===i);
-    const st=co?co.st:'empty',name=co?co.name:'';
-    const div=document.createElement('div');
-    div.className='floor-strip'+(i===1?' sel':'');
-    div.dataset.floor=i;
-    div.innerHTML=`<div class="f-num">${i}</div><div class="f-bar ${st}"></div><div class="f-name">${name}</div>`;
-    div.addEventListener('click',()=>pickFloor(i));
-    frag.appendChild(div);
-  }
-  col.appendChild(frag);
-  pickFloor(1);
-  setTimeout(()=>col.scrollTop=col.scrollHeight,80);
+// init settings
+function initSettings(){
+  document.getElementById('settings-body').innerHTML=`
+    <div class="settings-section"><div class="ss-title">Notifications</div>
+    ${[{l:'WebSocket Real-time Alerts',s:'Push to dashboard on every alert',on:true},{l:'Email (HIGH/CRITICAL)',s:'Gmail SMTP — set SMTP_HOST or SENDGRID_API_KEY',on:true},{l:'Slack Webhook',s:'Post to #vigilax-alerts — set SLACK_WEBHOOK_URL',on:false},{l:'SMS Critical (Twilio)',s:'Score ≥ 90 — set TWILIO_* env vars; 3× email fallback if absent',on:false}]
+    .map(r=>`<div class="setting-row"><div><div class="sr-label">${r.l}</div><div class="sr-sub">${r.s}</div></div><div class="toggle ${r.on?'on':''}" onclick="this.classList.toggle('on')"></div></div>`).join('')}</div>
+    <div class="settings-section"><div class="ss-title">Detection Engines</div>
+    ${[{l:'Click Fraud (Z-Score)',s:'Temporal clustering, IP analysis, CTR anomaly detection',on:true},{l:'Review Fraud (Jaccard)',s:'Duplicate detection — threshold 0.65',on:true},{l:'Influencer Fraud',s:'Per-tier ER benchmarks with platform modifiers',on:true},{l:'Ad Fraud (IVT)',s:'Invalid traffic, MFA domains, pixel validation',on:true},{l:'Gov Procurement',s:'Bid rigging, cover bidding, expenditure anomalies',on:true},{l:'Cannabis Monitor',s:'Public signals ONLY — ALWAYS requires human review',on:true}]
+    .map(r=>`<div class="setting-row"><div><div class="sr-label">${r.l}</div><div class="sr-sub">${r.s}</div></div><div class="toggle ${r.on?'on':''}" onclick="this.classList.toggle('on')"></div></div>`).join('')}</div>
+    <div class="settings-section"><div class="ss-title">Security</div>
+    <div class="setting-row"><div><div class="sr-label">Human Review Required</div><div class="sr-sub">Every finding requires human sign-off. Auto-accusation permanently disabled.</div></div><div class="toggle on" style="pointer-events:none;opacity:0.55"></div></div>
+    <div class="setting-row"><div><div class="sr-label">Evidence Chain of Custody</div><div class="sr-sub">SHA256 hash chain on all evidence packages</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div></div>
+    <div class="settings-section"><div class="ss-title">Keyboard Shortcuts</div>
+    <table class="mt"><tr><th>Key</th><th>Section</th></tr>
+    ${[['H','Home'],['2','Tower'],['A','Agents'],['4','Revenue'],['5','Threats'],['6','Review Queue'],['7','Settings']].map(([k,v])=>`<tr><td><span class="engine-tag">${k}</span></td><td>${v}</td></tr>`).join('')}</table></div>
+  `;
 }
 
-function pickFloor(n){
-  document.querySelectorAll('.floor-strip').forEach(s=>s.classList.toggle('sel',parseInt(s.dataset.floor)===n));
-  const car=document.getElementById('elev-car');
-  if(car){const pct=(392-n)/392;car.style.top=(pct*88+4)+'%';}
-  const co=COMPANIES.find(c=>c.f===n);
-  const ns=String(n).padStart(3,'0');
-  document.getElementById('d-num').textContent=ns;
-  document.getElementById('sb-floor-num').textContent=n;
-  if(co&&co.name){
-    document.getElementById('d-company').textContent=co.name;
-    document.getElementById('d-ind').textContent=co.ind||'—';
-    document.getElementById('d-ag').textContent=co.ag;
-    document.getElementById('d-mrr').textContent='$'+co.mrr.toLocaleString();
-    document.getElementById('d-thr').textContent=co.thr?co.thr+'/100':'—';
-    document.getElementById('d-area').textContent='4,800 ft²';
-    document.getElementById('d-status').textContent=co.st.toUpperCase();
-    const pill=document.getElementById('d-pill');
-    const cls={live:'sp-live',building:'sp-building',planned:'sp-planned',empty:'sp-empty'};
-    const txt={live:'● OPERATIONAL',building:'◐ BUILDING',planned:'○ PLANNED',empty:'— AVAILABLE'};
-    pill.className='status-pill '+(cls[co.st]||'sp-empty');
-    pill.textContent=txt[co.st]||'—';
-    document.getElementById('sb-floor-name').textContent=co.name;
-  } else {
-    document.getElementById('d-company').textContent='Unoccupied Floor';
-    document.getElementById('d-ind').textContent='—';
-    document.getElementById('d-ag').textContent='0';
-    document.getElementById('d-mrr').textContent='$0';
-    document.getElementById('d-thr').textContent='—';
-    document.getElementById('d-area').textContent='4,800 ft²';
-    document.getElementById('d-status').textContent='EMPTY';
-    const pill=document.getElementById('d-pill');
-    pill.className='status-pill sp-empty';pill.textContent='— AVAILABLE';
-    document.getElementById('sb-floor-name').textContent='Unoccupied';
-  }
-}
-
-// ══ TOAST ══════════════════════════════════════
-function toast(msg,type='ok'){
-  const w=document.getElementById('toast-wrap');
-  const t=document.createElement('div');
-  t.className='toast '+type;t.textContent=msg;
-  w.appendChild(t);setTimeout(()=>t.remove(),3200);
-}
-
-// ══ LIVE SIMULATION ══════════════════════════
-let thrCount=247;
+// live sim
 setInterval(()=>{
-  if(Math.random()<.18){
-    thrCount+=Math.floor(Math.random()*3);
-    ['top-threat','thr-big','sb-threats'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=thrCount;});
-    document.getElementById('tf-count').textContent=thrCount+' ACTIVE';
+  AGENTS.forEach((a,i)=>{
+    const d=(Math.random()-0.45)*7;
+    a.load=Math.max(5,Math.min(99,Math.round(a.load+d)));
+    if(curSection==='agents'){
+      const lb=document.getElementById('lb-'+a.id);
+      const lp=document.getElementById('lp-'+a.id);
+      if(lb){lb.style.width=a.load+'%';lb.className='load-fill'+(a.load>=80?' hot':a.load>=55?' warn':'');}
+      if(lp)lp.textContent=a.load+'%';
+    }
+  });
+  if(Math.random()<0.12){
+    simThreats=Math.min(simThreats+1,99);
+    document.getElementById('tb-threats').textContent=simThreats;
+    const mc=document.getElementById('mc-threats');
+    if(mc)mc.textContent=simThreats;
   }
-  AGENTS.forEach(a=>{a.load=Math.max(0,Math.min(100,a.load+(Math.random()-.5)*5));});
-  const avg=Math.round(AGENTS.reduce((s,a)=>s+a.load,0)/AGENTS.length);
-  const ai=document.getElementById('h-ai');
-  if(ai){ai.textContent=avg+'%';ai.className='hv'+(avg>80?' err':avg>60?' w':'');}
-  if(Math.random()<.022){
-    const msgs=[['New threat: cannabis monitor score 91','err'],['VIGILAX flagged government contract anomaly','w'],['GapScanner scan complete — 3 gaps found','ok'],['Review queue: new critical item added','err']];
-    const[m,t]=msgs[Math.floor(Math.random()*msgs.length)];toast(m,t);
-  }
+  if(curSection==='agents')drawNetwork();
 },2200);
 
-// ══ INIT ══════════════════════════════════════
-window.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(()=>{
-    counter(document.getElementById('m-co'),47,1200);
-    counter(document.getElementById('m-ag'),312,1600);
-    counter(document.getElementById('m-thr'),247,1400);
-    counter(document.getElementById('m-q'),18,1000);
-    counter(document.getElementById('m-fl'),47,1200);
-    setTimeout(()=>{
-      const f=document.getElementById('fl-fill');if(f)f.style.width='12%';
-    },400);
-  },300);
+// toast
+function toast(msg,type='ok'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='show'+(type==='warn'?' err':'');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3000);
+}
 
-  renderAQ();renderTF();renderAgents();renderThreats();renderQueue();renderRevTable();
-  setTimeout(()=>toast('Floor 1 Command Center — All systems operational','ok'),1000);
-});
+// boot
+initHome();initTower();initAgents();initRevenue();initThreats();initQueue();initSettings();
 </script>
