@@ -1,0 +1,44 @@
+name: Deploy AgentForge
+
+on:
+  push:
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
+    paths:
+      - 'agentforge-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone or init agentforge repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/agentforge.git /tmp/agentforge 2>/dev/null || {
+            mkdir -p /tmp/agentforge
+            cd /tmp/agentforge
+            git init -b main
+            git remote add origin https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/agentforge.git
+          }
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe and copy site files
+        run: |
+          find /tmp/agentforge -mindepth 1 -not -path '/tmp/agentforge/.git*' -delete 2>/dev/null || true
+          cp -r agentforge-site/. /tmp/agentforge/
+          touch /tmp/agentforge/.nojekyll
+          echo "Copied $(ls agentforge-site/*.html 2>/dev/null | wc -l) HTML files"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/agentforge
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Empire Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: agentforge @ ${{ github.sha }}" || echo "Nothing to commit"
+          git push origin main || git push --set-upstream origin main
+          echo "Live: franciscoderek7.github.io/agentforge"
