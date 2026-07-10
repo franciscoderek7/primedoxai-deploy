@@ -1,0 +1,1388 @@
+<title>Francisco Holdings Inc. — Floor 1 Command Center</title>
+<style>
+/* ══════════════════════════════════════════════════════
+   DESIGN TOKENS — Brutalist Command Center
+   Palette: Void / Sentinel Green / Empire Gold / Command Blue / Threat Red
+   ══════════════════════════════════════════════════════ */
+:root {
+  --void:        #020C14;
+  --hull:        #071828;
+  --bulkhead:    #0A1E30;
+  --glass:       rgba(7,24,40,0.85);
+  --border:      rgba(0,229,160,0.10);
+  --border-hi:   rgba(0,229,160,0.32);
+  --sentinel:    #00E5A0;
+  --sentinel-2:  #00B37D;
+  --sent-bg:     rgba(0,229,160,0.07);
+  --gold:        #C9A227;
+  --gold-hi:     #F5C842;
+  --gold-bg:     rgba(201,162,39,0.08);
+  --cmd:         #2196F3;
+  --cmd-bg:      rgba(33,150,243,0.08);
+  --threat:      #FF3D5E;
+  --threat-bg:   rgba(255,61,94,0.08);
+  --cannabis:    #FF6B35;
+  --canna-bg:    rgba(255,107,53,0.08);
+  --t1: #E4F0FF;
+  --t2: #7BA8C8;
+  --t3: #3A5A7A;
+  --t4: #152638;
+  --sidebar-w: 224px;
+  --top-h:     52px;
+  --r:         6px;
+  --r-lg:      10px;
+  --mono:      'Courier New', Courier, monospace;
+  --sans:      system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--void);
+  color: var(--t1);
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+/* Structural grid watermark */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,160,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,160,0.018) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── TOPBAR ─────────────────────────────────────────── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--top-h);
+  background: rgba(2,12,20,0.97);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 18px; gap: 14px;
+  z-index: 1000;
+  backdrop-filter: blur(14px);
+}
+
+.logo-block {
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.logo-block b { color: var(--sentinel); letter-spacing: 0.2em; }
+
+.vdiv { width: 1px; height: 28px; background: var(--border); flex-shrink: 0; }
+
+.status-strip {
+  display: flex; align-items: center; gap: 10px; flex: 1; overflow: hidden;
+}
+
+.spill {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 10px; color: var(--t2);
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--sentinel);
+  animation: blink 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.dot.gold  { background: var(--gold); }
+.dot.red   { background: var(--threat); animation-duration: 0.9s; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+.topbar-right {
+  display: flex; align-items: center; gap: 12px; margin-left: auto;
+}
+
+#live-clock {
+  font-family: var(--mono); font-size: 13px; color: var(--sentinel);
+  letter-spacing: 0.06em; min-width: 76px; text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bell {
+  position: relative; cursor: pointer; color: var(--t2);
+  font-size: 15px; transition: color .2s; user-select: none;
+}
+.bell:hover { color: var(--gold); }
+.bell-badge {
+  position: absolute; top: -5px; right: -6px;
+  background: var(--threat); color: #fff;
+  font-size: 8px; font-weight: 700; font-family: var(--mono);
+  width: 14px; height: 14px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  animation: blink .9s ease-in-out infinite;
+}
+
+.avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: linear-gradient(135deg, rgba(201,162,39,.15) 0%, var(--bulkhead) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--gold);
+  cursor: pointer; font-family: var(--mono);
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: var(--top-h); left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: rgba(7,24,40,0.98);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  z-index: 900; overflow: hidden;
+}
+
+.sb-label {
+  padding: 18px 15px 7px;
+  font: 8px/1 var(--mono);
+  letter-spacing: .20em; text-transform: uppercase; color: var(--t3);
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all .14s;
+  color: var(--t2); user-select: none;
+}
+.nav-item:hover { background: var(--sent-bg); color: var(--t1); border-left-color: rgba(0,229,160,.4); }
+.nav-item.active { background: var(--sent-bg); color: var(--sentinel); border-left-color: var(--sentinel); }
+
+.nav-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.nav-label { font-size: 12.5px; flex: 1; }
+
+.nbadge {
+  margin-left: auto; background: var(--threat-bg); color: var(--threat);
+  font-size: 9px; font-family: var(--mono); font-weight: 700;
+  padding: 1px 6px; border-radius: 10px; min-width: 20px; text-align: center;
+}
+.nbadge.g { background: var(--gold-bg); color: var(--gold); }
+
+.sb-floor-widget {
+  padding: 12px 15px; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.sb-floor-label { font: 8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--t3); margin-bottom:5px; }
+.sb-floor-num   { font: 700 28px/1 var(--mono); color: var(--gold); letter-spacing:-.02em; }
+.sb-floor-name  { font: 9px/1.3 var(--mono); color: var(--t3); margin-top:3px; }
+
+.sb-health {
+  padding: 12px 15px; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.health-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 3px 0; font: 10px/1.4 var(--mono); color: var(--t2);
+}
+.hv     { color: var(--sentinel); font-weight: 700; }
+.hv.w   { color: var(--gold); }
+.hv.err { color: var(--threat); }
+
+/* ── MAIN ─────────────────────────────────────────── */
+.main {
+  position: fixed;
+  top: var(--top-h); left: var(--sidebar-w);
+  right: 0; bottom: 0;
+  overflow-y: auto; overflow-x: hidden;
+  z-index: 1;
+}
+
+.main::-webkit-scrollbar { width: 4px; }
+.main::-webkit-scrollbar-track { background: transparent; }
+.main::-webkit-scrollbar-thumb { background: var(--t4); border-radius: 2px; }
+
+.section {
+  display: none; padding: 22px;
+  min-height: 100%;
+  animation: fade-up .22s ease;
+}
+.section.active { display: block; }
+
+@keyframes fade-up {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ── SHARED COMPONENTS ─────────────────────────────── */
+.eyebrow {
+  font: 8px/1 var(--mono);
+  letter-spacing:.22em; text-transform:uppercase; color:var(--sentinel);
+  margin-bottom: 5px;
+}
+.section-title {
+  font-size: 21px; font-weight: 600; color: var(--t1);
+  letter-spacing:-.02em; margin-bottom: 20px;
+}
+
+.card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--border-hi); }
+
+.card-hd {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-title { font: 9px/1 var(--mono); letter-spacing:.13em; text-transform:uppercase; color:var(--t2); }
+.card-body  { padding: 16px; }
+
+/* ── HOME — METRICS ─────────────────────────────────── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(6,1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media(max-width:1200px){.metrics-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:780px) {.metrics-grid{grid-template-columns:repeat(2,1fr);}}
+
+.mtile {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 16px;
+  position: relative; overflow: hidden;
+  transition: all .16s; cursor: default;
+}
+.mtile:hover { border-color: var(--border-hi); transform: translateY(-1px); }
+.mtile::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: var(--ta, var(--sentinel)); opacity:.65;
+}
+.mtile.g  { --ta: var(--gold); }
+.mtile.b  { --ta: var(--cmd); }
+.mtile.r  { --ta: var(--threat); }
+
+.mtile-label {
+  font: 8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase;
+  color: var(--t3); margin-bottom: 8px;
+}
+.mtile-val {
+  font: 700 28px/1 var(--mono); letter-spacing:-.02em;
+  color: var(--ta, var(--sentinel));
+  font-variant-numeric: tabular-nums;
+}
+.mtile-val.flicker { animation: flicker 4s ease-in-out infinite; }
+@keyframes flicker { 0%,94%,100%{opacity:1} 97%{opacity:.6} }
+
+.mtile-sub { font: 10px/1 var(--mono); color: var(--t3); margin-top: 6px; }
+
+.mtile-bar { margin-top: 10px; height: 2px; background: var(--t4); border-radius: 1px; overflow:hidden; }
+.mtile-bar-fill {
+  height: 100%; background: var(--ta, var(--sentinel)); border-radius: 1px;
+  box-shadow: 0 0 6px var(--ta, var(--sentinel));
+  transition: width 2s cubic-bezier(.22,.61,.36,1);
+}
+
+/* ── HOME — LOWER ─────────────────────────────────── */
+.home-lower {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+@media(max-width:780px){.home-lower{grid-template-columns:1fr;}}
+
+/* Agent quick */
+.aq-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; border-bottom: 1px solid var(--border);
+  transition: background .14s;
+}
+.aq-item:hover { background: var(--sent-bg); }
+.aq-item:last-child { border-bottom:none; }
+.aq-dot { width:7px;height:7px;border-radius:50%;flex-shrink:0;animation: blink 2s ease-in-out infinite; }
+.aq-dot.green  { background:var(--sentinel);box-shadow:0 0 7px var(--sentinel); }
+.aq-dot.gold   { background:var(--gold);box-shadow:0 0 7px var(--gold); }
+.aq-dot.dim    { background:var(--t3);box-shadow:none;animation:none; }
+.aq-name { font:11px/1 var(--mono); color:var(--t1); flex:1; }
+.aq-action { font:10px/1 var(--mono); color:var(--t3); max-width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.aq-load { font:10px/1 var(--mono); color:var(--sentinel); min-width:28px; text-align:right; }
+
+/* Threat feed */
+.threat-feed-scroll { max-height: 290px; overflow-y:auto; }
+.threat-feed-scroll::-webkit-scrollbar{width:3px;}
+.threat-feed-scroll::-webkit-scrollbar-thumb{background:var(--t4);border-radius:2px;}
+
+.tf-item {
+  display:flex; align-items:center; gap:8px;
+  padding: 8px 14px; border-bottom: 1px solid rgba(255,61,94,.06);
+  font: 10px/1.4 var(--mono); transition: background .14s;
+}
+.tf-item:hover { background: var(--threat-bg); }
+.tf-item.canna { background: var(--canna-bg); }
+
+.sev-badge {
+  font:700 8px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase;
+  padding: 2px 5px; border-radius: 3px; flex-shrink: 0; min-width: 48px; text-align:center;
+}
+.sev-c { background:var(--threat-bg); color:var(--threat); border:1px solid rgba(255,61,94,.25); }
+.sev-h { background:var(--canna-bg);  color:var(--cannabis); border:1px solid rgba(255,107,53,.25); }
+.sev-m { background:var(--gold-bg);   color:var(--gold); border:1px solid rgba(201,162,39,.25); }
+
+.tf-desc { flex:1; color:var(--t2); }
+.tf-time { color:var(--t3); font-size:9px; }
+
+/* ── TOWER ─────────────────────────────────────────── */
+.tower-wrap {
+  display:grid; grid-template-columns: 270px 1fr; gap:18px;
+  height: calc(100vh - var(--top-h) - 86px);
+}
+@media(max-width:900px){.tower-wrap{grid-template-columns:1fr;}}
+
+.building-card {
+  background:var(--glass); border:1px solid var(--border);
+  border-radius:var(--r-lg); display:flex; flex-direction:column; overflow:hidden;
+}
+
+.building-inner {
+  flex:1; display:flex; overflow:hidden;
+}
+
+.floors-col {
+  flex:1; overflow-y:auto; padding:6px 0;
+}
+.floors-col::-webkit-scrollbar{width:3px;}
+.floors-col::-webkit-scrollbar-thumb{background:var(--t4);border-radius:2px;}
+
+.floor-strip {
+  display:flex; align-items:center; gap:7px;
+  padding: 1.5px 8px; cursor:pointer;
+  transition: background .1s;
+}
+.floor-strip:hover { background: rgba(0,229,160,.05); }
+.floor-strip.sel   { background: rgba(0,229,160,.09); }
+.floor-strip.sel .f-bar { box-shadow: 0 0 6px currentColor; }
+
+.f-num { font:8px/1 var(--mono); color:var(--t3); width:26px; text-align:right; flex-shrink:0; }
+.f-bar { flex:1; height:7px; border-radius:2px; }
+.f-bar.live     { background:var(--sentinel); }
+.f-bar.building { background:var(--gold); }
+.f-bar.planned  { background:var(--cmd); opacity:.35; }
+.f-bar.empty    { background:var(--t4); }
+.f-name { font:8px/1 var(--mono); color:var(--t3); width:88px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* Elevator */
+.elev-shaft {
+  width: 22px; background: rgba(2,12,20,.7);
+  border-left: 1px solid var(--border); position:relative; overflow:hidden; flex-shrink:0;
+}
+.elev-track {
+  position:absolute; left:50%; top:6px; bottom:6px; width:1px;
+  background:var(--border); transform:translateX(-50%);
+}
+.elev-car {
+  position:absolute; left:3px; right:3px; height:12px;
+  background:var(--gold); border-radius:2px;
+  box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(201,162,39,.3);
+  transition: top .85s cubic-bezier(.45,.05,.55,.95);
+}
+
+/* Floor legend */
+.tower-legend {
+  display:flex; gap:14px; padding:10px 14px; border-top:1px solid var(--border);
+  flex-shrink:0;
+}
+.leg-item { display:flex; align-items:center; gap:5px; font:9px/1 var(--mono); color:var(--t2); }
+.leg-dot  { width:7px; height:7px; border-radius:2px; }
+
+/* Tower detail */
+.tower-detail { display:flex; flex-direction:column; gap:14px; }
+
+.floor-hero {
+  display:flex; align-items:center; gap:16px;
+  padding: 18px;
+}
+.floor-big-num {
+  font: 700 56px/1 var(--mono);
+  color: var(--gold);
+  letter-spacing:-.03em;
+  text-shadow: 0 0 30px rgba(201,162,39,.3);
+}
+.floor-meta-company { font-size:17px; font-weight:600; color:var(--t1); margin-bottom:6px; }
+.status-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  font: 700 9px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase;
+  padding: 3px 10px; border-radius: 20px;
+}
+.sp-live     { background:var(--sent-bg); color:var(--sentinel); border:1px solid rgba(0,229,160,.25); }
+.sp-building { background:var(--gold-bg); color:var(--gold);     border:1px solid rgba(201,162,39,.25); }
+.sp-planned  { background:var(--cmd-bg);  color:var(--cmd);      border:1px solid rgba(33,150,243,.25); }
+.sp-empty    { background:var(--t4);      color:var(--t3);       border:1px solid var(--border); }
+
+.floor-stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding: 0 18px 18px; }
+.fstat { background:rgba(7,24,40,.5); border:1px solid var(--border); border-radius:var(--r); padding:10px 12px; }
+.fstat-label { font:8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3); margin-bottom:5px; }
+.fstat-val   { font:700 18px/1 var(--mono); color:var(--t1); font-variant-numeric:tabular-nums; }
+
+/* ── AGENTS ─────────────────────────────────────────── */
+.agents-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+}
+@media(max-width:1100px){.agents-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px) {.agents-grid{grid-template-columns:1fr;}}
+
+.agent-card {
+  background:var(--glass); border:1px solid var(--border);
+  border-radius:var(--r-lg); overflow:hidden;
+  transition: all .2s; cursor:pointer;
+}
+.agent-card:hover { border-color:var(--border-hi); transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,229,160,.05); }
+
+.ac-top {
+  padding: 14px 16px; display:flex; align-items:flex-start; gap:10px;
+  border-bottom: 1px solid var(--border);
+}
+.ac-icon {
+  width:36px; height:36px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px; flex-shrink:0;
+}
+.ac-name { font:600 13px/1.2 var(--sans); color:var(--t1); margin-bottom:3px; }
+.ac-role { font:9px/1 var(--mono); text-transform:uppercase; letter-spacing:.10em; color:var(--t3); }
+
+.sbadge {
+  margin-left:auto; font:700 8px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase;
+  padding: 3px 7px; border-radius:20px; flex-shrink:0;
+}
+.sb-act  { background:var(--sent-bg); color:var(--sentinel); border:1px solid rgba(0,229,160,.3); }
+.sb-busy { background:var(--gold-bg); color:var(--gold);     border:1px solid rgba(201,162,39,.3); }
+.sb-idle { background:rgba(30,50,70,.4); color:var(--t3);    border:1px solid var(--border); }
+
+.ac-body { padding:12px 16px; }
+
+.load-row { display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+.load-lbl { font:8px/1 var(--mono); text-transform:uppercase; letter-spacing:.10em; color:var(--t3); width:26px; }
+.load-bar { flex:1; height:3px; background:var(--t4); border-radius:2px; overflow:hidden; }
+.load-fill {
+  height:100%; border-radius:2px; background:var(--sentinel);
+  box-shadow: 0 0 5px var(--sentinel);
+  transition: width 2.2s ease;
+}
+.load-fill.hi   { background:var(--gold);   box-shadow:0 0 5px var(--gold); }
+.load-fill.crit { background:var(--threat); box-shadow:0 0 5px var(--threat); }
+.load-pct { font:9px/1 var(--mono); color:var(--t2); min-width:28px; text-align:right; }
+
+.ac-last {
+  font:9px/1.4 var(--mono); color:var(--t3);
+  border-top:1px solid var(--border); padding-top:8px; margin-top:4px;
+}
+.ac-last span { color:var(--t2); }
+
+/* ── REVENUE ─────────────────────────────────────────── */
+.revenue-layout { display:grid; grid-template-columns:1fr 300px; gap:16px; }
+@media(max-width:900px){.revenue-layout{grid-template-columns:1fr;}}
+
+.target-bar-wrap {
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  background: var(--sent-bg); border: 1px solid rgba(0,229,160,.18); border-radius:var(--r);
+}
+.target-label { font:8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--sentinel); margin-bottom:8px; }
+.target-row   { display:flex; align-items:center; gap:10px; }
+.t-edge { font:9px/1 var(--mono); color:var(--t3); }
+.t-bar  { flex:1; height:5px; background:var(--t4); border-radius:3px; overflow:hidden; }
+.t-fill {
+  height:100%; background:var(--sentinel); border-radius:3px;
+  box-shadow:0 0 8px var(--sentinel);
+  width:0%; transition: width 2.5s cubic-bezier(.22,.61,.36,1);
+}
+.t-pct { font:700 12px/1 var(--mono); color:var(--sentinel); min-width:32px; text-align:right; }
+
+#revenue-canvas { width:100%; height:280px; display:block; }
+
+.rev-table { width:100%; border-collapse:collapse; font:11px/1.4 var(--mono); }
+.rev-table th {
+  padding: 7px 12px; text-align:left;
+  font:8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3);
+  border-bottom: 1px solid var(--border); background:rgba(7,24,40,.5);
+}
+.rev-table td { padding:8px 12px; border-bottom:1px solid rgba(0,229,160,.04); color:var(--t2); font-variant-numeric:tabular-nums; }
+.rev-table tr:hover td { background:var(--sent-bg); }
+.rev-amt { color:var(--sentinel); font-weight:700; }
+
+/* ── THREATS ─────────────────────────────────────────── */
+.threats-layout { display:grid; grid-template-columns:1fr 270px; gap:16px; }
+@media(max-width:900px){.threats-layout{grid-template-columns:1fr;}}
+
+.thr-table { width:100%; border-collapse:collapse; font:10px/1.4 var(--mono); }
+.thr-table th {
+  padding:8px 12px; text-align:left;
+  font:8px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3);
+  border-bottom:1px solid var(--border); background:rgba(7,24,40,.5);
+}
+.thr-table td { padding:9px 12px; border-bottom:1px solid rgba(255,61,94,.05); color:var(--t2); }
+.thr-table tr:hover td { background:var(--threat-bg); }
+.thr-table tr.canna td { border-left:2px solid var(--cannabis); }
+.thr-table tr.canna:hover td { background:var(--canna-bg); }
+
+.threat-big-panel { display:flex; flex-direction:column; }
+.threat-count-hero {
+  padding: 22px 18px; text-align:center; border-bottom:1px solid var(--border);
+}
+.thr-num {
+  font:700 60px/1 var(--mono); color:var(--threat);
+  text-shadow:0 0 30px rgba(255,61,94,.4);
+  animation: flicker 5s ease-in-out infinite;
+  font-variant-numeric:tabular-nums;
+}
+.thr-num-label { font:9px/1 var(--mono); letter-spacing:.20em; text-transform:uppercase; color:var(--t3); margin-top:5px; }
+
+.engine-bars { padding:14px 16px; border-bottom:1px solid var(--border); }
+.engine-bar-lbl { font:8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--t3); margin-bottom:10px; }
+.eng-row { margin-bottom:7px; }
+.eng-name-row { display:flex; justify-content:space-between; margin-bottom:3px; }
+.eng-name { font:8px/1 var(--mono); color:var(--t3); text-transform:uppercase; }
+.eng-count{ font:700 9px/1 var(--mono); }
+.eng-bar-bg { height:3px; background:var(--t4); border-radius:2px; overflow:hidden; }
+.eng-bar-fill { height:100%; border-radius:2px; }
+
+.escal-path { padding:14px 16px; }
+.escal-label { font:8px/1 var(--mono); letter-spacing:.15em; text-transform:uppercase; color:var(--t3); margin-bottom:10px; }
+.escal-row { display:flex; align-items:center; gap:4px; font:9px/1 var(--mono); flex-wrap:wrap; }
+.escal-step { padding:4px 8px; border-radius:4px; }
+.escal-arrow { color:var(--t4); }
+
+/* ── REVIEW QUEUE ─────────────────────────────────────── */
+.review-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:18px; }
+.rv-stat { background:var(--glass); border:1px solid var(--border); border-radius:var(--r); padding:12px 14px; text-align:center; }
+.rv-stat-num   { font:700 26px/1 var(--mono); font-variant-numeric:tabular-nums; }
+.rv-stat-label { font:9px/1 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--t3); margin-top:4px; }
+
+.queue-meta-bar {
+  font:8px/1 var(--mono); letter-spacing:.10em; text-transform:uppercase;
+  color:var(--t3); margin-bottom:10px;
+}
+
+.queue-list { display:flex; flex-direction:column; gap:7px; }
+
+.q-item {
+  background:var(--glass); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:11px 14px;
+  display:flex; align-items:center; gap:11px;
+  cursor:grab; transition:all .14s; user-select:none;
+}
+.q-item:hover { border-color:var(--border-hi); transform:translateX(2px); }
+.q-item.canna-q { border-color:rgba(255,107,53,.25); background:rgba(255,107,53,.03); }
+.q-item.dragging { opacity:.4; cursor:grabbing; }
+
+.q-handle { color:var(--t4); font-size:11px; cursor:grab; }
+
+.q-priority {
+  font:700 10px/1 var(--mono);
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.p1{background:var(--threat-bg);color:var(--threat);}
+.p2{background:var(--canna-bg);color:var(--cannabis);}
+.p3{background:var(--gold-bg);color:var(--gold);}
+.p4{background:var(--cmd-bg);color:var(--cmd);}
+
+.q-content { flex:1; min-width:0; }
+.q-title { font:500 12px/1.3 var(--sans); color:var(--t1); margin-bottom:2px; }
+.q-meta  { font:9px/1 var(--mono); color:var(--t3); }
+
+.canna-tag {
+  font:700 8px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase;
+  background:var(--canna-bg); color:var(--cannabis);
+  border:1px solid rgba(255,107,53,.3); padding:2px 7px; border-radius:3px; flex-shrink:0;
+}
+
+.q-actions { display:flex; gap:5px; }
+
+.btn {
+  font:700 9px/1 var(--mono); letter-spacing:.07em; text-transform:uppercase;
+  padding: 5px 9px; border-radius:3px; border:1px solid; cursor:pointer;
+  background:transparent; transition:all .14s;
+}
+.btn-ok  { color:var(--sentinel); border-color:rgba(0,229,160,.3); }
+.btn-ok:hover  { background:var(--sentinel); color:var(--void); }
+.btn-rev { color:var(--gold); border-color:rgba(201,162,39,.3); }
+.btn-rev:hover { background:var(--gold); color:var(--void); }
+.btn-esc { color:var(--threat); border-color:rgba(255,61,94,.3); }
+.btn-esc:hover { background:var(--threat); color:#fff; }
+
+/* ── SETTINGS ─────────────────────────────────────────── */
+.settings-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media(max-width:780px){.settings-grid{grid-template-columns:1fr;}}
+
+.s-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 9px 0; border-bottom:1px solid var(--border);
+  font:11px/1 var(--mono);
+}
+.s-row:last-child { border-bottom:none; }
+.s-key { color:var(--t2); }
+.s-val { color:var(--sentinel); }
+.s-val.dim { color:var(--t3); letter-spacing:.08em; }
+.s-val.w   { color:var(--gold); }
+
+/* ── TOAST ─────────────────────────────────────────── */
+.toast-wrap {
+  position:fixed; bottom:22px; right:22px;
+  display:flex; flex-direction:column; gap:7px; z-index:9999;
+  pointer-events:none;
+}
+.toast {
+  background:var(--bulkhead); border:1px solid var(--border-hi);
+  border-radius:var(--r); padding:10px 14px;
+  font:11px/1.4 var(--mono); color:var(--t1);
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  animation: toast-in .22s ease, toast-out .28s ease 2.7s forwards;
+  max-width:300px; pointer-events:auto;
+}
+.toast.ok  { border-color:rgba(0,229,160,.45); color:var(--sentinel); }
+.toast.w   { border-color:rgba(201,162,39,.45); color:var(--gold); }
+.toast.err { border-color:rgba(255,61,94,.45);  color:var(--threat); }
+
+@keyframes toast-in  { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
+@keyframes toast-out { from{opacity:1;transform:translateX(0)}     to{opacity:0;transform:translateX(16px)} }
+</style>
+
+<!-- ══ TOPBAR ══════════════════════════════════════════ -->
+<div class="topbar">
+  <div class="logo-block">
+    FRANCISCO HOLDINGS INC<br>
+    <b>FLOOR&nbsp;1 ·&nbsp;COMMAND CENTER</b>
+  </div>
+  <div class="vdiv"></div>
+  <div class="status-strip">
+    <div class="spill"><div class="dot"></div>API ONLINE</div>
+    <div class="spill"><div class="dot"></div>DB CONNECTED</div>
+    <div class="spill"><div class="dot gold"></div>18 PENDING REVIEWS</div>
+    <div class="spill"><div class="dot red"></div><span id="top-threat" style="color:var(--threat)">247</span>&nbsp;THREATS</div>
+  </div>
+  <div class="topbar-right">
+    <div id="live-clock">00:00:00</div>
+    <div class="vdiv"></div>
+    <div class="bell" onclick="toast('18 items await review','w')">&#9993;<div class="bell-badge">18</div></div>
+    <div class="avatar" title="Derek Francisco · CEO">DF</div>
+  </div>
+</div>
+
+<!-- ══ SIDEBAR ══════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sb-label">Empire</div>
+  <div class="nav-item active" onclick="go('home')" data-s="home"><div class="nav-icon">⬡</div><div class="nav-label">Command Center</div></div>
+  <div class="nav-item" onclick="go('tower')" data-s="tower"><div class="nav-icon">▤</div><div class="nav-label">392-Floor Tower</div></div>
+  <div class="nav-item" onclick="go('agents')" data-s="agents"><div class="nav-icon">◈</div><div class="nav-label">Agent Swarm</div></div>
+  <div class="nav-item" onclick="go('revenue')" data-s="revenue"><div class="nav-icon">◎</div><div class="nav-label">Revenue Tracker</div></div>
+  <div class="sb-label">Security</div>
+  <div class="nav-item" onclick="go('threats')" data-s="threats"><div class="nav-icon">◉</div><div class="nav-label">VIGILAX Threats</div><div class="nbadge" id="sb-threats">247</div></div>
+  <div class="nav-item" onclick="go('review')" data-s="review"><div class="nav-icon">◐</div><div class="nav-label">Review Queue</div><div class="nbadge g">18</div></div>
+  <div class="sb-label">System</div>
+  <div class="nav-item" onclick="go('settings')" data-s="settings"><div class="nav-icon">⊞</div><div class="nav-label">Settings</div></div>
+
+  <div class="sb-floor-widget">
+    <div class="sb-floor-label">Selected Floor</div>
+    <div class="sb-floor-num" id="sb-floor-num">—</div>
+    <div class="sb-floor-name" id="sb-floor-name">Select a floor</div>
+  </div>
+
+  <div class="sb-health">
+    <div class="sb-label" style="padding:0 0 8px">System Health</div>
+    <div class="health-row"><span>VIGILAX</span><span class="hv" id="h-api">ONLINE</span></div>
+    <div class="health-row"><span>DATABASE</span><span class="hv" id="h-db">CONNECTED</span></div>
+    <div class="health-row"><span>WEBSOCKET</span><span class="hv" id="h-ws">ACTIVE</span></div>
+    <div class="health-row"><span>AI LOAD</span><span class="hv w" id="h-ai">64%</span></div>
+    <div class="health-row"><span>AGENTS</span><span class="hv" id="h-ag">312</span></div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══════════════════════════════════════════ -->
+<main class="main">
+
+<!-- ── HOME ── -->
+<section class="section active" id="s-home">
+  <div class="eyebrow">Mission Control</div>
+  <div class="section-title">Empire Overview</div>
+
+  <div class="metrics-grid">
+    <div class="mtile g"><div class="mtile-label">Companies</div><div class="mtile-val" id="m-co">0</div><div class="mtile-sub">47 total entities</div></div>
+    <div class="mtile"><div class="mtile-label">AI Agents</div><div class="mtile-val" id="m-ag">0</div><div class="mtile-sub">Distributed swarm</div></div>
+    <div class="mtile b"><div class="mtile-label">Monthly Revenue</div><div class="mtile-val" id="m-rev" style="font-size:22px">$0</div><div class="mtile-sub">Target $100K</div><div class="mtile-bar"><div class="mtile-bar-fill" id="rev-fill" style="width:0%"></div></div></div>
+    <div class="mtile r"><div class="mtile-label">Active Threats</div><div class="mtile-val flicker" id="m-thr">0</div><div class="mtile-sub">VIGILAX Sentinel</div></div>
+    <div class="mtile g"><div class="mtile-label">Review Queue</div><div class="mtile-val" id="m-q">0</div><div class="mtile-sub">Awaiting decision</div></div>
+    <div class="mtile"><div class="mtile-label">Floors Occupied</div><div class="mtile-val" id="m-fl">0</div><div class="mtile-sub">Of 392 total</div><div class="mtile-bar"><div class="mtile-bar-fill" id="fl-fill" style="width:0%"></div></div></div>
+  </div>
+
+  <div class="home-lower">
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Agent Swarm — Live</span><span style="font:9px/1 var(--mono);color:var(--sentinel)">● ACTIVE</span></div>
+      <div id="aq-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Live Threat Feed</span><span style="font:9px/1 var(--mono);color:var(--threat)" id="tf-count">247 ACTIVE</span></div>
+      <div class="threat-feed-scroll" id="tf-home"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOWER ── -->
+<section class="section" id="s-tower">
+  <div class="eyebrow">Skyscraper Navigation</div>
+  <div class="section-title">Francisco Holdings Tower — 392 Floors</div>
+
+  <div class="tower-wrap">
+    <div class="building-card">
+      <div class="building-inner">
+        <div class="floors-col" id="floors-col"></div>
+        <div class="elev-shaft">
+          <div class="elev-track"></div>
+          <div class="elev-car" id="elev-car" style="top:95%"></div>
+        </div>
+      </div>
+      <div class="tower-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--sentinel)"></div>Live</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Building</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--cmd);opacity:.4"></div>Planned</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--t4)"></div>Empty</div>
+      </div>
+    </div>
+
+    <div class="tower-detail">
+      <div class="card">
+        <div class="floor-hero">
+          <div class="floor-big-num" id="d-num">—</div>
+          <div>
+            <div class="floor-meta-company" id="d-company">Select a floor</div>
+            <div style="margin-top:8px"><span class="status-pill sp-live" id="d-pill">● OPERATIONAL</span></div>
+          </div>
+        </div>
+        <div class="floor-stats-grid">
+          <div class="fstat"><div class="fstat-label">Industry</div><div class="fstat-val" id="d-ind" style="font-size:11px;color:var(--t1)">—</div></div>
+          <div class="fstat"><div class="fstat-label">Active Agents</div><div class="fstat-val" id="d-ag">—</div></div>
+          <div class="fstat"><div class="fstat-label">MRR</div><div class="fstat-val" id="d-mrr" style="color:var(--sentinel)">—</div></div>
+          <div class="fstat"><div class="fstat-label">Threat Score</div><div class="fstat-val" id="d-thr">—</div></div>
+          <div class="fstat"><div class="fstat-label">Status</div><div class="fstat-val" id="d-status" style="font-size:12px">—</div></div>
+          <div class="fstat"><div class="fstat-label">Floor Area</div><div class="fstat-val" id="d-area" style="font-size:12px">—</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd"><span class="card-title">Tower Stats</span></div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
+            <div>
+              <div style="font:8px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:5px">Live</div>
+              <div style="font:700 24px/1 var(--mono);color:var(--sentinel)">23</div>
+            </div>
+            <div>
+              <div style="font:8px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:5px">Building</div>
+              <div style="font:700 24px/1 var(--mono);color:var(--gold)">24</div>
+            </div>
+            <div>
+              <div style="font:8px/1 var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:5px">Planned</div>
+              <div style="font:700 24px/1 var(--mono);color:var(--cmd)">345</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── AGENTS ── -->
+<section class="section" id="s-agents">
+  <div class="eyebrow">AI Infrastructure</div>
+  <div class="section-title">Agent Swarm <span style="font-size:12px;color:var(--sentinel);font-family:var(--mono);font-weight:400">312 ACTIVE</span></div>
+  <div class="agents-grid" id="agents-grid"></div>
+</section>
+
+<!-- ── REVENUE ── -->
+<section class="section" id="s-revenue">
+  <div class="eyebrow">Financial Intelligence</div>
+  <div class="section-title">Revenue Tracker</div>
+  <div class="target-bar-wrap">
+    <div class="target-label">$100K / Month Target</div>
+    <div class="target-row">
+      <div class="t-edge">$0</div>
+      <div class="t-bar"><div class="t-fill" id="t-fill"></div></div>
+      <div class="t-edge">$100K</div>
+      <div class="t-pct">0%</div>
+    </div>
+  </div>
+  <div class="revenue-layout">
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Monthly Revenue by Company</span><span style="font:9px/1 var(--mono);color:var(--t3)">Jul 2026</span></div>
+      <div class="card-body" style="padding-top:10px"><canvas id="revenue-canvas"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Company Breakdown</span></div>
+      <div style="overflow-x:auto">
+        <table class="rev-table">
+          <thead><tr><th>Company</th><th>Tier</th><th>MRR</th></tr></thead>
+          <tbody id="rev-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── THREATS ── -->
+<section class="section" id="s-threats">
+  <div class="eyebrow">Bad Actor Detection</div>
+  <div class="section-title">VIGILAX — Active Threats</div>
+  <div class="threats-layout">
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Threat Registry</span><span style="font:9px/1 var(--mono);color:var(--threat)">● MONITORING</span></div>
+      <div style="overflow-x:auto">
+        <table class="thr-table">
+          <thead><tr><th>Severity</th><th>Engine</th><th>Target</th><th>Score</th><th>Time</th><th>Status</th></tr></thead>
+          <tbody id="thr-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card threat-big-panel">
+      <div class="threat-count-hero">
+        <div class="thr-num" id="thr-big">247</div>
+        <div class="thr-num-label">Active Threats</div>
+      </div>
+      <div class="engine-bars">
+        <div class="engine-bar-lbl">By Detection Engine</div>
+        <div id="eng-bars"></div>
+      </div>
+      <div class="escal-path">
+        <div class="escal-label">Escalation Path</div>
+        <div class="escal-row">
+          <span class="escal-step" style="background:var(--cmd-bg);color:var(--cmd)">AI</span>
+          <span class="escal-arrow">→</span>
+          <span class="escal-step" style="background:var(--gold-bg);color:var(--gold)">Human</span>
+          <span class="escal-arrow">→</span>
+          <span class="escal-step" style="background:var(--threat-bg);color:var(--threat)">Legal</span>
+          <span class="escal-arrow">→</span>
+          <span class="escal-step" style="background:var(--t4);color:var(--t2)">Authority</span>
+        </div>
+        <div style="margin-top:9px;font:8px/1.5 var(--mono);color:var(--t4)">REVIEW REQUIRED. No action without<br>human investigator sign-off.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REVIEW ── -->
+<section class="section" id="s-review">
+  <div class="eyebrow">Human-in-the-Loop</div>
+  <div class="section-title">Derek's Action Queue</div>
+  <div class="review-stats">
+    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--threat)">3</div><div class="rv-stat-label">Critical</div></div>
+    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--cannabis)">7</div><div class="rv-stat-label">High</div></div>
+    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--gold)">6</div><div class="rv-stat-label">Medium</div></div>
+    <div class="rv-stat"><div class="rv-stat-num" style="color:var(--cmd)">2</div><div class="rv-stat-label">Low</div></div>
+  </div>
+  <div class="queue-meta-bar">Drag to reprioritize · 🌿 Cannabis items flagged · All decisions logged</div>
+  <div class="queue-list" id="queue-list"></div>
+</section>
+
+<!-- ── SETTINGS ── -->
+<section class="section" id="s-settings">
+  <div class="eyebrow">System Configuration</div>
+  <div class="section-title">Environment & Connections</div>
+  <div class="settings-grid">
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Backend Connections</span></div>
+      <div class="card-body">
+        <div class="s-row"><span class="s-key">VIGILAX API</span><span class="s-val">● ONLINE :3002</span></div>
+        <div class="s-row"><span class="s-key">MAIN API</span><span class="s-val">● ONLINE :3001</span></div>
+        <div class="s-row"><span class="s-key">DATABASE</span><span class="s-val">● Supabase Free</span></div>
+        <div class="s-row"><span class="s-key">WEBSOCKET</span><span class="s-val">● ACTIVE</span></div>
+        <div class="s-row"><span class="s-key">EMAIL</span><span class="s-val">Gmail SMTP</span></div>
+        <div class="s-row"><span class="s-key">SLACK</span><span class="s-val">Webhook Active</span></div>
+        <div class="s-row"><span class="s-key">SMS</span><span class="s-val w">3× Email Fallback</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="card-title">API Keys</span></div>
+      <div class="card-body">
+        <div class="s-row"><span class="s-key">VIGILAX_API_KEY</span><span class="s-val dim">••••••••••••••••</span></div>
+        <div class="s-row"><span class="s-key">ADMIN_SECRET</span><span class="s-val dim">••••••••••••••••</span></div>
+        <div class="s-row"><span class="s-key">DATABASE_URL</span><span class="s-val dim">postgresql://••••</span></div>
+        <div class="s-row"><span class="s-key">SMTP_PASS</span><span class="s-val dim">••••••••••••••••</span></div>
+        <div class="s-row"><span class="s-key">SLACK_WEBHOOK</span><span class="s-val dim">hooks.slack.com/•</span></div>
+        <div class="s-row"><span class="s-key">NODE_ENV</span><span class="s-val">production</span></div>
+        <div class="s-row"><span class="s-key">PORT</span><span class="s-val">3002</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Keyboard Shortcuts</span></div>
+      <div class="card-body">
+        <div class="s-row"><span class="s-key">H</span><span class="s-val">Command Center</span></div>
+        <div class="s-row"><span class="s-key">2</span><span class="s-val">Tower View</span></div>
+        <div class="s-row"><span class="s-key">A</span><span class="s-val">Agent Swarm</span></div>
+        <div class="s-row"><span class="s-key">4</span><span class="s-val">Revenue</span></div>
+        <div class="s-row"><span class="s-key">5</span><span class="s-val">Threats</span></div>
+        <div class="s-row"><span class="s-key">6</span><span class="s-val">Review Queue</span></div>
+        <div class="s-row"><span class="s-key">7</span><span class="s-val">Settings</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Zero-Budget Stack</span></div>
+      <div class="card-body">
+        <div class="s-row"><span class="s-key">HOSTING</span><span class="s-val">Render.com Free</span></div>
+        <div class="s-row"><span class="s-key">DATABASE</span><span class="s-val">Supabase 500MB</span></div>
+        <div class="s-row"><span class="s-key">EMAIL</span><span class="s-val">Gmail SMTP</span></div>
+        <div class="s-row"><span class="s-key">DOMAIN</span><span class="s-val" style="font-size:9px">franciscoholdingsinc.com</span></div>
+        <div class="s-row"><span class="s-key">SSL</span><span class="s-val">Let's Encrypt</span></div>
+        <div class="s-row"><span class="s-key">MONTHLY COST</span><span class="s-val">$0.00</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Toast -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ══ DATA ══════════════════════════════════════════════
+const COMPANIES = [
+  {f:1,  name:'Francisco Holdings Inc.',  ind:'Holding Company',       st:'live',     ag:8,  mrr:0, tier:'Gov',   thr:12},
+  {f:2,  name:'VIGILAX Sentinel',         ind:'Fraud Detection',        st:'live',     ag:47, mrr:0, tier:'Pro',   thr:5},
+  {f:3,  name:'OmniGuard',                ind:'Cybersecurity',          st:'live',     ag:31, mrr:0, tier:'Pro',   thr:3},
+  {f:4,  name:'SoulStack',                ind:'AI Infrastructure',      st:'live',     ag:24, mrr:0, tier:'Pro',   thr:2},
+  {f:5,  name:'Kiaros',                   ind:'Strategy & AI',          st:'live',     ag:18, mrr:0, tier:'Basic', thr:1},
+  {f:6,  name:'PrimeDox AI',              ind:'AI Concierge',           st:'live',     ag:29, mrr:0, tier:'Pro',   thr:4},
+  {f:7,  name:'AgentForge',               ind:'Agent Marketplace',      st:'live',     ag:22, mrr:0, tier:'Pro',   thr:2},
+  {f:8,  name:'Doc Weedlaw',              ind:'Cannabis Legal Ed.',     st:'live',     ag:14, mrr:0, tier:'Basic', thr:8},
+  {f:9,  name:'CCLDR',                    ind:'Cannabis Law Directory', st:'live',     ag:12, mrr:0, tier:'Basic', thr:14},
+  {f:10, name:'GapScanner',               ind:'Market Intelligence',    st:'live',     ag:19, mrr:0, tier:'Pro',   thr:1},
+  {f:11, name:'Francisco Agent',          ind:'CEO AI Clone',           st:'live',     ag:35, mrr:0, tier:'Gov',   thr:0},
+  {f:12, name:'Gemma 31B Orchestrator',   ind:'AI Orchestration',       st:'live',     ag:53, mrr:0, tier:'Gov',   thr:0},
+  {f:13, name:'Empire Analytics',         ind:'Business Intelligence',  st:'building', ag:6,  mrr:0, tier:'Pro',   thr:0},
+  {f:14, name:'ContentForge',             ind:'Content AI',             st:'building', ag:4,  mrr:0, tier:'Basic', thr:0},
+  {f:15, name:'LeadEngine',               ind:'Sales Automation',       st:'building', ag:3,  mrr:0, tier:'Pro',   thr:0},
+  {f:16, name:'ReviewShield',             ind:'Review Management',      st:'building', ag:5,  mrr:0, tier:'Pro',   thr:0},
+  {f:17, name:'GrantFinder Pro',          ind:'Government Grants',      st:'building', ag:2,  mrr:0, tier:'Gov',   thr:0},
+  {f:18, name:'WeedMapper',               ind:'Cannabis Analytics',     st:'building', ag:3,  mrr:0, tier:'Basic', thr:6},
+  {f:19, name:'BidRadar',                 ind:'Procurement Intel.',     st:'building', ag:4,  mrr:0, tier:'Gov',   thr:0},
+  {f:20, name:'ClientBot',                ind:'Client Automation',      st:'building', ag:2,  mrr:0, tier:'Basic', thr:0},
+  {f:21, name:'Derek Holdings Media',     ind:'Media & Publishing',     st:'building', ag:3,  mrr:0, tier:'Basic', thr:0},
+  {f:22, name:'EvidenceVault',            ind:'Legal Tech',             st:'building', ag:5,  mrr:0, tier:'Gov',   thr:2},
+  {f:23, name:'ThreatMap',               ind:'Geospatial Security',    st:'building', ag:4,  mrr:0, tier:'Pro',   thr:1},
+];
+for(let i=24;i<=392;i++){
+  COMPANIES.push({f:i,name:i<=47?'Division '+i:'',ind:i<=47?'Planned':'',
+    st:i<=47?'planned':'empty',ag:0,mrr:0,tier:'—',thr:0});
+}
+
+const AGENTS=[
+  {id:'primedox',  name:'PrimeDox AI',         role:'Concierge / Orchestrator', icon:'🤖', st:'active', load:72, last:'Processing CEO briefing request'},
+  {id:'omniguard', name:'OmniGuard',            role:'Security Layer',           icon:'🛡️', st:'active', load:58, last:'Scanning 12 endpoints for anomalies'},
+  {id:'vigilax',   name:'VIGILAX Sentinel',     role:'Fraud Detection',          icon:'🔍', st:'busy',   load:91, last:'Processing 247 active threat signals'},
+  {id:'gemma',     name:'Gemma 31B',            role:'AI Orchestrator',          icon:'⬡',  st:'busy',   load:84, last:'Routing 18 tasks across agent swarm'},
+  {id:'docweed',   name:'Doc Weedlaw',          role:'Cannabis Legal Ed.',       icon:'⚖️', st:'active', load:34, last:'Generating Ontario compliance FAQ'},
+  {id:'francisco', name:'Francisco Agent',      role:"Derek's AI Clone",         icon:'👤', st:'idle',   load:8,  last:'Awaiting next directive from PrimeDox'},
+  {id:'gap',       name:'GapScanner',           role:'Market Intelligence',      icon:'◎',  st:'active', load:41, last:'Scanning 3 new industry URLs'},
+  {id:'evidence',  name:'EvidenceVault',        role:'Chain of Custody',         icon:'🔐', st:'active', load:22, last:'Packaging SHA256 evidence bundle'},
+  {id:'forge',     name:'AgentForge',           role:'Agent Marketplace',        icon:'⬢',  st:'busy',   load:67, last:'Processing 3 agent purchase requests'},
+];
+
+const THREATS=[
+  {sev:'CRITICAL',eng:'cannabis_monitor',tgt:'unlicensed-delivery.ca',sc:97,t:'2m ago',status:'ESCALATED',canna:true},
+  {sev:'CRITICAL',eng:'gov_fraud',tgt:'MuniContract-2024-18A',sc:94,t:'7m ago',status:'REVIEW',canna:false},
+  {sev:'CRITICAL',eng:'review_fraud',tgt:'GreenLeaf Dispensary',sc:92,t:'11m ago',status:'REVIEW',canna:true},
+  {sev:'HIGH',eng:'click_fraud',tgt:'Campaign CAD-4412',sc:87,t:'18m ago',status:'PENDING',canna:false},
+  {sev:'HIGH',eng:'ad_fraud',tgt:'weedexpress-on.xyz',sc:85,t:'23m ago',status:'PENDING',canna:true},
+  {sev:'HIGH',eng:'influencer_fraud',tgt:'@cannabisqueen_on',sc:82,t:'31m ago',status:'PENDING',canna:true},
+  {sev:'HIGH',eng:'gov_fraud',tgt:'Vendor-PSPC-2026-7',sc:81,t:'45m ago',status:'PENDING',canna:false},
+  {sev:'MEDIUM',eng:'review_fraud',tgt:'AcmePlumbing Toronto',sc:74,t:'1h ago',status:'MONITOR',canna:false},
+  {sev:'MEDIUM',eng:'click_fraud',tgt:'Campaign ADV-9921',sc:71,t:'1h 12m',status:'MONITOR',canna:false},
+  {sev:'MEDIUM',eng:'influencer_fraud',tgt:'@techreviewer_ca',sc:68,t:'1h 34m',status:'MONITOR',canna:false},
+];
+
+const ENGINES=[
+  {name:'cannabis_monitor',count:89,color:'#FF6B35'},
+  {name:'gov_fraud',count:61,color:'#FF3D5E'},
+  {name:'review_fraud',count:47,color:'#C9A227'},
+  {name:'click_fraud',count:31,color:'#2196F3'},
+  {name:'influencer_fraud',count:12,color:'#00E5A0'},
+  {name:'ad_fraud',count:7,color:'#7BA8C8'},
+];
+
+let QUEUE=[
+  {id:'q1',p:1,title:'CRITICAL: Unlicensed cannabis delivery service detected',meta:'cannabis_monitor · Score 97 · unlicensed-delivery.ca',canna:true},
+  {id:'q2',p:1,title:'CRITICAL: Suspected bid rigging — MuniContract-2024-18A',meta:'gov_fraud · Score 94 · 3 vendors implicated',canna:false},
+  {id:'q3',p:1,title:'CRITICAL: Cannabis dispensary fake review burst (47 in 2h)',meta:'review_fraud · Score 92 · GreenLeaf Dispensary',canna:true},
+  {id:'q4',p:2,title:'HIGH: Click fraud campaign — $12,400 ad spend affected',meta:'click_fraud · Score 87 · Campaign CAD-4412',canna:false},
+  {id:'q5',p:2,title:'HIGH: MFA domain serving cannabis ads without license',meta:'ad_fraud · Score 85 · weedexpress-on.xyz',canna:true},
+  {id:'q6',p:2,title:'HIGH: Influencer follower spike — 40K in 48h',meta:'influencer_fraud · Score 82 · @cannabisqueen_on',canna:true},
+  {id:'q7',p:2,title:'HIGH: Government vendor — sole source abuse pattern',meta:'gov_fraud · Score 81 · Vendor-PSPC-2026-7',canna:false},
+  {id:'q8',p:3,title:'MEDIUM: Review fraud — plumbing company manipulation',meta:'review_fraud · Score 74 · AcmePlumbing Toronto',canna:false},
+  {id:'q9',p:3,title:'MEDIUM: Sustained bot traffic — 3 days active',meta:'click_fraud · Score 71 · Campaign ADV-9921',canna:false},
+  {id:'q10',p:3,title:'MEDIUM: Influencer engagement ratio anomaly',meta:'influencer_fraud · Score 68 · @techreviewer_ca',canna:false},
+  {id:'q11',p:3,title:'MEDIUM: Review burst — restaurant chain (12 locations)',meta:'review_fraud · Score 66 · Multi-location',canna:false},
+  {id:'q12',p:3,title:'MEDIUM: Ad domain spoofing — finance sector',meta:'ad_fraud · Score 64 · 8 publisher domains',canna:false},
+  {id:'q13',p:4,title:'LOW: Engagement anomaly — minor influencer account',meta:'influencer_fraud · Score 51 · @micro_influencer',canna:false},
+  {id:'q14',p:4,title:'LOW: Expenditure clustering near $10K threshold',meta:'gov_fraud · Score 48 · Municipal vendor',canna:false},
+  {id:'q15',p:4,title:'MONITOR: Clickthrough rate slightly elevated',meta:'click_fraud · Score 42 · Continue observation',canna:false},
+  {id:'q16',p:4,title:'MONITOR: Review velocity marginally elevated',meta:'review_fraud · Score 39 · Continue observation',canna:false},
+  {id:'q17',p:4,title:'LOW: Minor TTR anomaly in reviews',meta:'review_fraud · Score 35 · Low confidence',canna:false},
+  {id:'q18',p:4,title:'MONITOR: Domain registered < 30 days — watch list',meta:'ad_fraud · Score 31 · newcannabissite.ca',canna:true},
+];
+
+// ══ NAVIGATION ══════════════════════════════════════
+function go(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const sec=document.getElementById('s-'+id);
+  if(sec)sec.classList.add('active');
+  const nav=document.querySelector('[data-s="'+id+'"]');
+  if(nav)nav.classList.add('active');
+  if(id==='revenue'){renderRevenueChart();setTimeout(()=>{const f=document.getElementById('t-fill');if(f)f.style.width='0%';},100);}
+  if(id==='tower'&&!towerReady){buildTower();towerReady=true;}
+}
+
+document.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;
+  const m={h:'home',H:'home','2':'tower',a:'agents',A:'agents','4':'revenue','5':'threats','6':'review','7':'settings'};
+  if(m[e.key])go(m[e.key]);
+});
+
+// ══ CLOCK ══════════════════════════════════════════
+function tick(){
+  const n=new Date();
+  document.getElementById('live-clock').textContent=
+    [n.getHours(),n.getMinutes(),n.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
+}
+tick();setInterval(tick,1000);
+
+// ══ COUNTERS ══════════════════════════════════════
+function counter(el,target,dur=1600,pre='',suf=''){
+  if(!el)return;
+  let v=0;const step=target/(dur/16);
+  const t=setInterval(()=>{
+    v=Math.min(v+step,target);
+    el.textContent=pre+Math.round(v).toLocaleString()+suf;
+    if(v>=target)clearInterval(t);
+  },16);
+}
+
+// ══ AGENT QUICK LIST ══════════════════════════════
+function renderAQ(){
+  const c=document.getElementById('aq-list');
+  if(!c)return;
+  c.innerHTML=AGENTS.map(a=>`
+    <div class="aq-item">
+      <div class="aq-dot ${a.st==='busy'?'gold':a.st==='idle'?'dim':'green'}"></div>
+      <div class="aq-name">${a.name}</div>
+      <div class="aq-action">${a.last}</div>
+      <div class="aq-load">${Math.round(a.load)}%</div>
+    </div>`).join('');
+}
+
+// ══ THREAT FEED ══════════════════════════════════
+function renderTF(){
+  const c=document.getElementById('tf-home');
+  if(!c)return;
+  c.innerHTML=THREATS.slice(0,8).map(t=>`
+    <div class="tf-item ${t.canna?'canna':''}">
+      <span class="sev-badge sev-${t.sev==='CRITICAL'?'c':t.sev==='HIGH'?'h':'m'}">${t.sev}</span>
+      <span class="tf-desc">${t.eng.replace(/_/g,' ')} — ${t.tgt}</span>
+      <span class="tf-time">${t.t}</span>
+    </div>`).join('');
+}
+
+// ══ AGENTS GRID ══════════════════════════════════
+function renderAgents(){
+  const c=document.getElementById('agents-grid');
+  if(!c)return;
+  c.innerHTML=AGENTS.map(a=>{
+    const lc=a.load>80?'crit':a.load>60?'hi':'';
+    const bc=a.st==='active'?'sb-act':a.st==='busy'?'sb-busy':'sb-idle';
+    const bl=a.st==='active'?'ACTIVE':a.st==='busy'?'BUSY':'IDLE';
+    return`<div class="agent-card" onclick="toast('${a.name}: ${a.last.replace(/'/g,"&#39;")}','${a.st==='busy'?'w':'ok'}')">
+      <div class="ac-top">
+        <div class="ac-icon" style="background:rgba(0,229,160,.08)">${a.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="ac-name">${a.name}</div>
+          <div class="ac-role">${a.role}</div>
+        </div>
+        <span class="sbadge ${bc}">${bl}</span>
+      </div>
+      <div class="ac-body">
+        <div class="load-row">
+          <div class="load-lbl">CPU</div>
+          <div class="load-bar"><div class="load-fill ${lc}" style="width:${a.load}%"></div></div>
+          <div class="load-pct">${Math.round(a.load)}%</div>
+        </div>
+        <div class="ac-last">Last: <span>${a.last}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══ REVENUE CHART ══════════════════════════════
+function renderRevenueChart(){
+  const canvas=document.getElementById('revenue-canvas');
+  if(!canvas)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth||700,H=280;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul'];
+  const PAD={t:28,r:24,b:36,l:56};
+  const cw=W-PAD.l-PAD.r,ch=H-PAD.t-PAD.b;
+  const MAX=100000;
+
+  // Grid lines
+  for(let i=0;i<=5;i++){
+    const y=PAD.t+(ch/5)*i;
+    ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(PAD.l+cw,y);
+    ctx.strokeStyle='rgba(0,229,160,0.06)';ctx.lineWidth=1;ctx.stroke();
+    const val=MAX-(MAX/5)*i;
+    ctx.fillStyle='#3A5A7A';ctx.font='8px Courier New';ctx.textAlign='right';
+    ctx.fillText('$'+(val>=1000?(val/1000).toFixed(0)+'K':val),PAD.l-5,y+3);
+  }
+
+  // X axis
+  months.forEach((m,i)=>{
+    const x=PAD.l+(cw/(months.length-1))*i;
+    ctx.fillStyle='#3A5A7A';ctx.font='8px Courier New';ctx.textAlign='center';
+    ctx.fillText(m,x,H-6);
+    ctx.beginPath();ctx.moveTo(x,PAD.t);ctx.lineTo(x,PAD.t+ch);
+    ctx.strokeStyle='rgba(0,229,160,0.03)';ctx.stroke();
+  });
+
+  // Target dashed line
+  ctx.setLineDash([4,4]);ctx.beginPath();
+  ctx.moveTo(PAD.l,PAD.t);ctx.lineTo(PAD.l+cw,PAD.t);
+  ctx.strokeStyle='rgba(0,229,160,0.22)';ctx.lineWidth=1;ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#00E5A0';ctx.font='8px Courier New';ctx.textAlign='left';
+  ctx.fillText('$100K TARGET',PAD.l+4,PAD.t-4);
+
+  // All zero series (current state)
+  const series=[
+    {label:'Francisco Holdings',color:'#C9A227',data:[0,0,0,0,0,0,0]},
+    {label:'VIGILAX',color:'#FF3D5E',data:[0,0,0,0,0,0,0]},
+    {label:'AgentForge',color:'#00E5A0',data:[0,0,0,0,0,0,0]},
+  ];
+
+  series.forEach(s=>{
+    ctx.beginPath();
+    s.data.forEach((v,i)=>{
+      const x=PAD.l+(cw/(months.length-1))*i;
+      const y=PAD.t+ch-(v/MAX)*ch;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.stroke();
+    s.data.forEach((v,i)=>{
+      const x=PAD.l+(cw/(months.length-1))*i;
+      const y=PAD.t+ch-(v/MAX)*ch;
+      ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=s.color;ctx.fill();
+    });
+  });
+
+  // Legend
+  series.forEach((s,i)=>{
+    const x=PAD.l+i*130;
+    ctx.beginPath();ctx.moveTo(x,18);ctx.lineTo(x+14,18);
+    ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#7BA8C8';ctx.font='8px Courier New';ctx.textAlign='left';
+    ctx.fillText(s.label,x+18,21);
+  });
+}
+
+function renderRevTable(){
+  const tb=document.getElementById('rev-tbody');
+  if(!tb)return;
+  tb.innerHTML=COMPANIES.filter(c=>c.name&&c.st==='live').map(c=>`
+    <tr><td>${c.name}</td><td style="color:var(--t3)">${c.tier}</td><td class="rev-amt">$${c.mrr.toLocaleString()}</td></tr>`).join('');
+}
+
+// ══ THREATS ══════════════════════════════════════
+function renderThreats(){
+  const tb=document.getElementById('thr-tbody');
+  if(!tb)return;
+  tb.innerHTML=THREATS.map(t=>`
+    <tr class="${t.canna?'canna':''}">
+      <td><span class="sev-badge sev-${t.sev==='CRITICAL'?'c':t.sev==='HIGH'?'h':'m'}">${t.sev}</span></td>
+      <td>${t.eng.replace(/_/g,' ')}</td>
+      <td style="color:var(--t1)">${t.tgt}</td>
+      <td style="font-weight:700;color:${t.sc>=90?'var(--threat)':t.sc>=75?'var(--cannabis)':'var(--gold)'}">${t.sc}</td>
+      <td>${t.t}</td>
+      <td style="font:8px/1 var(--mono);text-transform:uppercase;color:var(--t3)">${t.status}</td>
+    </tr>`).join('');
+
+  const eb=document.getElementById('eng-bars');
+  if(!eb)return;
+  const total=ENGINES.reduce((s,e)=>s+e.count,0);
+  eb.innerHTML=ENGINES.map(e=>`
+    <div class="eng-row">
+      <div class="eng-name-row">
+        <span class="eng-name">${e.name.replace(/_/g,' ')}</span>
+        <span class="eng-count" style="color:${e.color}">${e.count}</span>
+      </div>
+      <div class="eng-bar-bg">
+        <div class="eng-bar-fill" style="width:${Math.round(e.count/total*100)}%;background:${e.color}"></div>
+      </div>
+    </div>`).join('');
+}
+
+// ══ QUEUE ══════════════════════════════════════
+let dragSrc=null;
+
+function renderQueue(){
+  const c=document.getElementById('queue-list');
+  if(!c)return;
+  c.innerHTML=QUEUE.map(item=>`
+    <div class="q-item ${item.canna?'canna-q':''}"
+         id="qi-${item.id}" draggable="true"
+         ondragstart="dStart(event,'${item.id}')"
+         ondragover="dOver(event)"
+         ondrop="dDrop(event,'${item.id}')">
+      <div class="q-handle">⣿</div>
+      <div class="q-priority p${item.p}">${item.p}</div>
+      <div class="q-content">
+        <div class="q-title">${item.canna?'🌿 ':''}${item.title}</div>
+        <div class="q-meta">${item.meta}</div>
+      </div>
+      ${item.canna?'<span class="canna-tag">CANNABIS</span>':''}
+      <div class="q-actions">
+        <button class="btn btn-ok"  onclick="qAct('${item.id}','ok')">✓</button>
+        <button class="btn btn-rev" onclick="qAct('${item.id}','rev')">◉</button>
+        <button class="btn btn-esc" onclick="qAct('${item.id}','esc')">↑</button>
+      </div>
+    </div>`).join('');
+}
+
+function dStart(e,id){dragSrc=id;e.currentTarget.classList.add('dragging');}
+function dOver(e){e.preventDefault();}
+function dDrop(e,tid){
+  e.preventDefault();
+  if(!dragSrc||dragSrc===tid)return;
+  const si=QUEUE.findIndex(i=>i.id===dragSrc);
+  const ti=QUEUE.findIndex(i=>i.id===tid);
+  const [item]=QUEUE.splice(si,1);QUEUE.splice(ti,0,item);
+  document.querySelectorAll('.q-item').forEach(el=>el.classList.remove('dragging'));
+  dragSrc=null;renderQueue();toast('Queue reprioritized','ok');
+}
+function qAct(id,act){
+  const item=QUEUE.find(i=>i.id===id);if(!item)return;
+  const msgs={ok:`Approved: ${item.id.toUpperCase()}`,rev:`Flagged for review: ${item.id.toUpperCase()}`,esc:`ESCALATED to Legal: ${item.id.toUpperCase()}`};
+  const types={ok:'ok',rev:'w',esc:'err'};
+  toast(msgs[act],types[act]);
+  if(act==='ok'){QUEUE=QUEUE.filter(i=>i.id!==id);renderQueue();}
+}
+
+// ══ TOWER ══════════════════════════════════════
+let towerReady=false;
+
+function buildTower(){
+  const col=document.getElementById('floors-col');
+  if(!col)return;
+  const frag=document.createDocumentFragment();
+  for(let i=392;i>=1;i--){
+    const co=COMPANIES.find(c=>c.f===i);
+    const st=co?co.st:'empty',name=co?co.name:'';
+    const div=document.createElement('div');
+    div.className='floor-strip'+(i===1?' sel':'');
+    div.dataset.floor=i;
+    div.innerHTML=`<div class="f-num">${i}</div><div class="f-bar ${st}"></div><div class="f-name">${name}</div>`;
+    div.addEventListener('click',()=>pickFloor(i));
+    frag.appendChild(div);
+  }
+  col.appendChild(frag);
+  pickFloor(1);
+  setTimeout(()=>col.scrollTop=col.scrollHeight,80);
+}
+
+function pickFloor(n){
+  document.querySelectorAll('.floor-strip').forEach(s=>s.classList.toggle('sel',parseInt(s.dataset.floor)===n));
+  const car=document.getElementById('elev-car');
+  if(car){const pct=(392-n)/392;car.style.top=(pct*88+4)+'%';}
+  const co=COMPANIES.find(c=>c.f===n);
+  const ns=String(n).padStart(3,'0');
+  document.getElementById('d-num').textContent=ns;
+  document.getElementById('sb-floor-num').textContent=n;
+  if(co&&co.name){
+    document.getElementById('d-company').textContent=co.name;
+    document.getElementById('d-ind').textContent=co.ind||'—';
+    document.getElementById('d-ag').textContent=co.ag;
+    document.getElementById('d-mrr').textContent='$'+co.mrr.toLocaleString();
+    document.getElementById('d-thr').textContent=co.thr?co.thr+'/100':'—';
+    document.getElementById('d-area').textContent='4,800 ft²';
+    document.getElementById('d-status').textContent=co.st.toUpperCase();
+    const pill=document.getElementById('d-pill');
+    const cls={live:'sp-live',building:'sp-building',planned:'sp-planned',empty:'sp-empty'};
+    const txt={live:'● OPERATIONAL',building:'◐ BUILDING',planned:'○ PLANNED',empty:'— AVAILABLE'};
+    pill.className='status-pill '+(cls[co.st]||'sp-empty');
+    pill.textContent=txt[co.st]||'—';
+    document.getElementById('sb-floor-name').textContent=co.name;
+  } else {
+    document.getElementById('d-company').textContent='Unoccupied Floor';
+    document.getElementById('d-ind').textContent='—';
+    document.getElementById('d-ag').textContent='0';
+    document.getElementById('d-mrr').textContent='$0';
+    document.getElementById('d-thr').textContent='—';
+    document.getElementById('d-area').textContent='4,800 ft²';
+    document.getElementById('d-status').textContent='EMPTY';
+    const pill=document.getElementById('d-pill');
+    pill.className='status-pill sp-empty';pill.textContent='— AVAILABLE';
+    document.getElementById('sb-floor-name').textContent='Unoccupied';
+  }
+}
+
+// ══ TOAST ══════════════════════════════════════
+function toast(msg,type='ok'){
+  const w=document.getElementById('toast-wrap');
+  const t=document.createElement('div');
+  t.className='toast '+type;t.textContent=msg;
+  w.appendChild(t);setTimeout(()=>t.remove(),3200);
+}
+
+// ══ LIVE SIMULATION ══════════════════════════
+let thrCount=247;
+setInterval(()=>{
+  if(Math.random()<.18){
+    thrCount+=Math.floor(Math.random()*3);
+    ['top-threat','thr-big','sb-threats'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=thrCount;});
+    document.getElementById('tf-count').textContent=thrCount+' ACTIVE';
+  }
+  AGENTS.forEach(a=>{a.load=Math.max(0,Math.min(100,a.load+(Math.random()-.5)*5));});
+  const avg=Math.round(AGENTS.reduce((s,a)=>s+a.load,0)/AGENTS.length);
+  const ai=document.getElementById('h-ai');
+  if(ai){ai.textContent=avg+'%';ai.className='hv'+(avg>80?' err':avg>60?' w':'');}
+  if(Math.random()<.022){
+    const msgs=[['New threat: cannabis monitor score 91','err'],['VIGILAX flagged government contract anomaly','w'],['GapScanner scan complete — 3 gaps found','ok'],['Review queue: new critical item added','err']];
+    const[m,t]=msgs[Math.floor(Math.random()*msgs.length)];toast(m,t);
+  }
+},2200);
+
+// ══ INIT ══════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(()=>{
+    counter(document.getElementById('m-co'),47,1200);
+    counter(document.getElementById('m-ag'),312,1600);
+    counter(document.getElementById('m-thr'),247,1400);
+    counter(document.getElementById('m-q'),18,1000);
+    counter(document.getElementById('m-fl'),47,1200);
+    setTimeout(()=>{
+      const f=document.getElementById('fl-fill');if(f)f.style.width='12%';
+    },400);
+  },300);
+
+  renderAQ();renderTF();renderAgents();renderThreats();renderQueue();renderRevTable();
+  setTimeout(()=>toast('Floor 1 Command Center — All systems operational','ok'),1000);
+});
+</script>
