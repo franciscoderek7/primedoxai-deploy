@@ -1,0 +1,1523 @@
+{
+  "_meta": {
+    "version": "2.0",
+    "total_profiles": 110,
+    "last_updated": "2026-07-10",
+    "maintained_by": "VIGILAX Sentinel — Francisco Holdings Inc.",
+    "usage": "Loaded at startup. Thresholds drive per-engine anomaly detection. fraud_risk_level: LOW | MEDIUM | HIGH | CRITICAL"
+  },
+  "profiles": [
+    {
+      "id": "ecommerce_general",
+      "group": "Retail & Commerce",
+      "name": "E-Commerce (General)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["review_bombing", "fake_reviews", "click_fraud", "ad_fraud", "chargeback_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 8, "ip_cluster_max": 15, "ctr_max": 0.08, "ctr_min": 0.001, "conversion_rate_max": 0.30 },
+        "review_fraud": { "burst_window_hours": 24, "burst_pct_warn": 15, "burst_pct_alert": 25, "jaccard_dupe_threshold": 0.65, "min_ttr": 0.40, "rating_imbalance_threshold": 0.70 },
+        "influencer_fraud": { "engagement_drop_pct": 40, "follower_growth_spike_pct": 25 },
+        "ad_fraud": { "ivt_pct_warn": 5, "ivt_pct_alert": 15, "datacenter_pct_max": 10 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "FTC (US)", "ASA (UK)"],
+      "notes": "High review fraud risk. Seasonal click spikes (BFCM) expected."
+    },
+    {
+      "id": "ecommerce_luxury",
+      "group": "Retail & Commerce",
+      "name": "E-Commerce (Luxury Goods)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["counterfeit_listings", "fake_reviews", "identity_fraud", "ad_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 2, "bot_ua_pct_alert": 6, "ctr_max": 0.06, "conversion_rate_max": 0.10 },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20, "jaccard_dupe_threshold": 0.60 },
+        "ad_fraud": { "ivt_pct_warn": 3, "ivt_pct_alert": 10 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "FTC (US)", "EUIPO"],
+      "notes": "High-value targets for fake review manipulation and brand impersonation."
+    },
+    {
+      "id": "ecommerce_dropship",
+      "group": "Retail & Commerce",
+      "name": "E-Commerce (Dropshipping)",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["fake_reviews", "astroturfing", "ad_fraud", "scam_products"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18, "jaccard_dupe_threshold": 0.55, "min_ttr": 0.35 },
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12, "ctr_max": 0.12 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "FTC (US)", "Consumer Protection BC"],
+      "notes": "Extremely high fake review prevalence. Low review counts are easily manipulated."
+    },
+    {
+      "id": "cannabis_licensed",
+      "group": "Cannabis & Regulated Substances",
+      "name": "Cannabis (Licensed Retailer)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["unlicensed_sales", "illicit_delivery", "review_fraud", "black_market_signals"],
+      "thresholds": {
+        "cannabis_monitor": {
+          "illicit_keyword_score_warn": 30,
+          "illicit_keyword_score_alert": 60,
+          "no_license_displayed_alert": true,
+          "delivery_claims_without_license_alert": true,
+          "price_below_market_warn": 0.30
+        },
+        "review_fraud": { "burst_pct_warn": 20, "burst_pct_alert": 35 }
+      },
+      "regulatory_bodies": ["Health Canada", "AGCO (Ontario)", "BCLDB (BC)", "AGLC (Alberta)"],
+      "notes": "Public signals ONLY. Cross-reference Health Canada license registry. Never access private accounts.",
+      "public_signals_only": true
+    },
+    {
+      "id": "cannabis_unlicensed",
+      "group": "Cannabis & Regulated Substances",
+      "name": "Cannabis (Suspected Unlicensed)",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["illegal_sales", "delivery_without_license", "black_market_pricing", "no_age_verification"],
+      "thresholds": {
+        "cannabis_monitor": {
+          "illicit_keyword_score_warn": 20,
+          "illicit_keyword_score_alert": 40,
+          "no_license_displayed_alert": true,
+          "price_below_market_warn": 0.40,
+          "bulk_quantity_offers_alert": true,
+          "mail_order_claims_alert": true
+        }
+      },
+      "regulatory_bodies": ["Health Canada", "RCMP", "Provincial police"],
+      "reporting_channels": ["cannabis@canada.ca", "cannabis@agco.ca", "1-800-387-0020 (Crime Stoppers)"],
+      "notes": "PUBLIC signals ONLY. NEVER access private data. Always requires human review.",
+      "public_signals_only": true,
+      "always_human_review": true
+    },
+    {
+      "id": "advertising_agency",
+      "group": "Advertising & Marketing",
+      "name": "Advertising Agency",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["click_fraud", "ad_fraud", "influencer_fraud", "fake_metrics"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 7, "ctr_max": 0.10, "ip_cluster_max": 20 },
+        "ad_fraud": { "ivt_pct_warn": 8, "ivt_pct_alert": 20, "mfa_domain_pct_warn": 5 },
+        "influencer_fraud": { "engagement_drop_pct": 35, "follower_growth_spike_pct": 20 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "ASA (UK)", "IAB Canada"],
+      "notes": "IVT thresholds follow MRC standards. MFA domain detection applies."
+    },
+    {
+      "id": "digital_marketing",
+      "group": "Advertising & Marketing",
+      "name": "Digital Marketing (SMB)",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["click_fraud", "fake_reviews", "inflated_metrics"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12, "ctr_max": 0.08 },
+        "review_fraud": { "burst_pct_warn": 20, "burst_pct_alert": 35 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "SMBs often have lower traffic volumes, raising false positive risk. Adjust z-score windows."
+    },
+    {
+      "id": "influencer_marketing",
+      "group": "Advertising & Marketing",
+      "name": "Influencer Marketing",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["follower_fraud", "engagement_fraud", "fake_influencers", "pod_activity"],
+      "thresholds": {
+        "influencer_fraud": {
+          "nano_er_min": 1.5, "nano_er_max": 9.0,
+          "micro_er_min": 1.5, "micro_er_max": 6.0,
+          "mid_er_min": 1.0,  "mid_er_max": 4.5,
+          "macro_er_min": 0.8, "macro_er_max": 3.0,
+          "mega_er_min": 0.5,  "mega_er_max": 2.0,
+          "follower_growth_spike_pct": 15,
+          "engagement_drop_pct": 40,
+          "pod_engagement_pct": 30
+        }
+      },
+      "regulatory_bodies": ["FTC (US)", "Competition Bureau Canada", "CAD (Canada Advertising)"],
+      "notes": "Engagement rate anomaly is primary signal. Pod detection critical for mid-tier."
+    },
+    {
+      "id": "programmatic_advertising",
+      "group": "Advertising & Marketing",
+      "name": "Programmatic Advertising",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["ad_fraud", "domain_spoofing", "pixel_stuffing", "ad_stacking", "ivt"],
+      "thresholds": {
+        "ad_fraud": {
+          "ivt_pct_warn": 5, "ivt_pct_alert": 15,
+          "datacenter_pct_max": 8,
+          "mfa_domain_pct_warn": 3,
+          "viewability_min": 0.50,
+          "zero_scroll_pct_max": 15
+        }
+      },
+      "regulatory_bodies": ["IAB Canada", "MRC", "TAG (Trustworthy Accountability Group)"],
+      "notes": "Highest IVT exposure of any category. Domain spoofing and ad stacking are primary attack vectors."
+    },
+    {
+      "id": "government_federal",
+      "group": "Government & Public Sector",
+      "name": "Federal Government (Canada)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "vendor_concentration", "threshold_splitting", "kickbacks"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 5,
+          "single_bidder_pct_warn": 25,
+          "single_bidder_pct_alert": 40,
+          "vendor_concentration_pct_warn": 30,
+          "vendor_concentration_pct_alert": 45,
+          "threshold_amounts": [5000, 10000, 25000, 50000, 100000, 250000],
+          "threshold_cluster_pct_warn": 10,
+          "round_number_pct_max": 25,
+          "weekend_spending_pct_max": 15
+        }
+      },
+      "regulatory_bodies": ["Office of the Auditor General of Canada", "PSPC", "Competition Bureau Canada", "RCMP"],
+      "notes": "PSPC open data is primary source. Bid rotation CV < 0.2 among repeat winners is key signal."
+    },
+    {
+      "id": "government_provincial",
+      "group": "Government & Public Sector",
+      "name": "Provincial Government",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "sole_source_abuse", "vendor_concentration", "invoice_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 5,
+          "single_bidder_pct_warn": 30,
+          "single_bidder_pct_alert": 45,
+          "vendor_concentration_pct_warn": 35,
+          "vendor_concentration_pct_alert": 50,
+          "threshold_amounts": [5000, 10000, 25000, 100000],
+          "round_number_pct_max": 30
+        }
+      },
+      "regulatory_bodies": ["Provincial Auditor General", "Ministry of Finance", "Provincial Police"],
+      "notes": "Threshold amounts vary by province. Ontario: $100k MERX threshold."
+    },
+    {
+      "id": "government_municipal",
+      "group": "Government & Public Sector",
+      "name": "Municipal Government",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["bid_rigging", "vendor_favoritism", "phantom_contracts", "expense_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "single_bidder_pct_warn": 35,
+          "vendor_concentration_pct_warn": 40,
+          "threshold_amounts": [5000, 10000, 25000],
+          "weekend_spending_pct_max": 20
+        }
+      },
+      "regulatory_bodies": ["Municipal Auditor", "Ontario Ombudsman", "Provincial Police"],
+      "notes": "Smaller procurement volumes require adjusted z-score windows (longer baseline)."
+    },
+    {
+      "id": "healthcare_private",
+      "group": "Healthcare",
+      "name": "Healthcare (Private Clinic)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "misleading_claims", "paid_reviews", "competitor_attacks"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20, "jaccard_dupe_threshold": 0.60, "min_ttr": 0.42 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["College of Physicians and Surgeons", "Competition Bureau Canada", "OPC"],
+      "notes": "Misleading health claims are a regulatory violation beyond fraud. Flag for separate review."
+    },
+    {
+      "id": "healthcare_public",
+      "group": "Healthcare",
+      "name": "Healthcare (Public / Hospital)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["procurement_fraud", "vendor_concentration", "bid_rigging", "expense_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "vendor_concentration_pct_warn": 30,
+          "vendor_concentration_pct_alert": 45,
+          "single_bidder_pct_warn": 25,
+          "threshold_amounts": [10000, 25000, 100000]
+        }
+      },
+      "regulatory_bodies": ["Ministry of Health", "OAG", "OHIP Audit Branch"],
+      "notes": "PPE procurement is highest-risk category post-2020. Prioritize vendor concentration analysis."
+    },
+    {
+      "id": "healthcare_dental",
+      "group": "Healthcare",
+      "name": "Dental Practice",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "paid_reviews", "competitor_review_bombing"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22, "jaccard_dupe_threshold": 0.62 }
+      },
+      "regulatory_bodies": ["Royal College of Dental Surgeons", "Competition Bureau Canada"],
+      "notes": "Review fraud is primary concern. Competitors often use negative bombing tactics."
+    },
+    {
+      "id": "financial_services",
+      "group": "Financial Services",
+      "name": "Financial Services (General)",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["fake_reviews", "misleading_ads", "click_fraud", "identity_fraud", "pump_dump"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 2, "bot_ua_pct_alert": 5, "ctr_max": 0.05 },
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15, "min_ttr": 0.45 },
+        "ad_fraud": { "ivt_pct_warn": 3, "ivt_pct_alert": 8 }
+      },
+      "regulatory_bodies": ["OSFI", "FINTRAC", "AMF (Quebec)", "FSRA (Ontario)"],
+      "notes": "Financial advertising is highly regulated. False performance claims are primary concern."
+    },
+    {
+      "id": "fintech_lending",
+      "group": "Financial Services",
+      "name": "Fintech / Online Lending",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["fake_reviews", "misleading_rate_claims", "astroturfing", "lead_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15, "jaccard_dupe_threshold": 0.58 },
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 7, "ctr_max": 0.04 }
+      },
+      "regulatory_bodies": ["FCAC", "FSRA (Ontario)", "AMF (Quebec)", "Competition Bureau Canada"],
+      "notes": "APR disclosure fraud is regulatory-level. Coordinate with legal on flagged cases."
+    },
+    {
+      "id": "crypto_exchange",
+      "group": "Financial Services",
+      "name": "Cryptocurrency Exchange",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["wash_trading", "fake_volume", "review_fraud", "pump_dump", "influencer_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 5, "burst_pct_alert": 12, "jaccard_dupe_threshold": 0.55 },
+        "influencer_fraud": { "engagement_drop_pct": 30, "follower_growth_spike_pct": 10 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 10 }
+      },
+      "regulatory_bodies": ["FINTRAC", "CSA (Canadian Securities Administrators)", "OSC"],
+      "notes": "Pump-and-dump is coordinated with influencer fraud. Run both engines simultaneously."
+    },
+    {
+      "id": "insurance",
+      "group": "Financial Services",
+      "name": "Insurance",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "misleading_coverage_claims", "click_fraud", "lead_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 8, "ctr_max": 0.06 },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["OSFI", "FSRA (Ontario)", "AMF (Quebec)", "IBC"],
+      "notes": "Lead fraud (fake inquiries) is distinct from click fraud. Track conversion-to-quote ratio."
+    },
+    {
+      "id": "real_estate",
+      "group": "Real Estate",
+      "name": "Real Estate (Residential)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "phantom_listings", "bait_switch", "mortgage_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20, "jaccard_dupe_threshold": 0.60 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["RECO (Ontario)", "BCFSA (BC)", "OACIQ (Quebec)", "Competition Bureau Canada"],
+      "notes": "Phantom listings inflate agent metrics. Verify listing authenticity through public MLS."
+    },
+    {
+      "id": "real_estate_commercial",
+      "group": "Real Estate",
+      "name": "Real Estate (Commercial)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "vendor_concentration", "phantom_contracts", "inflated_valuations"],
+      "thresholds": {
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "single_bidder_pct_warn": 30 },
+        "review_fraud": { "burst_pct_warn": 12 }
+      },
+      "regulatory_bodies": ["RECO (Ontario)", "Competition Bureau Canada", "CMHC"],
+      "notes": "Commercial procurement often overlaps with gov fraud patterns. Run both engines."
+    },
+    {
+      "id": "legal_services",
+      "group": "Professional Services",
+      "name": "Legal Services / Law Firm",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "astroturfing", "misleading_success_rates"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18, "min_ttr": 0.45 }
+      },
+      "regulatory_bodies": ["Law Society of Ontario", "Federation of Law Societies", "Competition Bureau Canada"],
+      "notes": "Testimonial claims are regulated by law society advertising rules."
+    },
+    {
+      "id": "accounting",
+      "group": "Professional Services",
+      "name": "Accounting / Tax Services",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "misleading_refund_claims", "identity_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["CPA Canada", "Competition Bureau Canada", "CRA"],
+      "notes": "Tax refund guarantee claims are specifically prohibited. Flag for separate analysis."
+    },
+    {
+      "id": "consulting",
+      "group": "Professional Services",
+      "name": "Consulting (Business / IT)",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "credential_fraud", "misleading_results_claims"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 15, "burst_pct_alert": 25 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 35 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "Government IT consulting contracts are high-risk for sole-source abuse."
+    },
+    {
+      "id": "recruitment_hr",
+      "group": "Professional Services",
+      "name": "Recruitment / HR",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "ghost_jobs", "resume_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 15 },
+        "click_fraud": { "bot_ua_pct_warn": 5, "ctr_max": 0.06 }
+      },
+      "regulatory_bodies": ["OHSA", "Competition Bureau Canada"],
+      "notes": "Ghost job postings waste applicant time — track apply-to-response rate anomalies."
+    },
+    {
+      "id": "restaurant_food",
+      "group": "Hospitality & Food",
+      "name": "Restaurant / Food Service",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "review_bombing", "competitor_attacks", "astroturfing"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 15, "burst_pct_alert": 28, "jaccard_dupe_threshold": 0.65, "min_ttr": 0.38 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "Provincial Consumer Protection"],
+      "notes": "Most review-intensive category. Competitive review bombing is extremely common."
+    },
+    {
+      "id": "hotel_hospitality",
+      "group": "Hospitality & Food",
+      "name": "Hotel / Hospitality",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "review_fraud", "click_fraud", "fake_bookings"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22, "jaccard_dupe_threshold": 0.62 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "OTA watchdogs"],
+      "notes": "Review platforms (TripAdvisor, Booking.com) have own fraud detection — supplement, not replace."
+    },
+    {
+      "id": "food_delivery",
+      "group": "Hospitality & Food",
+      "name": "Food Delivery Platform",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "ghost_kitchens", "order_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "click_fraud": { "bot_ua_pct_warn": 5, "ctr_max": 0.07 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "Ghost kitchen review manipulation is a known fraud vector on Uber Eats / DoorDash."
+    },
+    {
+      "id": "software_saas",
+      "group": "Technology",
+      "name": "Software / SaaS",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "click_fraud", "ad_fraud", "astroturfing"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 8, "ctr_max": 0.06 },
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 20 },
+        "ad_fraud": { "ivt_pct_warn": 5, "ivt_pct_alert": 12 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "G2/Capterra/Trustpilot reviews are primary manipulation targets in SaaS."
+    },
+    {
+      "id": "cybersecurity",
+      "group": "Technology",
+      "name": "Cybersecurity",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "misleading_claims", "astroturfing", "vendor_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 },
+        "click_fraud": { "bot_ua_pct_warn": 2, "bot_ua_pct_alert": 5 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "CSE (Communications Security Establishment)"],
+      "notes": "Efficacy claim fraud ('stops 100% of threats') is a primary competition concern."
+    },
+    {
+      "id": "ai_ml_tech",
+      "group": "Technology",
+      "name": "AI / Machine Learning",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "benchmark_fraud", "astroturfing", "misleading_capability_claims"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "OPC (Privacy)", "ISED Canada"],
+      "notes": "AI benchmark manipulation (cherry-picked tests) is not yet regulated but is a fraud signal."
+    },
+    {
+      "id": "app_development",
+      "group": "Technology",
+      "name": "Mobile App / App Store",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "rating_manipulation", "install_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15, "jaccard_dupe_threshold": 0.60 },
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12, "ctr_max": 0.10 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "App install fraud often correlates with click fraud. Run both engines simultaneously."
+    },
+    {
+      "id": "gaming",
+      "group": "Technology",
+      "name": "Gaming / Online Games",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "bot_activity", "click_fraud", "influencer_fraud", "loot_box_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 8, "bot_ua_pct_alert": 20, "ctr_max": 0.12 },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20 },
+        "influencer_fraud": { "engagement_drop_pct": 30, "follower_growth_spike_pct": 20 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "ESRB"],
+      "notes": "Gaming has the highest bot traffic ratio of any category. Adjust thresholds upward."
+    },
+    {
+      "id": "telecom",
+      "group": "Technology",
+      "name": "Telecommunications",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "misleading_coverage_claims", "click_fraud", "lead_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 7 },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["CRTC", "CCTS", "Competition Bureau Canada"],
+      "notes": "Coverage map misrepresentation is a known CRTC concern. Flag for separate analysis."
+    },
+    {
+      "id": "education_private",
+      "group": "Education",
+      "name": "Private Education / Tutoring",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "misleading_outcome_claims", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["Ministry of Education (provincial)", "Competition Bureau Canada"],
+      "notes": "Employment outcome claims ('90% job placement') are a primary misleading advertising concern."
+    },
+    {
+      "id": "education_online",
+      "group": "Education",
+      "name": "Online Education / EdTech",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "astroturfing", "certificate_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20, "jaccard_dupe_threshold": 0.60 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 8 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "PTIB (BC)", "BSID (Ontario)"],
+      "notes": "Udemy/Coursera review manipulation is widespread. Accreditation fraud is separate concern."
+    },
+    {
+      "id": "post_secondary",
+      "group": "Education",
+      "name": "Post-Secondary Institution",
+      "fraud_risk_level": "LOW",
+      "common_fraud_patterns": ["procurement_fraud", "credential_fraud", "fake_reviews"],
+      "thresholds": {
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "threshold_amounts": [10000, 25000, 100000] },
+        "review_fraud": { "burst_pct_warn": 15 }
+      },
+      "regulatory_bodies": ["Ministry of Advanced Education", "Auditor General"],
+      "notes": "Procurement fraud in capital projects and IT contracts is primary concern."
+    },
+    {
+      "id": "construction",
+      "group": "Trades & Construction",
+      "name": "Construction",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "vendor_concentration", "fake_reviews", "subcontractor_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 5,
+          "single_bidder_pct_warn": 25,
+          "vendor_concentration_pct_warn": 35,
+          "threshold_amounts": [10000, 25000, 100000, 250000]
+        },
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["Ontario College of Trades", "Competition Bureau Canada", "OAG"],
+      "notes": "Construction is the highest-risk sector for bid rigging cartels. Cover bidding is endemic."
+    },
+    {
+      "id": "trades_electrical",
+      "group": "Trades & Construction",
+      "name": "Electrical Contractor",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "bid_rigging", "unlicensed_work_claims"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "gov_fraud": { "cover_bid_spread_pct": 5, "single_bidder_pct_warn": 30 }
+      },
+      "regulatory_bodies": ["ESA (Ontario)", "Electrical Safety Authority"],
+      "notes": "License verification is critical — unlicensed contractor claims are a public safety issue."
+    },
+    {
+      "id": "trades_plumbing",
+      "group": "Trades & Construction",
+      "name": "Plumbing",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "emergency_price_gouging", "bid_rigging"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["Ontario College of Trades", "TSSA"],
+      "notes": "Emergency service fake reviews are a known tactic to exploit urgent consumer need."
+    },
+    {
+      "id": "trades_hvac",
+      "group": "Trades & Construction",
+      "name": "HVAC",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "price_gouging", "misleading_efficiency_claims"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["TSSA", "Ontario College of Trades", "Competition Bureau Canada"],
+      "notes": "Rebate and energy efficiency claim fraud is common in HVAC advertising."
+    },
+    {
+      "id": "automotive_dealer",
+      "group": "Automotive",
+      "name": "Automotive Dealership",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "bait_switch_pricing", "odometer_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18, "jaccard_dupe_threshold": 0.60 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["OMVIC (Ontario)", "VSA (BC)", "Competition Bureau Canada"],
+      "notes": "All-in pricing regulations (Competition Act 2024 amendments) apply to advertised prices."
+    },
+    {
+      "id": "automotive_repair",
+      "group": "Automotive",
+      "name": "Automotive Repair",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "unnecessary_repairs", "misleading_estimates"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["OMVIC (Ontario)", "Consumer Protection Ontario", "BBB"],
+      "notes": "Repair shop review manipulation often targets Google Maps specifically."
+    },
+    {
+      "id": "energy_utilities",
+      "group": "Energy & Utilities",
+      "name": "Energy / Utilities",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["procurement_fraud", "bid_rigging", "misleading_rate_claims", "door_to_door_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "vendor_concentration_pct_warn": 30,
+          "threshold_amounts": [25000, 100000, 250000],
+          "cover_bid_spread_pct": 5
+        },
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 7 }
+      },
+      "regulatory_bodies": ["OEB (Ontario)", "AESO (Alberta)", "BCUC", "NEB", "OAG"],
+      "notes": "Energy contract door-to-door fraud is a known consumer protection issue in Ontario."
+    },
+    {
+      "id": "mining_resources",
+      "group": "Energy & Utilities",
+      "name": "Mining & Natural Resources",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["procurement_fraud", "environmental_claim_fraud", "stock_manipulation"],
+      "thresholds": {
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "threshold_amounts": [100000, 250000] }
+      },
+      "regulatory_bodies": ["Natural Resources Canada", "OAG", "OSC (Securities)", "Mining Act"],
+      "notes": "Junior mining company stock promotion fraud overlaps with influencer fraud patterns."
+    },
+    {
+      "id": "pharma_opioids",
+      "group": "Pharmaceuticals",
+      "name": "Pharmaceuticals (Controlled Substances)",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["illegal_online_sales", "fake_prescriptions", "misleading_claims", "diversion"],
+      "thresholds": {
+        "cannabis_monitor": {
+          "illicit_keyword_score_warn": 15,
+          "illicit_keyword_score_alert": 30,
+          "no_license_displayed_alert": true
+        },
+        "review_fraud": { "burst_pct_warn": 5, "burst_pct_alert": 10 }
+      },
+      "regulatory_bodies": ["Health Canada", "DPIC", "RCMP Drug Section", "DEA (for US cross-border)"],
+      "notes": "Online illegal pharmacy detection uses cannabis monitor patterns adapted for pharma context.",
+      "public_signals_only": true,
+      "always_human_review": true
+    },
+    {
+      "id": "pharma_otc",
+      "group": "Pharmaceuticals",
+      "name": "Pharmaceuticals (OTC / Supplements)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["misleading_health_claims", "fake_reviews", "astroturfing", "influencer_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15, "jaccard_dupe_threshold": 0.58 },
+        "influencer_fraud": { "engagement_drop_pct": 35, "follower_growth_spike_pct": 20 }
+      },
+      "regulatory_bodies": ["Health Canada", "Competition Bureau Canada", "DSHEA (US)"],
+      "notes": "Health claim fraud ('cures cancer') is a criminal offence in Canada. Always escalate to legal."
+    },
+    {
+      "id": "beauty_cosmetics",
+      "group": "Consumer Products",
+      "name": "Beauty / Cosmetics",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "influencer_fraud", "astroturfing", "misleading_before_after"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18, "jaccard_dupe_threshold": 0.62 },
+        "influencer_fraud": { "engagement_drop_pct": 40, "follower_growth_spike_pct": 25 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "FTC (US)", "ASA (UK)"],
+      "notes": "Before/after photo manipulation is a key fraud signal alongside review fraud."
+    },
+    {
+      "id": "fashion_apparel",
+      "group": "Consumer Products",
+      "name": "Fashion / Apparel",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "counterfeit_signals", "influencer_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "influencer_fraud": { "engagement_drop_pct": 40 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "CBSA (counterfeit)"],
+      "notes": "Fast fashion dropship review fraud mirrors ecommerce_dropship patterns."
+    },
+    {
+      "id": "fitness_wellness",
+      "group": "Health & Wellness",
+      "name": "Fitness / Gym",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "misleading_transformation_claims", "hidden_fees"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["Consumer Protection Ontario", "Competition Bureau Canada"],
+      "notes": "Gym contract cancellation fraud is a Consumer Protection Act concern alongside review fraud."
+    },
+    {
+      "id": "weight_loss",
+      "group": "Health & Wellness",
+      "name": "Weight Loss / Diet Products",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["fake_reviews", "misleading_health_claims", "influencer_fraud", "subscription_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 6, "burst_pct_alert": 12, "jaccard_dupe_threshold": 0.55 },
+        "influencer_fraud": { "engagement_drop_pct": 30, "follower_growth_spike_pct": 15 }
+      },
+      "regulatory_bodies": ["Health Canada", "Competition Bureau Canada", "FTC (US)"],
+      "notes": "Highest misleading claim prevalence of any consumer product category. Always escalate."
+    },
+    {
+      "id": "mental_health",
+      "group": "Health & Wellness",
+      "name": "Mental Health Services",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "misleading_outcome_claims", "unlicensed_practice"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18, "min_ttr": 0.45 }
+      },
+      "regulatory_bodies": ["CRPO (Ontario)", "CPSBC (BC)", "CRPQ (Quebec)", "Competition Bureau Canada"],
+      "notes": "Unlicensed practice claims are a public safety issue beyond fraud. Always escalate."
+    },
+    {
+      "id": "travel_tourism",
+      "group": "Travel & Leisure",
+      "name": "Travel / Tourism",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "phantom_listings", "bait_switch", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20, "jaccard_dupe_threshold": 0.62 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["TICO (Ontario)", "Competition Bureau Canada", "CTA (Canadian Transportation Agency)"],
+      "notes": "Airline and hotel review fraud peaks during booking windows. Monitor seasonally."
+    },
+    {
+      "id": "vacation_rental",
+      "group": "Travel & Leisure",
+      "name": "Vacation Rental (Airbnb/VRBO)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "phantom_listings", "bait_switch_properties"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15, "jaccard_dupe_threshold": 0.60 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "Municipal bylaws"],
+      "notes": "Phantom listing fraud is primary concern. Cross-check listing images for reuse across profiles."
+    },
+    {
+      "id": "event_entertainment",
+      "group": "Travel & Leisure",
+      "name": "Events & Entertainment",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["ticket_fraud", "fake_reviews", "click_fraud", "counterfeit_tickets"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12, "ctr_max": 0.10 },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20 }
+      },
+      "regulatory_bodies": ["Ticket Sales Act (Ontario)", "Competition Bureau Canada"],
+      "notes": "Scalper bots inflate click traffic massively during sale windows. Temporal analysis critical."
+    },
+    {
+      "id": "sports_betting",
+      "group": "Travel & Leisure",
+      "name": "Sports Betting / Online Gaming",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["fake_reviews", "misleading_odds", "bonus_abuse", "click_fraud", "influencer_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12 },
+        "review_fraud": { "burst_pct_warn": 6, "burst_pct_alert": 12 },
+        "influencer_fraud": { "engagement_drop_pct": 30 }
+      },
+      "regulatory_bodies": ["iGO (iGaming Ontario)", "AGCO", "KAHNAWAKE Gaming Commission"],
+      "notes": "iGaming Ontario regulates all legal operators. Unlicensed operators are primary fraud target."
+    },
+    {
+      "id": "nonprofit",
+      "group": "Non-Profit & Charity",
+      "name": "Non-Profit / Charity",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["donation_fraud", "fake_charities", "procurement_fraud", "expense_fraud"],
+      "thresholds": {
+        "gov_fraud": { "vendor_concentration_pct_warn": 40, "threshold_amounts": [10000, 25000, 100000] },
+        "review_fraud": { "burst_pct_warn": 15 }
+      },
+      "regulatory_bodies": ["CRA Charities Directorate", "OAG", "Ministry of Finance"],
+      "notes": "Fake charity solicitations spike after natural disasters. Seasonal monitoring recommended."
+    },
+    {
+      "id": "political",
+      "group": "Non-Profit & Charity",
+      "name": "Political Organization",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["astroturfing", "fake_reviews", "influencer_fraud", "coordinated_inauthentic_behavior"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 5, "burst_pct_alert": 10 },
+        "influencer_fraud": { "engagement_drop_pct": 25, "follower_growth_spike_pct": 10 }
+      },
+      "regulatory_bodies": ["Elections Canada", "Provincial Elections Offices", "Elections Act"],
+      "notes": "Political astroturfing is regulated under the Canada Elections Act. Always legal referral.",
+      "always_human_review": true
+    },
+    {
+      "id": "media_publishing",
+      "group": "Media & Entertainment",
+      "name": "Media / Publishing",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "click_fraud", "ad_fraud", "bot_traffic"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12, "ctr_max": 0.05 },
+        "ad_fraud": { "ivt_pct_warn": 8, "ivt_pct_alert": 20, "mfa_domain_pct_warn": 5 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "CMPA (Canadian Media Producers)"],
+      "notes": "News site ad fraud (MFA patterns) is primary concern for publishers monetizing via programmatic."
+    },
+    {
+      "id": "social_media_platform",
+      "group": "Media & Entertainment",
+      "name": "Social Media Platform",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["bot_accounts", "fake_reviews", "coordinated_inauthentic_behavior", "influencer_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 8, "bot_ua_pct_alert": 20 },
+        "influencer_fraud": { "engagement_drop_pct": 25, "follower_growth_spike_pct": 10 }
+      },
+      "regulatory_bodies": ["CRTC", "Competition Bureau Canada", "OPC (Privacy)"],
+      "notes": "Platform-level fraud detection is out of scope for VIGILAX. Focus on entities using platforms."
+    },
+    {
+      "id": "streaming",
+      "group": "Media & Entertainment",
+      "name": "Streaming Service",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "click_fraud", "subscription_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["CRTC", "Competition Bureau Canada"],
+      "notes": "Content rating manipulation (IMDB/RT scores) is a known fraud vector alongside ad fraud."
+    },
+    {
+      "id": "agriculture",
+      "group": "Agriculture & Food Production",
+      "name": "Agriculture",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["procurement_fraud", "subsidy_fraud", "misleading_organic_claims"],
+      "thresholds": {
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "threshold_amounts": [25000, 100000] }
+      },
+      "regulatory_bodies": ["CFIA", "AAFC", "OAG", "Competition Bureau Canada"],
+      "notes": "Organic certification fraud and agri-food subsidy fraud are primary concerns."
+    },
+    {
+      "id": "food_manufacturing",
+      "group": "Agriculture & Food Production",
+      "name": "Food Manufacturing",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["misleading_label_claims", "procurement_fraud", "fake_reviews"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 35 }
+      },
+      "regulatory_bodies": ["CFIA", "Health Canada", "Competition Bureau Canada"],
+      "notes": "Allergen and nutrition label fraud is a public health concern beyond competition law."
+    },
+    {
+      "id": "logistics_shipping",
+      "group": "Logistics & Supply Chain",
+      "name": "Logistics / Shipping",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["procurement_fraud", "fake_reviews", "package_fraud", "address_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "threshold_amounts": [25000, 100000] }
+      },
+      "regulatory_bodies": ["CTA (Canadian Transportation Agency)", "Competition Bureau Canada"],
+      "notes": "Government logistics contracts are high-risk for single-vendor concentration."
+    },
+    {
+      "id": "supply_chain",
+      "group": "Logistics & Supply Chain",
+      "name": "Supply Chain / Procurement",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "vendor_concentration", "kickbacks", "phantom_invoices"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 5,
+          "single_bidder_pct_warn": 25,
+          "vendor_concentration_pct_warn": 30,
+          "threshold_amounts": [10000, 25000, 100000, 250000],
+          "round_number_pct_max": 25
+        }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "RCMP", "OAG"],
+      "notes": "Phantom invoice detection requires cross-referencing vendor lists against delivery records."
+    },
+    {
+      "id": "aerospace_defense",
+      "group": "Government & Public Sector",
+      "name": "Aerospace & Defense (Government)",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["bid_rigging", "cost_padding", "sole_source_abuse", "kickbacks"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 3,
+          "single_bidder_pct_warn": 20,
+          "vendor_concentration_pct_warn": 25,
+          "threshold_amounts": [100000, 250000, 1000000],
+          "round_number_pct_max": 20
+        }
+      },
+      "regulatory_bodies": ["DND / PWGSC", "OAG", "RCMP", "DFO"],
+      "notes": "Defense procurement is highest-value per-contract. Single-vendor flags are critical.",
+      "always_human_review": true
+    },
+    {
+      "id": "infrastructure",
+      "group": "Government & Public Sector",
+      "name": "Infrastructure (Roads, Bridges, Transit)",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["bid_rigging", "cartel_behavior", "cost_inflation", "subcontractor_kickbacks"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 5,
+          "single_bidder_pct_warn": 20,
+          "vendor_concentration_pct_warn": 30,
+          "threshold_amounts": [100000, 250000, 1000000],
+          "bid_rotation_cv_threshold": 0.20
+        }
+      },
+      "regulatory_bodies": ["Infrastructure Ontario", "TTC (transit)", "OAG", "Competition Bureau Canada"],
+      "notes": "Bid rotation cartels are well-documented in Canadian road construction. CV < 0.2 is key.",
+      "always_human_review": true
+    },
+    {
+      "id": "staffing_agency",
+      "group": "Professional Services",
+      "name": "Staffing / Temp Agency",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["resume_fraud", "fake_reviews", "worker_misclassification", "ghost_employees"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 40 }
+      },
+      "regulatory_bodies": ["ESDC", "OHSA", "Competition Bureau Canada"],
+      "notes": "Government staffing contracts are high-risk for vendor concentration and ghost employees."
+    },
+    {
+      "id": "printing_publishing",
+      "group": "Media & Entertainment",
+      "name": "Printing / Publishing",
+      "fraud_risk_level": "LOW",
+      "common_fraud_patterns": ["fake_reviews", "plagiarism", "bid_rigging"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 15 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 40 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "Government printing contracts can exhibit bid rigging. Low overall risk."
+    },
+    {
+      "id": "cleaning_services",
+      "group": "Trades & Construction",
+      "name": "Cleaning Services",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "bid_rigging", "unlicensed_workers"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 15, "burst_pct_alert": 28 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 40, "threshold_amounts": [10000, 25000] }
+      },
+      "regulatory_bodies": ["ESA (Ontario)", "Competition Bureau Canada"],
+      "notes": "Government facility cleaning contracts are common bid-rigging targets."
+    },
+    {
+      "id": "security_guarding",
+      "group": "Professional Services",
+      "name": "Security Guarding",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "fake_reviews", "license_fraud", "vendor_concentration"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20 },
+        "gov_fraud": {
+          "vendor_concentration_pct_warn": 35,
+          "single_bidder_pct_warn": 25,
+          "threshold_amounts": [25000, 100000]
+        }
+      },
+      "regulatory_bodies": ["MCSCS (Ontario)", "PSA (BC)", "Competition Bureau Canada"],
+      "notes": "Security license fraud creates public safety risk. Always cross-reference provincial license registry."
+    },
+    {
+      "id": "insurance_brokerage",
+      "group": "Financial Services",
+      "name": "Insurance Brokerage",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "misleading_coverage_claims", "premium_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 },
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 7 }
+      },
+      "regulatory_bodies": ["FSRA (Ontario)", "AMF (Quebec)", "RIBO (Ontario brokers)"],
+      "notes": "Misleading premium quotes in digital ads are a primary FSRA concern."
+    },
+    {
+      "id": "mortgage_broker",
+      "group": "Financial Services",
+      "name": "Mortgage Broker",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "misleading_rate_claims", "income_fraud", "appraisal_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15 },
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 7 }
+      },
+      "regulatory_bodies": ["FSRA (Ontario)", "BCFSA (BC)", "AMF (Quebec)", "OSFI"],
+      "notes": "Rate guarantee claims are regulated. Income inflation in applications is out of VIGILAX scope."
+    },
+    {
+      "id": "investment_advisor",
+      "group": "Financial Services",
+      "name": "Investment Advisor",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["misleading_return_claims", "fake_reviews", "pump_dump", "ponzi_signals"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 5, "burst_pct_alert": 10, "min_ttr": 0.50 },
+        "click_fraud": { "bot_ua_pct_warn": 2, "bot_ua_pct_alert": 5 }
+      },
+      "regulatory_bodies": ["CIRO (formerly IIROC)", "CSA", "OSC", "AMF (Quebec)", "BCSC"],
+      "notes": "Return guarantee claims are securities fraud. Always legal referral when flagged.",
+      "always_human_review": true
+    },
+    {
+      "id": "payday_lending",
+      "group": "Financial Services",
+      "name": "Payday Lending",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["fee_disclosure_fraud", "fake_reviews", "misleading_apr_claims", "predatory_targeting"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 6, "burst_pct_alert": 12, "jaccard_dupe_threshold": 0.55 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["FSRA (Ontario)", "Consumer Protection BC", "Criminal Code s.347 (criminal interest rate)"],
+      "notes": "2396% APR cap under Ontario Payday Loans Act. Any implied exception is a criminal matter.",
+      "always_human_review": true
+    },
+    {
+      "id": "mlm_network_marketing",
+      "group": "Consumer Products",
+      "name": "MLM / Network Marketing",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["pyramid_scheme_signals", "fake_reviews", "income_claim_fraud", "influencer_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 5, "burst_pct_alert": 10, "jaccard_dupe_threshold": 0.55 },
+        "influencer_fraud": { "engagement_drop_pct": 25, "follower_growth_spike_pct": 15 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada (Competition Act s.55)", "FTC (US)"],
+      "notes": "Pyramid scheme detection is Competition Act criminal. Income claims without disclosure are prohibited.",
+      "always_human_review": true
+    },
+    {
+      "id": "franchise",
+      "group": "Retail & Commerce",
+      "name": "Franchise",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "misleading_disclosure", "fee_fraud", "territory_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "Arthur Wishart Act (Ontario)", "RIBA (Quebec)"],
+      "notes": "Franchise disclosure document fraud is distinct from review fraud. Flag for legal review."
+    },
+    {
+      "id": "home_improvement",
+      "group": "Trades & Construction",
+      "name": "Home Improvement",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "deposit_fraud", "unlicensed_contractors", "price_gouging"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22, "jaccard_dupe_threshold": 0.62 }
+      },
+      "regulatory_bodies": ["Consumer Protection Ontario (Ontario New Home Warranties Plan Act)", "Better Business Bureau"],
+      "notes": "Deposit fraud (paid, no work done) is a consumer protection crime under CPA 2002."
+    },
+    {
+      "id": "moving_storage",
+      "group": "Logistics & Supply Chain",
+      "name": "Moving & Storage",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "hostage_cargo_fraud", "price_gouging", "bait_switch"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22, "jaccard_dupe_threshold": 0.60 }
+      },
+      "regulatory_bodies": ["CTA (interprovincial)", "Consumer Protection Ontario"],
+      "notes": "Hostage cargo fraud (holding goods for inflated payment) is criminal. Always legal referral."
+    },
+    {
+      "id": "wedding_events",
+      "group": "Hospitality & Food",
+      "name": "Wedding / Event Planning",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "deposit_fraud", "bait_switch", "phantom_vendors"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20 }
+      },
+      "regulatory_bodies": ["Consumer Protection Ontario", "Competition Bureau Canada"],
+      "notes": "Vendor ghost accounts (venue, photographer, caterer) use cross-referencing review tactics."
+    },
+    {
+      "id": "pet_services",
+      "group": "Consumer Services",
+      "name": "Pet Services",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "puppy_mill_listings", "bait_switch_puppies"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["Animal Pedigree Act", "Consumer Protection Ontario", "OSPCA"],
+      "notes": "Puppy mill fraud listing detection uses review and photo duplication signals."
+    },
+    {
+      "id": "veterinary",
+      "group": "Healthcare",
+      "name": "Veterinary Services",
+      "fraud_risk_level": "LOW",
+      "common_fraud_patterns": ["fake_reviews", "misleading_price_claims"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["CVBC (BC)", "CVOA (Ontario)", "Competition Bureau Canada"],
+      "notes": "Low risk. Review fraud is the primary concern."
+    },
+    {
+      "id": "childcare",
+      "group": "Consumer Services",
+      "name": "Childcare / Daycare",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "license_misrepresentation", "capacity_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["Ministry of Education (Ontario)", "Child Care and Early Years Act"],
+      "notes": "License and ratio misrepresentation is a public safety matter. Cross-reference provincial registry."
+    },
+    {
+      "id": "elder_care",
+      "group": "Healthcare",
+      "name": "Elder Care / Long-Term Care",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["procurement_fraud", "fake_reviews", "billing_fraud", "staffing_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "threshold_amounts": [25000, 100000] }
+      },
+      "regulatory_bodies": ["Ministry of Long-Term Care (Ontario)", "OAG", "MOHLTC"],
+      "notes": "Elder care procurement fraud is high-priority post-COVID. Billing fraud requires MOHLTC referral."
+    },
+    {
+      "id": "pr_communications",
+      "group": "Advertising & Marketing",
+      "name": "PR / Communications",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["astroturfing", "fake_reviews", "fake_press_release_syndication", "sock_puppet_accounts"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15, "jaccard_dupe_threshold": 0.60 },
+        "influencer_fraud": { "engagement_drop_pct": 35 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "PRSA Code of Ethics (self-regulatory)"],
+      "notes": "Sock puppet and astroturfing campaigns are difficult to distinguish from organic. Human review required.",
+      "always_human_review": true
+    },
+    {
+      "id": "seo_agency",
+      "group": "Advertising & Marketing",
+      "name": "SEO Agency",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["fake_reviews", "click_fraud", "link_schemes", "fake_metrics"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12, "ctr_max": 0.10 },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 20 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "Click fraud to artificially improve CTR metrics for clients is a documented SEO fraud tactic."
+    },
+    {
+      "id": "affiliate_marketing",
+      "group": "Advertising & Marketing",
+      "name": "Affiliate Marketing",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["click_fraud", "cookie_stuffing", "ad_fraud", "fake_conversions"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 3, "bot_ua_pct_alert": 8, "ctr_max": 0.12, "ip_cluster_max": 15 },
+        "ad_fraud": { "ivt_pct_warn": 8, "ivt_pct_alert": 20 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "FTC (US)"],
+      "notes": "Cookie stuffing and forced click injection are primary attack vectors in affiliate networks."
+    },
+    {
+      "id": "cbd_hemp",
+      "group": "Cannabis & Regulated Substances",
+      "name": "CBD / Hemp Products",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["misleading_health_claims", "fake_reviews", "thc_content_fraud", "license_misrepresentation"],
+      "thresholds": {
+        "cannabis_monitor": {
+          "illicit_keyword_score_warn": 25,
+          "illicit_keyword_score_alert": 50,
+          "no_license_displayed_alert": true
+        },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["Health Canada", "AGCO", "Competition Bureau Canada"],
+      "notes": "CBD health claims are regulated — therapeutic claims require DIN. Public signals only.",
+      "public_signals_only": true
+    },
+    {
+      "id": "psychedelics_clinical",
+      "group": "Cannabis & Regulated Substances",
+      "name": "Psychedelics (Clinical / Research)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["unlicensed_therapy", "misleading_outcome_claims", "black_market_signals"],
+      "thresholds": {
+        "cannabis_monitor": {
+          "illicit_keyword_score_warn": 20,
+          "illicit_keyword_score_alert": 40,
+          "no_license_displayed_alert": true
+        }
+      },
+      "regulatory_bodies": ["Health Canada SAP", "RCMP Drug Section", "College of Physicians"],
+      "notes": "Psilocybin and MDMA therapy requires Section 56 exemption or SAP. Public signals only.",
+      "public_signals_only": true,
+      "always_human_review": true
+    },
+    {
+      "id": "tobacco_vaping",
+      "group": "Cannabis & Regulated Substances",
+      "name": "Tobacco / Vaping",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["misleading_health_claims", "underage_targeting", "illegal_flavour_sales", "fake_reviews"],
+      "thresholds": {
+        "cannabis_monitor": {
+          "illicit_keyword_score_warn": 20,
+          "illicit_keyword_score_alert": 40
+        },
+        "influencer_fraud": { "engagement_drop_pct": 30, "follower_growth_spike_pct": 15 }
+      },
+      "regulatory_bodies": ["Health Canada", "AGCO (Ontario vape)", "Tobacco and Vaping Products Act"],
+      "notes": "Youth targeting in vape advertising is a federal offence. Influencer fraud engine applies.",
+      "public_signals_only": true
+    },
+    {
+      "id": "weapons_firearms",
+      "group": "Regulated Industries",
+      "name": "Firearms / Weapons (Licensed)",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["unlicensed_sales", "straw_purchases", "misleading_license_claims"],
+      "thresholds": {
+        "cannabis_monitor": {
+          "illicit_keyword_score_warn": 15,
+          "illicit_keyword_score_alert": 30,
+          "no_license_displayed_alert": true
+        }
+      },
+      "regulatory_bodies": ["RCMP CFP (Canadian Firearms Program)", "CAFC", "Criminal Code"],
+      "notes": "Public signals only. ANY unlicensed sale signal requires immediate RCMP referral.",
+      "public_signals_only": true,
+      "always_human_review": true
+    },
+    {
+      "id": "waste_management",
+      "group": "Government & Public Sector",
+      "name": "Waste Management / Municipal Services",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "cartel_behavior", "environmental_violation_concealment"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 5,
+          "single_bidder_pct_warn": 25,
+          "vendor_concentration_pct_warn": 40,
+          "bid_rotation_cv_threshold": 0.20,
+          "threshold_amounts": [25000, 100000, 250000]
+        }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "MOE (Ontario)", "OAG"],
+      "notes": "Waste hauling is a documented bid-rigging sector in Canada. Cover bidding is endemic."
+    },
+    {
+      "id": "it_services",
+      "group": "Technology",
+      "name": "IT Services / Managed Services",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["bid_rigging", "fake_reviews", "sole_source_abuse", "vendor_lock_in_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "vendor_concentration_pct_warn": 35,
+          "single_bidder_pct_warn": 25,
+          "threshold_amounts": [25000, 100000]
+        },
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 }
+      },
+      "regulatory_bodies": ["PSPC", "Shared Services Canada", "Competition Bureau Canada"],
+      "notes": "Government IT managed services contracts are highest-risk for sole-source abuse in tech sector."
+    },
+    {
+      "id": "cloud_services",
+      "group": "Technology",
+      "name": "Cloud Services",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "misleading_uptime_claims", "security_claim_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 8, "burst_pct_alert": 15 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada", "OPC (Privacy)"],
+      "notes": "SLA uptime misrepresentation is primary concern in cloud services advertising."
+    },
+    {
+      "id": "taxi_rideshare",
+      "group": "Transportation",
+      "name": "Taxi / Rideshare",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "GPS_fraud", "surge_manipulation", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["Municipal licensing", "Competition Bureau Canada"],
+      "notes": "Driver review manipulation is common on both Uber and Lyft platforms."
+    },
+    {
+      "id": "trucking",
+      "group": "Transportation",
+      "name": "Trucking / Freight",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["procurement_fraud", "load_fraud", "fuel_surcharge_fraud"],
+      "thresholds": {
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "threshold_amounts": [25000, 100000] }
+      },
+      "regulatory_bodies": ["CTA", "MTO (Ontario)", "Competition Bureau Canada"],
+      "notes": "Load fraud (phantom shipments on broker platforms) is out of scope but flagging is appropriate."
+    },
+    {
+      "id": "aviation",
+      "group": "Transportation",
+      "name": "Aviation",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["procurement_fraud", "maintenance_record_fraud", "click_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "vendor_concentration_pct_warn": 30,
+          "threshold_amounts": [100000, 250000],
+          "single_bidder_pct_warn": 20
+        }
+      },
+      "regulatory_bodies": ["TC (Transport Canada)", "NavCanada", "OAG"],
+      "notes": "Aviation procurement is safety-critical. Always legal referral on findings."
+    },
+    {
+      "id": "photography_creative",
+      "group": "Creative Services",
+      "name": "Photography / Creative Services",
+      "fraud_risk_level": "LOW",
+      "common_fraud_patterns": ["fake_reviews", "portfolio_fraud", "copyright_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 15, "burst_pct_alert": 28 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "Low risk. Review fraud and fake portfolio images are primary signals."
+    },
+    {
+      "id": "design_agency",
+      "group": "Creative Services",
+      "name": "Design Agency",
+      "fraud_risk_level": "LOW",
+      "common_fraud_patterns": ["fake_reviews", "award_fraud", "portfolio_theft"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "Design award fraud (fake Awwwards/Behance) can inflate agency credibility artificially."
+    },
+    {
+      "id": "esports",
+      "group": "Media & Entertainment",
+      "name": "Esports / Competitive Gaming",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["match_fixing", "influencer_fraud", "fake_viewership", "click_fraud"],
+      "thresholds": {
+        "influencer_fraud": { "engagement_drop_pct": 25, "follower_growth_spike_pct": 10 },
+        "click_fraud": { "bot_ua_pct_warn": 8, "bot_ua_pct_alert": 20 }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada (for betting fraud)", "AGCO (if sports betting linked)"],
+      "notes": "Match fixing detection is out of scope but viewership inflation is within ad fraud engine."
+    },
+    {
+      "id": "nft_web3",
+      "group": "Financial Services",
+      "name": "NFT / Web3",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["wash_trading", "rug_pull_signals", "influencer_fraud", "fake_reviews", "pump_dump"],
+      "thresholds": {
+        "influencer_fraud": { "engagement_drop_pct": 20, "follower_growth_spike_pct": 8 },
+        "review_fraud": { "burst_pct_warn": 4, "burst_pct_alert": 8, "jaccard_dupe_threshold": 0.50 },
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 12 }
+      },
+      "regulatory_bodies": ["CSA", "OSC", "FINTRAC (if money services)"],
+      "notes": "Rug pull signals include sudden liquidity removal and coordinated social pump. Human review critical.",
+      "always_human_review": true
+    },
+    {
+      "id": "charity_foundation",
+      "group": "Non-Profit & Charity",
+      "name": "Charitable Foundation",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["donation_fraud", "misappropriation", "fake_charity_signals", "expense_fraud"],
+      "thresholds": {
+        "gov_fraud": { "vendor_concentration_pct_warn": 40 },
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 20 }
+      },
+      "regulatory_bodies": ["CRA Charities Directorate", "OAG"],
+      "notes": "Charity misrepresentation (using 100% of donations for admin) is a CRA criminal referral."
+    },
+    {
+      "id": "immigration_consulting",
+      "group": "Professional Services",
+      "name": "Immigration Consulting",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["fake_reviews", "ghost_consultants", "guarantee_fraud", "misleading_success_rates"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 6, "burst_pct_alert": 12, "jaccard_dupe_threshold": 0.55 }
+      },
+      "regulatory_bodies": ["CICC (College of Immigration and Citizenship Consultants)", "IRPA", "RCMP"],
+      "notes": "Ghost consultant fraud and guarantee claims are criminal under IRPA. Always legal referral.",
+      "always_human_review": true
+    },
+    {
+      "id": "courier_last_mile",
+      "group": "Logistics & Supply Chain",
+      "name": "Courier / Last-Mile Delivery",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["fake_reviews", "package_fraud", "click_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 12, "burst_pct_alert": 22 },
+        "click_fraud": { "bot_ua_pct_warn": 4, "bot_ua_pct_alert": 9 }
+      },
+      "regulatory_bodies": ["CPC (Canada Post)", "Competition Bureau Canada"],
+      "notes": "Phishing using fake delivery notifications is out of scope but related."
+    },
+    {
+      "id": "solar_energy",
+      "group": "Energy & Utilities",
+      "name": "Solar Energy",
+      "fraud_risk_level": "HIGH",
+      "common_fraud_patterns": ["misleading_savings_claims", "fake_reviews", "procurement_fraud", "subsidy_fraud"],
+      "thresholds": {
+        "review_fraud": { "burst_pct_warn": 10, "burst_pct_alert": 18 },
+        "gov_fraud": { "vendor_concentration_pct_warn": 35, "threshold_amounts": [25000, 100000] }
+      },
+      "regulatory_bodies": ["OEB", "IESO", "Competition Bureau Canada", "CRA (for green subsidies)"],
+      "notes": "Solar savings guarantee claims and government rebate fraud are primary concerns."
+    },
+    {
+      "id": "water_treatment",
+      "group": "Government & Public Sector",
+      "name": "Water Treatment / Municipal Infrastructure",
+      "fraud_risk_level": "CRITICAL",
+      "common_fraud_patterns": ["procurement_fraud", "bid_rigging", "testing_record_fraud"],
+      "thresholds": {
+        "gov_fraud": {
+          "cover_bid_spread_pct": 5,
+          "single_bidder_pct_warn": 20,
+          "vendor_concentration_pct_warn": 30,
+          "threshold_amounts": [25000, 100000, 250000]
+        }
+      },
+      "regulatory_bodies": ["MOE (Ontario)", "MECP", "OAG", "Competition Bureau Canada"],
+      "notes": "Water infrastructure procurement fraud is public safety critical. Always escalate.",
+      "always_human_review": true
+    },
+    {
+      "id": "general_default",
+      "group": "General",
+      "name": "General / Unknown Industry",
+      "fraud_risk_level": "MEDIUM",
+      "common_fraud_patterns": ["click_fraud", "fake_reviews", "ad_fraud"],
+      "thresholds": {
+        "click_fraud": { "bot_ua_pct_warn": 5, "bot_ua_pct_alert": 10, "ip_cluster_max": 20, "ctr_max": 0.10, "conversion_rate_max": 0.25 },
+        "review_fraud": { "burst_pct_warn": 15, "burst_pct_alert": 30, "jaccard_dupe_threshold": 0.65, "min_ttr": 0.40 },
+        "influencer_fraud": { "engagement_drop_pct": 40, "follower_growth_spike_pct": 25 },
+        "ad_fraud": { "ivt_pct_warn": 8, "ivt_pct_alert": 20 },
+        "gov_fraud": { "cover_bid_spread_pct": 5, "single_bidder_pct_warn": 30, "vendor_concentration_pct_warn": 40, "threshold_amounts": [5000, 10000, 25000, 100000] }
+      },
+      "regulatory_bodies": ["Competition Bureau Canada"],
+      "notes": "Default profile used when industry cannot be determined. Apply conservative thresholds."
+    }
+  ]
+}
