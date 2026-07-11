@@ -1,0 +1,44 @@
+name: Deploy CannaDeliver
+
+on:
+  push:
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
+    paths:
+      - 'canna-deliver-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone or init canna-deliver repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/canna-deliver.git /tmp/canna-deliver 2>/dev/null || {
+            mkdir -p /tmp/canna-deliver
+            cd /tmp/canna-deliver
+            git init -b main
+            git remote add origin https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/canna-deliver.git
+          }
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe and copy site files
+        run: |
+          find /tmp/canna-deliver -mindepth 1 -not -path '/tmp/canna-deliver/.git*' -delete 2>/dev/null || true
+          cp -r canna-deliver-site/. /tmp/canna-deliver/
+          touch /tmp/canna-deliver/.nojekyll
+          echo "Copied $(ls canna-deliver-site/*.html 2>/dev/null | wc -l) HTML files"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/canna-deliver
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Empire Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: canna-deliver @ ${{ github.sha }}" || echo "Nothing to commit"
+          git push origin main || git push --set-upstream origin main
+          echo "Live: franciscoderek7.github.io/canna-deliver"
