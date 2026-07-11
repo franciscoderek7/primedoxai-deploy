@@ -1,962 +1,550 @@
-<!doctype html>
-<title>Claude Empire Command — Francisco Holdings Inc.</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Holdings Inc. — Empire Command Center | Phoenix Dominion</title>
 <style>
-:root {
-  --void:    #020A16;
-  --bulkhead:#0C1E35;
-  --plasma:  #05F2C7;
-  --amber:   #F0A500;
-  --empire:  #1247DB;
-  --hot:     #FF1F4E;
-  --dim:     #1A3050;
-  --text:    #C8D8E8;
-  --muted:   #4A6880;
-  --ok:      #00E676;
-  --grid:    rgba(5,242,199,0.07);
+:root{
+  --void:#020A16;
+  --plasma:#05F2C7;
+  --amber:#F0A500;
+  --empire-blue:#0066CC;
+  --dark:#0a0a0a;
+  --gray:#1a1a1a;
+  --light:#e0e0e0;
+  --danger:#cc3300;
+  --gold:#ffd700;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:var(--void);color:var(--text);font-family:'Courier New',monospace;font-size:13px}
-#app{display:flex;height:100vh;overflow:hidden}
-#sidebar{width:180px;min-width:180px;background:var(--bulkhead);display:flex;flex-direction:column;border-right:1px solid var(--dim);overflow:hidden}
-#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
-#logo{padding:16px 12px 10px;border-bottom:1px solid var(--dim)}
-.logo-top{font-size:10px;letter-spacing:0.22em;color:var(--muted);text-transform:uppercase}
-.logo-name{font-size:15px;font-weight:700;color:var(--plasma);letter-spacing:-0.02em;margin-top:3px}
-.logo-sub{font-size:9px;color:var(--muted);letter-spacing:0.18em;margin-top:1px}
-#nav{flex:1;overflow-y:auto;padding:8px 0}
-.nav-item{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;border-left:3px solid transparent;transition:all 0.15s;color:var(--muted);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;user-select:none}
-.nav-item:hover{color:var(--text);background:rgba(5,242,199,0.05)}
-.nav-item.active{color:var(--plasma);border-left-color:var(--plasma);background:rgba(5,242,199,0.08)}
-.nav-icon{font-size:14px;width:18px;text-align:center}
-.nav-key{margin-left:auto;font-size:9px;background:var(--dim);padding:1px 4px;border-radius:2px;color:var(--muted)}
-#sidebar-footer{padding:10px 12px;border-top:1px solid var(--dim)}
-.sf-line{font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:3px}
-.sf-status{display:flex;align-items:center;gap:6px;font-size:9px}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-#topbar{height:44px;background:var(--bulkhead);border-bottom:1px solid var(--dim);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0}
-.tb-sect{font-size:10px;letter-spacing:0.20em;color:var(--plasma);text-transform:uppercase;white-space:nowrap}
-.tb-sep{color:var(--dim)}
-.tb-title{font-size:12px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tb-metrics{display:flex;gap:16px;align-items:center;flex-shrink:0}
-.tbm{font-size:9px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;white-space:nowrap}
-.tbm span{color:var(--text);font-size:11px;font-weight:700;margin-left:4px}
-#clock{font-size:11px;color:var(--amber);letter-spacing:0.08em;font-variant-numeric:tabular-nums;flex-shrink:0}
-#content{flex:1;overflow:hidden}
-.panel{display:none;height:100%;overflow-y:auto;overflow-x:hidden}
-.panel.active{display:block}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:var(--void)}
-::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
-.section-head{padding:18px 24px 14px;border-bottom:1px solid var(--dim);flex-shrink:0}
-.sh-eye{font-size:9px;letter-spacing:0.22em;color:var(--plasma);text-transform:uppercase;margin-bottom:3px}
-.sh-title{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.03em}
-.sh-sub{font-size:11px;color:var(--muted);margin-top:3px}
-.mini-label{font-size:9px;letter-spacing:0.20em;color:var(--plasma);text-transform:uppercase;margin-bottom:8px}
-/* HOME */
-#p-home.active{display:grid;grid-template-columns:240px 1fr 1fr;grid-template-rows:1fr 1fr;height:100%}
-.home-building{grid-row:1/3;background:var(--bulkhead);border-right:1px solid var(--dim);display:flex;flex-direction:column;align-items:center;padding:12px 0 0}
-#bcanvas{cursor:crosshair;display:block;flex-shrink:0}
-.floor-detail{padding:10px 14px;width:100%;border-top:1px solid var(--dim);margin-top:auto}
-.fd-floor{font-size:9px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase}
-.fd-name{font-size:13px;color:var(--plasma);font-weight:700;margin:3px 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fd-meta{font-size:9px;color:var(--muted)}
-.home-top-right{padding:14px 18px;border-bottom:1px solid var(--dim);overflow:hidden}
-.home-top-right2{padding:14px 18px;border-bottom:1px solid var(--dim);border-left:1px solid var(--dim);overflow:hidden}
-.home-bot-left{padding:14px 18px;overflow:hidden}
-.home-bot-right{padding:14px 18px;border-left:1px solid var(--dim);overflow:hidden}
-.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.metric-card{background:var(--void);border:1px solid var(--dim);border-radius:3px;padding:10px 12px}
-.mc-label{font-size:8px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
-.mc-value{font-size:24px;font-weight:700;letter-spacing:-0.04em;color:var(--text);margin:3px 0 1px;font-variant-numeric:tabular-nums}
-.mc-value.plasma{color:var(--plasma)}.mc-value.amber{color:var(--amber)}.mc-value.hot{color:var(--hot)}
-.mc-sub{font-size:8px;color:var(--muted)}
-.cctv-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
-.cctv-cell{background:#000;border:1px solid var(--dim);border-radius:3px;aspect-ratio:16/9;position:relative;overflow:hidden}
-.cctv-corner{position:absolute;width:9px;height:9px;border-color:var(--plasma);border-style:solid;opacity:0.5}
-.cctv-corner.tl{top:3px;left:3px;border-width:1px 0 0 1px}
-.cctv-corner.tr{top:3px;right:3px;border-width:1px 1px 0 0}
-.cctv-corner.bl{bottom:3px;left:3px;border-width:0 0 1px 1px}
-.cctv-corner.br{bottom:3px;right:3px;border-width:0 1px 1px 0}
-.cctv-label{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:7px;letter-spacing:0.12em;color:rgba(5,242,199,0.45)}
-.cctv-status{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:7px;color:rgba(255,31,78,0.65);letter-spacing:0.10em;white-space:nowrap}
-.cctv-cross{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;opacity:0.12}
-.cctv-cross::before,.cctv-cross::after{content:'';position:absolute;background:var(--muted)}
-.cctv-cross::before{width:1px;height:100%;left:50%;transform:translateX(-50%)}
-.cctv-cross::after{height:1px;width:100%;top:50%;transform:translateY(-50%)}
-/* CHIPS */
-.chip{display:inline-block;padding:1px 5px;border-radius:2px;font-size:8px;letter-spacing:0.10em;text-transform:uppercase;font-weight:700}
-.chip.crit{background:rgba(255,31,78,0.12);color:var(--hot);border:1px solid rgba(255,31,78,0.25)}
-.chip.high{background:rgba(240,165,0,0.12);color:var(--amber);border:1px solid rgba(240,165,0,0.25)}
-.chip.med{background:rgba(18,71,219,0.12);color:#5B8CF5;border:1px solid rgba(18,71,219,0.25)}
-.chip.low{background:rgba(0,230,118,0.10);color:var(--ok);border:1px solid rgba(0,230,118,0.2)}
-.chip.live{background:rgba(5,242,199,0.10);color:var(--plasma);border:1px solid rgba(5,242,199,0.25)}
-.chip.plan{background:rgba(18,71,219,0.10);color:#5B8CF5;border:1px solid rgba(18,71,219,0.2)}
-.chip.idle{background:rgba(74,104,128,0.18);color:var(--muted);border:1px solid var(--dim)}
-/* MICRO TABLE */
-.mt{width:100%;border-collapse:collapse}
-.mt th{font-size:8px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;padding:3px 6px 3px 0;border-bottom:1px solid var(--dim);font-weight:400;text-align:left}
-.mt td{padding:5px 6px 5px 0;font-size:11px;vertical-align:middle;border-bottom:1px solid rgba(26,48,80,0.35)}
-.mt tr:hover td{background:rgba(5,242,199,0.04)}
-/* TOWER */
-#p-tower.active{display:flex;flex-direction:row;height:100%}
-.tower-main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at center,rgba(5,242,199,0.04) 0%,transparent 70%)}
-.tower-sidebar{width:260px;background:var(--bulkhead);border-left:1px solid var(--dim);overflow-y:auto;padding:14px}
-#tcanvas{cursor:crosshair}
-/* AGENTS */
-#p-agents.active{display:flex;flex-direction:column;height:100%}
-.agent-body{flex:1;display:grid;grid-template-columns:1fr 300px;min-height:0;overflow:hidden}
-.agent-cards{padding:18px;overflow-y:auto}
-.agent-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
-.agent-card{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;padding:12px;transition:border-color 0.2s}
-.agent-card:hover{border-color:rgba(5,242,199,0.3)}
-.ac-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.ac-icon{font-size:18px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--dim);border-radius:3px;flex-shrink:0}
-.ac-name{font-size:11px;font-weight:700;color:var(--text)}
-.ac-role{font-size:8px;color:var(--muted);letter-spacing:0.06em;margin-top:1px}
-.ac-status{margin-bottom:7px}
-.ac-load{display:flex;align-items:center;gap:6px;margin-bottom:5px}
-.load-bar{flex:1;height:2px;background:var(--dim);border-radius:2px;overflow:hidden}
-.load-fill{height:100%;background:var(--plasma);border-radius:2px;transition:width 1.2s}
-.load-fill.warn{background:var(--amber)}.load-fill.hot{background:var(--hot)}
-.load-pct{font-size:9px;color:var(--muted);width:26px;text-align:right;font-variant-numeric:tabular-nums}
-.ac-last{font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.agent-net-panel{border-left:1px solid var(--dim);padding:16px;display:flex;flex-direction:column;overflow:hidden}
-.anp-title{font-size:9px;letter-spacing:0.22em;color:var(--plasma);text-transform:uppercase;margin-bottom:10px}
-/* REVENUE */
-#p-revenue.active{display:flex;flex-direction:column;height:100%}
-.rev-body{flex:1;padding:18px;overflow-y:auto}
-.rev-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
-.kpi{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;padding:12px 14px}
-.kpi-label{font-size:8px;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
-.kpi-val{font-size:28px;font-weight:700;letter-spacing:-0.04em;margin:5px 0 2px;font-variant-numeric:tabular-nums}
-.kpi-sub{font-size:9px;color:var(--muted)}
-#rcanvas{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;display:block;width:100%}
-/* THREATS */
-#p-threats.active{display:flex;flex-direction:column;height:100%}
-.threats-body{flex:1;overflow-y:auto;padding:0 20px 20px}
-.threat-filters{display:flex;gap:6px;padding:10px 0 12px}
-.tf-btn{background:var(--bulkhead);border:1px solid var(--dim);padding:4px 10px;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-radius:2px;font-family:inherit;transition:all 0.15s}
-.tf-btn:hover,.tf-btn.active{border-color:var(--plasma);color:var(--plasma)}
-.threat-row{display:grid;grid-template-columns:44px 68px 88px 60px 1fr 70px 110px;gap:0;align-items:center;padding:7px 0;border-bottom:1px solid rgba(26,48,80,0.45);cursor:pointer;transition:background 0.1s}
-.threat-row:hover{background:rgba(5,242,199,0.03)}
-.threat-row.hdr{font-size:8px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--dim);padding-bottom:7px;cursor:default}
-.threat-row.hdr:hover{background:none}
-.tr-score{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.04em}
-.s-crit{color:var(--hot)}.s-high{color:var(--amber)}.s-med{color:#5B8CF5}.s-low{color:var(--ok)}
-.engine-tag{font-size:8px;padding:2px 5px;background:var(--dim);border-radius:2px;letter-spacing:0.06em;color:var(--text)}
-/* QUEUE */
-#p-queue.active{display:flex;flex-direction:column;height:100%}
-.queue-body{flex:1;padding:0 20px 20px;overflow-y:auto}
-.queue-stats{display:flex;gap:10px;padding:10px 0 14px}
-.qs{background:var(--bulkhead);border:1px solid var(--dim);border-radius:3px;padding:7px 12px;font-size:9px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
-.qs span{font-size:15px;font-weight:700;display:block;letter-spacing:-0.02em;margin-bottom:1px;font-variant-numeric:tabular-nums}
-.queue-item{background:var(--bulkhead);border:1px solid var(--dim);border-radius:4px;padding:11px 13px;margin-bottom:7px;cursor:grab;transition:border-color 0.15s,transform 0.1s}
-.queue-item:hover{border-color:rgba(5,242,199,0.25)}
-.queue-item.dragging{opacity:0.35;transform:scale(0.97)}
-.queue-item.drag-over{border-color:var(--plasma);background:rgba(5,242,199,0.05)}
-.qi-top{display:flex;align-items:center;gap:7px;margin-bottom:5px}
-.qi-prio{width:3px;height:32px;border-radius:2px;flex-shrink:0}
-.qi-prio.p1{background:var(--hot)}.qi-prio.p2{background:var(--amber)}.qi-prio.p3{background:#5B8CF5}.qi-prio.p4{background:var(--muted)}
-.qi-title{font-size:11px;font-weight:700;color:var(--text);flex:1}
-.qi-meta{font-size:9px;color:var(--muted);margin-bottom:7px;padding-left:10px}
-.qi-actions{display:flex;gap:5px;padding-left:10px}
-.qi-btn{background:none;border:1px solid var(--dim);padding:3px 9px;font-size:9px;letter-spacing:0.10em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-radius:2px;font-family:inherit;transition:all 0.15s}
-.qi-btn:hover{border-color:var(--plasma);color:var(--plasma)}
-.qi-btn.approve{border-color:rgba(0,230,118,0.25);color:var(--ok)}.qi-btn.approve:hover{background:rgba(0,230,118,0.08)}
-.qi-btn.escalate{border-color:rgba(255,31,78,0.25);color:var(--hot)}.qi-btn.escalate:hover{background:rgba(255,31,78,0.08)}
-/* SETTINGS */
-#p-settings.active{display:block;height:100%}
-.settings-body{padding:22px;max-width:600px;overflow-y:auto;height:100%}
-.ss-title{font-size:9px;letter-spacing:0.22em;color:var(--plasma);text-transform:uppercase;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--dim)}
-.settings-section{margin-bottom:24px}
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(26,48,80,0.35)}
-.sr-label{font-size:11px;color:var(--text)}
-.sr-sub{font-size:9px;color:var(--muted);margin-top:2px}
-.toggle{width:34px;height:17px;background:var(--dim);border-radius:9px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0}
-.toggle.on{border:1px solid rgba(5,242,199,0.4)}
-.toggle::after{content:'';position:absolute;width:11px;height:11px;background:var(--muted);border-radius:50%;top:3px;left:3px;transition:all 0.2s}
-.toggle.on::after{background:var(--plasma);left:20px}
-/* TOAST */
-#toast{position:fixed;bottom:18px;right:18px;background:var(--bulkhead);border:1px solid var(--plasma);border-radius:4px;padding:9px 14px;font-size:11px;color:var(--plasma);letter-spacing:0.08em;opacity:0;transition:opacity 0.3s;z-index:100;pointer-events:none}
-#toast.show{opacity:1}
-#toast.err{border-color:var(--hot);color:var(--hot)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif;}
+body{background:var(--void);color:var(--light);overflow:hidden;height:100vh;}
+.empire-grid{
+  display:grid;
+  grid-template-columns:1fr 380px 380px;
+  grid-template-rows:60px 1fr 1fr;
+  gap:12px;
+  padding:12px;
+  height:100vh;
+}
+.header{
+  grid-column:1/-1;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;background:var(--gray);border:1px solid #222;border-radius:12px;
+}
+.header-left{display:flex;align-items:center;gap:16px;}
+.logo{font-size:1.4rem;font-weight:900;color:var(--plasma);letter-spacing:2px;}
+.logo span{color:var(--amber);}
+.status-bar{display:flex;align-items:center;gap:20px;font-size:0.8rem;color:#666;}
+.status-item{display:flex;align-items:center;gap:6px;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--plasma);animation:pulse 2s infinite;}
+.status-dot.amber{background:var(--amber);}
+.status-dot.danger{background:var(--danger);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.header-right{display:flex;align-items:center;gap:16px;}
+.revenue-display{padding:8px 20px;background:rgba(5,242,199,0.1);border:1px solid var(--plasma);border-radius:8px;color:var(--plasma);font-weight:800;font-size:1.1rem;}
+.pin-btn{padding:8px 20px;background:var(--amber);color:var(--void);border:none;border-radius:8px;font-weight:800;cursor:pointer;transition:all 0.3s;}
+.pin-btn:hover{background:#ffcc00;}
+.building-panel{
+  grid-row:2/-1;
+  background:var(--gray);border:1px solid #222;border-radius:16px;
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+}
+.building-header{
+  padding:16px 20px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;
+}
+.building-title{font-size:1rem;font-weight:700;color:var(--plasma);}
+.building-sub{color:#666;font-size:0.8rem;}
+.floor-count{font-size:1.5rem;font-weight:900;color:var(--amber);}
+#buildingCanvas{width:100%;flex-grow:1;cursor:pointer;}
+.building-controls{
+  padding:12px 20px;border-top:1px solid #222;display:flex;gap:10px;justify-content:center;
+}
+.ctrl-btn{padding:8px 16px;background:transparent;border:1px solid #333;border-radius:6px;color:#888;font-size:0.8rem;cursor:pointer;transition:all 0.3s;}
+.ctrl-btn:hover{border-color:var(--plasma);color:var(--plasma);}
+.ctrl-btn.active{background:rgba(5,242,199,0.1);border-color:var(--plasma);color:var(--plasma);}
+.metrics-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.panel-title{font-size:0.9rem;font-weight:700;color:var(--plasma);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;}
+.metric-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border-left:3px solid var(--plasma);}
+.metric-row.warning{border-left-color:var(--amber);}
+.metric-row.danger{border-left-color:var(--danger);}
+.metric-label{font-size:0.85rem;color:#888;}
+.metric-value{font-size:1.1rem;font-weight:800;color:var(--light);}
+.metric-value.up{color:var(--plasma);}
+.metric-value.down{color:var(--danger);}
+.metric-sub{font-size:0.75rem;color:#555;}
+.cctv-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.cctv-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;flex-grow:1;
+}
+.cam-feed{
+  background:#000;border:1px solid #333;border-radius:8px;position:relative;
+  display:flex;align-items:center;justify-content:center;min-height:120px;
+  overflow:hidden;
+}
+.cam-feed::before{
+  content:'';position:absolute;top:4px;left:4px;right:4px;bottom:4px;
+  border:1px solid rgba(5,242,199,0.3);border-radius:4px;
+}
+.cam-feed::after{
+  content:'';position:absolute;top:4px;left:4px;width:8px;height:8px;
+  border-top:2px solid var(--plasma);border-left:2px solid var(--plasma);
+}
+.cam-label{
+  position:absolute;top:8px;left:12px;font-size:0.7rem;color:var(--plasma);
+  background:rgba(0,0,0,0.7);padding:2px 8px;border-radius:4px;z-index:2;
+}
+.cam-status{
+  position:absolute;bottom:8px;right:12px;font-size:0.65rem;color:#666;
+  background:rgba(0,0,0,0.7);padding:2px 8px;border-radius:4px;z-index:2;
+}
+.cam-status.live{color:var(--plasma);}
+.cam-icon{font-size:2rem;color:#222;}
+.agent-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+#agentCanvas{width:100%;height:200px;border-radius:8px;background:#000;}
+.agent-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.agent-tag{padding:4px 12px;background:rgba(5,242,199,0.1);border:1px solid rgba(5,242,199,0.3);border-radius:20px;font-size:0.75rem;color:var(--plasma);cursor:pointer;transition:all 0.3s;}
+.agent-tag:hover{background:rgba(5,242,199,0.2);border-color:var(--plasma);}
+.agent-tag.offline{color:#666;border-color:#333;background:transparent;}
+.floor-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(2,10,22,0.95);
+  display:none;align-items:center;justify-content:center;z-index:1000;
+  backdrop-filter:blur(10px);
+}
+.floor-overlay.active{display:flex;}
+.floor-modal{
+  background:var(--gray);border:2px solid var(--plasma);border-radius:20px;
+  padding:40px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;
+  position:relative;
+}
+.floor-modal::before{
+  content:'';position:absolute;top:-2px;left:20%;right:20%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--plasma),transparent);
+}
+.close-modal{
+  position:absolute;top:16px;right:20px;background:none;border:none;
+  color:#666;font-size:1.5rem;cursor:pointer;transition:color 0.3s;
+}
+.close-modal:hover{color:var(--plasma);}
+.floor-num{font-size:3rem;font-weight:900;color:var(--amber);margin-bottom:8px;}
+.floor-company{font-size:1.5rem;font-weight:700;color:var(--light);margin-bottom:4px;}
+.floor-status{display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;margin-bottom:20px;}
+.floor-status.live{background:rgba(5,242,199,0.15);color:var(--plasma);border:1px solid var(--plasma);}
+.floor-status.dev{background:rgba(240,165,0,0.15);color:var(--amber);border:1px solid var(--amber);}
+.floor-status.plan{background:rgba(0,102,204,0.15);color:var(--empire-blue);border:1px solid var(--empire-blue);}
+.floor-desc{color:#888;margin-bottom:24px;line-height:1.6;}
+.floor-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.action-btn{padding:12px 24px;border-radius:8px;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.action-btn.primary{background:linear-gradient(135deg,var(--plasma),#03b8a0);color:var(--void);border:none;}
+.action-btn.primary:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(5,242,199,0.4);}
+.action-btn.secondary{background:transparent;color:var(--plasma);border:1px solid var(--plasma);}
+.action-btn.secondary:hover{background:rgba(5,242,199,0.1);}
+.action-btn.paypal{background:linear-gradient(135deg,var(--plasma),#03b8a0);color:var(--void);border:none;}
+.action-btn.paypal:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(5,242,199,0.4);}
+.revenue-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.revenue-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.rev-item{padding:12px;background:rgba(0,0,0,0.3);border-radius:8px;text-align:center;}
+.rev-item .rev-label{font-size:0.75rem;color:#666;margin-bottom:4px;}
+.rev-item .rev-value{font-size:1.3rem;font-weight:900;color:var(--plasma);}
+.rev-item .rev-change{font-size:0.7rem;color:var(--amber);}
+.empire-footer{
+  position:fixed;bottom:0;left:0;right:0;padding:8px 20px;
+  background:var(--void);border-top:1px solid #222;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.75rem;color:#444;z-index:100;
+}
+.empire-footer .classified{color:var(--amber);font-weight:700;letter-spacing:3px;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--void);}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--plasma);}
+@media(max-width:1200px){
+  .empire-grid{grid-template-columns:1fr 1fr;grid-template-rows:60px 1fr 1fr 1fr;}
+  .building-panel{grid-column:1/-1;grid-row:2/4;}
+}
+@media(max-width:768px){
+  .empire-grid{grid-template-columns:1fr;grid-template-rows:auto;}
+  .building-panel{grid-column:1;grid-row:auto;height:400px;}
+}
 </style>
+</head>
+<body>
 
-<div id="app">
-<div id="sidebar">
-  <div id="logo">
-    <div class="logo-top">Francisco Holdings</div>
-    <div class="logo-name">EMPIRE</div>
-    <div class="logo-sub">Command v2.0</div>
+<div class="empire-grid">
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">FRANCISCO <span>HOLDINGS</span></div>
+      <div class="status-bar">
+        <div class="status-item"><div class="status-dot"></div>Agent Swarm Active</div>
+        <div class="status-item"><div class="status-dot amber"></div>5 Floors Live</div>
+        <div class="status-item"><div class="status-dot danger"></div>387 Pending</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="revenue-display">&#128176; $0.00 CAD</div>
+      <button class="pin-btn" onclick="togglePin()">&#128274; PIN: 3920</button>
+    </div>
+  </header>
+
+  <div class="building-panel">
+    <div class="building-header">
+      <div>
+        <div class="building-title">&#127962; EMPIRE SKYSCRAPER</div>
+        <div class="building-sub">2.5D Canvas Render — Click floor to inspect</div>
+      </div>
+      <div class="floor-count">5<span style="font-size:0.8rem;color:#666;">/392</span></div>
+    </div>
+    <canvas id="buildingCanvas"></canvas>
+    <div class="building-controls">
+      <button class="ctrl-btn active" onclick="setFilter('all',event)">All</button>
+      <button class="ctrl-btn" onclick="setFilter('live',event)">Live</button>
+      <button class="ctrl-btn" onclick="setFilter('dev',event)">Dev</button>
+      <button class="ctrl-btn" onclick="setFilter('plan',event)">Plan</button>
+      <button class="ctrl-btn" onclick="resetView()">Reset</button>
+    </div>
   </div>
-  <nav id="nav">
-    <div class="nav-item active" onclick="go('home')"><span class="nav-icon">⌂</span>Home<span class="nav-key">H</span></div>
-    <div class="nav-item" onclick="go('tower')"><span class="nav-icon">▲</span>Tower<span class="nav-key">2</span></div>
-    <div class="nav-item" onclick="go('agents')"><span class="nav-icon">◈</span>Agents<span class="nav-key">A</span></div>
-    <div class="nav-item" onclick="go('revenue')"><span class="nav-icon">◎</span>Revenue<span class="nav-key">4</span></div>
-    <div class="nav-item" onclick="go('threats')"><span class="nav-icon">⚡</span>Threats<span class="nav-key">5</span></div>
-    <div class="nav-item" onclick="go('queue')"><span class="nav-icon">⊟</span>Review<span class="nav-key">6</span></div>
-    <div class="nav-item" onclick="go('settings')"><span class="nav-icon">⚙</span>Settings<span class="nav-key">7</span></div>
-  </nav>
-  <div id="sidebar-footer">
-    <div class="sf-line">VIGILAX SENTINEL</div>
-    <div class="sf-status"><div class="dot"></div><span style="font-size:9px;color:var(--ok)">ALL SYSTEMS NOMINAL</span></div>
+
+  <div class="metrics-panel">
+    <div class="panel-title">&#128202; Empire Metrics</div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">Active Companies</div>
+        <div class="metric-sub">Generating revenue</div>
+      </div>
+      <div class="metric-value up">5</div>
+    </div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">PayPal Status</div>
+        <div class="metric-sub">paypal.me/techpetcage</div>
+      </div>
+      <div class="metric-value up">&#10003; Fixed</div>
+    </div>
+    <div class="metric-row warning">
+      <div>
+        <div class="metric-label">API Keys</div>
+        <div class="metric-sub">OpenAI, Claude, DeepSeek</div>
+      </div>
+      <div class="metric-value down">&#10007; Missing</div>
+    </div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">Litigation Active</div>
+        <div class="metric-sub">CV-26-00000064-0000</div>
+      </div>
+      <div class="metric-value">$3.3M</div>
+    </div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">Constitutional Claim</div>
+        <div class="metric-sub">CV-26-00000063-0000</div>
+      </div>
+      <div class="metric-value">$35M</div>
+    </div>
+  </div>
+
+  <div class="cctv-panel">
+    <div class="panel-title">&#128249; Security CCTV</div>
+    <div class="cctv-grid">
+      <div class="cam-feed">
+        <span class="cam-label">CAM-01</span>
+        <span class="cam-status live">&#9679; LIVE</span>
+        <div class="cam-icon">&#127962;</div>
+      </div>
+      <div class="cam-feed">
+        <span class="cam-label">CAM-02</span>
+        <span class="cam-status">OFFLINE</span>
+        <div class="cam-icon">&#128274;</div>
+      </div>
+      <div class="cam-feed">
+        <span class="cam-label">CAM-03</span>
+        <span class="cam-status">OFFLINE</span>
+        <div class="cam-icon">&#127760;</div>
+      </div>
+      <div class="cam-feed">
+        <span class="cam-label">CAM-04</span>
+        <span class="cam-status live">&#9679; LIVE</span>
+        <div class="cam-icon">&#128176;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="agent-panel">
+    <div class="panel-title">&#129302; Agent Network</div>
+    <canvas id="agentCanvas"></canvas>
+    <div class="agent-list">
+      <span class="agent-tag">PrimeDox AI</span>
+      <span class="agent-tag">OmniGuard</span>
+      <span class="agent-tag">Doc Weedlaw</span>
+      <span class="agent-tag">Revenue AI</span>
+      <span class="agent-tag">Vigilax</span>
+      <span class="agent-tag offline">Gemma 31B</span>
+      <span class="agent-tag offline">DeepSeek</span>
+      <span class="agent-tag offline">Claude API</span>
+    </div>
+  </div>
+
+  <div class="revenue-panel">
+    <div class="panel-title">&#128181; Revenue Streams</div>
+    <div class="revenue-grid">
+      <div class="rev-item">
+        <div class="rev-label">OmniGuard</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$99-$2,499/mo</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">Vault Velocity</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$99-$999/mo</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">PrimeDox AI</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$49 trial</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">CCLDR</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$99-$399/doc</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="floor-overlay" id="floorOverlay">
+  <div class="floor-modal">
+    <button class="close-modal" onclick="closeFloor()">&#215;</button>
+    <div class="floor-num" id="modalNum">Floor 1</div>
+    <div class="floor-company" id="modalCompany">Francisco Holdings HQ</div>
+    <div class="floor-status live" id="modalStatus">&#9679; LIVE</div>
+    <div class="floor-desc" id="modalDesc">The command center of the empire.</div>
+    <div class="floor-actions" id="modalActions"></div>
   </div>
 </div>
 
-<div id="main">
-  <div id="topbar">
-    <span class="tb-sect" id="tb-sect">HOME</span>
-    <span class="tb-sep">|</span>
-    <span class="tb-title" id="tb-title">Francisco Holdings Inc. — Empire Command Center</span>
-    <div class="tb-metrics">
-      <div class="tbm">THREATS<span id="tb-threats">10</span></div>
-      <div class="tbm">QUEUE<span id="tb-queue">18</span></div>
-      <div class="tbm">AGENTS<span id="tb-agents">9</span></div>
-    </div>
-    <div id="clock">--:--:--</div>
-  </div>
-
-  <div id="content">
-
-    <!-- HOME -->
-    <div class="panel active" id="p-home">
-      <!-- building col -->
-      <div class="home-building">
-        <div class="mini-label" style="padding:0 14px">392-Floor Tower</div>
-        <canvas id="bcanvas" width="212" height="440"></canvas>
-        <div class="floor-detail" id="floor-detail">
-          <div class="fd-floor">Click to explore</div>
-          <div class="fd-name">—</div>
-          <div class="fd-meta">Interactive building</div>
-        </div>
-      </div>
-      <!-- metrics -->
-      <div class="home-top-right">
-        <div class="mini-label">Empire Metrics</div>
-        <div class="metrics-grid">
-          <div class="metric-card"><div class="mc-label">Live Companies</div><div class="mc-value plasma" id="mc-companies">0</div><div class="mc-sub">of 392 floors</div></div>
-          <div class="metric-card"><div class="mc-label">Active Agents</div><div class="mc-value amber" id="mc-agents">0</div><div class="mc-sub">AI workforce</div></div>
-          <div class="metric-card"><div class="mc-label">Open Threats</div><div class="mc-value hot" id="mc-threats">0</div><div class="mc-sub">pending review</div></div>
-          <div class="metric-card"><div class="mc-label">MRR Pipeline</div><div class="mc-value amber">$4.7k</div><div class="mc-sub">activating Q3</div></div>
-        </div>
-      </div>
-      <!-- cctv -->
-      <div class="home-top-right2">
-        <div class="mini-label">CCTV Surveillance</div>
-        <div class="cctv-grid">
-          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-01</div><div class="cctv-status">● OFFLINE</div></div>
-          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-02</div><div class="cctv-status">● OFFLINE</div></div>
-          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-03</div><div class="cctv-status">● OFFLINE</div></div>
-          <div class="cctv-cell"><div class="cctv-corner tl"></div><div class="cctv-corner tr"></div><div class="cctv-corner bl"></div><div class="cctv-corner br"></div><div class="cctv-cross"></div><div class="cctv-label">CAM-04</div><div class="cctv-status">● OFFLINE</div></div>
-        </div>
-      </div>
-      <!-- bottom left: threats -->
-      <div class="home-bot-left" style="border-top:1px solid var(--dim)">
-        <div class="mini-label">Recent Threats</div>
-        <table class="mt" id="home-threat-table"></table>
-      </div>
-      <!-- bottom right: agents -->
-      <div class="home-bot-right" style="border-top:1px solid var(--dim)">
-        <div class="mini-label">Agent Status</div>
-        <div id="home-agent-list"></div>
-      </div>
-    </div>
-
-    <!-- TOWER -->
-    <div class="panel" id="p-tower">
-      <div class="tower-main">
-        <div>
-          <div style="font-size:9px;letter-spacing:0.20em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;text-align:center">Interactive 2.5D Tower · 392 Floors</div>
-          <div style="position:relative;display:inline-block">
-            <canvas id="tcanvas" width="280" height="540"></canvas>
-            <div id="elevator" style="position:absolute;left:42px;width:154px;height:7px;background:rgba(5,242,199,0.2);border:1px solid var(--plasma);box-shadow:0 0 8px var(--plasma);transition:top 0.65s cubic-bezier(0.45,0.05,0.55,0.95);pointer-events:none;top:510px"></div>
-          </div>
-        </div>
-      </div>
-      <div class="tower-sidebar">
-        <div style="font-size:9px;letter-spacing:0.20em;color:var(--plasma);text-transform:uppercase;margin-bottom:12px">Floor Directory</div>
-        <div id="tower-detail" style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--dim)"></div>
-        <div style="font-size:9px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Named Floors</div>
-        <div id="floor-list"></div>
-      </div>
-    </div>
-
-    <!-- AGENTS -->
-    <div class="panel" id="p-agents">
-      <div class="section-head">
-        <div class="sh-eye">Workforce</div>
-        <div class="sh-title">Agent Swarm</div>
-        <div class="sh-sub">AI agents powering the Francisco Holdings empire</div>
-      </div>
-      <div class="agent-body">
-        <div class="agent-cards">
-          <div class="agent-grid" id="agent-grid"></div>
-        </div>
-        <div class="agent-net-panel">
-          <div class="anp-title">Agent Network</div>
-          <canvas id="netcanvas" width="268" height="268"></canvas>
-          <div style="margin-top:10px;font-size:9px;color:var(--muted)">
-            <div style="margin-bottom:3px"><span style="color:var(--plasma)">●</span> Active</div>
-            <div style="margin-bottom:3px"><span style="color:var(--amber)">●</span> Processing</div>
-            <div><span style="color:var(--muted)">●</span> Standby</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- REVENUE -->
-    <div class="panel" id="p-revenue">
-      <div class="section-head">
-        <div class="sh-eye">Financial</div>
-        <div class="sh-title">Revenue Tracker</div>
-        <div class="sh-sub">MRR pipeline across all Francisco Holdings entities</div>
-      </div>
-      <div class="rev-body">
-        <div class="rev-kpis" id="rev-kpis"></div>
-        <canvas id="rcanvas" height="190"></canvas>
-        <div style="margin-top:18px">
-          <div class="mini-label">Revenue by Entity</div>
-          <table class="mt" id="rev-table"></table>
-        </div>
-      </div>
-    </div>
-
-    <!-- THREATS -->
-    <div class="panel" id="p-threats">
-      <div class="section-head">
-        <div class="sh-eye">VIGILAX Sentinel</div>
-        <div class="sh-title">Threat Intelligence</div>
-        <div class="sh-sub">Real-time fraud detection · Review required for all findings</div>
-      </div>
-      <div class="threats-body">
-        <div class="threat-filters">
-          <button class="tf-btn active" onclick="filterThreats('ALL',this)">All</button>
-          <button class="tf-btn" onclick="filterThreats('CRITICAL',this)">Critical</button>
-          <button class="tf-btn" onclick="filterThreats('HIGH',this)">High</button>
-          <button class="tf-btn" onclick="filterThreats('MEDIUM',this)">Medium</button>
-        </div>
-        <div class="threat-row hdr">
-          <div>Score</div><div>Severity</div><div>Engine</div><div>Time</div>
-          <div>Target / Description</div><div>Status</div><div>Actions</div>
-        </div>
-        <div id="threat-list"></div>
-      </div>
-    </div>
-
-    <!-- QUEUE -->
-    <div class="panel" id="p-queue">
-      <div class="section-head">
-        <div class="sh-eye">Human-in-the-Loop</div>
-        <div class="sh-title">Review Queue</div>
-        <div class="sh-sub">All items require human sign-off. Drag to reprioritize.</div>
-      </div>
-      <div class="queue-body">
-        <div class="queue-stats" id="queue-stats"></div>
-        <div id="queue-list"></div>
-      </div>
-    </div>
-
-    <!-- SETTINGS -->
-    <div class="panel" id="p-settings">
-      <div class="section-head">
-        <div class="sh-eye">Configuration</div>
-        <div class="sh-title">Settings</div>
-        <div class="sh-sub">Empire command center preferences and detection engine controls</div>
-      </div>
-      <div class="settings-body" id="settings-body"></div>
-    </div>
-
-  </div>
-</div>
-</div>
-
-<div id="toast"></div>
+<footer class="empire-footer">
+  <div class="classified">CLASSIFIED LEVEL: EMPEROR</div>
+  <div>&#169; 2026 Francisco Holdings Inc. — Phoenix Dominion Global Domination</div>
+</footer>
 
 <script>
-'use strict';
-
-const COMPANIES = [
-  {f:1,  n:'Francisco Holdings Inc.',   d:'Holding Company',          st:'live', ag:8,  mrr:0},
-  {f:2,  n:'CCLDR / Doc Weedlaw',       d:'Cannabis Legal & Media',   st:'live', ag:3,  mrr:850},
-  {f:3,  n:'OmniGuard',                 d:'AI Security SaaS',         st:'live', ag:4,  mrr:2400},
-  {f:4,  n:'Kiaros',                    d:'Time Intelligence',         st:'live', ag:2,  mrr:0},
-  {f:5,  n:'SoulStack',                 d:'AI Observer Platform',      st:'live', ag:5,  mrr:0},
-  {f:6,  n:'VIGILAX Sentinel',          d:'Fraud Detection API',       st:'live', ag:6,  mrr:1200},
-  {f:7,  n:'Francisco Media Group',     d:'Digital Media',             st:'live', ag:2,  mrr:0},
-  {f:8,  n:'PrimeDox AI',               d:'AI Orchestration',          st:'live', ag:9,  mrr:0},
-  {f:9,  n:'LegalFlow AI',              d:'Legal Automation',          st:'dev',  ag:1,  mrr:0},
-  {f:10, n:'Sentinel Network',          d:'Threat Intelligence',       st:'dev',  ag:2,  mrr:0},
-  {f:11, n:'DocWeedlaw.ca',             d:'Cannabis Compliance',       st:'live', ag:1,  mrr:320},
-  {f:12, n:'Francisco Capital',         d:'Investment Vehicle',        st:'plan', ag:0,  mrr:0},
-  {f:13, n:'OmniAudit',                 d:'Compliance Audit SaaS',     st:'dev',  ag:2,  mrr:0},
-  {f:14, n:'Recon AI',                  d:'OSINT Platform',            st:'plan', ag:0,  mrr:0},
-  {f:15, n:'Francisco Labs',            d:'R&D',                       st:'plan', ag:0,  mrr:0},
-  {f:16, n:'CloudSentry',               d:'Cloud Security',            st:'dev',  ag:1,  mrr:0},
-  {f:17, n:'InfluenceIQ',               d:'Influencer Analytics',      st:'dev',  ag:1,  mrr:0},
-  {f:18, n:'GovTracker',                d:'Government Intelligence',   st:'plan', ag:0,  mrr:0},
-  {f:19, n:'Francisco Ventures',        d:'VC Fund',                   st:'plan', ag:0,  mrr:0},
-  {f:20, n:'NullTrace',                 d:'Privacy Engineering',       st:'plan', ag:0,  mrr:0},
-  {f:21, n:'AdShield',                  d:'Ad Fraud Prevention',       st:'dev',  ag:1,  mrr:0},
-  {f:22, n:'Meridian Consulting',       d:'Strategic Advisory',        st:'plan', ag:0,  mrr:0},
-  {f:23, n:'Francisco Trust',           d:'Asset Management',          st:'plan', ag:0,  mrr:0},
-  {f:24, n:'Empire Analytics',          d:'BI & Data Platform',        st:'dev',  ag:1,  mrr:0},
+const floors = [
+  {num:1, name:"Francisco Holdings HQ",    status:"live",desc:"The command center of the empire. All operations, strategy, and governance flow from this floor.",url:"https://franciscoholdingsinc.com",price:null},
+  {num:2, name:"OmniGuard Cybersecurity",  status:"live",desc:"World's first agentic AI cybersecurity. 14 autonomous security agents protecting every digital surface.",url:"https://omni-guard.com",price:99},
+  {num:3, name:"PrimeDox AI",              status:"live",desc:"The brain behind the empire. Document generation, legal concierge, and AI specialist routing.",url:"https://primedoxai.com",price:49},
+  {num:4, name:"Vault Velocity Auto",      status:"live",desc:"Luxury brokerage for supercars, jets, yachts. Curated listings. Verified provenance. Discretion guaranteed.",url:"https://vaultvelocityauto.com",price:99},
+  {num:5, name:"CCLDR Legal Education",    status:"live",desc:"The most dangerous legal education platform in the world. Cannabis constitutional law for lawyers and paralegals.",url:"https://ccldr.net",price:99},
+  {num:6, name:"VIGILAX Sentinel",         status:"dev", desc:"Fraud detection API — click fraud, review fraud, influencer fraud, gov procurement anomalies.",url:"#",price:null},
+  {num:7, name:"SoulStack",                status:"dev", desc:"AI observer platform. Watches the empire, flags anomalies, reports up the authority chain.",url:"#",price:null},
+  {num:8, name:"Kiaros",                   status:"dev", desc:"Temporal data analytics and predictive modeling for enterprise decision-making.",url:"#",price:null},
+  {num:9, name:"Francisco Media Group",    status:"dev", desc:"Digital media operations across all empire brands.",url:"#",price:null},
+  {num:10,name:"Empire Analytics",         status:"dev", desc:"BI & data platform powering empire-wide intelligence.",url:"#",price:null},
 ];
-for(let i=25;i<=392;i++) COMPANIES.push({f:i,n:`Floor ${i}`,d:'Available',st:'empty',ag:0,mrr:0});
+for(let i=11;i<=392;i++) floors.push({num:i,name:`Floor ${i}`,status:"plan",desc:"Future empire company. Auto-generated on approval.",url:"#",price:null});
 
-const AGENTS = [
-  {id:'primedox', n:'PrimeDox AI',        r:'Orchestrator / Concierge',   i:'🤖', st:'active', load:72, l:'Processing CEO briefing request'},
-  {id:'primedocs',n:'PrimeDocs',           r:'Override / Memory Layer',    i:'📋', st:'standby',load:18, l:'Monitoring authority chain'},
-  {id:'soulstack',n:'SoulStack Observer',  r:'Empire Monitor',             i:'👁', st:'active', load:55, l:'Scanning 24 live entities'},
-  {id:'omni',     n:'OmniGuard AI',        r:'Security Intelligence',      i:'🛡', st:'active', load:88, l:'Threat correlation running'},
-  {id:'vigilax',  n:'VIGILAX Sentinel',    r:'Fraud Detection',            i:'⚡', st:'active', load:91, l:'6 engines processing scan'},
-  {id:'kiaros',   n:'Kiaros Time AI',      r:'Temporal Intelligence',      i:'⏱', st:'active', load:43, l:'Indexing 1,440 time signals'},
-  {id:'legal',    n:'Legal AI',            r:'Cannabis Compliance',        i:'⚖', st:'standby',load:12, l:'Awaiting CCLDR document'},
-  {id:'adshield', n:'AdShield',            r:'Ad Fraud Monitor',           i:'🎯', st:'active', load:67, l:'CTR anomaly detected ×3'},
-  {id:'govint',   n:'GovInt',              r:'Government Intelligence',    i:'🏛', st:'standby',load:8,  l:'Monitoring 47 procurement feeds'},
-];
+const canvas=document.getElementById('buildingCanvas');
+const ctx=canvas.getContext('2d');
+let selectedFloor=null, hoverFloor=null, filterMode='all';
 
-const THREATS = [
-  {id:'T001',score:97,sev:'CRITICAL',engine:'VIGILAX', target:'Campaign CBD-2024-RX',   desc:'Click fraud Z-score 4.8σ — 3 IP clusters',        time:'08:14',st:'pending',  c:true},
-  {id:'T002',score:94,sev:'CRITICAL',engine:'GOV',     target:'Tender RFP-GOV-1142',    desc:'Cover bidding detected — 4 bids within 2.1%',     time:'07:52',st:'pending',  c:false},
-  {id:'T003',score:89,sev:'HIGH',    engine:'REVIEW',  target:'BrandX Reviews (48)',    desc:'Jaccard similarity 0.81 — duplicate cluster',      time:'07:38',st:'pending',  c:false},
-  {id:'T004',score:86,sev:'HIGH',    engine:'INFL',    target:'@influencer_macro_12',   desc:'Engagement rate 0.8% vs 3.2% tier benchmark',     time:'07:21',st:'reviewing',c:false},
-  {id:'T005',score:82,sev:'HIGH',    engine:'AD',      target:'DemandSide DSP-88',      desc:'IVT rate 34% — MFA domain pattern match',          time:'06:59',st:'pending',  c:false},
-  {id:'T006',score:78,sev:'HIGH',    engine:'CANNABIS',target:'@unlicensed_disp_bc',    desc:'Illicit keyword score 62 — no license displayed', time:'06:41',st:'pending',  c:true},
-  {id:'T007',score:71,sev:'MEDIUM',  engine:'REVIEW',  target:'ServiceCo Reviews (22)', desc:'TTR 0.31 — below authentic threshold (0.45)',      time:'06:10',st:'reviewing',c:false},
-  {id:'T008',score:67,sev:'MEDIUM',  engine:'VIGILAX', target:'Campaign SEM-AUTO-99',   desc:'Conversion velocity anomaly — 3.4× baseline',     time:'05:44',st:'pending',  c:false},
-  {id:'T009',score:58,sev:'MEDIUM',  engine:'GOV',     target:'Expenditure Q2-2024',    desc:'Threshold splitting $4,950 × 6 — structuring',    time:'05:20',st:'pending',  c:false},
-  {id:'T010',score:41,sev:'LOW',     engine:'AD',      target:'Programmatic-Pool-7',    desc:'Pixel load anomaly — tracking discrepancy 18%',   time:'04:55',st:'reviewing',c:false},
-];
-
-const QUEUE_DATA = [
-  {id:'Q001',p:1,t:'Cannabis Unlicensed Outlet — BC',      m:'Score 97 · VIGILAX · Cannabis flag · Immediate legal review',c:true},
-  {id:'Q002',p:1,t:'Gov Procurement Cover Bidding',         m:'Score 94 · GOV ENGINE · 4 vendors coordinated — RFP-1142'},
-  {id:'Q003',p:1,t:'Macro Influencer Fraud Cluster',        m:'Score 89 · INFL ENGINE · Campaign #2024-FH-88'},
-  {id:'Q004',p:2,t:'Review Duplicate Farm — BrandX',        m:'Score 86 · REVIEW ENGINE · 48 suspicious reviews'},
-  {id:'Q005',p:2,t:'IVT Spike DSP-88',                      m:'Score 82 · AD ENGINE · $4,200 spend at risk'},
-  {id:'Q006',p:2,t:'Cannabis Social Signal',                 m:'Score 78 · CANNABIS MONITOR · Public post — human sign-off required',c:true},
-  {id:'Q007',p:2,t:'Click Fraud Campaign SEM-AUTO',          m:'Score 71 · VIGILAX · Velocity anomaly confirmed'},
-  {id:'Q008',p:3,t:'Expenditure Pattern Q2',                 m:'Score 67 · GOV ENGINE · Municipal contract clustering'},
-  {id:'Q009',p:3,t:'TTR Below Threshold — ServiceCo',        m:'Score 58 · REVIEW ENGINE · 22 reviews analyzed'},
-  {id:'Q010',p:3,t:'Pixel Tracking Discrepancy',             m:'Score 41 · AD ENGINE · Minor — monitor'},
-  {id:'Q011',p:3,t:'New Influencer Audit Batch',             m:'Scheduled · INFL ENGINE · 14 accounts queued'},
-  {id:'Q012',p:4,t:'Weekly Gov Procurement Sweep',           m:'Scheduled · GOV ENGINE · Ontario tenders'},
-  {id:'Q013',p:4,t:'Cannabis Monitor Daily Report',          m:'Scheduled · CANNABIS MONITOR · Public signals only',c:true},
-  {id:'Q014',p:4,t:'Review Corpus Refresh',                  m:'Scheduled · REVIEW ENGINE · 500 new reviews'},
-  {id:'Q015',p:4,t:'Ad Network Baseline Update',             m:'Scheduled · AD ENGINE · IVT benchmarks'},
-  {id:'Q016',p:4,t:'Influencer Tier Calibration',            m:'Scheduled · INFL ENGINE · ER benchmark refresh'},
-  {id:'Q017',p:4,t:'VIGILAX Threshold Review',               m:'Scheduled · SYSTEM · Quarterly threshold audit'},
-  {id:'Q018',p:4,t:'Audit Log Export',                       m:'Scheduled · SYSTEM · SHA256 chain of custody'},
-];
-
-const REV_ENTITIES=[
-  {n:'VIGILAX Sentinel',mrr:1200,st:'live',q3:4800},
-  {n:'OmniGuard',       mrr:2400,st:'live',q3:9600},
-  {n:'CCLDR',           mrr:850, st:'live',q3:3400},
-  {n:'DocWeedlaw.ca',   mrr:320, st:'live',q3:1280},
-  {n:'Kiaros',          mrr:0,   st:'dev', q3:2000},
-  {n:'SoulStack',       mrr:0,   st:'dev', q3:5000},
-  {n:'LegalFlow AI',    mrr:0,   st:'dev', q3:1500},
-  {n:'AdShield',        mrr:0,   st:'dev', q3:800},
-];
-
-let curSection='home', selFloor=1, hovFloor=-1, threatFilter='ALL';
-let queueData=[...QUEUE_DATA], dragSrc=null, simThreats=THREATS.length;
-
-// clock
-setInterval(()=>{
-  const n=new Date();
-  document.getElementById('clock').textContent=
-    `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
-},1000);
-
-// counter
-function counter(el,target,dur=1100){
-  if(!el)return;
-  let t0=null;
-  const frame=ts=>{
-    if(!t0)t0=ts;
-    const p=Math.min((ts-t0)/dur,1);
-    el.textContent=Math.round((1-Math.pow(1-p,3))*target);
-    if(p<1)requestAnimationFrame(frame); else el.textContent=target;
-  };
-  requestAnimationFrame(frame);
+function resizeCanvas(){
+  const rect=canvas.parentElement.getBoundingClientRect();
+  canvas.width=rect.width-40;
+  canvas.height=rect.height-120;
+  drawBuilding();
 }
 
-// navigation
-function go(id){
-  curSection=id;
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('p-'+id)?.classList.add('active');
-  document.querySelectorAll('#nav .nav-item').forEach((n,i)=>{
-    n.classList.toggle('active',['home','tower','agents','revenue','threats','queue','settings'][i]===id);
-  });
-  document.getElementById('tb-sect').textContent=id.toUpperCase();
-  document.getElementById('tb-title').textContent={
-    home:'Francisco Holdings Inc. — Empire Command Center',
-    tower:'392-Floor Skyscraper · Interactive Tower View',
-    agents:'AI Agent Swarm · Francisco Holdings Inc.',
-    revenue:'Revenue Tracker · MRR Pipeline',
-    threats:'VIGILAX Sentinel · Threat Intelligence',
-    queue:'Human Review Queue · Pending Sign-off',
-    settings:'System Settings · Configuration',
-  }[id]||'';
-  if(id==='agents')setTimeout(drawNetwork,60);
-  if(id==='revenue')setTimeout(drawRevChart,60);
-  if(id==='tower')setTimeout(()=>drawBuilding('tcanvas',280,540,true),60);
+function getStatusColor(s){
+  return s==='live'?'#05F2C7':s==='dev'?'#F0A500':'#0066CC';
 }
 
-document.addEventListener('keydown',e=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
-  const m={h:'home','2':'tower',a:'agents','4':'revenue','5':'threats','6':'queue','7':'settings'};
-  if(m[e.key])go(m[e.key]);
-});
+function drawBuilding(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const fH=18,fW=120,fD=40;
+  const startX=canvas.width/2-fW/2;
+  const startY=canvas.height-60;
+  const vis=Math.min(floors.length,Math.floor((canvas.height-80)/fH));
 
-// building
-function drawBuilding(cid,CW,CH,interactive){
-  const cv=document.getElementById(cid);
-  if(!cv)return;
-  const ctx=cv.getContext('2d');
-  ctx.clearRect(0,0,CW,CH);
+  ctx.fillStyle='#0a1525';
+  ctx.fillRect(startX-10,startY-vis*fH+fH,fW+20,vis*fH+20);
 
-  const fx=38,fy=16,fw=156,fh=CH-36;
-  const dx=34,dy=-18;
-  const fph=fh/392;
+  for(let i=0;i<vis;i++){
+    const floor=floors[i];
+    if(filterMode!=='all'&&floor.status!==filterMode)continue;
+    const y=startY-i*fH;
+    const col=getStatusColor(floor.status);
+    const isH=hoverFloor===floor.num;
+    const isS=selectedFloor===floor.num;
 
-  // right face
-  ctx.beginPath();
-  ctx.moveTo(fx+fw,fy); ctx.lineTo(fx+fw+dx,fy+dy);
-  ctx.lineTo(fx+fw+dx,fy+dy+fh); ctx.lineTo(fx+fw,fy+fh);
-  ctx.closePath();
-  ctx.fillStyle='#060F20';
-  ctx.fill();
-  // right face floor bands
-  for(let i=0;i<392;i++){
-    const comp=COMPANIES[i];
-    const y=fy+fh-(i+1)*fph;
-    if(comp.st==='live'){
-      const xL=fx+fw, yL=y;
-      const xR=fx+fw+dx, yR=yL+dy*(i/392)*0;
-      ctx.fillStyle='rgba(5,242,199,0.18)';
-      const h2=Math.max(fph,0.5);
-      const xOff=dx*(i/392)*0.15;
-      ctx.fillRect(xL,yL,dx,h2);
+    // right face
+    ctx.fillStyle=isS?col:(isH?col+'88':col+'44');
+    ctx.beginPath();
+    ctx.moveTo(startX+fW,y);
+    ctx.lineTo(startX+fW+fD,y-fD*0.5);
+    ctx.lineTo(startX+fW+fD,y-fD*0.5-fH);
+    ctx.lineTo(startX+fW,y-fH);
+    ctx.closePath();ctx.fill();
+    ctx.strokeStyle=isS?col:col+'66';ctx.lineWidth=isS?2:1;ctx.stroke();
+
+    // front face
+    ctx.fillStyle=isS?col+'33':(isH?col+'22':'#0d1f2d');
+    ctx.fillRect(startX,y-fH,fW,fH);
+    ctx.strokeStyle=isS?col:col+'33';ctx.lineWidth=isS?2:0.5;
+    ctx.strokeRect(startX,y-fH,fW,fH);
+
+    // floor number
+    ctx.fillStyle=isS?col:'#555';
+    ctx.font=isS?'bold 11px monospace':'10px monospace';
+    ctx.fillText(floor.num.toString().padStart(3,'0'),startX+8,y-5);
+
+    // floor name
+    if(floor.status==='live'||isH||isS){
+      ctx.fillStyle=isS?col:'#888';ctx.font='9px sans-serif';
+      const nm=floor.name.length>14?floor.name.substring(0,14)+'...':floor.name;
+      ctx.fillText(nm,startX+35,y-5);
+    }
+
+    // glow for live
+    if(floor.status==='live'&&!isS){
+      ctx.shadowColor=col;ctx.shadowBlur=5;
+      ctx.strokeRect(startX,y-fH,fW,fH);
+      ctx.shadowBlur=0;
     }
   }
-  ctx.strokeStyle='rgba(5,242,199,0.12)';ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(fx+fw,fy);ctx.lineTo(fx+fw+dx,fy+dy);ctx.lineTo(fx+fw+dx,fy+dy+fh);ctx.lineTo(fx+fw,fy+fh);ctx.stroke();
 
   // roof
+  const topY=startY-vis*fH+fH;
+  ctx.fillStyle='#05F2C722';
   ctx.beginPath();
-  ctx.moveTo(fx,fy);ctx.lineTo(fx+fw,fy);ctx.lineTo(fx+fw+dx,fy+dy);ctx.lineTo(fx+dx,fy+dy);
-  ctx.closePath();
-  ctx.fillStyle='rgba(5,242,199,0.15)';ctx.fill();
-  ctx.strokeStyle='rgba(5,242,199,0.45)';ctx.lineWidth=1;ctx.stroke();
+  ctx.moveTo(startX,topY);ctx.lineTo(startX+fW,topY);
+  ctx.lineTo(startX+fW+fD,topY-fD*0.5);ctx.lineTo(startX+fD,topY-fD*0.5);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#05F2C744';ctx.stroke();
 
-  // front base
-  ctx.fillStyle='#080E1A';ctx.fillRect(fx,fy,fw,fh);
-  ctx.strokeStyle='rgba(5,242,199,0.18)';ctx.lineWidth=1;ctx.strokeRect(fx,fy,fw,fh);
-
-  // floor bands
-  for(let i=0;i<392;i++){
-    const comp=COMPANIES[i];
-    const y=fy+fh-(i+1)*fph;
-    const h=Math.max(fph-0.2,0.4);
-    if(comp.st==='live'){
-      const a=0.35+0.4*(comp.ag/10);
-      ctx.fillStyle=`rgba(5,242,199,${Math.min(a,0.85)})`;
-      ctx.fillRect(fx+1,y,fw-2,Math.max(h,1.4));
-    } else if(comp.st==='dev'){
-      ctx.fillStyle='rgba(240,165,0,0.22)';
-      ctx.fillRect(fx+1,y,fw-2,Math.max(h,0.9));
-    } else if(comp.st==='plan'){
-      ctx.fillStyle='rgba(18,71,219,0.15)';
-      ctx.fillRect(fx+1,y,fw-2,Math.max(h,0.7));
-    }
-  }
-
-  // window grid
-  ctx.strokeStyle='rgba(5,242,199,0.055)';ctx.lineWidth=0.5;
-  for(let c=0;c<7;c++){
-    const x=fx+10+c*(fw-20)/6;
-    ctx.beginPath();ctx.moveTo(x,fy+4);ctx.lineTo(x,fy+fh-4);ctx.stroke();
-  }
-
-  // hover
-  if(hovFloor>=0&&hovFloor<392){
-    const y=fy+fh-(hovFloor+1)*fph;
-    ctx.fillStyle='rgba(255,255,255,0.1)';
-    ctx.fillRect(fx+1,y-1,fw-2,fph+2);
-  }
-
-  // selected
-  if(selFloor>=1&&selFloor<=392){
-    const ii=selFloor-1;
-    const y=fy+fh-(ii+1)*fph;
-    const sc=COMPANIES[ii].st==='live'?'#05F2C7':COMPANIES[ii].st==='dev'?'#F0A500':'#1247DB';
-    ctx.strokeStyle=sc;ctx.lineWidth=1.5;
-    ctx.shadowBlur=8;ctx.shadowColor=sc;
-    ctx.strokeRect(fx+1,y-1,fw-2,Math.max(fph+2,2.5));
-    ctx.shadowBlur=0;
-  }
-
-  // floor labels
-  ctx.fillStyle='rgba(5,242,199,0.45)';ctx.font='7px Courier New';ctx.textAlign='right';
-  [1,50,100,150,200,250,300,350,392].forEach(n=>{
-    const y=fy+fh-n*fph;ctx.fillText(n,fx-3,y+3);
-  });
+  ctx.fillStyle='#05F2C7';ctx.font='bold 14px sans-serif';ctx.textAlign='center';
+  ctx.fillText('PHOENIX DOMINION',canvas.width/2,30);
+  ctx.font='10px sans-serif';ctx.fillStyle='#666';
+  ctx.fillText('392-FLOOR GLOBAL EMPIRE',canvas.width/2,48);
   ctx.textAlign='left';
+}
 
-  // elevator shaft
-  ctx.fillStyle='rgba(0,0,0,0.35)';ctx.fillRect(fx+5,fy+4,7,fh-8);
-
-  // legend
-  [{c:'rgba(5,242,199,0.7)',l:'Live'},{c:'rgba(240,165,0,0.55)',l:'Dev'},{c:'rgba(18,71,219,0.55)',l:'Plan'}].forEach((lg,i)=>{
-    ctx.fillStyle=lg.c;ctx.fillRect(CW-62,8+i*13,7,5);
-    ctx.fillStyle='rgba(200,216,232,0.55)';ctx.font='7px Courier New';ctx.textAlign='left';
-    ctx.fillText(lg.l,CW-52,13+i*13);
-  });
-
-  if(interactive){
-    cv.onmousemove=e=>{
-      const r=cv.getBoundingClientRect();
-      const mx=e.clientX-r.left,my=e.clientY-r.top;
-      if(mx>=fx&&mx<=fx+fw&&my>=fy&&my<=fy+fh){
-        const nf=Math.floor((fy+fh-my)/fph);
-        if(nf!==hovFloor){hovFloor=nf;drawBuilding(cid,CW,CH,interactive);}
-      } else if(hovFloor!==-1){hovFloor=-1;drawBuilding(cid,CW,CH,interactive);}
-    };
-    cv.onclick=e=>{
-      const r=cv.getBoundingClientRect();
-      const my=e.clientY-r.top;
-      if(my>=fy&&my<=fy+fh){
-        const f=Math.floor((fy+fh-my)/fph)+1;
-        if(f>=1&&f<=392)pickFloor(f,cid==='bcanvas');
-      }
-    };
-    cv.onmouseleave=()=>{hovFloor=-1;drawBuilding(cid,CW,CH,interactive);};
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const x=e.clientX-rect.left,y=e.clientY-rect.top;
+  const fH=18,fW=120,startX=canvas.width/2-fW/2,startY=canvas.height-60;
+  const vis=Math.min(floors.length,Math.floor((canvas.height-80)/fH));
+  let found=null;
+  for(let i=0;i<vis;i++){
+    const fy=startY-i*fH;
+    if(x>=startX&&x<=startX+fW&&y>=fy-fH&&y<=fy){found=floors[i].num;break;}
   }
+  if(found!==hoverFloor){hoverFloor=found;canvas.style.cursor=found?'pointer':'default';drawBuilding();}
+});
+
+canvas.addEventListener('click',()=>{
+  if(hoverFloor){selectedFloor=hoverFloor;drawBuilding();showFloorDetail(hoverFloor);}
+});
+
+function showFloorDetail(num){
+  const floor=floors.find(f=>f.num===num);
+  if(!floor)return;
+  document.getElementById('modalNum').textContent='Floor '+floor.num;
+  document.getElementById('modalCompany').textContent=floor.name;
+  document.getElementById('modalStatus').textContent='&#9679; '+floor.status.toUpperCase();
+  document.getElementById('modalStatus').className='floor-status '+floor.status;
+  document.getElementById('modalDesc').textContent=floor.desc;
+  let html='';
+  if(floor.url&&floor.url!=='#') html+=`<a href="${floor.url}" class="action-btn primary" target="_blank" rel="noopener">&#127760; Visit Site</a>`;
+  if(floor.price) html+=`<a href="https://paypal.me/techpetcage/${floor.price}CAD?desc=${encodeURIComponent(floor.name)}" class="action-btn paypal" target="_blank" rel="noopener">&#128179; Pay $${floor.price} CAD</a>`;
+  html+=`<button class="action-btn secondary" onclick="closeFloor()">&#215; Close</button>`;
+  document.getElementById('modalActions').innerHTML=html;
+  document.getElementById('floorOverlay').classList.add('active');
 }
 
-function pickFloor(f,isHome){
-  selFloor=f;
-  const c=COMPANIES[f-1];
-  if(isHome){
-    drawBuilding('bcanvas',212,440,true);
-    const fd=document.getElementById('floor-detail');
-    if(fd)fd.innerHTML=`
-      <div class="fd-floor">Floor ${f}</div>
-      <div class="fd-name">${c.n}</div>
-      <div class="fd-meta">${c.d}${c.ag?' · '+c.ag+' agents':''}${c.mrr?' · $'+c.mrr+'/mo':''}</div>
-    `;
-  } else {
-    drawBuilding('tcanvas',280,540,true);
-    const fh=540-36;
-    const yPct=(16+fh-f*(fh/392))/540;
-    const el=document.getElementById('elevator');
-    if(el)el.style.top=Math.round(yPct*540-3)+'px';
-    const td=document.getElementById('tower-detail');
-    if(td)td.innerHTML=`
-      <div class="fd-floor">Floor ${f}</div>
-      <div class="fd-name" style="font-size:14px;margin:3px 0">${c.n}</div>
-      <div style="margin-top:5px"><span class="chip ${c.st==='live'?'live':c.st==='dev'?'high':'plan'}">${c.st.toUpperCase()}</span></div>
-      <div class="fd-meta" style="margin-top:7px">${c.d}</div>
-      ${c.ag?`<div class="fd-meta" style="margin-top:3px">${c.ag} active agents</div>`:''}
-      ${c.mrr?`<div class="fd-meta" style="margin-top:3px">MRR $${c.mrr.toLocaleString()}/mo</div>`:''}
-    `;
-  }
+function closeFloor(){
+  document.getElementById('floorOverlay').classList.remove('active');
+  selectedFloor=null;drawBuilding();
 }
 
-// init home
-function initHome(){
-  counter(document.getElementById('mc-companies'),24);
-  counter(document.getElementById('mc-agents'),9);
-  counter(document.getElementById('mc-threats'),THREATS.length);
-  drawBuilding('bcanvas',212,440,true);
-
-  document.getElementById('home-threat-table').innerHTML=
-    `<tr><th>Score</th><th>Sev</th><th>Engine</th><th>Target</th><th>Status</th></tr>`+
-    THREATS.slice(0,6).map(t=>`<tr>
-      <td style="font-weight:700;font-variant-numeric:tabular-nums;color:${t.score>=90?'var(--hot)':t.score>=70?'var(--amber)':'#5B8CF5'}">${t.score}</td>
-      <td><span class="chip ${sClass(t.sev)}">${t.sev.slice(0,4)}</span></td>
-      <td><span class="engine-tag">${t.engine}</span></td>
-      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px">${t.target}</td>
-      <td><span class="chip ${t.st==='pending'?'crit':'high'}">${t.st}</span></td>
-    </tr>`).join('');
-
-  document.getElementById('home-agent-list').innerHTML=AGENTS.map(a=>`
-    <div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid rgba(26,48,80,0.35)">
-      <span style="font-size:13px">${a.i}</span>
-      <div style="flex:1;min-width:0"><div style="font-size:10px;font-weight:700">${a.n}</div><div style="font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.l}</div></div>
-      <span class="chip ${a.st==='active'?'live':'idle'}">${a.st}</span>
-    </div>`).join('');
+function setFilter(mode,e){
+  filterMode=mode;
+  document.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('active'));
+  if(e&&e.target)e.target.classList.add('active');
+  drawBuilding();
 }
 
-function sClass(s){return{CRITICAL:'crit',HIGH:'high',MEDIUM:'med',LOW:'low'}[s]||'idle';}
-
-// init tower
-function initTower(){
-  const fl=document.getElementById('floor-list');
-  fl.innerHTML=COMPANIES.filter(c=>c.st!=='empty').map(c=>`
-    <div onclick="pickFloor(${c.f},false)" style="padding:4px 0;border-bottom:1px solid rgba(26,48,80,0.3);cursor:pointer;display:flex;align-items:center;gap:5px">
-      <span style="font-size:9px;color:var(--muted);width:22px;flex-shrink:0;font-variant-numeric:tabular-nums">${c.f}</span>
-      <span style="font-size:10px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.n}</span>
-      <span class="chip ${c.st==='live'?'live':c.st==='dev'?'high':'plan'}" style="flex-shrink:0">${c.st}</span>
-    </div>`).join('');
+function resetView(){
+  filterMode='all';selectedFloor=null;
+  document.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ctrl-btn')[0].classList.add('active');
+  drawBuilding();
 }
 
-// init agents
-function initAgents(){
-  document.getElementById('agent-grid').innerHTML=AGENTS.map(a=>{
-    const lc=a.load>=80?'hot':a.load>=55?'warn':'';
-    return `<div class="agent-card">
-      <div class="ac-top"><div class="ac-icon">${a.i}</div><div><div class="ac-name">${a.n}</div><div class="ac-role">${a.r}</div></div></div>
-      <div class="ac-status"><span class="chip ${a.st==='active'?'live':'idle'}">${a.st.toUpperCase()}</span></div>
-      <div class="ac-load"><div class="load-bar"><div class="load-fill ${lc}" style="width:${a.load}%" id="lb-${a.id}"></div></div><div class="load-pct" id="lp-${a.id}">${a.load}%</div></div>
-      <div class="ac-last">${a.l}</div>
-    </div>`;
-  }).join('');
-}
+// agent network
+const agentCanvas=document.getElementById('agentCanvas');
+const actx=agentCanvas.getContext('2d');
 
-function drawNetwork(){
-  const cv=document.getElementById('netcanvas');
-  if(!cv)return;
-  const ctx=cv.getContext('2d');
-  const W=268,H=268,cx=W/2,cy=H/2,r=98;
-  ctx.clearRect(0,0,W,H);
-  const nodes=AGENTS.map((a,i)=>{
-    const ang=(i/AGENTS.length)*Math.PI*2-Math.PI/2;
-    return{x:cx+r*Math.cos(ang),y:cy+r*Math.sin(ang),...a};
-  });
-  // connections
-  nodes.forEach(n=>{
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(n.x,n.y);
-    const g=ctx.createLinearGradient(cx,cy,n.x,n.y);
-    g.addColorStop(0,'rgba(5,242,199,0.28)');g.addColorStop(1,'rgba(5,242,199,0)');
-    ctx.strokeStyle=g;ctx.lineWidth=n.st==='active'?1.2:0.5;ctx.stroke();
-  });
-  // hub
-  ctx.beginPath();ctx.arc(cx,cy,13,0,Math.PI*2);
-  ctx.fillStyle='rgba(5,242,199,0.12)';ctx.fill();
-  ctx.strokeStyle='#05F2C7';ctx.lineWidth=1.5;
-  ctx.shadowBlur=10;ctx.shadowColor='#05F2C7';ctx.stroke();ctx.shadowBlur=0;
-  ctx.fillStyle='#05F2C7';ctx.font='8px Courier New';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('FH',cx,cy);
-  // nodes
-  nodes.forEach(n=>{
-    const col=n.st==='active'?'#05F2C7':n.load>55?'#F0A500':'#4A6880';
-    ctx.beginPath();ctx.arc(n.x,n.y,n.st==='active'?7:5,0,Math.PI*2);
-    ctx.fillStyle='rgba(5,242,199,0.08)';ctx.fill();
-    ctx.strokeStyle=col;ctx.lineWidth=1.2;
-    if(n.st==='active'){ctx.shadowBlur=5;ctx.shadowColor=col;}
-    ctx.stroke();ctx.shadowBlur=0;
-    ctx.fillStyle='rgba(200,216,232,0.65)';ctx.font='7px Courier New';
-    ctx.textAlign=n.x<cx?'right':'left';ctx.textBaseline='middle';
-    ctx.fillText(n.n.split(' ')[0],n.x+(n.x<cx?-11:11),n.y);
-  });
-  ctx.textAlign='left';ctx.textBaseline='alphabetic';
-}
-
-// init revenue
-function initRevenue(){
-  const total=REV_ENTITIES.reduce((s,e)=>s+e.mrr,0);
-  document.getElementById('rev-kpis').innerHTML=[
-    {l:'Current MRR',  v:`$${total.toLocaleString()}`, col:'amber'},
-    {l:'Q3 Pipeline',  v:`$${(REV_ENTITIES.reduce((s,e)=>s+e.q3,0)/1000).toFixed(0)}k MRR`, col:'plasma'},
-    {l:'Live Entities',v:'4',  col:'ok'},
-    {l:'In Development',v:`${REV_ENTITIES.filter(e=>e.st==='dev').length}`, col:'amber'},
-  ].map(k=>`<div class="kpi"><div class="kpi-label">${k.l}</div><div class="kpi-val" style="color:var(--${k.col})">${k.v}</div></div>`).join('');
-
-  document.getElementById('rev-table').innerHTML=
-    `<tr><th>Entity</th><th>Status</th><th>Current MRR</th><th>Q3 Target</th></tr>`+
-    REV_ENTITIES.map(e=>`<tr>
-      <td>${e.n}</td>
-      <td><span class="chip ${e.st==='live'?'live':'high'}">${e.st}</span></td>
-      <td style="font-variant-numeric:tabular-nums;font-weight:700;color:${e.mrr?'var(--amber)':'var(--muted)'}">${e.mrr?'$'+e.mrr.toLocaleString():'—'}</td>
-      <td style="font-variant-numeric:tabular-nums;color:var(--plasma)">$${e.q3.toLocaleString()}</td>
-    </tr>`).join('');
-}
-
-function drawRevChart(){
-  const cv=document.getElementById('rcanvas');
-  if(!cv)return;
-  cv.width=cv.offsetWidth||800;
-  const W=cv.width,H=190;
-  const ctx=cv.getContext('2d');
-  ctx.clearRect(0,0,W,H);
-  const pad={t:16,r:20,b:28,l:48};
-  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
-  const maxV=5500,months=['Jan','Feb','Mar','Apr','May','Jun','Jul'],n=months.length;
-  const xSt=cw/(n-1);
-  const series=[
-    {d:[0,0,400,800,1200,1200,1200],col:'#05F2C7',lb:'VIGILAX'},
-    {d:[0,0,0,1200,2400,2400,2400],col:'#F0A500',lb:'OmniGuard'},
-    {d:[0,200,500,850,850,850,850],col:'#1247DB',lb:'CCLDR'},
+function drawAgentNetwork(){
+  const w=agentCanvas.width=agentCanvas.offsetWidth;
+  const h=agentCanvas.height=agentCanvas.offsetHeight;
+  actx.clearRect(0,0,w,h);
+  const cx=w/2,cy=h/2,r=Math.min(w,h)*0.35;
+  const agents=[
+    {name:'PrimeDox',angle:0,  active:true},
+    {name:'OmniGuard',angle:60, active:true},
+    {name:'DocWeedlaw',angle:120,active:true},
+    {name:'Revenue',  angle:180,active:true},
+    {name:'Vigilax',  angle:240,active:true},
+    {name:'Gemma',    angle:300,active:false},
   ];
-  // grid
-  ctx.strokeStyle='rgba(26,48,80,0.55)';ctx.lineWidth=0.5;
-  ctx.fillStyle='rgba(74,104,128,0.75)';ctx.font='8px Courier New';ctx.textAlign='right';
-  for(let i=0;i<=4;i++){
-    const y=pad.t+ch*(1-i/4);
-    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
-    ctx.fillText('$'+(maxV*i/4/1000).toFixed(1)+'k',pad.l-5,y+3);
-  }
-  // target
-  const ty=pad.t+ch*(1-5000/maxV);
-  ctx.strokeStyle='rgba(240,165,0,0.35)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
-  ctx.beginPath();ctx.moveTo(pad.l,ty);ctx.lineTo(pad.l+cw,ty);ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle='rgba(240,165,0,0.6)';ctx.textAlign='right';ctx.font='7px Courier New';
-  ctx.fillText('TARGET $5k MRR',pad.l+cw,ty-3);
-  // months
-  ctx.fillStyle='rgba(74,104,128,0.75)';ctx.textAlign='center';ctx.font='8px Courier New';
-  months.forEach((m,i)=>ctx.fillText(m,pad.l+i*xSt,H-6));
-  // total area
-  const stacked=months.map((_,i)=>series.reduce((s,sr)=>s+sr.d[i],0));
-  const ag=ctx.createLinearGradient(0,pad.t,0,pad.t+ch);
-  ag.addColorStop(0,'rgba(5,242,199,0.1)');ag.addColorStop(1,'rgba(5,242,199,0)');
-  ctx.beginPath();ctx.moveTo(pad.l,pad.t+ch);
-  stacked.forEach((v,i)=>ctx.lineTo(pad.l+i*xSt,pad.t+ch*(1-v/maxV)));
-  ctx.lineTo(pad.l+(n-1)*xSt,pad.t+ch);ctx.closePath();
-  ctx.fillStyle=ag;ctx.fill();
-  // series lines
-  series.forEach(sr=>{
-    ctx.beginPath();
-    sr.d.forEach((v,i)=>{const x=pad.l+i*xSt,y=pad.t+ch*(1-v/maxV);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
-    ctx.strokeStyle=sr.col;ctx.lineWidth=1.8;ctx.stroke();
-    const li=n-1;
-    if(sr.d[li]>0){
-      ctx.beginPath();ctx.arc(pad.l+li*xSt,pad.t+ch*(1-sr.d[li]/maxV),3.5,0,Math.PI*2);
-      ctx.fillStyle=sr.col;ctx.fill();
-      ctx.fillStyle=sr.col;ctx.font='8px Courier New';ctx.textAlign='left';
-      ctx.fillText(sr.lb+' $'+sr.d[li].toLocaleString(),pad.l+li*xSt+7,pad.t+ch*(1-sr.d[li]/maxV)+3);
-    }
+  agents.forEach(a=>{
+    const rad=(a.angle-90)*Math.PI/180;
+    const x=cx+r*Math.cos(rad),y=cy+r*Math.sin(rad);
+    actx.strokeStyle=a.active?'rgba(5,242,199,0.2)':'rgba(100,100,100,0.1)';
+    actx.lineWidth=1;actx.beginPath();actx.moveTo(cx,cy);actx.lineTo(x,y);actx.stroke();
   });
-  ctx.textAlign='left';
-}
-
-// init threats
-function initThreats(){renderThreats();}
-function renderThreats(){
-  const ft=threatFilter==='ALL'?THREATS:THREATS.filter(t=>t.sev===threatFilter);
-  document.getElementById('threat-list').innerHTML=ft.map(t=>`
-    <div class="threat-row">
-      <div class="tr-score s-${sClass(t.sev)}">${t.score}</div>
-      <div><span class="chip ${sClass(t.sev)}">${t.sev.slice(0,4)}</span></div>
-      <div><span class="engine-tag">${t.engine}</span></div>
-      <div style="font-size:9px;color:var(--muted);font-variant-numeric:tabular-nums">${t.time}</div>
-      <div>
-        <div style="font-size:10px;font-weight:700">${t.target}${t.c?'<span style="font-size:8px;color:var(--amber);margin-left:5px">🌿</span>':''}</div>
-        <div style="font-size:9px;color:var(--muted);margin-top:1px">${t.desc}</div>
-        <div style="font-size:8px;color:rgba(255,31,78,0.7);margin-top:2px;letter-spacing:0.07em">REVIEW REQUIRED. No auto-action.</div>
-      </div>
-      <div><span class="chip ${t.st==='pending'?'crit':'high'}">${t.st}</span></div>
-      <div style="display:flex;gap:4px;flex-wrap:wrap">
-        <button class="qi-btn" onclick="toast('Added to review queue','ok')">Queue</button>
-        <button class="qi-btn escalate" onclick="toast('Escalated to PrimeDox','warn')">Escalate</button>
-      </div>
-    </div>`).join('');
-}
-function filterThreats(s,btn){
-  threatFilter=s;
-  document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');renderThreats();
-}
-
-// init queue
-function initQueue(){renderQueue();}
-function renderQueue(){
-  const cnt=[1,2,3,4].map(p=>queueData.filter(q=>q.p===p).length);
-  document.getElementById('queue-stats').innerHTML=[
-    {l:'Critical',v:cnt[0],c:'hot'},{l:'High',v:cnt[1],c:'amber'},
-    {l:'Medium',v:cnt[2],c:'empire'},{l:'Total',v:queueData.length,c:'text'},
-  ].map(k=>`<div class="qs"><span style="color:var(--${k.c})">${k.v}</span>${k.l}</div>`).join('');
-  document.getElementById('tb-queue').textContent=queueData.length;
-  document.getElementById('queue-list').innerHTML=queueData.map(q=>`
-    <div class="queue-item" id="qi-${q.id}" draggable="true"
-      ondragstart="dStart(event,'${q.id}')"
-      ondragover="dOver(event)"
-      ondrop="dDrop(event,'${q.id}')"
-      ondragleave="this.classList.remove('drag-over')">
-      <div class="qi-top">
-        <div class="qi-prio p${q.p}"></div>
-        <div class="qi-title">${q.t}${q.c?'<span style="font-size:8px;color:var(--amber);margin-left:5px">🌿</span>':''}</div>
-        <span class="chip ${q.p===1?'crit':q.p===2?'high':q.p===3?'med':'idle'}" style="flex-shrink:0">P${q.p}</span>
-      </div>
-      <div class="qi-meta">${q.m}</div>
-      <div class="qi-actions">
-        <button class="qi-btn approve" onclick="qAct('${q.id}','approve')">Approve</button>
-        <button class="qi-btn" onclick="qAct('${q.id}','review')">Review</button>
-        <button class="qi-btn escalate" onclick="qAct('${q.id}','escalate')">Escalate</button>
-      </div>
-    </div>`).join('');
-}
-function qAct(id,act){
-  if(act==='approve'){queueData=queueData.filter(q=>q.id!==id);renderQueue();toast('Approved and archived','ok');}
-  else if(act==='review')toast('Flagged for detailed review','ok');
-  else toast('Escalated to PrimeDox — awaiting sign-off','warn');
-}
-function dStart(e,id){dragSrc=id;document.getElementById('qi-'+id)?.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
-function dOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
-function dDrop(e,tid){
-  e.preventDefault();e.currentTarget.classList.remove('drag-over');
-  if(!dragSrc||dragSrc===tid)return;
-  const si=queueData.findIndex(q=>q.id===dragSrc),ti=queueData.findIndex(q=>q.id===tid);
-  if(si<0||ti<0)return;
-  const[item]=queueData.splice(si,1);queueData.splice(ti,0,item);
-  renderQueue();dragSrc=null;
-}
-
-// init settings
-function initSettings(){
-  document.getElementById('settings-body').innerHTML=`
-    <div class="settings-section"><div class="ss-title">Notifications</div>
-    ${[{l:'WebSocket Real-time Alerts',s:'Push to dashboard on every alert',on:true},{l:'Email (HIGH/CRITICAL)',s:'Gmail SMTP — set SMTP_HOST or SENDGRID_API_KEY',on:true},{l:'Slack Webhook',s:'Post to #vigilax-alerts — set SLACK_WEBHOOK_URL',on:false},{l:'SMS Critical (Twilio)',s:'Score ≥ 90 — set TWILIO_* env vars; 3× email fallback if absent',on:false}]
-    .map(r=>`<div class="setting-row"><div><div class="sr-label">${r.l}</div><div class="sr-sub">${r.s}</div></div><div class="toggle ${r.on?'on':''}" onclick="this.classList.toggle('on')"></div></div>`).join('')}</div>
-    <div class="settings-section"><div class="ss-title">Detection Engines</div>
-    ${[{l:'Click Fraud (Z-Score)',s:'Temporal clustering, IP analysis, CTR anomaly detection',on:true},{l:'Review Fraud (Jaccard)',s:'Duplicate detection — threshold 0.65',on:true},{l:'Influencer Fraud',s:'Per-tier ER benchmarks with platform modifiers',on:true},{l:'Ad Fraud (IVT)',s:'Invalid traffic, MFA domains, pixel validation',on:true},{l:'Gov Procurement',s:'Bid rigging, cover bidding, expenditure anomalies',on:true},{l:'Cannabis Monitor',s:'Public signals ONLY — ALWAYS requires human review',on:true}]
-    .map(r=>`<div class="setting-row"><div><div class="sr-label">${r.l}</div><div class="sr-sub">${r.s}</div></div><div class="toggle ${r.on?'on':''}" onclick="this.classList.toggle('on')"></div></div>`).join('')}</div>
-    <div class="settings-section"><div class="ss-title">Security</div>
-    <div class="setting-row"><div><div class="sr-label">Human Review Required</div><div class="sr-sub">Every finding requires human sign-off. Auto-accusation permanently disabled.</div></div><div class="toggle on" style="pointer-events:none;opacity:0.55"></div></div>
-    <div class="setting-row"><div><div class="sr-label">Evidence Chain of Custody</div><div class="sr-sub">SHA256 hash chain on all evidence packages</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div></div>
-    <div class="settings-section"><div class="ss-title">Keyboard Shortcuts</div>
-    <table class="mt"><tr><th>Key</th><th>Section</th></tr>
-    ${[['H','Home'],['2','Tower'],['A','Agents'],['4','Revenue'],['5','Threats'],['6','Review Queue'],['7','Settings']].map(([k,v])=>`<tr><td><span class="engine-tag">${k}</span></td><td>${v}</td></tr>`).join('')}</table></div>
-  `;
-}
-
-// live sim
-setInterval(()=>{
-  AGENTS.forEach((a,i)=>{
-    const d=(Math.random()-0.45)*7;
-    a.load=Math.max(5,Math.min(99,Math.round(a.load+d)));
-    if(curSection==='agents'){
-      const lb=document.getElementById('lb-'+a.id);
-      const lp=document.getElementById('lp-'+a.id);
-      if(lb){lb.style.width=a.load+'%';lb.className='load-fill'+(a.load>=80?' hot':a.load>=55?' warn':'');}
-      if(lp)lp.textContent=a.load+'%';
-    }
+  // hub — FH (Francisco Holdings)
+  actx.fillStyle='#05F2C7';actx.shadowColor='#05F2C7';actx.shadowBlur=15;
+  actx.beginPath();actx.arc(cx,cy,8,0,Math.PI*2);actx.fill();
+  actx.shadowBlur=0;
+  actx.fillStyle='#020A16';actx.font='bold 7px sans-serif';actx.textAlign='center';actx.textBaseline='middle';
+  actx.fillText('FH',cx,cy);
+  actx.textBaseline='alphabetic';
+  actx.fillStyle='#888';actx.font='9px sans-serif';
+  actx.fillText('HQ',cx,cy+20);
+  agents.forEach(a=>{
+    const rad=(a.angle-90)*Math.PI/180;
+    const x=cx+r*Math.cos(rad),y=cy+r*Math.sin(rad);
+    actx.fillStyle=a.active?'#05F2C7':'#333';
+    if(a.active){actx.shadowColor='#05F2C7';actx.shadowBlur=10;}
+    actx.beginPath();actx.arc(x,y,6,0,Math.PI*2);actx.fill();
+    actx.shadowBlur=0;
+    actx.fillStyle=a.active?'#aaa':'#555';actx.font='8px sans-serif';actx.textAlign='center';
+    actx.fillText(a.name,x,y+16);
   });
-  if(Math.random()<0.12){
-    simThreats=Math.min(simThreats+1,99);
-    document.getElementById('tb-threats').textContent=simThreats;
-    const mc=document.getElementById('mc-threats');
-    if(mc)mc.textContent=simThreats;
-  }
-  if(curSection==='agents')drawNetwork();
-},2200);
-
-// toast
-function toast(msg,type='ok'){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.className='show'+(type==='warn'?' err':'');
-  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3000);
 }
 
-// boot
-initHome();initTower();initAgents();initRevenue();initThreats();initQueue();initSettings();
+function togglePin(){
+  const pin=prompt('Enter Empire PIN:');
+  if(pin==='3920') alert(String.fromCodePoint(128274)+' Verified. Welcome, Emperor.');
+  else alert(String.fromCodePoint(10060)+' Invalid PIN');
+}
+
+window.addEventListener('resize',()=>{resizeCanvas();drawAgentNetwork();});
+setTimeout(()=>{resizeCanvas();drawAgentNetwork();},100);
+setInterval(drawAgentNetwork,3000);
 </script>
+</body>
+</html>
