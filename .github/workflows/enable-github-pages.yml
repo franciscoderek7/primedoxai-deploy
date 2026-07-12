@@ -1,0 +1,88 @@
+name: Enable GitHub Pages on All Empire Repos
+
+on:
+  workflow_dispatch:
+
+jobs:
+  enable-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable GitHub Pages on all empire repos
+        run: |
+          TOKEN="${{ secrets.DEPLOY_TOKEN }}"
+          OWNER="franciscoderek7"
+
+          # All target repos that serve live domains
+          REPOS=(
+            "francisco-holdings"
+            "zprimedoxaihq"
+            "Ccldr-net"
+            "omniaguard"
+            "primedox"
+            "techpetcage"
+            "vaultvelocityauto"
+            "vigilax"
+            "cleanswarm"
+            "kiaros"
+            "techpackcage"
+            "docweedlaw"
+            "agent-swarm-tech"
+            "agentforge"
+            "beno-x"
+            "fintech-swarm"
+            "health-swarm"
+            "empire-gap-scanner"
+            "ai-governance-canada"
+            "canna-deliver"
+            "constitutional-defense-labs"
+          )
+
+          for REPO in "${REPOS[@]}"; do
+            echo ""
+            echo "=== $REPO ==="
+
+            # Try to enable Pages (POST — creates new Pages config)
+            HTTP=$(curl -s -o /tmp/pages-resp.json -w "%{http_code}" \
+              -X POST \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$OWNER/$REPO/pages" \
+              -d '{"source":{"branch":"main","path":"/"}}')
+
+            if [ "$HTTP" == "201" ]; then
+              echo "✅ Pages ENABLED on $REPO"
+            elif [ "$HTTP" == "409" ] || [ "$HTTP" == "422" ]; then
+              # Pages already enabled — update source settings
+              HTTP2=$(curl -s -o /tmp/pages-resp2.json -w "%{http_code}" \
+                -X PUT \
+                -H "Authorization: Bearer $TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/$OWNER/$REPO/pages" \
+                -d '{"source":{"branch":"main","path":"/"}}')
+              echo "✅ Pages already on $REPO (updated settings — HTTP $HTTP2)"
+            elif [ "$HTTP" == "404" ]; then
+              echo "⚠️  Repo $REPO NOT FOUND — needs to be created first"
+              cat /tmp/pages-resp.json
+            else
+              echo "❌ Unexpected response $HTTP for $REPO"
+              cat /tmp/pages-resp.json
+            fi
+          done
+
+          echo ""
+          echo "=== PAGES ENABLE COMPLETE ==="
+          echo "Sites live in ~2 minutes after Pages builds"
+          echo ""
+          echo "URLS:"
+          echo "  https://franciscoholdingsinc.com"
+          echo "  https://zprimedoxaihq.com"
+          echo "  https://omniaguard.com"
+          echo "  https://primedoxai.com"
+          echo "  https://techpetcage.com"
+          echo "  https://vaultvelocityauto.com"
+          echo "  https://vigilax.com"
+          echo "  https://cleanswarm.com"
+          echo "  https://kiaros.com"
+          echo "  https://techpackcage.com"
