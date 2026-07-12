@@ -48,31 +48,31 @@
       consultLabel: 'Get Warrior Tier — $149',
     },
     'omniaguard': {
-      name: 'OmniaGuard AI',
+      name: 'OmniGuard AI',
       avatar: '🛡️',
       color: '#6c63ff',
       accent: '#4b43cc',
-      greeting: "OmniaGuard here. What's your threat surface? I can help you find the right protection tier.",
-      consultLink: 'mailto:omniaguard1@gmail.com?subject=OmniaGuard%20Inquiry',
-      consultLabel: 'Contact Sales',
+      greeting: "OmniGuard here. What's your threat surface? I can help you find the right protection tier.",
+      consultLink: 'https://paypal.me/techpetcage/499CAD',
+      consultLabel: 'Start OmniGuard Sentinel — $499/mo',
     },
     'cleanswarm': {
       name: 'CleanSwarm AI',
       avatar: '🐝',
       color: '#f59e0b',
       accent: '#b45309',
-      greeting: "Hey! CleanSwarm here. Need AI-powered document cleanup? Tell me about your workflow.",
-      consultLink: 'mailto:franciscoderek7@gmail.com?subject=CleanSwarm%20Inquiry',
-      consultLabel: 'Contact CleanSwarm →',
+      greeting: "Hey! CleanSwarm here. Let's automate your workflow. What are you cleaning up?",
+      consultLink: 'https://paypal.me/techpetcage/399CAD',
+      consultLabel: 'Start CleanSwarm Starter — $399/mo',
     },
     'default': {
-      name: 'Reverend AI',
-      avatar: '✝️',
-      color: '#6c63ff',
-      accent: '#4b43cc',
-      greeting: "Hello. I'm Reverend AI. How can I help you today?",
-      consultLink: 'mailto:franciscoderek7@gmail.com',
-      consultLabel: 'Contact Us',
+      name: 'Francisco Holdings AI',
+      avatar: '🏛️',
+      color: '#c9a84c',
+      accent: '#9a7a2e',
+      greeting: "Welcome to Francisco Holdings. I help founders get clarity fast. What challenge are you facing?",
+      consultLink: 'https://paypal.me/techpetcage/500CAD',
+      consultLabel: 'Book Strategy Session — $500',
     }
   };
 
@@ -82,7 +82,7 @@
   var KB = [
     // Founder — only answered if explicitly asked, then pivots back to security
     { kw: ['who built', 'who is the founder', 'who created', 'who founded', 'founder of omniaguard', 'who is behind', 'who owns omniaguard'],
-      answer: "OmniaGuard was founded by Derek Francisco.<br><br>Now — what's your threat surface? Tell me your industry and team size and I'll point you to the right protection tier." },
+      answer: "OmniGuard was founded by Derek Francisco.<br><br>Now — what's your threat surface? Tell me your industry and team size and I'll point you to the right protection tier." },
     // Off-topic legal routing (cannabis/legal — not a security question)
     { kw: ['cannabis charge', 'cannabis charges', 'marijuana charge', 'weed charge', 'cannabis', 'marijuana', 'possession charge', 'drug charge'],
       answer: "I specialize in cybersecurity, not legal matters. For cannabis defense, visit Floor 2 (BENO-X / Doc Weedlaw) or PrimeDox AI HQ at zprimedoxaihq.com." },
@@ -112,13 +112,13 @@
       answer: "Deployment timeline by tier:<br>• Sentinel / Guardian — self-serve, live in 2 hours<br>• Warden and above — dedicated engineer, live in 48 hours<br>• Archon / Sovereign — custom scoping, 5-10 business days" },
     // Payment
     { kw: ['pay', 'payment', 'how do i pay', 'interac', 'bitcoin', 'wire transfer', 'corporate cheque', 'paypal'],
-      answer: "We accept PayPal, Interac e-Transfer, Bitcoin, wire transfer, and corporate cheque. Send your Interac payment or payment confirmation to <strong>omniaguard1@gmail.com</strong> with your company name and tier — accounts are activated within 2 business hours." },
+      answer: "We accept PayPal, Interac e-Transfer, Bitcoin, wire transfer, and corporate cheque. Click the button below to pay via PayPal — accounts are activated within 2 business hours of confirmed payment." },
     // General pricing fallback
     { kw: ['price', 'cost', 'tier', 'how much', 'pricing', 'plan', 'plans'],
       answer: "OmniaGuard tiers:<br>🔹 Sentinel — $499/mo<br>🔸 Guardian — $2,499/mo<br>🛡️ Warden — $5,000/mo ★ Recommended<br>🔥 Archon — $15,000/mo<br>💎 Sovereign — $25,000/mo<br><br>Tell me your industry and team size and I'll recommend the right one." },
     // Contact
     { kw: ['contact', 'email', 'reach', 'talk to', 'speak to someone', 'sales'],
-      answer: "Reach our security team directly at <strong>omniaguard1@gmail.com</strong> — we typically respond within 1 business hour." },
+      answer: "Book directly using the button below — that's the fastest way to reach our security team. We respond within 1 business hour." },
     { kw: ['hello', 'hi', 'hey', 'start', 'help', 'what can you do'],
       answer: null } // triggers default greeting repeat
   ];
@@ -229,7 +229,7 @@
     } else {
       botReply(
         "I specialize in cybersecurity — ask me about our tiers, the 14-layer stack, compliance, or deployment timelines.<br><br>" +
-        "For anything else, reach our team at <strong>omniaguard1@gmail.com</strong>."
+        "For a detailed conversation, book directly using the button below."
       );
     }
   }
