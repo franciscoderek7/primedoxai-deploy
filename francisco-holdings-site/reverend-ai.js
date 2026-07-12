@@ -53,26 +53,26 @@
       color: '#6c63ff',
       accent: '#4b43cc',
       greeting: "OmniGuard here. What's your threat surface? I can help you find the right protection tier.",
-      consultLink: 'mailto:contact@omniaguard.com?subject=OmniGuard%20Inquiry',
-      consultLabel: 'Contact Sales',
+      consultLink: 'https://paypal.me/techpetcage/499CAD',
+      consultLabel: 'Start OmniGuard Sentinel — $499/mo',
     },
     'cleanswarm': {
       name: 'CleanSwarm AI',
       avatar: '🐝',
       color: '#f59e0b',
       accent: '#b45309',
-      greeting: "Hey! CleanSwarm here. Need AI-powered document cleanup? Tell me about your workflow.",
-      consultLink: 'mailto:franciscoderek7@gmail.com?subject=CleanSwarm%20Inquiry',
-      consultLabel: 'Contact CleanSwarm →',
+      greeting: "Hey! CleanSwarm here. Let's automate your workflow. What are you cleaning up?",
+      consultLink: 'https://paypal.me/techpetcage/399CAD',
+      consultLabel: 'Start CleanSwarm Starter — $399/mo',
     },
     'default': {
-      name: 'Reverend AI',
-      avatar: '✝️',
-      color: '#6c63ff',
-      accent: '#4b43cc',
-      greeting: "Hello. I'm Reverend AI. How can I help you today?",
-      consultLink: 'mailto:franciscoderek7@gmail.com',
-      consultLabel: 'Contact Us',
+      name: 'Francisco Holdings AI',
+      avatar: '🏛️',
+      color: '#c9a84c',
+      accent: '#9a7a2e',
+      greeting: "Welcome to Francisco Holdings. I help founders get clarity fast. What challenge are you facing?",
+      consultLink: 'https://paypal.me/techpetcage/500CAD',
+      consultLabel: 'Book Strategy Session — $500',
     }
   };
 
@@ -108,12 +108,22 @@
     { kw: ['cleanswarm', 'clean', 'swarm', 'document cleanup', 'ocr', 'extraction'],
       answer: "CleanSwarm automates document cleanup, OCR extraction, and data structuring at scale. Tiers:<br>🐝 Starter — $399/mo<br>🐝🐝 Growth — $999/mo<br>🐝🐝🐝 Scale — $2,499/mo" },
     // General
+    // Cross-empire routing
+    { kw: ['legal', 'lawyer', 'law firm', 'documents', 'primedox'],
+      answer: "For legal document automation, PrimeDox AI has you covered — drafting, intake forms, e-signature, and case tracking. Tiers from $149/mo.<br><br><a class='rev-cta' href='https://franciscoholdingsinc.com/companies/cannabis-compliance-canada.html' target='_blank'>Explore PrimeDox AI →</a>" },
+    { kw: ['cannabis', 'dispensary', 'ccldr', 'weedlaw', 'compliance'],
+      answer: "For cannabis legal compliance and constitutional defense, CCLDR and Doc Weedlaw are your go-to empire services. BENO-X Framework included.<br><br><a class='rev-cta' href='https://franciscoholdingsinc.com' target='_blank'>See All Empire Services →</a>" },
+    { kw: ['surveillance', 'camera', 'security camera', 'vigilax', 'monitoring'],
+      answer: "VIGILAX covers AI-powered surveillance — smart cameras, real-time alerts, remote monitoring. Contact via our empire portal to quote your facility.<br><br><a class='rev-cta' href='https://franciscoholdingsinc.com' target='_blank'>Explore VIGILAX →</a>" },
+    { kw: ['pet', 'dog', 'cat', 'techpetcage', 'gps collar', 'vet'],
+      answer: "TechPetCage delivers GPS tracking, health alerts, and AI vet notifications for pets. B2B bundles available for vet clinics and shelters.<br><br><a class='rev-cta' href='https://franciscoholdingsinc.com' target='_blank'>See TechPetCage →</a>" },
+    // Affiliate / commission
     { kw: ['affiliate', 'commission', 'referral', 'partner', 'earn'],
-      answer: "Our affiliate program pays 20% commission on every referral. Sign up at <a href='../affiliate/' style='color:inherit'>the affiliate page</a> — first payouts go through Interac or PayPal." },
+      answer: "Our affiliate program pays 20–40% commission on every referral — higher tiers earn more. Sign up at <a href='../refer/' style='color:inherit'>the referral page</a> — payouts via Interac or PayPal." },
     { kw: ['paypal', 'payment', 'pay', 'interac', 'etransfer', 'e-transfer'],
-      answer: "All products can be purchased via PayPal or Interac e-Transfer. Send to <strong>franciscoderek7@gmail.com</strong> with the product name in the subject." },
+      answer: "All products can be purchased via PayPal — click the button below to pay securely. Interac e-Transfer is also accepted; use the booking button and add your name in the notes." },
     { kw: ['contact', 'email', 'reach', 'talk to', 'speak'],
-      answer: "Best way to reach us: reply directly to your welcome email, or send to <strong>franciscoderek7@gmail.com</strong>. For OmniGuard: contact@omniaguard.com." },
+      answer: "Book a direct session using the button below — that's the fastest way to get a response. Strategy sessions, product demos, and consultations are all available." },
     { kw: ['hello', 'hi', 'hey', 'start', 'help', 'what can you do'],
       answer: null } // triggers default greeting repeat
   ];
@@ -223,8 +233,8 @@
       botReply(answer);
     } else {
       botReply(
-        "Good question. For a detailed answer, the fastest path is speaking directly with our team.<br><br>" +
-        "Reply via email: <strong>franciscoderek7@gmail.com</strong> — or click below."
+        "Great question — that's exactly the kind of thing worth a proper conversation.<br><br>" +
+        "Book directly using the button below and we'll cover it in detail. No wasted time."
       );
     }
   }
