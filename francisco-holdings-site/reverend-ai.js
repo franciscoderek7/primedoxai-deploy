@@ -48,12 +48,12 @@
       consultLabel: 'Get Warrior Tier — $149',
     },
     'omniaguard': {
-      name: 'OmniaGuard AI',
+      name: 'OmniGuard AI',
       avatar: '🛡️',
       color: '#6c63ff',
       accent: '#4b43cc',
-      greeting: "OmniaGuard here. What's your threat surface? I can help you find the right protection tier.",
-      consultLink: 'mailto:contact@omniaguard.com?subject=OmniaGuard%20Inquiry',
+      greeting: "OmniGuard here. What's your threat surface? I can help you find the right protection tier.",
+      consultLink: 'mailto:contact@omniaguard.com?subject=OmniGuard%20Inquiry',
       consultLabel: 'Contact Sales',
     },
     'cleanswarm': {
@@ -101,9 +101,9 @@
       answer: "The Francisco Holdings monthly strategy retainer is $1,500/mo — 4 sessions, priority access, direct line to Derek Francisco. Reply 'RETAINER' to get the agreement." },
     { kw: ['22 brands', 'empire', 'holdings', 'how do you', 'run'],
       answer: "Derek Francisco runs 22 brands with 2 people using AI automation, Loop A/B identity architecture, and a lean AI stack. That playbook is teachable in a single consulting session." },
-    // OmniaGuard
+    // OmniGuard
     { kw: ['omniaguard', 'security', 'threat', 'ai security', 'enterprise security', 'protection'],
-      answer: "OmniaGuard offers enterprise-grade AI security:<br>🔹 Sentinel — $499/mo (monitoring)<br>🔸 Guardian — $1,499/mo (active defense)<br>🔥 Fortress — $4,999/mo (full suite)<br>💎 Sovereign — $15,000/mo (dedicated team)" },
+      answer: "OmniGuard offers enterprise-grade AI security:<br>🔹 Sentinel — $499/mo (monitoring)<br>🔸 Guardian — $1,499/mo (active defense)<br>🔥 Fortress — $4,999/mo (full suite)<br>💎 Sovereign — $15,000/mo (dedicated team)" },
     // CleanSwarm
     { kw: ['cleanswarm', 'clean', 'swarm', 'document cleanup', 'ocr', 'extraction'],
       answer: "CleanSwarm automates document cleanup, OCR extraction, and data structuring at scale. Tiers:<br>🐝 Starter — $399/mo<br>🐝🐝 Growth — $999/mo<br>🐝🐝🐝 Scale — $2,499/mo" },
@@ -113,7 +113,7 @@
     { kw: ['paypal', 'payment', 'pay', 'interac', 'etransfer', 'e-transfer'],
       answer: "All products can be purchased via PayPal or Interac e-Transfer. Send to <strong>franciscoderek7@gmail.com</strong> with the product name in the subject." },
     { kw: ['contact', 'email', 'reach', 'talk to', 'speak'],
-      answer: "Best way to reach us: reply directly to your welcome email, or send to <strong>franciscoderek7@gmail.com</strong>. For OmniaGuard: contact@omniaguard.com." },
+      answer: "Best way to reach us: reply directly to your welcome email, or send to <strong>franciscoderek7@gmail.com</strong>. For OmniGuard: contact@omniaguard.com." },
     { kw: ['hello', 'hi', 'hey', 'start', 'help', 'what can you do'],
       answer: null } // triggers default greeting repeat
   ];
