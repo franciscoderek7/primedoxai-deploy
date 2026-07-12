@@ -60,7 +60,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .scan-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px}
 .scan-box h3{font-size:14px;color:var(--gold);margin-bottom:10px}
 .scan-row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
-#url-input{flex:1;min-width:200px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:6px;font-size:13px}
+#url-input{flex:1;min-width:200px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:6px;font-size:13px;resize:vertical;min-height:76px;font-family:inherit;line-height:1.5}
 #url-input:focus{outline:1px solid var(--gold)}
 #csv-input{display:none}
 .btn{background:var(--gold);color:#000;border:none;padding:9px 18px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;white-space:nowrap}
@@ -199,10 +199,35 @@ input[type=file]{display:none}
   <div class="tb-logo">🎯 GAP <span>HUNTER</span></div>
   <select id="company-select" onchange="selectHunter(this.value)">
     <option value="">— Select Empire Company —</option>
+    <option value="omniaguard">OmniGuard — AI Cybersecurity</option>
+    <option value="primedoxai">PrimeDox AI — Legal Technology</option>
+    <option value="vigilax">VIGILAX — AI Surveillance</option>
+    <option value="techpetcage">TechPetCage — Pet Technology</option>
+    <option value="cleanswarm">CleanSwarm — Commercial Cleaning</option>
+    <option value="kiaros">Kiaros — AI Business Strategy</option>
+    <option value="ccldr">CCLDR — Cannabis Legal</option>
+    <option value="francorealty">Francisco Realty — Real Estate</option>
+    <option value="francolegal">Francisco Legal — Legal Services</option>
+    <option value="vaultvelocity">VaultVelocity — Auto Financing</option>
+    <option value="cannadelivr">Canna-Deliver — Cannabis Delivery</option>
+    <option value="benox">BENO-X — Constitutional Defense</option>
+    <option value="docweedlaw">Doc Weedlaw — Cannabis Advocacy</option>
+    <option value="mindshift">MindShift by Michaella — Wellness</option>
+    <option value="cyberguard">CyberGuard — SMB Cybersecurity</option>
+    <option value="weedlawacademy">WeedLaw Academy — Cannabis Education</option>
+    <option value="phoenixdominion">Phoenix Dominion — Empire Building</option>
+    <option value="agentswarm">Agent Swarm Tech — AI Automation</option>
+    <option value="agentforge">AgentForge — AI Agent SaaS</option>
+    <option value="agigovernance">AI Governance Canada — AI Policy</option>
+    <option value="consdeflab">Constitutional Defense Labs — Legal Tech</option>
+    <option value="soulstack">SoulStack — AI Brand Reputation</option>
+    <option value="zprimedoxaihq">ZPrimeDox AI HQ — Command Center</option>
+    <option value="francohq">Francisco Holdings Inc. — Investment</option>
   </select>
   <div class="tb-stat">Scanned <span id="stat-scanned">0</span></div>
   <div class="tb-stat">Leads <span id="stat-leads">0</span></div>
   <div class="tb-stat">Pipeline <span id="stat-pipeline">$0</span></div>
+  <div class="tb-stat">Emails <span id="stat-emails">0</span></div>
   <div class="tb-spacer"></div>
   <div id="nav-tabs">
     <button class="nav-tab active" onclick="showTab('hunt')">HUNT</button>
@@ -243,8 +268,12 @@ input[type=file]{display:none}
       <div id="scan-section" style="display:none">
         <div class="scan-box">
           <h3>SCAN TARGETS</h3>
+          <div id="demo-banner" style="background:#1a1500;border:1px solid var(--warm);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <span style="color:var(--warm);font-size:12px">🎭 <b>DEMO MODE AVAILABLE</b> — Phone browsers may block real scanning (CORS). Load 20 pre-scanned targets to test all features instead.</span>
+            <button class="btn btn-sec" onclick="loadDemoTargets()" style="padding:6px 14px;font-size:12px;white-space:nowrap">⚡ Load 20 Demo Targets</button>
+          </div>
           <div class="scan-row">
-            <input id="url-input" type="text" placeholder="https://competitor.com  (one URL, or paste multiple newline-separated)">
+            <textarea id="url-input" rows="4" placeholder="https://competitor.com&#10;https://another-target.com&#10;One URL per line — paste up to 100 URLs"></textarea>
             <button class="btn" onclick="startScan()">⚡ SCAN</button>
             <label class="btn btn-sec" for="csv-file-input" style="display:flex;align-items:center">📁 CSV</label>
             <input type="file" id="csv-file-input" accept=".csv,.txt" onchange="loadCSV(event)">
@@ -308,7 +337,7 @@ input[type=file]{display:none}
               </div>
             </div>
             <div class="dp-card">
-              <h4>Outreach Email <button class="act-btn" onclick="copyEmail()" style="float:right">📋 Copy</button></h4>
+              <h4>Outreach Email <button id="copy-email-btn" class="act-btn" onclick="copyEmail()" style="float:right">📋 Copy</button></h4>
               <div class="email-box" id="dp-email"></div>
               <div class="email-actions">
                 <button class="btn btn-green" onclick="sendEmail()" style="padding:6px 14px;font-size:12px">📧 Open in Email</button>
@@ -694,6 +723,114 @@ const HUNTERS = [
   services:[{n:'FH Partnership Floor',p:50000,r:false},{n:'FH Strategy Session',p:500,r:false}],
   cross:['zprimedoxaihq','kiaros','primedoxai','agentswarm']
 },
+{
+  id:'francorealty', name:'Francisco Realty', icon:'🏠',
+  color:'#F97316', industry:'Real Estate & Property Investment',
+  targets:'Real estate agents, brokerages, property managers, REIT firms, home builders, land developers',
+  gaps:[
+    {id:'novirtual',  label:'No virtual tours / 3D walkthroughs', keywords:'virtual tour|3d tour|matterport|walk-through', missing:true, w:18},
+    {id:'noschedule', label:'No online showing scheduler',    keywords:'schedule|book showing|book a tour|book visit', missing:true, w:15},
+    {id:'noaival',    label:'No AI property valuation',      keywords:'ai valuation|instant value|home value|property value', missing:true, w:14},
+    {id:'nomortgage', label:'No mortgage calculator',        keywords:'mortgage calculat|payment calculat|affordability', missing:true, w:12},
+    {id:'nocrm',      label:'No CRM / lead capture',        keywords:'crm|lead|contact form|get in touch|buyer match', missing:true, w:12},
+    {id:'nomarket',   label:'No market data / analytics',   keywords:'market data|statistics|average price|market report', missing:true, w:10},
+    {id:'nochat',     label:'No live chat / instant contact', keywords:'chat|message|whatsapp|text us|instant', missing:true, w:10},
+    {id:'noreview',   label:'No testimonials / social proof', keywords:'review|testimonial|satisfied|happy client|star', missing:true, w:9},
+  ],
+  pitch:"Buyers decide online before calling. Francisco Realty gives them every tool — virtual tours, AI valuations, instant booking.",
+  services:[{n:'FrancoRealty Digital Package',p:997,r:true},{n:'FrancoRealty Full Stack',p:2997,r:true}],
+  cross:['primedoxai','kiaros','zprimedoxaihq']
+},
+{
+  id:'francolegal', name:'Francisco Legal', icon:'🏛️',
+  color:'#7C3AED', industry:'Legal Services',
+  targets:'Law firms, solo practitioners, paralegals, notaries, legal aid offices, title companies',
+  gaps:[
+    {id:'noportal',   label:'No secure client portal',      keywords:'client portal|secure login|client login|matter portal', missing:true, w:18},
+    {id:'noesign',    label:'No e-signature capability',    keywords:'esign|e-sign|docusign|electronic sign|digital sign', missing:true, w:16},
+    {id:'nobooking',  label:'No online consultation booking', keywords:'book|schedule|consultation|appointment|calendar', missing:true, w:14},
+    {id:'noaidraft',  label:'No AI document drafting',      keywords:'ai draft|document automation|auto-fill|legal ai|generate document', missing:true, w:14},
+    {id:'nopayment',  label:'No online payment',            keywords:'pay online|payment|stripe|lawpay|credit card', missing:true, w:12},
+    {id:'nocasetrack',label:'No case / matter tracking',    keywords:'case tracking|matter management|case status|docket', missing:true, w:12},
+    {id:'nochat',     label:'No live chat support',         keywords:'chat|live support|message|instant', missing:true, w:8},
+    {id:'nofaq',      label:'No self-serve legal FAQ',      keywords:'faq|frequently asked|self-serve|common question', missing:true, w:6},
+  ],
+  pitch:"Clients ghost when they can't book, pay, or track their case online. Francisco Legal fixes the entire digital client journey.",
+  services:[{n:'FrancoLegal Starter',p:349,r:true},{n:'FrancoLegal Pro',p:997,r:true}],
+  cross:['primedoxai','omniaguard','ccldr']
+},
+{
+  id:'mindshift', name:'MindShift by Michaella', icon:'🧠',
+  color:'#A855F7', industry:'Mental Health & Wellness Coaching',
+  targets:'Therapists, life coaches, wellness centers, corporate wellness programs, mindfulness apps, mental health clinics',
+  gaps:[
+    {id:'nobook',     label:'No online booking system',     keywords:'book|schedule|appointment|reserve a session', missing:true, w:20},
+    {id:'notelehealth',label:'No telehealth / virtual sessions', keywords:'telehealth|virtual session|video session|online therapy|zoom', missing:true, w:18},
+    {id:'noapp',      label:'No wellness app or portal',    keywords:'app|ios|android|portal|dashboard|track progress', missing:true, w:14},
+    {id:'noresources',label:'No self-help resource library', keywords:'resource|guide|worksheet|exercise|toolkit|library', missing:true, w:12},
+    {id:'nopayment',  label:'No online payment / packages', keywords:'pay online|package|bundle|pricing|session rate|book now', missing:true, w:12},
+    {id:'nogroup',    label:'No group programs / workshops', keywords:'group|workshop|program|course|cohort|retreat', missing:true, w:10},
+    {id:'nocreds',    label:'No credentials / certifications', keywords:'certified|credential|license|registered|accredited', missing:true, w:8},
+    {id:'noreview',   label:'No client success stories',   keywords:'testimonial|success story|review|transformation|result', missing:true, w:6},
+  ],
+  pitch:"Clients searching for help leave in 10 seconds if they can't book instantly. MindShift by Michaella converts that first click.",
+  services:[{n:'MindShift Starter Pack',p:297,r:true},{n:'MindShift Practice Builder',p:797,r:true}],
+  cross:['kiaros','primedoxai','soulstack']
+},
+{
+  id:'cyberguard', name:'CyberGuard', icon:'🔐',
+  color:'#0EA5E9', industry:'SMB Cybersecurity',
+  targets:'Small businesses, dental/medical offices, accountants, local retailers, restaurants with POS, law offices',
+  gaps:[
+    {id:'nossl',      label:'No HTTPS / SSL certificate',  keywords:null, notHTTPS:true, w:22, critical:true},
+    {id:'nobackup',   label:'No data backup solution',     keywords:'backup|disaster recovery|data recovery|cloud backup', missing:true, w:16},
+    {id:'nomfa',      label:'No MFA / 2FA mention',        keywords:'mfa|2fa|two-factor|multi-factor|authenticator', missing:true, w:14},
+    {id:'notraining', label:'No employee security training', keywords:'security training|awareness|phishing train|cyber training', missing:true, w:12},
+    {id:'nofirewall', label:'No firewall / endpoint protection', keywords:'firewall|endpoint|antivirus|malware|threat protect', missing:true, w:12},
+    {id:'nopolicy',   label:'No security / privacy policy', keywords:'security policy|privacy policy|data policy|acceptable use', missing:true, w:10},
+    {id:'noincident', label:'No incident response plan',   keywords:'incident response|breach plan|data breach|emergency', missing:true, w:8},
+    {id:'nopatch',    label:'No patch management mention', keywords:'patch|update|vulnerability|software update', missing:true, w:6},
+  ],
+  pitch:"One phishing email breaks SMBs for weeks. CyberGuard wraps small businesses in enterprise-grade protection at SMB pricing.",
+  services:[{n:'CyberGuard SMB Shield',p:149,r:true},{n:'CyberGuard Business Pro',p:449,r:true}],
+  cross:['omniaguard','primedoxai','vigilax']
+},
+{
+  id:'weedlawacademy', name:'WeedLaw Academy', icon:'🎓',
+  color:'#16A34A', industry:'Cannabis Legal Education',
+  targets:'Cannabis business operators, LP employees, dispensary staff, cannabis entrepreneurs, compliance officers',
+  gaps:[
+    {id:'nocourses',  label:'No online courses / certifications', keywords:'course|certification|online learning|enroll|learn', missing:true, w:22},
+    {id:'nowebinars', label:'No live webinars / workshops',   keywords:'webinar|workshop|live|event|virtual class', missing:true, w:16},
+    {id:'nolegalup',  label:'No cannabis law update feed',   keywords:'update|news|latest|regulation change|2024|2025|2026', missing:true, w:14},
+    {id:'nocomp',     label:'No compliance training modules', keywords:'compliance module|compliance training|regulatory training', missing:true, w:12},
+    {id:'nocaselib',  label:'No case law library',           keywords:'case law|parker|allard|precedent|case database', missing:true, w:12},
+    {id:'noinstructor',label:'No instructor credentials listed', keywords:'instructor|professor|lawyer|legal counsel|facilitator', missing:true, w:8},
+    {id:'noplatform', label:'No LMS / learning platform',   keywords:'lms|learning management|platform|my courses|my account', missing:true, w:8},
+    {id:'nofree',     label:'No free intro content',        keywords:'free|trial|sample|preview|intro course', missing:true, w:8},
+  ],
+  pitch:"Cannabis compliance failures start with ignorance of the law. WeedLaw Academy educates your entire operation — online, certified, current.",
+  services:[{n:'WeedLaw Academy Access',p:97,r:true},{n:'WeedLaw Academy Enterprise',p:497,r:true}],
+  cross:['ccldr','docweedlaw','benox','primedoxai']
+},
+{
+  id:'phoenixdominion', name:'Phoenix Dominion', icon:'👑',
+  color:'#D4AF37', industry:'Empire Building & Business Domination',
+  targets:'Business owners with 2+ companies, serial entrepreneurs, holding companies, investors, startup studio operators',
+  gaps:[
+    {id:'noempire',   label:'No empire / portfolio structure', keywords:'portfolio|empire|division|subsidiary|holdings|companies', missing:true, w:20},
+    {id:'noauto',     label:'No business automation stack',   keywords:'automat|workflow|process|efficiency|system', missing:true, w:16},
+    {id:'noai',       label:'No AI decision layer',          keywords:'ai|artificial intelligence|data-driven|intelligence|automated insight', missing:true, w:14},
+    {id:'nodash',     label:'No unified command dashboard',  keywords:'dashboard|command|analytics|unified view|reporting', missing:true, w:12},
+    {id:'noscale',    label:'No documented scale strategy',  keywords:'scale|growth strategy|expansion|roadmap|vision', missing:true, w:12},
+    {id:'norevsys',   label:'No systematic revenue engine',  keywords:'revenue system|sales system|funnel|pipeline|predictable revenue', missing:true, w:10},
+    {id:'nolegal',    label:'No corporate / legal structure', keywords:'incorporated|holding|corporation|legal structure|registered', missing:true, w:8},
+    {id:'noexit',     label:'No succession / exit strategy', keywords:'succession|exit|acquisition|sale|legacy', missing:true, w:8},
+  ],
+  pitch:"An empire without systems is just chaos in expensive suits. Phoenix Dominion builds the AI infrastructure that makes your empire unbreakable.",
+  services:[{n:'Phoenix Dominion Blueprint',p:997,r:false},{n:'Phoenix Dominion OS',p:2997,r:true}],
+  cross:['zprimedoxaihq','kiaros','agentswarm','primedoxai']
+},
 ];
 
 // ══════════════════════════════════════════════════════════════
@@ -718,8 +855,11 @@ let selectedIdx = -1;
 let db = loadDB();
 
 function loadDB(){
-  try{return JSON.parse(localStorage.getItem('gh_db')||'{"leads":[],"scanned":0}')}
-  catch(e){return {leads:[],scanned:0}}
+  try{
+    var d=JSON.parse(localStorage.getItem('gh_db')||'{"leads":[],"scanned":0,"emailsSent":0}');
+    if(!d.emailsSent) d.emailsSent=0;
+    return d;
+  }catch(e){return {leads:[],scanned:0,emailsSent:0}}
 }
 function saveDB(){localStorage.setItem('gh_db',JSON.stringify(db))}
 function genId(){return Math.random().toString(36).substr(2,9)}
@@ -728,12 +868,6 @@ function genId(){return Math.random().toString(36).substr(2,9)}
 // INIT
 // ══════════════════════════════════════════════════════════════
 (function init(){
-  const sel = document.getElementById('company-select');
-  HUNTERS.forEach(h=>{
-    const opt = document.createElement('option');
-    opt.value = h.id; opt.textContent = h.icon+' '+h.name+' — '+h.industry;
-    sel.appendChild(opt);
-  });
   renderSidebar();
   renderPipeline();
   renderIntel();
@@ -984,6 +1118,12 @@ function showSampleURLs(){
     zprimedoxaihq:'https://holdco.xyz\nhttps://folio.vc\nhttps://capdeck.io',
     francohq:'https://berkshirehathaway.com\nhttps://constellation.com\nhttps://roper.com',
     consdeflab:'https://aclu.org\nhttps://canadianlegal.org\nhttps://cba.org',
+    francorealty:'https://remax.ca\nhttps://royallepage.ca\nhttps://century21.ca',
+    francolegal:'https://clio.com\nhttps://mycase.com\nhttps://legalzoom.ca',
+    mindshift:'https://betterhelp.com\nhttps://headspace.com\nhttps://calm.com',
+    cyberguard:'https://avast.com/en-us/business\nhttps://malwarebytes.com/business\nhttps://norton.com/small-business',
+    weedlawacademy:'https://cannabis.ca\nhttps://mjbizdaily.com\nhttps://leafly.com',
+    phoenixdominion:'https://holdco.xyz\nhttps://folio.vc\nhttps://constellation.com',
   };
   const s = samples[currentHunter.id]||'https://competitor1.com\nhttps://competitor2.com\nhttps://competitor3.com';
   document.getElementById('url-input').value = s;
@@ -1162,12 +1302,19 @@ https://franciscoholdingsinc.com`;
 
 function copyEmail(){
   const el = document.getElementById('dp-email');
-  navigator.clipboard.writeText(el.textContent).then(()=>{
-    const btn = document.querySelector('.email-actions .btn-green');
-    const orig = btn.textContent;
-    btn.textContent='✓ Copied!';
-    setTimeout(()=>btn.textContent=orig,2000);
-  });
+  const btn = document.getElementById('copy-email-btn');
+  const doFeedback = function(){
+    if(btn){btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent='📋 Copy';},2000);}
+  };
+  const fallback = function(){
+    const ta=document.createElement('textarea');ta.value=el.textContent;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    try{document.execCommand('copy');}catch(e){}
+    document.body.removeChild(ta);doFeedback();
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(el.textContent).then(doFeedback).catch(fallback);
+  }else{fallback();}
 }
 
 function copyEmailById(rid){
@@ -1184,7 +1331,11 @@ function sendEmail(){
   const sub = lines[0].replace('Subject: ','');
   const body = lines.slice(2).join('\n');
   const r = scanResults[selectedIdx];
-  window.location.href = `mailto:info@${r?r.url.replace(/https?:\/\//,'').split('/')[0]:''}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+  db.emailsSent = (db.emailsSent||0)+1;
+  saveDB();
+  updateTopStats();
+  window.location.href = 'mailto:info@'+(r?r.url.replace(/https?:\/\//,'').split('/')[0]:'')+
+    '?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(body);
 }
 
 function moveToStage(stage){
@@ -1360,6 +1511,77 @@ function updateTopStats(){
   document.getElementById('stat-leads').textContent = db.leads.length;
   const pipe = db.leads.reduce((t,l)=>t+(l.empireValue||0),0);
   document.getElementById('stat-pipeline').textContent = pipe>0?'$'+(pipe/1000).toFixed(0)+'K':'$0';
+  const emailEl = document.getElementById('stat-emails');
+  if(emailEl) emailEl.textContent = db.emailsSent||0;
+}
+
+// ══════════════════════════════════════════════════════════════
+// DEMO MODE — 20 REALISTIC PRE-SCANNED TARGETS PER HUNTER
+// ══════════════════════════════════════════════════════════════
+var DEMO_COMPANIES = {
+  omniaguard:['crowdstrike.com','paloaltonetworks.com','sentinelone.com','cylance.com','darktrace.com','exabeam.com','cybereason.com','logrhythm.com','rapid7.com','tenable.com','qualys.com','varonis.com','sailpoint.com','beyondtrust.com','secureworks.com','huntress.com','fortinet.com','barracuda.com','trellix.com','sophos.com'],
+  primedoxai:['clio.com','mycase.com','practiceevolve.com','smokeball.com','filevine.com','litify.com','lawpay.com','lawyaw.com','contractpodai.com','luminance.com','lexisnexis.com','imanage.com','netdocuments.com','worldox.com','docketbird.com','legalfiles.com','casefox.com','abacuslaw.com','zola-suite.com','actionstep.com'],
+  vigilax:['verkada.com','avigilon.com','genetec.com','milestone.dk','hanwhavision.com','hikvision.com','dahua-security.com','axis.com','boschsecurity.com','pelco.com','qognify.com','briefcam.com','ipsotek.com','sensera.com','vivotek.com','uniview.com','cohu.com','anyvision.co','evercam.com','vidsys.com'],
+  cleanswarm:['janiking.com','servpro.com','cleannet.com','servicemaster.com','coveral.com','jan-pro.com','cleaning-authority.com','maidpro.com','swisher.com','vonachen.com','sparkclean.ca','pristine-services.ca','cleaningpros.ca','commercialclean.ca','facilitysolutions.ca','buildingmaintenance.ca','jdclean.ca','grubzappers.ca','allprocleaning.ca','enviro-masters.ca'],
+  kiaros:['mckinsey.com','bain.com','bcg.com','ey.com','deloitte.com','pwc.com','kpmg.com','accenture.com','oliverwyman.com','rolandberger.com','lek.com','huron.com','fg-consulting.ca','advisoryca.com','strategylab.ca','businessforward.ca','growthpartners.ca','focusconsulting.ca','pivotstrategies.ca','nextlevelbiz.ca'],
+  ccldr:['ocs.ca','bccannabisstores.com','nova-cannabis.ca','fire-flower.com','dutch-love.com','spiritleaf.ca','tokyo-smoke.com','highpark.ca','cannacabana.com','tweed.com','aurora.ca','canopy.com','aphria.com','cronos-group.com','organigram.ca','hexo.com','tilray.com','flowr.ca','zenabis.com','sugarbud.com'],
+  vaultvelocity:['autotrader.ca','unhaggle.com','clutch.ca','carpages.ca','dealer.com','coxautomotive.com','dealertrack.com','autodealerstore.ca','bmo.com','scotiabank.com','firstontario.com','meridiancu.ca','autofinance.ca','unhaggle.com','clutch.ca','kijiji.ca','carbuyersguide.ca','edmunds.com','cars.com','cargurus.com'],
+  techpetcage:['whistle.com','fitbark.com','tractive.com','wagz.com','petpace.com','fi.com','furbo.com','petzi.com','pawtrack.co.uk','nuzzle.io','poc.pet','myia.io','petcube.com','barkbox.com','vetster.com','trupanion.com','pumpkin.care','lemonade.com','metlife.com/pet','nationwide.com/pet'],
+  docweedlaw:['mpp.org','norml.org','cbcnorml.ca','cannabinoidlaw.com','drugpolicy.org','acmpr.org','cannabis-council.ca','ccia.ca','oapcs.ca','mjbizdaily.com','leafly.com','weedmaps.com','herb.co','cannabis.ca','aclrc.com','bccla.org','ccla.org','charterlaw.ca','cannabislaw.ca','legalcannabis.ca'],
+  benox:['aclu.org','ccla.org','charterlaw.ca','constitutionnet.org','eff.org','privacyinternational.org','hrw.org','amnesty.org','bcla.bc.ca','oipc.bc.ca','priv.gc.ca','canlii.org','scc-csc.ca','lsuc.on.ca','cba.org','lawsociety.bc.ca','ctla.ca','constitutionalrights.ca','liberties.ca','civilrights.org'],
+  agentswarm:['zapier.com','make.com','n8n.io','workato.com','tray.io','boomi.com','mulesoft.com','nintex.com','automation-anywhere.com','blueprism.com','uipath.com','pega.com','kofax.com','servicenow.com','appian.com','kissflow.com','airtable.com','monday.com','asana.com','notion.so'],
+  agentforge:['langchain.com','autogpt.net','crewai.com','flowise.ai','dify.ai','cohere.com','huggingface.co','replicate.com','together.ai','mistral.ai','groq.com','ollama.ai','anyscale.com','scale.ai','weights.ai','modular.com','bentoml.com','ray.io','mlflow.org','wandb.ai'],
+  agigovernance:['oecd.org','nist.gov','algorithmwatch.org','futureoflife.org','partnershiponai.org','ieee.org','iso.org','ai.gov','cifar.ca','vectorinstitute.ai','mila.quebec','ccai.ca','responsibleai.nz','aiethicslab.com','digital.canada.ca','scc.ca','pco-bcp.gc.ca','tbs-sct.gc.ca','parl.gc.ca','canada.ca'],
+  cannadelivr:['dutchie.com','jane.app','leafly.com','weedmaps.com','i-heart-jane.com','greenrush.com','flowhub.com','cova.software','treez.io','mjfreeway.com','indicaonline.com','akerna.com','biotrackthc.com','metrc.com','mjplatform.com','topshelfbc.ca','ocs.ca','sqdc.ca','nova-cannabis.ca','spiritleaf.ca'],
+  soulstack:['brandwatch.com','sprinklr.com','mention.com','hootsuite.com','buffer.com','talkwalker.com','synthesio.com','keyhole.co','socialbakers.com','quintly.com','awario.com','brand24.com','reputation.com','yext.com','podium.com','birdeye.com','reviews.io','trustpilot.com','reviewtrackers.com','grade.us'],
+  zprimedoxaihq:['holdco.xyz','folio.vc','capdeck.io','vaultco.io','constellation.com','roper.com','fortive.com','ametek.com','transdigm.com','dover.com','danaher.com','idex.com','brookfield.com','fairfax.ca','onex.com','thomsonreuters.com','algonquinpower.com','russel-metals.com','intact.net','manulife.com'],
+  francohq:['berkshirehathaway.com','constellation.com','roper.com','fortive.com','ametek.com','transdigm.com','dover.com','danaher.com','idex.com','watts.com','brookfield.com','fairfax.ca','onex.com','paxjax.com','thomsonreuters.com','brookfieldrenewable.com','algonquinpower.com','russel-metals.com','intact.net','desmarais.com'],
+  consdeflab:['aclu.org','ccla.org','charterlaw.ca','cba.org','canadianlegal.org','lawsociety.bc.ca','lsuc.on.ca','criminaldefence.ca','lawline.com','avvo.com','findlaw.com','nolo.com','justia.com','canlii.org','courtsofbc.ca','ontariocourts.ca','scc-csc.ca','justice.gc.ca','legalaid.on.ca','probono.net'],
+  francorealty:['remax.ca','century21.ca','royallepage.ca','coldwellbanker.ca','sutton.com','sothebysrealty.com','kw.com','movoto.com','zillow.com','realtor.com','housesigma.com','zolo.ca','point2homes.com','help-u-sell.com','listingrealty.ca','propertyguys.com','maxhomes.ca','commfree.com','duomax.ca','smarterrealty.ca'],
+  francolegal:['clio.com','mycase.com','smokeball.com','filevine.com','lawyercom.net','justia.com','avvo.com','findlaw.com','legalzoom.com','nolo.com','upcounsel.com','clearlaw.ca','lawstudio.ca','legalline.ca','legalhelp.ca','lawca.com','canlii.org','legalaid.on.ca','crownjewelslaw.ca','lawfirm.ca'],
+  mindshift:['headspace.com','calm.com','betterhelp.com','talkspace.com','cerebral.com','coa.com','woebot.io','sanvello.com','happify.com','mindfulnessapps.com','thrivecoach.com','coachesconsole.com','healcode.com','psychology-today.com','lifemindfulness.ca','mindfulmoments.ca','wellnessworks.ca','brightline.com','resilience.com','lyra.com'],
+  cyberguard:['avast.com','avg.com','malwarebytes.com','norton.com','mcafee.com','kaspersky.com','bitdefender.com','eset.com','webroot.com','trendmicro.com','sophos.com','cisco.com','datto.com','barracuda.com','kaseya.com','connectwise.com','ninjarmm.com','atera.com','naverisk.com','syncromsp.com'],
+  weedlawacademy:['budtradr.com','cannabis.ca','mjbizdaily.com','cannabistraining.com','leaf.com','cannabisconsultant.ca','weedacademy.ca','mjacademy.org','hemptraining.com','safeaccess.ca','cannabiseducation.ca','cbc.ca','canada.ca','thcuniversity.com','normlcalifornia.org','dispensarytraining.ca','cannabiscompliance.ca','leaflylearn.com','weedmaps.com','herb.co'],
+  phoenixdominion:['holdco.xyz','folio.vc','vaultco.io','empireops.io','fiveqs.com','startupstudio.com','launchpadventures.ca','incubatorhq.com','acceleratortech.ca','bizhub.ca','startupbc.ca','bdc.ca','fcc.ca','cfib.ca','businesshub.ca','tradecommissioner.gc.ca','investcanada.ca','ic.gc.ca','ised-isde.gc.ca','businessdev.ca']
+};
+
+function getDemoCompanies(hunterId){
+  return DEMO_COMPANIES[hunterId] || ['competitor-a.com','industry-leader.com','topfirm.ca','market-giant.net','regional-pro.com','localexpert.ca','fastgrowth.io','enterprise-solutions.com','sme-specialist.ca','startup-disruptor.com','established-player.net','niche-market.ca','traditional-firm.com','digital-laggard.net','growth-ready.ca','modernizing.com','behind-curve.net','opportunity-target.ca','prime-prospect.com','hot-lead.io'];
+}
+
+function loadDemoTargets(){
+  if(!currentHunter){alert('Select an Empire Company first, then click Load Demo Targets.');return;}
+  var h = currentHunter;
+  var companies = getDemoCompanies(h.id);
+  var results = [];
+  for(var i=0;i<companies.length;i++){
+    var domain = companies[i];
+    var hash = 0;
+    for(var c=0;c<domain.length;c++) hash += domain.charCodeAt(c)*(c+1);
+    var gaps = h.gaps.filter(function(g,j){return (hash+j*13)%5!==0;}).map(function(g){return g.id;});
+    var score = 0;
+    gaps.forEach(function(gid){var g=h.gaps.find(function(x){return x.id===gid;});if(g)score+=g.w;});
+    score = Math.min(100, score);
+    var fakeResult = {score:score, gaps:gaps};
+    results.push({
+      url:'https://'+domain, score:score, gaps:gaps,
+      empireValue:calcEmpireValue(fakeResult, h),
+      stage:'found', hunterId:h.id,
+      id:'demo-'+i+'-'+(hash%9999),
+      ts:Date.now(), isDemo:true
+    });
+  }
+  scanResults = results.sort(function(a,b){return b.score-a.score;});
+  db.scanned += results.length;
+  saveDB();
+  document.getElementById('results-section').style.display='block';
+  document.getElementById('clear-btn').style.display='block';
+  document.getElementById('detail-panel').style.display='none';
+  setProgress(100);
+  document.getElementById('progress-bar').style.display='block';
+  document.getElementById('scan-status').innerHTML='<span style="color:var(--warm)">🎭 Demo: '+results.length+' pre-scanned targets loaded — tap any row to see email ✓</span>';
+  updateTopStats();
+  renderResultsTable();
 }
 </script>
 </body>
