@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeDox AI — Document Generator</title>
+<meta name="description" content="PrimeDox AI generates legal, business, and strategic documents in seconds. NDAs, demand letters, cease & desist, business plans, cannabis compliance checklists — all from AI-powered templates.">
+<style>
+:root{
+  --bg:#07071a;--bg2:#0d0d24;--bg3:#131330;--border:#2a2a4a;
+  --gold:#D4AF37;--gold2:#b8960c;--blue:#00d4ff;--blue2:#0099bb;
+  --emerald:#10B981;--red:#ef4444;--muted:#7070a0;--text:#e8e8f8;
+  --warm:#f59e0b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;min-height:100vh}
+
+/* TOP BAR */
+#top{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.logo{font-size:18px;font-weight:900;color:var(--blue);letter-spacing:-0.5px;white-space:nowrap}
+.logo span{color:var(--gold)}
+.tagline{font-size:12px;color:var(--muted);flex:1}
+.top-cta{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#000;font-weight:900;padding:8px 18px;border-radius:6px;text-decoration:none;font-size:12px;letter-spacing:.5px;white-space:nowrap;border:none;cursor:pointer}
+.top-back{color:var(--muted);font-size:12px;text-decoration:none;white-space:nowrap}
+.top-back:hover{color:var(--text)}
+
+/* HERO */
+#hero{background:linear-gradient(135deg,var(--bg),#0a0a2a);border-bottom:1px solid var(--border);padding:40px 24px 32px;text-align:center}
+#hero h1{font-size:clamp(24px,5vw,44px);font-weight:900;color:var(--blue);line-height:1.1;margin-bottom:10px}
+#hero p{color:var(--muted);font-size:15px;max-width:560px;margin:0 auto 20px}
+.hero-stats{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.hs{text-align:center}
+.hs-val{font-size:20px;font-weight:900;color:var(--gold)}
+.hs-lab{font-size:11px;color:var(--muted)}
+
+/* MAIN LAYOUT */
+#app{display:grid;grid-template-columns:260px 1fr;gap:0;min-height:calc(100vh - 240px)}
+@media(max-width:700px){#app{grid-template-columns:1fr}#sidebar{display:none}}
+
+/* SIDEBAR */
+#sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:16px 0}
+.sb-head{padding:0 14px 8px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.doc-type{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:.12s;border-left:3px solid transparent}
+.doc-type:hover{background:var(--bg3);border-left-color:var(--border)}
+.doc-type.active{background:var(--bg3);border-left-color:var(--blue)}
+.dt-icon{font-size:18px;width:24px;text-align:center}
+.dt-name{font-size:13px;font-weight:600;color:var(--text)}
+.dt-sub{font-size:11px;color:var(--muted)}
+.dt-pro{font-size:10px;font-weight:700;color:var(--blue);background:#001a2a;border:1px solid var(--blue2);border-radius:3px;padding:1px 5px;margin-left:4px}
+
+#sidebar .sb-bottom{margin-top:20px;padding:14px;border-top:1px solid var(--border)}
+.sub-card{background:var(--bg3);border:1px solid var(--blue);border-radius:8px;padding:14px;text-align:center}
+.sub-price{font-size:26px;font-weight:900;color:var(--blue)}
+.sub-period{font-size:12px;color:var(--muted)}
+.sub-desc{font-size:12px;color:var(--muted);margin:8px 0}
+.sub-btn{display:block;background:var(--blue);color:#000;font-weight:900;padding:10px;border-radius:6px;text-decoration:none;font-size:13px;text-align:center;transition:.15s;border:none;cursor:pointer;width:100%}
+.sub-btn:hover{background:var(--blue2);color:#fff}
+
+/* MAIN CONTENT */
+#main{display:flex;flex-direction:column}
+#form-area{padding:20px;border-bottom:1px solid var(--border)}
+#form-area h2{font-size:18px;font-weight:800;color:var(--blue);margin-bottom:4px}
+#form-area .doc-desc{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6}
+
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.field-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:4px}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.field input,.field textarea,.field select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:6px;font-size:13px;font-family:inherit}
+.field textarea{min-height:70px;resize:vertical;line-height:1.5}
+.field input:focus,.field textarea:focus,.field select:focus{outline:1px solid var(--blue);border-color:var(--blue)}
+.field select option{background:var(--bg)}
+
+.gen-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.btn-gen{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#000;font-weight:900;padding:11px 24px;border-radius:6px;border:none;cursor:pointer;font-size:14px;transition:.15s}
+.btn-gen:hover{transform:scale(1.03)}
+.btn-sec{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:11px 18px;border-radius:6px;font-size:13px;cursor:pointer;transition:.12s}
+.btn-sec:hover{border-color:var(--blue);color:var(--blue)}
+.btn-copy{background:var(--bg3);color:var(--emerald);border:1px solid var(--emerald);padding:9px 16px;border-radius:6px;font-size:13px;cursor:pointer;transition:.12s}
+.btn-copy:hover{background:#001a0a}
+#mobile-type-select{display:none;width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:6px;font-size:14px;margin-bottom:16px}
+@media(max-width:700px){#mobile-type-select{display:block}}
+
+/* DOCUMENT OUTPUT */
+#output-area{padding:20px;flex:1}
+#output-area h2{font-size:15px;font-weight:700;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
+#doc-output{background:#fff;color:#111;border-radius:8px;padding:32px;font-family:Georgia,serif;font-size:13px;line-height:1.8;min-height:400px;white-space:pre-wrap;word-wrap:break-word;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+#doc-output.empty{color:#888;font-style:italic;text-align:center;padding:60px 40px;font-family:system-ui,sans-serif}
+.output-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+/* DEMO / SUBSCRIPTION BANNER */
+.upgrade-bar{background:linear-gradient(135deg,#000828,#001a3a);border:1px solid var(--blue);border-radius:10px;padding:18px 20px;margin:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.ub-left{flex:1}
+.ub-title{font-size:16px;font-weight:800;color:var(--blue)}
+.ub-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.ub-price{font-size:22px;font-weight:900;color:var(--blue);white-space:nowrap}
+.ub-period{font-size:12px;color:var(--muted);margin-bottom:8px}
+.ub-btn{display:inline-block;background:var(--blue);color:#000;font-weight:900;padding:10px 22px;border-radius:6px;text-decoration:none;font-size:13px;white-space:nowrap}
+.ub-btn:hover{background:var(--blue2);color:#fff}
+
+/* TYPE CHIPS on mobile */
+.mobile-chips{display:none;gap:6px;flex-wrap:wrap;margin-bottom:14px;padding:0 20px}
+@media(max-width:700px){.mobile-chips{display:flex}}
+.chip{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;transition:.12s}
+.chip.active{border-color:var(--blue);color:var(--blue);background:#001a2a}
+</style>
+</head>
+<body>
+
+<div id="top">
+  <div class="logo">Prime<span>Dox</span> AI</div>
+  <div class="tagline">AI Document Generator — Legal · Business · Strategic</div>
+  <a href="index.html" class="top-back">← Empire Home</a>
+  <a href="https://paypal.me/techpetcage/49CAD" target="_blank" rel="noopener" class="top-cta">Subscribe $49/mo →</a>
+</div>
+
+<div id="hero">
+  <h1>PrimeDox AI Document Generator</h1>
+  <p>Generate court-ready legal documents, business frameworks, and strategic templates in seconds. Select a document type, fill in your details — PrimeDox AI assembles the rest.</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-val">8</div><div class="hs-lab">Document Types</div></div>
+    <div class="hs"><div class="hs-val">$49</div><div class="hs-lab">Per Month</div></div>
+    <div class="hs"><div class="hs-val">∞</div><div class="hs-lab">Documents</div></div>
+    <div class="hs"><div class="hs-val">3 min</div><div class="hs-lab">Avg. Draft Time</div></div>
+  </div>
+</div>
+
+<div class="upgrade-bar">
+  <div class="ub-left">
+    <div class="ub-title">PrimeDox AI — Full Access</div>
+    <div class="ub-sub">Unlimited documents · All 8 types · Priority AI generation · Download as PDF</div>
+  </div>
+  <div style="text-align:right">
+    <div class="ub-price">$49<span style="font-size:14px;color:var(--muted)">/mo</span></div>
+    <a href="https://paypal.me/techpetcage/49CAD" target="_blank" rel="noopener" class="ub-btn">Subscribe via PayPal →</a>
+  </div>
+</div>
+
+<div class="mobile-chips" id="mobile-chips"></div>
+
+<div id="app">
+  <div id="sidebar">
+    <div class="sb-head">Document Types</div>
+    <div id="type-list"></div>
+    <div class="sb-bottom">
+      <div class="sub-card">
+        <div class="sub-price">$49</div>
+        <div class="sub-period">per month</div>
+        <div class="sub-desc">Unlimited documents. All types. Cancel anytime.</div>
+        <a href="https://paypal.me/techpetcage/49CAD" target="_blank" rel="noopener" class="sub-btn">Subscribe via PayPal</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="form-area">
+      <h2 id="form-title">Select a Document Type</h2>
+      <div id="form-desc" class="doc-desc">Choose a document type from the left to get started.</div>
+      <div id="form-fields"></div>
+      <div class="gen-row" id="gen-row" style="display:none">
+        <button class="btn-gen" onclick="generateDoc()">⚡ Generate Document</button>
+        <button class="btn-sec" onclick="clearForm()">↺ Clear</button>
+      </div>
+    </div>
+
+    <div id="output-area">
+      <h2>Generated Document</h2>
+      <div id="doc-output" class="empty">Your generated document will appear here in formatted, ready-to-use text.</div>
+      <div class="output-actions" id="output-actions" style="display:none">
+        <button id="btn-copy-doc" class="btn-copy" onclick="copyDoc()">📋 Copy Document</button>
+        <button class="btn-sec" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DOCUMENT TYPES + TEMPLATES
+// ═══════════════════════════════════════════
+var TYPES = [
+{
+  id:'nda', label:'Non-Disclosure Agreement', icon:'🤝', tier:'free',
+  desc:'A standard bilateral NDA protecting confidential information shared between two parties. Suitable for business discussions, hiring, partnerships, and vendor negotiations.',
+  fields:[
+    {id:'partyA',   label:'Party A (Disclosing)',  type:'text',     placeholder:'Your name or company name'},
+    {id:'partyB',   label:'Party B (Receiving)',   type:'text',     placeholder:'Other party\'s name or company'},
+    {id:'date',     label:'Effective Date',         type:'text',     placeholder:'e.g. July 12, 2026'},
+    {id:'purpose',  label:'Purpose of Disclosure', type:'text',     placeholder:'e.g. Evaluation of a potential business partnership'},
+    {id:'duration', label:'Agreement Duration',    type:'text',     placeholder:'e.g. 2 years from effective date'},
+    {id:'province', label:'Governing Province',    type:'text',     placeholder:'e.g. Ontario, Canada'},
+  ],
+  generate: function(f) {
+    return 'NON-DISCLOSURE AGREEMENT\n\n'+
+    'This Non-Disclosure Agreement ("Agreement") is entered into as of '+f.date+' ("Effective Date"), between:\n\n'+
+    '  '+f.partyA+' ("Disclosing Party")\nand\n  '+f.partyB+' ("Receiving Party")\n\n'+
+    'collectively referred to as the "Parties."\n\n'+
+    '1. PURPOSE\nThe Parties wish to explore '+f.purpose+' (the "Purpose"). In connection with this Purpose, each Party may disclose to the other certain confidential and proprietary information.\n\n'+
+    '2. CONFIDENTIAL INFORMATION\n"Confidential Information" means any non-public information disclosed by one Party to the other, either directly or indirectly, in writing, orally, or by inspection of tangible objects, including without limitation trade secrets, business plans, financial projections, customer lists, pricing structures, and proprietary technology.\n\n'+
+    '3. OBLIGATIONS\nThe Receiving Party agrees to:\n(a) Hold all Confidential Information in strict confidence;\n(b) Not to disclose the Confidential Information to any third party without prior written consent;\n(c) Use the Confidential Information solely for the Purpose;\n(d) Protect the Confidential Information with the same degree of care it uses for its own confidential information, but in no event less than reasonable care.\n\n'+
+    '4. EXCLUSIONS\nThis Agreement does not apply to information that: (a) is or becomes publicly known through no act of the Receiving Party; (b) was rightfully known before disclosure; (c) is rightfully received from a third party without restriction; or (d) is required to be disclosed by law or court order.\n\n'+
+    '5. TERM\nThis Agreement shall remain in effect for '+f.duration+' unless earlier terminated by mutual written agreement.\n\n'+
+    '6. RETURN OF INFORMATION\nUpon request or termination of this Agreement, the Receiving Party shall promptly return or destroy all Confidential Information and certify such destruction in writing.\n\n'+
+    '7. REMEDIES\nThe Parties acknowledge that a breach of this Agreement may cause irreparable harm for which monetary damages would be inadequate. The non-breaching Party shall be entitled to seek equitable relief including injunction and specific performance.\n\n'+
+    '8. GOVERNING LAW\nThis Agreement shall be governed by and construed in accordance with the laws of the Province of '+f.province+', Canada, without regard to conflicts of law principles.\n\n'+
+    '9. ENTIRE AGREEMENT\nThis Agreement constitutes the entire agreement between the Parties with respect to its subject matter and supersedes all prior discussions and agreements.\n\n'+
+    '10. SIGNATURES\n\n'+
+    '_______________________________\n'+f.partyA+' ("Disclosing Party")\nDate: _________________________\n\n'+
+    '_______________________________\n'+f.partyB+' ("Receiving Party")\nDate: _________________________\n\n'+
+    '— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —';
+  }
+},
+{
+  id:'demand', label:'Demand Letter', icon:'⚖️', tier:'free',
+  desc:'A formal demand letter requiring payment of an outstanding debt or fulfillment of an obligation. Suitable for unpaid invoices, contract breaches, or loan repayments.',
+  fields:[
+    {id:'senderName',  label:'Your Name / Company',        type:'text', placeholder:'Derek Francisco / Francisco Holdings Inc.'},
+    {id:'recipName',   label:'Recipient Name / Company',   type:'text', placeholder:'John Smith / ABC Corp.'},
+    {id:'recipAddr',   label:'Recipient Address',          type:'text', placeholder:'123 Main St, Toronto, ON M1A 1A1'},
+    {id:'amount',      label:'Amount Owed ($)',            type:'text', placeholder:'e.g. 5,000.00'},
+    {id:'debtDesc',    label:'Describe the Debt / Breach', type:'textarea', placeholder:'e.g. Outstanding balance for consulting services rendered October–December 2025 per Invoice #1042...'},
+    {id:'deadline',    label:'Response Deadline',          type:'text', placeholder:'e.g. 14 days from the date of this letter'},
+    {id:'date',        label:'Letter Date',                type:'text', placeholder:'July 12, 2026'},
+    {id:'province',    label:'Governing Province',         type:'text', placeholder:'Ontario'},
+  ],
+  generate: function(f) {
+    return f.date+'\n\nVIA CERTIFIED MAIL AND EMAIL\n\n'+f.recipName+'\n'+f.recipAddr+'\n\nRe: Formal Demand for Payment — $'+f.amount+'\n\nDear '+f.recipName+':\n\n'+
+    'This letter constitutes a formal demand for payment in the amount of $'+f.amount+' CAD, plus applicable interest and costs.\n\n'+
+    'BACKGROUND\n'+f.debtDesc+'\n\nDESPITE DEMAND\nDespite previous requests for payment and/or fulfilment, you have failed and/or refused to remit the amount owed. This failure constitutes a material breach and causes ongoing financial harm to '+f.senderName+'.\n\n'+
+    'DEMAND\nYou are hereby formally demanded to remit payment of $'+f.amount+' CAD in full to '+f.senderName+' within '+f.deadline+' of the date of this letter.\n\nPayment may be made via:\n• E-transfer\n• PayPal\n• Bank draft payable to '+f.senderName+'\n\n'+
+    'If payment is not received within the stated deadline, '+f.senderName+' reserves all rights to pursue collection through legal proceedings in the Province of '+f.province+', including but not limited to claims for:\n• The outstanding principal of $'+f.amount+'\n• Prejudgment interest at the applicable rate\n• Legal fees and disbursements\n• Any additional damages arising from the breach\n\n'+
+    'This letter is sent without prejudice to any rights or remedies available to '+f.senderName+'.\n\nYours sincerely,\n\n\n_______________________________\n'+f.senderName+'\n\n— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —';
+  }
+},
+{
+  id:'cease', label:'Cease & Desist', icon:'🛑', tier:'free',
+  desc:'A formal cease and desist letter demanding the recipient stop a specific activity that infringes on your rights. Suitable for trademark infringement, harassment, defamation, or contract violations.',
+  fields:[
+    {id:'senderName',   label:'Your Name / Company',       type:'text', placeholder:'Your full legal name or company'},
+    {id:'recipName',    label:'Recipient Name / Company',  type:'text', placeholder:'The infringing party\'s name'},
+    {id:'violation',    label:'Nature of the Violation',   type:'textarea', placeholder:'e.g. Unauthorized use of the trademark "PrimeDox" on your website primedox-fake.com since March 2026...'},
+    {id:'demand',       label:'Specific Demand',           type:'textarea', placeholder:'e.g. Immediately cease all use of the PrimeDox trademark, remove all infringing content, and confirm compliance in writing within 14 days...'},
+    {id:'consequences', label:'Consequences if Ignored',   type:'text', placeholder:'e.g. Legal action including injunctive relief and damages'},
+    {id:'deadline',     label:'Compliance Deadline',       type:'text', placeholder:'e.g. 14 days from receipt of this letter'},
+    {id:'date',         label:'Letter Date',               type:'text', placeholder:'July 12, 2026'},
+  ],
+  generate: function(f) {
+    return f.date+'\n\nVIA CERTIFIED MAIL — WITHOUT PREJUDICE\n\nTo: '+f.recipName+'\n\nRe: Cease and Desist Notice\n\nDear '+f.recipName+':\n\n'+
+    'This letter is a formal cease and desist notice from '+f.senderName+' ("Complainant"). We are writing to demand that you immediately stop the following activities:\n\n'+
+    'NATURE OF VIOLATION\n'+f.violation+'\n\n'+
+    'YOUR OBLIGATIONS\nYou are hereby ordered to:\n'+f.demand+'\n\n'+
+    'DEADLINE FOR COMPLIANCE\nYou must comply with all demands set out in this notice within '+f.deadline+' from the date of receipt.\n\n'+
+    'CONSEQUENCES OF NON-COMPLIANCE\nIf you fail to comply within the stated deadline, '+f.senderName+' will pursue all available legal remedies including: '+f.consequences+'. We are prepared to commence legal proceedings immediately and without further notice.\n\n'+
+    'This notice does not constitute a waiver of any rights, remedies, or defences available to '+f.senderName+', all of which are expressly reserved.\n\n'+
+    'Govern yourself accordingly.\n\nYours truly,\n\n\n_______________________________\n'+f.senderName+'\n\n— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —';
+  }
+},
+{
+  id:'bizplan', label:'Business Plan Summary', icon:'📊', tier:'free',
+  desc:'A structured executive summary for your business. Ideal for pitch decks, investor presentations, partner proposals, and bank/SBL financing applications.',
+  fields:[
+    {id:'bizName',   label:'Business Name',              type:'text',     placeholder:'Francisco Holdings Inc.'},
+    {id:'mission',   label:'Mission Statement',           type:'textarea', placeholder:'e.g. To build AI-powered empire companies that generate recurring revenue across multiple industries while remaining lean and hyper-efficient.'},
+    {id:'product',   label:'Product / Service Description', type:'textarea', placeholder:'e.g. PrimeDox AI automates legal and business document creation using AI templates...'},
+    {id:'market',    label:'Target Market',               type:'text',     placeholder:'e.g. Law firms, consultants, cannabis operators, SMBs across Canada'},
+    {id:'revenue',   label:'Revenue Model',               type:'text',     placeholder:'e.g. $49/mo SaaS subscription, $497 one-time, enterprise licensing from $2,997'},
+    {id:'proj',      label:'3-Year Revenue Projection',   type:'text',     placeholder:'e.g. Y1: $150K | Y2: $420K | Y3: $1.2M'},
+    {id:'team',      label:'Team / Founder',              type:'text',     placeholder:'e.g. Derek Francisco — 20+ years legal/tech experience, founder of 22 empire brands'},
+    {id:'ask',       label:'Funding Ask (if any)',         type:'text',     placeholder:'e.g. $250,000 seed — 18 months runway, tech build + growth'},
+  ],
+  generate: function(f) {
+    return f.bizName.toUpperCase()+' — EXECUTIVE SUMMARY\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nMISSION\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.mission+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nPRODUCT / SERVICE\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.product+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nTARGET MARKET\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.market+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nREVENUE MODEL\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.revenue+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n3-YEAR REVENUE PROJECTION\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.proj+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nFOUNDING TEAM\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.team+'\n\n'+
+    (f.ask?'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nINVESTMENT ASK\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.ask+'\n\n':'')+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nCONTACT\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nFrancisco Holdings Inc.\nhttps://franciscoholdingsinc.com\n\n'+
+    '— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —';
+  }
+},
+{
+  id:'cannabis', label:'Cannabis Compliance Checklist', icon:'🌿', tier:'free',
+  desc:'A compliance checklist for licensed cannabis businesses under the Cannabis Act (Canada). Covers Health Canada requirements, provincial obligations, and operational minimums.',
+  fields:[
+    {id:'bizName',  label:'Business / Licensee Name',   type:'text', placeholder:'Your licensed business name'},
+    {id:'licType',  label:'License Type',               type:'select', options:['Micro-Cultivation','Standard Cultivation','Processing','Sale — Medical','Sale — Non-Medical','Research','Nursery','Analytical Testing']},
+    {id:'province', label:'Province of Operation',      type:'text', placeholder:'e.g. Ontario'},
+    {id:'period',   label:'Compliance Review Period',   type:'text', placeholder:'e.g. Q3 2026 (July–September)'},
+    {id:'reviewer', label:'Reviewed By',                type:'text', placeholder:'e.g. Derek Francisco, Compliance Officer'},
+  ],
+  generate: function(f) {
+    return 'CANNABIS COMPLIANCE CHECKLIST\n'+f.bizName+' — '+f.licType+'\nProvince: '+f.province+' | Period: '+f.period+'\nReviewed By: '+f.reviewer+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 1: LICENSING & REGISTRATION\n━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '☐ Federal cannabis licence is current and not expired\n☐ License class matches current operations\n☐ Site map submitted to Health Canada is current\n☐ Key personnel notifications up to date (senior person, responsible adult)\n☐ Any amendment requests to Health Canada filed within required timeframes\n☐ Provincial / territorial registration (where required) is valid\n☐ Municipal zoning confirmed as compliant\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 2: PHYSICAL SECURITY\n━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '☐ Perimeter fencing / barriers compliant with Cannabis Regulations s.60\n☐ Access control to all restricted areas documented\n☐ Video surveillance operational and 30-day retention confirmed\n☐ Vault/secure storage meets dimensional and locking requirements\n☐ Security personnel training records are current\n☐ Intrusion detection system tested and functioning\n☐ Loss or theft protocols documented and staff trained\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 3: RECORD-KEEPING\n━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '☐ Inventory tracking system captures all movements\n☐ Monthly inventory reports filed with Health Canada on time\n☐ Cannabis tracking system data verified for accuracy\n☐ Purchase/sale records maintained for minimum 2 years\n☐ Destruction records complete (date, method, quantity, witnesses)\n☐ Batch production records current and accessible\n☐ Recall program documentation reviewed quarterly\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 4: PRODUCT QUALITY & PACKAGING\n━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '☐ Quality assurance personnel designated and documented\n☐ Good Production Practices (GPP) procedures current\n☐ All products tested by accredited lab before sale\n☐ Packaging meets child-resistant and tamper-evident requirements\n☐ Labels comply with Cannabis Regulations Schedule 1 requirements\n☐ Health warning messages and Standardized Cannabis Symbol displayed\n☐ THC/CBD content accurately reflected on label ± allowable variance\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 5: CHARTER & CONSTITUTIONAL PREPAREDNESS\n━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '☐ Key staff understand s.7 Charter rights in enforcement situations\n☐ BENO-X framework reviewed for applicable constitutional defences\n☐ Counsel on retainer or identified for emergency situations\n☐ Compliance defence file maintained (demonstrates due diligence)\n☐ Adverse inspection documentation procedures in place\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━\nSECTION 6: UPCOMING DEADLINES\n━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+    '☐ Next Health Canada report due: _______________\n☐ License renewal date: _______________\n☐ Annual review of security clearances: _______________\n☐ Next lab testing cycle: _______________\n☐ Provincial compliance filing: _______________\n\n'+
+    'CERTIFICATION\nI certify that the above review was conducted in good faith and reflects the current compliance status of '+f.bizName+'.\n\nSignature: _______________________________\n'+f.reviewer+'\nDate: _______________________________\n\n'+
+    '— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —\nFor constitutional defence resources, see CCLDR / Doc Weedlaw at franciscoholdingsinc.com';
+  }
+},
+{
+  id:'aiagreement', label:'AI Agent Agreement', icon:'🤖', tier:'free',
+  desc:'A services agreement for deploying an AI agent for a client. Covers scope, deliverables, payment terms, data handling, and liability limitations for AI-powered automation work.',
+  fields:[
+    {id:'providerName', label:'Service Provider (You)',   type:'text', placeholder:'Francisco Holdings Inc. / PrimeDox AI'},
+    {id:'clientName',   label:'Client Name / Company',   type:'text', placeholder:'Client full legal name'},
+    {id:'agentDesc',    label:'Agent Description',       type:'textarea', placeholder:'e.g. A document automation agent that generates NDA templates, demand letters, and compliance checklists based on client-provided inputs...'},
+    {id:'deliverables', label:'Deliverables',            type:'textarea', placeholder:'e.g. 1. Configured document generator accessible via web portal\n2. Up to 100 documents per month\n3. 5 custom template configurations...'},
+    {id:'startDate',    label:'Agreement Start Date',    type:'text', placeholder:'July 15, 2026'},
+    {id:'payment',      label:'Payment Terms',           type:'text', placeholder:'e.g. $497 one-time setup + $49/month recurring via PayPal'},
+    {id:'dataClause',   label:'Data Handling',           type:'text', placeholder:'e.g. All client data processed locally, no third-party storage'},
+  ],
+  generate: function(f) {
+    return 'AI AGENT SERVICES AGREEMENT\n\nThis AI Agent Services Agreement ("Agreement") is entered into as of '+f.startDate+' between:\n\n'+
+    '  '+f.providerName+' ("Provider")\nand\n  '+f.clientName+' ("Client")\n\n'+
+    '1. SCOPE OF SERVICES\nProvider agrees to configure, deploy, and maintain an AI automation agent (the "Agent") with the following capabilities and description:\n\n'+f.agentDesc+'\n\n'+
+    '2. DELIVERABLES\nProvider shall deliver the following:\n\n'+f.deliverables+'\n\n'+
+    '3. PAYMENT TERMS\n'+f.payment+'\n\nInvoices are due on receipt. Late payment (>7 days) may result in service suspension. All fees are in Canadian dollars (CAD) unless otherwise stated.\n\n'+
+    '4. DATA HANDLING AND PRIVACY\n'+f.dataClause+'\n\nClient retains ownership of all content submitted to the Agent. Provider shall not use Client data for training purposes without express written consent.\n\n'+
+    '5. INTELLECTUAL PROPERTY\nAll custom templates, configurations, and outputs generated for Client are owned by Client upon full payment. Provider retains ownership of the underlying Agent framework, platform, and base technology.\n\n'+
+    '6. LIMITATION OF LIABILITY\nAI-generated documents are provided as templates and starting points only. They do not constitute legal advice. Provider\'s total liability is limited to the fees paid in the 3 months prior to any claim. Provider is not liable for decisions made based on Agent outputs without independent professional review.\n\n'+
+    '7. DISCLAIMER\nThe Agent may occasionally produce outputs that require human review and correction. Client is responsible for reviewing all generated documents before use in legal, financial, or binding contexts.\n\n'+
+    '8. TERMINATION\nEither party may terminate this Agreement with 14 days written notice. Client may terminate immediately for material breach by Provider. Provider may suspend service for non-payment.\n\n'+
+    '9. GOVERNING LAW\nThis Agreement is governed by the laws of Ontario, Canada.\n\n'+
+    '10. SIGNATURES\n\n_______________________________\n'+f.providerName+' ("Provider")\nDate: _________________________\n\n'+
+    '_______________________________\n'+f.clientName+' ("Client")\nDate: _________________________\n\n'+
+    '— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —';
+  }
+},
+{
+  id:'pitch', label:'Investor Pitch Outline', icon:'💰', tier:'free',
+  desc:'A structured 10-slide investor pitch deck outline in text form. Covers all the essential elements VCs and angel investors need to see: problem, solution, market, traction, team, ask.',
+  fields:[
+    {id:'company',   label:'Company Name',             type:'text',     placeholder:'Francisco Holdings Inc.'},
+    {id:'tagline',   label:'One-Line Tagline',          type:'text',     placeholder:'e.g. AI-powered empire companies that generate recurring revenue at scale'},
+    {id:'problem',   label:'Problem Statement',         type:'textarea', placeholder:'e.g. 90% of SMBs waste thousands of dollars on lawyers for standard documents that AI can generate in minutes...'},
+    {id:'solution',  label:'Your Solution',             type:'textarea', placeholder:'e.g. PrimeDox AI generates court-ready legal and business documents in under 3 minutes for $49/mo...'},
+    {id:'market',    label:'Market Size',               type:'text',     placeholder:'e.g. $47B legal tech market (Canada + US) | 1.2M SMBs in Canada alone'},
+    {id:'traction',  label:'Current Traction',          type:'text',     placeholder:'e.g. 22 product brands, live website, 3 paying beta customers, $0 to launch'},
+    {id:'model',     label:'Business Model',            type:'text',     placeholder:'e.g. SaaS $49/mo + $497 one-time + Enterprise $2,997/yr'},
+    {id:'team',      label:'Team',                      type:'text',     placeholder:'e.g. Derek Francisco — founder, 20+ years legal/tech; 2-person lean empire'},
+    {id:'ask',       label:'The Ask',                   type:'text',     placeholder:'e.g. $500,000 seed for 24-month runway: tech buildout, marketing, hiring 2 engineers'},
+    {id:'use',       label:'Use of Funds',              type:'text',     placeholder:'e.g. 40% product dev, 30% marketing, 20% operations, 10% legal/compliance'},
+  ],
+  generate: function(f) {
+    return f.company.toUpperCase()+' — INVESTOR PITCH DECK OUTLINE\n"'+f.tagline+'"\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 1: COVER\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.company+'\n'+f.tagline+'\n[Logo] [Date] [Confidential]\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 2: THE PROBLEM\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.problem+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 3: THE SOLUTION\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.solution+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 4: MARKET OPPORTUNITY\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.market+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 5: TRACTION\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.traction+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 6: BUSINESS MODEL\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.model+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 7: TEAM\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.team+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 8: COMPETITIVE ADVANTAGE\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n• AI-native architecture — not bolted on\n• Legal domain expertise (Derek Francisco)\n• Empire flywheel: each product feeds others\n• Canadian market first-mover in this niche\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 9: THE ASK\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.ask+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nSLIDE 10: USE OF FUNDS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.use+'\n\n'+
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nCONTACT\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+f.company+'\nhttps://franciscoholdingsinc.com\nBook a call: franciscoholdingsinc.com/book.html\n\n'+
+    '— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —';
+  }
+},
+{
+  id:'retainer', label:'Legal Retainer Agreement', icon:'🏛️', tier:'free',
+  desc:'A legal services retainer agreement establishing an ongoing relationship between a legal professional and a client. Covers scope, billing, communication expectations, and conflict of interest.',
+  fields:[
+    {id:'firmName',    label:'Law Firm / Practitioner Name',  type:'text', placeholder:'Francisco Legal / Derek Francisco'},
+    {id:'clientName',  label:'Client Full Name',              type:'text', placeholder:'Client legal name'},
+    {id:'scope',       label:'Scope of Representation',      type:'textarea', placeholder:'e.g. Provision of cannabis compliance guidance, regulatory correspondence with Health Canada, representation in licensing matters...'},
+    {id:'retainerFee', label:'Retainer Amount',              type:'text', placeholder:'e.g. $2,500 CAD'},
+    {id:'billing',     label:'Billing Rate / Structure',     type:'text', placeholder:'e.g. $200/hr billed monthly against retainer; retainer replenished when below $500'},
+    {id:'term',        label:'Term of Agreement',            type:'text', placeholder:'e.g. 12 months from effective date, renewable by mutual agreement'},
+    {id:'date',        label:'Agreement Date',               type:'text', placeholder:'July 12, 2026'},
+  ],
+  generate: function(f) {
+    return 'LEGAL SERVICES RETAINER AGREEMENT\n\nThis Retainer Agreement ("Agreement") is entered into as of '+f.date+' between:\n\n'+
+    '  '+f.firmName+' ("Legal Counsel")\nand\n  '+f.clientName+' ("Client")\n\n'+
+    '1. SCOPE OF REPRESENTATION\nLegal Counsel agrees to provide legal services as follows:\n\n'+f.scope+'\n\nServices outside this scope require a separate written agreement or amendment.\n\n'+
+    '2. RETAINER AND FEES\nClient agrees to pay a retainer of '+f.retainerFee+' CAD upon execution of this Agreement. The retainer is applied against fees as follows:\n\n'+f.billing+'\n\nAll hourly time is recorded in 0.1 hour increments. Unused retainer funds will be held in trust and returned to Client upon termination of this Agreement.\n\n'+
+    '3. BILLING AND PAYMENT\nMonthly statements will be provided. Payment is due within 14 days of statement date. Work may be suspended for accounts overdue by more than 30 days.\n\n'+
+    '4. COMMUNICATION\nLegal Counsel will respond to all client communications within 2 business days. Urgent matters requiring same-day response should be clearly marked as urgent. All formal legal advice will be provided in writing.\n\n'+
+    '5. CONFIDENTIALITY\nAll information provided by Client to Legal Counsel is strictly confidential and protected by solicitor-client privilege. Legal Counsel will not disclose any Client information without written consent except as required by law.\n\n'+
+    '6. CONFLICTS OF INTEREST\nLegal Counsel has conducted a conflicts check and confirms no known conflict exists as of the date of this Agreement. Client agrees to disclose all known adverse parties.\n\n'+
+    '7. TERM AND TERMINATION\nThis Agreement is effective for '+f.term+'. Either party may terminate with 14 days written notice. Upon termination, all outstanding fees become immediately due and payable.\n\n'+
+    '8. DISCLAIMER\nThis Agreement establishes a relationship for legal education and guidance services. For formal legal representation in court proceedings, a separate retainer agreement may be required. Derek Francisco is a legal educator and constitutional advocate.\n\n'+
+    '9. SIGNATURES\n\n_______________________________\n'+f.firmName+' ("Legal Counsel")\nDate: _________________________\n\n'+
+    '_______________________________\n'+f.clientName+' ("Client")\nDate: _________________________\n\n'+
+    '— Generated by PrimeDox AI | franciscoholdingsinc.com/primedox.html —';
+  }
+},
+];
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+var currentType = null;
+
+function buildSidebar() {
+  var list = document.getElementById('type-list');
+  var chips = document.getElementById('mobile-chips');
+  list.innerHTML = ''; chips.innerHTML = '';
+  TYPES.forEach(function(t) {
+    var div = document.createElement('div');
+    div.className = 'doc-type';
+    div.id = 'dt-'+t.id;
+    div.innerHTML = '<div class="dt-icon">'+t.icon+'</div><div><div class="dt-name">'+t.label+'</div><div class="dt-sub">'+t.desc.slice(0,50)+'...</div></div>';
+    div.onclick = function(){selectType(t.id);};
+    list.appendChild(div);
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.id = 'chip-'+t.id;
+    chip.textContent = t.icon+' '+t.label.split(' ')[0];
+    chip.onclick = function(){selectType(t.id);};
+    chips.appendChild(chip);
+  });
+}
+
+function selectType(id) {
+  currentType = TYPES.find(function(t){return t.id===id;}) || null;
+  document.querySelectorAll('.doc-type').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.chip').forEach(function(el){el.classList.remove('active');});
+  var dtEl = document.getElementById('dt-'+id);
+  if(dtEl) dtEl.classList.add('active');
+  var chipEl = document.getElementById('chip-'+id);
+  if(chipEl) chipEl.classList.add('active');
+  renderForm();
+}
+
+function renderForm() {
+  var t = currentType;
+  if(!t) return;
+  document.getElementById('form-title').textContent = t.icon+' '+t.label;
+  document.getElementById('form-desc').textContent = t.desc;
+  var ff = document.getElementById('form-fields');
+  ff.innerHTML = '<div class="field-grid">';
+  t.fields.forEach(function(f) {
+    var cls = 'field'+(f.type==='textarea'?' full':'');
+    if(f.type==='select') {
+      var opts = f.options.map(function(o){return '<option>'+o+'</option>';}).join('');
+      ff.innerHTML += '<div class="'+cls+'"><label>'+f.label+'</label><select id="fd-'+f.id+'">'+opts+'</select></div>';
+    } else if(f.type==='textarea') {
+      ff.innerHTML += '<div class="'+cls+'"><label>'+f.label+'</label><textarea id="fd-'+f.id+'" placeholder="'+f.placeholder+'"></textarea></div>';
+    } else {
+      ff.innerHTML += '<div class="'+cls+'"><label>'+f.label+'</label><input type="text" id="fd-'+f.id+'" placeholder="'+f.placeholder+'"></div>';
+    }
+  });
+  ff.innerHTML += '</div>';
+  document.getElementById('gen-row').style.display = 'flex';
+}
+
+function generateDoc() {
+  var t = currentType;
+  if(!t) return;
+  var f = {};
+  var missing = [];
+  t.fields.forEach(function(field) {
+    var el = document.getElementById('fd-'+field.id);
+    if(el) {
+      f[field.id] = el.value.trim() || (field.type==='select' ? el.options[el.selectedIndex].text : '');
+    }
+    if(!f[field.id] && field.type !== 'select') {
+      missing.push(field.label);
+    }
+  });
+  if(missing.length > 0 && missing.length > t.fields.length/2) {
+    var el = document.getElementById('doc-output');
+    el.className = 'empty';
+    el.textContent = 'Please fill in at least a few key fields before generating. Missing: '+missing.slice(0,3).join(', ')+(missing.length>3?' + '+(missing.length-3)+' more':'');
+    return;
+  }
+  var content = t.generate(f);
+  var el = document.getElementById('doc-output');
+  el.className = '';
+  el.textContent = content;
+  document.getElementById('output-actions').style.display = 'flex';
+  el.scrollIntoView({behavior:'smooth'});
+}
+
+function copyDoc() {
+  var el = document.getElementById('doc-output');
+  var btn = document.getElementById('btn-copy-doc');
+  var fallback = function() {
+    var ta = document.createElement('textarea');
+    ta.value = el.textContent;
+    ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    try{document.execCommand('copy');}catch(e){}
+    document.body.removeChild(ta);
+    btn.textContent = '✓ Copied!';
+    setTimeout(function(){btn.textContent='📋 Copy Document';},2000);
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(el.textContent).then(function(){
+      btn.textContent='✓ Copied!';
+      setTimeout(function(){btn.textContent='📋 Copy Document';},2000);
+    }).catch(fallback);
+  } else { fallback(); }
+}
+
+function clearForm() {
+  if(!currentType) return;
+  currentType.fields.forEach(function(f){
+    var el=document.getElementById('fd-'+f.id);
+    if(el&&f.type!=='select') el.value='';
+  });
+  document.getElementById('doc-output').className='empty';
+  document.getElementById('doc-output').textContent='Your generated document will appear here in formatted, ready-to-use text.';
+  document.getElementById('output-actions').style.display='none';
+}
+
+buildSidebar();
+selectType('nda');
+</script>
+
+<script>window.REVEREND_SITE='primedox';</script>
+<script src="reverend-ai.js"></script>
+</body>
+</html>
