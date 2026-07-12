@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industry Gap Hunter — Francisco Holdings Empire</title>
+<style>
+:root{
+  --bg:#080810;--bg2:#0f0f1a;--bg3:#16162a;--border:#2a2a44;
+  --gold:#D4AF37;--gold2:#B8960C;--emerald:#22c55e;--red:#ef4444;
+  --blue:#4A90E2;--pink:#E91E63;--text:#e8e8f0;--muted:#8888aa;
+  --hot:#ef4444;--warm:#f59e0b;--cool:#3b82f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
+
+/* TOP BAR */
+#topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.tb-logo{font-size:18px;font-weight:800;color:var(--gold);white-space:nowrap}
+.tb-logo span{color:var(--emerald)}
+#company-select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:6px;font-size:13px;min-width:200px;cursor:pointer}
+#company-select:focus{outline:1px solid var(--gold)}
+.tb-stat{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;white-space:nowrap}
+.tb-stat span{color:var(--gold);font-weight:700}
+.tb-spacer{flex:1}
+#nav-tabs{display:flex;gap:4px}
+.nav-tab{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:.15s}
+.nav-tab.active,.nav-tab:hover{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700}
+
+/* LAYOUT */
+#layout{display:flex;min-height:calc(100vh - 53px)}
+#sidebar{width:220px;background:var(--bg2);border-right:1px solid var(--border);flex-shrink:0;overflow-y:auto;max-height:calc(100vh - 53px);position:sticky;top:53px}
+#main{flex:1;overflow:auto}
+
+/* SIDEBAR */
+.sb-section{padding:10px 12px 4px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;border-top:1px solid var(--border)}
+.sb-item{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;transition:.12s;border-left:3px solid transparent}
+.sb-item:hover{background:var(--bg3);border-left-color:var(--border)}
+.sb-item.active{background:var(--bg3);border-left-color:var(--gold)}
+.sb-icon{font-size:16px;width:22px;text-align:center}
+.sb-info{flex:1;min-width:0}
+.sb-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-badge{background:var(--hot);color:#fff;border-radius:10px;font-size:10px;font-weight:700;padding:1px 6px;min-width:18px;text-align:center}
+
+/* TABS */
+.tab-panel{display:none;padding:16px}
+.tab-panel.active{display:block}
+
+/* HUNT TAB */
+.hunter-header{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
+.hh-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.hh-icon{font-size:32px}
+.hh-name{font-size:22px;font-weight:800}
+.hh-industry{color:var(--muted);font-size:13px}
+.hh-pitch{background:var(--bg3);border-left:3px solid var(--gold);padding:10px 14px;border-radius:0 6px 6px 0;font-style:italic;color:#ccc;font-size:13px}
+.hh-targets{margin-top:10px;font-size:12px;color:var(--muted)}
+.hh-targets b{color:var(--text)}
+
+.scan-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px}
+.scan-box h3{font-size:14px;color:var(--gold);margin-bottom:10px}
+.scan-row{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
+#url-input{flex:1;min-width:200px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:6px;font-size:13px}
+#url-input:focus{outline:1px solid var(--gold)}
+#csv-input{display:none}
+.btn{background:var(--gold);color:#000;border:none;padding:9px 18px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn:hover{background:var(--gold2)}
+.btn-sec{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-sec:hover{border-color:var(--gold);color:var(--gold)}
+.btn-red{background:var(--red)}
+.btn-red:hover{background:#dc2626}
+.btn-green{background:var(--emerald);color:#000}
+.csv-hint{font-size:11px;color:var(--muted);margin-top:6px}
+
+.progress-bar{background:var(--bg3);border:1px solid var(--border);border-radius:6px;height:8px;overflow:hidden;margin-top:8px;display:none}
+.progress-fill{height:100%;background:var(--gold);transition:width .3s;width:0%}
+#scan-status{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* RESULTS TABLE */
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.results-header h3{color:var(--gold);font-size:15px}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:20px;font-size:12px;cursor:pointer;transition:.12s}
+.filter-btn.active{border-color:var(--gold);color:var(--gold)}
+
+.results-table{width:100%;border-collapse:collapse;font-size:13px}
+.results-table th{background:var(--bg2);color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;font-weight:600;font-size:12px}
+.results-table th:hover{color:var(--text)}
+.results-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.results-table tr:hover td{background:var(--bg2)}
+.results-table tr.selected td{background:#1a1a2e}
+
+.score-pill{display:inline-block;padding:2px 10px;border-radius:20px;font-weight:700;font-size:12px;min-width:48px;text-align:center}
+.score-hot{background:#7f1d1d;color:#fca5a5}
+.score-warm{background:#78350f;color:#fcd34d}
+.score-cool{background:#1e3a5f;color:#93c5fd}
+.score-none{background:var(--bg3);color:var(--muted)}
+
+.gap-chips{display:flex;flex-wrap:wrap;gap:3px}
+.gap-chip{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:1px 6px;font-size:10px;color:var(--muted)}
+.gap-chip.critical{border-color:#7f1d1d;color:#fca5a5;background:#1c0a0a}
+.gap-chip.warning{border-color:#78350f;color:#fcd34d;background:#1c1000}
+
+.action-btns{display:flex;gap:5px}
+.act-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:3px 8px;border-radius:4px;font-size:11px;cursor:pointer;transition:.12s}
+.act-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* LEAD DETAIL PANEL */
+#detail-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;display:none}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+@media(max-width:800px){.dp-grid{grid-template-columns:1fr}}
+.dp-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px}
+.dp-card h4{font-size:12px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;letter-spacing:.06em}
+.gap-list-item{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px}
+.gap-list-item:last-child{border:0}
+.gap-weight{color:var(--gold);font-weight:700;font-size:11px}
+
+.cross-item{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px}
+.cross-item:last-child{border:0}
+.cross-price{color:var(--emerald);font-weight:700}
+.empire-total{margin-top:10px;padding:8px;background:#0a1f0a;border:1px solid #1a4a1a;border-radius:6px;text-align:center}
+.empire-total .val{font-size:22px;font-weight:800;color:var(--emerald)}
+.empire-total .lab{font-size:11px;color:var(--muted)}
+
+.email-box{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:12px;line-height:1.6;white-space:pre-wrap;color:#ddd;max-height:200px;overflow-y:auto;margin-top:8px}
+.email-actions{display:flex;gap:8px;margin-top:8px}
+
+/* PIPELINE TAB */
+.pipeline-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;overflow-x:auto}
+@media(max-width:900px){.pipeline-grid{grid-template-columns:repeat(2,1fr)}}
+.pipe-col{background:var(--bg2);border:1px solid var(--border);border-radius:8px;min-height:200px}
+.pipe-col-head{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.pipe-col-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.pipe-col-count{background:var(--bg3);padding:2px 8px;border-radius:10px;font-size:11px;color:var(--muted)}
+.pipe-leads{padding:8px}
+.pipe-lead{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:6px;cursor:pointer;transition:.12s}
+.pipe-lead:hover{border-color:var(--gold)}
+.pl-url{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.pl-val{font-size:11px;color:var(--emerald);font-weight:700;margin-top:3px}
+.pipe-empty{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+
+/* SWARM INTEL / DASHBOARD */
+.intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.intel-grid{grid-template-columns:1fr}}
+.intel-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.intel-card h3{font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.ic-stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}
+.ic-stat-row:last-child{border:0}
+.ic-label{font-size:13px}
+.ic-value{font-size:18px;font-weight:800}
+.ic-sub{font-size:11px;color:var(--muted)}
+.mini-bar-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px}
+.mini-bar-label{width:140px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-bar-track{flex:1;background:var(--bg3);border-radius:3px;height:8px;overflow:hidden}
+.mini-bar-fill{height:100%;border-radius:3px;background:var(--gold)}
+.mini-bar-val{width:36px;text-align:right;color:var(--text);font-weight:600}
+
+/* GAPS CONFIG PANEL */
+.gaps-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+@media(max-width:600px){.gaps-grid{grid-template-columns:1fr}}
+.gap-toggle{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;cursor:pointer;transition:.12s}
+.gap-toggle.active{border-color:var(--emerald)}
+.gap-toggle input{accent-color:var(--emerald)}
+.gap-toggle label{font-size:12px;cursor:pointer;flex:1}
+.gap-toggle .gw{font-size:11px;color:var(--muted)}
+
+/* MOBILE */
+@media(max-width:640px){
+  #sidebar{display:none}
+  #topbar{gap:6px}
+  .tb-logo{font-size:15px}
+  .dp-grid{grid-template-columns:1fr}
+  .pipeline-grid{grid-template-columns:1fr 1fr}
+  .intel-grid{grid-template-columns:1fr}
+  #company-select{width:100%;min-width:0}
+  .scan-row{flex-direction:column}
+  #url-input{width:100%}
+}
+
+/* UTILITIES */
+.empty-state{text-align:center;color:var(--muted);padding:40px 20px;font-size:13px}
+.empty-state .es-icon{font-size:40px;margin-bottom:8px}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.tag-green{background:#052e12;color:var(--emerald);border:1px solid #1a4a2a}
+.tag-red{background:#2e0505;color:#fca5a5;border:1px solid #7f1d1d}
+.tag-gold{background:#2e2200;color:var(--gold);border:1px solid #78350f}
+.divider{height:1px;background:var(--border);margin:12px 0}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+input[type=file]{display:none}
+.loading-dot{display:inline-block;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="tb-logo">🎯 GAP <span>HUNTER</span></div>
+  <select id="company-select" onchange="selectHunter(this.value)">
+    <option value="">— Select Empire Company —</option>
+  </select>
+  <div class="tb-stat">Scanned <span id="stat-scanned">0</span></div>
+  <div class="tb-stat">Leads <span id="stat-leads">0</span></div>
+  <div class="tb-stat">Pipeline <span id="stat-pipeline">$0</span></div>
+  <div class="tb-spacer"></div>
+  <div id="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('hunt')">HUNT</button>
+    <button class="nav-tab" onclick="showTab('pipeline')">PIPELINE</button>
+    <button class="nav-tab" onclick="showTab('intel')">SWARM INTEL</button>
+  </div>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <div class="sb-section">Empire Hunters</div>
+    <div id="sb-hunters"></div>
+    <div class="sb-section" style="margin-top:4px">Pipeline Stages</div>
+    <div id="sb-pipe-stats"></div>
+  </div>
+
+  <div id="main">
+    <!-- HUNT TAB -->
+    <div id="tab-hunt" class="tab-panel active">
+      <div id="hunter-header" class="hunter-header" style="display:none">
+        <div class="hh-top">
+          <div id="hh-icon" class="hh-icon">🎯</div>
+          <div>
+            <div id="hh-name" class="hh-name"></div>
+            <div id="hh-industry" class="hh-industry"></div>
+          </div>
+          <div style="flex:1"></div>
+          <div id="hh-services" style="font-size:12px;color:var(--muted);text-align:right"></div>
+        </div>
+        <div id="hh-pitch" class="hh-pitch"></div>
+        <div id="hh-targets" class="hh-targets"></div>
+      </div>
+
+      <div id="no-hunter" style="padding:40px 0">
+        <div class="empty-state"><div class="es-icon">🏭</div>Select an empire company above to begin hunting gaps in their industry.</div>
+      </div>
+
+      <div id="scan-section" style="display:none">
+        <div class="scan-box">
+          <h3>SCAN TARGETS</h3>
+          <div class="scan-row">
+            <input id="url-input" type="text" placeholder="https://competitor.com  (one URL, or paste multiple newline-separated)">
+            <button class="btn" onclick="startScan()">⚡ SCAN</button>
+            <label class="btn btn-sec" for="csv-file-input" style="display:flex;align-items:center">📁 CSV</label>
+            <input type="file" id="csv-file-input" accept=".csv,.txt" onchange="loadCSV(event)">
+            <button class="btn btn-sec" onclick="showSampleURLs()">📋 Sample</button>
+            <button class="btn btn-red" onclick="clearResults()" style="display:none" id="clear-btn">✕ Clear</button>
+          </div>
+          <div class="csv-hint">Single URL · Multiple URLs (one per line) · CSV with URLs in first column</div>
+          <div class="progress-bar" id="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+          <div id="scan-status"></div>
+        </div>
+
+        <div id="gaps-config" class="scan-box" style="display:none">
+          <h3 id="gaps-config-title">GAP CHECKS</h3>
+          <div id="gaps-grid" class="gaps-grid"></div>
+        </div>
+
+        <div id="results-section" style="display:none">
+          <div class="results-header">
+            <h3>SCAN RESULTS</h3>
+            <div class="filter-row">
+              <button class="filter-btn active" onclick="filterResults('all',this)">All</button>
+              <button class="filter-btn" onclick="filterResults('hot',this)">🔥 Hot (70+)</button>
+              <button class="filter-btn" onclick="filterResults('warm',this)">⚡ Warm (40+)</button>
+              <button class="filter-btn" onclick="filterResults('cool',this)">❄️ Cool</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+          <table class="results-table" id="results-table">
+            <thead>
+              <tr>
+                <th onclick="sortResults('url')">URL ↕</th>
+                <th onclick="sortResults('score')">Gap Score ↕</th>
+                <th>Top Gaps</th>
+                <th onclick="sortResults('empireValue')">Empire Value ↕</th>
+                <th>Stage</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="results-tbody"></tbody>
+          </table>
+          </div>
+        </div>
+
+        <div id="detail-panel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3 style="color:var(--gold)" id="dp-title">Lead Detail</h3>
+            <button class="btn btn-sec" onclick="closeDetail()" style="padding:4px 10px;font-size:12px">✕</button>
+          </div>
+          <div class="dp-grid">
+            <div class="dp-card">
+              <h4>Gaps Found</h4>
+              <div id="dp-gaps"></div>
+            </div>
+            <div class="dp-card">
+              <h4>Empire Cross-Sell</h4>
+              <div id="dp-crosssell"></div>
+              <div id="dp-empire-total" class="empire-total" style="display:none">
+                <div class="lab">TOTAL EMPIRE VALUE</div>
+                <div class="val" id="dp-total-val">$0</div>
+                <div class="lab" id="dp-total-sub"></div>
+              </div>
+            </div>
+            <div class="dp-card">
+              <h4>Outreach Email <button class="act-btn" onclick="copyEmail()" style="float:right">📋 Copy</button></h4>
+              <div class="email-box" id="dp-email"></div>
+              <div class="email-actions">
+                <button class="btn btn-green" onclick="sendEmail()" style="padding:6px 14px;font-size:12px">📧 Open in Email</button>
+                <select id="dp-stage-select" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px" onchange="moveToStage(this.value)">
+                  <option value="found">Found</option>
+                  <option value="sent">Sent</option>
+                  <option value="replied">Replied</option>
+                  <option value="meeting">Meeting</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE TAB -->
+    <div id="tab-pipeline" class="tab-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <h2 style="color:var(--gold)">LEAD PIPELINE</h2>
+        <div style="display:flex;gap:8px">
+          <select id="pipe-filter" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px" onchange="renderPipeline()">
+            <option value="all">All Companies</option>
+          </select>
+          <button class="btn btn-sec" onclick="exportPipeline()" style="padding:6px 12px;font-size:12px">⬇️ Export CSV</button>
+        </div>
+      </div>
+      <div class="pipeline-grid" id="pipeline-grid"></div>
+    </div>
+
+    <!-- SWARM INTEL TAB -->
+    <div id="tab-intel" class="tab-panel">
+      <h2 style="color:var(--gold);margin-bottom:14px">SWARM INTELLIGENCE</h2>
+      <div class="intel-grid">
+        <div class="intel-card">
+          <h3>🎯 Hunt Stats</h3>
+          <div id="ic-hunt-stats"></div>
+        </div>
+        <div class="intel-card">
+          <h3>💰 Revenue Pipeline</h3>
+          <div id="ic-revenue"></div>
+        </div>
+        <div class="intel-card">
+          <h3>🏭 Leads by Industry</h3>
+          <div id="ic-by-industry"></div>
+        </div>
+        <div class="intel-card">
+          <h3>🔍 Top Gaps Found Empire-Wide</h3>
+          <div id="ic-top-gaps"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// HUNTER PROFILES — ALL EMPIRE COMPANIES
+// ══════════════════════════════════════════════════════════════
+const HUNTERS = [
+{
+  id:'omniaguard', name:'OmniGuard', icon:'🛡️',
+  color:'#4A90E2', industry:'AI Cybersecurity',
+  targets:'Cybersecurity firms, MSPs, fintech, healthcare IT, government contractors, law firms',
+  gaps:[
+    {id:'ssl',       label:'No HTTPS/SSL',              keywords:null, notHTTPS:true,          w:20, critical:true},
+    {id:'privacy',   label:'No privacy policy',          keywords:'privacy policy|privacy notice', missing:true, w:12},
+    {id:'soc2',      label:'No compliance certs (SOC2/ISO)', keywords:'soc2|soc 2|iso 27001|iso27001|hipaa', missing:true, w:15},
+    {id:'mfa',       label:'No MFA/2FA mention',         keywords:'mfa|2fa|two-factor|multi-factor', missing:true, w:10},
+    {id:'breach',    label:'No incident response policy', keywords:'incident response|breach notification|data breach response', missing:true, w:12},
+    {id:'monitoring', label:'No 24/7 monitoring',        keywords:'24/7|monitoring|soc |security operations', missing:true, w:10},
+    {id:'vuln',      label:'No vulnerability disclosure', keywords:'vulnerability|pentest|penetration test|responsible disclosure', missing:true, w:11},
+    {id:'ai_sec',    label:'No AI security layer',       keywords:'ai security|ai-powered|machine learning detect', missing:true, w:10},
+  ],
+  pitch:"You protect clients but your own perimeter has gaps. OmniGuard's AI closes them before attackers find them.",
+  services:[{n:'OmniGuard Shield',p:299,r:true},{n:'OmniGuard Enterprise',p:999,r:true}],
+  cross:['primedoxai','vigilax','soulstack','agigovernance']
+},
+{
+  id:'primedoxai', name:'PrimeDox AI', icon:'⚖️',
+  color:'#F59E0B', industry:'Legal Technology',
+  targets:'Law firms, paralegal services, legal aid clinics, notaries, title companies, immigration lawyers',
+  gaps:[
+    {id:'noauto',    label:'No document automation',     keywords:'automation|auto-fill|document generat', missing:true, w:18},
+    {id:'nointake',  label:'No AI intake form',           keywords:'intake form|client intake|online intake|intake questionnaire', missing:true, w:15},
+    {id:'nobooking', label:'No online booking',           keywords:'book|schedule|calendar|appointment', missing:true, w:12},
+    {id:'noportal',  label:'No client portal',            keywords:'client portal|login|client login|secure portal', missing:true, w:12},
+    {id:'noesign',   label:'No e-signature',              keywords:'esign|e-sign|docusign|adobe sign|electronic sign', missing:true, w:13},
+    {id:'nochat',    label:'No AI chatbot',               keywords:'chat|chatbot|assistant|ai assist', missing:true, w:10},
+    {id:'notrack',   label:'No case/matter tracking',     keywords:'case tracking|matter management|case status|docket', missing:true, w:10},
+    {id:'nopayment', label:'No online payment',           keywords:'pay online|payment|stripe|paypal|credit card', missing:true, w:10},
+  ],
+  pitch:"Your lawyers draft by hand while AI does it in seconds. PrimeDox transforms your practice overnight.",
+  services:[{n:'PrimeDox Starter',p:149,r:true},{n:'PrimeDox Pro',p:499,r:true},{n:'PrimeDox Elite',p:999,r:true}],
+  cross:['omniaguard','ccldr','vigilax']
+},
+{
+  id:'ccldr', name:'CCLDR', icon:'⚖️🌿',
+  color:'#22c55e', industry:'Cannabis Legal & Compliance',
+  targets:'Dispensaries, licensed producers, cannabis consultants, compassion clubs, micro-cultivators, retailers',
+  gaps:[
+    {id:'notrack',   label:'No compliance tracking',     keywords:'compliance track|license track|deadline|renewal reminder', missing:true, w:20},
+    {id:'nolicense', label:'No license docs displayed',  keywords:'license number|health canada|federal license|provincial license', missing:true, w:15},
+    {id:'nocharter', label:'No Charter defense info',    keywords:'charter|section 7|constitutional|s.7|parker|allard', missing:true, w:12},
+    {id:'noaudit',   label:'No compliance audit offer',  keywords:'compliance audit|gap audit|regulatory review', missing:true, w:13},
+    {id:'nohemp',    label:'No cannabis law resources',  keywords:'cannabis law|cannabis act|cannabis regulation|criminal code', missing:true, w:10},
+    {id:'noai',      label:'No AI compliance tools',     keywords:'ai compliance|automated compliance|compliance software', missing:true, w:10},
+    {id:'noeducate', label:'No staff education content', keywords:'staff training|education|course|certification', missing:true, w:10},
+    {id:'noreport',  label:'No regulatory reporting',    keywords:'health canada report|monthly report|production report|inventory report', missing:true, w:10},
+  ],
+  pitch:"One compliance gap costs your license. CCLDR ensures you never miss a deadline or a defense.",
+  services:[{n:'CCLDR Warrior',p:149,r:true},{n:'CCLDR Professional',p:499,r:true},{n:'CCLDR Elite',p:999,r:true}],
+  cross:['primedoxai','omniaguard','benox','docweedlaw','cannadelivr']
+},
+{
+  id:'vigilax', name:'VIGILAX', icon:'👁️',
+  color:'#8B5CF6', industry:'AI Surveillance & Security',
+  targets:'Security companies, property managers, retail chains, warehouses, parking operators, municipalities',
+  gaps:[
+    {id:'nocamera',  label:'No video analytics mention', keywords:'video analytics|ai camera|smart camera|facial recognition', missing:true, w:15},
+    {id:'noalert',   label:'No real-time alert system',  keywords:'real-time alert|instant alert|push notification|alarm', missing:true, w:15},
+    {id:'noremote',  label:'No remote monitoring',       keywords:'remote monitor|remote view|cloud monitor|offsite monitor', missing:true, w:12},
+    {id:'nointegr',  label:'No system integration',      keywords:'integration|api|connect|third party|existing system', missing:true, w:10},
+    {id:'noreport',  label:'No analytics reporting',     keywords:'analytics|report|dashboard|stats|incident log', missing:true, w:12},
+    {id:'noai',      label:'No AI/ML detection',         keywords:'ai|machine learning|deep learning|neural|anomaly detect', missing:true, w:14},
+    {id:'nomobile',  label:'No mobile app',              keywords:'mobile app|ios|android|smartphone|app store', missing:true, w:12},
+    {id:'norespond', label:'No incident response',       keywords:'incident response|response team|emergency|dispatch', missing:true, w:10},
+  ],
+  pitch:"Your cameras record but don't think. VIGILAX AI detects threats before they become incidents.",
+  services:[{n:'VIGILAX Basic',p:199,r:true},{n:'VIGILAX Pro',p:799,r:true},{n:'VIGILAX Enterprise',p:2499,r:true}],
+  cross:['omniaguard','cleanswarm','soulstack']
+},
+{
+  id:'cleanswarm', name:'CleanSwarm', icon:'🤖',
+  color:'#0EA5E9', industry:'Commercial Cleaning / Facility Services',
+  targets:'Commercial cleaning companies, janitorial services, property managers, facility managers, hospitals, schools',
+  gaps:[
+    {id:'norobot',   label:'No robotic/autonomous cleaning', keywords:'robot|autonomous|automatic|roomba|floor bot', missing:true, w:18},
+    {id:'nobook',    label:'No online booking',           keywords:'book online|schedule online|request quote|instant quote', missing:true, w:15},
+    {id:'notrack',   label:'No job tracking system',      keywords:'track|gps|job status|real-time|live status', missing:true, w:12},
+    {id:'noapp',     label:'No client app or portal',     keywords:'app|portal|login|dashboard|client access', missing:true, w:12},
+    {id:'noai',      label:'No AI dispatch',              keywords:'ai dispatch|automated dispatch|smart routing|optimization', missing:true, w:13},
+    {id:'noinsure',  label:'No insurance/cert mention',   keywords:'insured|bonded|certified|wcb|wsib|liability insurance', missing:true, w:10},
+    {id:'noreview',  label:'No reviews/social proof',     keywords:'review|testimonial|google review|star rating|rated', missing:true, w:10},
+    {id:'noprice',   label:'No pricing transparency',     keywords:'price|rate|cost|starting at|per hour|per visit', missing:true, w:10},
+  ],
+  pitch:"Your crews clean the space; CleanSwarm's AI orchestrates the entire operation. Cut costs 40%.",
+  services:[{n:'CleanSwarm Starter',p:297,r:true},{n:'CleanSwarm Commercial',p:997,r:true}],
+  cross:['vigilax','kiaros','agentswarm']
+},
+{
+  id:'kiaros', name:'Kiaros', icon:'⏱️',
+  color:'#EC4899', industry:'AI Business Strategy / Consulting',
+  targets:'Business consultants, strategy firms, startup accelerators, fractional executives, coaches, advisory firms',
+  gaps:[
+    {id:'noai',      label:'No AI strategy tools',       keywords:'ai strategy|ai-powered|machine learning|ai consultant', missing:true, w:18},
+    {id:'noauto',    label:'No business automation',     keywords:'automat|workflow|process automat|efficiency', missing:true, w:14},
+    {id:'noresults', label:'No ROI case studies',        keywords:'roi|case study|results|revenue growth|cost saving', missing:true, w:12},
+    {id:'nobook',    label:'No online discovery call',   keywords:'book a call|schedule|discovery call|consultation', missing:true, w:12},
+    {id:'nodata',    label:'No data-driven methodology', keywords:'data-driven|analytics|kpi|metrics|dashboard', missing:true, w:10},
+    {id:'noempire',  label:'No multi-company framework', keywords:'portfolio|multiple company|enterprise|holding|division', missing:true, w:12},
+    {id:'nocrm',     label:'No CRM integration',         keywords:'crm|salesforce|hubspot|pipeline|client management', missing:true, w:11},
+    {id:'notrain',   label:'No team training offer',     keywords:'training|workshop|onboarding|staff train', missing:true, w:11},
+  ],
+  pitch:"Your strategy runs on intuition. Kiaros runs it on AI intelligence at the exact right moment.",
+  services:[{n:'Kiaros Session',p:500,r:false},{n:'Kiaros Monthly',p:1997,r:true}],
+  cross:['primedoxai','soulstack','agentswarm','agentforge']
+},
+{
+  id:'vaultvelocity', name:'VaultVelocity Auto', icon:'🚗',
+  color:'#F97316', industry:'Auto Financing / Pre-Owned Vehicles',
+  targets:'Car dealerships, auto financiers, used car lots, buy-here-pay-here, lease brokers, fleet companies',
+  gaps:[
+    {id:'noonline',  label:'No online financing apply',  keywords:'apply online|online application|instant approval|get approved', missing:true, w:18},
+    {id:'noinventory', label:'No live inventory',        keywords:'inventory|stock|available now|search vehicles', missing:true, w:15},
+    {id:'nocalc',    label:'No payment calculator',      keywords:'payment calculat|monthly payment|estimate payment|finance calculat', missing:true, w:12},
+    {id:'noai',      label:'No AI credit matching',      keywords:'ai|machine learning|automated approval|instant decision|credit ai', missing:true, w:14},
+    {id:'noreview',  label:'No customer reviews',        keywords:'review|testimonial|google|trustpilot|star', missing:true, w:10},
+    {id:'noval',     label:'No vehicle valuation tool',  keywords:'value|valuation|trade-in|kbb|black book|appraise', missing:true, w:11},
+    {id:'nochat',    label:'No chat/instant contact',    keywords:'chat|message|text us|whatsapp|instant', missing:true, w:10},
+    {id:'nomobile',  label:'Poor mobile experience',     keywords:'viewport', missing:true, w:10, urlCheck:true},
+  ],
+  pitch:"Customers want instant approval, not a 3-day wait. VaultVelocity closes them while they're still excited.",
+  services:[{n:'VaultVelocity Lead Engine',p:697,r:true},{n:'VaultVelocity Full Stack',p:2497,r:true}],
+  cross:['primedoxai','omniaguard','kiaros']
+},
+{
+  id:'techpetcage', name:'TechPetCage', icon:'🐾',
+  color:'#F472B6', industry:'Pet Technology',
+  targets:'Veterinary clinics, pet supply stores, dog trainers, pet insurance, grooming salons, shelters',
+  gaps:[
+    {id:'nogps',     label:'No GPS/tracking products',   keywords:'gps|track|location|collar track|pet tracker', missing:true, w:18},
+    {id:'nohealth',  label:'No pet health monitoring',   keywords:'health monitor|vital|heart rate|activity track|wellness', missing:true, w:15},
+    {id:'noapp',     label:'No mobile app',              keywords:'app|ios|android|mobile app|download', missing:true, w:12},
+    {id:'noai',      label:'No AI vet alerts',           keywords:'ai|artificial intelligence|smart alert|health ai|vet alert', missing:true, w:14},
+    {id:'nobook',    label:'No online booking',          keywords:'book|schedule|appointment|reserve', missing:true, w:10},
+    {id:'nosubscr',  label:'No subscription/plan',       keywords:'subscription|monthly plan|annual|membership', missing:true, w:11},
+    {id:'noreview',  label:'No pet parent testimonials', keywords:'review|testimonial|happy pet|customer|star rating', missing:true, w:10},
+    {id:'noschip',   label:'No microchip integration',   keywords:'microchip|chip|registration|found pet', missing:true, w:10},
+  ],
+  pitch:"Pet parents want peace of mind 24/7. TechPetCage's AI delivers it — GPS, health alerts, vet notifications.",
+  services:[{n:'TechPetCage Smart Collar',p:97,r:false},{n:'TechPetCage Pro',p:197,r:false},{n:'TechPetCage B2B Bundle',p:997,r:true}],
+  cross:['kiaros','omniaguard','agentswarm']
+},
+{
+  id:'docweedlaw', name:'Doc Weedlaw', icon:'🌿⚖️',
+  color:'#84CC16', industry:'Cannabis Advocacy / Constitutional Law',
+  targets:'Cannabis activists, harm reduction orgs, legal clinics, cannabis media, advocacy groups, dispensaries',
+  gaps:[
+    {id:'nocharter', label:'No Charter defense resources', keywords:'charter|section 7|constitutional|s.7', missing:true, w:18},
+    {id:'nocase',    label:'No case law database',       keywords:'case law|precedent|parker|allard|smith|r. v.', missing:true, w:15},
+    {id:'noeducate', label:'No educational content',     keywords:'education|guide|resource|article|explained', missing:true, w:12},
+    {id:'nodefense', label:'No defense strategy guide',  keywords:'defense strateg|legal strategy|how to defend|exemption', missing:true, w:13},
+    {id:'nocontact', label:'No direct advocate contact', keywords:'contact|consult|reach|speak to|get help', missing:true, w:10},
+    {id:'noform',    label:'No intake/consultation form',keywords:'intake|form|consult|apply|submit', missing:true, w:12},
+    {id:'nonews',    label:'No current case updates',    keywords:'news|update|recent|latest|2024|2025|2026', missing:true, w:10},
+    {id:'nomedia',   label:'No media/press materials',   keywords:'media|press|press release|journalist|interview', missing:true, w:10},
+  ],
+  pitch:"Cannabis law is evolving fast. Doc Weedlaw keeps advocates, clients, and organizations ahead of every ruling.",
+  services:[{n:'Doc Weedlaw Consultation',p:299,r:false},{n:'Doc Weedlaw Resource Bundle',p:97,r:false}],
+  cross:['ccldr','primedoxai','benox','consdeflab']
+},
+{
+  id:'benox', name:'BENO-X Institute', icon:'🏛️',
+  color:'#A78BFA', industry:'Constitutional Defense Research',
+  targets:'Legal defense organizations, civil liberties groups, cannabis legal advocates, law schools, Charter challengers',
+  gaps:[
+    {id:'noresearch', label:'No constitutional research base', keywords:'research|case law|precedent|framework|analysis', missing:true, w:18},
+    {id:'noparker',   label:'No Parker/Allard case refs',      keywords:'parker|allard|smith|charter cannabis|s.7 charter', missing:true, w:15},
+    {id:'noexemption',label:'No exemption framework guide',    keywords:'exemption|medical exemption|constitutional exemption', missing:true, w:13},
+    {id:'noeducate',  label:'No public education materials',   keywords:'education|guide|resource|understand|explainer', missing:true, w:12},
+    {id:'nonetwork',  label:'No legal network/referrals',      keywords:'network|referral|lawyer|find counsel|defense lawyer', missing:true, w:10},
+    {id:'nocase',     label:'No case tracking/database',       keywords:'database|track|case database|docket', missing:true, w:12},
+    {id:'noai',       label:'No AI research tools',            keywords:'ai|artificial intelligence|automated research|legal ai', missing:true, w:10},
+    {id:'nopublish',  label:'No published research papers',    keywords:'paper|publication|journal|white paper|brief', missing:true, w:10},
+  ],
+  pitch:"Constitutional defense requires depth. BENO-X delivers the research framework that wins before court.",
+  services:[{n:'BENO-X Research Access',p:97,r:true},{n:'BENO-X Institute Membership',p:497,r:true}],
+  cross:['ccldr','primedoxai','docweedlaw','consdeflab']
+},
+{
+  id:'agentswarm', name:'Agent Swarm Tech', icon:'🤖',
+  color:'#22D3EE', industry:'AI Agent Automation',
+  targets:'SaaS companies, digital agencies, e-commerce, logistics, real estate tech, marketing automation',
+  gaps:[
+    {id:'noauto',    label:'No workflow automation',     keywords:'automat|workflow|automated process', missing:true, w:18},
+    {id:'noagent',   label:'No AI agent integration',    keywords:'ai agent|agent|autonomous|bot|intelligent automat', missing:true, w:18},
+    {id:'noscale',   label:'No scalable process docs',   keywords:'scale|scalable|enterprise|high volume', missing:true, w:10},
+    {id:'noapi',     label:'No open API/webhook',        keywords:'api|webhook|integration|zapier|make.com|n8n', missing:true, w:12},
+    {id:'nomulti',   label:'No multi-agent capability',  keywords:'multi-agent|swarm|agent pool|parallel agent', missing:true, w:14},
+    {id:'nomonitor', label:'No agent monitoring',        keywords:'monitor|dashboard|agent status|performance track', missing:true, w:10},
+    {id:'nollm',     label:'No LLM/AI backend',          keywords:'llm|gpt|claude|openai|anthropic|ai model', missing:true, w:10},
+    {id:'nocustom',  label:'No custom agent builder',    keywords:'custom agent|build your own|configure|no-code agent', missing:true, w:8},
+  ],
+  pitch:"Your team handles tasks one at a time. Agent Swarm Tech deploys 100 AI agents that never sleep.",
+  services:[{n:'Agent Swarm Starter',p:299,r:true},{n:'Agent Swarm Growth',p:999,r:true},{n:'Agent Swarm Enterprise',p:2999,r:true}],
+  cross:['kiaros','primedoxai','omniaguard','agentforge']
+},
+{
+  id:'agentforge', name:'AgentForge', icon:'⚒️',
+  color:'#F59E0B', industry:'AI Agent SaaS Development',
+  targets:'Software companies, digital agencies, AI startups, enterprise IT, no-code platforms, niche SaaS builders',
+  gaps:[
+    {id:'noagent',   label:'No agent-building tools',    keywords:'agent builder|build agent|agent framework|custom agent', missing:true, w:20},
+    {id:'noniche',   label:'No niche industry focus',    keywords:'niche|industry-specific|vertical|specialized', missing:true, w:15},
+    {id:'nowhite',   label:'No white-label option',      keywords:'white label|rebrand|reseller|private label', missing:true, w:13},
+    {id:'nodeploy',  label:'No one-click deploy',        keywords:'deploy|one-click|instant deploy|live in minutes', missing:true, w:12},
+    {id:'nomarket',  label:'No agent marketplace',       keywords:'marketplace|library|template|pre-built', missing:true, w:12},
+    {id:'nollm',     label:'No multi-LLM support',       keywords:'gpt|claude|gemini|llama|multi-model|bring your own', missing:true, w:10},
+    {id:'nomem',     label:'No memory/context layer',    keywords:'memory|context|persistent|long-term memory', missing:true, w:8},
+    {id:'norev',     label:'No revenue share for builders', keywords:'revenue share|earn|monetize|marketplace earn', missing:true, w:10},
+  ],
+  pitch:"Every niche needs its own AI agent. AgentForge builds and deploys them in hours, not months.",
+  services:[{n:'AgentForge Starter',p:497,r:true},{n:'AgentForge Studio',p:1497,r:true}],
+  cross:['agentswarm','kiaros','primedoxai','omniaguard']
+},
+{
+  id:'agigovernance', name:'AI Governance Canada', icon:'🇨🇦',
+  color:'#EF4444', industry:'AI Policy & Compliance',
+  targets:'AI companies, government agencies, regulated industries, healthcare tech, financial services, HR tech',
+  gaps:[
+    {id:'noframe',   label:'No AI governance framework', keywords:'governance|framework|policy|ethical ai|responsible ai', missing:true, w:18},
+    {id:'nobia',     label:'No bias audit process',      keywords:'bias|fairness|audit|discrimination|equitable', missing:true, w:15},
+    {id:'noaida',    label:'No AIDA/PIPEDA compliance',  keywords:'aida|pipeda|privacy act|ai act|regulation compliance', missing:true, w:15},
+    {id:'notranspar',label:'No AI transparency docs',    keywords:'transparency|explainable|interpretable|audit trail', missing:true, w:12},
+    {id:'noimpact',  label:'No algorithmic impact assessment', keywords:'impact assessment|aia|risk assessment|algorithmic', missing:true, w:10},
+    {id:'noethics',  label:'No ethics board/review',     keywords:'ethics|ethics board|ethics review|ethical committee', missing:true, w:10},
+    {id:'nopublic',  label:'No public accountability report', keywords:'accountability|public report|annual report|transparency report', missing:true, w:10},
+    {id:'notrain',   label:'No staff AI ethics training', keywords:'ai training|ethics training|responsible use|ai literacy', missing:true, w:10},
+  ],
+  pitch:"Canada's AI law (AIDA) is coming. AI Governance Canada ensures you're compliant before regulators knock.",
+  services:[{n:'AI Governance Audit',p:997,r:false},{n:'AI Governance Framework',p:4997,r:false}],
+  cross:['primedoxai','omniaguard','kiaros']
+},
+{
+  id:'consdeflab', name:'Constitutional Defense Labs', icon:'🏛️⚖️',
+  color:'#6366F1', industry:'Constitutional Law Technology',
+  targets:'Criminal defense lawyers, legal aid societies, civil rights organizations, public interest litigators',
+  gaps:[
+    {id:'notech',    label:'No legal tech stack',        keywords:'legal tech|legaltech|software|automat|digital', missing:true, w:18},
+    {id:'noresearch',label:'No constitutional research tools', keywords:'research tool|case law|precedent|charter analysis', missing:true, w:15},
+    {id:'noai',      label:'No AI brief drafting',       keywords:'ai draft|automated draft|ai assist|brief generat', missing:true, w:15},
+    {id:'nocollb',   label:'No collaboration platform',  keywords:'collaborat|team|share|multi-user|co-counsel', missing:true, w:10},
+    {id:'notimeline',label:'No case timeline builder',   keywords:'timeline|chronology|case flow|visual timeline', missing:true, w:10},
+    {id:'nodoc',     label:'No document assembly',       keywords:'document assembl|template|clause library|form fill', missing:true, w:12},
+    {id:'noevidnce', label:'No evidence management',     keywords:'evidence|exhibit|proof|document management', missing:true, w:10},
+    {id:'nopublic',  label:'No public legal education',  keywords:'public education|know your rights|legal guide|citizen', missing:true, w:10},
+  ],
+  pitch:"Constitutional defense wins on research and preparation. Constitutional Defense Labs automates both.",
+  services:[{n:'ConDef Research Suite',p:297,r:true},{n:'ConDef Full Stack',p:997,r:true}],
+  cross:['primedoxai','benox','ccldr','docweedlaw']
+},
+{
+  id:'cannadelivr', name:'Canna-Deliver', icon:'🚚🌿',
+  color:'#10B981', industry:'Cannabis Delivery',
+  targets:'Cannabis dispensaries, licensed producers, cannabis delivery services, compassion clubs',
+  gaps:[
+    {id:'noonline',  label:'No online ordering',         keywords:'order online|online order|shop|add to cart', missing:true, w:20},
+    {id:'notrack',   label:'No delivery tracking',       keywords:'track|tracking|delivery status|where is my order', missing:true, w:15},
+    {id:'noage',     label:'No age verification',        keywords:'age verif|19+|18+|id check|verify age', missing:true, w:15},
+    {id:'noapp',     label:'No delivery app',            keywords:'app|ios|android|download|mobile order', missing:true, w:12},
+    {id:'nosub',     label:'No subscription delivery',   keywords:'subscription|recurring|monthly|weekly deliver', missing:true, w:12},
+    {id:'noprofile', label:'No licensed producer profile', keywords:'licensed|health canada|license number|lp ', missing:true, w:10},
+    {id:'noloyalty', label:'No loyalty program',         keywords:'loyalty|points|reward|discount program|earn', missing:true, w:8},
+    {id:'nochat',    label:'No live customer support',   keywords:'chat|live support|text|whatsapp|contact us', missing:true, w:8},
+  ],
+  pitch:"Customers want same-day delivery from licensed sources. Canna-Deliver gets compliant product to doors fast.",
+  services:[{n:'Canna-Deliver Platform',p:497,r:true},{n:'Canna-Deliver Enterprise',p:1997,r:true}],
+  cross:['ccldr','primedoxai','omniaguard']
+},
+{
+  id:'soulstack', name:'SoulStack', icon:'👁️',
+  color:'#8B5CF6', industry:'AI Brand Reputation / Observer Intelligence',
+  targets:'Brands, celebrities, influencers, executives, public companies, government contractors, PR agencies',
+  gaps:[
+    {id:'nomonitor', label:'No brand mention monitoring', keywords:'brand monitor|mention|alert|reputation monitor', missing:true, w:18},
+    {id:'nosentim',  label:'No sentiment analysis',      keywords:'sentiment|tone|positive negative|brand health', missing:true, w:15},
+    {id:'nocrisis',  label:'No crisis response protocol', keywords:'crisis|reputation repair|response plan|crisis PR', missing:true, w:15},
+    {id:'nosocial',  label:'No social listening',        keywords:'social listen|social monitor|twitter|instagram|tiktok watch', missing:true, w:12},
+    {id:'noreview',  label:'No review management',       keywords:'review manag|google review|respond to review|review reply', missing:true, w:10},
+    {id:'noanalytics',label:'No reputation analytics',   keywords:'reputation score|trust score|analytics|dashboard report', missing:true, w:10},
+    {id:'nodarkweb', label:'No dark web monitoring',     keywords:'dark web|data exposure|breach check|leaked data', missing:true, w:10},
+    {id:'noai',      label:'No AI anomaly detection',    keywords:'ai detect|anomaly|unusual activity|ai flag', missing:true, w:10},
+  ],
+  pitch:"Your reputation is being shaped right now — by strangers online. SoulStack watches so you don't have to.",
+  services:[{n:'SoulStack Watch',p:197,r:true},{n:'SoulStack Enterprise',p:997,r:true}],
+  cross:['omniaguard','vigilax','kiaros','primedoxai']
+},
+{
+  id:'zprimedoxaihq', name:'ZPrimeDox AI HQ', icon:'🏛️',
+  color:'#D4AF37', industry:'AI Command Center / Empire Management',
+  targets:'Business owners with 5+ companies, holding companies, franchise operators, serial entrepreneurs, family offices',
+  gaps:[
+    {id:'nohq',      label:'No centralized command center', keywords:'command center|central hub|empire|portfolio view|all companies', missing:true, w:20},
+    {id:'nodash',    label:'No unified dashboard',      keywords:'unified|dashboard|all-in-one|centralized|single view', missing:true, w:15},
+    {id:'noai',      label:'No AI decision support',    keywords:'ai decision|ai insight|ai recommend|intelligence', missing:true, w:15},
+    {id:'noauto',    label:'No cross-company automation', keywords:'cross-company|automat|workflow|connect|integrate', missing:true, w:12},
+    {id:'norep',     label:'No empire-wide reporting',  keywords:'report|analytics|kpi|performance|revenue overview', missing:true, w:12},
+    {id:'nogap',     label:'No gap analysis tools',     keywords:'gap|audit|opportunity|missing|weakness', missing:true, w:12},
+    {id:'nostrat',   label:'No AI strategy layer',      keywords:'ai strategy|strategic ai|vision|growth engine', missing:true, w:7},
+    {id:'noswarm',   label:'No swarm intelligence',     keywords:'swarm|multi-agent|agent pool|intelligence network', missing:true, w:7},
+  ],
+  pitch:"Running 5+ companies from spreadsheets is chaos. ZPrimeDox AI HQ gives you one screen to rule the empire.",
+  services:[{n:'ZPrimeDox HQ Basic',p:497,r:true},{n:'ZPrimeDox HQ Empire',p:1997,r:true}],
+  cross:['primedoxai','agentswarm','kiaros','soulstack']
+},
+{
+  id:'francohq', name:'Francisco Holdings Inc.', icon:'👑',
+  color:'#D4AF37', industry:'Investment / Holding Company',
+  targets:'Family offices, angel investors, venture studios, holding companies, serial entrepreneurs, business groups',
+  gaps:[
+    {id:'noempire',  label:'No empire/portfolio showcase', keywords:'portfolio|empire|division|subsidiary|holdings', missing:true, w:18},
+    {id:'noinvest',  label:'No investment thesis published', keywords:'investment thesis|thesis|investment criteria|focus area', missing:true, w:13},
+    {id:'notrack',   label:'No portfolio performance tracking', keywords:'performance|returns|portfolio track|results|benchmark', missing:true, w:12},
+    {id:'noai',      label:'No AI portfolio intelligence', keywords:'ai|intelligence|data-driven|ai invest', missing:true, w:12},
+    {id:'nopitch',   label:'No pitch deck / investor materials', keywords:'pitch deck|investor|term sheet|invest with us|deal flow', missing:true, w:12},
+    {id:'nosynergy', label:'No cross-portfolio synergy strategy', keywords:'synergy|cross-portfolio|shared service|leverage', missing:true, w:10},
+    {id:'noesg',     label:'No ESG / impact mandate',    keywords:'esg|impact|sustainable|social good|community', missing:true, w:8},
+    {id:'noreport',  label:'No annual report/transparency', keywords:'annual report|transparency|shareholder|update', missing:true, w:8},
+  ],
+  pitch:"A holding company without a platform is just companies. Francisco Holdings builds empires with AI-connected divisions.",
+  services:[{n:'FH Partnership Floor',p:50000,r:false},{n:'FH Strategy Session',p:500,r:false}],
+  cross:['zprimedoxaihq','kiaros','primedoxai','agentswarm']
+},
+];
+
+// ══════════════════════════════════════════════════════════════
+// PIPELINE STAGES
+// ══════════════════════════════════════════════════════════════
+const STAGES = [
+  {id:'found',   label:'Found',   color:'#4B5563'},
+  {id:'sent',    label:'Sent',    color:'#1D4ED8'},
+  {id:'replied', label:'Replied', color:'#B45309'},
+  {id:'meeting', label:'Meeting', color:'#6D28D9'},
+  {id:'closed',  label:'Closed', color:'#065F46'},
+];
+
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+let currentHunter = null;
+let scanResults = [];
+let sortKey = 'score', sortDir = -1;
+let filterMode = 'all';
+let selectedIdx = -1;
+let db = loadDB();
+
+function loadDB(){
+  try{return JSON.parse(localStorage.getItem('gh_db')||'{"leads":[],"scanned":0}')}
+  catch(e){return {leads:[],scanned:0}}
+}
+function saveDB(){localStorage.setItem('gh_db',JSON.stringify(db))}
+function genId(){return Math.random().toString(36).substr(2,9)}
+
+// ══════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════
+(function init(){
+  const sel = document.getElementById('company-select');
+  HUNTERS.forEach(h=>{
+    const opt = document.createElement('option');
+    opt.value = h.id; opt.textContent = h.icon+' '+h.name+' — '+h.industry;
+    sel.appendChild(opt);
+  });
+  renderSidebar();
+  renderPipeline();
+  renderIntel();
+  updateTopStats();
+})();
+
+function renderSidebar(){
+  const sb = document.getElementById('sb-hunters');
+  sb.innerHTML = '';
+  HUNTERS.forEach(h=>{
+    const cnt = db.leads.filter(l=>l.hunterId===h.id).length;
+    const div = document.createElement('div');
+    div.className = 'sb-item'+(currentHunter&&currentHunter.id===h.id?' active':'');
+    div.onclick = ()=>{
+      document.getElementById('company-select').value=h.id;
+      selectHunter(h.id);
+    };
+    div.innerHTML = `<div class="sb-icon">${h.icon}</div><div class="sb-info"><div class="sb-name">${h.name}</div><div class="sb-sub">${h.industry}</div></div>${cnt?`<div class="sb-badge">${cnt}</div>`:''}`;
+    sb.appendChild(div);
+  });
+  const sb2 = document.getElementById('sb-pipe-stats');
+  sb2.innerHTML = '';
+  STAGES.forEach(s=>{
+    const cnt = db.leads.filter(l=>l.stage===s.id).length;
+    const div = document.createElement('div');
+    div.className = 'sb-item';
+    div.onclick = ()=>{showTab('pipeline')};
+    div.innerHTML = `<div class="sb-icon" style="width:10px;height:10px;background:${s.color};border-radius:50%;margin:6px"></div><div class="sb-info"><div class="sb-name">${s.label}</div></div><div class="sb-badge" style="background:${s.color}">${cnt}</div>`;
+    sb2.appendChild(div);
+  });
+}
+
+function showTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(b=>{
+    if(b.textContent.toLowerCase().includes(name==='intel'?'swarm':name)) b.classList.add('active');
+  });
+  if(name==='pipeline') renderPipeline();
+  if(name==='intel') renderIntel();
+}
+
+// ══════════════════════════════════════════════════════════════
+// HUNTER SELECTION
+// ══════════════════════════════════════════════════════════════
+function selectHunter(id){
+  currentHunter = HUNTERS.find(h=>h.id===id)||null;
+  document.getElementById('no-hunter').style.display = currentHunter?'none':'block';
+  document.getElementById('scan-section').style.display = currentHunter?'block':'none';
+  document.getElementById('hunter-header').style.display = currentHunter?'block':'none';
+  if(!currentHunter){renderSidebar();return;}
+  const h = currentHunter;
+  document.getElementById('hh-icon').textContent = h.icon;
+  document.getElementById('hh-name').textContent = h.name;
+  document.getElementById('hh-name').style.color = h.color;
+  document.getElementById('hh-industry').textContent = h.industry;
+  document.getElementById('hh-pitch').textContent = '"'+h.pitch+'"';
+  document.getElementById('hh-targets').innerHTML = '<b>Hunt targets:</b> '+h.targets;
+  const svc = h.services.map(s=>s.n+(s.r?' $'+s.p+'/mo':' $'+s.p)).join(' · ');
+  document.getElementById('hh-services').innerHTML = '<div style="font-size:11px;text-align:right">Services:<br>'+svc+'</div>';
+  renderGapsConfig();
+  renderSidebar();
+  scanResults=[];
+  document.getElementById('results-section').style.display='none';
+  document.getElementById('detail-panel').style.display='none';
+  document.getElementById('clear-btn').style.display='none';
+  document.getElementById('scan-status').textContent='';
+}
+
+function renderGapsConfig(){
+  const h = currentHunter;
+  const config = document.getElementById('gaps-config');
+  config.style.display = 'block';
+  document.getElementById('gaps-config-title').textContent = 'GAP CHECKS FOR '+h.name.toUpperCase()+' INDUSTRY';
+  const grid = document.getElementById('gaps-grid');
+  grid.innerHTML = '';
+  h.gaps.forEach(g=>{
+    const div = document.createElement('div');
+    div.className = 'gap-toggle active';
+    div.id = 'gap-tog-'+g.id;
+    div.innerHTML = `<input type="checkbox" id="gc-${g.id}" checked onchange="toggleGap('${g.id}',this.checked)"><label for="gc-${g.id}">${g.label}</label><span class="gw">${g.w}pt</span>`;
+    grid.appendChild(div);
+  });
+}
+
+let disabledGaps = {};
+function toggleGap(id,checked){
+  disabledGaps[id] = !checked;
+  const tog = document.getElementById('gap-tog-'+id);
+  if(tog) tog.classList.toggle('active',checked);
+}
+
+// ══════════════════════════════════════════════════════════════
+// SCANNING ENGINE
+// ══════════════════════════════════════════════════════════════
+const PROXY = 'https://corsproxy.io/?';
+let scanQueue = [], scanActive = 0, scanMax = 3, scanTotal = 0, scanDone = 0;
+
+async function startScan(){
+  if(!currentHunter) return;
+  const raw = document.getElementById('url-input').value.trim();
+  if(!raw){alert('Enter at least one URL to scan.');return;}
+  const urls = raw.split(/[\n,]+/).map(u=>u.trim()).filter(u=>u.length>5).map(normalizeURL);
+  if(!urls.length){alert('No valid URLs found.');return;}
+  beginScan(urls);
+}
+
+function normalizeURL(u){
+  u = u.trim();
+  if(!u.startsWith('http')) u = 'https://'+u;
+  return u;
+}
+
+function beginScan(urls){
+  scanResults = [];
+  scanQueue = [...new Set(urls)];
+  scanActive = 0; scanDone = 0; scanTotal = scanQueue.length;
+  document.getElementById('progress-bar').style.display='block';
+  document.getElementById('results-section').style.display='block';
+  document.getElementById('detail-panel').style.display='none';
+  document.getElementById('clear-btn').style.display='block';
+  document.getElementById('scan-status').textContent = `Scanning 0/${scanTotal}...`;
+  setProgress(0);
+  renderResultsTable();
+  pumpScanQueue();
+}
+
+function pumpScanQueue(){
+  while(scanActive < scanMax && scanQueue.length){
+    const url = scanQueue.shift();
+    scanActive++;
+    scanURL(url).then(result=>{
+      scanActive--;
+      scanDone++;
+      db.scanned++;
+      saveDB();
+      scanResults.push(result);
+      scanResults.sort((a,b)=>b.score-a.score);
+      setProgress(scanDone/scanTotal*100);
+      document.getElementById('scan-status').textContent = `Scanned ${scanDone}/${scanTotal}${scanQueue.length?'  <span class="loading-dot">●</span>  scanning...':'  ✓ Complete'}`;
+      updateTopStats();
+      renderResultsTable();
+      pumpScanQueue();
+    });
+  }
+}
+
+function setProgress(pct){
+  document.getElementById('progress-fill').style.width = pct+'%';
+}
+
+async function scanURL(url){
+  const result = {url, score:0, gaps:[], empireValue:0, stage:'found', hunterId:currentHunter.id, id:genId(), ts:Date.now()};
+  const h = currentHunter;
+
+  // HTTPS check
+  const isHTTPS = url.startsWith('https://');
+
+  let html = '';
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(),10000);
+    const resp = await fetch(PROXY+encodeURIComponent(url),{signal:controller.signal});
+    clearTimeout(timer);
+    html = (await resp.text()).toLowerCase();
+  }catch(e){
+    // If fetch fails, do URL-only analysis
+    result.fetchFailed = true;
+  }
+
+  h.gaps.forEach(g=>{
+    if(disabledGaps[g.id]) return;
+    let gapFound = false;
+    if(g.notHTTPS){
+      gapFound = !isHTTPS;
+    } else if(g.missing && html){
+      // Gap present if keywords NOT found
+      const keys = g.keywords.split('|');
+      gapFound = !keys.some(k=>html.includes(k));
+    } else if(!g.missing && html){
+      // Gap present if keywords ARE found (bad signal)
+      const keys = g.keywords.split('|');
+      gapFound = keys.some(k=>html.includes(k));
+    } else if(g.notHTTPS===undefined && !html && !result.fetchFailed){
+      gapFound = false;
+    }
+    if(gapFound){
+      result.score += g.w;
+      result.gaps.push(g.id);
+    }
+  });
+
+  // Cap at 100
+  result.score = Math.min(100, result.score);
+
+  // Calculate empire value (cross-sell)
+  result.empireValue = calcEmpireValue(result, h);
+  return result;
+}
+
+function calcEmpireValue(result, h){
+  let total = 0;
+  // Primary services (from selected hunter)
+  h.services.forEach(s=>{ total += s.p; });
+  // Cross-sell from gap signals
+  const crossHunters = (h.cross||[]).map(id=>HUNTERS.find(x=>x.id===id)).filter(Boolean);
+  crossHunters.forEach(ch=>{
+    if(ch && result.score > 20){
+      const s = ch.services[0];
+      if(s) total += s.p;
+    }
+  });
+  return total;
+}
+
+function loadCSV(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const lines = e.target.result.split(/\r?\n/);
+    const urls = lines.map(l=>l.split(',')[0].trim()).filter(u=>u.includes('.'));
+    document.getElementById('url-input').value = urls.join('\n');
+    document.getElementById('scan-status').textContent = `Loaded ${urls.length} URLs from CSV`;
+  };
+  reader.readAsText(file);
+}
+
+function showSampleURLs(){
+  if(!currentHunter) return;
+  const samples = {
+    omniaguard:'https://crowdstrike.com\nhttps://paloaltonetworks.com\nhttps://sentinelone.com',
+    primedoxai:'https://clio.com\nhttps://mycase.com\nhttps://practiceevolve.com',
+    ccldr:'https://cannasafety.ca\nhttps://ocs.ca\nhttps://bccannabisstores.com',
+    vigilax:'https://verkada.com\nhttps://avigilon.com\nhttps://genetec.com',
+    cleanswarm:'https://janiking.com\nhttps://servpro.com\nhttps://cleannet.com',
+    kiaros:'https://mckinsey.com\nhttps://bain.com\nhttps://ey.com/strategy',
+    vaultvelocity:'https://autotrader.ca\nhttps://unhaggle.com\nhttps://clutch.ca',
+    techpetcage:'https://whistle.com\nhttps://fitbark.com\nhttps://tractive.com',
+    docweedlaw:'https://cannabinoidlaw.com\nhttps://leafly.com\nhttps://mpp.org',
+    benox:'https://aclu.org\nhttps://ccla.org\nhttps://charterlaw.ca',
+    agentswarm:'https://zapier.com\nhttps://make.com\nhttps://n8n.io',
+    agentforge:'https://langchain.com\nhttps://autogpt.net\nhttps://crewai.com',
+    agigovernance:'https://oecd.org/ai\nhttps://nist.gov/ai\nhttps://gov.uk/government/collections/ai-governance',
+    cannadelivr:'https://dutchie.com\nhttps://jane.app\nhttps://leafly.com/delivery',
+    soulstack:'https://brandwatch.com\nhttps://sprinklr.com\nhttps://mention.com',
+    zprimedoxaihq:'https://holdco.xyz\nhttps://folio.vc\nhttps://capdeck.io',
+    francohq:'https://berkshirehathaway.com\nhttps://constellation.com\nhttps://roper.com',
+    consdeflab:'https://aclu.org\nhttps://canadianlegal.org\nhttps://cba.org',
+  };
+  const s = samples[currentHunter.id]||'https://competitor1.com\nhttps://competitor2.com\nhttps://competitor3.com';
+  document.getElementById('url-input').value = s;
+}
+
+function clearResults(){
+  scanResults = [];
+  document.getElementById('results-section').style.display='none';
+  document.getElementById('detail-panel').style.display='none';
+  document.getElementById('progress-bar').style.display='none';
+  document.getElementById('scan-status').textContent='';
+  document.getElementById('clear-btn').style.display='none';
+  document.getElementById('url-input').value='';
+  selectedIdx = -1;
+}
+
+// ══════════════════════════════════════════════════════════════
+// RESULTS TABLE
+// ══════════════════════════════════════════════════════════════
+function renderResultsTable(){
+  const tbody = document.getElementById('results-tbody');
+  let rows = [...scanResults];
+  // Filter
+  if(filterMode==='hot') rows=rows.filter(r=>r.score>=70);
+  else if(filterMode==='warm') rows=rows.filter(r=>r.score>=40&&r.score<70);
+  else if(filterMode==='cool') rows=rows.filter(r=>r.score<40);
+  // Sort
+  rows.sort((a,b)=>{
+    const av=a[sortKey]||0, bv=b[sortKey]||0;
+    return sortDir*(typeof av==='string'?av.localeCompare(bv):bv-av);
+  });
+  tbody.innerHTML = '';
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">No results yet. Enter target URLs and click SCAN.</td></tr>';
+    return;
+  }
+  rows.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    if(selectedIdx===scanResults.indexOf(r)) tr.classList.add('selected');
+    tr.onclick=()=>selectResult(scanResults.indexOf(r));
+    const scoreClass = r.score>=70?'score-hot':r.score>=40?'score-warm':r.score>0?'score-cool':'score-none';
+    const gapChips = r.gaps.slice(0,3).map(gid=>{
+      const g = currentHunter&&currentHunter.gaps.find(x=>x.id===gid);
+      return g?`<span class="gap-chip ${g.w>=15?'critical':'warning'}">${g.label.slice(0,20)}</span>`:'';
+    }).join('');
+    const stageObj = STAGES.find(s=>s.id===r.stage)||STAGES[0];
+    tr.innerHTML=`
+      <td><a href="${r.url}" target="_blank" style="color:var(--blue);max-width:180px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.url.replace(/https?:\/\//,'')}</a></td>
+      <td><span class="score-pill ${scoreClass}">${r.score}</span></td>
+      <td><div class="gap-chips">${gapChips}${r.gaps.length>3?`<span class="gap-chip">+${r.gaps.length-3}</span>`:''}</div></td>
+      <td style="color:var(--emerald);font-weight:700">$${r.empireValue.toLocaleString()}</td>
+      <td><span class="tag" style="background:${stageObj.color}22;border:1px solid ${stageObj.color}66;color:${stageObj.color}">${stageObj.label}</span></td>
+      <td><div class="action-btns">
+        <button class="act-btn" onclick="event.stopPropagation();addToLeads('${r.id}')">+ Add Lead</button>
+        <button class="act-btn" onclick="event.stopPropagation();copyEmailById('${r.id}')">Email</button>
+      </div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function sortResults(key){
+  if(sortKey===key) sortDir*=-1; else{sortKey=key;sortDir=-1;}
+  renderResultsTable();
+}
+
+function filterResults(mode,btn){
+  filterMode=mode;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderResultsTable();
+}
+
+// ══════════════════════════════════════════════════════════════
+// LEAD DETAIL
+// ══════════════════════════════════════════════════════════════
+function selectResult(idx){
+  selectedIdx = idx;
+  const r = scanResults[idx];
+  if(!r||!currentHunter) return;
+  document.getElementById('detail-panel').style.display='block';
+  document.getElementById('dp-title').textContent = r.url.replace(/https?:\/\//,'').split('/')[0];
+  document.getElementById('dp-stage-select').value = r.stage||'found';
+  renderDetailGaps(r);
+  renderDetailCrossSell(r);
+  renderDetailEmail(r);
+  renderResultsTable();
+  document.getElementById('detail-panel').scrollIntoView({behavior:'smooth'});
+}
+
+function closeDetail(){
+  document.getElementById('detail-panel').style.display='none';
+  selectedIdx=-1;
+  renderResultsTable();
+}
+
+function renderDetailGaps(r){
+  const h = currentHunter;
+  const el = document.getElementById('dp-gaps');
+  if(!h){el.innerHTML='';return;}
+  const rows = h.gaps.map(g=>{
+    const found = r.gaps.includes(g.id);
+    return `<div class="gap-list-item">
+      <span style="color:${found?'#fca5a5':'var(--muted)'}">${found?'✕':'✓'} ${g.label}</span>
+      <span class="gap-weight" style="color:${found?'var(--hot)':'var(--muted)'}">${found?'+'+g.w:'0'}</span>
+    </div>`;
+  }).join('');
+  el.innerHTML = rows + `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-weight:700"><span>Gap Score</span><span style="color:${r.score>=70?'var(--hot)':r.score>=40?'var(--warm)':'var(--blue)'">${r.score}/100</span></div>`;
+}
+
+function renderDetailCrossSell(r){
+  const h = currentHunter;
+  const el = document.getElementById('dp-crosssell');
+  const elTotal = document.getElementById('dp-empire-total');
+  const elVal = document.getElementById('dp-total-val');
+  const elSub = document.getElementById('dp-total-sub');
+  if(!h){el.innerHTML='';return;}
+
+  let items = [];
+  // Primary
+  h.services.forEach(s=>{
+    items.push({hunter:h.name,service:s.n,price:s.p,recurring:s.r,priority:'primary'});
+  });
+  // Cross-sell
+  (h.cross||[]).forEach(cid=>{
+    const ch = HUNTERS.find(x=>x.id===cid);
+    if(ch && r.score>15){
+      const s = ch.services[0];
+      if(s) items.push({hunter:ch.name+' '+ch.icon,service:s.n,price:s.p,recurring:s.r,priority:'cross'});
+    }
+  });
+
+  let total = 0, recurring = 0;
+  const rows = items.map(item=>{
+    total += item.price;
+    if(item.recurring) recurring += item.price;
+    const badge = item.priority==='primary'?
+      '<span class="tag tag-gold" style="font-size:10px">PRIMARY</span>':
+      '<span class="tag tag-green" style="font-size:10px">CROSS-SELL</span>';
+    return `<div class="cross-item">${badge} <span style="flex:1;padding:0 6px;font-size:12px">${item.service}</span><span class="cross-price">$${item.price.toLocaleString()}${item.recurring?'/mo':''}</span></div>`;
+  }).join('');
+  el.innerHTML = rows;
+  elTotal.style.display='block';
+  elVal.textContent = '$'+total.toLocaleString();
+  elSub.textContent = 'Setup + $'+recurring.toLocaleString()+'/mo recurring';
+}
+
+function renderDetailEmail(r){
+  const h = currentHunter;
+  const el = document.getElementById('dp-email');
+  if(!h){el.textContent='';return;}
+  const domain = r.url.replace(/https?:\/\//,'').split('/')[0];
+  const topGaps = r.gaps.slice(0,3).map(gid=>{
+    const g = h.gaps.find(x=>x.id===gid);
+    return g?'• '+g.label:'';
+  }).filter(Boolean).join('\n');
+  const email = `Subject: ${h.name} spotted ${r.gaps.length} gaps on ${domain}
+
+Hi there,
+
+I ran a quick audit of ${domain} and found ${r.gaps.length} gaps that competitors in your industry are already closing:
+
+${topGaps||'• Multiple technical and conversion gaps found'}
+
+${h.pitch}
+
+We offer: ${h.services.map(s=>s.n+' ($'+s.p+(s.r?'/mo':'')+')')  .join(', ')}
+
+Worth a 15-minute call? No pitch, just the audit results.
+
+— Derek Francisco
+Francisco Holdings Inc.
+https://franciscoholdingsinc.com`;
+  el.textContent = email;
+}
+
+function copyEmail(){
+  const el = document.getElementById('dp-email');
+  navigator.clipboard.writeText(el.textContent).then(()=>{
+    const btn = document.querySelector('.email-actions .btn-green');
+    const orig = btn.textContent;
+    btn.textContent='✓ Copied!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  });
+}
+
+function copyEmailById(rid){
+  const r = scanResults.find(x=>x.id===rid);
+  if(!r) return;
+  const idx = scanResults.indexOf(r);
+  selectResult(idx);
+  setTimeout(copyEmail,100);
+}
+
+function sendEmail(){
+  const txt = document.getElementById('dp-email').textContent;
+  const lines = txt.split('\n');
+  const sub = lines[0].replace('Subject: ','');
+  const body = lines.slice(2).join('\n');
+  const r = scanResults[selectedIdx];
+  window.location.href = `mailto:info@${r?r.url.replace(/https?:\/\//,'').split('/')[0]:''}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+}
+
+function moveToStage(stage){
+  if(selectedIdx<0) return;
+  const r = scanResults[selectedIdx];
+  r.stage = stage;
+  // Update in DB if exists
+  const existing = db.leads.find(l=>l.id===r.id);
+  if(existing) existing.stage=stage;
+  saveDB();
+  renderResultsTable();
+  renderSidebar();
+}
+
+function addToLeads(rid){
+  const r = scanResults.find(x=>x.id===rid);
+  if(!r) return;
+  const existing = db.leads.find(l=>l.id===r.id);
+  if(!existing){
+    db.leads.push({...r});
+    saveDB();
+  }
+  renderSidebar();
+  updateTopStats();
+  const btn = event.target;
+  btn.textContent='✓ Added';
+  btn.style.color='var(--emerald)';
+  setTimeout(()=>{btn.textContent='+ Add Lead';btn.style.color='';},2000);
+}
+
+// ══════════════════════════════════════════════════════════════
+// PIPELINE
+// ══════════════════════════════════════════════════════════════
+function renderPipeline(){
+  const grid = document.getElementById('pipeline-grid');
+  const filterVal = document.getElementById('pipe-filter').value;
+  const sel = document.getElementById('pipe-filter');
+
+  // Populate filter options
+  const existing = [...sel.options].map(o=>o.value);
+  HUNTERS.forEach(h=>{
+    if(!existing.includes(h.id)){
+      const opt = document.createElement('option');
+      opt.value=h.id; opt.textContent=h.icon+' '+h.name;
+      sel.appendChild(opt);
+    }
+  });
+
+  grid.innerHTML='';
+  STAGES.forEach(s=>{
+    let leads = db.leads.filter(l=>l.stage===s.id);
+    if(filterVal!=='all') leads=leads.filter(l=>l.hunterId===filterVal);
+    const col = document.createElement('div');
+    col.className='pipe-col';
+    const val = leads.reduce((t,l)=>t+(l.empireValue||0),0);
+    col.innerHTML=`<div class="pipe-col-head"><span class="pipe-col-name" style="color:${s.color}">${s.label}</span><span class="pipe-col-count">${leads.length}${val?` · $${(val/1000).toFixed(0)}K`:''}</span></div><div class="pipe-leads" id="pipe-${s.id}"></div>`;
+    grid.appendChild(col);
+    const cont = col.querySelector('.pipe-leads');
+    if(!leads.length){cont.innerHTML='<div class="pipe-empty">No leads</div>';return;}
+    leads.sort((a,b)=>b.score-a.score).forEach(l=>{
+      const h = HUNTERS.find(x=>x.id===l.hunterId);
+      const card = document.createElement('div');
+      card.className='pipe-lead';
+      card.innerHTML=`<div class="pl-url">${l.url.replace(/https?:\/\//,'').split('/')[0]}</div><div class="pl-sub">${h?h.icon+' '+h.name:l.hunterId} · Score: ${l.score}</div><div class="pl-val">$${(l.empireValue||0).toLocaleString()} opportunity</div>`;
+      card.onclick=()=>openLeadDetail(l);
+      cont.appendChild(card);
+    });
+  });
+}
+
+function openLeadDetail(lead){
+  showTab('hunt');
+  const h = HUNTERS.find(x=>x.id===lead.hunterId);
+  if(h){
+    document.getElementById('company-select').value=h.id;
+    selectHunter(h.id);
+  }
+  scanResults=[lead];
+  document.getElementById('results-section').style.display='block';
+  renderResultsTable();
+  selectResult(0);
+}
+
+function exportPipeline(){
+  const rows=[['URL','Company','Score','Stage','Empire Value','Gaps','Date']];
+  db.leads.forEach(l=>{
+    const h=HUNTERS.find(x=>x.id===l.hunterId);
+    rows.push([l.url,h?h.name:l.hunterId,l.score,l.stage,l.empireValue,l.gaps.join(';'),new Date(l.ts).toLocaleDateString()]);
+  });
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv,'+encodeURIComponent(csv);
+  a.download='gap-hunter-pipeline.csv';
+  a.click();
+}
+
+// ══════════════════════════════════════════════════════════════
+// SWARM INTEL
+// ══════════════════════════════════════════════════════════════
+function renderIntel(){
+  // Hunt stats
+  const s1 = document.getElementById('ic-hunt-stats');
+  const totalScanned = db.scanned||0;
+  const totalLeads = db.leads.length;
+  const hotLeads = db.leads.filter(l=>l.score>=70).length;
+  const warmLeads = db.leads.filter(l=>l.score>=40&&l.score<70).length;
+  s1.innerHTML=`
+    <div class="ic-stat-row"><span class="ic-label">URLs Scanned</span><span class="ic-value" style="color:var(--gold)">${totalScanned.toLocaleString()}</span></div>
+    <div class="ic-stat-row"><span class="ic-label">Total Leads Saved</span><span class="ic-value" style="color:var(--text)">${totalLeads}</span></div>
+    <div class="ic-stat-row"><span class="ic-label">🔥 Hot Leads (70+)</span><span class="ic-value" style="color:var(--hot)">${hotLeads}</span></div>
+    <div class="ic-stat-row"><span class="ic-label">⚡ Warm Leads (40+)</span><span class="ic-value" style="color:var(--warm)">${warmLeads}</span></div>
+    <div class="ic-stat-row"><span class="ic-label">Hunters Available</span><span class="ic-value" style="color:var(--emerald)">${HUNTERS.length}</span></div>
+  `;
+
+  // Revenue pipeline
+  const s2 = document.getElementById('ic-revenue');
+  const pipelineVal = db.leads.reduce((t,l)=>t+(l.empireValue||0),0);
+  const sentVal = db.leads.filter(l=>['sent','replied','meeting','closed'].includes(l.stage)).reduce((t,l)=>t+(l.empireValue||0),0);
+  const closedVal = db.leads.filter(l=>l.stage==='closed').reduce((t,l)=>t+(l.empireValue||0),0);
+  const closedCount = db.leads.filter(l=>l.stage==='closed').length;
+  s2.innerHTML=`
+    <div class="ic-stat-row"><span class="ic-label">Total Pipeline Value</span><span class="ic-value" style="color:var(--gold)">$${(pipelineVal/1000).toFixed(0)}K</span></div>
+    <div class="ic-stat-row"><span class="ic-label">Proposals Sent</span><span class="ic-value">${db.leads.filter(l=>l.stage==='sent').length}</span></div>
+    <div class="ic-stat-row"><span class="ic-label">Meetings Booked</span><span class="ic-value" style="color:var(--blue)">${db.leads.filter(l=>l.stage==='meeting').length}</span></div>
+    <div class="ic-stat-row"><span class="ic-label">Closed Deals</span><span class="ic-value" style="color:var(--emerald)">${closedCount}</span></div>
+    <div class="ic-stat-row"><span class="ic-label">Revenue Closed</span><span class="ic-value" style="color:var(--emerald)">$${closedVal.toLocaleString()}</span></div>
+  `;
+
+  // By industry
+  const s3 = document.getElementById('ic-by-industry');
+  const byHunter = {};
+  db.leads.forEach(l=>{byHunter[l.hunterId]=(byHunter[l.hunterId]||0)+1;});
+  const sorted = Object.entries(byHunter).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if(!sorted.length){s3.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px 0">No leads yet. Start hunting.</div>';return;}
+  const maxCount = sorted[0]?.[1]||1;
+  s3.innerHTML = sorted.map(([hid,cnt])=>{
+    const h=HUNTERS.find(x=>x.id===hid);
+    return `<div class="mini-bar-row">
+      <span class="mini-bar-label">${h?h.icon+' '+h.name:hid}</span>
+      <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${cnt/maxCount*100}%;background:${h?h.color:'var(--gold)'}"></div></div>
+      <span class="mini-bar-val">${cnt}</span>
+    </div>`;
+  }).join('');
+
+  // Top gaps
+  const s4 = document.getElementById('ic-top-gaps');
+  const gapCounts = {};
+  const gapLabels = {};
+  db.leads.forEach(l=>{
+    const h=HUNTERS.find(x=>x.id===l.hunterId);
+    l.gaps.forEach(gid=>{
+      gapCounts[gid]=(gapCounts[gid]||0)+1;
+      if(h){const g=h.gaps.find(x=>x.id===gid);if(g)gapLabels[gid]=g.label;}
+    });
+  });
+  const topGaps = Object.entries(gapCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if(!topGaps.length){s4.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px 0">No gaps found yet.</div>';return;}
+  const maxG = topGaps[0]?.[1]||1;
+  const totalL = db.leads.length||1;
+  s4.innerHTML = topGaps.map(([gid,cnt])=>{
+    const label = gapLabels[gid]||gid;
+    const pct = Math.round(cnt/totalL*100);
+    return `<div class="mini-bar-row">
+      <span class="mini-bar-label" title="${label}">${label.slice(0,22)}</span>
+      <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${cnt/maxG*100}%"></div></div>
+      <span class="mini-bar-val">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+function updateTopStats(){
+  document.getElementById('stat-scanned').textContent = db.scanned||0;
+  document.getElementById('stat-leads').textContent = db.leads.length;
+  const pipe = db.leads.reduce((t,l)=>t+(l.empireValue||0),0);
+  document.getElementById('stat-pipeline').textContent = pipe>0?'$'+(pipe/1000).toFixed(0)+'K':'$0';
+}
+</script>
+</body>
+</html>
