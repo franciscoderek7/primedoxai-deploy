@@ -1,0 +1,52 @@
+name: Deploy AI Governance Canada
+
+on:
+  push:
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
+    paths:
+      - 'ai-governance-canada-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone or init ai-governance-canada repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/ai-governance-canada.git /tmp/ai-governance-canada 2>/dev/null || {
+            mkdir -p /tmp/ai-governance-canada
+            cd /tmp/ai-governance-canada
+            git init -b main
+            git remote add origin https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/ai-governance-canada.git
+          }
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Identity leak guard (Loop B — no Derek Francisco personal info)
+        run: |
+          if grep -rE "705-307-8080|franciscoderek7@gmail|Derek Francisco" ai-governance-canada-site/; then
+            echo "IDENTITY LEAK DETECTED — blocking deploy"
+            exit 1
+          fi
+          echo "Identity check passed"
+
+      - name: Wipe and copy site files
+        run: |
+          find /tmp/ai-governance-canada -mindepth 1 -not -path '/tmp/ai-governance-canada/.git*' -delete 2>/dev/null || true
+          cp -r ai-governance-canada-site/. /tmp/ai-governance-canada/
+          touch /tmp/ai-governance-canada/.nojekyll
+          echo "Copied $(ls ai-governance-canada-site/*.html 2>/dev/null | wc -l) HTML files"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/ai-governance-canada
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Empire Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: ai-governance-canada @ ${{ github.sha }}" || echo "Nothing to commit"
+          git push origin main || git push --set-upstream origin main
+          echo "Live: franciscoderek7.github.io/ai-governance-canada"

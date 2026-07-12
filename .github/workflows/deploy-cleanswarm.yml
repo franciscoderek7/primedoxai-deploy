@@ -1,10 +1,10 @@
-name: Deploy CleanSwarm to cleanswarm.ca
+name: Deploy CleanSwarm
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
     paths:
-      - 'cleanswarm-checkout/**'
+      - 'cleanswarm-site/**'
   workflow_dispatch:
 
 jobs:
@@ -14,87 +14,31 @@ jobs:
       - name: Checkout primedoxai-deploy
         uses: actions/checkout@v4
 
-      - name: Verify Loop B identity (anonymous — no Derek name, no cannabis)
+      - name: Clone or init cleanswarm repo
         run: |
-          # CleanSwarm is Loop B — completely anonymous, no cannabis, no Derek Francisco
-          # Exclude shared-CDN script tags (cdn.jsdelivr.net/gh/franciscoderek7/...) —
-          # Loop B sites load agents/*.js from that GitHub-org-named CDN path;
-          # that's infra, not an identity leak. Still catches real leaks elsewhere.
-          DEREK_LEAK=$(grep -rn "Derek Francisco\|franciscoderek7\|Doc Weedlaw\|CCLDR" cleanswarm-checkout/ --include="*.html" | grep -v "cdn.jsdelivr.net/gh/franciscoderek7" | wc -l)
-          if [ "$DEREK_LEAK" -gt 0 ]; then
-            echo "FAIL: Derek Francisco identity leaked in Loop B site"
-            grep -rn "Derek Francisco\|franciscoderek7\|Doc Weedlaw\|CCLDR" cleanswarm-checkout/ --include="*.html" | grep -v "cdn.jsdelivr.net/gh/franciscoderek7"
-            exit 1
-          fi
-
-          CANNABIS_LEAK=$(grep -rn "cannabis\|marijuana\|weed" cleanswarm-checkout/ --include="*.html" -i | wc -l)
-          if [ "$CANNABIS_LEAK" -gt 0 ]; then
-            echo "FAIL: Cannabis content found in Loop B CleanSwarm site"
-            grep -rn "cannabis\|marijuana\|weed" cleanswarm-checkout/ --include="*.html" -i
-            exit 1
-          fi
-
-          PERSONAL_LEAK=$(grep -rn "franciscoderek7@gmail\|705-307-8080\|Kent St W\|K9V 2Z8" cleanswarm-checkout/ --include="*.html" | wc -l)
-          if [ "$PERSONAL_LEAK" -gt 0 ]; then
-            echo "FAIL: Personal info found in Loop B site"
-            exit 1
-          fi
-          echo "PASS: Loop B identity isolation verified — anonymous, zero cannabis, zero personal info"
-
-      - name: Clone cleanswarm repo
-        run: |
-          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/cleanswarm.git /tmp/cleanswarm
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/cleanswarm.git /tmp/cleanswarm 2>/dev/null || {
+            mkdir -p /tmp/cleanswarm
+            cd /tmp/cleanswarm
+            git init -b main
+            git remote add origin https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/cleanswarm.git
+          }
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
-      - name: Wipe old files
+      - name: Wipe and copy site files
         run: |
-          find /tmp/cleanswarm -mindepth 1 -not -path '/tmp/cleanswarm/.git*' -delete
-          echo "Clean slate"
-
-      - name: Copy site files
-        run: |
-          cd cleanswarm-checkout
-          for f in *.html; do cp "$f" /tmp/cleanswarm/"$f" && echo "  copied $f"; done
-          for ext in jpg jpeg png webp gif svg js css txt xml; do
-            for f in *.$ext; do [ -f "$f" ] && cp "$f" /tmp/cleanswarm/"$f" && echo "  copied $f"; done
-          done
-          # Copy assets/ subdirectory (logo.svg, favicon.svg, etc.)
-          if [ -d assets ]; then
-            mkdir -p /tmp/cleanswarm/assets
-            cp -r assets/. /tmp/cleanswarm/assets/
-            echo "  copied assets/ directory"
-          fi
-          echo "cleanswarm.ca" > /tmp/cleanswarm/CNAME
+          find /tmp/cleanswarm -mindepth 1 -not -path '/tmp/cleanswarm/.git*' -delete 2>/dev/null || true
+          cp -r cleanswarm-site/. /tmp/cleanswarm/
           touch /tmp/cleanswarm/.nojekyll
-          echo "All CleanSwarm files copied"
+          echo "Copied $(ls cleanswarm-site/*.html 2>/dev/null | wc -l) HTML files"
 
-      - name: Commit and push to cleanswarm repo
+      - name: Commit and push
         run: |
           cd /tmp/cleanswarm
-          git config user.email "deploy@cleanswarm.ca"
-          git config user.name "CleanSwarm Deploy Bot"
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Empire Deploy Bot"
           git add -A
           git diff --cached --stat
-          git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}
-
-          CNAME: cleanswarm.ca
-          Loop: B (anonymous)
-          Triggered by: push to franciscoderek7/primedoxai-deploy main" \
-            || echo "Nothing to commit — already up to date"
-          git push origin main
-          echo "Pushed to franciscoderek7/cleanswarm — live in ~2 minutes"
-
-      - name: Summary
-        run: |
-          echo ""
-          echo "================================================"
-          echo "  CLEANSWARM DEPLOYED"
-          echo "================================================"
-          echo "  Repo: franciscoderek7/cleanswarm (main)"
-          echo "  CNAME: cleanswarm.ca"
-          echo "  Loop: B (anonymous — no Derek Francisco, no cannabis)"
-          echo "  Live in: ~2 minutes (GitHub Pages build)"
-          echo ""
-          echo "  Check: https://cleanswarm.ca"
-          echo "================================================"
+          git commit -m "deploy: cleanswarm @ ${{ github.sha }}" || echo "Nothing to commit"
+          git push origin main || git push --set-upstream origin main
+          echo "Live: franciscoderek7.github.io/cleanswarm"

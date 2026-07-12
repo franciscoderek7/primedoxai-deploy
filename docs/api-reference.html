@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimeDox AI — API Reference</title>
+<style>
+  :root {
+    --green: #0B3D2E; --green-l: #14573F;
+    --gold:  #C9A227; --gold-l: #E5B93A;
+    --plat:  #E5E4E2; --black: #0A0A0A;
+    --bg: #111813; --card: #18221C; --border: #1F3028;
+    --text: #D4D8D5; --muted: #6B7C72;
+    --red: #E53E3E; --ok: #2ECC71; --blue: #4A9EE5;
+    --r: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--black); color: var(--text); font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; }
+
+  .layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+  /* Sidebar */
+  nav { background: var(--bg); border-right: 1px solid var(--border); padding: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  .nav-top { padding: 20px 20px 14px; border-bottom: 1px solid var(--border); }
+  .nav-top h1 { font-size: 14px; font-weight: 700; color: var(--gold); }
+  .nav-top p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .nav-section { padding: 14px 20px 4px; font-size: 10px; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+  .nav-link { display: block; padding: 7px 20px; font-size: 12px; color: var(--muted); text-decoration: none; transition: color .15s; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--gold); border-left: 2px solid var(--gold); background: var(--card); }
+  .badge-method { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; margin-right: 6px; }
+  .get  { background: rgba(74,158,229,.2); color: #4A9EE5; }
+  .post { background: rgba(46,204,113,.2); color: var(--ok); }
+  .del  { background: rgba(229,62,62,.2); color: var(--red); }
+
+  /* Content */
+  main { padding: 40px 48px; max-width: 880px; }
+  h2 { font-size: 22px; font-weight: 700; color: var(--gold); margin: 40px 0 8px; border-top: 1px solid var(--border); padding-top: 36px; }
+  h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  h3 { font-size: 13px; font-weight: 700; color: var(--plat); margin: 28px 0 10px; display: flex; align-items: center; gap: 8px; }
+  p { color: var(--text); margin-bottom: 12px; }
+  .endpoint { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 28px; }
+  .endpoint-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .method { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; }
+  .method.GET  { background: rgba(74,158,229,.2); color: #4A9EE5; }
+  .method.POST { background: rgba(46,204,113,.2); color: var(--ok); }
+  .path { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; font-weight: 600; color: var(--plat); }
+  .auth-badge { margin-left: auto; font-size: 10px; padding: 2px 8px; border-radius: 3px; }
+  .auth-none  { background: rgba(255,255,255,.07); color: var(--muted); }
+  .auth-user  { background: rgba(74,158,229,.15); color: #4A9EE5; }
+  .auth-admin { background: rgba(201,162,39,.15); color: var(--gold); }
+
+  .endpoint-body { padding: 18px; }
+  .desc { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  th { text-align: left; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  td { padding: 8px 12px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td code { background: var(--bg); border-radius: 3px; padding: 1px 5px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: var(--gold-l); }
+  td.required { color: var(--red); font-size: 10px; }
+
+  .code-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 18px; margin-bottom: 12px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; line-height: 1.8; overflow-x: auto; }
+  .code-block .key   { color: #4A9EE5; }
+  .code-block .str   { color: #A8D8A8; }
+  .code-block .num   { color: #F0A060; }
+  .code-block .bool  { color: #F0A060; }
+  .code-block .cmt   { color: var(--muted); }
+  .section-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 700; }
+
+  .alert { border-radius: var(--r); padding: 12px 16px; margin-bottom: 16px; font-size: 12px; }
+  .alert-warn { background: rgba(212,160,23,.12); border-left: 3px solid var(--gold); color: var(--plat); }
+  .alert-ok   { background: rgba(46,204,113,.1); border-left: 3px solid var(--ok); color: var(--plat); }
+  .alert-err  { background: rgba(229,62,62,.1); border-left: 3px solid var(--red); color: var(--plat); }
+
+  code.inline { background: var(--card); border: 1px solid var(--border); border-radius: 3px; padding: 1px 6px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--gold-l); }
+
+  @media(max-width:768px) {
+    .layout { grid-template-columns: 1fr; }
+    nav { position: static; height: auto; }
+    main { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <div class="nav-top">
+    <h1>PrimeDox AI API</h1>
+    <p>Backend: agents/backend/gemma-server.js</p>
+  </div>
+
+  <div class="nav-section">Core</div>
+  <a href="#health" class="nav-link"><span class="badge-method get">GET</span>/health</a>
+
+  <div class="nav-section">Auth</div>
+  <a href="#auth-register" class="nav-link"><span class="badge-method post">POST</span>/auth/register</a>
+  <a href="#auth-login"    class="nav-link"><span class="badge-method post">POST</span>/auth/login</a>
+  <a href="#auth-refresh"  class="nav-link"><span class="badge-method post">POST</span>/auth/refresh</a>
+  <a href="#auth-me"       class="nav-link"><span class="badge-method get">GET</span>/auth/me</a>
+  <a href="#auth-logout"   class="nav-link"><span class="badge-method post">POST</span>/auth/logout</a>
+  <a href="#auth-reset"    class="nav-link"><span class="badge-method post">POST</span>/auth/reset-password</a>
+
+  <div class="nav-section">AI Routing</div>
+  <a href="#ai-route"      class="nav-link"><span class="badge-method post">POST</span>/api/ai/route</a>
+  <a href="#chat"          class="nav-link"><span class="badge-method post">POST</span>/chat</a>
+  <a href="#swarm"         class="nav-link"><span class="badge-method post">POST</span>/swarm</a>
+
+  <div class="nav-section">Gap Scanner</div>
+  <a href="#gap-scan"      class="nav-link"><span class="badge-method post">POST</span>/api/gap-scan</a>
+  <a href="#gap-industries"class="nav-link"><span class="badge-method get">GET</span>/api/gap-scan/industries</a>
+  <a href="#gap-batch"     class="nav-link"><span class="badge-method post">POST</span>/api/gap-scan/batch</a>
+
+  <div class="nav-section">Marketplace</div>
+  <a href="#market-list"   class="nav-link"><span class="badge-method get">GET</span>/api/marketplace/agents</a>
+  <a href="#market-get"    class="nav-link"><span class="badge-method get">GET</span>/api/marketplace/agents/:id</a>
+  <a href="#market-buy"    class="nav-link"><span class="badge-method post">POST</span>…/agents/:id/purchase</a>
+  <a href="#market-review" class="nav-link"><span class="badge-method post">POST</span>…/agents/:id/reviews</a>
+  <a href="#market-submit" class="nav-link"><span class="badge-method post">POST</span>/api/marketplace/submit</a>
+
+  <div class="nav-section">Payments</div>
+  <a href="#stripe-webhook"class="nav-link"><span class="badge-method post">POST</span>/webhooks/stripe</a>
+
+  <div class="nav-section">Admin</div>
+  <a href="#admin-revenue" class="nav-link"><span class="badge-method get">GET</span>/api/admin/revenue</a>
+  <a href="#admin-market"  class="nav-link"><span class="badge-method get">GET</span>/api/marketplace/stats</a>
+
+  <div class="nav-section">Documents</div>
+  <a href="#gen-motion"    class="nav-link"><span class="badge-method post">POST</span>/generate-motion</a>
+  <a href="#translate"     class="nav-link"><span class="badge-method post">POST</span>/translate</a>
+  <a href="#suggest-fix"   class="nav-link"><span class="badge-method post">POST</span>/suggest-fix</a>
+</nav>
+
+<main>
+
+<!-- ── Overview ─────────────────────────────────────────────────── -->
+<h2 id="overview">Overview</h2>
+<p>Base URL: <code class="inline">https://YOUR-URL.railway.app</code> (set after Railway deploy)</p>
+
+<div class="alert alert-warn">
+  <strong>Auth:</strong> Most AI and admin endpoints require <code class="inline">Authorization: Bearer &lt;jwt&gt;</code>. Get a JWT from <code class="inline">POST /auth/login</code>. Admin routes additionally require role <code class="inline">admin</code> or <code class="inline">derek-superadmin</code>.
+</div>
+
+<table>
+  <tr><th>Rate Limit Group</th><th>Endpoint(s)</th><th>Limit</th></tr>
+  <tr><td>Chat</td><td>/chat, /swarm</td><td>30 req/min</td></tr>
+  <tr><td>Gap Scanner</td><td>/api/gap-scan*</td><td>10 req/min</td></tr>
+  <tr><td>General</td><td>/api/marketplace/*, /api/ai/*</td><td>60 req/min</td></tr>
+</table>
+
+<!-- ── Health ────────────────────────────────────────────────────── -->
+<h2>Core</h2>
+
+<div class="endpoint" id="health">
+  <div class="endpoint-header">
+    <span class="method GET">GET</span>
+    <span class="path">/health</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">System health check. Use for Railway healthcheck and monitoring.</div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">
+{
+  <span class="key">"status"</span>: <span class="str">"ok"</span>,
+  <span class="key">"agents"</span>: <span class="num">45</span>,             <span class="cmt">// number of loaded system prompts</span>
+  <span class="key">"backend"</span>: <span class="str">"hybrid"</span>,        <span class="cmt">// "openai" | "gemma" | "hybrid"</span>
+  <span class="key">"model"</span>: <span class="str">"gpt-4o"</span>,
+  <span class="key">"uptime"</span>: <span class="num">3600</span>,            <span class="cmt">// seconds since start</span>
+  <span class="key">"supabase"</span>: <span class="bool">true</span>,
+  <span class="key">"stripe"</span>: <span class="bool">true</span>,
+  <span class="key">"jwt"</span>: <span class="bool">true</span>
+}
+    </div>
+  </div>
+</div>
+
+<!-- ── Auth ──────────────────────────────────────────────────────── -->
+<h2>Authentication</h2>
+
+<div class="endpoint" id="auth-register">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/auth/register</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Create a new user account. Stores credentials in Supabase Auth. Returns a signed JWT.</div>
+    <div class="section-label">Request Body</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>email</code></td><td>string</td><td class="required">required</td><td>User email</td></tr>
+      <tr><td><code>password</code></td><td>string</td><td class="required">required</td><td>Min 6 chars</td></tr>
+      <tr><td><code>name</code></td><td>string</td><td>optional</td><td>Display name</td></tr>
+      <tr><td><code>referral_code</code></td><td>string</td><td>optional</td><td>Referral code for discount</td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"token"</span>: <span class="str">"eyJ..."</span>, <span class="key">"user"</span>: { <span class="key">"id"</span>: <span class="str">"uuid"</span>, <span class="key">"email"</span>: <span class="str">"..."</span>, <span class="key">"role"</span>: <span class="str">"customer"</span> } }</div>
+    <div class="alert alert-err" style="margin-top:0">409 — Email already registered</div>
+  </div>
+</div>
+
+<div class="endpoint" id="auth-login">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/auth/login</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Login with email + password. Returns a 7-day JWT (configurable via JWT_EXPIRES_IN).</div>
+    <div class="section-label">Request Body</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>email</code></td><td>string</td><td class="required">required</td><td></td></tr>
+      <tr><td><code>password</code></td><td>string</td><td class="required">required</td><td></td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"token"</span>: <span class="str">"eyJ..."</span>, <span class="key">"user"</span>: { <span class="key">"id"</span>: <span class="str">"uuid"</span>, <span class="key">"email"</span>: <span class="str">"..."</span>, <span class="key">"role"</span>: <span class="str">"customer"</span> } }</div>
+    <div class="alert alert-err" style="margin-top:0">401 — Invalid credentials</div>
+  </div>
+</div>
+
+<div class="endpoint" id="auth-refresh">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/auth/refresh</span>
+    <span class="auth-badge auth-user">JWT required</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Extend a valid JWT. Returns a fresh token with reset expiry. Call before token expires to keep sessions alive.</div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"token"</span>: <span class="str">"eyJ..."</span> }</div>
+  </div>
+</div>
+
+<div class="endpoint" id="auth-me">
+  <div class="endpoint-header">
+    <span class="method GET">GET</span>
+    <span class="path">/auth/me</span>
+    <span class="auth-badge auth-user">JWT required</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Returns the authenticated user's profile.</div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"id"</span>: <span class="str">"uuid"</span>, <span class="key">"email"</span>: <span class="str">"..."</span>, <span class="key">"role"</span>: <span class="str">"customer"</span>, <span class="key">"name"</span>: <span class="str">"..."</span> }</div>
+  </div>
+</div>
+
+<div class="endpoint" id="auth-logout">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/auth/logout</span>
+    <span class="auth-badge auth-user">JWT required</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Invalidate the current session in Supabase. JWT is stateless — client should also delete the stored token.</div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"message"</span>: <span class="str">"Logged out"</span> }</div>
+  </div>
+</div>
+
+<div class="endpoint" id="auth-reset">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/auth/reset-password</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Trigger a Supabase password reset email.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>email</code></td><td>string</td><td class="required">required</td><td></td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"message"</span>: <span class="str">"Password reset email sent"</span> }</div>
+  </div>
+</div>
+
+<!-- ── AI Routing ─────────────────────────────────────────────────── -->
+<h2>AI Routing</h2>
+<p>Fallback chain: Claude (Anthropic) → OpenAI/DeepSeek → Qwen → GLM → Kimi. First configured provider wins.</p>
+
+<div class="endpoint" id="ai-route">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/api/ai/route</span>
+    <span class="auth-badge auth-user">JWT required</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Route a chat completion request through the AI fallback chain. Used by Kimi's frontend for all AI-powered features.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>messages</code></td><td>array</td><td class="required">required</td><td>OpenAI-format message array: <code>[{role,content}]</code></td></tr>
+      <tr><td><code>system</code></td><td>string</td><td>optional</td><td>System prompt override</td></tr>
+      <tr><td><code>max_tokens</code></td><td>number</td><td>optional</td><td>Default: 1024</td></tr>
+      <tr><td><code>temperature</code></td><td>number</td><td>optional</td><td>Default: 0.7</td></tr>
+    </table>
+    <div class="section-label">Request Example</div>
+    <div class="code-block">
+{
+  <span class="key">"messages"</span>: [
+    { <span class="key">"role"</span>: <span class="str">"user"</span>, <span class="key">"content"</span>: <span class="str">"Summarize Ontario cannabis regulations"</span> }
+  ],
+  <span class="key">"max_tokens"</span>: <span class="num">500</span>
+}
+    </div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">
+{
+  <span class="key">"content"</span>: <span class="str">"Ontario cannabis retail..."</span>,
+  <span class="key">"provider"</span>: <span class="str">"anthropic"</span>,    <span class="cmt">// which AI responded</span>
+  <span class="key">"model"</span>: <span class="str">"claude-haiku-4-5-20251001"</span>,
+  <span class="key">"usage"</span>: { <span class="key">"input_tokens"</span>: <span class="num">12</span>, <span class="key">"output_tokens"</span>: <span class="num">84</span> }
+}
+    </div>
+    <div class="alert alert-err" style="margin-top:0">503 — All AI providers exhausted (no API keys configured)</div>
+  </div>
+</div>
+
+<div class="endpoint" id="chat">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/chat</span>
+    <span class="auth-badge auth-none">No auth (rate-limited)</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Stateful multi-turn conversation with a specific PrimeDox AI agent. Session history held in memory (30 min TTL).</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>agent_id</code></td><td>string</td><td class="required">required</td><td>One of: <code>phoenix</code>, <code>counsel</code>, <code>barrister</code>, <code>ledger</code>, <code>archivist</code>, <code>alpha</code>, and 39 others</td></tr>
+      <tr><td><code>messages</code></td><td>array</td><td class="required">required</td><td>Full message history</td></tr>
+      <tr><td><code>session_id</code></td><td>string</td><td>optional</td><td>Persist conversation across requests</td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"reply"</span>: <span class="str">"..."</span>, <span class="key">"agent_id"</span>: <span class="str">"phoenix"</span>, <span class="key">"session_id"</span>: <span class="str">"sess_abc123"</span> }</div>
+  </div>
+</div>
+
+<div class="endpoint" id="swarm">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/swarm</span>
+    <span class="auth-badge auth-none">No auth (rate-limited)</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Fan a single query out to multiple agents in parallel. Returns all responses. Max 8 agents per request (SWARM_MAX_AGENTS env var).</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>query</code></td><td>string</td><td class="required">required</td><td>Prompt to send to all agents</td></tr>
+      <tr><td><code>agent_ids</code></td><td>string[]</td><td class="required">required</td><td>Array of agent IDs, max 8</td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">
+{
+  <span class="key">"results"</span>: [
+    { <span class="key">"agent_id"</span>: <span class="str">"phoenix"</span>, <span class="key">"reply"</span>: <span class="str">"..."</span> },
+    { <span class="key">"agent_id"</span>: <span class="str">"counsel"</span>, <span class="key">"reply"</span>: <span class="str">"..."</span> }
+  ]
+}
+    </div>
+  </div>
+</div>
+
+<!-- ── Gap Scanner ────────────────────────────────────────────────── -->
+<h2>Gap Scanner</h2>
+<p>Scans any public business website, scores it 0–100 against industry benchmarks, and generates an AgentForge quote. Higher gap score = more revenue opportunity.</p>
+
+<div class="endpoint" id="gap-scan">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/api/gap-scan</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Full gap analysis: fetch → detect industry → score 7 categories → return prioritized gaps + AgentForge quote.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>url</code></td><td>string</td><td class="required">required</td><td>Business website URL (http:// or https://)</td></tr>
+      <tr><td><code>industry</code></td><td>string</td><td>optional</td><td>Override auto-detect: <code>dental</code>, <code>restaurant</code>, <code>legal_criminal</code>, etc.</td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">
+{
+  <span class="key">"success"</span>: <span class="bool">true</span>,
+  <span class="key">"url"</span>: <span class="str">"https://example-dentist.com"</span>,
+  <span class="key">"domain"</span>: <span class="str">"example-dentist.com"</span>,
+  <span class="key">"detected_industry"</span>: <span class="str">"dental"</span>,
+  <span class="key">"gap_score"</span>: <span class="num">72</span>,         <span class="cmt">// 0-100, higher = more opportunity</span>
+  <span class="key">"gap_score_label"</span>: <span class="str">"HIGH — Significant missed opportunity"</span>,
+  <span class="key">"present_score"</span>: <span class="num">28</span>,
+  <span class="key">"gaps_found"</span>: [
+    {
+      <span class="key">"id"</span>: <span class="str">"no_booking"</span>,
+      <span class="key">"priority"</span>: <span class="str">"HIGH"</span>,
+      <span class="key">"title"</span>: <span class="str">"No online booking system detected"</span>,
+      <span class="key">"impact"</span>: <span class="str">"72% of dental competitors have online booking"</span>,
+      <span class="key">"fix"</span>: <span class="str">"Deploy Booking Agent — 24/7 appointment scheduling"</span>,
+      <span class="key">"agent"</span>: <span class="str">"booking_agent"</span>,
+      <span class="key">"monthly_value_cad"</span>: <span class="num">800</span>
+    }
+  ],
+  <span class="key">"agentforge_quote"</span>: {
+    <span class="key">"agents_recommended"</span>: [{ <span class="key">"id"</span>: <span class="str">"booking_agent"</span>, <span class="key">"setup"</span>: <span class="num">297</span>, <span class="key">"monthly"</span>: <span class="num">97</span> }],
+    <span class="key">"setup_cost_cad"</span>: <span class="num">950</span>,
+    <span class="key">"monthly_cost_cad"</span>: <span class="num">340</span>,
+    <span class="key">"bundle_discount_pct"</span>: <span class="num">20</span>,
+    <span class="key">"roi_breakeven_months"</span>: <span class="num">3</span>,
+    <span class="key">"paypal_url"</span>: <span class="str">"https://paypal.me/techpetcage/950CAD"</span>
+  }
+}
+    </div>
+  </div>
+</div>
+
+<div class="endpoint" id="gap-industries">
+  <div class="endpoint-header">
+    <span class="method GET">GET</span>
+    <span class="path">/api/gap-scan/industries</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">List all 20 supported industries with their sub-industry breakdowns.</div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">
+[
+  { <span class="key">"id"</span>: <span class="str">"dental"</span>, <span class="key">"group"</span>: <span class="str">"Healthcare"</span>, <span class="key">"industry"</span>: <span class="str">"dental"</span>, <span class="key">"sub_industries"</span>: [<span class="str">"general"</span>, <span class="str">"orthodontics"</span>] },
+  ...
+]
+    </div>
+  </div>
+</div>
+
+<div class="endpoint" id="gap-batch">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/api/gap-scan/batch</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Scan up to 5 URLs in parallel. Ideal for agency prospecting lists.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>urls</code></td><td>string[]</td><td class="required">required</td><td>1–5 URLs to scan</td></tr>
+      <tr><td><code>industry</code></td><td>string</td><td>optional</td><td>Apply same industry to all URLs</td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block"><span class="cmt">// Array of scan results, one per URL (same schema as single scan)</span>
+[ { <span class="key">"success"</span>: <span class="bool">true</span>, <span class="key">"url"</span>: <span class="str">"..."</span>, <span class="key">"gap_score"</span>: <span class="num">68</span>, ... }, ... ]</div>
+  </div>
+</div>
+
+<!-- ── Marketplace ────────────────────────────────────────────────── -->
+<h2>Agent Marketplace</h2>
+<p>Revenue split: 70% creator / 20% platform / 10% operations. Stripe Checkout handles payment. PayPal fallback if Stripe not configured.</p>
+
+<div class="endpoint" id="market-list">
+  <div class="endpoint-header">
+    <span class="method GET">GET</span>
+    <span class="path">/api/marketplace/agents</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Paginated agent catalog with optional filters.</div>
+    <table>
+      <tr><th>Query Param</th><th>Type</th><th>Description</th></tr>
+      <tr><td><code>category</code></td><td>string</td><td>Filter by: Operations, Lead Capture, Reputation, Marketing, Intelligence, Retention</td></tr>
+      <tr><td><code>industry</code></td><td>string</td><td>Filter by industry ID (e.g. <code>dental</code>)</td></tr>
+      <tr><td><code>featured</code></td><td>bool</td><td>Only featured agents</td></tr>
+      <tr><td><code>search</code></td><td>string</td><td>Full-text search on name/tagline/description</td></tr>
+      <tr><td><code>page</code></td><td>number</td><td>Default: 1</td></tr>
+      <tr><td><code>per_page</code></td><td>number</td><td>Default: 20, max: 50</td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">
+{
+  <span class="key">"agents"</span>: [ { <span class="key">"id"</span>: <span class="str">"booking_agent"</span>, <span class="key">"name"</span>: <span class="str">"Booking Agent"</span>, ... } ],
+  <span class="key">"total"</span>: <span class="num">10</span>,
+  <span class="key">"page"</span>: <span class="num">1</span>,
+  <span class="key">"per_page"</span>: <span class="num">20</span>,
+  <span class="key">"source"</span>: <span class="str">"catalog"</span>     <span class="cmt">// "catalog" | "supabase" | "catalog_fallback"</span>
+}
+    </div>
+  </div>
+</div>
+
+<div class="endpoint" id="market-get">
+  <div class="endpoint-header">
+    <span class="method GET">GET</span>
+    <span class="path">/api/marketplace/agents/:id</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Full agent detail including recent reviews.</div>
+    <div class="section-label">Agent IDs</div>
+    <p>booking_agent, chat_agent, review_agent, seo_agent, lead_agent, intake_agent, reminder_agent, follow_up_agent, analytics_agent, social_agent</p>
+  </div>
+</div>
+
+<div class="endpoint" id="market-buy">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/api/marketplace/agents/:id/purchase</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Create a Stripe Checkout session. Redirects customer to Stripe-hosted payment page. Returns PayPal fallback URL if Stripe not configured.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>customer_email</code></td><td>string</td><td>optional</td><td>Pre-fill Stripe checkout email</td></tr>
+      <tr><td><code>success_url</code></td><td>string</td><td>optional</td><td>Redirect after payment. Default: /marketplace/success</td></tr>
+      <tr><td><code>cancel_url</code></td><td>string</td><td>optional</td><td>Redirect on cancel</td></tr>
+    </table>
+    <div class="section-label">Response 200 (Stripe configured)</div>
+    <div class="code-block">{ <span class="key">"checkout_url"</span>: <span class="str">"https://checkout.stripe.com/..."</span>, <span class="key">"session_id"</span>: <span class="str">"cs_live_..."</span> }</div>
+    <div class="section-label">Response 200 (PayPal fallback)</div>
+    <div class="code-block">{ <span class="key">"checkout_url"</span>: <span class="str">"https://paypal.me/techpetcage/297CAD"</span>, <span class="key">"amount_cad"</span>: <span class="num">297</span> }</div>
+  </div>
+</div>
+
+<div class="endpoint" id="market-review">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/api/marketplace/agents/:id/reviews</span>
+    <span class="auth-badge auth-user">JWT required</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Submit a review for a purchased agent. One review per user per agent.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>rating</code></td><td>number</td><td class="required">required</td><td>1–5</td></tr>
+      <tr><td><code>review_text</code></td><td>string</td><td class="required">required</td><td>Min 10 chars</td></tr>
+      <tr><td><code>reviewer_name</code></td><td>string</td><td>optional</td><td>Display name. Default: Anonymous</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="endpoint" id="market-submit">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/api/marketplace/submit</span>
+    <span class="auth-badge auth-user">JWT required</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Submit a new agent to the marketplace (creator flow). Goes to pending_review status. 48h review turnaround.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>name</code></td><td>string</td><td class="required">required</td><td>Agent display name</td></tr>
+      <tr><td><code>tagline</code></td><td>string</td><td class="required">required</td><td>One-line value proposition</td></tr>
+      <tr><td><code>description</code></td><td>string</td><td class="required">required</td><td>Full description</td></tr>
+      <tr><td><code>category</code></td><td>string</td><td class="required">required</td><td>Operations / Lead Capture / Marketing / etc.</td></tr>
+      <tr><td><code>setup_price_cad</code></td><td>number</td><td class="required">required</td><td>One-time setup fee</td></tr>
+      <tr><td><code>monthly_price_cad</code></td><td>number</td><td>optional</td><td>Recurring monthly fee</td></tr>
+      <tr><td><code>industries</code></td><td>string[]</td><td>optional</td><td>Target industry IDs (or ["all"])</td></tr>
+      <tr><td><code>skills</code></td><td>string[]</td><td>optional</td><td>Capability tags</td></tr>
+    </table>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"success"</span>: <span class="bool">true</span>, <span class="key">"message"</span>: <span class="str">"Agent submitted for review. We'll contact you within 48 hours."</span>, <span class="key">"agent_id"</span>: <span class="str">"..."</span> }</div>
+  </div>
+</div>
+
+<!-- ── Stripe Webhook ──────────────────────────────────────────────── -->
+<h2>Payments</h2>
+
+<div class="endpoint" id="stripe-webhook">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/webhooks/stripe</span>
+    <span class="auth-badge auth-none">Stripe signature</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Stripe webhook endpoint. <strong>Do not call directly.</strong> Configure in Stripe Dashboard → Webhooks.</div>
+    <div class="alert alert-warn">Requires raw body (not JSON-parsed). Header: <code class="inline">stripe-signature</code>. Secret: <code class="inline">STRIPE_WEBHOOK_SECRET</code> env var.</div>
+    <div class="section-label">Handled Events</div>
+    <table>
+      <tr><th>Event</th><th>Action</th></tr>
+      <tr><td><code>checkout.session.completed</code></td><td>Write payment to <code>payments</code> table; trigger referral commission if applicable</td></tr>
+      <tr><td><code>payment_intent.succeeded</code></td><td>Update payment status to succeeded</td></tr>
+      <tr><td><code>customer.subscription.created</code></td><td>Write subscription record; update user profile</td></tr>
+      <tr><td><code>customer.subscription.deleted</code></td><td>Mark subscription cancelled; revoke access</td></tr>
+    </table>
+    <div class="section-label">Webhook URL</div>
+    <div class="code-block">https://YOUR-URL.railway.app/webhooks/stripe</div>
+  </div>
+</div>
+
+<!-- ── Admin ──────────────────────────────────────────────────────── -->
+<h2>Admin</h2>
+
+<div class="endpoint" id="admin-revenue">
+  <div class="endpoint-header">
+    <span class="method GET">GET</span>
+    <span class="path">/api/admin/revenue</span>
+    <span class="auth-badge auth-admin">Admin JWT</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Empire revenue summary. Last 100 succeeded payments from Supabase.</div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">{ <span class="key">"total_cad"</span>: <span class="str">"4891.00"</span>, <span class="key">"count"</span>: <span class="num">12</span>, <span class="key">"payments"</span>: [ ... ] }</div>
+  </div>
+</div>
+
+<div class="endpoint" id="admin-market">
+  <div class="endpoint-header">
+    <span class="method GET">GET</span>
+    <span class="path">/api/marketplace/stats</span>
+    <span class="auth-badge auth-admin">Admin JWT</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Marketplace GMV and revenue split breakdown.</div>
+    <div class="section-label">Response 200</div>
+    <div class="code-block">
+{
+  <span class="key">"total_agents"</span>: <span class="num">10</span>,
+  <span class="key">"total_purchases"</span>: <span class="num">47</span>,
+  <span class="key">"gmv_cad"</span>: <span class="num">15891.00</span>,
+  <span class="key">"platform_revenue_cad"</span>: <span class="num">3178.20</span>,
+  <span class="key">"ops_revenue_cad"</span>: <span class="num">1589.10</span>,
+  <span class="key">"creator_payouts_cad"</span>: <span class="num">11123.70</span>,
+  <span class="key">"revenue_split"</span>: { <span class="key">"creator"</span>: <span class="num">0.7</span>, <span class="key">"platform"</span>: <span class="num">0.2</span>, <span class="key">"ops"</span>: <span class="num">0.1</span> }
+}
+    </div>
+  </div>
+</div>
+
+<!-- ── Document Gen ───────────────────────────────────────────────── -->
+<h2>Document Generation</h2>
+
+<div class="endpoint" id="gen-motion">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/generate-motion</span>
+    <span class="auth-badge auth-none">No auth (rate-limited)</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">Generate a legal motion or document. Routes through Chinese AI stack (DeepSeek → Qwen → GLM) for cost efficiency.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>motionType</code></td><td>string</td><td class="required">required</td><td>e.g. "Notice of Motion", "Affidavit", "Factum"</td></tr>
+      <tr><td><code>facts</code></td><td>string</td><td class="required">required</td><td>Case facts and context</td></tr>
+      <tr><td><code>jurisdiction</code></td><td>string</td><td>optional</td><td>Default: "Ontario"</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="endpoint" id="translate">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/translate</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>text</code></td><td>string</td><td class="required">required</td><td>Source text</td></tr>
+      <tr><td><code>targetLang</code></td><td>string</td><td class="required">required</td><td>Target language (e.g. "French", "Spanish")</td></tr>
+      <tr><td><code>context</code></td><td>string</td><td>optional</td><td>Domain context for accuracy</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="endpoint" id="suggest-fix">
+  <div class="endpoint-header">
+    <span class="method POST">POST</span>
+    <span class="path">/suggest-fix</span>
+    <span class="auth-badge auth-none">No auth</span>
+  </div>
+  <div class="endpoint-body">
+    <div class="desc">AI-powered code or document fix suggestions.</div>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+      <tr><td><code>context</code></td><td>string</td><td class="required">required</td><td>Code snippet, error message, or document excerpt</td></tr>
+      <tr><td><code>issue</code></td><td>string</td><td>optional</td><td>Description of the problem</td></tr>
+    </table>
+  </div>
+</div>
+
+</main>
+</div>
+</body>
+</html>

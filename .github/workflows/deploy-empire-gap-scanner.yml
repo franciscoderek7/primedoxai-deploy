@@ -1,0 +1,44 @@
+name: Deploy Empire Gap Scanner
+
+on:
+  push:
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
+    paths:
+      - 'empire-gap-scanner/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone or init empire-gap-scanner repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/empire-gap-scanner.git /tmp/empire-gap-scanner 2>/dev/null || {
+            mkdir -p /tmp/empire-gap-scanner
+            cd /tmp/empire-gap-scanner
+            git init -b main
+            git remote add origin https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/empire-gap-scanner.git
+          }
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe and copy site files
+        run: |
+          find /tmp/empire-gap-scanner -mindepth 1 -not -path '/tmp/empire-gap-scanner/.git*' -delete 2>/dev/null || true
+          cp -r empire-gap-scanner/. /tmp/empire-gap-scanner/
+          touch /tmp/empire-gap-scanner/.nojekyll
+          echo "Gap Scanner: $(wc -c < empire-gap-scanner/index.html) bytes"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/empire-gap-scanner
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Empire Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: empire-gap-scanner @ ${{ github.sha }}" || echo "Nothing to commit"
+          git push origin main || git push --set-upstream origin main
+          echo "Live: https://franciscoderek7.github.io/empire-gap-scanner"

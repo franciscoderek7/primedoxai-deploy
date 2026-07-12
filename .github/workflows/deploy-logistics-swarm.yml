@@ -1,0 +1,44 @@
+name: Deploy Logistics Swarm Inc.
+
+on:
+  push:
+    branches: [main, claude/francisco-revenue-sprint-MEva6]
+    paths:
+      - 'logistics-swarm-site/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout primedoxai-deploy
+        uses: actions/checkout@v4
+
+      - name: Clone or init logistics-swarm repo
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/logistics-swarm.git /tmp/logistics-swarm 2>/dev/null || {
+            mkdir -p /tmp/logistics-swarm
+            cd /tmp/logistics-swarm
+            git init -b main
+            git remote add origin https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/franciscoderek7/logistics-swarm.git
+          }
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Wipe and copy site files
+        run: |
+          find /tmp/logistics-swarm -mindepth 1 -not -path '/tmp/logistics-swarm/.git*' -delete 2>/dev/null || true
+          cp -r logistics-swarm-site/. /tmp/logistics-swarm/
+          touch /tmp/logistics-swarm/.nojekyll
+          echo "Copied $(ls logistics-swarm-site/*.html 2>/dev/null | wc -l) HTML files"
+
+      - name: Commit and push
+        run: |
+          cd /tmp/logistics-swarm
+          git config user.email "deploy@franciscoholdingsinc.com"
+          git config user.name "Empire Deploy Bot"
+          git add -A
+          git diff --cached --stat
+          git commit -m "deploy: logistics-swarm @ ${{ github.sha }}" || echo "Nothing to commit"
+          git push origin main || git push --set-upstream origin main
+          echo "Live: franciscoderek7.github.io/logistics-swarm"

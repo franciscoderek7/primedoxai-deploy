@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download CyberGuard — PA Endpoint Protection</title>
+  <meta name="description" content="Install CyberGuard PA on your device — AI-powered endpoint protection for Android, iOS, Windows, and macOS." />
+  <meta name="robots" content="noindex" /><!-- unlisted page, not in main nav -->
+  <style>
+    :root {
+      --blue: #1E90FF;
+      --pink: #E91E63;
+      --pink-light: #FF69B4;
+      --bg: #0A0A1A;
+      --surface: #111128;
+      --border: rgba(30,144,255,0.18);
+      --text: #E8EAF6;
+      --muted: #7986CB;
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,26,0.95);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .logo-text { color: var(--text); font-weight: 700; font-size: 1.1rem; }
+    .logo-text span { color: var(--blue); }
+    .header-back {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color .2s;
+    }
+    .header-back:hover { color: var(--blue); }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 48px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(30,144,255,0.12);
+      border: 1px solid rgba(30,144,255,0.3);
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 40%, var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+
+    /* Auto-detect banner */
+    .detect-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(233,30,99,0.1);
+      border: 1px solid rgba(233,30,99,0.3);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      color: var(--pink-light);
+    }
+    .detect-dot {
+      width: 8px; height: 8px;
+      background: var(--pink);
+      border-radius: 50%;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── Platform Grid ── */
+    .platforms {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .platforms h2 {
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 32px;
+    }
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    /* Platform card */
+    .pcard {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 20px;
+      text-align: center;
+      transition: border-color .25s, transform .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .pcard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(30,144,255,0.04), rgba(233,30,99,0.04));
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .pcard:hover::before { opacity: 1; }
+    .pcard:hover { border-color: rgba(30,144,255,0.45); transform: translateY(-3px); }
+    .pcard.detected {
+      border-color: rgba(233,30,99,0.5);
+      box-shadow: 0 0 0 1px rgba(233,30,99,0.2), 0 8px 32px rgba(233,30,99,0.08);
+    }
+    .detected-tag {
+      display: none;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--pink);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+    .pcard.detected .detected-tag { display: block; }
+
+    .pcard-icon {
+      font-size: 2.8rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .pcard h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .pcard-version {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .pcard-reqs {
+      font-size: 0.75rem;
+      color: rgba(121,134,203,0.7);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* Download button */
+    .btn-download {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+      position: relative;
+    }
+    .btn-primary-dl {
+      background: linear-gradient(135deg, var(--blue), #005fd4);
+      color: #fff;
+    }
+    .btn-primary-dl:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .btn-coming-soon {
+      background: rgba(30,144,255,0.08);
+      border: 1px solid rgba(30,144,255,0.25);
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+    .btn-coming-soon::after {
+      content: '— Coming Soon';
+      font-weight: 400;
+      font-size: 0.78rem;
+      display: block;
+      color: rgba(121,134,203,0.6);
+    }
+
+    /* Notify input */
+    .notify-group {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .notify-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 9px 12px;
+      color: var(--text);
+      font-size: 0.82rem;
+      outline: none;
+      min-width: 0;
+    }
+    .notify-input:focus { border-color: rgba(30,144,255,0.5); }
+    .notify-input::placeholder { color: rgba(121,134,203,0.5); }
+    .notify-btn {
+      background: var(--pink);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 9px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: filter .2s;
+    }
+    .notify-btn:hover { filter: brightness(1.15); }
+
+    /* ── Activation steps ── */
+    .activation {
+      max-width: 720px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+    .activation h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      background: linear-gradient(135deg, var(--blue), var(--pink));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .step-body h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .step-body p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+    code {
+      background: rgba(30,144,255,0.1);
+      color: var(--blue);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      header { padding: 14px 18px; }
+      .hero { padding: 48px 18px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🛡️</div>
+    <span class="logo-text"><span>Cyber</span>Guard</span>
+  </a>
+  <a href="index.html" class="header-back">← Back to Overview</a>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">PA Endpoint Protection</div>
+  <h1>Protect Every Device.<br>Every Platform.</h1>
+  <p>CyberGuard PA delivers AI-powered threat detection across Android, iOS, Windows, and macOS. One subscription. All your devices.</p>
+  <div class="detect-banner" id="detectBanner">
+    <div class="detect-dot"></div>
+    <span id="detectText">Detecting your platform…</span>
+  </div>
+</section>
+
+<section class="platforms">
+  <h2>Select Your Platform</h2>
+  <div class="platform-grid">
+
+    <div class="pcard" id="card-android">
+      <div class="detected-tag">Your Device</div>
+      <span class="pcard-icon">🤖</span>
+      <h3>Android</h3>
+      <p class="pcard-version">CyberGuard PA v1.0</p>
+      <p class="pcard-reqs">Requires Android 10+<br>~28 MB</p>
+      <button class="btn-download btn-coming-soon" disabled>Get on Google Play</button>
+      <div class="notify-group">
+        <input type="email" class="notify-input" placeholder="your@email.com" id="email-android" />
+        <button class="notify-btn" onclick="notifyMe('android')">Notify Me</button>
+      </div>
+    </div>
+
+    <div class="pcard" id="card-ios">
+      <div class="detected-tag">Your Device</div>
+      <span class="pcard-icon">🍎</span>
+      <h3>iPhone / iPad</h3>
+      <p class="pcard-version">CyberGuard PA v1.0</p>
+      <p class="pcard-reqs">Requires iOS 16+<br>~24 MB</p>
+      <button class="btn-download btn-coming-soon" disabled>Get on App Store</button>
+      <div class="notify-group">
+        <input type="email" class="notify-input" placeholder="your@email.com" id="email-ios" />
+        <button class="notify-btn" onclick="notifyMe('ios')">Notify Me</button>
+      </div>
+    </div>
+
+    <div class="pcard" id="card-windows">
+      <div class="detected-tag">Your Device</div>
+      <span class="pcard-icon">🪟</span>
+      <h3>Windows</h3>
+      <p class="pcard-version">CyberGuard PA v1.0</p>
+      <p class="pcard-reqs">Requires Windows 10/11 (64-bit)<br>~65 MB installer</p>
+      <button class="btn-download btn-coming-soon" disabled>Download for Windows</button>
+      <div class="notify-group">
+        <input type="email" class="notify-input" placeholder="your@email.com" id="email-windows" />
+        <button class="notify-btn" onclick="notifyMe('windows')">Notify Me</button>
+      </div>
+    </div>
+
+    <div class="pcard" id="card-macos">
+      <div class="detected-tag">Your Device</div>
+      <span class="pcard-icon">🍏</span>
+      <h3>macOS</h3>
+      <p class="pcard-version">CyberGuard PA v1.0</p>
+      <p class="pcard-reqs">Requires macOS 13 Ventura+<br>~58 MB .dmg</p>
+      <button class="btn-download btn-coming-soon" disabled>Download for Mac</button>
+      <div class="notify-group">
+        <input type="email" class="notify-input" placeholder="your@email.com" id="email-macos" />
+        <button class="notify-btn" onclick="notifyMe('macos')">Notify Me</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="activation">
+  <h2>Activation Guide</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Download & Install</h4>
+        <p>Download the installer for your platform above. On Android/iOS, tap <em>Install</em> in the store. On Windows/macOS, run the installer and follow the on-screen prompts. No admin rights required for basic protection.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Create or Sign In to Your Account</h4>
+        <p>Open the app and enter your CyberGuard account email. If you purchased a plan at <a href="index.html#pricing">omniaguard.com/pricing</a>, your account is already active — use the same email address.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Enter Your Activation Code</h4>
+        <p>Your 16-character activation code was emailed after purchase. Enter it in the <em>Activate License</em> screen. Format: <code>CGPA-XXXX-XXXX-XXXX</code>. Check your spam folder if not received within 5 minutes.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>Run Your First Scan</h4>
+        <p>Tap <em>Full Scan</em> from the dashboard. The initial scan takes 2–8 minutes depending on device storage. Subsequent scans run in the background automatically and won't impact performance.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h4>Enable Real-Time Protection</h4>
+        <p>On Android, grant the <em>Accessibility</em> permission when prompted — this enables link-intercept protection. On iOS, enable the <em>VPN & Device Management</em> profile in Settings. On Windows/macOS, approve the system extension during first launch.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <h4>Need Help?</h4>
+        <p>Contact support: <a href="mailto:omniaguard1@gmail.com">omniaguard1@gmail.com</a>. Include your activation code and platform. Response within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>CyberGuard PA · Powered by <a href="index.html">OmniGuard</a> · A Francisco Holdings Inc. product · <a href="mailto:omniaguard1@gmail.com">Support</a></p>
+  <p style="margin-top:8px;color:rgba(121,134,203,0.5)">Native app installers are in development. Enter your email above to be notified when your platform launches.</p>
+</footer>
+
+<script>
+  // Platform detection via UA — runs immediately, no flash
+  (function detectPlatform() {
+    const ua = navigator.userAgent;
+    let detected = null;
+
+    if (/android/i.test(ua)) {
+      detected = 'android';
+    } else if (/iphone|ipad|ipod/i.test(ua)) {
+      detected = 'ios';
+    } else if (/macintosh|mac os x/i.test(ua) && !/iphone|ipad/i.test(ua)) {
+      // macOS — not iOS (UA quirk: iPad may send Macintosh in iPadOS 13+, check touch)
+      detected = navigator.maxTouchPoints > 1 ? 'ios' : 'macos';
+    } else if (/win/i.test(ua)) {
+      detected = 'windows';
+    }
+
+    const banner = document.getElementById('detectText');
+    if (detected) {
+      const labels = { android: 'Android', ios: 'iPhone / iPad', macos: 'macOS', windows: 'Windows' };
+      banner.textContent = 'Your device: ' + labels[detected] + ' — scroll down to your platform';
+      const card = document.getElementById('card-' + detected);
+      if (card) {
+        card.classList.add('detected');
+        // Scroll it into view gently after a short delay
+        setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 600);
+      }
+    } else {
+      banner.textContent = 'Choose your platform below';
+    }
+  })();
+
+  // Notify Me — stores email locally and shows confirmation
+  // Replace with a real form submission (Formspree, n8n webhook, Mailchimp) when ready
+  function notifyMe(platform) {
+    const input = document.getElementById('email-' + platform);
+    const email = input.value.trim();
+    const labels = { android: 'Android', ios: 'iPhone / iPad', macos: 'macOS', windows: 'Windows' };
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.style.borderColor = 'rgba(233,30,99,0.6)';
+      input.placeholder = 'Enter a valid email';
+      setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'your@email.com'; }, 2000);
+      return;
+    }
+
+    // Store locally (replace with server submission)
+    const stored = JSON.parse(localStorage.getItem('cg_notify') || '{}');
+    stored[platform] = email;
+    localStorage.setItem('cg_notify', JSON.stringify(stored));
+
+    // Show confirmation inside the card
+    const card = document.getElementById('card-' + platform);
+    const group = card.querySelector('.notify-group');
+    group.innerHTML = '<p style="text-align:center;color:#4CAF50;font-size:0.85rem;width:100%;padding:8px 0">✓ You\'re on the list for ' + labels[platform] + '!</p>';
+  }
+</script>
+
+</body>
+</html>

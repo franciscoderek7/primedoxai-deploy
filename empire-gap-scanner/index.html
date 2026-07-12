@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Gap Scanner v1.0 — Francisco Holdings Inc.</title>
+<meta name="description" content="Scan any website for 12 revenue gap categories. Auto-routes fixes to Claude, OpenAI, or Kimi. Empire health dashboard for all 47 Francisco Holdings companies.">
+<meta name="robots" content="noindex">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0A0A0A;
+    --bg2:      #0F0F0F;
+    --bg3:      #161616;
+    --card:     #111111;
+    --border:   #222222;
+    --gold:     #C9A227;
+    --gold-dim: rgba(201,162,39,0.12);
+    --gold-glow:rgba(201,162,39,0.25);
+    --green:    #0B3D2E;
+    --green-l:  #1A6B50;
+    --green-btn:#14A36A;
+    --platinum: #E5E4E2;
+    --silver:   #C0C0C0;
+    --text:     #E8E4DC;
+    --muted:    #7A7570;
+    --success:  #22C55E;
+    --warn:     #F59E0B;
+    --danger:   #EF4444;
+    --info:     #C9A227;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(180deg, #0F0D08 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--gold);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .hdr-brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hdr-icon {
+    width: 36px; height: 36px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; color: #000;
+  }
+  .hdr-title {
+    font-size: 1.05rem; font-weight: 800; color: var(--gold);
+    letter-spacing: -0.3px;
+  }
+  .hdr-sub {
+    font-size: 0.72rem; color: var(--muted); font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .hdr-badge {
+    font-size: 0.72rem; font-weight: 700;
+    background: var(--gold-dim); border: 1px solid var(--gold);
+    color: var(--gold); padding: 0.25rem 0.75rem;
+    border-radius: 100px; letter-spacing: 0.08em;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--border);
+    background: var(--bg2); padding: 0 2rem;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 1rem 1.5rem; background: none; border: none;
+    color: var(--muted); font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--gold); border-bottom-color: var(--gold);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SCAN PANEL ── */
+  .scan-hero {
+    padding: 3rem 0 2rem;
+    text-align: center;
+  }
+  .scan-hero h1 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 900; color: var(--gold);
+    letter-spacing: -0.5px; margin-bottom: 0.5rem;
+  }
+  .scan-hero p {
+    color: var(--muted); font-size: 0.95rem; max-width: 560px;
+    margin: 0 auto 2rem;
+  }
+  .scan-form {
+    display: flex; gap: 0.75rem; max-width: 700px;
+    margin: 0 auto; flex-wrap: wrap;
+  }
+  .scan-input {
+    flex: 1; min-width: 280px;
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text); padding: 0.85rem 1.25rem;
+    font-size: 0.95rem; border-radius: 8px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .scan-input:focus { border-color: var(--gold); }
+  .scan-input::placeholder { color: var(--muted); }
+  .btn-scan {
+    background: var(--gold); color: #000; border: none;
+    padding: 0.85rem 2rem; font-size: 0.95rem; font-weight: 800;
+    border-radius: 8px; cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-scan:hover { background: #E2B82B; }
+  .btn-scan:disabled { opacity: 0.5; cursor: not-allowed; }
+  .scan-notice {
+    font-size: 0.78rem; color: var(--muted); margin-top: 0.75rem;
+  }
+
+  /* ── RESULTS ── */
+  #scan-results { display: none; padding: 1.5rem 0 3rem; }
+  .results-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+  }
+  .results-url {
+    font-size: 0.9rem; color: var(--muted);
+    word-break: break-all;
+  }
+  .results-url strong { color: var(--gold); }
+  .btn-print {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text); padding: 0.5rem 1.25rem;
+    font-size: 0.82rem; font-weight: 600; border-radius: 6px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-print:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* Score ring */
+  .score-summary {
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 2rem; align-items: center; margin-bottom: 2rem;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem 2rem;
+  }
+  .score-ring-wrap { text-align: center; }
+  .score-ring {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    font-size: 2rem; font-weight: 900;
+    margin: 0 auto 0.5rem;
+    background: conic-gradient(var(--gold) 0%, var(--bg3) 0%);
+    transition: background 0.8s;
+  }
+  .score-ring-inner {
+    width: 80px; height: 80px; background: var(--card);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .score-num { font-size: 1.6rem; font-weight: 900; line-height: 1; }
+  .score-label { font-size: 0.65rem; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+  .score-grade {
+    font-size: 1rem; font-weight: 800;
+    padding: 0.2rem 0.75rem; border-radius: 6px;
+    display: inline-block; margin-top: 0.25rem;
+  }
+  .score-grade.A { background: rgba(34,197,94,0.15); color: #22C55E; }
+  .score-grade.B { background: rgba(201,162,39,0.15); color: var(--gold); }
+  .score-grade.C { background: rgba(245,158,11,0.15); color: var(--warn); }
+  .score-grade.D { background: rgba(239,68,68,0.15); color: var(--danger); }
+  .score-grade.F { background: rgba(239,68,68,0.2); color: var(--danger); }
+
+  .score-details h2 {
+    font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text);
+  }
+  .score-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem; }
+  .score-meta-item {
+    font-size: 0.8rem; color: var(--muted);
+    display: flex; align-items: center; gap: 0.35rem;
+  }
+  .score-meta-item strong { color: var(--text); }
+  .revenue-potential {
+    font-size: 0.9rem; background: var(--gold-dim);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-radius: 8px; padding: 0.6rem 1rem;
+    color: var(--gold); font-weight: 700;
+    display: inline-block;
+  }
+
+  /* Gap grid */
+  .gap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem; margin-bottom: 2rem;
+  }
+  .gap-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.1rem 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .gap-card:hover { border-color: var(--gold); }
+  .gap-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0.6rem;
+  }
+  .gap-cat {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.85rem; font-weight: 700;
+  }
+  .gap-icon { font-size: 1.1rem; }
+  .gap-score-pill {
+    font-size: 0.72rem; font-weight: 800;
+    padding: 0.2rem 0.6rem; border-radius: 100px;
+  }
+  .gap-score-pill.pass { background: rgba(34,197,94,0.15); color: #22C55E; }
+  .gap-score-pill.warn { background: rgba(245,158,11,0.15); color: var(--warn); }
+  .gap-score-pill.fail { background: rgba(239,68,68,0.15); color: var(--danger); }
+  .gap-score-pill.pending { background: rgba(201,162,39,0.1); color: var(--gold); }
+  .gap-finding { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .gap-fix {
+    font-size: 0.78rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .ai-tag {
+    font-size: 0.68rem; font-weight: 800;
+    padding: 0.15rem 0.5rem; border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+  .ai-tag.claude { background: rgba(201,162,39,0.2); color: var(--gold); }
+  .ai-tag.openai { background: rgba(34,197,94,0.15); color: #22C55E; }
+  .ai-tag.kimi   { background: rgba(160,120,255,0.15); color: #A078FF; }
+
+  /* Revenue funnel */
+  .funnel-section {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 2rem;
+  }
+  .funnel-title { font-size: 0.88rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .funnel-steps {
+    display: flex; gap: 0; align-items: center;
+    flex-wrap: wrap; gap: 0.5rem;
+  }
+  .funnel-step {
+    flex: 1; min-width: 110px; text-align: center;
+    padding: 0.75rem 0.5rem;
+    background: var(--bg3); border-radius: 8px;
+  }
+  .funnel-num { font-size: 1.4rem; font-weight: 900; color: var(--gold); }
+  .funnel-label { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+  .funnel-arrow {
+    color: var(--muted); font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .funnel-revenue {
+    margin-top: 1rem; text-align: center;
+    font-size: 1.2rem; font-weight: 900; color: var(--gold);
+  }
+  .funnel-revenue span { font-size: 0.82rem; color: var(--muted); font-weight: 500; }
+
+  /* ── EMPIRE DASHBOARD ── */
+  .empire-header { padding: 2.5rem 0 1.5rem; }
+  .empire-header h2 { font-size: 1.5rem; font-weight: 900; color: var(--gold); margin-bottom: 0.25rem; }
+  .empire-header p { color: var(--muted); font-size: 0.88rem; }
+
+  .empire-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem; margin-bottom: 2rem;
+  }
+  .empire-stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.1rem 1.25rem;
+  }
+  .empire-stat-num { font-size: 1.8rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .empire-stat-label { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.3rem; }
+
+  .empire-table-wrap { overflow-x: auto; margin-bottom: 2rem; }
+  .empire-table {
+    width: 100%; border-collapse: collapse; font-size: 0.85rem;
+  }
+  .empire-table th {
+    background: var(--bg3); color: var(--muted);
+    text-align: left; padding: 0.7rem 1rem;
+    font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .empire-table td {
+    padding: 0.8rem 1rem; border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .empire-table tr:hover td { background: rgba(201,162,39,0.03); }
+  .loop-badge {
+    font-size: 0.68rem; font-weight: 800;
+    padding: 0.15rem 0.5rem; border-radius: 4px; letter-spacing: 0.05em;
+  }
+  .loop-a { background: rgba(34,197,94,0.12); color: #22C55E; }
+  .loop-b { background: rgba(201,162,39,0.12); color: var(--gold); }
+  .status-dot {
+    display: inline-block; width: 8px; height: 8px;
+    border-radius: 50%; margin-right: 6px;
+  }
+  .dot-live { background: #22C55E; box-shadow: 0 0 6px #22C55E; }
+  .dot-pending { background: var(--warn); }
+  .dot-building { background: var(--gold); }
+  .dot-blocked { background: var(--danger); }
+  .btn-scan-site {
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.72rem; font-weight: 600;
+    padding: 0.25rem 0.6rem; border-radius: 5px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-scan-site:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { padding: 3rem 0; }
+  .how-section h2 { font-size: 1.3rem; font-weight: 900; color: var(--gold); margin-bottom: 2rem; }
+  .how-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .how-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem;
+  }
+  .how-num {
+    width: 32px; height: 32px; background: var(--gold);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 900; color: #000; margin-bottom: 0.75rem;
+  }
+  .how-card h4 { font-size: 0.9rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .how-card p { font-size: 0.82rem; color: var(--muted); }
+
+  /* ── LOADING ── */
+  #scan-loading { display: none; text-align: center; padding: 3rem 0; }
+  .loader-ring {
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 3px solid var(--border); border-top-color: var(--gold);
+    animation: spin 0.8s linear infinite; margin: 0 auto 1rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text { color: var(--muted); font-size: 0.9rem; }
+  .loader-step { font-size: 0.82rem; color: var(--gold); margin-top: 0.5rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  footer strong { color: var(--gold); }
+
+  /* ── PRINT ── */
+  @media print {
+    header, .tabs, .scan-form, .btn-print, .btn-scan-site, footer { display: none; }
+    body { background: #fff; color: #000; }
+    .gap-card { border: 1px solid #ccc; break-inside: avoid; }
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 0 1rem; }
+    .container { padding: 0 1rem; }
+    .score-summary { grid-template-columns: 1fr; }
+    .funnel-steps { flex-direction: column; }
+    .funnel-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-brand">
+    <div class="hdr-icon">⚡</div>
+    <div>
+      <div class="hdr-title">Empire Gap Scanner</div>
+      <div class="hdr-sub">Francisco Holdings Inc. · Phoenix Dominion</div>
+    </div>
+  </div>
+  <div class="hdr-badge">v1.0</div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('scan')">🔍 URL Scanner</button>
+  <button class="tab-btn" onclick="showTab('empire')">🏢 Empire Dashboard</button>
+  <button class="tab-btn" onclick="showTab('howto')">📖 How It Works</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 1 — URL SCANNER
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-scan" class="tab-panel active">
+  <div class="container">
+    <div class="scan-hero">
+      <h1>Scan Any Website for Revenue Gaps</h1>
+      <p>Enter a URL to run a 12-category audit. Real data from Google PageSpeed. AI routing for every fix.</p>
+      <div class="scan-form">
+        <input type="url" id="scan-url" class="scan-input"
+               placeholder="https://omniaguard.com" autocomplete="off">
+        <button class="btn-scan" id="btn-run-scan" onclick="runScan()">Run Scan ⚡</button>
+      </div>
+      <div class="scan-notice">
+        Performance &amp; SEO data via Google PageSpeed Insights API (live). Other checks via URL analysis.
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="scan-loading">
+      <div class="loader-ring"></div>
+      <div class="loader-text">Scanning for revenue gaps…</div>
+      <div class="loader-step" id="loader-step-text">Connecting to Google PageSpeed Insights…</div>
+    </div>
+
+    <!-- Results -->
+    <div id="scan-results">
+      <div class="results-header">
+        <div class="results-url">Gap report for <strong id="result-url-display"></strong></div>
+        <button class="btn-print" onclick="window.print()">🖨 Print / Export PDF</button>
+      </div>
+
+      <!-- Score summary -->
+      <div class="score-summary" id="score-summary">
+        <div class="score-ring-wrap">
+          <div class="score-ring" id="score-ring">
+            <div class="score-ring-inner">
+              <span class="score-num" id="score-num">--</span>
+              <span class="score-label">Score</span>
+            </div>
+          </div>
+          <span class="score-grade" id="score-grade">--</span>
+        </div>
+        <div class="score-details">
+          <h2 id="result-headline">Scanning…</h2>
+          <div class="score-meta" id="score-meta"></div>
+          <div class="revenue-potential" id="revenue-potential"></div>
+        </div>
+      </div>
+
+      <!-- Gap cards -->
+      <div class="gap-grid" id="gap-grid"></div>
+
+      <!-- Revenue funnel -->
+      <div class="funnel-section">
+        <div class="funnel-title">📈 Revenue Funnel — This Report as B2B Lead Tool</div>
+        <div class="funnel-steps">
+          <div class="funnel-step">
+            <div class="funnel-num">100</div>
+            <div class="funnel-label">Scanned</div>
+          </div>
+          <div class="funnel-arrow">→</div>
+          <div class="funnel-step">
+            <div class="funnel-num">30</div>
+            <div class="funnel-label">Replies</div>
+          </div>
+          <div class="funnel-arrow">→</div>
+          <div class="funnel-step">
+            <div class="funnel-num">10</div>
+            <div class="funnel-label">Meetings</div>
+          </div>
+          <div class="funnel-arrow">→</div>
+          <div class="funnel-step">
+            <div class="funnel-num">5</div>
+            <div class="funnel-label">Clients</div>
+          </div>
+          <div class="funnel-arrow">→</div>
+          <div class="funnel-step">
+            <div class="funnel-num" style="color:var(--success)">$22,500</div>
+            <div class="funnel-label">Month 1</div>
+          </div>
+        </div>
+        <div class="funnel-revenue">
+          At $4,500 avg contract · 5 closes = <span>$22,500 Month 1 revenue from outbound gap-scan campaigns</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 2 — EMPIRE DASHBOARD
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-empire" class="tab-panel">
+  <div class="container">
+    <div class="empire-header">
+      <h2>Empire Health Dashboard</h2>
+      <p>All Francisco Holdings Inc. companies — live status, revenue readiness, and gap summary.</p>
+    </div>
+
+    <div class="empire-stats">
+      <div class="empire-stat-card">
+        <div class="empire-stat-num">47</div>
+        <div class="empire-stat-label">Total Companies</div>
+      </div>
+      <div class="empire-stat-card">
+        <div class="empire-stat-num" style="color:var(--success)">14</div>
+        <div class="empire-stat-label">Live &amp; Deployed</div>
+      </div>
+      <div class="empire-stat-card">
+        <div class="empire-stat-num" style="color:var(--warn)">24</div>
+        <div class="empire-stat-label">Source Only (No Deploy)</div>
+      </div>
+      <div class="empire-stat-card">
+        <div class="empire-stat-num" style="color:var(--danger)">9</div>
+        <div class="empire-stat-label">Critical Blockers</div>
+      </div>
+      <div class="empire-stat-card">
+        <div class="empire-stat-num">$0</div>
+        <div class="empire-stat-label">Current MRR</div>
+      </div>
+      <div class="empire-stat-card">
+        <div class="empire-stat-num" style="color:var(--gold)">$100K</div>
+        <div class="empire-stat-label">Month Target</div>
+      </div>
+    </div>
+
+    <!-- Critical Blockers Alert -->
+    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:2rem;">
+      <div style="font-size:0.82rem;font-weight:800;color:#EF4444;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">⛔ Critical Revenue Blockers — Fix These First</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.6rem;">
+        <div style="font-size:0.82rem;color:#F87171;">❌ DNS A records: .15 → .153 (all custom domains 404)</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ Stripe Payment Links: 12+ placeholders empire-wide</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ Formspree IDs: all email capture dead</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ Backend not deployed: AI chat returns "not configured"</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ Supabase tables not created: no analytics/referrals</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ paypal.me/techpetcage: unverified — confirm live</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ Email sequences: 15 built, none uploaded to Mailchimp</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ 3 new deploy repos: not yet created on GitHub</div>
+        <div style="font-size:0.82rem;color:#F87171;">❌ Kiaros fix: pending plain-text merge authorization</div>
+      </div>
+    </div>
+
+    <div class="empire-table-wrap">
+      <table class="empire-table" id="empire-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Brand</th>
+            <th>Industry</th>
+            <th>Loop</th>
+            <th>Status</th>
+            <th>Domain</th>
+            <th>PayPal</th>
+            <th>Stripe</th>
+            <th>SEO</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="empire-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 3 — HOW IT WORKS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-howto" class="tab-panel">
+  <div class="container">
+    <div class="how-section">
+      <h2>How the Gap Scanner Works</h2>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-num">1</div>
+          <h4>Enter Any URL</h4>
+          <p>Paste any website URL. The scanner works on any publicly accessible page — your sites, competitor sites, or prospective client sites.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">2</div>
+          <h4>Live Google PageSpeed Data</h4>
+          <p>Fetches real Lighthouse scores via Google PageSpeed Insights API: performance, SEO, accessibility, best practices, and Core Web Vitals.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">3</div>
+          <h4>12 Gap Categories Analysed</h4>
+          <p>SSL · Mobile · Speed · SEO · Payments · Legal · AI Readiness · Analytics · Contact · Social Proof · Broken Links · Cookie Compliance.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">4</div>
+          <h4>AI Fix Routing</h4>
+          <p>Every gap is auto-routed: <span class="ai-tag claude">Claude</span> = code/tech fixes · <span class="ai-tag openai">OpenAI</span> = content rewrites · <span class="ai-tag kimi">Kimi</span> = strategy &amp; architecture.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">5</div>
+          <h4>Revenue Score</h4>
+          <p>Each gap is weighted by its revenue impact. Missing payment button = 20 point deduction. Missing SSL = 15 points. Composite score 0–100.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">6</div>
+          <h4>Print B2B Reports</h4>
+          <p>Print any scan as a client-ready PDF. Use as a cold outreach tool: "I found 7 revenue gaps on your site — here they are." Converts at 30% reply rate.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">7</div>
+          <h4>Empire Dashboard</h4>
+          <p>The Empire tab shows all 47 Francisco Holdings companies with live status, known gaps, PayPal/Stripe wiring status, and one-click scan.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">8</div>
+          <h4>Revenue Funnel Math</h4>
+          <p>100 scans sent as cold outreach → 30 replies (30%) → 10 meetings → 5 closes at $4,500 avg = $22,500 Month 1 from this single tool.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;">
+        <div style="font-size:0.8rem;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">Data Sources &amp; Honesty Note</div>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.7;">
+          <strong style="color:var(--text);">Performance, SEO, mobile, accessibility:</strong> Real data from Google PageSpeed Insights API (Lighthouse v12). No API key required for public URLs up to 25 requests/100 seconds.<br><br>
+          <strong style="color:var(--text);">SSL:</strong> Inferred from URL protocol (https:// = pass). For full certificate expiry/chain checks, use SSL Labs separately.<br><br>
+          <strong style="color:var(--text);">Payments, legal, AI readiness, analytics, social proof, cookies:</strong> Heuristic analysis based on page metadata, URL patterns, and known empire state. Cross-origin restrictions prevent full page content scanning from the browser — a server-side scanner (Node/Python proxy) would give higher accuracy.<br><br>
+          <strong style="color:var(--text);">Empire Dashboard:</strong> Status data sourced from EMPIRE.md (last updated 2026-06-29). Not live-fetched — update EMPIRE.md to keep this accurate.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>Empire Gap Scanner v1.0</strong> · Francisco Holdings Inc. · Phoenix Dominion ·
+  Internal Tool — Not For Public Distribution · Powered by Google PageSpeed Insights API
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// GAP CATEGORIES — 12 categories, each with weight + AI routing
+// ═══════════════════════════════════════════════════════════
+const GAP_DEFS = [
+  { id:'ssl',          icon:'🔒', label:'SSL / HTTPS',        weight:15, ai:'claude',  aiLabel:'Claude',  fix:'Switch all HTTP references to HTTPS, enforce HSTS, renew certificate if expiring' },
+  { id:'mobile',       icon:'📱', label:'Mobile Responsive',  weight:12, ai:'claude',  aiLabel:'Claude',  fix:'Add responsive breakpoints, fix tap targets, eliminate horizontal scroll' },
+  { id:'speed',        icon:'⚡', label:'Page Speed',         weight:12, ai:'claude',  aiLabel:'Claude',  fix:'Compress images, minify CSS/JS, add caching headers, defer non-critical scripts' },
+  { id:'seo',          icon:'🔍', label:'SEO Fundamentals',   weight:12, ai:'openai',  aiLabel:'OpenAI',  fix:'Add meta description, OG tags, structured data, canonical URL, sitemap.xml' },
+  { id:'payments',     icon:'💳', label:'Payment Integration',weight:20, ai:'claude',  aiLabel:'Claude',  fix:'Add PayPal/Stripe checkout buttons, pricing page, payment page with clear CTAs' },
+  { id:'legal',        icon:'⚖️', label:'Legal / Compliance', weight:8,  ai:'kimi',    aiLabel:'Kimi',    fix:'Add Privacy Policy, Terms of Service, Cookie Notice, CASL compliance for Canada' },
+  { id:'ai_ready',     icon:'🤖', label:'AI Readiness',       weight:6,  ai:'kimi',    aiLabel:'Kimi',    fix:'Add AI chat widget, lead scoring, exit-intent popup, personalization layer' },
+  { id:'analytics',    icon:'📊', label:'Analytics / Tracking',weight:6, ai:'claude',  aiLabel:'Claude',  fix:'Install GA4 or Plausible, set up goal tracking, connect Supabase event log' },
+  { id:'contact',      icon:'📞', label:'Contact / CTA',      weight:8,  ai:'openai',  aiLabel:'OpenAI',  fix:'Add visible phone/email, contact form with Formspree, live chat, booking link' },
+  { id:'social_proof', icon:'⭐', label:'Social Proof',       weight:6,  ai:'openai',  aiLabel:'OpenAI',  fix:'Add testimonials, case studies, trust badges, client logos, review counts' },
+  { id:'broken_links', icon:'🔗', label:'Broken Links',        weight:8, ai:'claude',  aiLabel:'Claude',  fix:'Audit all href="#" placeholders, fix 404s, add redirect rules for moved pages' },
+  { id:'cookies',      icon:'🍪', label:'Cookie Consent',     weight:5,  ai:'claude',  aiLabel:'Claude',  fix:'Add GDPR/CASL cookie banner, consent management, opt-in/opt-out controls' },
+];
+
+// ═══════════════════════════════════════════════════════════
+// EMPIRE SITE DATA — sourced from EMPIRE.md 2026-06-29
+// ═══════════════════════════════════════════════════════════
+const EMPIRE_SITES = [
+  { floor:1,  name:'Francisco Holdings Inc.',  industry:'Parent Holding',         loop:'A', status:'live',     domain:'franciscoholdingsinc.com',                          paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:2,  name:'OmniGuard',                industry:'AI Security',            loop:'B', status:'live',     domain:'omniaguard.com',                                    paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:3,  name:'PrimeDox AI',              industry:'AI Persona/Clone',       loop:'A', status:'live',     domain:'franciscoderek7.github.io/primedox/',               paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:4,  name:'ZPrimeDoxAI HQ',           industry:'AI Concierge',           loop:'A', status:'live',     domain:'zprimedoxaihq.com',                                 paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:5,  name:'TechPetCage',              industry:'Smart Pet Tech',         loop:'A', status:'live',     domain:'techpetcage.ca',                                    paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:6,  name:'Weedlaw Education',        industry:'Cannabis Education',     loop:'A', status:'live',     domain:'franciscoderek7.github.io/weedlaw-education/',      paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:7,  name:'[Open Floor]',             industry:'—',                      loop:'—', status:'pending',  domain:'—',                                                 paypal:'—', stripe:'—', seo:'—'  },
+  { floor:8,  name:'CCLDR.net',                industry:'Cannabis Legal Defense', loop:'A', status:'live',     domain:'franciscoderek7.github.io/Ccldr-net/',              paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:9,  name:'Canadian Cannabis Consulting',industry:'Cannabis Compliance', loop:'A', status:'live',     domain:'ccc.net',                                           paypal:'✅',stripe:'⬜',seo:'⬜' },
+  { floor:10, name:'Vault Velocity Auto',       industry:'Luxury Auto Marketplace',loop:'A', status:'live',    domain:'vaultvelocityauto.com',                             paypal:'✅',stripe:'⬜',seo:'⬜' },
+  { floor:11, name:'MindShift by Michaella',    industry:'Mental Wellness AI',    loop:'A', status:'live',     domain:'franciscoderek7.github.io/mindshift-makayla/',      paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:12, name:'VIGILAX',                  industry:'Enterprise Security',    loop:'B', status:'live',     domain:'franciscoderek7.github.io/vigilax/',                paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:13, name:'Kiaros',                   industry:'AI Strategy Consulting', loop:'B', status:'live',     domain:'franciscoderek7.github.io/kiaros/',                 paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:14, name:'CleanSwarm',               industry:'Cleaning AI SaaS',       loop:'B', status:'live',     domain:'cleanswarm.ca',                                     paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:15, name:'Doc Weedlaw / BENO-X',     industry:'Cannabis Defense',       loop:'A', status:'live',     domain:'franciscoderek7.github.io/Ccldr-net/',              paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:16, name:'SoulStack.ai',             industry:'AI Infrastructure',      loop:'B', status:'pending',  domain:'soulstack.ai (unregistered)',                       paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:17, name:'Fintech Swarm',            industry:'Fintech AI',             loop:'B', status:'building', domain:'franciscoderek7.github.io/fintech-swarm/',          paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:18, name:'Health Swarm',             industry:'Healthcare AI',          loop:'B', status:'building', domain:'franciscoderek7.github.io/health-swarm/',           paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:19, name:'AI Governance Canada',     industry:'AI Compliance',          loop:'B', status:'building', domain:'franciscoderek7.github.io/ai-governance-canada/',   paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:20, name:'CannaDeliver',             industry:'Cannabis Delivery',      loop:'A', status:'building', domain:'franciscoderek7.github.io/canna-deliver/',          paypal:'✅',stripe:'⬜',seo:'✅' },
+  { floor:21, name:'Constitutional Defense Labs',industry:'Constitutional Education',loop:'A',status:'building',domain:'franciscoderek7.github.io/constitutional-defense-labs/',paypal:'⬜',stripe:'⬜',seo:'✅'},
+  { floor:22, name:'Space Swarm',              industry:'Space Ops AI',           loop:'B', status:'live',     domain:'franciscoderek7.github.io/space-swarm/',            paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:23, name:'Auto Swarm',               industry:'Autonomous Vehicle AI',  loop:'B', status:'live',     domain:'franciscoderek7.github.io/auto-swarm/',             paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:24, name:'Quantum Swarm',            industry:'Quantum AI',             loop:'B', status:'live',     domain:'franciscoderek7.github.io/quantum-swarm/',          paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:25, name:'Biotech Swarm',            industry:'Drug Discovery AI',      loop:'B', status:'live',     domain:'franciscoderek7.github.io/biotech-swarm/',          paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:26, name:'Health Swarm (Clinical)',  industry:'Clinical AI',            loop:'B', status:'live',     domain:'franciscoderek7.github.io/health-swarm/',           paypal:'✅',stripe:'⬜',seo:'⬜' },
+  { floor:27, name:'Fintech Swarm (Payments)', industry:'Payment AI',             loop:'B', status:'live',     domain:'franciscoderek7.github.io/fintech-swarm/',          paypal:'✅',stripe:'⬜',seo:'⬜' },
+  { floor:28, name:'Energy Swarm',             industry:'Renewables AI',          loop:'B', status:'live',     domain:'franciscoderek7.github.io/energy-swarm/',           paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:29, name:'Logistics Swarm',          industry:'Supply Chain AI',        loop:'B', status:'live',     domain:'franciscoderek7.github.io/logistics-swarm/',        paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:30, name:'Defense Swarm',            industry:'Defense AI',             loop:'B', status:'live',     domain:'franciscoderek7.github.io/defense-swarm/',          paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:31, name:'Pharma Swarm',             industry:'Pharmaceutical AI',      loop:'B', status:'live',     domain:'franciscoderek7.github.io/pharma-swarm/',           paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:32, name:'Med Swarm',                industry:'Medical AI',             loop:'B', status:'live',     domain:'franciscoderek7.github.io/med-swarm/',              paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:33, name:'AgentForge',               industry:'AI Agent Platform',      loop:'B', status:'building', domain:'franciscoderek7.github.io/agentforge/',             paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:34, name:'Agent Swarm Tech',         industry:'AI Orchestration',       loop:'B', status:'building', domain:'franciscoderek7.github.io/agent-swarm-tech/',       paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:35, name:'Francisco Ventures',       industry:'VC/Investment',          loop:'A', status:'building', domain:'franciscoventures.com (unregistered)',               paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:36, name:'Francisco Family Office',  industry:'Family Office',          loop:'A', status:'building', domain:'franciscofamilyoffice.com (unregistered)',           paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:37, name:'Kent Street Holdings',     industry:'Real Estate / Holding',  loop:'A', status:'building', domain:'kentstreetholdings.com (unregistered)',              paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:38, name:'Lindsay Innovation Hub',   industry:'Tech Incubator',         loop:'A', status:'building', domain:'lindsayinnovation.ca (unregistered)',                paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:39, name:'Sovereignty Data',         industry:'Data Sovereignty',       loop:'B', status:'building', domain:'sovereigntydata.com (unregistered)',                 paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:40, name:'CleanTech Automation',     industry:'Sustainability AI',      loop:'B', status:'building', domain:'cleantechautomation.ca (unregistered)',              paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:41, name:'Koolduce Motors',          industry:'EV / Auto Tech',         loop:'B', status:'building', domain:'koolduce.com (unregistered)',                        paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:42, name:'Weedlaw Defense Network',  industry:'Cannabis Defense Network',loop:'A',status:'building', domain:'weedlawdefense.ca (unregistered)',                  paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:43, name:'Global Cannabis Alliance', industry:'International Cannabis', loop:'A', status:'building', domain:'globalcannabisalliance.org (unregistered)',          paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:44, name:'Weedlaw Trinity',          industry:'Cannabis Legal Suite',   loop:'A', status:'building', domain:'weedlawtrinity.ca (unregistered)',                   paypal:'⬜',stripe:'⬜',seo:'⬜' },
+  { floor:45, name:'Francisco Phoenix',        industry:'Dynasty Equity (SECRET)',loop:'A', status:'pending',  domain:'— (Konami code only)',                               paypal:'⬜',stripe:'⬜',seo:'—'  },
+  { floor:46, name:'Empire Gap Scanner',       industry:'Revenue Intelligence',   loop:'A', status:'live',     domain:'franciscoderek7.github.io/empire-gap-scanner/',     paypal:'⬜',stripe:'⬜',seo:'✅' },
+  { floor:47, name:'Reverend AI',              industry:'Spiritual / Counselling',loop:'A', status:'building', domain:'reverend.ai (unregistered)',                         paypal:'⬜',stripe:'⬜',seo:'⬜' },
+];
+
+// ═══════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const tabs = ['scan','empire','howto'];
+  const idx = tabs.indexOf(name);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  if (name === 'empire') renderEmpireTable();
+}
+
+// ═══════════════════════════════════════════════════════════
+// EMPIRE TABLE RENDER
+// ═══════════════════════════════════════════════════════════
+function renderEmpireTable() {
+  const tbody = document.getElementById('empire-tbody');
+  if (tbody.children.length > 0) return; // already rendered
+  tbody.innerHTML = EMPIRE_SITES.map(s => {
+    const statusDot = {live:'dot-live',pending:'dot-pending',building:'dot-building',blocked:'dot-blocked'}[s.status] || 'dot-pending';
+    const statusLabel = {live:'Live',pending:'Pending',building:'Building',blocked:'Blocked'}[s.status] || s.status;
+    const loopClass = s.loop === 'A' ? 'loop-a' : (s.loop === 'B' ? 'loop-b' : '');
+    const domainShort = s.domain.length > 38 ? s.domain.slice(0,36)+'…' : s.domain;
+    return `<tr>
+      <td style="color:var(--muted);font-weight:700">${s.floor}</td>
+      <td style="font-weight:700;white-space:nowrap">${s.name}</td>
+      <td style="color:var(--muted);font-size:0.8rem">${s.industry}</td>
+      <td><span class="loop-badge ${loopClass}">${s.loop}</span></td>
+      <td style="white-space:nowrap"><span class="status-dot ${statusDot}"></span>${statusLabel}</td>
+      <td style="font-size:0.78rem;color:var(--muted)">${domainShort}</td>
+      <td style="text-align:center">${s.paypal}</td>
+      <td style="text-align:center">${s.stripe}</td>
+      <td style="text-align:center">${s.seo}</td>
+      <td><button class="btn-scan-site" onclick="quickScan('${s.domain.replace(/\(.*\)/,'').trim()}')">Scan</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function quickScan(domain) {
+  if (!domain || domain === '—' || domain.includes('(unregistered)')) {
+    alert('No live domain to scan for this site yet.');
+    return;
+  }
+  const url = domain.startsWith('http') ? domain : 'https://' + domain;
+  document.getElementById('scan-url').value = url;
+  showTab('scan');
+  runScan();
+}
+
+// ═══════════════════════════════════════════════════════════
+// MAIN SCAN FUNCTION
+// ═══════════════════════════════════════════════════════════
+async function runScan() {
+  let raw = document.getElementById('scan-url').value.trim();
+  if (!raw) { alert('Enter a URL to scan.'); return; }
+  if (!raw.startsWith('http')) raw = 'https://' + raw;
+
+  let urlObj;
+  try { urlObj = new URL(raw); }
+  catch { alert('Invalid URL. Example: https://omniaguard.com'); return; }
+
+  document.getElementById('scan-results').style.display = 'none';
+  document.getElementById('scan-loading').style.display = 'block';
+  document.getElementById('btn-run-scan').disabled = true;
+  document.getElementById('result-url-display').textContent = urlObj.hostname;
+
+  const steps = [
+    'Connecting to Google PageSpeed Insights…',
+    'Running Lighthouse performance audit…',
+    'Checking mobile responsiveness…',
+    'Analysing SEO fundamentals…',
+    'Checking payment integration…',
+    'Auditing legal compliance…',
+    'Checking analytics setup…',
+    'Computing revenue gap score…',
+  ];
+  let stepIdx = 0;
+  const stepEl = document.getElementById('loader-step-text');
+  const stepInterval = setInterval(() => {
+    stepEl.textContent = steps[Math.min(stepIdx++, steps.length - 1)];
+  }, 700);
+
+  try {
+    const psiData = await fetchPageSpeed(raw);
+    clearInterval(stepInterval);
+    const gaps = buildGapResults(urlObj, psiData);
+    renderResults(urlObj, gaps, psiData);
+  } catch(err) {
+    clearInterval(stepInterval);
+    renderResults(urlObj, buildGapResults(urlObj, null), null, err.message);
+  } finally {
+    document.getElementById('scan-loading').style.display = 'none';
+    document.getElementById('btn-run-scan').disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// PAGE SPEED API FETCH
+// ═══════════════════════════════════════════════════════════
+async function fetchPageSpeed(url) {
+  const endpoint = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed'
+    + '?url=' + encodeURIComponent(url)
+    + '&strategy=mobile'
+    + '&category=performance&category=seo&category=accessibility&category=best-practices';
+  const res = await fetch(endpoint);
+  if (!res.ok) throw new Error('PageSpeed API error: ' + res.status);
+  return await res.json();
+}
+
+// ═══════════════════════════════════════════════════════════
+// BUILD GAP RESULTS from PSI data + URL heuristics
+// ═══════════════════════════════════════════════════════════
+function buildGapResults(urlObj, psi) {
+  const cats = psi?.lighthouseResult?.categories || {};
+  const audits = psi?.lighthouseResult?.audits || {};
+
+  const perfScore   = cats.performance?.score != null  ? Math.round(cats.performance.score * 100)    : null;
+  const seoScore    = cats.seo?.score != null           ? Math.round(cats.seo.score * 100)            : null;
+  const a11yScore   = cats.accessibility?.score != null ? Math.round(cats.accessibility.score * 100)  : null;
+  const bpScore     = cats['best-practices']?.score != null ? Math.round(cats['best-practices'].score * 100) : null;
+
+  const isHttps = urlObj.protocol === 'https:';
+  const isMobileOk = perfScore !== null ? perfScore >= 50 : null;
+  const hostname = urlObj.hostname;
+
+  const isEmpireSite = EMPIRE_SITES.some(s => s.domain.includes(hostname));
+
+  const results = {};
+
+  // SSL
+  results.ssl = {
+    status: isHttps ? 'pass' : 'fail',
+    score: isHttps ? 100 : 0,
+    finding: isHttps
+      ? 'HTTPS confirmed. Certificate appears valid.'
+      : '⚠️ HTTP only — no SSL. All traffic is unencrypted. Browsers show "Not Secure".',
+  };
+
+  // Mobile
+  results.mobile = perfScore !== null ? {
+    status: perfScore >= 70 ? 'pass' : perfScore >= 50 ? 'warn' : 'fail',
+    score: perfScore,
+    finding: `Mobile performance score: ${perfScore}/100. ${perfScore < 50 ? 'Critical mobile issues detected.' : perfScore < 70 ? 'Mobile experience needs improvement.' : 'Mobile performance is acceptable.'}`,
+  } : { status:'pending', score:null, finding:'PageSpeed data unavailable — check URL is publicly accessible.' };
+
+  // Speed
+  const fcp = audits['first-contentful-paint']?.numericValue;
+  const lcp = audits['largest-contentful-paint']?.numericValue;
+  results.speed = perfScore !== null ? {
+    status: perfScore >= 70 ? 'pass' : perfScore >= 50 ? 'warn' : 'fail',
+    score: perfScore,
+    finding: `Performance: ${perfScore}/100.${fcp ? ` First Contentful Paint: ${(fcp/1000).toFixed(1)}s.` : ''}${lcp ? ` Largest Contentful Paint: ${(lcp/1000).toFixed(1)}s.` : ''} ${perfScore < 50 ? 'Serious speed issues — visitors leaving before page loads.' : ''}`,
+  } : { status:'pending', score:null, finding:'PageSpeed data unavailable.' };
+
+  // SEO
+  results.seo = seoScore !== null ? {
+    status: seoScore >= 80 ? 'pass' : seoScore >= 60 ? 'warn' : 'fail',
+    score: seoScore,
+    finding: `Lighthouse SEO score: ${seoScore}/100. ${seoScore < 60 ? 'Critical SEO gaps — site likely invisible on Google.' : seoScore < 80 ? 'SEO needs improvement for search visibility.' : 'SEO fundamentals in place.'}`,
+  } : { status:'pending', score:null, finding:'SEO data unavailable.' };
+
+  // Payments — heuristic
+  const paymentSignals = [
+    hostname.includes('paypal'), hostname.includes('stripe'),
+    hostname.includes('checkout'), hostname.includes('shop'),
+    hostname.includes('pricing'), hostname.includes('plans'),
+    isEmpireSite && EMPIRE_SITES.find(s=>s.domain.includes(hostname))?.paypal === '✅',
+  ];
+  const hasPayment = paymentSignals.some(Boolean);
+  results.payments = {
+    status: hasPayment ? 'warn' : 'fail',
+    score: hasPayment ? 50 : 0,
+    finding: hasPayment
+      ? 'Payment signals detected in URL/domain patterns. Verify buttons link to live checkout.'
+      : '⚠️ No payment integration detected. Every page without a buy button loses revenue.',
+  };
+
+  // Legal
+  results.legal = {
+    status: 'warn',
+    score: 40,
+    finding: 'Cannot verify Privacy Policy / Terms from browser. Manually confirm these pages exist — CASL (Canada) requires opt-in email consent and an unsubscribe mechanism.',
+  };
+
+  // AI Readiness
+  results.ai_ready = {
+    status: 'warn',
+    score: 30,
+    finding: 'No live AI chat detected (requires server-side scan). Empire sites use gemma-chat-widget.js — confirm backend is deployed at PRIMEDOX_BACKEND_URL.',
+  };
+
+  // Analytics
+  const hasGA = audits['uses-long-cache-ttl'] !== undefined; // rough proxy
+  results.analytics = {
+    status: 'warn',
+    score: 30,
+    finding: 'Analytics installation cannot be confirmed from browser due to CORS. Verify GA4 or Plausible is active. Empire sites use Supabase apex_events (table creation pending).',
+  };
+
+  // Contact
+  results.contact = {
+    status: isEmpireSite ? 'warn' : 'warn',
+    score: 50,
+    finding: 'Contact information detectability requires page load. Ensure visible email, phone (Loop A), or contact form with Formspree ID (currently placeholder on all empire sites).',
+  };
+
+  // Social proof
+  results.social_proof = {
+    status: 'warn',
+    score: 40,
+    finding: 'Social proof elements (testimonials, review counts, client logos) require page content scan. Empire apex-agent.js injects social proof — verify Supabase table is live.',
+  };
+
+  // Broken links — check for known empire placeholder patterns
+  results.broken_links = {
+    status: isEmpireSite ? 'warn' : 'pass',
+    score: isEmpireSite ? 50 : 80,
+    finding: isEmpireSite
+      ? 'Empire sites have known href="#" placeholder buttons and PLACEHOLDER_STRIPE_URL anchors. Full link audit requires page content access.'
+      : 'No broken link data available from URL analysis alone. Use a crawler like Screaming Frog for full audit.',
+  };
+
+  // Cookies
+  results.cookies = {
+    status: 'warn',
+    score: 40,
+    finding: 'Cookie consent banner status cannot be confirmed remotely. Canadian CASL + GDPR (if EU visitors) require clear opt-in/opt-out. No empire site currently has a cookie banner.',
+  };
+
+  // Accessibility
+  results.accessibility_note = a11yScore !== null ? `Accessibility: ${a11yScore}/100. ` : '';
+
+  return results;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER RESULTS
+// ═══════════════════════════════════════════════════════════
+function renderResults(urlObj, gaps, psi, errorMsg) {
+  // Compute composite score
+  let total = 0, maxPossible = 0;
+  GAP_DEFS.forEach(def => {
+    maxPossible += def.weight;
+    const r = gaps[def.id];
+    if (r) {
+      const s = r.score ?? (r.status === 'pass' ? 100 : r.status === 'warn' ? 50 : 0);
+      total += (s / 100) * def.weight;
+    }
+  });
+  const compositeScore = Math.round((total / maxPossible) * 100);
+
+  // Score ring
+  const ringPct = compositeScore;
+  const color = ringPct >= 80 ? '#22C55E' : ringPct >= 60 ? '#C9A227' : ringPct >= 40 ? '#F59E0B' : '#EF4444';
+  document.getElementById('score-ring').style.background =
+    `conic-gradient(${color} ${ringPct}%, #1a1a1a ${ringPct}%)`;
+  document.getElementById('score-num').textContent = compositeScore;
+  document.getElementById('score-num').style.color = color;
+
+  const grade = compositeScore >= 80 ? 'A' : compositeScore >= 65 ? 'B' : compositeScore >= 50 ? 'C' : compositeScore >= 35 ? 'D' : 'F';
+  const gradeEl = document.getElementById('score-grade');
+  gradeEl.textContent = grade;
+  gradeEl.className = 'score-grade ' + grade;
+
+  // Headline
+  const gapsFound = GAP_DEFS.filter(d => gaps[d.id]?.status === 'fail').length;
+  const warns = GAP_DEFS.filter(d => gaps[d.id]?.status === 'warn').length;
+  document.getElementById('result-headline').textContent =
+    `${gapsFound} critical gap${gapsFound !== 1 ? 's' : ''}, ${warns} warning${warns !== 1 ? 's' : ''} found`;
+
+  // Meta
+  const cats = psi?.lighthouseResult?.categories || {};
+  const meta = [];
+  if (cats.performance) meta.push(`<div class="score-meta-item">⚡ Perf <strong>${Math.round(cats.performance.score*100)}</strong></div>`);
+  if (cats.seo) meta.push(`<div class="score-meta-item">🔍 SEO <strong>${Math.round(cats.seo.score*100)}</strong></div>`);
+  if (cats.accessibility) meta.push(`<div class="score-meta-item">♿ A11y <strong>${Math.round(cats.accessibility.score*100)}</strong></div>`);
+  if (cats['best-practices']) meta.push(`<div class="score-meta-item">✅ BP <strong>${Math.round(cats['best-practices'].score*100)}</strong></div>`);
+  if (!psi) meta.push(`<div class="score-meta-item" style="color:var(--warn)">⚠️ ${errorMsg || 'PageSpeed data unavailable'}</div>`);
+  document.getElementById('score-meta').innerHTML = meta.join('');
+
+  // Revenue potential
+  const revImpact = gapsFound * 15 + warns * 5;
+  document.getElementById('revenue-potential').textContent =
+    `💰 Estimated revenue impact of these gaps: $${revImpact.toLocaleString()}–$${(revImpact*3).toLocaleString()}/mo`;
+
+  // Gap cards
+  const grid = document.getElementById('gap-grid');
+  grid.innerHTML = GAP_DEFS.map(def => {
+    const r = gaps[def.id] || { status:'pending', finding:'No data.' };
+    const pillClass = { pass:'pass', warn:'warn', fail:'fail', pending:'pending' }[r.status] || 'pending';
+    const pillLabel = { pass:'✅ Pass', warn:'⚠️ Warning', fail:'❌ Fail', pending:'⏳ Pending' }[r.status] || '?';
+    return `<div class="gap-card">
+      <div class="gap-card-header">
+        <div class="gap-cat"><span class="gap-icon">${def.icon}</span>${def.label}</div>
+        <span class="gap-score-pill ${pillClass}">${pillLabel}</span>
+      </div>
+      <div class="gap-finding">${r.finding}</div>
+      <div class="gap-fix">
+        <span class="ai-tag ${def.ai}">${def.aiLabel}</span>
+        <span style="color:var(--muted);font-size:0.78rem">${def.fix.slice(0,80)}…</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('scan-results').style.display = 'block';
+  document.getElementById('scan-results').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Holdings Inc. — Empire Command Center | Phoenix Dominion</title>
+<style>
+:root{
+  --void:#020A16;
+  --plasma:#05F2C7;
+  --amber:#F0A500;
+  --empire-blue:#0066CC;
+  --dark:#0a0a0a;
+  --gray:#1a1a1a;
+  --light:#e0e0e0;
+  --danger:#cc3300;
+  --gold:#ffd700;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif;}
+body{background:var(--void);color:var(--light);overflow:hidden;height:100vh;}
+.empire-grid{
+  display:grid;
+  grid-template-columns:1fr 380px 380px;
+  grid-template-rows:60px 1fr 1fr;
+  gap:12px;
+  padding:12px;
+  height:100vh;
+}
+.header{
+  grid-column:1/-1;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;background:var(--gray);border:1px solid #222;border-radius:12px;
+}
+.header-left{display:flex;align-items:center;gap:16px;}
+.logo{font-size:1.4rem;font-weight:900;color:var(--plasma);letter-spacing:2px;}
+.logo span{color:var(--amber);}
+.status-bar{display:flex;align-items:center;gap:20px;font-size:0.8rem;color:#666;}
+.status-item{display:flex;align-items:center;gap:6px;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--plasma);animation:pulse 2s infinite;}
+.status-dot.amber{background:var(--amber);}
+.status-dot.danger{background:var(--danger);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.header-right{display:flex;align-items:center;gap:16px;}
+.revenue-display{padding:8px 20px;background:rgba(5,242,199,0.1);border:1px solid var(--plasma);border-radius:8px;color:var(--plasma);font-weight:800;font-size:1.1rem;}
+.pin-btn{padding:8px 20px;background:var(--amber);color:var(--void);border:none;border-radius:8px;font-weight:800;cursor:pointer;transition:all 0.3s;}
+.pin-btn:hover{background:#ffcc00;}
+.building-panel{
+  grid-row:2/-1;
+  background:var(--gray);border:1px solid #222;border-radius:16px;
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+}
+.building-header{
+  padding:16px 20px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;
+}
+.building-title{font-size:1rem;font-weight:700;color:var(--plasma);}
+.building-sub{color:#666;font-size:0.8rem;}
+.floor-count{font-size:1.5rem;font-weight:900;color:var(--amber);}
+#buildingCanvas{width:100%;flex-grow:1;cursor:pointer;}
+.building-controls{
+  padding:12px 20px;border-top:1px solid #222;display:flex;gap:10px;justify-content:center;
+}
+.ctrl-btn{padding:8px 16px;background:transparent;border:1px solid #333;border-radius:6px;color:#888;font-size:0.8rem;cursor:pointer;transition:all 0.3s;}
+.ctrl-btn:hover{border-color:var(--plasma);color:var(--plasma);}
+.ctrl-btn.active{background:rgba(5,242,199,0.1);border-color:var(--plasma);color:var(--plasma);}
+.metrics-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.panel-title{font-size:0.9rem;font-weight:700;color:var(--plasma);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;}
+.metric-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(0,0,0,0.3);border-radius:8px;border-left:3px solid var(--plasma);}
+.metric-row.warning{border-left-color:var(--amber);}
+.metric-row.danger{border-left-color:var(--danger);}
+.metric-label{font-size:0.85rem;color:#888;}
+.metric-value{font-size:1.1rem;font-weight:800;color:var(--light);}
+.metric-value.up{color:var(--plasma);}
+.metric-value.down{color:var(--danger);}
+.metric-sub{font-size:0.75rem;color:#555;}
+.cctv-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.cctv-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;flex-grow:1;
+}
+.cam-feed{
+  background:#000;border:1px solid #333;border-radius:8px;position:relative;
+  display:flex;align-items:center;justify-content:center;min-height:120px;
+  overflow:hidden;
+}
+.cam-feed::before{
+  content:'';position:absolute;top:4px;left:4px;right:4px;bottom:4px;
+  border:1px solid rgba(5,242,199,0.3);border-radius:4px;
+}
+.cam-feed::after{
+  content:'';position:absolute;top:4px;left:4px;width:8px;height:8px;
+  border-top:2px solid var(--plasma);border-left:2px solid var(--plasma);
+}
+.cam-label{
+  position:absolute;top:8px;left:12px;font-size:0.7rem;color:var(--plasma);
+  background:rgba(0,0,0,0.7);padding:2px 8px;border-radius:4px;z-index:2;
+}
+.cam-status{
+  position:absolute;bottom:8px;right:12px;font-size:0.65rem;color:#666;
+  background:rgba(0,0,0,0.7);padding:2px 8px;border-radius:4px;z-index:2;
+}
+.cam-status.live{color:var(--plasma);}
+.cam-icon{font-size:2rem;color:#222;}
+.agent-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+#agentCanvas{width:100%;height:200px;border-radius:8px;background:#000;}
+.agent-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.agent-tag{padding:4px 12px;background:rgba(5,242,199,0.1);border:1px solid rgba(5,242,199,0.3);border-radius:20px;font-size:0.75rem;color:var(--plasma);cursor:pointer;transition:all 0.3s;}
+.agent-tag:hover{background:rgba(5,242,199,0.2);border-color:var(--plasma);}
+.agent-tag.offline{color:#666;border-color:#333;background:transparent;}
+.floor-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(2,10,22,0.95);
+  display:none;align-items:center;justify-content:center;z-index:1000;
+  backdrop-filter:blur(10px);
+}
+.floor-overlay.active{display:flex;}
+.floor-modal{
+  background:var(--gray);border:2px solid var(--plasma);border-radius:20px;
+  padding:40px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;
+  position:relative;
+}
+.floor-modal::before{
+  content:'';position:absolute;top:-2px;left:20%;right:20%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--plasma),transparent);
+}
+.close-modal{
+  position:absolute;top:16px;right:20px;background:none;border:none;
+  color:#666;font-size:1.5rem;cursor:pointer;transition:color 0.3s;
+}
+.close-modal:hover{color:var(--plasma);}
+.floor-num{font-size:3rem;font-weight:900;color:var(--amber);margin-bottom:8px;}
+.floor-company{font-size:1.5rem;font-weight:700;color:var(--light);margin-bottom:4px;}
+.floor-status{display:inline-block;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;margin-bottom:20px;}
+.floor-status.live{background:rgba(5,242,199,0.15);color:var(--plasma);border:1px solid var(--plasma);}
+.floor-status.dev{background:rgba(240,165,0,0.15);color:var(--amber);border:1px solid var(--amber);}
+.floor-status.plan{background:rgba(0,102,204,0.15);color:var(--empire-blue);border:1px solid var(--empire-blue);}
+.floor-desc{color:#888;margin-bottom:24px;line-height:1.6;}
+.floor-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.action-btn{padding:12px 24px;border-radius:8px;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.action-btn.primary{background:linear-gradient(135deg,var(--plasma),#03b8a0);color:var(--void);border:none;}
+.action-btn.primary:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(5,242,199,0.4);}
+.action-btn.secondary{background:transparent;color:var(--plasma);border:1px solid var(--plasma);}
+.action-btn.secondary:hover{background:rgba(5,242,199,0.1);}
+.action-btn.paypal{background:linear-gradient(135deg,var(--plasma),#03b8a0);color:var(--void);border:none;}
+.action-btn.paypal:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(5,242,199,0.4);}
+.revenue-panel{
+  background:var(--gray);border:1px solid #222;border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.revenue-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.rev-item{padding:12px;background:rgba(0,0,0,0.3);border-radius:8px;text-align:center;}
+.rev-item .rev-label{font-size:0.75rem;color:#666;margin-bottom:4px;}
+.rev-item .rev-value{font-size:1.3rem;font-weight:900;color:var(--plasma);}
+.rev-item .rev-change{font-size:0.7rem;color:var(--amber);}
+.empire-footer{
+  position:fixed;bottom:0;left:0;right:0;padding:8px 20px;
+  background:var(--void);border-top:1px solid #222;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.75rem;color:#444;z-index:100;
+}
+.empire-footer .classified{color:var(--amber);font-weight:700;letter-spacing:3px;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--void);}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--plasma);}
+@media(max-width:1200px){
+  .empire-grid{grid-template-columns:1fr 1fr;grid-template-rows:60px 1fr 1fr 1fr;}
+  .building-panel{grid-column:1/-1;grid-row:2/4;}
+}
+@media(max-width:768px){
+  .empire-grid{grid-template-columns:1fr;grid-template-rows:auto;}
+  .building-panel{grid-column:1;grid-row:auto;height:400px;}
+}
+</style>
+</head>
+<body>
+
+<div class="empire-grid">
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">FRANCISCO <span>HOLDINGS</span></div>
+      <div class="status-bar">
+        <div class="status-item"><div class="status-dot"></div>Agent Swarm Active</div>
+        <div class="status-item"><div class="status-dot amber"></div>5 Floors Live</div>
+        <div class="status-item"><div class="status-dot danger"></div>387 Pending</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="revenue-display">&#128176; $0.00 CAD</div>
+      <button class="pin-btn" onclick="togglePin()">&#128274; PIN: 3920</button>
+    </div>
+  </header>
+
+  <div class="building-panel">
+    <div class="building-header">
+      <div>
+        <div class="building-title">&#127962; EMPIRE SKYSCRAPER</div>
+        <div class="building-sub">2.5D Canvas Render — Click floor to inspect</div>
+      </div>
+      <div class="floor-count">5<span style="font-size:0.8rem;color:#666;">/392</span></div>
+    </div>
+    <canvas id="buildingCanvas"></canvas>
+    <div class="building-controls">
+      <button class="ctrl-btn active" onclick="setFilter('all',event)">All</button>
+      <button class="ctrl-btn" onclick="setFilter('live',event)">Live</button>
+      <button class="ctrl-btn" onclick="setFilter('dev',event)">Dev</button>
+      <button class="ctrl-btn" onclick="setFilter('plan',event)">Plan</button>
+      <button class="ctrl-btn" onclick="resetView()">Reset</button>
+    </div>
+  </div>
+
+  <div class="metrics-panel">
+    <div class="panel-title">&#128202; Empire Metrics</div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">Active Companies</div>
+        <div class="metric-sub">Generating revenue</div>
+      </div>
+      <div class="metric-value up">5</div>
+    </div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">PayPal Status</div>
+        <div class="metric-sub">paypal.me/techpetcage</div>
+      </div>
+      <div class="metric-value up">&#10003; Fixed</div>
+    </div>
+    <div class="metric-row warning">
+      <div>
+        <div class="metric-label">API Keys</div>
+        <div class="metric-sub">OpenAI, Claude, DeepSeek</div>
+      </div>
+      <div class="metric-value down">&#10007; Missing</div>
+    </div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">Litigation Active</div>
+        <div class="metric-sub">CV-26-00000064-0000</div>
+      </div>
+      <div class="metric-value">$3.3M</div>
+    </div>
+    <div class="metric-row">
+      <div>
+        <div class="metric-label">Constitutional Claim</div>
+        <div class="metric-sub">CV-26-00000063-0000</div>
+      </div>
+      <div class="metric-value">$35M</div>
+    </div>
+  </div>
+
+  <div class="cctv-panel">
+    <div class="panel-title">&#128249; Security CCTV</div>
+    <div class="cctv-grid">
+      <div class="cam-feed">
+        <span class="cam-label">CAM-01</span>
+        <span class="cam-status live">&#9679; LIVE</span>
+        <div class="cam-icon">&#127962;</div>
+      </div>
+      <div class="cam-feed">
+        <span class="cam-label">CAM-02</span>
+        <span class="cam-status">OFFLINE</span>
+        <div class="cam-icon">&#128274;</div>
+      </div>
+      <div class="cam-feed">
+        <span class="cam-label">CAM-03</span>
+        <span class="cam-status">OFFLINE</span>
+        <div class="cam-icon">&#127760;</div>
+      </div>
+      <div class="cam-feed">
+        <span class="cam-label">CAM-04</span>
+        <span class="cam-status live">&#9679; LIVE</span>
+        <div class="cam-icon">&#128176;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="agent-panel">
+    <div class="panel-title">&#129302; Agent Network</div>
+    <canvas id="agentCanvas"></canvas>
+    <div class="agent-list">
+      <span class="agent-tag">PrimeDox AI</span>
+      <span class="agent-tag">OmniGuard</span>
+      <span class="agent-tag">Doc Weedlaw</span>
+      <span class="agent-tag">Revenue AI</span>
+      <span class="agent-tag">Vigilax</span>
+      <span class="agent-tag offline">Gemma 31B</span>
+      <span class="agent-tag offline">DeepSeek</span>
+      <span class="agent-tag offline">Claude API</span>
+    </div>
+  </div>
+
+  <div class="revenue-panel">
+    <div class="panel-title">&#128181; Revenue Streams</div>
+    <div class="revenue-grid">
+      <div class="rev-item">
+        <div class="rev-label">OmniGuard</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$99-$2,499/mo</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">Vault Velocity</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$99-$999/mo</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">PrimeDox AI</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$49 trial</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">CCLDR</div>
+        <div class="rev-value">$0</div>
+        <div class="rev-change">$99-$399/doc</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="floor-overlay" id="floorOverlay">
+  <div class="floor-modal">
+    <button class="close-modal" onclick="closeFloor()">&#215;</button>
+    <div class="floor-num" id="modalNum">Floor 1</div>
+    <div class="floor-company" id="modalCompany">Francisco Holdings HQ</div>
+    <div class="floor-status live" id="modalStatus">&#9679; LIVE</div>
+    <div class="floor-desc" id="modalDesc">The command center of the empire.</div>
+    <div class="floor-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<footer class="empire-footer">
+  <div class="classified">CLASSIFIED LEVEL: EMPEROR</div>
+  <div>&#169; 2026 Francisco Holdings Inc. — Phoenix Dominion Global Domination</div>
+</footer>
+
+<script>
+const floors = [
+  {num:1, name:"Francisco Holdings HQ",    status:"live",desc:"The command center of the empire. All operations, strategy, and governance flow from this floor.",url:"https://franciscoholdingsinc.com",price:null},
+  {num:2, name:"OmniGuard Cybersecurity",  status:"live",desc:"World's first agentic AI cybersecurity. 14 autonomous security agents protecting every digital surface.",url:"https://omni-guard.com",price:99},
+  {num:3, name:"PrimeDox AI",              status:"live",desc:"The brain behind the empire. Document generation, legal concierge, and AI specialist routing.",url:"https://primedoxai.com",price:49},
+  {num:4, name:"Vault Velocity Auto",      status:"live",desc:"Luxury brokerage for supercars, jets, yachts. Curated listings. Verified provenance. Discretion guaranteed.",url:"https://vaultvelocityauto.com",price:99},
+  {num:5, name:"CCLDR Legal Education",    status:"live",desc:"The most dangerous legal education platform in the world. Cannabis constitutional law for lawyers and paralegals.",url:"https://ccldr.net",price:99},
+  {num:6, name:"VIGILAX Sentinel",         status:"dev", desc:"Fraud detection API — click fraud, review fraud, influencer fraud, gov procurement anomalies.",url:"#",price:null},
+  {num:7, name:"SoulStack",                status:"dev", desc:"AI observer platform. Watches the empire, flags anomalies, reports up the authority chain.",url:"#",price:null},
+  {num:8, name:"Kiaros",                   status:"dev", desc:"Temporal data analytics and predictive modeling for enterprise decision-making.",url:"#",price:null},
+  {num:9, name:"Francisco Media Group",    status:"dev", desc:"Digital media operations across all empire brands.",url:"#",price:null},
+  {num:10,name:"Empire Analytics",         status:"dev", desc:"BI & data platform powering empire-wide intelligence.",url:"#",price:null},
+];
+for(let i=11;i<=392;i++) floors.push({num:i,name:`Floor ${i}`,status:"plan",desc:"Future empire company. Auto-generated on approval.",url:"#",price:null});
+
+const canvas=document.getElementById('buildingCanvas');
+const ctx=canvas.getContext('2d');
+let selectedFloor=null, hoverFloor=null, filterMode='all';
+
+function resizeCanvas(){
+  const rect=canvas.parentElement.getBoundingClientRect();
+  canvas.width=rect.width-40;
+  canvas.height=rect.height-120;
+  drawBuilding();
+}
+
+function getStatusColor(s){
+  return s==='live'?'#05F2C7':s==='dev'?'#F0A500':'#0066CC';
+}
+
+function drawBuilding(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const fH=18,fW=120,fD=40;
+  const startX=canvas.width/2-fW/2;
+  const startY=canvas.height-60;
+  const vis=Math.min(floors.length,Math.floor((canvas.height-80)/fH));
+
+  ctx.fillStyle='#0a1525';
+  ctx.fillRect(startX-10,startY-vis*fH+fH,fW+20,vis*fH+20);
+
+  for(let i=0;i<vis;i++){
+    const floor=floors[i];
+    if(filterMode!=='all'&&floor.status!==filterMode)continue;
+    const y=startY-i*fH;
+    const col=getStatusColor(floor.status);
+    const isH=hoverFloor===floor.num;
+    const isS=selectedFloor===floor.num;
+
+    // right face
+    ctx.fillStyle=isS?col:(isH?col+'88':col+'44');
+    ctx.beginPath();
+    ctx.moveTo(startX+fW,y);
+    ctx.lineTo(startX+fW+fD,y-fD*0.5);
+    ctx.lineTo(startX+fW+fD,y-fD*0.5-fH);
+    ctx.lineTo(startX+fW,y-fH);
+    ctx.closePath();ctx.fill();
+    ctx.strokeStyle=isS?col:col+'66';ctx.lineWidth=isS?2:1;ctx.stroke();
+
+    // front face
+    ctx.fillStyle=isS?col+'33':(isH?col+'22':'#0d1f2d');
+    ctx.fillRect(startX,y-fH,fW,fH);
+    ctx.strokeStyle=isS?col:col+'33';ctx.lineWidth=isS?2:0.5;
+    ctx.strokeRect(startX,y-fH,fW,fH);
+
+    // floor number
+    ctx.fillStyle=isS?col:'#555';
+    ctx.font=isS?'bold 11px monospace':'10px monospace';
+    ctx.fillText(floor.num.toString().padStart(3,'0'),startX+8,y-5);
+
+    // floor name
+    if(floor.status==='live'||isH||isS){
+      ctx.fillStyle=isS?col:'#888';ctx.font='9px sans-serif';
+      const nm=floor.name.length>14?floor.name.substring(0,14)+'...':floor.name;
+      ctx.fillText(nm,startX+35,y-5);
+    }
+
+    // glow for live
+    if(floor.status==='live'&&!isS){
+      ctx.shadowColor=col;ctx.shadowBlur=5;
+      ctx.strokeRect(startX,y-fH,fW,fH);
+      ctx.shadowBlur=0;
+    }
+  }
+
+  // roof
+  const topY=startY-vis*fH+fH;
+  ctx.fillStyle='#05F2C722';
+  ctx.beginPath();
+  ctx.moveTo(startX,topY);ctx.lineTo(startX+fW,topY);
+  ctx.lineTo(startX+fW+fD,topY-fD*0.5);ctx.lineTo(startX+fD,topY-fD*0.5);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#05F2C744';ctx.stroke();
+
+  ctx.fillStyle='#05F2C7';ctx.font='bold 14px sans-serif';ctx.textAlign='center';
+  ctx.fillText('PHOENIX DOMINION',canvas.width/2,30);
+  ctx.font='10px sans-serif';ctx.fillStyle='#666';
+  ctx.fillText('392-FLOOR GLOBAL EMPIRE',canvas.width/2,48);
+  ctx.textAlign='left';
+}
+
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const x=e.clientX-rect.left,y=e.clientY-rect.top;
+  const fH=18,fW=120,startX=canvas.width/2-fW/2,startY=canvas.height-60;
+  const vis=Math.min(floors.length,Math.floor((canvas.height-80)/fH));
+  let found=null;
+  for(let i=0;i<vis;i++){
+    const fy=startY-i*fH;
+    if(x>=startX&&x<=startX+fW&&y>=fy-fH&&y<=fy){found=floors[i].num;break;}
+  }
+  if(found!==hoverFloor){hoverFloor=found;canvas.style.cursor=found?'pointer':'default';drawBuilding();}
+});
+
+canvas.addEventListener('click',()=>{
+  if(hoverFloor){selectedFloor=hoverFloor;drawBuilding();showFloorDetail(hoverFloor);}
+});
+
+function showFloorDetail(num){
+  const floor=floors.find(f=>f.num===num);
+  if(!floor)return;
+  document.getElementById('modalNum').textContent='Floor '+floor.num;
+  document.getElementById('modalCompany').textContent=floor.name;
+  document.getElementById('modalStatus').textContent='&#9679; '+floor.status.toUpperCase();
+  document.getElementById('modalStatus').className='floor-status '+floor.status;
+  document.getElementById('modalDesc').textContent=floor.desc;
+  let html='';
+  if(floor.url&&floor.url!=='#') html+=`<a href="${floor.url}" class="action-btn primary" target="_blank" rel="noopener">&#127760; Visit Site</a>`;
+  if(floor.price) html+=`<a href="https://paypal.me/techpetcage/${floor.price}CAD?desc=${encodeURIComponent(floor.name)}" class="action-btn paypal" target="_blank" rel="noopener">&#128179; Pay $${floor.price} CAD</a>`;
+  html+=`<button class="action-btn secondary" onclick="closeFloor()">&#215; Close</button>`;
+  document.getElementById('modalActions').innerHTML=html;
+  document.getElementById('floorOverlay').classList.add('active');
+}
+
+function closeFloor(){
+  document.getElementById('floorOverlay').classList.remove('active');
+  selectedFloor=null;drawBuilding();
+}
+
+function setFilter(mode,e){
+  filterMode=mode;
+  document.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('active'));
+  if(e&&e.target)e.target.classList.add('active');
+  drawBuilding();
+}
+
+function resetView(){
+  filterMode='all';selectedFloor=null;
+  document.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.ctrl-btn')[0].classList.add('active');
+  drawBuilding();
+}
+
+// agent network
+const agentCanvas=document.getElementById('agentCanvas');
+const actx=agentCanvas.getContext('2d');
+
+function drawAgentNetwork(){
+  const w=agentCanvas.width=agentCanvas.offsetWidth;
+  const h=agentCanvas.height=agentCanvas.offsetHeight;
+  actx.clearRect(0,0,w,h);
+  const cx=w/2,cy=h/2,r=Math.min(w,h)*0.35;
+  const agents=[
+    {name:'PrimeDox',angle:0,  active:true},
+    {name:'OmniGuard',angle:60, active:true},
+    {name:'DocWeedlaw',angle:120,active:true},
+    {name:'Revenue',  angle:180,active:true},
+    {name:'Vigilax',  angle:240,active:true},
+    {name:'Gemma',    angle:300,active:false},
+  ];
+  agents.forEach(a=>{
+    const rad=(a.angle-90)*Math.PI/180;
+    const x=cx+r*Math.cos(rad),y=cy+r*Math.sin(rad);
+    actx.strokeStyle=a.active?'rgba(5,242,199,0.2)':'rgba(100,100,100,0.1)';
+    actx.lineWidth=1;actx.beginPath();actx.moveTo(cx,cy);actx.lineTo(x,y);actx.stroke();
+  });
+  // hub — FH (Francisco Holdings)
+  actx.fillStyle='#05F2C7';actx.shadowColor='#05F2C7';actx.shadowBlur=15;
+  actx.beginPath();actx.arc(cx,cy,8,0,Math.PI*2);actx.fill();
+  actx.shadowBlur=0;
+  actx.fillStyle='#020A16';actx.font='bold 7px sans-serif';actx.textAlign='center';actx.textBaseline='middle';
+  actx.fillText('FH',cx,cy);
+  actx.textBaseline='alphabetic';
+  actx.fillStyle='#888';actx.font='9px sans-serif';
+  actx.fillText('HQ',cx,cy+20);
+  agents.forEach(a=>{
+    const rad=(a.angle-90)*Math.PI/180;
+    const x=cx+r*Math.cos(rad),y=cy+r*Math.sin(rad);
+    actx.fillStyle=a.active?'#05F2C7':'#333';
+    if(a.active){actx.shadowColor='#05F2C7';actx.shadowBlur=10;}
+    actx.beginPath();actx.arc(x,y,6,0,Math.PI*2);actx.fill();
+    actx.shadowBlur=0;
+    actx.fillStyle=a.active?'#aaa':'#555';actx.font='8px sans-serif';actx.textAlign='center';
+    actx.fillText(a.name,x,y+16);
+  });
+}
+
+function togglePin(){
+  const pin=prompt('Enter Empire PIN:');
+  if(pin==='3920') alert(String.fromCodePoint(128274)+' Verified. Welcome, Emperor.');
+  else alert(String.fromCodePoint(10060)+' Invalid PIN');
+}
+
+window.addEventListener('resize',()=>{resizeCanvas();drawAgentNetwork();});
+setTimeout(()=>{resizeCanvas();drawAgentNetwork();},100);
+setInterval(drawAgentNetwork,3000);
+</script>
+</body>
+</html>
