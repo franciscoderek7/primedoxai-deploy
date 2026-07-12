@@ -406,7 +406,7 @@
       <div class="hdr-sub">Francisco Holdings Inc. · Phoenix Dominion</div>
     </div>
   </div>
-  <div class="hdr-badge">v1.0</div>
+  <div class="hdr-badge">v2.0</div>
 </header>
 
 <div class="tabs">
@@ -467,6 +467,41 @@
 
       <!-- Gap cards -->
       <div class="gap-grid" id="gap-grid"></div>
+
+      <!-- ── Action Panel ── -->
+      <div id="action-panel" style="display:none;margin-top:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem 2rem;">
+        <div style="font-size:0.75rem;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.25rem;">⚡ Convert This Scan Into Revenue</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+
+          <!-- Send Outreach -->
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem;">
+            <div style="font-size:0.88rem;font-weight:700;margin-bottom:0.35rem;">📧 Send Cold Outreach Email</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.75rem;">Send the audit report to the prospect. Converts at ~30% reply rate.</div>
+            <div style="display:flex;gap:0.5rem;">
+              <input type="email" id="outreach-email" placeholder="prospect@company.com"
+                style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:0.5rem 0.75rem;color:var(--text);font-size:0.82rem;outline:none;">
+              <button onclick="triggerOutreach()"
+                style="background:var(--gold);color:#000;font-weight:800;font-size:0.82rem;padding:0.5rem 1rem;border:none;border-radius:6px;cursor:pointer;white-space:nowrap;">
+                Send →
+              </button>
+            </div>
+            <div id="outreach-status" style="font-size:0.75rem;margin-top:0.5rem;color:var(--muted);"></div>
+          </div>
+
+          <!-- PayPal Trial -->
+          <div style="background:var(--bg3);border:1px solid rgba(201,162,39,0.3);border-radius:10px;padding:1.25rem;text-align:center;">
+            <div style="font-size:0.88rem;font-weight:700;margin-bottom:0.35rem;">💳 Unlock Gap Scanner Pro</div>
+            <div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.75rem;">Unlimited scans · Bulk outreach · Lead CRM<br>$49 CAD one-time trial activation.</div>
+            <button onclick="startPayPalTrial()"
+              style="background:linear-gradient(135deg,#C9A227,#a07c10);color:#000;font-weight:800;font-size:0.9rem;padding:0.6rem 1.5rem;border:none;border-radius:8px;cursor:pointer;width:100%;">
+              Start $49 Trial →
+            </button>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.4rem;">Charged to your PayPal account. Not Derek's.</div>
+          </div>
+        </div>
+
+        <div id="lead-saved-msg" style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem;text-align:right;"></div>
+      </div>
 
       <!-- Revenue funnel -->
       <div class="funnel-section">
@@ -649,6 +684,117 @@
 </footer>
 
 <script>
+// ═══════════════════════════════════════════════════════════
+// BACKEND API CONFIG
+// Set API_BASE to your Railway deployment URL after deploy.
+// Localhost falls back automatically for local dev.
+// ═══════════════════════════════════════════════════════════
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001'
+  : 'https://primedox-backend.railway.app'; // TODO: update after Railway deploy
+
+// Store last scan result for action panel use
+let _lastScan = null;
+
+async function saveLeadToBackend(scanData) {
+  try {
+    const resp = await fetch(`${API_BASE}/api/leads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scan: scanData })
+    });
+    if (resp.ok) {
+      const d = await resp.json();
+      if (d.leadId) {
+        document.getElementById('lead-saved-msg').textContent = `Lead saved · ID: ${d.leadId} · Type: ${d.leadType || '—'}`;
+      }
+      return d.leadId;
+    }
+  } catch { /* backend not deployed yet — silent */ }
+  return null;
+}
+
+async function triggerOutreach() {
+  const email = document.getElementById('outreach-email').value.trim();
+  const status = document.getElementById('outreach-status');
+  if (!email || !email.includes('@')) { status.textContent = 'Enter a valid email address.'; status.style.color = 'var(--danger)'; return; }
+  if (!_lastScan) { status.textContent = 'Run a scan first.'; return; }
+
+  status.textContent = 'Sending…'; status.style.color = 'var(--muted)';
+
+  try {
+    const scanUrl = document.getElementById('scan-url').value.trim();
+    let domain = scanUrl;
+    try { domain = new URL(scanUrl.startsWith('http') ? scanUrl : 'https://' + scanUrl).hostname; } catch {}
+
+    const resp = await fetch(`${API_BASE}/api/email/send-outreach`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lead: {
+          email,
+          domain,
+          score: _lastScan.compositeScore,
+          gap_count: _lastScan.gapsFound,
+          est_value_cad: (_lastScan.gapsFound || 0) * 600,
+          issues: _lastScan.topIssues || []
+        }
+      })
+    });
+
+    if (resp.ok) {
+      status.textContent = `✅ Sent to ${email}`;
+      status.style.color = 'var(--success)';
+    } else {
+      const err = await resp.json();
+      status.textContent = err.error || 'Send failed — check backend config.';
+      status.style.color = 'var(--danger)';
+    }
+  } catch {
+    status.textContent = 'Backend not reachable. Deploy to Railway first.';
+    status.style.color = 'var(--warn)';
+  }
+}
+
+async function startPayPalTrial() {
+  const btn = event.target;
+  btn.textContent = 'Redirecting to PayPal…';
+  btn.disabled = true;
+
+  try {
+    const resp = await fetch(`${API_BASE}/api/payment/create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: 49, currency: 'CAD', description: 'PrimeDox AI — Gap Scanner Pro Trial' })
+    });
+    const data = await resp.json();
+    if (data.approvalUrl) {
+      window.location.href = data.approvalUrl;
+    } else {
+      alert('PayPal not configured on backend yet. Set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in Railway env.');
+      btn.textContent = 'Start $49 Trial →'; btn.disabled = false;
+    }
+  } catch {
+    alert('Backend not reachable. Deploy to Railway first — see agents/backend/');
+    btn.textContent = 'Start $49 Trial →'; btn.disabled = false;
+  }
+}
+
+// Check payment status from PayPal redirect
+(function checkPaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('payment');
+  if (status === 'success') {
+    const amount = params.get('amount');
+    const currency = params.get('currency') || 'CAD';
+    document.title = '✅ Trial Activated — Empire Gap Scanner';
+    setTimeout(() => alert(`✅ Payment complete! $${amount} ${currency} received. Trial is now active.`), 500);
+    window.history.replaceState({}, '', window.location.pathname);
+  } else if (status === 'cancelled') {
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+})();
+
 // ═══════════════════════════════════════════════════════════
 // GAP CATEGORIES — 12 categories, each with weight + AI routing
 // ═══════════════════════════════════════════════════════════
@@ -1024,6 +1170,31 @@ function renderResults(urlObj, gaps, psi, errorMsg) {
       </div>
     </div>`;
   }).join('');
+
+  // Action panel
+  document.getElementById('action-panel').style.display = 'block';
+  document.getElementById('lead-saved-msg').textContent = '';
+  document.getElementById('outreach-status').textContent = '';
+  document.getElementById('outreach-email').value = '';
+
+  // Store scan state for action panel + backend call
+  _lastScan = {
+    compositeScore,
+    gapsFound,
+    warns,
+    topIssues: GAP_DEFS.filter(d => gaps[d.id]?.status === 'fail').map(d => d.label).slice(0, 5)
+  };
+
+  // Persist lead to backend (non-blocking, silent fail if backend not deployed)
+  saveLeadToBackend({
+    url: urlObj.href,
+    domain: urlObj.hostname,
+    score: compositeScore,
+    gap_count: gapsFound,
+    issues: _lastScan.topIssues,
+    est_value_cad: gapsFound * 600 + warns * 200,
+    raw_psi: psi ? { categories: psi.lighthouseResult?.categories } : null
+  });
 
   document.getElementById('scan-results').style.display = 'block';
   document.getElementById('scan-results').scrollIntoView({ behavior:'smooth', block:'start' });

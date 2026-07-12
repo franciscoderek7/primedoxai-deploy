@@ -160,5 +160,26 @@ app.post('/route', async (req, res) => {
   }
 });
 
+// ── Gap Scanner routes (HTTP-based) ──
+const { registerRoutes: registerGapRoutes } = require('./gap-scanner');
+registerGapRoutes(app, limiter);
+
+// ── Deep Scanner routes (Playwright) ──
+const { registerDeepRoutes } = require('./playwright-scanner');
+registerDeepRoutes(app, limiter);
+
+// ── Lead Database routes (Supabase) ──
+const { registerLeadRoutes } = require('./leads-db');
+registerLeadRoutes(app, limiter);
+
+// ── Email routes (Resend) ──
+const { registerEmailRoutes } = require('./email-service');
+registerEmailRoutes(app, limiter);
+
+// ── Payment routes (PayPal Orders API) ──
+// Registered before express.json() to preserve raw body for webhook
+const { registerPaymentRoutes } = require('./paypal-service');
+registerPaymentRoutes(app);
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log('PrimeDox AI Backend on port', PORT));
