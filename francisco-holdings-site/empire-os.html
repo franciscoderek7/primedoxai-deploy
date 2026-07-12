@@ -15,41 +15,43 @@
   --red:#EF4444;--red2:#F87171;--red-dim:rgba(239,68,68,.12);
   --amber:#F59E0B;--cyan:#00D4FF;
   --plat:#E5E4E2;--muted:#6B7A8D;--dim:#3A3A4A;
-  --sidebar-w:220px;
+  --sidebar-w:224px;
 }
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;display:flex;flex-direction:column}
 
 /* ── TOP BAR ─────────────────────────────────── */
-#topbar{height:48px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;padding:0 16px;flex-shrink:0;overflow:hidden}
-.tb-logo{display:flex;align-items:center;gap:8px;margin-right:20px;min-width:0}
-.tb-crown{font-size:20px;flex-shrink:0}
+#topbar{height:48px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;flex-shrink:0;overflow:hidden;gap:0}
+.tb-logo{display:flex;align-items:center;gap:8px;margin-right:20px;min-width:0;flex-shrink:0}
+.tb-crown{font-size:20px}
 .tb-brand{font-size:12px;font-weight:900;letter-spacing:.5px;color:var(--gold);white-space:nowrap}
 .tb-sub{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
 .tb-metrics{display:flex;gap:0;flex:1;overflow:hidden}
-.tb-metric{padding:0 12px;border-right:1px solid var(--border);min-width:80px;flex-shrink:0}
+.tb-metric{padding:0 10px;border-right:1px solid var(--border);min-width:72px;flex-shrink:0}
 .tb-metric:last-child{border-right:none}
 .tb-m-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
 .tb-m-val{font-size:13px;font-weight:900;letter-spacing:-.3px}
-.tb-m-val.gold{color:var(--gold)}.tb-m-val.red{color:var(--red)}.tb-m-val.em{color:var(--em3)}.tb-m-val.amber{color:var(--amber)}
-.tb-health{display:flex;gap:6px;align-items:center;padding:0 12px;border-right:1px solid var(--border);flex-shrink:0}
+.tb-m-val.gold{color:var(--gold)}.tb-m-val.red{color:var(--red)}.tb-m-val.em{color:var(--em3)}.tb-m-val.amber{color:var(--amber)}.tb-m-val.cyan{color:var(--cyan)}
+.tb-health{display:flex;gap:5px;align-items:center;padding:0 12px;border-right:1px solid var(--border);flex-shrink:0}
 .tb-h-chip{font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--card)}
-.tb-h-chip.hi{color:var(--em3);border:1px solid var(--em)}.tb-h-chip.ok{color:var(--gold);border:1px solid rgba(212,175,55,.3)}
+.tb-h-chip.hi{color:var(--em3);border:1px solid var(--em)}.tb-h-chip.ok{color:var(--gold);border:1px solid rgba(212,175,55,.3)}.tb-h-chip.warn{color:var(--amber);border:1px solid rgba(245,158,11,.3)}
 .tb-right{display:flex;align-items:center;gap:10px;padding-left:12px;flex-shrink:0}
-.tb-time{font-size:11px;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+.tb-time{font-size:11px;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .tb-user{display:flex;align-items:center;gap:8px}
-.tb-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--em),var(--gold));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#000}
-.tb-uname{font-size:11px;font-weight:700;color:var(--plat)}
-.tb-urole{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+.tb-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--em),var(--gold));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#000;flex-shrink:0}
+.tb-uname{font-size:11px;font-weight:700;color:var(--plat);white-space:nowrap}
+.tb-urole{font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:.8px;white-space:nowrap}
 
 /* ── BODY LAYOUT ────────────────────────────── */
 #app-body{display:flex;flex:1;overflow:hidden}
 
 /* ── SIDEBAR ─────────────────────────────────── */
 #sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
-.sb-section{padding:8px 0;border-bottom:1px solid var(--border)}
-.sb-section:last-child{border-bottom:none}
-.sb-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background .15s;position:relative}
+#sidebar::-webkit-scrollbar{width:3px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
+.sb-section{padding:6px 0;border-bottom:1px solid var(--border)}
+.sb-section:last-child{border-bottom:none;margin-top:auto}
+.sb-item{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background .15s;position:relative}
 .sb-item:hover{background:var(--card)}
 .sb-item.active{background:var(--gold-dim);border-left:2px solid var(--gold)}
 .sb-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
@@ -58,16 +60,25 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
 .sb-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.3)}
 .sb-badge.gold{background:var(--gold-dim);color:var(--gold);border-color:rgba(212,175,55,.3)}
 .sb-badge.em{background:rgba(16,185,129,.12);color:var(--em3);border-color:rgba(16,185,129,.3)}
+.sb-badge.amber{background:rgba(245,158,11,.12);color:var(--amber);border-color:rgba(245,158,11,.3)}
+.sb-badge.zero{background:rgba(16,185,129,.08);color:var(--em3);border-color:rgba(16,185,129,.2)}
+.sb-btn{display:block;margin:8px 12px;padding:8px 12px;background:linear-gradient(135deg,var(--em),var(--em2));color:#fff;font-size:10px;font-weight:900;letter-spacing:1px;text-align:center;border:none;border-radius:4px;cursor:pointer;text-decoration:none}
 
 /* ── CENTER ─────────────────────────────────── */
 #center{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.center-head{padding:14px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
-.center-title{font-size:16px;font-weight:900;letter-spacing:-.3px;color:var(--gold2)}
-.center-sub{font-size:11px;color:var(--muted)}
+.center-head{padding:10px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.center-title{font-size:15px;font-weight:900;letter-spacing:-.3px;color:var(--gold2)}
+.center-sub{font-size:10px;color:var(--muted)}
+.center-stats{display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0}
+.cs-pill{flex:1;padding:8px 12px;text-align:center;border-right:1px solid var(--border)}
+.cs-pill:last-child{border-right:none}
+.cs-val{font-size:16px;font-weight:900;letter-spacing:-.5px}
+.cs-val.live{color:var(--em3)}.cs-val.dev{color:var(--amber)}.cs-val.plan{color:var(--dim)}
+.cs-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 #tower-wrap{flex:1;position:relative;overflow:hidden;background:linear-gradient(180deg,#08080F 0%,#060609 100%)}
 #tower-canvas{display:block;width:100%;height:100%}
-.tower-overlay{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;display:flex;gap:8px;background:linear-gradient(0,rgba(6,6,9,.95),transparent);pointer-events:none}
-.tower-btn{pointer-events:auto;padding:8px 16px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;border:none;transition:all .15s}
+.tower-overlay{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;display:flex;gap:8px;background:linear-gradient(0,rgba(6,6,9,.95),transparent);pointer-events:none}
+.tower-btn{pointer-events:auto;padding:7px 14px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;border:none;transition:all .15s}
 .tower-btn.primary{background:var(--gold);color:#000}
 .tower-btn.primary:hover{background:var(--gold2)}
 .tower-btn.secondary{background:var(--card);color:var(--plat);border:1px solid var(--border2)}
@@ -75,14 +86,17 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
 #floor-select-bar{position:absolute;top:0;right:0;bottom:0;width:56px;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;padding:8px 0}
 #floor-select-bar::-webkit-scrollbar{width:3px}
 #floor-select-bar::-webkit-scrollbar-thumb{background:var(--border2)}
-.fs-floor{font-size:9px;font-weight:700;text-align:center;padding:5px 0;cursor:pointer;color:var(--muted);transition:all .15s}
+.fs-floor{font-size:9px;font-weight:700;text-align:center;padding:4px 0;cursor:pointer;color:var(--muted);transition:all .15s}
 .fs-floor:hover{color:var(--gold);background:var(--card)}
 .fs-floor.active{color:var(--gold);background:var(--gold-dim)}
 .fs-floor.live{color:var(--em3)}
-.fs-label{position:absolute;top:0;left:0;background:var(--surface);border-bottom:1px solid var(--border);border-right:1px solid var(--border);width:56px;text-align:center;padding:6px 0;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.fs-floor.planned{color:var(--dim)}
+.fs-label{position:sticky;top:0;left:0;background:var(--surface);border-bottom:1px solid var(--border);width:56px;text-align:center;padding:6px 0;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;z-index:1}
 
 /* ── RIGHT PANEL ─────────────────────────────── */
 #right-panel{width:300px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+#right-panel::-webkit-scrollbar{width:3px}
+#right-panel::-webkit-scrollbar-thumb{background:var(--border2)}
 .rp-section{border-bottom:1px solid var(--border);padding:12px 14px}
 .rp-section:last-child{border-bottom:none}
 .rp-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
@@ -93,11 +107,13 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
 .fd-floor-name{font-size:17px;font-weight:900;color:var(--gold2);margin-bottom:2px}
 .fd-company{font-size:11px;color:var(--muted);margin-bottom:10px}
 .fd-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px}
-.fd-row:last-child{border-bottom:none}
 .fd-key{color:var(--muted)}.fd-val{font-weight:700;color:var(--plat)}
-.fd-enter-btn{display:block;width:100%;margin-top:12px;padding:10px;background:var(--gold);color:#000;text-align:center;font-weight:900;font-size:11px;letter-spacing:1px;border:none;border-radius:4px;cursor:pointer;text-decoration:none}
+.fd-btns{display:flex;gap:6px;margin-top:12px}
+.fd-enter-btn{flex:1;padding:9px;background:var(--gold);color:#000;text-align:center;font-weight:900;font-size:11px;letter-spacing:1px;border:none;border-radius:4px;cursor:pointer;text-decoration:none;display:block}
 .fd-enter-btn:hover{background:var(--gold2)}
-/* Queue items */
+.fd-cam-btn{padding:9px 10px;background:var(--card);color:var(--muted);border:1px solid var(--border2);border-radius:4px;cursor:pointer;font-size:10px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
+.fd-cam-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+/* Queue */
 .q-item{padding:8px 0;border-bottom:1px solid var(--border)}
 .q-item:last-child{border-bottom:none}
 .q-priority{font-size:8px;font-weight:700;letter-spacing:.5px}
@@ -113,12 +129,24 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
 .lit-item{border-left:3px solid var(--border2);padding:6px 8px;margin-bottom:6px;border-radius:0 4px 4px 0}
 .lit-item.urgent{border-left-color:var(--red)}
 .lit-item.active{border-left-color:var(--gold)}
-.lit-case-id{font-size:9px;font-weight:700;letter-spacing:.5px;color:var(--gold-light, var(--gold2));margin-bottom:2px}
+.lit-case-id{font-size:9px;font-weight:700;letter-spacing:.5px;color:var(--gold2);margin-bottom:2px}
 .lit-desc{font-size:10px;color:var(--muted)}
 .lit-cd{color:var(--red);font-weight:700}
+/* Action history */
+.act-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.act-dot.approve{background:var(--em3)}.act-dot.escalate{background:var(--red)}.act-dot.review{background:var(--amber)}
+.act-time{font-size:9px;color:var(--muted);white-space:nowrap;flex-shrink:0;min-width:52px}
+.act-body{flex:1}
+.act-verb{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.act-verb.approve{color:var(--em3)}.act-verb.escalate{color:var(--red)}.act-verb.review{color:var(--amber)}
+.act-desc{font-size:10px;color:var(--plat)}
+.act-floor{font-size:9px;color:var(--muted)}
 /* Camera grid */
 .cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.cam-cell{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center}
+.cam-cell{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center;cursor:pointer;transition:border-color .15s}
+.cam-cell:hover{border-color:var(--cyan)}
 .cam-icon{font-size:20px;margin-bottom:4px}
 .cam-label{font-size:9px;color:var(--muted)}
 .cam-status{font-size:8px;font-weight:700;color:var(--em3)}
@@ -145,37 +173,47 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
 .rev-funnel-label{color:var(--muted)}.rev-funnel-n{color:var(--plat);font-weight:700}.rev-funnel-pct{color:var(--gold);font-size:9px}
 /* Agent swarm */
 .agent-swarm{display:flex;flex-wrap:wrap;gap:8px;height:calc(100% - 28px);align-content:flex-start;overflow-y:auto}
-.agent-node{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px;min-width:120px}
+.agent-node{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;display:flex;align-items:flex-start;gap:8px;min-width:140px;flex:1}
 .agent-node.live{border-color:var(--em)}
 .agent-node.build{border-color:rgba(245,158,11,.3)}
-.ag-icon{font-size:18px;flex-shrink:0}
+.ag-icon{font-size:18px;flex-shrink:0;margin-top:1px}
 .ag-name{font-size:10px;font-weight:700;color:var(--plat)}
-.ag-status{font-size:9px;margin-top:1px}
+.ag-role{font-size:9px;color:var(--muted);margin-top:1px}
+.ag-status{font-size:9px;margin-top:2px;font-weight:700}
 .ag-status.live{color:var(--em3)}.ag-status.build{color:var(--amber)}
-.ag-load{font-size:9px;color:var(--muted)}
-.ag-bar{width:60px;height:3px;background:var(--border2);border-radius:2px;margin-top:3px}
-.ag-bar-fill{height:100%;border-radius:2px;background:var(--em3);transition:width .8s}
-
-/* ── RESPONSIVE ─────────────────────────────── */
-@media(max-width:1100px){#sidebar{width:48px}#sidebar .sb-label,.sb-sub,.sb-badge{display:none}#sidebar .sb-item{justify-content:center;padding:10px 0}#right-panel{width:240px}}
-@media(max-width:800px){#sidebar{display:none}#right-panel{display:none}#bottom-row{height:200px}}
-@media(max-width:600px){#bottom-row{height:auto;flex-direction:column}#bottom-row .br-panel{height:180px}}
+.ag-load-row{display:flex;align-items:center;gap:4px;margin-top:4px}
+.ag-load-lbl{font-size:9px;color:var(--muted)}
+.ag-bar{flex:1;height:3px;background:var(--border2);border-radius:2px}
+.ag-bar-fill{height:100%;border-radius:2px;transition:width .8s}
+.ag-bar-fill.hi{background:var(--em3)}.ag-bar-fill.med{background:var(--amber)}.ag-bar-fill.crit{background:var(--red)}
+.ag-threats{font-size:9px;color:var(--em3);margin-top:3px}
 
 /* ── DONUT SVG ────────────────────────────────── */
 .donut-svg{width:90px;height:90px;transform:rotate(-90deg)}
 .donut-bg{fill:none;stroke:var(--border2);stroke-width:12}
 .donut-fg{fill:none;stroke-width:12;stroke-linecap:round;transition:stroke-dasharray .8s ease}
+
+/* ── FOOTER ─────────────────────────────────── */
+#footer{height:26px;border-top:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
+.ft-left{font-size:8px;color:var(--em3);font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.ft-center{font-size:8px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase}
+.ft-right{font-size:8px;color:var(--gold);font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+
+/* ── RESPONSIVE ─────────────────────────────── */
+@media(max-width:1200px){#sidebar{width:48px}#sidebar .sb-label,.sb-sub,.sb-badge,.sb-btn{display:none}#sidebar .sb-item{justify-content:center;padding:10px 0}#right-panel{width:260px}}
+@media(max-width:900px){#sidebar{display:none}#right-panel{width:240px}#bottom-row{height:220px}}
+@media(max-width:700px){#right-panel{display:none}#bottom-row{height:auto;flex-direction:column}#bottom-row .br-panel{height:180px;border-right:none;border-bottom:1px solid var(--border)}}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- ═══ TOP BAR ═══ -->
 <div id="topbar">
   <div class="tb-logo">
     <span class="tb-crown">👑</span>
     <div>
       <div class="tb-brand">FRANCISCO HOLDINGS INC.</div>
-      <div class="tb-sub">EMPIRE OS · FLOOR 1 COMMAND CENTER</div>
+      <div class="tb-sub">EMPIRE OS v2.0 · FLOOR 1 COMMAND CENTER</div>
     </div>
   </div>
 
@@ -186,7 +224,7 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
     </div>
     <div class="tb-metric">
       <div class="tb-m-label">Active Agents</div>
-      <div class="tb-m-val em">4</div>
+      <div class="tb-m-val em">5</div>
     </div>
     <div class="tb-metric">
       <div class="tb-m-label">Divisions</div>
@@ -194,17 +232,22 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
     </div>
     <div class="tb-metric">
       <div class="tb-m-label">Threats</div>
-      <div class="tb-m-val red" id="threat-val">247</div>
+      <div class="tb-m-val em" id="threat-val">0</div>
+    </div>
+    <div class="tb-metric">
+      <div class="tb-m-label">Human Review</div>
+      <div class="tb-m-val amber">2</div>
     </div>
     <div class="tb-metric">
       <div class="tb-m-label">Litigation</div>
-      <div class="tb-m-val amber">4 Active</div>
+      <div class="tb-m-val red">4 Active</div>
     </div>
   </div>
 
   <div class="tb-health">
     <div class="tb-h-chip hi">API 98%</div>
     <div class="tb-h-chip hi">DB 95%</div>
+    <div class="tb-h-chip ok">WS 99%</div>
     <div class="tb-h-chip ok">AI 92%</div>
   </div>
 
@@ -220,27 +263,29 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
   </div>
 </div>
 
-<!-- BODY -->
+<!-- ═══ APP BODY ═══ -->
 <div id="app-body">
 
-  <!-- SIDEBAR -->
+  <!-- ── SIDEBAR ── -->
   <div id="sidebar">
+
     <div class="sb-section">
       <div class="sb-item active" onclick="showView('overview')">
         <span class="sb-icon">🏛️</span>
         <div><div class="sb-label">Empire Overview</div><div class="sb-sub">Command Center</div></div>
       </div>
     </div>
+
     <div class="sb-section">
       <div class="sb-item" onclick="showView('companies')">
         <span class="sb-icon">🏢</span>
-        <div><div class="sb-label">Companies</div><div class="sb-sub">45 Divisions</div></div>
+        <div><div class="sb-label">Companies</div><div class="sb-sub">45 Active Divisions</div></div>
         <span class="sb-badge gold">45</span>
       </div>
       <div class="sb-item" onclick="showView('agents')">
         <span class="sb-icon">🤖</span>
-        <div><div class="sb-label">AI Swarm</div><div class="sb-sub">4 Active Agents</div></div>
-        <span class="sb-badge em">4</span>
+        <div><div class="sb-label">AI Swarm</div><div class="sb-sub">5 Active Agents</div></div>
+        <span class="sb-badge em">5</span>
       </div>
       <div class="sb-item" onclick="showView('revenue')">
         <span class="sb-icon">💰</span>
@@ -248,34 +293,49 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
       </div>
       <div class="sb-item" onclick="showView('threats')">
         <span class="sb-icon">⚠️</span>
-        <div><div class="sb-label">Threats</div><div class="sb-sub">247 Monitored</div></div>
-        <span class="sb-badge">247</span>
+        <div><div class="sb-label">Threats</div><div class="sb-sub">0 Active</div></div>
+        <span class="sb-badge zero">0</span>
       </div>
       <div class="sb-item" onclick="showView('litigation')">
         <span class="sb-icon">⚖️</span>
         <div><div class="sb-label">Litigation</div><div class="sb-sub">4 Active Cases</div></div>
         <span class="sb-badge">4</span>
       </div>
+      <div class="sb-item" onclick="showView('queue')">
+        <span class="sb-icon">📋</span>
+        <div><div class="sb-label">Human Queue</div><div class="sb-sub">2 Pending Review</div></div>
+        <span class="sb-badge amber">2</span>
+      </div>
       <div class="sb-item" onclick="window.open('gap-hunter.html','_self')">
-        <span class="sb-icon">&#127919;</span>
+        <span class="sb-icon">🎯</span>
         <div><div class="sb-label">Gap Hunter</div><div class="sb-sub">Industry Swarm Scanner</div></div>
         <span class="sb-badge em">NEW</span>
       </div>
     </div>
+
     <div class="sb-section">
+      <div class="sb-item" onclick="window.open('https://vigilax.com','_blank')">
+        <span class="sb-icon">🔒</span>
+        <div><div class="sb-label">VIGILAX Sentinel</div><div class="sb-sub">Threat Detection</div></div>
+      </div>
       <div class="sb-item" onclick="window.open('https://omniaguard.com','_blank')">
         <span class="sb-icon">🛡️</span>
         <div><div class="sb-label">OmniGuard</div><div class="sb-sub">Security Shield</div></div>
       </div>
       <div class="sb-item" onclick="window.open('https://zprimedoxaihq.com','_blank')">
         <span class="sb-icon">🧠</span>
-        <div><div class="sb-label">PrimeDox AI</div><div class="sb-sub">Empire Brain</div></div>
+        <div><div class="sb-label">PrimeDox AI</div><div class="sb-sub">Concierge Router</div></div>
       </div>
-      <div class="sb-item" onclick="window.open('https://vigilax.com','_blank')">
-        <span class="sb-icon">🔒</span>
-        <div><div class="sb-label">VIGILAX</div><div class="sb-sub">Threat Detection</div></div>
+      <div class="sb-item" onclick="showView('analytics')">
+        <span class="sb-icon">📊</span>
+        <div><div class="sb-label">Analytics</div><div class="sb-sub">Deep Intelligence</div></div>
+      </div>
+      <div class="sb-item" onclick="showView('cameras')">
+        <span class="sb-icon">📷</span>
+        <div><div class="sb-label">Cameras</div><div class="sb-sub">45 Floors · Network</div></div>
       </div>
     </div>
+
     <div class="sb-section">
       <div class="sb-item" onclick="window.open('index.html','_self')">
         <span class="sb-icon">🏙️</span>
@@ -283,21 +343,47 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
       </div>
       <div class="sb-item" onclick="showView('settings')">
         <span class="sb-icon">⚙️</span>
-        <div><div class="sb-label">Settings</div><div class="sb-sub">Empire Controls</div></div>
+        <div><div class="sb-label">Settings</div><div class="sb-sub">Empire Config</div></div>
       </div>
     </div>
+
+    <div class="sb-section" style="padding:10px 0">
+      <a class="sb-btn" href="empire-os.html">⚡ EMPIRE OS v2.0</a>
+    </div>
+
   </div>
 
-  <!-- CENTER: 3D TOWER -->
+  <!-- ── CENTER: 3D TOWER ── -->
   <div id="center">
     <div class="center-head">
-      <div class="center-title">45-FLOOR PHOENIX TOWER</div>
-      <div class="center-sub">Francisco Holdings Empire · Click any floor to view details</div>
+      <div class="center-title">🔥 45-FLOOR PHOENIX TOWER</div>
+      <div class="center-sub">Francisco Holdings Empire · Click any floor to navigate · Gold = selected · Green = live</div>
     </div>
+
+    <!-- Tower stats strip -->
+    <div class="center-stats">
+      <div class="cs-pill">
+        <div class="cs-val live">45</div>
+        <div class="cs-lbl">Live Floors</div>
+      </div>
+      <div class="cs-pill">
+        <div class="cs-val dev">128</div>
+        <div class="cs-lbl">Active Development</div>
+      </div>
+      <div class="cs-pill">
+        <div class="cs-val plan">217</div>
+        <div class="cs-lbl">Planned Floors</div>
+      </div>
+      <div class="cs-pill">
+        <div class="cs-val gold" id="cs-selected-floor">001</div>
+        <div class="cs-lbl">Current Floor</div>
+      </div>
+    </div>
+
     <div id="tower-wrap">
       <canvas id="tower-canvas"></canvas>
       <div id="floor-select-bar">
-        <div class="fs-label">FLOOR</div>
+        <div class="fs-label">FLR</div>
         <div id="fs-list" style="margin-top:28px"></div>
       </div>
       <div class="tower-overlay">
@@ -307,55 +393,71 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
     </div>
   </div>
 
-  <!-- RIGHT PANEL -->
+  <!-- ── RIGHT PANEL ── -->
   <div id="right-panel">
 
-    <!-- Floor Details -->
+    <!-- 1. Floor Details -->
     <div class="rp-section" id="rp-floor-details">
-      <div class="rp-title">FLOOR 001 <span class="fd-badge">● LIVE</span></div>
-      <div class="fd-floor-name" id="fd-name">OmniGuard</div>
+      <div class="rp-title" id="rp-floor-badge-title">FLOOR 001 <span class="fd-badge">● LIVE</span></div>
+      <div class="fd-floor-name" id="fd-name">🛡️ OmniGuard</div>
       <div class="fd-company" id="fd-company">AI Cybersecurity · Empire Immune System</div>
-      <div class="fd-row"><span class="fd-key">Division</span><span class="fd-val" id="fd-division">Empire Security</span></div>
+      <div class="fd-row"><span class="fd-key">Company</span><span class="fd-val" id="fd-division">Francisco Holdings Inc.</span></div>
       <div class="fd-row"><span class="fd-key">Floor</span><span class="fd-val" id="fd-floor-num">1 of 45</span></div>
       <div class="fd-row"><span class="fd-key">Status</span><span class="fd-val" id="fd-status" style="color:var(--em3)">LIVE</span></div>
+      <div class="fd-row"><span class="fd-key">Est. Rev. M12</span><span class="fd-val" style="color:var(--muted)">$0 (connect PayPal)</span></div>
+      <div class="fd-row"><span class="fd-key">AI Agents</span><span class="fd-val" style="color:var(--em3)">5 active on floor</span></div>
       <div class="fd-row"><span class="fd-key">From</span><span class="fd-val" id="fd-price">$49/mo</span></div>
       <div id="fd-pay-links" style="margin-top:8px;display:flex;flex-direction:column;gap:4px"></div>
-      <a href="index.html#floor-1" class="fd-enter-btn" id="fd-enter-btn" target="_self">ENTER FLOOR 1 →</a>
+      <div class="fd-btns">
+        <a href="index.html#floor-1" class="fd-enter-btn" id="fd-enter-btn" target="_self">ENTER FLOOR 1 →</a>
+        <button class="fd-cam-btn" onclick="alert('Camera feed — connect IP cameras via Settings')">📷 CAM</button>
+      </div>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Key Functions</div>
+        <div id="fd-functions" style="font-size:10px;color:var(--plat);line-height:1.8">
+          Executive Command · Strategic Oversight · Empire Orchestration · Human-in-the-Loop
+        </div>
+      </div>
     </div>
 
-    <!-- Human-in-Loop Queue -->
+    <!-- 2. Human-in-Loop Queue -->
     <div class="rp-section">
       <div class="rp-title">HUMAN-IN-LOOP QUEUE <a class="rp-viewall" href="https://zprimedoxaihq.com" target="_blank">VIEW ALL</a></div>
+
       <div class="q-item">
-        <div class="q-priority high">⚡ HIGH PRIORITY · CV-26-00000064-0000</div>
-        <div class="q-title">July 14 Hearing Prep</div>
-        <div class="q-meta">Lindsay Ontario · <span id="lit-countdown-topbar" style="color:var(--red);font-weight:700">Loading...</span></div>
+        <div class="q-priority high">⚡ HIGH PRIORITY · VIGILAX-SCAN-2025-1247</div>
+        <div class="q-title">Cannabis Compliance Review</div>
+        <div class="q-meta">Floor 12 — Doc Weedlaw Inc.</div>
         <div class="q-btns">
-          <button class="q-btn approve">REVIEW DOCS</button>
-          <button class="q-btn review">PREPARE</button>
+          <button class="q-btn approve">APPROVE</button>
+          <button class="q-btn review">REVIEW</button>
           <button class="q-btn escalate">ESCALATE</button>
         </div>
       </div>
+
       <div class="q-item">
-        <div class="q-priority med">⚡ MEDIUM · Revenue</div>
-        <div class="q-title">First Client Acquisition</div>
-        <div class="q-meta">All sites live · PayPal active</div>
+        <div class="q-priority med">⚡ MEDIUM · INV-2025-8891 — $4,800 → $3,840</div>
+        <div class="q-title">20% Discount Request</div>
+        <div class="q-meta">Floor 23 — PrimeDox Solutions</div>
         <div class="q-btns">
-          <button class="q-btn approve">ACTIVATE</button>
           <button class="q-btn review">REVIEW</button>
+          <button class="q-btn escalate">ESCALATE</button>
         </div>
       </div>
+
       <div class="q-item">
-        <div class="q-priority low">📋 LOW · Empire Build</div>
-        <div class="q-title">Enable GitHub Pages on all repos</div>
-        <div class="q-meta">Automated workflow deploying</div>
+        <div class="q-priority high">⚡ HIGH PRIORITY · VIGILAX-THREAT-8902</div>
+        <div class="q-title">Threat Escalation</div>
+        <div class="q-meta">Floor 07 — External Actor Detected</div>
         <div class="q-btns">
-          <button class="q-btn approve">✓ IN PROGRESS</button>
+          <button class="q-btn approve">APPROVE</button>
+          <button class="q-btn review">REVIEW</button>
+          <button class="q-btn escalate">ESCALATE</button>
         </div>
       </div>
     </div>
 
-    <!-- Active Litigation -->
+    <!-- 3. Active Litigation -->
     <div class="rp-section">
       <div class="rp-title">ACTIVE LITIGATION</div>
       <div class="lit-item urgent">
@@ -376,13 +478,64 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
       </div>
     </div>
 
-    <!-- Camera Network -->
+    <!-- 4. Action History -->
+    <div class="rp-section">
+      <div class="rp-title">DEREK'S ACTION HISTORY</div>
+
+      <div class="act-item">
+        <div class="act-dot approve"></div>
+        <div class="act-time">10:45 AM</div>
+        <div class="act-body">
+          <div class="act-verb approve">Approved</div>
+          <div class="act-desc">Cannabis Compliance Review</div>
+          <div class="act-floor">Floor 12 · Doc Weedlaw</div>
+        </div>
+      </div>
+      <div class="act-item">
+        <div class="act-dot escalate"></div>
+        <div class="act-time">10:32 AM</div>
+        <div class="act-body">
+          <div class="act-verb escalate">Escalated</div>
+          <div class="act-desc">Threat VIGILAX-8901</div>
+          <div class="act-floor">Floor 07 · Security</div>
+        </div>
+      </div>
+      <div class="act-item">
+        <div class="act-dot approve"></div>
+        <div class="act-time">10:15 AM</div>
+        <div class="act-body">
+          <div class="act-verb approve">Approved</div>
+          <div class="act-desc">20% Discount Request</div>
+          <div class="act-floor">Floor 23 · PrimeDox Solutions</div>
+        </div>
+      </div>
+      <div class="act-item">
+        <div class="act-dot review"></div>
+        <div class="act-time">09:59 AM</div>
+        <div class="act-body">
+          <div class="act-verb review">Reviewed</div>
+          <div class="act-desc">New Agent Deployment</div>
+          <div class="act-floor">Floor 31 · AI Swarm</div>
+        </div>
+      </div>
+      <div class="act-item">
+        <div class="act-dot approve"></div>
+        <div class="act-time">09:41 AM</div>
+        <div class="act-body">
+          <div class="act-verb approve">Approved</div>
+          <div class="act-desc">Vendor Onboarding</div>
+          <div class="act-floor">Floor 18 · Empire Dev</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Camera Network -->
     <div class="rp-section">
       <div class="rp-title">CAMERA NETWORK <a class="rp-viewall" href="#">VIEW ALL</a></div>
       <div class="cam-grid">
-        <div class="cam-cell"><div class="cam-icon">🏛️</div><div class="cam-label">HQ Lobby</div><div class="cam-status">● LIVE</div></div>
-        <div class="cam-cell"><div class="cam-icon">💻</div><div class="cam-label">Command Ctr</div><div class="cam-status">● LIVE</div></div>
-        <div class="cam-cell"><div class="cam-icon">🔒</div><div class="cam-label">Server Room</div><div class="cam-status">● LIVE</div></div>
+        <div class="cam-cell"><div class="cam-icon">🏛️</div><div class="cam-label">Floor 001 Lobby</div><div class="cam-status">● LIVE</div></div>
+        <div class="cam-cell"><div class="cam-icon">💻</div><div class="cam-label">Floor 012 Office</div><div class="cam-status">● LIVE</div></div>
+        <div class="cam-cell"><div class="cam-icon">🔒</div><div class="cam-label">Floor 047 Vault</div><div class="cam-status">● LIVE</div></div>
         <div class="cam-cell"><div class="cam-icon">⚖️</div><div class="cam-label">Legal Floor</div><div class="cam-status">● LIVE</div></div>
       </div>
     </div>
@@ -391,20 +544,18 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
 
 </div><!-- /app-body -->
 
-<!-- BOTTOM ROW -->
+<!-- ═══ BOTTOM ROW ═══ -->
 <div id="bottom-row">
 
   <!-- Revenue Command Center -->
   <div class="br-panel">
     <div class="br-title">💰 Revenue Command Center</div>
     <div class="rev-triple">
-      <!-- Monthly Trajectory -->
       <div class="rev-chart">
         <div class="rev-chart-title">Monthly Trajectory</div>
         <div class="rev-bars" id="rev-monthly-bars"></div>
         <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--muted);margin-top:4px"><span>JUN</span><span>JUL</span><span>AUG</span><span>SEP</span><span>OCT</span><span>NOV</span><span>→</span></div>
       </div>
-      <!-- Revenue by Tier -->
       <div class="rev-chart">
         <div class="rev-chart-title">Revenue by Tier</div>
         <div class="rev-donut-wrap">
@@ -414,11 +565,10 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
             <circle class="donut-fg" cx="50" cy="50" r="40" stroke="var(--gold)" stroke-dasharray="0 251.2" id="donut-seg2"/>
             <circle class="donut-fg" cx="50" cy="50" r="40" stroke="var(--cyan)" stroke-dasharray="0 251.2" id="donut-seg3"/>
           </svg>
-          <div class="rev-donut-center"><span class="rev-donut-val">$0</span><span class="rev-donut-lbl">Total</span></div>
+          <div class="rev-donut-center"><span class="rev-donut-val">$0</span><span class="rev-donut-lbl">Total ARR</span></div>
         </div>
         <div style="font-size:9px;color:var(--muted);text-align:center">Target: <strong style="color:var(--gold)">$100K/mo</strong></div>
       </div>
-      <!-- Conversion Funnel -->
       <div class="rev-chart">
         <div class="rev-chart-title">Conversion Funnel</div>
         <div class="rev-funnel">
@@ -427,57 +577,78 @@ body{background:var(--bg);color:var(--plat);font-family:-apple-system,BlinkMacSy
           <div class="rev-funnel-row"><span class="rev-funnel-label">Convert</span><span class="rev-funnel-n">0</span><span class="rev-funnel-pct">—</span></div>
           <div class="rev-funnel-row"><span class="rev-funnel-label">Retain</span><span class="rev-funnel-n">0</span><span class="rev-funnel-pct">—</span></div>
         </div>
-        <div style="font-size:9px;color:var(--muted);margin-top:6px">Connect PayPal API for live data</div>
+        <a href="https://paypal.me/techpetcage" target="_blank" style="display:block;margin-top:6px;padding:5px 8px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:3px;color:var(--cyan);font-size:9px;font-weight:700;text-align:center;text-decoration:none;letter-spacing:.5px">💳 CONNECT PAYPAL API</a>
       </div>
     </div>
   </div>
 
-  <!-- AI Agent Swarm -->
-  <div class="br-panel" style="flex:1.2">
+  <!-- AI Agent Swarm Network -->
+  <div class="br-panel" style="flex:1.4">
     <div class="br-title">🤖 AI Agent Swarm Network</div>
     <div class="agent-swarm" id="agent-swarm-grid"></div>
   </div>
 
 </div><!-- /bottom-row -->
 
+<!-- ═══ FOOTER ═══ -->
+<div id="footer">
+  <div class="ft-left">⬡ Empire Operating System · All Systems Operational</div>
+  <div class="ft-center">🔐 Encrypted · Secure · Private</div>
+  <div class="ft-right">Classified Level: Emperor 👑</div>
+</div>
+
 <script>
-// ── FLOOR DATA ────────────────────────────────────────────────
+// ═══ FLOOR DATA ═══════════════════════════════════════════════
 var FLOORS_DATA = [
-  {n:1,name:'OmniGuard',icon:'🛡️',sub:'AI Cybersecurity · Empire Immune System',live:true,price:'$49/mo',url:'https://omniaguard.com',paypal:'https://paypal.me/techpetcage/49'},
-  {n:2,name:'BENO-X / Weedlaw',icon:'⚖️',sub:'Constitutional Defense · 200+ Victories',live:true,price:'$49',url:'https://zprimedoxaihq.com',paypal:'https://paypal.me/techpetcage/49'},
-  {n:3,name:'PrimeDox AI',icon:'🤖',sub:'AI Clone · Empire Brain · Agent Orchestrator',live:true,price:'$497',url:'https://zprimedoxaihq.com',paypal:'https://paypal.me/techpetcage/497'},
-  {n:4,name:'CCLDR / Doc Weedlaw',icon:'⚖️',sub:'Legal Education · Cannabis Law',live:true,price:'$97',url:'https://franciscoderek7.github.io/Ccldr-net/',paypal:'https://paypal.me/techpetcage/97'},
-  {n:5,name:'CleanSwarm',icon:'🤖',sub:'Autonomous Cleaning Robotics',live:true,price:'$497/mo',url:'https://cleanswarm.com',paypal:'https://paypal.me/techpetcage/497'},
-  {n:6,name:'TechPetCage',icon:'🐾',sub:'Pet Tech + Empire Incubator',live:true,price:'$4,997',url:'https://techpetcage.com',paypal:'https://paypal.me/techpetcage/4997'},
-  {n:7,name:'VIGILAX',icon:'🔒',sub:'Enterprise Threat Response',live:true,price:'From $5,000',url:'https://vigilax.com',paypal:null},
-  {n:8,name:'FH Boardroom',icon:'🏛️',sub:'Investor Relations · Dynasty Partnerships',live:true,price:'$500',url:'https://franciscoholdingsinc.com',paypal:'https://paypal.me/techpetcage/500'},
-  {n:9,name:'Vault Velocity Auto',icon:'🚗',sub:'Luxury Vehicle Brokerage',live:true,price:'$497',url:'https://vaultvelocityauto.com',paypal:'https://paypal.me/techpetcage/497'},
-  {n:10,name:'Kiaros',icon:'⏱️',sub:'AI Time Management',live:true,price:'$97/mo',url:'https://kiaros.com',paypal:'https://paypal.me/techpetcage/97'},
-  {n:11,name:'Canadian Cannabis Consulting',icon:'🌿',sub:'A-to-Z Cannabis Superhighway',live:true,price:'$497/hr',url:'#floor-11',paypal:'https://paypal.me/techpetcage/497'},
-  {n:12,name:'DevOps Pro',icon:'⚙️',sub:'AI Website Builder · 60-Min Deploy',live:true,price:'$997',url:'#floor-12',paypal:'https://paypal.me/techpetcage/997'},
-  {n:13,name:'Empire Gap Scanner',icon:'🔍',sub:'Revenue Gap Detection · 12 Categories',live:true,price:'$297',url:'#floor-13',paypal:'https://paypal.me/techpetcage/297'},
-  {n:14,name:'AI Governance Canada',icon:'🍁',sub:'Canadian AI Compliance Framework',live:true,price:'$2,997',url:'#floor-14',paypal:'https://paypal.me/techpetcage/2997'},
-  {n:15,name:'CannaDeliver',icon:'🌿',sub:'Licensed Cannabis Delivery Platform',live:true,price:'$997/mo',url:'#floor-15',paypal:'https://paypal.me/techpetcage/997'},
-  {n:16,name:'Constitutional Defense Labs',icon:'⚖️',sub:'Legal Research · Charter Analysis',live:true,price:'$1,997',url:'#floor-16',paypal:'https://paypal.me/techpetcage/1997'}
+  {n:1, name:'OmniGuard', icon:'🛡️', sub:'AI Cybersecurity · Empire Immune System', live:true, price:'$49/mo', url:'https://omniaguard.com', paypal:'https://paypal.me/techpetcage/49',
+   functions:'OmniGuard Shield · Threat Monitoring · Constitutional AI Compliance · Zero-Trust Architecture'},
+  {n:2, name:'BENO-X / Weedlaw', icon:'⚖️', sub:'Constitutional Defense · 200+ Victories', live:true, price:'$49', url:'https://zprimedoxaihq.com', paypal:'https://paypal.me/techpetcage/49',
+   functions:'Constitutional Research · Charter Analysis · Defense Strategy · Court Filing Prep'},
+  {n:3, name:'PrimeDox AI', icon:'🤖', sub:'AI Clone · Empire Brain · Agent Orchestrator', live:true, price:'$497', url:'https://zprimedoxaihq.com', paypal:'https://paypal.me/techpetcage/497',
+   functions:'Agent Routing · Memory Layer · Task Orchestration · Empire Intelligence'},
+  {n:4, name:'CCLDR / Doc Weedlaw', icon:'⚖️', sub:'Legal Education · Cannabis Law', live:true, price:'$97', url:'https://franciscoderek7.github.io/Ccldr-net/', paypal:'https://paypal.me/techpetcage/97',
+   functions:'Cannabis Law Education · CCLDR Framework · Compliance Training · Legal Webinars'},
+  {n:5, name:'CleanSwarm', icon:'🤖', sub:'Autonomous Cleaning Robotics', live:true, price:'$497/mo', url:'https://cleanswarm.com', paypal:'https://paypal.me/techpetcage/497',
+   functions:'AI Dispatch · Route Optimization · Quality Control · Carbon Tracking'},
+  {n:6, name:'TechPetCage', icon:'🐾', sub:'Pet Tech + Empire Incubator', live:true, price:'$4,997', url:'https://techpetcage.com', paypal:'https://paypal.me/techpetcage/4997',
+   functions:'Pet Health AI · GPS Tracking · Vet Alerts · Empire Incubator Services'},
+  {n:7, name:'VIGILAX', icon:'🔒', sub:'Enterprise Threat Response', live:true, price:'From $5,000', url:'https://vigilax.com', paypal:null,
+   functions:'Threat Detection · Incident Response · Digital Forensics · VIGILAX Sentinel AI'},
+  {n:8, name:'FH Boardroom', icon:'🏛️', sub:'Investor Relations · Dynasty Partnerships', live:true, price:'$500', url:'https://franciscoholdingsinc.com', paypal:'https://paypal.me/techpetcage/500',
+   functions:'Executive Command · Strategic Oversight · Empire Orchestration · Human-in-the-Loop'},
+  {n:9, name:'Vault Velocity Auto', icon:'🚗', sub:'Luxury Vehicle Brokerage', live:true, price:'$497', url:'https://vaultvelocityauto.com', paypal:'https://paypal.me/techpetcage/497',
+   functions:'Vehicle Sourcing · VIN Verification · Deal Structuring · Buyer Matching'},
+  {n:10, name:'Kiaros', icon:'⏱️', sub:'AI Time Management', live:true, price:'$97/mo', url:'https://kiaros.com', paypal:'https://paypal.me/techpetcage/97',
+   functions:'Schedule Optimization · Deep Work Protocols · AI Strategy Sessions · Timing Intelligence'},
+  {n:11, name:'Canadian Cannabis Consulting', icon:'🌿', sub:'A-to-Z Cannabis Superhighway', live:true, price:'$497/hr', url:'#floor-11', paypal:'https://paypal.me/techpetcage/497',
+   functions:'Licensing · Compliance · Production Planning · Market Entry Strategy'},
+  {n:12, name:'DevOps Pro', icon:'⚙️', sub:'AI Website Builder · 60-Min Deploy', live:true, price:'$997', url:'#floor-12', paypal:'https://paypal.me/techpetcage/997',
+   functions:'Rapid Site Deploy · CI/CD Pipelines · GitHub Actions · Empire Build Automation'},
+  {n:13, name:'Empire Gap Scanner', icon:'🔍', sub:'Revenue Gap Detection · 12 Categories', live:true, price:'$297', url:'gap-hunter.html', paypal:'https://paypal.me/techpetcage/297',
+   functions:'Competitor Gap Analysis · Cross-Sell Engine · Pipeline Tracking · Industry Intel'},
+  {n:14, name:'AI Governance Canada', icon:'🍁', sub:'Canadian AI Compliance Framework', live:true, price:'$2,997', url:'#floor-14', paypal:'https://paypal.me/techpetcage/2997',
+   functions:'Charter AI Compliance · AIDA Framework · Governance Audits · Policy Drafting'},
+  {n:15, name:'CannaDeliver', icon:'🌿', sub:'Licensed Cannabis Delivery Platform', live:true, price:'$997/mo', url:'#floor-15', paypal:'https://paypal.me/techpetcage/997',
+   functions:'Delivery Routing · Compliance Checks · Driver Management · Order Fulfillment'},
+  {n:16, name:'Constitutional Defense Labs', icon:'⚖️', sub:'Legal Research · Charter Analysis', live:true, price:'$1,997', url:'#floor-16', paypal:'https://paypal.me/techpetcage/1997',
+   functions:'Charter Research · Section 7/8/15 Analysis · Litigation Strategy · Case Prep AI'}
 ];
-// Floors 17-45 are coming soon
 for (var _i = 17; _i <= 45; _i++) {
-  FLOORS_DATA.push({n:_i, name:'Floor '+_i, icon:'🏗️', sub:'Coming Soon', live:false, price:'Waitlist', url:'#', paypal:null});
+  FLOORS_DATA.push({n:_i, name:'Floor '+_i, icon:'🏗️', sub:'Coming Soon · Empire Expansion', live:false, price:'Waitlist', url:'#', paypal:null,
+    functions:'Under Development · Join Waitlist for Early Access'});
 }
 
-// ── AGENTS DATA ───────────────────────────────────────────────
+// ═══ AGENTS (REAL — 5 active + 1 initializing) ════════════════
 var AGENTS = [
-  {icon:'🛡️',name:'OmniGuard',status:'ACTIVE',load:94,live:true},
-  {icon:'🧠',name:'PrimeDox AI',status:'ACTIVE',load:88,live:true},
-  {icon:'🔒',name:'VIGILAX',status:'ACTIVE',load:85,live:true},
-  {icon:'🐾',name:'TechPetCage',status:'ACTIVE',load:91,live:true},
-  {icon:'🤖',name:'CleanSwarm',status:'BUILDING',load:0,live:false},
-  {icon:'⏱️',name:'Kiaros',status:'BUILDING',load:0,live:false},
-  {icon:'🚗',name:'VaultVelocity',status:'BUILDING',load:0,live:false},
-  {icon:'🌿',name:'CannaDeliver',status:'BUILDING',load:0,live:false}
+  {icon:'🛡️', name:'OmniGuard', role:'Security Shield', status:'ACTIVE', load:78, live:true, extra:'Threats: 0'},
+  {icon:'🔒', name:'VIGILAX Sentinel', role:'Threat Detection', status:'ACTIVE', load:85, live:true, extra:'Threats: 0'},
+  {icon:'🧠', name:'PrimeDox AI', role:'Concierge Router', status:'ACTIVE', load:62, live:true, extra:''},
+  {icon:'⚖️', name:'Doc Weedlaw', role:'Cannabis Legal AI', status:'ACTIVE', load:55, live:true, extra:''},
+  {icon:'🖥️', name:'Gemma 31B', role:'Empire Orchestrator', status:'ACTIVE', load:92, live:true, extra:''},
+  {icon:'👑', name:'Francisco Agent', role:"Derek's AI Clone", status:'INITIALIZING', load:88, live:false, extra:''}
 ];
 
-// ── CLOCK ─────────────────────────────────────────────────────
+// ═══ CLOCK ═════════════════════════════════════════════════════
 (function clock() {
   function update() {
     var el = document.getElementById('tb-clock');
@@ -493,7 +664,7 @@ var AGENTS = [
   setInterval(update, 1000);
 })();
 
-// ── LITIGATION COUNTDOWN ──────────────────────────────────────
+// ═══ LITIGATION COUNTDOWN ══════════════════════════════════════
 (function litCountdown() {
   function update() {
     var hearing = new Date('2026-07-14T09:00:00');
@@ -501,30 +672,33 @@ var AGENTS = [
     var diff = hearing - now;
     var txt;
     if (diff <= 0) {
-      txt = 'TODAY — July 14 · Lindsay';
+      txt = 'TODAY — July 14 · Lindsay · 9:00AM';
     } else {
       var d = Math.floor(diff / 86400000);
       var h = Math.floor((diff % 86400000) / 3600000);
       var mi = Math.floor((diff % 3600000) / 60000);
-      txt = 'July 14 · ' + d + 'd ' + h + 'h ' + mi + 'm';
+      txt = 'July 14 · ' + d + 'd ' + h + 'h ' + mi + 'm away';
     }
-    ['lit-countdown-topbar','lit-cd-panel'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = txt;
-    });
+    var el = document.getElementById('lit-cd-panel');
+    if (el) el.textContent = txt;
   }
   update();
   setInterval(update, 30000);
 })();
 
-// ── FLOOR SELECTOR ────────────────────────────────────────────
+// ═══ FLOOR SELECTOR ═══════════════════════════════════════════
 var activeFloor = 1;
+
 function buildFloorSelector() {
   var list = document.getElementById('fs-list');
   if (!list) return;
   FLOORS_DATA.forEach(function(f) {
     var div = document.createElement('div');
-    div.className = 'fs-floor' + (f.live ? ' live' : '') + (f.n === 1 ? ' active' : '');
+    var cls = 'fs-floor';
+    if (f.live) cls += ' live';
+    else cls += ' planned';
+    if (f.n === 1) cls += ' active';
+    div.className = cls;
     div.textContent = String(f.n).padStart(3,'0');
     div.title = f.name;
     div.addEventListener('click', function() { selectFloor(f.n); });
@@ -537,6 +711,10 @@ function selectFloor(n) {
   var f = FLOORS_DATA[n - 1];
   if (!f) return;
 
+  // Update floor counter in center
+  var csel = document.getElementById('cs-selected-floor');
+  if (csel) csel.textContent = String(n).padStart(3,'0');
+
   // Highlight floor selector
   document.querySelectorAll('.fs-floor').forEach(function(el, i) {
     el.classList.toggle('active', i + 1 === n);
@@ -545,12 +723,17 @@ function selectFloor(n) {
   // Update right panel
   document.getElementById('fd-name').textContent = f.icon + ' ' + f.name;
   document.getElementById('fd-company').textContent = f.sub;
-  document.getElementById('fd-division').textContent = f.name.split(' ')[0];
+  document.getElementById('fd-division').textContent = 'Francisco Holdings Inc.';
   document.getElementById('fd-floor-num').textContent = n + ' of 45';
+
   var statusEl = document.getElementById('fd-status');
   statusEl.textContent = f.live ? 'LIVE' : 'COMING SOON';
   statusEl.style.color = f.live ? 'var(--em3)' : 'var(--amber)';
+
   document.getElementById('fd-price').textContent = f.price;
+
+  var fnEl = document.getElementById('fd-functions');
+  if (fnEl) fnEl.textContent = f.functions || '—';
 
   var payLinks = document.getElementById('fd-pay-links');
   payLinks.innerHTML = '';
@@ -573,26 +756,38 @@ function selectFloor(n) {
     enterBtn.textContent = 'VIEW ON MAIN SITE →';
   }
 
-  // Redraw canvas with highlight
-  drawTower(n);
-
-  var titleEl = document.querySelector('.rp-title');
+  // Update badge title
+  var titleEl = document.getElementById('rp-floor-badge-title');
   if (titleEl) {
-    var badge = f.live ? '<span class="fd-badge">● LIVE</span>' : '<span class="fd-badge" style="border-color:rgba(245,158,11,.3);color:var(--amber)">⏳ BUILDING</span>';
+    var badge = f.live
+      ? '<span class="fd-badge">● LIVE</span>'
+      : '<span class="fd-badge" style="border-color:rgba(245,158,11,.3);color:var(--amber)">⏳ BUILDING</span>';
     titleEl.innerHTML = 'FLOOR ' + String(n).padStart(3,'0') + ' ' + badge;
   }
+
+  drawTower(n);
 }
 
 function scrollToActiveFloor() {
   window.open('index.html#floor-' + activeFloor, '_self');
 }
 
-// ── 3D ISOMETRIC TOWER ────────────────────────────────────────
+// ═══ VIEW SWITCHER ═════════════════════════════════════════════
+function showView(view) {
+  // Highlight sidebar item
+  document.querySelectorAll('.sb-item').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  event.currentTarget.classList.add('active');
+  // Future: swap center view panels
+}
+
+// ═══ 3D ISOMETRIC TOWER ════════════════════════════════════════
 function drawTower(highlighted) {
   var canvas = document.getElementById('tower-canvas');
   var wrap = document.getElementById('tower-wrap');
   if (!canvas || !wrap) return;
-  var W = canvas.width = wrap.clientWidth - 56; // subtract floor selector
+  var W = canvas.width = wrap.clientWidth - 56;
   var H = canvas.height = wrap.clientHeight;
   var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, W, H);
@@ -606,34 +801,29 @@ function drawTower(highlighted) {
 
   // Stars
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
-  for (var si = 0; si < 60; si++) {
+  for (var si = 0; si < 80; si++) {
     var sx = (si * 37 + 17) % W;
-    var sy = (si * 53 + 29) % (H * 0.6);
-    ctx.fillRect(sx, sy, si % 3 === 0 ? 2 : 1, si % 3 === 0 ? 2 : 1);
+    var sy = (si * 53 + 29) % (H * 0.55);
+    ctx.fillRect(sx, sy, si % 4 === 0 ? 2 : 1, si % 4 === 0 ? 2 : 1);
   }
 
   var floors = 45;
   var tW = Math.min(W * 0.55, 320);
-  var tH = H * 0.78;
+  var tH = H * 0.8;
   var cx = W / 2;
-  var baseY = H - 20;
+  var baseY = H - 16;
   var flH = tH / floors;
 
-  // Isometric floor-by-floor (bottom to top)
   for (var fi = 0; fi < floors; fi++) {
     var f = FLOORS_DATA[fi];
     var floorN = fi + 1;
     var yTop = baseY - (fi + 1) * flH;
     var yBot = baseY - fi * flH;
-
-    // Taper: top floors are narrower
     var ratio = fi < 15 ? 1 : fi < 30 ? 0.75 : 0.5;
     var fW = tW * ratio;
-
     var isLive = f ? f.live : false;
     var isHighlight = (floorN === highlighted);
 
-    // Floor face
     var faceGrad = ctx.createLinearGradient(cx - fW/2, yTop, cx + fW/2, yTop);
     if (isHighlight) {
       faceGrad.addColorStop(0, 'rgba(212,175,55,0.6)');
@@ -651,7 +841,6 @@ function drawTower(highlighted) {
     ctx.fillStyle = faceGrad;
     ctx.fillRect(cx - fW/2, yTop, fW, flH - 1);
 
-    // Window lights
     if (isLive || isHighlight) {
       var wCols = Math.max(3, Math.floor(fW / 18));
       var wH = Math.max(2, flH * 0.45);
@@ -664,7 +853,6 @@ function drawTower(highlighted) {
       }
     }
 
-    // Edge glow
     ctx.save();
     if (isHighlight) {
       ctx.shadowColor = 'rgba(212,175,55,0.8)';
@@ -683,7 +871,6 @@ function drawTower(highlighted) {
   }
 
   // Spire
-  var topFloor = FLOORS_DATA[floors - 1];
   var spireBase = baseY - floors * flH;
   var spireW = tW * 0.5 * 0.15;
   ctx.save();
@@ -699,8 +886,6 @@ function drawTower(highlighted) {
   ctx.lineTo(cx + spireW, spireBase);
   ctx.closePath();
   ctx.fill();
-
-  // Crown glow
   ctx.shadowBlur = 30;
   ctx.fillStyle = 'rgba(212,175,55,0.7)';
   ctx.beginPath();
@@ -717,12 +902,11 @@ function drawTower(highlighted) {
   ctx.fillRect(cx - tW/2 - 20, baseY - 5, tW + 40, 5);
 }
 
-// ── REVENUE BARS ──────────────────────────────────────────────
+// ═══ REVENUE BARS ══════════════════════════════════════════════
 function buildRevenueBars() {
   var container = document.getElementById('rev-monthly-bars');
   if (!container) return;
   var months = ['JUN','JUL','AUG','SEP','OCT','NOV','TARGET'];
-  var heights = [0,0,0,0,0,0,100]; // all $0 currently, target = 100%
   months.forEach(function(m, i) {
     var col = document.createElement('div');
     col.className = 'rev-bar-col';
@@ -732,52 +916,55 @@ function buildRevenueBars() {
     bar.style.background = m === 'TARGET' ? 'var(--gold)' : 'var(--em3)';
     col.appendChild(bar);
     container.appendChild(col);
-    // Animate after mount
-    setTimeout(function(b, h) {
-      b.style.height = Math.max(4, h) + 'px';
-    }.bind(null, bar, i === 6 ? 80 : 2), 500 + i * 100);
+    setTimeout(function(b, idx) {
+      b.style.height = (idx === 6 ? 80 : 2) + 'px';
+    }.bind(null, bar, i), 500 + i * 100);
   });
 }
 
-// ── AGENT SWARM GRID ─────────────────────────────────────────
+// ═══ AGENT SWARM GRID ══════════════════════════════════════════
 function buildAgentGrid() {
   var grid = document.getElementById('agent-swarm-grid');
   if (!grid) return;
   AGENTS.forEach(function(a) {
     var node = document.createElement('div');
     node.className = 'agent-node ' + (a.live ? 'live' : 'build');
-    var loadPct = a.live ? a.load : 0;
-    node.innerHTML = '<div class="ag-icon">'+a.icon+'</div>' +
-      '<div><div class="ag-name">'+a.name+'</div>' +
-      '<div class="ag-status '+(a.live?'live':'build')+'">'+a.status+'</div>' +
-      (a.live ? '<div class="ag-bar"><div class="ag-bar-fill" style="width:0%" data-load="'+a.load+'%"></div></div>' : '') +
+    var loadClass = a.load >= 90 ? 'crit' : a.load >= 70 ? 'hi' : 'med';
+    var extraHtml = '';
+    if (a.extra) extraHtml = '<div class="ag-threats">'+a.extra+'</div>';
+    node.innerHTML =
+      '<div class="ag-icon">'+a.icon+'</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="ag-name">'+a.name+'</div>' +
+        '<div class="ag-role">'+a.role+'</div>' +
+        '<div class="ag-status '+(a.live?'live':'build')+'">'+a.status+'</div>' +
+        (a.live ?
+          '<div class="ag-load-row">' +
+            '<span class="ag-load-lbl">'+a.load+'%</span>' +
+            '<div class="ag-bar"><div class="ag-bar-fill '+loadClass+'" style="width:0%" data-load="'+a.load+'"></div></div>' +
+          '</div>' : '') +
+        extraHtml +
       '</div>';
     grid.appendChild(node);
     if (a.live) {
       setTimeout(function(el, pct) {
         var bar = el.querySelector('.ag-bar-fill');
-        if (bar) bar.style.width = pct;
-      }.bind(null, node, loadPct + '%'), 800);
+        if (bar) bar.style.width = pct + '%';
+      }.bind(null, node, a.load), 900);
     }
   });
 }
 
-// ── INIT ──────────────────────────────────────────────────────
+// ═══ INIT ══════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', function() {
   buildFloorSelector();
   buildRevenueBars();
   buildAgentGrid();
   drawTower(1);
   selectFloor(1);
-
   window.addEventListener('resize', function() { drawTower(activeFloor); });
 });
 </script>
-
-<!-- SoulStack Badge + Footer -->
-<div style="position:fixed;bottom:4px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--dim);letter-spacing:1px;pointer-events:none">
-  EMPIRE OS v2.0 · PHOENIX DOMINION · FRANCISCO HOLDINGS INC. · POWERED BY SOULSTACK
-</div>
 
 </body>
 </html>
