@@ -269,12 +269,11 @@ input[type=file]{display:none}
         <div class="scan-box">
           <h3>SCAN TARGETS</h3>
           <div id="demo-banner" style="background:#1a1500;border:1px solid var(--warm);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-            <span style="color:var(--warm);font-size:12px">🎭 <b>DEMO MODE AVAILABLE</b> — Phone browsers may block real scanning (CORS). Load 20 pre-scanned targets to test all features instead.</span>
-            <button class="btn btn-sec" onclick="loadDemoTargets()" style="padding:6px 14px;font-size:12px;white-space:nowrap">⚡ Load 20 Demo Targets</button>
+            <span style="color:var(--warm);font-size:12px">💡 <b>INSTANT MODE</b> — Tap HUNT with no URLs to auto-load 20 pre-scanned targets. Or paste your own URLs below for real scanning.</span>
           </div>
           <div class="scan-row">
-            <textarea id="url-input" rows="4" placeholder="https://competitor.com&#10;https://another-target.com&#10;One URL per line — paste up to 100 URLs"></textarea>
-            <button class="btn" onclick="startScan()">⚡ SCAN</button>
+            <textarea id="url-input" rows="4" placeholder="Leave blank to auto-load 20 demo targets&#10;— OR —&#10;Paste up to 100 URLs (one per line) for real scanning"></textarea>
+            <button class="btn" id="hunt-btn" onclick="startScan()">🎯 HUNT</button>
             <label class="btn btn-sec" for="csv-file-input" style="display:flex;align-items:center">📁 CSV</label>
             <input type="file" id="csv-file-input" accept=".csv,.txt" onchange="loadCSV(event)">
             <button class="btn btn-sec" onclick="showSampleURLs()">📋 Sample</button>
@@ -872,6 +871,18 @@ function genId(){return Math.random().toString(36).substr(2,9)}
   renderPipeline();
   renderIntel();
   updateTopStats();
+  // Mobile: ensure HUNT button fires on touchstart too
+  var huntBtn = document.getElementById('hunt-btn');
+  if(huntBtn){
+    var _hunting = false;
+    huntBtn.addEventListener('touchstart', function(e){
+      e.preventDefault();
+      if(_hunting) return;
+      _hunting = true;
+      startScan();
+      setTimeout(function(){_hunting=false;},500);
+    }, {passive:false});
+  }
 })();
 
 function renderSidebar(){
@@ -968,11 +979,21 @@ const PROXY = 'https://corsproxy.io/?';
 let scanQueue = [], scanActive = 0, scanMax = 3, scanTotal = 0, scanDone = 0;
 
 async function startScan(){
-  if(!currentHunter) return;
+  if(!currentHunter){
+    document.getElementById('scan-status').innerHTML='<span style="color:#f59e0b">⚠ Select an Empire Company first.</span>';
+    return;
+  }
   const raw = document.getElementById('url-input').value.trim();
-  if(!raw){alert('Enter at least one URL to scan.');return;}
+  if(!raw){
+    // No URLs entered — fall back to demo mode automatically
+    loadDemoTargets();
+    return;
+  }
   const urls = raw.split(/[\n,]+/).map(u=>u.trim()).filter(u=>u.length>5).map(normalizeURL);
-  if(!urls.length){alert('No valid URLs found.');return;}
+  if(!urls.length){
+    loadDemoTargets();
+    return;
+  }
   beginScan(urls);
 }
 
