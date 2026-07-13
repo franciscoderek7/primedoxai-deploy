@@ -678,3 +678,36 @@ Full revenue acceleration sprint: VIGILAX commercial site, MindShift shop, urgen
 
 *Updated: 2026-06-29 | Session: Francisco Revenue Sprint (cont.) | Builder: Claude*
 *Source of truth for the Francisco Holdings empire. Update after every deployment.*
+
+---
+
+**FRANCISCO HOLDINGS PAYMENT AUDIT + GAP HUNTER FIX — DEPLOYED LIVE — 2026-07-13 (Derek's "MASTER PROMPT — FIX ALL PAYPAL BUTTONS & DEAD LINKS" + Gap Hunter repair orders):**
+
+**Gap Hunter JS fix (commit `0896557`, deployed Actions run `29206989467`):**
+- Root cause: single JS syntax error at `gap-hunter.html` line 1244 — `}` and `"` swapped inside a template literal (`'var(--blue)'">${r.score}` → `'var(--blue)'}">${r.score}`). Destroyed the entire 78,701-char inline script at parse time, leaving all functions (`showTab`, `selectHunter`, `startScan`) undefined. Fixed, verified with `node --check`, deployed.
+- History note: two prior fix attempts (commits `28a9971`, `9a52ee6`) both had the correct fix but one was rolled back by Derek after CDN-cache confusion (the fix was already live), and the second had a net-zero diff vs the feature branch tip which caused GitHub Actions path filter to skip the deploy workflow entirely. `0896557` is the clean re-fix from the correct base.
+
+**Payment link audit (commit `c242ffa`):**
+- `reverend-ai.js`: "Start Free Trial — $49" label changed to "Subscribe — $49/mo" (the old label suggested a free trial that charges immediately)
+- `book.html`: Interac e-Transfer email fixed (`docweedlaw@gmail.com` was missing — mailto pointed to wrong address)
+- `francisco-holdings-expanded.html`: 9× `docweedla@gmail.com` (typo, missing trailing 'w') → `docweedlaw@gmail.com`; 3× `https://zprimedoxaihq.com` (nonexistent domain) → `primedox.html`
+- `pricing.html`: 4× `#PASTE-PAYPAL-LINK-HERE` placeholders → `paypal.me/techpetcage/199`, `paypal.me/techpetcage/499`, `paypal.me/techpetcage/1999`, `paypal.me/techpetcage/4999`
+
+**Full floor audit findings — all active floors clean (21 unique PayPal amounts, all to `paypal.me/techpetcage`; 0 dead `href="#"` bare-hash links; 30-Day Money-Back Guarantee renders on every paid floor via floor renderer line 1757).**
+
+**Brand/UI/logic fixes (commit `67d56a2`):**
+- `index.html` line 769: architecture diagram showed retired brand name `OMNIAGUARD` → `OmniGuard`
+- `index.html` Floor 1: `live:` URL still pointed to old domain `omniaguard.com` → `omni-guard.com` (per June 2026 rebrand)
+- `index.html` ACHIEVEMENTS: `'empire_builder'` key was missing — Floor 6 TechPetCage boss paid $4,997 but achievement popup silently failed. Added `empire_builder: { name: 'Empire Founder', coins: 5000 }`
+- `index.html` Floor 8 Boardroom: three investment tiers (Floor $50K / Suite $250K / Penthouse $1M) had no `val:` field — prices never rendered in the card UI. Added `val:'$50,000'`, `val:'$250,000'`, `val:'$1,000,000+'`
+
+**Deploy pipeline:** `primedoxai-deploy` main → GitHub Actions `deploy-francisco-holdings.yml` (run `29259998384`, conclusion: success, 12s) → `franciscoderek7/francisco-holdings` main → GitHub Pages → `franciscoholdingsinc.com`. All three workflows triggered and completed: deploy (success), pages build (in progress at time of check), CI runtime (in progress).
+
+**Flagged for Derek — NOT changed (decisions needed):**
+- Floors 21, 22, 23 entirely absent from FLOORS array. `ROLE_HIGHLIGHT.Advocate` references floor 23 (`[2,4,23,35]`) but that section doesn't exist — highlight silently applies to nothing. Minimap creates dead cells 21/22/23. Needs content decision (add as `coming:true` or remove the highlight reference).
+- CLAUDE.md proxy blocks outbound to `franciscoholdingsinc.com` from this container — live visual verification (Gap Hunter tab switching, PayPal checkout flow) requires Derek to confirm in incognito browser, ideally cache-cleared.
+
+---
+
+*Updated: 2026-07-13 | Session: Francisco Revenue Sprint | Builder: Claude*
+*Source of truth for the Francisco Holdings empire. Update after every deployment.*
