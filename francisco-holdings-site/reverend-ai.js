@@ -27,7 +27,7 @@
       accent: '#0099bb',
       greeting: "I'm PrimeDox AI. I can help you understand our document automation tiers. What are you looking for?",
       consultLink: 'https://paypal.me/techpetcage/49CAD',
-      consultLabel: 'Start Free Trial — $49',
+      consultLabel: 'Subscribe — $49/mo',
     },
     'francisco-holdings': {
       name: 'FH Assistant',
