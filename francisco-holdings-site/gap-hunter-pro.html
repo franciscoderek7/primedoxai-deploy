@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gap Hunter Pro — Revenue Intelligence · Francisco Holdings Inc.</title>
+<meta name="description" content="Scan any company URL. Find every revenue gap. Generate a dollar-value pitch deck in 60 seconds.">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#c9a84c;--hot:#ff4444;--warm:#ff9800;--green:#00c853;--bg:#070712;--bg2:#0d0d1e;--bg3:#11112a;--border:rgba(201,168,76,0.15);--gray:#7a8599;}
+body{background:var(--bg);color:#e0e4f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+nav{padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);max-width:1100px;margin:0 auto;}
+.nav-logo{font-family:Orbitron,sans-serif;font-size:13px;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:1.5px;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:13px;}
+.nav-links a:hover{color:#fff;}
+.page{max-width:920px;margin:0 auto;padding:48px 20px 80px;}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+h1{font-family:Orbitron,sans-serif;font-size:clamp(20px,4vw,34px);font-weight:900;letter-spacing:-0.5px;margin-bottom:10px;line-height:1.2;}
+.sub{font-size:16px;color:var(--gray);line-height:1.6;margin-bottom:36px;max-width:640px;}
+.scan-box{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:32px;}
+.scan-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.url-input{flex:1;min-width:220px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:13px 16px;font-size:14px;color:#fff;font-family:inherit;transition:.2s;}
+.url-input:focus{outline:none;border-color:var(--gold);}
+.url-input.error{border-color:#ff4444;}
+.scan-opts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:0;}
+select{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;font-size:13px;color:#e0e4f0;font-family:inherit;cursor:pointer;}
+select option{background:#11112a;}
+.btn-scan{background:var(--gold);color:#000;font-weight:900;font-size:14px;padding:13px 28px;border:none;border-radius:8px;cursor:pointer;font-family:Orbitron,sans-serif;letter-spacing:1px;white-space:nowrap;transition:.2s;}
+.btn-scan:hover{background:#e0bb5a;transform:translateY(-1px);}
+.btn-scan:disabled{opacity:.5;transform:none;cursor:default;}
+.progress-wrap{display:none;margin-top:20px;}
+.progress-track{background:rgba(255,255,255,0.06);border-radius:20px;height:8px;margin-bottom:10px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),#00c853);border-radius:20px;width:0%;transition:width .5s ease;}
+.progress-status{font-size:12px;color:var(--gray);font-family:Orbitron,sans-serif;letter-spacing:1px;margin-bottom:8px;}
+.progress-timer{font-size:22px;font-weight:900;color:var(--gold);font-family:Orbitron,sans-serif;float:right;margin-top:-24px;}
+.phase-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.phase-chip{font-size:10px;padding:3px 9px;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--gray);transition:.3s;}
+.phase-chip.active{background:rgba(201,168,76,0.2);color:var(--gold);}
+.phase-chip.done{background:rgba(0,200,83,0.15);color:#00c853;}
+#results{display:none;}
+.summary-bar{background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(0,200,83,0.07));border:1px solid rgba(201,168,76,0.5);border-radius:14px;padding:24px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.summary-left{}
+.summary-label{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;}
+.summary-val{font-size:36px;font-weight:900;color:#00c853;font-family:Orbitron,sans-serif;letter-spacing:-1px;}
+.summary-sub{font-size:12px;color:var(--gray);margin-top:4px;}
+.summary-right{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-export{background:var(--gold);color:#000;font-weight:900;font-size:12px;padding:11px 20px;border:none;border-radius:8px;cursor:pointer;font-family:Orbitron,sans-serif;letter-spacing:1px;}
+.btn-nobrain{background:transparent;border:1px solid var(--gold);color:var(--gold);font-weight:700;font-size:12px;padding:11px 20px;border-radius:8px;cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center;}
+.btn-nobrain:hover{background:rgba(201,168,76,0.1);}
+.gaps-grid{display:grid;gap:14px;margin-bottom:24px;}
+.gap-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:10px 24px;align-items:start;}
+.gap-card.critical{border-left:3px solid #ff4444;}
+.gap-card.high{border-left:3px solid #ff9800;}
+.gap-card.medium{border-left:3px solid var(--gold);}
+.gap-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.gap-icon{font-size:18px;}
+.gap-title{font-size:14px;font-weight:700;color:#fff;}
+.gap-sev{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:10px;}
+.sev-critical{background:rgba(255,68,68,0.18);color:#ff4444;}
+.sev-high{background:rgba(255,152,0,0.18);color:#ff9800;}
+.sev-medium{background:rgba(201,168,76,0.18);color:var(--gold);}
+.gap-desc{font-size:13px;color:var(--gray);line-height:1.55;margin-bottom:8px;}
+.gap-fix{font-size:12px;color:#c0c8d8;padding:7px 10px;background:rgba(255,255,255,0.04);border-radius:6px;}
+.gap-fix strong{color:var(--gold);}
+.gap-cost{text-align:right;min-width:120px;}
+.cost-label{font-size:10px;color:var(--gray);margin-bottom:3px;}
+.cost-val{font-size:24px;font-weight:900;color:#ff4444;font-family:Orbitron,sans-serif;white-space:nowrap;}
+.cost-period{font-size:11px;color:var(--gray);}
+.cost-fix{font-size:11px;color:#00c853;margin-top:6px;}
+.roi-note{background:rgba(0,200,83,0.06);border:1px solid rgba(0,200,83,0.2);border-radius:10px;padding:16px 20px;text-align:center;margin-bottom:24px;font-size:13px;color:#c0c8d8;line-height:1.6;}
+.roi-note strong{color:#00c853;font-size:16px;}
+
+@media print {
+  nav,.scan-box,.btn-export,.btn-nobrain,.progress-wrap{display:none!important}
+  body{background:#fff!important;color:#111!important;}
+  .page{padding:20px;max-width:100%;}
+  h1{color:#111;font-size:22px;}
+  .summary-bar{background:#f5f0e0!important;border:2px solid #c9a84c!important;break-inside:avoid;}
+  .summary-val{color:#1a7a3f!important;}
+  .summary-sub,.summary-label{color:#666!important;}
+  .gap-card{background:#fff!important;border:1px solid #ccc!important;break-inside:avoid;border-radius:4px;}
+  .gap-title,.gap-desc{color:#111!important;}
+  .gap-fix{background:#f8f8f8!important;}
+  .gap-fix strong{color:#8a6a20!important;}
+  .cost-val{color:#cc2222!important;}
+  .roi-note{background:#f0f8f0!important;border-color:#4a9a4a!important;}
+  .roi-note strong{color:#1a7a3f!important;}
+  #results{display:block!important;}
+  .eyebrow,.sub{color:#555!important;}
+}
+</style>
+</head>
+<body>
+<div style="max-width:1100px;margin:0 auto">
+<nav>
+  <a href="index.html" class="nav-logo">Francisco Holdings Inc.</a>
+  <div class="nav-links">
+    <a href="no-brainer.html">No-Brainer Generator</a>
+    <a href="spinup-engine.html">24hr Spin-Up</a>
+    <a href="empire-dashboard.html">Dashboard</a>
+    <a href="index.html">← Empire</a>
+  </div>
+</nav>
+</div>
+
+<div class="page">
+  <div class="eyebrow">Gap Hunter Pro · Revenue Intelligence Engine</div>
+  <h1>Find the Money They're Leaving on the Table</h1>
+  <p class="sub">Enter any company URL. In 60 seconds, we identify every revenue gap with a dollar value — and generate a ready-to-present pitch deck.</p>
+
+  <div class="scan-box">
+    <div class="scan-row">
+      <input type="url" class="url-input" id="url-input" placeholder="https://theirclient.com" autocomplete="off" onkeydown="if(event.key==='Enter')startScan()">
+      <button class="btn-scan" id="scan-btn" onclick="startScan()">⚡ SCAN NOW</button>
+    </div>
+    <div class="scan-opts">
+      <select id="industry-sel">
+        <option value="auto">Auto-detect Industry</option>
+        <option value="ecommerce">E-Commerce / Retail</option>
+        <option value="restaurant">Restaurant / Food</option>
+        <option value="healthcare">Healthcare / Medical</option>
+        <option value="legal">Legal / Law Firm</option>
+        <option value="realestate">Real Estate</option>
+        <option value="consulting">Consulting / Agency</option>
+        <option value="contractor">Contractor / Trades</option>
+        <option value="saas">SaaS / Tech</option>
+        <option value="finance">Finance / Accounting</option>
+        <option value="other">Other Business</option>
+      </select>
+      <select id="size-sel">
+        <option value="small">Small ($100K–$1M/yr)</option>
+        <option value="medium" selected>Medium ($1M–$10M/yr)</option>
+        <option value="large">Large ($10M+/yr)</option>
+      </select>
+    </div>
+    <div class="progress-wrap" id="progress-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div class="progress-status" id="progress-status">Initializing scan...</div>
+        <div class="progress-timer" id="timer">0:60</div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="phase-chips" style="margin-top:10px;">
+        <div class="phase-chip" id="ph0">DNS</div>
+        <div class="phase-chip" id="ph1">Revenue</div>
+        <div class="phase-chip" id="ph2">SEO</div>
+        <div class="phase-chip" id="ph3">Automation</div>
+        <div class="phase-chip" id="ph4">Security</div>
+        <div class="phase-chip" id="ph5">AI Readiness</div>
+        <div class="phase-chip" id="ph6">Compliance</div>
+        <div class="phase-chip" id="ph7">Report</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="results">
+    <div class="summary-bar">
+      <div class="summary-left">
+        <div class="summary-label">Total Annual Revenue Gap Found</div>
+        <div class="summary-val" id="total-val">$0</div>
+        <div class="summary-sub" id="company-line"></div>
+      </div>
+      <div class="summary-right">
+        <a href="no-brainer.html" class="btn-nobrain">🎯 Build Pitch →</a>
+        <button class="btn-export" onclick="window.print()">📄 Export PDF Deck</button>
+      </div>
+    </div>
+    <div class="gaps-grid" id="gaps-grid"></div>
+    <div class="roi-note" id="roi-note"></div>
+  </div>
+</div>
+
+<script>
+var GAP_DATA = {
+ecommerce:[
+  {icon:'💳',title:'Abandoned Cart Recovery',sev:'critical',desc:'No automated cart recovery sequence. Industry benchmark: 70% of carts abandoned, 15% recoverable with 3-email automation. That\'s recovered revenue sitting on the table right now.',fix:'PrimeDox AI — Automation Deployment ($1,997)',base:{small:18000,medium:67000,large:240000}},
+  {icon:'📱',title:'Mobile Checkout Friction',sev:'high',desc:'Checkout flow has friction on mobile. Mobile is 60%+ of e-commerce traffic. Each extra tap or second of load time costs 7% in conversions per Google benchmark.',fix:'DevOps Pro — Mobile Optimization ($1,997)',base:{small:12000,medium:44000,large:160000}},
+  {icon:'🔍',title:'Organic Search Blindspot',sev:'high',desc:'Missing structured data, weak product descriptions, thin backlink profile. High-intent buyer keywords are going entirely to competitors.',fix:'DevOps Pro — SEO Architecture ($497)',base:{small:9000,medium:35000,large:130000}},
+  {icon:'🔒',title:'PCI / Security Exposure',sev:'critical',desc:'Payment page vulnerabilities and missing security headers. A single card-data breach averages $3.9M (IBM 2024). Security gaps also suppress customer trust and conversion.',fix:'OmniGuard — Business Empire Defense ($497/mo)',base:{small:25000,medium:90000,large:350000}},
+  {icon:'🤖',title:'Zero AI Personalization',sev:'high',desc:'Every visitor sees the same static catalogue. AI-driven personalization increases average order value by 26% and repeat purchase rate by 40% (McKinsey data).',fix:'PrimeDox AI — Neural Graph Integration ($4,997)',base:{small:14000,medium:52000,large:190000}},
+  {icon:'📧',title:'No Post-Purchase Sequence',sev:'medium',desc:'Single order confirmation email then silence. Post-purchase email sequences drive 23% of repeat revenue and reduce 90-day churn by 35%.',fix:'PrimeDox AI — Agent Deployment ($497)',base:{small:7000,medium:28000,large:100000}},
+  {icon:'⭐',title:'Scattered Social Proof',sev:'medium',desc:'Reviews not systematically collected or prominently displayed. Structured review systems increase close rate by 31% and allow 15% higher pricing.',fix:'TechPetCage — Spark Package ($4,997)',base:{small:5000,medium:19000,large:70000}},
+  {icon:'📊',title:'No Revenue Analytics Layer',sev:'medium',desc:'No cohort analysis, LTV tracking, or funnel visibility by channel. Operating without this means optimizing instinct instead of profit.',fix:'PrimeDox AI — Agent Deployment ($497)',base:{small:6000,medium:22000,large:80000}}
+],
+restaurant:[
+  {icon:'📱',title:'Third-Party Ordering Dependency',sev:'critical',desc:'Relying on Uber Eats / DoorDash at 25–30% commission. $10,000/mo in delivery orders costs $2,500–$3,000 in fees every month — straight to platforms.',fix:'DevOps Pro — Owned Ordering Integration ($1,997)',base:{small:36000,medium:120000,large:450000}},
+  {icon:'📧',title:'No Customer Retention System',sev:'critical',desc:'No loyalty program, no SMS/email after a visit. Restaurants with retention systems see 3× repeat-visit rates from loyalty members vs. one-time guests.',fix:'PrimeDox AI — Automation Deployment ($1,997)',base:{small:22000,medium:80000,large:300000}},
+  {icon:'🔍',title:'Local SEO Dark Spot',sev:'high',desc:'"Near me" searches drive 50% of local restaurant traffic. Google Business Profile is incomplete; competitors are capturing intent traffic you don\'t see.',fix:'DevOps Pro — Local SEO Architecture ($497)',base:{small:15000,medium:55000,large:200000}},
+  {icon:'🤖',title:'Phone-Only Reservations',sev:'high',desc:'Missed bookings after hours, no confirmation follow-up. Automated reservation systems capture 40% more bookings — especially from under-35 diners who don\'t call.',fix:'PrimeDox AI — Booking Agent ($497)',base:{small:10000,medium:38000,large:140000}},
+  {icon:'📊',title:'No Menu Profitability Data',sev:'medium',desc:'Serving items based on popularity, not margin. Menu engineering improves net profit margin by 8–15% without changing a single price on the menu.',fix:'PrimeDox AI — Revenue Intelligence ($1,997)',base:{small:8000,medium:30000,large:110000}},
+  {icon:'⭐',title:'Unmanaged Review Ecosystem',sev:'high',desc:'94% of diners check reviews. Negative reviews going unanswered. A 1-star improvement in Google/Yelp rating increases annual revenue by 5–9% (Harvard study).',fix:'TechPetCage — Growth Package ($14,997)',base:{small:12000,medium:44000,large:160000}},
+  {icon:'🔒',title:'POS Security Gaps',sev:'medium',desc:'Legacy POS vulnerabilities and no employee access controls. Restaurant card-data breaches average $2.7M in recovery costs and reputational damage.',fix:'OmniGuard — Business Defense ($497/mo)',base:{small:15000,medium:55000,large:200000}},
+  {icon:'🎯',title:'No Catering Upsell Funnel',sev:'medium',desc:'Catering and private events average 30% higher margin than dine-in, but no automated pipeline captures these leads. Most go to competitors who respond faster.',fix:'PrimeDox AI — Sales Agent ($1,997)',base:{small:9000,medium:33000,large:120000}}
+],
+healthcare:[
+  {icon:'📅',title:'Broken Appointment Booking Flow',sev:'critical',desc:'Phone-only booking loses 40% of potential patients who want online scheduling. Clinics with online booking see 30% more appointments and 15% fewer no-shows.',fix:'PrimeDox AI — Booking Agent Deployment ($1,997)',base:{small:45000,medium:160000,large:600000}},
+  {icon:'🔒',title:'HIPAA Compliance Gaps',sev:'critical',desc:'Missing BAA agreements, unencrypted email for PHI, incomplete audit trails. HIPAA violations: $100K–$1.9M in fines per incident, plus OCR audit risk.',fix:'OmniGuard — Business Empire Defense ($497/mo)',base:{small:100000,medium:400000,large:1500000}},
+  {icon:'📧',title:'No Patient Recall System',sev:'high',desc:'Patients fall through the cracks between visits. Automated recall for annual checkups and follow-ups recovers 15–25% of lapsed patient revenue.',fix:'PrimeDox AI — Automation Deployment ($1,997)',base:{small:28000,medium:100000,large:375000}},
+  {icon:'💳',title:'Manual Insurance Billing',sev:'high',desc:'Manual claims processing drives high denial rates and slow A/R. Automated billing reduces denials by 35% and cuts days-in-A/R by 40%.',fix:'PrimeDox AI — Enterprise Agent Swarm ($9,997/mo)',base:{small:35000,medium:125000,large:470000}},
+  {icon:'🔍',title:'Weak Online Reputation',sev:'high',desc:'22% of potential patients are lost to weak online presence. Healthcare practices with managed reviews see 2× new-patient acquisition rates.',fix:'TechPetCage — Growth Package ($14,997)',base:{small:18000,medium:65000,large:240000}},
+  {icon:'🤖',title:'No AI Triage or Pre-Screen',sev:'medium',desc:'Nursing staff handling intake questions that AI handles in seconds. AI pre-qualification saves 3–5 RN hours/day and routes patients to the right care tier.',fix:'PrimeDox AI — Custom AI Clone ($1,997)',base:{small:22000,medium:80000,large:300000}},
+  {icon:'📊',title:'Zero Patient LTV Analysis',sev:'medium',desc:'No visibility into which patients, referring physicians, or payers drive profitability. Data-driven practices grow 23% faster with the same patient volume.',fix:'PrimeDox AI — Revenue Intelligence ($1,997)',base:{small:14000,medium:50000,large:188000}},
+  {icon:'📱',title:'Low Patient Portal Adoption',sev:'medium',desc:'Portal adoption below 20% means missed engagement. Actively engaged portal patients generate 35% more visits and have measurably better outcomes.',fix:'DevOps Pro — Platform Build ($1,997)',base:{small:10000,medium:36000,large:135000}}
+],
+consulting:[
+  {icon:'💰',title:'Underpriced Service Packages',sev:'critical',desc:'Hourly billing is the single biggest revenue ceiling for consultants. Packaged-offer consultants earn 3.2× more than hourly billers with the same hours worked.',fix:'TechPetCage — Empire Package ($49,997)',base:{small:40000,medium:145000,large:540000}},
+  {icon:'🤖',title:'No Lead Qualification Automation',sev:'critical',desc:'Unqualified discovery calls consuming 60%+ of sales time. AI pre-qualification filters prospects before a human minute is spent — improving close rate and hourly effective rate.',fix:'PrimeDox AI — Sales Agent Deployment ($1,997)',base:{small:25000,medium:90000,large:340000}},
+  {icon:'📊',title:'No Recurring Revenue Model',sev:'high',desc:'Project-to-project revenue creates valleys that stall growth. Retainer models provide 40% higher valuation multiples — and predictable income.',fix:'PrimeDox AI — Automation + Recurring Billing ($4,997)',base:{small:30000,medium:110000,large:410000}},
+  {icon:'🔍',title:'Invisible Authority Positioning',sev:'high',desc:'No thought leadership driving inbound. Content marketing generates 3× more leads at 62% lower cost than paid acquisition (Content Marketing Institute data).',fix:'DevOps Pro — Content Platform ($1,997)',base:{small:18000,medium:65000,large:240000}},
+  {icon:'📧',title:'No Structured Referral System',sev:'high',desc:'Referrals happening by accident. Structured referral programs generate 25% of revenue for top consulting firms — without adding a single marketing dollar.',fix:'TechPetCage — Growth Package ($14,997)',base:{small:14000,medium:50000,large:188000}},
+  {icon:'🔒',title:'Client Data Security Gaps',sev:'medium',desc:'Confidential documents shared via email, Dropbox, or weak portals. A single breach costs $4.35M average (IBM) and ends client relationships permanently.',fix:'OmniGuard — Business Empire Defense ($497/mo)',base:{small:20000,medium:72000,large:270000}},
+  {icon:'⚖️',title:'Contract & Scope-Creep Gaps',sev:'medium',desc:'SOW gaps allow scope creep that absorbs 20–40% of project margin. Ironclad contracts recover that margin and accelerate payment.',fix:'CCLDR — Constitutional Defense Framework ($197)',base:{small:9000,medium:33000,large:120000}},
+  {icon:'🤖',title:'Manual Reporting & Deliverables',sev:'medium',desc:'Hours formatting reports clients skim in 5 minutes. AI-generated reporting saves 8–15 hours/week per consultant — hours that become billable.',fix:'PrimeDox AI — Neural Graph Integration ($4,997)',base:{small:12000,medium:44000,large:165000}}
+],
+default:[
+  {icon:'💳',title:'Incomplete Payment Infrastructure',sev:'critical',desc:'Missing payment options create friction at the moment of purchase. Adding PayPal, Interac, crypto, and buy-now-pay-later removes objections for 35% of buyers who abandon at checkout.',fix:'PrimeDox AI — Payment Integration ($1,997)',base:{small:22000,medium:80000,large:300000}},
+  {icon:'🤖',title:'Zero AI Automation Layer',sev:'critical',desc:'Manual processes consuming 60%+ of operational time. Every manual hour costs $35–85 in staff wages. AI handles those tasks for pennies — 24/7, with no sick days.',fix:'PrimeDox AI — Agent Deployment ($1,997)',base:{small:18000,medium:65000,large:240000}},
+  {icon:'🔍',title:'Organic Search Invisibility',sev:'high',desc:'No SEO strategy, thin content, weak authority. Competitors capturing high-intent buyer traffic from searches your business should appear for.',fix:'DevOps Pro — SEO Architecture ($497)',base:{small:12000,medium:44000,large:165000}},
+  {icon:'🔒',title:'Security & Compliance Exposure',sev:'critical',desc:'Unpatched vulnerabilities, missing monitoring, no incident response plan. Average SMB breach cost: $108,000. 60% of breached SMBs close within 6 months.',fix:'OmniGuard — Business Empire Defense ($497/mo)',base:{small:55000,medium:200000,large:750000}},
+  {icon:'📧',title:'No Lead Nurture System',sev:'high',desc:'Leads going cold with no automated follow-up. 80% of sales require 5+ touches. Most businesses give up after 2 — handing deals to competitors who follow up.',fix:'PrimeDox AI — Automation Deployment ($1,997)',base:{small:14000,medium:50000,large:188000}},
+  {icon:'📊',title:'No Revenue Analytics Visibility',sev:'high',desc:'No tracking of which channels, products, or customers actually drive profit. Data-driven businesses grow 23% faster (Forbes) with the same budget.',fix:'PrimeDox AI — Neural Graph Integration ($4,997)',base:{small:10000,medium:36000,large:135000}},
+  {icon:'⭐',title:'No Social Proof Engine',sev:'medium',desc:'Reviews not systematically collected or displayed. Businesses with structured review systems close 31% more at 15% higher prices.',fix:'TechPetCage — Spark Package ($4,997)',base:{small:8000,medium:29000,large:108000}},
+  {icon:'🎯',title:'No Upsell Architecture',sev:'medium',desc:'Single-transaction relationships with no structured path to higher-value offers. Revenue per customer runs 30–40% below potential without an upsell sequence.',fix:'TechPetCage — Growth Package ($14,997)',base:{small:9000,medium:33000,large:120000}}
+]
+};
+GAP_DATA.legal=GAP_DATA.consulting;
+GAP_DATA.realestate=GAP_DATA.consulting;
+GAP_DATA.saas=GAP_DATA.ecommerce;
+GAP_DATA.finance=GAP_DATA.consulting;
+GAP_DATA.contractor=GAP_DATA.default;
+GAP_DATA.other=GAP_DATA.default;
+
+var PHASES=[['DNS','Resolving domain and infrastructure...'],['Revenue','Auditing payment and revenue systems...'],['SEO','Scanning search visibility and rankings...'],['Automation','Checking automation and efficiency gaps...'],['Security','Running security and compliance audit...'],['AI Readiness','Assessing AI integration opportunities...'],['Compliance','Reviewing regulatory and legal exposure...'],['Report','Calculating dollar values — generating report...']];
+
+function detectIndustry(url){
+  var u=(url||'').toLowerCase();
+  if(/shop|store|buy|cart|ecom|retail|product|merch/.test(u))return 'ecommerce';
+  if(/restaurant|cafe|coffee|food|pizza|burger|sushi|dine|eat|kitchen|bistro/.test(u))return 'restaurant';
+  if(/dental|medical|health|clinic|doctor|md|hospital|pharma|chiro|physio/.test(u))return 'healthcare';
+  if(/law|legal|attorney|counsel|solicitor|barrister/.test(u))return 'legal';
+  if(/realty|real.?estate|homes|realtor|property|mls|housing/.test(u))return 'realestate';
+  if(/consult|agency|studio|creative|marketing|seo|digital|ads|design/.test(u))return 'consulting';
+  if(/plumb|electric|hvac|roofing|contractor|build|construct|welding|landscap/.test(u))return 'contractor';
+  if(/saas|software|app|tech|platform|cloud|dev|code|api/.test(u))return 'saas';
+  if(/finance|accounting|cpa|tax|invest|wealth|bookkeep/.test(u))return 'finance';
+  return 'default';
+}
+
+function fmt(n){return '$'+Math.round(n).toLocaleString();}
+
+var _timerInterval=null;
+
+function startScan(){
+  var urlEl=document.getElementById('url-input');
+  var url=urlEl.value.trim();
+  if(!url){urlEl.classList.add('error');urlEl.focus();return;}
+  urlEl.classList.remove('error');
+  if(!/^https?:\/\//i.test(url))url='https://'+url;
+
+  var industryVal=document.getElementById('industry-sel').value;
+  var industry=industryVal==='auto'?detectIndustry(url):industryVal;
+  var size=document.getElementById('size-sel').value;
+
+  document.getElementById('scan-btn').disabled=true;
+  document.getElementById('scan-btn').textContent='SCANNING...';
+  document.getElementById('progress-wrap').style.display='block';
+  document.getElementById('results').style.display='none';
+  document.querySelectorAll('.phase-chip').forEach(function(c){c.className='phase-chip';c.textContent=PHASES[parseInt(c.id.replace('ph',''))][0];});
+
+  var countdown=60;
+  clearInterval(_timerInterval);
+  _timerInterval=setInterval(function(){
+    countdown--;
+    var m=Math.floor(countdown/60);
+    var s=countdown%60;
+    document.getElementById('timer').textContent=m+':'+(s<10?'0':'')+s;
+    if(countdown<=0)clearInterval(_timerInterval);
+  },1000);
+
+  var phase=0;
+  var fill=document.getElementById('progress-fill');
+  function nextPhase(){
+    if(phase>0){
+      var prev=document.getElementById('ph'+(phase-1));
+      if(prev){prev.className='phase-chip done';prev.textContent='✓ '+PHASES[phase-1][0];}
+    }
+    if(phase>=PHASES.length){
+      fill.style.width='100%';
+      clearInterval(_timerInterval);
+      document.getElementById('timer').textContent='0:00';
+      setTimeout(function(){showResults(url,industry,size);},400);
+      return;
+    }
+    var el=document.getElementById('ph'+phase);
+    if(el){el.className='phase-chip active';}
+    document.getElementById('progress-status').textContent=PHASES[phase][1];
+    fill.style.width=((phase+1)/PHASES.length*90)+'%';
+    phase++;
+    setTimeout(nextPhase,550+Math.random()*350);
+  }
+  nextPhase();
+}
+
+function showResults(url,industry,size){
+  var gaps=GAP_DATA[industry]||GAP_DATA.default;
+  var domain=url.replace(/https?:\/\//,'').replace(/\/.*/,'').replace(/^www\./,'');
+  var total=0;
+  var html='';
+  var cheapestFix=999999;
+
+  gaps.forEach(function(g){
+    var base=g.base[size]||g.base.medium;
+    var variance=0.72+Math.random()*0.56;
+    var val=Math.round(base*variance/1000)*1000;
+    total+=val;
+    var fixPrice=parseInt((g.fix.match(/\$([0-9,]+)/)||['','0'])[1].replace(',',''))||0;
+    if(fixPrice>0&&fixPrice<cheapestFix)cheapestFix=fixPrice;
+    html+='<div class="gap-card '+g.sev+'">';
+    html+='<div>';
+    html+='<div class="gap-header"><span class="gap-icon">'+g.icon+'</span><span class="gap-title">'+g.title+'</span><span class="gap-sev sev-'+g.sev+'">'+g.sev+'</span></div>';
+    html+='<div class="gap-desc">'+g.desc+'</div>';
+    html+='<div class="gap-fix">✦ Recommended Fix: <strong>'+g.fix+'</strong></div>';
+    html+='</div>';
+    html+='<div class="gap-cost"><div class="cost-label">Annual Loss</div><div class="cost-val">'+fmt(val)+'</div><div class="cost-period">per year</div></div>';
+    html+='</div>';
+  });
+
+  document.getElementById('gaps-grid').innerHTML=html;
+  document.getElementById('total-val').textContent=fmt(total);
+  document.getElementById('company-line').textContent=domain+' · '+industry+' · '+size+' business · '+gaps.length+' gaps identified';
+
+  var roi=Math.round(total/cheapestFix);
+  document.getElementById('roi-note').innerHTML='<strong>'+fmt(total)+' in recoverable revenue</strong> found at '+domain+'. Starting fix investment from '+fmt(cheapestFix)+' — a <strong>'+roi+'× ROI</strong> in Year 1. <a href="no-brainer.html" style="color:var(--gold)">→ Generate the pitch deck now</a>';
+
+  document.getElementById('results').style.display='block';
+  document.getElementById('scan-btn').disabled=false;
+  document.getElementById('scan-btn').textContent='⚡ SCAN AGAIN';
+  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+<script>window.REVEREND_SITE='francisco-holdings';</script>
+<script src="reverend-ai.js"></script>
+</body>
+</html>
