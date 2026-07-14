@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>No-Brainer Generator — PrimeDox · Francisco Holdings Inc.</title>
+<meta name="description" content="Input a prospect's company type, problem, and budget. Get a complete pitch script, gap analysis, 3-tier proposal, and contract template in seconds.">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#c9a84c;--green:#00c853;--bg:#070712;--bg2:#0d0d1e;--bg3:#11112a;--border:rgba(201,168,76,0.15);--gray:#7a8599;}
+body{background:var(--bg);color:#e0e4f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+nav{padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);max-width:1100px;margin:0 auto;}
+.nav-logo{font-family:Orbitron,sans-serif;font-size:13px;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:1.5px;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:13px;}
+.nav-links a:hover{color:#fff;}
+.page{max-width:880px;margin:0 auto;padding:48px 20px 80px;}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+h1{font-family:Orbitron,sans-serif;font-size:clamp(20px,4vw,32px);font-weight:900;letter-spacing:-0.5px;margin-bottom:10px;line-height:1.2;}
+.sub{font-size:15px;color:var(--gray);line-height:1.6;margin-bottom:36px;}
+.input-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:28px;}
+.input-card h3{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+label{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase;}
+input,select,textarea{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:11px 14px;font-size:14px;color:#fff;font-family:inherit;transition:.2s;width:100%;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(201,168,76,0.5);}
+select option{background:#11112a;}
+textarea{resize:vertical;min-height:80px;}
+.problem-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.pchip{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);color:var(--gray);cursor:pointer;transition:.15s;background:transparent;}
+.pchip:hover,.pchip.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+.btn-generate{width:100%;background:var(--gold);color:#000;font-weight:900;font-size:15px;padding:16px;border:none;border-radius:10px;cursor:pointer;font-family:Orbitron,sans-serif;letter-spacing:1.5px;transition:.2s;margin-top:8px;}
+.btn-generate:hover{background:#e0bb5a;transform:translateY(-1px);}
+#output-section{display:none;}
+.output-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;overflow-x:auto;}
+.otab{font-size:12px;font-weight:700;font-family:Orbitron,sans-serif;letter-spacing:1px;padding:12px 20px;border:none;background:transparent;color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:.2s;}
+.otab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.otab:hover{color:#fff;}
+.output-panel{display:none;}
+.output-panel.active{display:block;}
+.output-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:24px;position:relative;}
+.output-box pre{white-space:pre-wrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.7;color:#c0c8d8;}
+.output-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+.btn-copy{background:transparent;border:1px solid var(--border);color:var(--gray);font-size:12px;font-weight:700;padding:8px 16px;border-radius:6px;cursor:pointer;transition:.2s;}
+.btn-copy:hover{border-color:var(--gold);color:var(--gold);}
+.btn-print{background:transparent;border:1px solid var(--border);color:var(--gray);font-size:12px;font-weight:700;padding:8px 16px;border-radius:6px;cursor:pointer;transition:.2s;}
+.btn-print:hover{border-color:var(--gold);color:var(--gold);}
+.section-head{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.tier-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+@media(max-width:650px){.tier-cards{grid-template-columns:1fr;}}
+.tier-card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.tier-card.featured{border-color:var(--gold);background:rgba(201,168,76,0.07);}
+.tier-name{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.tier-price{font-size:26px;font-weight:900;color:#fff;margin-bottom:8px;}
+.tier-items{font-size:12px;color:var(--gray);line-height:1.7;}
+.tier-items li{list-style:none;padding-left:14px;position:relative;}
+.tier-items li::before{content:'✓';position:absolute;left:0;color:var(--green);}
+.gap-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.gap-row:last-child{border-bottom:none;}
+.gap-name{font-size:13px;color:#c0c8d8;}
+.gap-dollar{font-size:15px;font-weight:800;color:#ff6b6b;font-family:Orbitron,sans-serif;}
+.gap-total{display:flex;justify-content:space-between;padding:12px 0 0;font-weight:800;font-size:15px;}
+.gap-total-label{color:#fff;}
+.gap-total-val{color:var(--green);}
+@media print{
+  nav,.input-card,.output-tabs,.output-actions,.btn-generate{display:none!important}
+  body{background:#fff!important;color:#111!important;}
+  .page{padding:20px;}
+  h1{color:#111;}
+  #output-section{display:block!important;}
+  .output-panel{display:block!important;page-break-after:always;}
+  .output-box{background:#fff!important;border:1px solid #ccc!important;}
+  .output-box pre{color:#222!important;}
+  .section-head{color:#8a6a20!important;}
+  .tier-card{background:#f8f8f8!important;border-color:#ccc!important;}
+  .tier-name{color:#8a6a20!important;}
+  .tier-price,.tier-items li{color:#111!important;}
+}
+</style>
+</head>
+<body>
+<div style="max-width:1100px;margin:0 auto">
+<nav>
+  <a href="index.html" class="nav-logo">Francisco Holdings Inc.</a>
+  <div class="nav-links">
+    <a href="gap-hunter-pro.html">Gap Hunter Pro</a>
+    <a href="spinup-engine.html">24hr Spin-Up</a>
+    <a href="empire-dashboard.html">Dashboard</a>
+    <a href="index.html">← Empire</a>
+  </div>
+</nav>
+</div>
+
+<div class="page">
+  <div class="eyebrow">PrimeDox · No-Brainer Generator</div>
+  <h1>Close the $4,997 Deal in 24 Hours</h1>
+  <p class="sub">Enter their company type, their problem, and their budget. Get a personalized pitch script, gap analysis, 3-tier proposal, and contract template — ready to send.</p>
+
+  <div class="input-card">
+    <h3>Prospect Details</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Their Company Name</label>
+        <input type="text" id="company-name" placeholder="e.g. Maple Leaf Dental">
+      </div>
+      <div class="form-group">
+        <label>Company Type</label>
+        <select id="company-type">
+          <option value="">Select type...</option>
+          <option value="restaurant">Restaurant / Food Service</option>
+          <option value="dental">Dental / Medical Clinic</option>
+          <option value="realestate">Real Estate Agency</option>
+          <option value="law">Law Firm</option>
+          <option value="ecommerce">E-Commerce Store</option>
+          <option value="contractor">Contractor / Trades</option>
+          <option value="gym">Gym / Fitness Studio</option>
+          <option value="salon">Salon / Spa / Wellness</option>
+          <option value="consulting">Consulting / Agency</option>
+          <option value="retail">Retail Store</option>
+          <option value="saas">SaaS / Tech Company</option>
+          <option value="accountant">Accounting / Finance</option>
+          <option value="other">Other Business</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Their Estimated Annual Revenue</label>
+        <select id="revenue">
+          <option value="under500k">Under $500K/yr</option>
+          <option value="500k_2m" selected>$500K – $2M/yr</option>
+          <option value="2m_10m">$2M – $10M/yr</option>
+          <option value="over10m">Over $10M/yr</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Their Budget / Willingness to Invest</label>
+        <select id="budget">
+          <option value="under1k">Under $1,000</option>
+          <option value="1k_5k" selected>$1,000 – $5,000</option>
+          <option value="5k_20k">$5,000 – $20,000</option>
+          <option value="over20k">$20,000+</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Their Core Problem (describe in your own words)</label>
+      <textarea id="problem" placeholder="e.g. They're losing customers to competitors, their website is outdated, they have no automation..."></textarea>
+    </div>
+    <div class="problem-chips" id="problem-chips"></div>
+    <button class="btn-generate" onclick="generate()">⚡ GENERATE NO-BRAINER PACKAGE</button>
+  </div>
+
+  <div id="output-section">
+    <div class="output-tabs">
+      <button class="otab active" onclick="showTab('pitch',this)">🎯 Pitch Script</button>
+      <button class="otab" onclick="showTab('gaps',this)">💰 Gap Analysis</button>
+      <button class="otab" onclick="showTab('proposal',this)">📋 3-Tier Proposal</button>
+      <button class="otab" onclick="showTab('contract',this)">⚖️ Contract</button>
+    </div>
+
+    <div id="panel-pitch" class="output-panel active">
+      <div class="output-box">
+        <div class="section-head">Pitch Script — "Would You Let Me Help You?"</div>
+        <pre id="pitch-text"></pre>
+      </div>
+      <div class="output-actions">
+        <button class="btn-copy" onclick="copyPanel('pitch-text')">📋 Copy Script</button>
+        <button class="btn-print" onclick="window.print()">🖨️ Print All</button>
+      </div>
+    </div>
+
+    <div id="panel-gaps" class="output-panel">
+      <div class="output-box">
+        <div class="section-head">Dollar-Value Gap Analysis</div>
+        <div id="gaps-list"></div>
+      </div>
+      <div class="output-actions">
+        <button class="btn-copy" onclick="copyGaps()">📋 Copy Gap Analysis</button>
+      </div>
+    </div>
+
+    <div id="panel-proposal" class="output-panel">
+      <div class="output-box">
+        <div class="section-head">3-Tier Proposal</div>
+        <div class="tier-cards" id="tier-cards"></div>
+        <pre id="proposal-text" style="margin-top:16px;font-size:13px;color:var(--gray);"></pre>
+      </div>
+      <div class="output-actions">
+        <button class="btn-copy" onclick="copyPanel('proposal-text')">📋 Copy Proposal</button>
+      </div>
+    </div>
+
+    <div id="panel-contract" class="output-panel">
+      <div class="output-box">
+        <div class="section-head">Service Agreement Template</div>
+        <pre id="contract-text"></pre>
+      </div>
+      <div class="output-actions">
+        <button class="btn-copy" onclick="copyPanel('contract-text')">📋 Copy Contract</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var PROBLEM_CHIPS={
+  restaurant:['Losing delivery commission','No online ordering','Customers not returning','Empty weeknights','No loyalty program','Terrible Google reviews'],
+  dental:['Calendar not full','Patients not returning','Insurance billing mess','No recall system','Online reviews weak','Staff overwhelmed'],
+  realestate:['Leads going cold','No CRM system','Competing on price only','No referral system','Weak online presence','Manual follow-up'],
+  law:['No recurring revenue','Admin consuming billable hours','No intake automation','Clients shopping around','No thought leadership','Slow collections'],
+  ecommerce:['High cart abandonment','No email list strategy','Losing to Amazon','Low repeat purchases','No upsells','Slow site speed'],
+  contractor:['Feast-or-famine bookings','No follow-up system','Competing on price','No referrals system','Off-season gaps','Manual scheduling'],
+  gym:['Members cancelling','No referral program','Low PT upsells','Empty class times','No app/system','No community'],
+  salon:['No-shows killing revenue','Clients not reboooking','Staff not upselling','Instagram not converting','No loyalty system','Empty Tuesdays'],
+  consulting:['No recurring revenue','Too reliant on 1-2 clients','Undercharging','Manual everything','No lead system','Scope creep'],
+  retail:['Foot traffic dying','No online presence','Inventory not turning','Competing with Amazon','No loyalty program','Margins shrinking'],
+  saas:['High churn rate','Slow onboarding','No product-led growth','Support overloaded','No upsell path','Marketing not converting'],
+  accountant:['Tax season burnout','Clients only call once a year','No advisory revenue','Manual data entry','Slow collections','Staff retention'],
+  other:['Revenue stagnant','No automation','Losing to competitors','No online presence','Manual processes','Customer churn']
+};
+
+var GAP_TEMPLATES={
+  restaurant:{gaps:[['No owned online ordering','$2,500–$4,200/mo in platform commissions',36000],['No loyalty/retention system','$1,800–$3,000/mo in lost repeat business',24000],['Local SEO dark spot','$1,200–$2,500/mo in missed new customers',18000],['No automated review management','$900–$1,800/mo in lost trust/bookings',12000],['Manual reservations after hours','$600–$1,400/mo in missed bookings',10000]],service:'Restaurant Automation Package'},
+  dental:{gaps:[['No automated patient recall','$3,000–$6,000/mo in missed recall revenue',48000],['HIPAA compliance exposure','$8,000–$12,000/mo in regulatory risk',100000],['Broken online booking flow','$2,000–$4,000/mo in missed new patients',36000],['No post-visit follow-up','$1,500–$3,000/mo in lapsed patients',24000],['Weak Google/review presence','$1,000–$2,000/mo in lost new patients',18000]],service:'Dental Practice Automation'},
+  realestate:{gaps:[['No automated lead follow-up','$3,500–$7,000/mo in cold leads',60000],['No CRM or pipeline system','$2,000–$4,000/mo in lost deals',36000],['No referral engine','$1,500–$3,000/mo in missed referral commissions',24000],['Weak content/SEO presence','$1,000–$2,500/mo in lost organic leads',18000],['Manual contract & admin','$800–$1,500/mo in billable hours lost',12000]],service:'Real Estate Automation Stack'},
+  law:{gaps:[['No intake automation','$4,000–$8,000/mo in unqualified time wasted',72000],['No recurring retainer model','$3,000–$6,000/mo in project revenue valleys',48000],['Scope creep (contract gaps)','$2,000–$4,000/mo in absorbed time',30000],['No thought leadership content','$1,500–$3,000/mo in missed inbound',18000],['Slow collections process','$1,000–$2,500/mo in A/R drag',16000]],service:'Law Firm Operations Package'},
+  ecommerce:{gaps:[['Abandoned cart (no recovery)','$3,000–$6,000/mo in recoverable orders',54000],['No post-purchase email sequence','$1,800–$3,500/mo in missed repeat orders',30000],['Mobile checkout friction','$1,500–$3,000/mo in mobile abandonment',24000],['No personalization engine','$1,200–$2,400/mo in below-average AOV',18000],['SEO/organic blindspot','$900–$2,000/mo in competitor-captured traffic',14000]],service:'E-Commerce Growth Stack'},
+  contractor:{gaps:[['No lead nurture/follow-up','$2,500–$5,000/mo in cold leads',42000],['Off-season revenue gap','$2,000–$4,000/mo in predictable drought',30000],['No referral system','$1,500–$3,000/mo in word-of-mouth left to chance',24000],['Manual scheduling/dispatch','$800–$1,600/mo in coordination waste',13000],['No review generation','$600–$1,200/mo in lost trust',9000]],service:'Trades Business Automation'},
+  default:{gaps:[['No automation layer','$2,000–$4,500/mo in manual process cost',36000],['No lead nurture system','$1,800–$3,500/mo in cold-lead losses',28000],['Weak online presence','$1,200–$2,800/mo in missed organic traffic',20000],['No payment friction removal','$900–$2,000/mo in checkout abandonment',16000],['No upsell architecture','$700–$1,500/mo in below-potential LTV',12000]],service:'Business Growth Package'}
+};
+GAP_TEMPLATES.gym=GAP_TEMPLATES.restaurant;
+GAP_TEMPLATES.salon=GAP_TEMPLATES.restaurant;
+GAP_TEMPLATES.consulting=GAP_TEMPLATES.law;
+GAP_TEMPLATES.retail=GAP_TEMPLATES.ecommerce;
+GAP_TEMPLATES.saas=GAP_TEMPLATES.ecommerce;
+GAP_TEMPLATES.accountant=GAP_TEMPLATES.law;
+GAP_TEMPLATES.other=GAP_TEMPLATES.default;
+
+var TIER_CONFIGS={
+  'under1k':{t1:{name:'Quick Win',price:'$497',desc:'Fix the single highest-impact gap fast'},t2:{name:'Growth',price:'$997',desc:'Fix top 3 gaps + 30 days of automation'},t3:{name:'Empire',price:'$1,997',desc:'Full audit + all gaps fixed + 60-day support'}},
+  '1k_5k':{t1:{name:'Quick Win',price:'$997',desc:'Fix the single highest-impact gap fast'},t2:{name:'Growth',price:'$2,997',desc:'Fix top 3 gaps + 60 days of automation'},t3:{name:'Empire',price:'$4,997',desc:'Full audit + all gaps fixed + 90-day support'}},
+  '5k_20k':{t1:{name:'Quick Win',price:'$2,997',desc:'Fix the single highest-impact gap fast'},t2:{name:'Growth',price:'$7,997',desc:'Fix all gaps + 3 months of automation'},t3:{name:'Empire',price:'$14,997',desc:'Full rebuild + AI stack + 6-month retainer'}},
+  'over20k':{t1:{name:'Quick Win',price:'$9,997',desc:'Strategic fix of highest-value gap'},t2:{name:'Growth',price:'$24,997',desc:'Full automation build + 6 months'},t3:{name:'Empire',price:'$49,997',desc:'Complete empire build + 12-month partnership'}}
+};
+
+function loadChips(){
+  var type=document.getElementById('company-type').value||'other';
+  var chips=PROBLEM_CHIPS[type]||PROBLEM_CHIPS.other;
+  var html='';
+  chips.forEach(function(c){html+='<span class="pchip" onclick="toggleChip(this,\''+c+'\')">' +c+'</span>';});
+  document.getElementById('problem-chips').innerHTML=html;
+}
+document.getElementById('company-type').addEventListener('change',loadChips);
+loadChips();
+
+function toggleChip(el,text){
+  el.classList.toggle('active');
+  var ta=document.getElementById('problem');
+  if(el.classList.contains('active')){
+    ta.value=(ta.value?ta.value+', ':'')+text;
+  } else {
+    ta.value=ta.value.replace(', '+text,'').replace(text+', ','').replace(text,'').trim().replace(/^,|,$/,'').trim();
+  }
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.output-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.otab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function fmt(n){return '$'+Math.round(n).toLocaleString();}
+
+function generate(){
+  var name=document.getElementById('company-name').value.trim()||'Your Prospect';
+  var type=document.getElementById('company-type').value||'other';
+  var revenue=document.getElementById('revenue').value;
+  var budget=document.getElementById('budget').value;
+  var problem=document.getElementById('problem').value.trim()||'revenue is not growing as expected';
+
+  var gapData=GAP_TEMPLATES[type]||GAP_TEMPLATES.default;
+  var tiers=TIER_CONFIGS[budget]||TIER_CONFIGS['1k_5k'];
+
+  var revMult={under500k:0.6,'500k_2m':1,_2m_10m:2.2,over10m:5}[revenue.replace(/[^a-z0-9_]/g,'')]||1;
+  var totalGap=0;
+  var gapLines=[];
+  gapData.gaps.forEach(function(g){
+    var annual=Math.round(g[2]*revMult/1000)*1000;
+    totalGap+=annual;
+    gapLines.push({name:g[0],range:g[1],annual:annual});
+  });
+
+  var today=new Date();
+  var dateStr=today.toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'});
+  var due=new Date(today.getTime()+3*24*3600000).toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'});
+
+  // PITCH SCRIPT
+  var pitch=
+'Hi [First Name],\n\n'+
+'I\'ve been looking at '+gapData.service.replace(' Package','').replace(' Stack','').replace(' Automation','')+'s in your market, and I noticed something that stuck with me when I looked at '+name+'.\n\n'+
+'Most businesses like yours are losing '+fmt(Math.round(totalGap*0.4/1000)*1000)+' to '+fmt(totalGap)+' per year from gaps that are completely fixable. The one that jumps out most for you:\n\n'+
+'→ '+gapLines[0].name+' — '+gapLines[0].range+' every month.\n'+
+'→ '+gapLines[1].name+' — '+gapLines[1].range+' every month.\n'+
+'→ '+gapLines[2].name+' — '+gapLines[2].range+' every month.\n\n'+
+'I calculated it at roughly '+fmt(totalGap)+' in annual recoverable revenue.\n\n'+
+'Here\'s the no-brainer:\n\n'+
+'I can fix '+name+'\'s most expensive gap in the next 30 days for '+tiers.t2.price+'. If I don\'t find you at least '+fmt(parseInt(tiers.t2.price.replace(/[^0-9]/g,''))*3)+' in new revenue or cost savings within 90 days, you pay nothing.\n\n'+
+'No risk. All upside.\n\n'+
+'Would you let me help you?\n\n'+
+'— Derek Francisco\n'+
+'  CEO, Francisco Holdings Inc.\n'+
+'  franciscoholdingsinc.com\n'+
+'  docweedlaw@gmail.com\n\n'+
+'P.S. I\'m only taking 3 new clients this month. If you want one of those spots, reply within 48 hours.';
+
+  document.getElementById('pitch-text').textContent=pitch;
+
+  // GAP ANALYSIS
+  var gapsHtml='';
+  gapLines.forEach(function(g){
+    gapsHtml+='<div class="gap-row"><div class="gap-name">'+g.name+'</div><div class="gap-dollar">'+fmt(g.annual)+'/yr</div></div>';
+  });
+  gapsHtml+='<div class="gap-total"><div class="gap-total-label">Total Annual Gap</div><div class="gap-total-val">'+fmt(totalGap)+'</div></div>';
+  document.getElementById('gaps-list').innerHTML=gapsHtml;
+
+  // PROPOSAL
+  var tierHtml='';
+  var tierDetails=[
+    {t:tiers.t1,items:['Gap audit & analysis','Fix #1 highest-impact gap','Implementation in 14 days','30-day check-in call']},
+    {t:tiers.t2,items:['Full gap audit (all 5 gaps)','Fix top 3 gaps','AI automation for #1 gap','60-day support window','2× strategy calls'],feat:true},
+    {t:tiers.t3,items:['Everything in Growth','Fix all gaps identified','Custom AI agent build','90-day retainer support','Weekly progress calls','30-day money-back guarantee']}
+  ];
+  tierDetails.forEach(function(td){
+    tierHtml+='<div class="tier-card'+(td.feat?' featured':'')+'"><div class="tier-name">'+td.t.name+'</div><div class="tier-price">'+td.t.price+'</div><ul class="tier-items">';
+    td.items.forEach(function(i){tierHtml+='<li>'+i+'</li>';});
+    tierHtml+='</ul></div>';
+  });
+  document.getElementById('tier-cards').innerHTML=tierHtml;
+  document.getElementById('proposal-text').textContent=
+'RECOMMENDED: '+tiers.t2.name+' at '+tiers.t2.price+'\n'+
+'Reason: Closes '+Math.round(parseInt(tiers.t2.price.replace(/[^0-9]/g,''))/totalGap*100*10)/10+'% of the '+fmt(totalGap)+' gap in Year 1.\n'+
+'ROI: '+Math.round(totalGap/parseInt(tiers.t2.price.replace(/[^0-9]/g,'')))+':1 in Year 1\n\n'+
+'Payment: PayPal — paypal.me/techpetcage/'+tiers.t2.price.replace(/[^0-9]/g,'')+'\n'+
+'Interac: docweedlaw@gmail.com · Ref: "'+name+' — '+tiers.t2.name+'"';
+
+  // CONTRACT
+  var contractAmt=parseInt(tiers.t2.price.replace(/[^0-9]/g,''));
+  document.getElementById('contract-text').textContent=
+'SERVICE AGREEMENT\n'+
+'Francisco Holdings Inc. · Derek Francisco, CEO\n'+
+'===============================================\n\n'+
+'Date: '+dateStr+'\n'+
+'Client: '+name+'\n'+
+'Service: '+gapData.service+' — '+tiers.t2.name+' Package\n'+
+'Investment: '+tiers.t2.price+' (CAD)\n'+
+'Payment Due: '+due+'\n\n'+
+'SCOPE OF WORK\n'+
+'─────────────\n'+
+'1. Full revenue gap audit and analysis\n'+
+'2. Fix: '+gapLines[0].name+'\n'+
+'3. Fix: '+gapLines[1].name+'\n'+
+'4. Fix: '+gapLines[2].name+'\n'+
+'5. 60-day support window and 2 strategy calls\n\n'+
+'DELIVERABLES\n'+
+'─────────────\n'+
+'· Written gap analysis report with dollar values\n'+
+'· Implementation of fixes within 30 days of payment\n'+
+'· 60-day post-delivery support (email + call)\n'+
+'· Progress reports at Days 14, 30, and 60\n\n'+
+'TERMS\n'+
+'──────\n'+
+'· 50% deposit required to begin: '+fmt(Math.round(contractAmt/2))+'\n'+
+'· Balance due at Day 30: '+fmt(contractAmt-Math.round(contractAmt/2))+'\n'+
+'· 30-Day Money-Back Guarantee: if we don\'t identify at least '+fmt(contractAmt*3)+' in annualized savings or new revenue within 90 days, client receives a full refund.\n'+
+'· All work remains property of client upon final payment.\n'+
+'· Confidentiality: both parties agree to maintain strict confidentiality of shared business information.\n'+
+'· Disputes: resolved by negotiation first; binding arbitration if unresolved within 30 days.\n\n'+
+'PAYMENT\n'+
+'────────\n'+
+'PayPal: paypal.me/techpetcage/'+Math.round(contractAmt/2)+'\n'+
+'Interac: docweedlaw@gmail.com · Ref: "'+name+' Deposit"\n'+
+'Bitcoin: bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x\n\n'+
+'SIGNATURES\n'+
+'──────────\n'+
+'Derek Francisco, CEO — Francisco Holdings Inc.\n'+
+'Signature: ____________________  Date: _________\n\n'+
+'Client Authorized Signatory — '+name+'\n'+
+'Signature: ____________________  Date: _________\n\n'+
+'Print Name: __________________  Title: _________';
+
+  document.getElementById('output-section').style.display='block';
+  document.getElementById('output-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyPanel(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent).then(function(){
+    var btn=event.target;
+    var orig=btn.textContent;
+    btn.textContent='✓ Copied!';
+    setTimeout(function(){btn.textContent=orig;},2000);
+  });
+}
+
+function copyGaps(){
+  var el=document.getElementById('gaps-list');
+  var text=el.querySelectorAll('.gap-row,.gap-total');
+  var out='';
+  text.forEach(function(r){
+    var cells=r.querySelectorAll('div');
+    if(cells.length>=2)out+=cells[0].textContent+': '+cells[1].textContent+'\n';
+  });
+  navigator.clipboard.writeText(out).then(function(){
+    var btn=event.target;
+    btn.textContent='✓ Copied!';
+    setTimeout(function(){btn.textContent='📋 Copy Gap Analysis';},2000);
+  });
+}
+</script>
+<script>window.REVEREND_SITE='francisco-holdings';</script>
+<script src="reverend-ai.js"></script>
+</body>
+</html>

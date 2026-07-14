@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Dashboard — Francisco Holdings Inc.</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --surface:#12121a;
+  --card:#1a1a28;
+  --border:#2a2a3f;
+  --gold:#f0b429;
+  --gold2:#e09d1a;
+  --green:#22c55e;
+  --red:#ef4444;
+  --blue:#3b82f6;
+  --purple:#a855f7;
+  --orange:#f97316;
+  --text:#e8e8f0;
+  --muted:#6b7280;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+
+/* ─── LOCK SCREEN ─── */
+#lockScreen{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;flex-direction:column;gap:24px;
+}
+.lock-logo{font-size:48px;letter-spacing:-1px}
+.lock-title{font-size:22px;font-weight:700;color:var(--gold);letter-spacing:1px}
+.lock-sub{font-size:13px;color:var(--muted);text-align:center}
+.lock-form{display:flex;flex-direction:column;gap:12px;width:280px}
+.lock-input{
+  background:var(--card);border:1px solid var(--border);
+  color:var(--text);padding:12px 16px;border-radius:var(--radius);
+  font-size:16px;letter-spacing:3px;text-align:center;outline:none;
+  transition:border-color .2s;
+}
+.lock-input:focus{border-color:var(--gold)}
+.lock-btn{
+  background:var(--gold);color:#000;border:none;padding:13px;
+  border-radius:var(--radius);font-size:15px;font-weight:700;
+  cursor:pointer;transition:background .2s;letter-spacing:.5px;
+}
+.lock-btn:hover{background:var(--gold2)}
+.lock-err{color:var(--red);font-size:13px;text-align:center;min-height:18px}
+.lock-notice{font-size:11px;color:var(--muted);text-align:center;max-width:260px;line-height:1.5}
+
+/* ─── APP SHELL ─── */
+#app{display:none;flex-direction:column;min-height:100vh}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 28px;height:60px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:100;
+}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-logo{font-size:20px;font-weight:800;color:var(--gold);letter-spacing:.5px}
+.topbar-badge{
+  background:rgba(240,180,41,.15);color:var(--gold);
+  font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;
+  letter-spacing:.5px;border:1px solid rgba(240,180,41,.3);
+}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-date{font-size:13px;color:var(--muted)}
+.btn-lock{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;
+  transition:all .2s;
+}
+.btn-lock:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ─── MAIN ─── */
+.main{padding:28px;max-width:1400px;margin:0 auto;width:100%}
+
+/* ─── KPI TILES ─── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px}
+.kpi-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 22px;
+  display:flex;flex-direction:column;gap:6px;
+  transition:transform .15s,border-color .2s;
+}
+.kpi-card:hover{transform:translateY(-2px);border-color:rgba(240,180,41,.4)}
+.kpi-icon{font-size:26px;margin-bottom:4px}
+.kpi-label{font-size:12px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.kpi-value{font-size:32px;font-weight:800;color:var(--gold);letter-spacing:-1px;line-height:1}
+.kpi-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.kpi-delta{font-size:12px;font-weight:600;margin-top:4px}
+.kpi-delta.up{color:var(--green)}
+.kpi-delta.down{color:var(--red)}
+
+/* ─── SECTION HEADER ─── */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.section-title{font-size:16px;font-weight:700;color:var(--text);letter-spacing:.3px}
+.section-title span{color:var(--gold)}
+
+/* ─── PIPELINE ─── */
+.pipeline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.pipeline-col{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.pipeline-col-header{
+  padding:12px 16px;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.stage-lead .pipeline-col-header{background:rgba(59,130,246,.15);color:var(--blue);border-bottom:1px solid rgba(59,130,246,.3)}
+.stage-proposal .pipeline-col-header{background:rgba(168,85,247,.15);color:var(--purple);border-bottom:1px solid rgba(168,85,247,.3)}
+.stage-active .pipeline-col-header{background:rgba(249,115,22,.15);color:var(--orange);border-bottom:1px solid rgba(249,115,22,.3)}
+.stage-closed .pipeline-col-header{background:rgba(34,197,94,.15);color:var(--green);border-bottom:1px solid rgba(34,197,94,.3)}
+.pipeline-count{
+  background:rgba(255,255,255,.1);color:inherit;
+  font-size:11px;padding:2px 7px;border-radius:10px;font-weight:800;
+}
+.pipeline-items{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:80px}
+.pipeline-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:7px;padding:10px 12px;cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.pipeline-card:hover{border-color:var(--gold);background:var(--card)}
+.pc-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.pc-val{font-size:13px;font-weight:700;color:var(--gold)}
+.pc-industry{font-size:11px;color:var(--muted);margin-top:3px}
+.pc-date{font-size:10px;color:var(--muted);margin-top:2px}
+.pipeline-empty{font-size:12px;color:var(--muted);text-align:center;padding:16px 0;font-style:italic}
+
+/* ─── BOTTOM GRID ─── */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:28px}
+@media(max-width:800px){.bottom-grid{grid-template-columns:1fr}}
+
+/* ─── PANELS ─── */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.panel-head{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;
+}
+.panel-body{padding:16px 18px}
+
+/* ─── GAPS TABLE ─── */
+.gap-table{width:100%;border-collapse:collapse}
+.gap-table th{
+  font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
+  padding:6px 8px;text-align:left;font-weight:600;
+}
+.gap-table td{padding:8px;font-size:13px;border-top:1px solid var(--border)}
+.gap-table tr:first-child td{border-top:none}
+.gap-tag{
+  font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;
+  letter-spacing:.3px;display:inline-block;
+}
+.gap-tag.found{background:rgba(249,115,22,.15);color:var(--orange)}
+.gap-tag.fixed{background:rgba(34,197,94,.15);color:var(--green)}
+.gap-tag.ignored{background:rgba(107,114,128,.15);color:var(--muted)}
+
+/* ─── FUNNEL ─── */
+.funnel{display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.funnel-row{display:flex;align-items:center;gap:12px}
+.funnel-label{font-size:12px;color:var(--muted);width:80px;text-align:right;flex-shrink:0}
+.funnel-bar-wrap{flex:1;background:var(--surface);border-radius:4px;height:22px;overflow:hidden}
+.funnel-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;
+  font-size:11px;font-weight:700;transition:width .5s ease;white-space:nowrap;overflow:hidden}
+.f-lead{background:linear-gradient(90deg,#3b82f6,#2563eb)}
+.f-proposal{background:linear-gradient(90deg,#a855f7,#7c3aed)}
+.f-active{background:linear-gradient(90deg,#f97316,#ea580c)}
+.f-closed{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.funnel-count{font-size:13px;font-weight:700;color:var(--text);width:28px;text-align:right;flex-shrink:0}
+
+/* ─── REVENUE CHART ─── */
+.rev-chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:8px}
+.rev-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+.rev-bar-container{flex:1;width:100%;display:flex;align-items:flex-end}
+.rev-bar{
+  width:100%;background:linear-gradient(180deg,var(--gold),var(--gold2));
+  border-radius:4px 4px 0 0;min-height:4px;transition:height .4s ease;
+  cursor:default;position:relative;
+}
+.rev-bar:hover::after{
+  content:attr(data-val);
+  position:absolute;top:-26px;left:50%;transform:translateX(-50%);
+  background:var(--surface);color:var(--gold);
+  font-size:10px;padding:2px 6px;border-radius:4px;white-space:nowrap;
+  border:1px solid var(--border);pointer-events:none;
+}
+.rev-month{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
+
+/* ─── ADD CLIENT PANEL ─── */
+.add-client-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:28px}
+.add-client-toggle{
+  width:100%;background:none;border:none;color:var(--text);
+  padding:16px 20px;text-align:left;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:14px;font-weight:700;
+}
+.add-client-toggle:hover{color:var(--gold)}
+.toggle-icon{font-size:18px;transition:transform .2s;color:var(--gold)}
+.add-client-form{
+  padding:0 20px 20px;display:none;
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.add-client-form.open{display:grid}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.form-input,.form-select{
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);padding:9px 12px;border-radius:7px;font-size:13px;outline:none;
+  transition:border-color .2s;
+}
+.form-input:focus,.form-select:focus{border-color:var(--gold)}
+.form-select option{background:var(--surface)}
+.btn-add{
+  grid-column:1/-1;background:var(--gold);color:#000;border:none;
+  padding:12px;border-radius:7px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:background .15s;letter-spacing:.3px;
+}
+.btn-add:hover{background:var(--gold2)}
+
+/* ─── CLIENT TABLE ─── */
+.client-table-wrap{overflow-x:auto}
+.client-table{width:100%;border-collapse:collapse;font-size:13px}
+.client-table th{
+  font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
+  padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+.client-table td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.client-table tr:last-child td{border-bottom:none}
+.client-table tr:hover td{background:rgba(255,255,255,.02)}
+.status-chip{
+  font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;letter-spacing:.3px;
+}
+.s-lead{background:rgba(59,130,246,.15);color:var(--blue)}
+.s-proposal{background:rgba(168,85,247,.15);color:var(--purple)}
+.s-active{background:rgba(249,115,22,.15);color:var(--orange)}
+.s-closed{background:rgba(34,197,94,.15);color:var(--green)}
+.s-lost{background:rgba(239,68,68,.15);color:var(--red)}
+.deal-val{font-weight:700;color:var(--gold)}
+.action-btns{display:flex;gap:6px}
+.btn-sm{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  padding:4px 8px;border-radius:5px;cursor:pointer;font-size:11px;
+  transition:all .15s;
+}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
+.empty-state{
+  text-align:center;padding:40px;color:var(--muted);
+  font-size:14px;
+}
+.empty-state span{display:block;font-size:36px;margin-bottom:12px}
+
+/* ─── MODAL ─── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
+  z-index:1000;align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:28px;width:90%;max-width:480px;
+}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:16px;color:var(--gold)}
+.modal-body{display:flex;flex-direction:column;gap:12px}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.btn-cancel{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  padding:9px 18px;border-radius:7px;cursor:pointer;font-size:13px;
+}
+.btn-save{
+  background:var(--gold);color:#000;border:none;
+  padding:9px 20px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;
+}
+
+/* ─── CONVERSION METER ─── */
+.conv-meter{
+  background:var(--surface);border-radius:8px;height:28px;overflow:hidden;margin:8px 0;
+}
+.conv-fill{
+  height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;padding-left:12px;
+  font-size:12px;font-weight:700;color:#000;transition:width .5s ease;
+}
+.conv-label{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* ─── TOAST ─── */
+.toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--green);color:#000;
+  padding:12px 20px;border-radius:8px;font-size:13px;font-weight:700;
+  opacity:0;transform:translateY(10px);
+  transition:all .25s;pointer-events:none;z-index:9000;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* ─── MISC ─── */
+.section-mb{margin-bottom:28px}
+@media(max-width:600px){
+  .main{padding:16px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .bottom-grid{grid-template-columns:1fr}
+  .pipeline-grid{grid-template-columns:1fr 1fr}
+  .add-client-form{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div class="lock-logo">⚔</div>
+  <div class="lock-title">EMPIRE DASHBOARD</div>
+  <div class="lock-sub">Francisco Holdings Inc. — Command Center</div>
+  <form class="lock-form" onsubmit="unlock(event)">
+    <input id="pwInput" type="password" class="lock-input" placeholder="••••••••••" autocomplete="current-password">
+    <button type="submit" class="lock-btn">ENTER COMMAND CENTER</button>
+    <div id="lockErr" class="lock-err"></div>
+  </form>
+  <div class="lock-notice">⚠ Client-side authentication — for private use only. Do not share this URL on public pages.</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">⚔ EMPIRE</div>
+      <div class="topbar-badge">COMMAND CENTER</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topbarDate"></div>
+      <button class="btn-lock" onclick="lockOut()">Lock</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- KPI TILES -->
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi-card">
+        <div class="kpi-icon">🚀</div>
+        <div class="kpi-label">Active Spin-Ups</div>
+        <div class="kpi-value" id="kpiActive">0</div>
+        <div class="kpi-sub">clients in production</div>
+        <div class="kpi-delta up" id="kpiActiveDelta"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">💰</div>
+        <div class="kpi-label">Total Revenue</div>
+        <div class="kpi-value" id="kpiRevenue">$0</div>
+        <div class="kpi-sub">all closed deals</div>
+        <div class="kpi-delta up" id="kpiRevDelta"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🔍</div>
+        <div class="kpi-label">Gaps Found / Fixed</div>
+        <div class="kpi-value" id="kpiGaps">0/0</div>
+        <div class="kpi-sub">revenue gaps identified</div>
+        <div class="kpi-delta up" id="kpiGapDelta"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🎯</div>
+        <div class="kpi-label">Conversion Rate</div>
+        <div class="kpi-value" id="kpiConv">0%</div>
+        <div class="kpi-sub">no-brainer close rate</div>
+        <div class="kpi-delta" id="kpiConvDelta"></div>
+      </div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div class="section-header">
+      <div class="section-title">Client Pipeline <span>/ By Stage</span></div>
+    </div>
+    <div class="pipeline-grid section-mb" id="pipelineBoard">
+      <div class="pipeline-col stage-lead">
+        <div class="pipeline-col-header">Lead <span class="pipeline-count" id="cnt-lead">0</span></div>
+        <div class="pipeline-items" id="col-lead"><div class="pipeline-empty">No leads yet</div></div>
+      </div>
+      <div class="pipeline-col stage-proposal">
+        <div class="pipeline-col-header">Proposal <span class="pipeline-count" id="cnt-proposal">0</span></div>
+        <div class="pipeline-items" id="col-proposal"><div class="pipeline-empty">No proposals</div></div>
+      </div>
+      <div class="pipeline-col stage-active">
+        <div class="pipeline-col-header">Active <span class="pipeline-count" id="cnt-active">0</span></div>
+        <div class="pipeline-items" id="col-active"><div class="pipeline-empty">No active clients</div></div>
+      </div>
+      <div class="pipeline-col stage-closed">
+        <div class="pipeline-col-header">Closed ✓ <span class="pipeline-count" id="cnt-closed">0</span></div>
+        <div class="pipeline-items" id="col-closed"><div class="pipeline-empty">No closed deals</div></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM GRID: Revenue + Funnel -->
+    <div class="bottom-grid section-mb">
+      <div class="panel">
+        <div class="panel-head">📈 Monthly Revenue</div>
+        <div class="panel-body">
+          <div class="rev-chart" id="revChart"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--muted)" id="revLabels"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">🌀 Conversion Funnel</div>
+        <div class="panel-body">
+          <div class="funnel" id="funnelView"></div>
+          <div style="margin-top:16px">
+            <div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">No-Brainer Close Rate</div>
+            <div class="conv-meter"><div class="conv-fill" id="convFill" style="width:0%">0%</div></div>
+            <div class="conv-label" id="convLabel">0 closed of 0 total leads</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAPS TABLE -->
+    <div class="bottom-grid section-mb">
+      <div class="panel">
+        <div class="panel-head">🔍 Revenue Gaps Tracker</div>
+        <div class="panel-body" id="gapsPanel">
+          <div class="empty-state"><span>🔍</span>No gaps logged yet. Add clients to track gaps.</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">📊 Deal Stats</div>
+        <div class="panel-body" id="statsPanel">
+          <div style="display:flex;flex-direction:column;gap:14px" id="statsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD CLIENT -->
+    <div class="add-client-panel section-mb">
+      <button class="add-client-toggle" onclick="toggleForm()">
+        <span>+ Add New Client</span>
+        <span class="toggle-icon" id="toggleIcon">▼</span>
+      </button>
+      <div class="add-client-form" id="addForm">
+        <div class="form-group">
+          <label class="form-label">Client / Company Name *</label>
+          <input class="form-input" id="fName" placeholder="Acme Restaurant Group" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Industry</label>
+          <select class="form-select" id="fIndustry">
+            <option value="Restaurant">Restaurant / Food</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Ecommerce">Ecommerce / Retail</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="Legal">Legal / Law Firm</option>
+            <option value="Finance">Finance / Insurance</option>
+            <option value="Contractor">Contractor / Trades</option>
+            <option value="Fitness">Fitness / Wellness</option>
+            <option value="Consulting">Consulting / Agency</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deal Value ($) *</label>
+          <input class="form-input" id="fDeal" type="number" placeholder="4997" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stage</label>
+          <select class="form-select" id="fStage">
+            <option value="lead">Lead</option>
+            <option value="proposal">Proposal Sent</option>
+            <option value="active">Active / In Spin-Up</option>
+            <option value="closed">Closed / Won</option>
+            <option value="lost">Lost</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gaps Found</label>
+          <input class="form-input" id="fGapsFound" type="number" placeholder="5" min="0" value="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gaps Fixed</label>
+          <input class="form-input" id="fGapsFixed" type="number" placeholder="3" min="0" value="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Total Gap Value ($/yr)</label>
+          <input class="form-input" id="fGapVal" type="number" placeholder="85000" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Name</label>
+          <input class="form-input" id="fContact" placeholder="Jane Smith">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Notes</label>
+          <input class="form-input" id="fNotes" placeholder="e.g. called Monday, needs follow-up Friday">
+        </div>
+        <button class="btn-add" onclick="addClient()">Add Client to Empire</button>
+      </div>
+    </div>
+
+    <!-- CLIENT TABLE -->
+    <div class="section-header">
+      <div class="section-title">All Clients <span id="clientCount"></span></div>
+      <button class="btn-sm" onclick="exportCSV()">Export CSV</button>
+    </div>
+    <div class="panel">
+      <div class="client-table-wrap">
+        <table class="client-table">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Industry</th>
+              <th>Stage</th>
+              <th>Deal</th>
+              <th>Gaps F/X</th>
+              <th>Gap Value</th>
+              <th>Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="clientTableBody">
+            <tr><td colspan="8"><div class="empty-state"><span>⚔</span>No clients yet. Add your first one above.</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title">Edit Client</div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Client Name</label>
+        <input class="form-input" id="eName">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stage</label>
+        <select class="form-select" id="eStage">
+          <option value="lead">Lead</option>
+          <option value="proposal">Proposal Sent</option>
+          <option value="active">Active / In Spin-Up</option>
+          <option value="closed">Closed / Won</option>
+          <option value="lost">Lost</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Deal Value ($)</label>
+        <input class="form-input" id="eDeal" type="number">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gaps Found</label>
+        <input class="form-input" id="eGapsFound" type="number">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gaps Fixed</label>
+        <input class="form-input" id="eGapsFixed" type="number">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <input class="form-input" id="eNotes">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── AUTH ───────────────────────────────────────────
+const PW = 'CISCO1170$';
+
+function unlock(e){
+  e.preventDefault();
+  const v = document.getElementById('pwInput').value;
+  if(v === PW){
+    document.getElementById('lockScreen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('app').style.flexDirection='column';
+    sessionStorage.setItem('empireAuth','1');
+    init();
+  } else {
+    document.getElementById('lockErr').textContent='Incorrect password.';
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function lockOut(){
+  sessionStorage.removeItem('empireAuth');
+  document.getElementById('lockScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('pwInput').value='';
+  document.getElementById('lockErr').textContent='';
+}
+
+// ─── DATA ────────────────────────────────────────────
+const KEY = 'empire_clients_v2';
+const REV_KEY = 'empire_revenue_v1';
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){return [];} }
+function save(d){ localStorage.setItem(KEY, JSON.stringify(d)); }
+
+function loadRev(){ try{ return JSON.parse(localStorage.getItem(REV_KEY)||'{}'); }catch(e){return {};} }
+function saveRev(d){ localStorage.setItem(REV_KEY, JSON.stringify(d)); }
+
+let editId = null;
+
+// ─── INIT ─────────────────────────────────────────
+function init(){
+  const d = new Date();
+  document.getElementById('topbarDate').textContent =
+    d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+
+  if(sessionStorage.getItem('empireAuth')==='1'){
+    document.getElementById('lockScreen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('app').style.flexDirection='column';
+  }
+
+  render();
+}
+
+// ─── RENDER ───────────────────────────────────────
+function render(){
+  const clients = load();
+  renderKPIs(clients);
+  renderPipeline(clients);
+  renderFunnel(clients);
+  renderRevChart();
+  renderGapsTable(clients);
+  renderStats(clients);
+  renderClientTable(clients);
+}
+
+function renderKPIs(clients){
+  const active = clients.filter(c=>c.stage==='active').length;
+  const revenue = clients.filter(c=>c.stage==='closed').reduce((s,c)=>s+(c.deal||0),0);
+  const gapsF = clients.reduce((s,c)=>s+(c.gapsFound||0),0);
+  const gapsX = clients.reduce((s,c)=>s+(c.gapsFixed||0),0);
+  const total = clients.length;
+  const closed = clients.filter(c=>c.stage==='closed').length;
+  const convPct = total>0 ? Math.round(closed/total*100) : 0;
+
+  document.getElementById('kpiActive').textContent = active;
+  document.getElementById('kpiRevenue').textContent = '$'+fmt(revenue);
+  document.getElementById('kpiGaps').textContent = gapsF+'/'+gapsX;
+  document.getElementById('kpiConv').textContent = convPct+'%';
+
+  const cd = document.getElementById('kpiConvDelta');
+  cd.textContent = convPct>=50 ? '↑ Above average close rate' : convPct>0 ? '↗ Keep pushing' : '';
+  cd.className = 'kpi-delta '+(convPct>=50?'up':'');
+}
+
+function renderPipeline(clients){
+  const stages = ['lead','proposal','active','closed'];
+  stages.forEach(s=>{
+    const items = clients.filter(c=>c.stage===s);
+    document.getElementById('cnt-'+s).textContent = items.length;
+    const col = document.getElementById('col-'+s);
+    if(!items.length){
+      col.innerHTML='<div class="pipeline-empty">'+
+        (s==='lead'?'No leads yet':s==='proposal'?'No proposals':s==='active'?'No active clients':'No closed deals')+'</div>';
+      return;
+    }
+    col.innerHTML = items.map(c=>`
+      <div class="pipeline-card" onclick="openEdit('${c.id}')">
+        <div class="pc-name">${esc(c.name)}</div>
+        <div class="pc-val">${c.deal?'$'+fmt(c.deal):''}</div>
+        <div class="pc-industry">${esc(c.industry||'')}</div>
+        <div class="pc-date">${c.added||''}</div>
+      </div>`).join('');
+  });
+}
+
+function renderFunnel(clients){
+  const stages = [
+    {key:'lead',label:'Lead',cls:'f-lead'},
+    {key:'proposal',label:'Proposal',cls:'f-proposal'},
+    {key:'active',label:'Active',cls:'f-active'},
+    {key:'closed',label:'Closed',cls:'f-closed'},
+  ];
+  const counts = stages.map(s=>({...s,n:clients.filter(c=>c.stage===s.key).length}));
+  const max = Math.max(...counts.map(s=>s.n),1);
+
+  document.getElementById('funnelView').innerHTML = counts.map(s=>`
+    <div class="funnel-row">
+      <div class="funnel-label">${s.label}</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar ${s.cls}" style="width:${Math.max(s.n/max*100,4)}%">
+          ${s.n>0?s.n:''}
+        </div>
+      </div>
+      <div class="funnel-count">${s.n}</div>
+    </div>`).join('');
+
+  const total = clients.length;
+  const closed = clients.filter(c=>c.stage==='closed').length;
+  const pct = total>0?Math.round(closed/total*100):0;
+  const fill = document.getElementById('convFill');
+  fill.style.width = pct+'%';
+  fill.textContent = pct+'%';
+  document.getElementById('convLabel').textContent = closed+' closed of '+total+' total leads';
+}
+
+function renderRevChart(){
+  const revData = loadRev();
+  const now = new Date();
+  const months = [];
+  for(let i=5;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    const label = d.toLocaleDateString('en-US',{month:'short'});
+    months.push({key,label,val:revData[key]||0});
+  }
+  const max = Math.max(...months.map(m=>m.val),1);
+
+  document.getElementById('revChart').innerHTML = months.map(m=>`
+    <div class="rev-bar-wrap">
+      <div class="rev-bar-container">
+        <div class="rev-bar" style="height:${Math.max(m.val/max*100,3)}%"
+          data-val="${m.val?'$'+fmt(m.val):'$0'}"></div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('revLabels').innerHTML = months.map(m=>`<span>${m.label}</span>`).join('');
+}
+
+function renderGapsTable(clients){
+  const el = document.getElementById('gapsPanel');
+  const withGaps = clients.filter(c=>c.gapsFound>0);
+  if(!withGaps.length){
+    el.innerHTML='<div class="empty-state"><span>🔍</span>No gaps logged yet.</div>';
+    return;
+  }
+  el.innerHTML=`<table class="gap-table">
+    <thead><tr><th>Client</th><th>Found</th><th>Fixed</th><th>Gap Value</th><th>Status</th></tr></thead>
+    <tbody>`+
+    withGaps.map(c=>{
+      const pct = c.gapsFound>0?Math.round(c.gapsFixed/c.gapsFound*100):0;
+      const tag = pct>=100?'fixed':pct>0?'found':'found';
+      return `<tr>
+        <td>${esc(c.name)}</td>
+        <td>${c.gapsFound||0}</td>
+        <td>${c.gapsFixed||0}</td>
+        <td>${c.gapVal?'$'+fmt(c.gapVal)+'/yr':'—'}</td>
+        <td><span class="gap-tag ${tag}">${pct>=100?'FIXED':pct+'%'}</span></td>
+      </tr>`;
+    }).join('')+
+    `</tbody></table>`;
+}
+
+function renderStats(clients){
+  const closed = clients.filter(c=>c.stage==='closed');
+  const avg = closed.length ? Math.round(closed.reduce((s,c)=>s+(c.deal||0),0)/closed.length) : 0;
+  const biggest = closed.length ? Math.max(...closed.map(c=>c.deal||0)) : 0;
+  const industries = {};
+  clients.forEach(c=>{ if(c.industry){ industries[c.industry]=(industries[c.industry]||0)+1; }});
+  const topInd = Object.entries(industries).sort((a,b)=>b[1]-a[1])[0];
+
+  document.getElementById('statsList').innerHTML = [
+    {label:'Avg Deal Size',val:avg?'$'+fmt(avg):'—'},
+    {label:'Biggest Deal',val:biggest?'$'+fmt(biggest):'—'},
+    {label:'Closed Deals',val:closed.length},
+    {label:'Total Pipeline',val:clients.length+' clients'},
+    {label:'Top Industry',val:topInd?topInd[0]+' ('+topInd[1]+')':'—'},
+    {label:'Deals This Month',val:closed.filter(c=>{
+      if(!c.added) return false;
+      const d=new Date(); const m=d.toISOString().slice(0,7);
+      return c.added.startsWith(m);
+    }).length},
+  ].map(s=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+    <span style="font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">${s.label}</span>
+    <span style="font-size:15px;font-weight:700;color:var(--gold)">${s.val}</span>
+  </div>`).join('');
+}
+
+function renderClientTable(clients){
+  const tbody = document.getElementById('clientTableBody');
+  document.getElementById('clientCount').textContent = clients.length ? '/ '+clients.length : '';
+  if(!clients.length){
+    tbody.innerHTML='<tr><td colspan="8"><div class="empty-state"><span>⚔</span>No clients yet.</div></td></tr>';
+    return;
+  }
+  const sorted = [...clients].sort((a,b)=>new Date(b.added||0)-new Date(a.added||0));
+  tbody.innerHTML = sorted.map(c=>`
+    <tr>
+      <td><strong>${esc(c.name)}</strong>${c.contact?'<br><span style="font-size:11px;color:var(--muted)">'+esc(c.contact)+'</span>':''}</td>
+      <td>${esc(c.industry||'—')}</td>
+      <td><span class="status-chip s-${c.stage}">${stageLabel(c.stage)}</span></td>
+      <td class="deal-val">${c.deal?'$'+fmt(c.deal):'—'}</td>
+      <td style="font-size:12px">${(c.gapsFound||0)+' / '+(c.gapsFixed||0)}</td>
+      <td style="font-size:12px;color:var(--muted)">${c.gapVal?'$'+fmt(c.gapVal)+'<br><span style="font-size:10px">/yr</span>':'—'}</td>
+      <td style="font-size:11px;color:var(--muted)">${c.added||'—'}</td>
+      <td><div class="action-btns">
+        <button class="btn-sm" onclick="openEdit('${c.id}')">Edit</button>
+        <button class="btn-sm danger" onclick="deleteClient('${c.id}')">Del</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+// ─── ADD CLIENT ───────────────────────────────────
+let formOpen = false;
+function toggleForm(){
+  formOpen = !formOpen;
+  const f = document.getElementById('addForm');
+  const icon = document.getElementById('toggleIcon');
+  f.classList.toggle('open', formOpen);
+  f.style.display = formOpen ? 'grid' : 'none';
+  icon.textContent = formOpen ? '▲' : '▼';
+}
+
+function addClient(){
+  const name = document.getElementById('fName').value.trim();
+  const deal = parseFloat(document.getElementById('fDeal').value)||0;
+  if(!name){ toast('Client name required'); return; }
+
+  const now = new Date().toISOString().slice(0,10);
+  const client = {
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    name,
+    industry: document.getElementById('fIndustry').value,
+    deal,
+    stage: document.getElementById('fStage').value,
+    gapsFound: parseInt(document.getElementById('fGapsFound').value)||0,
+    gapsFixed: parseInt(document.getElementById('fGapsFixed').value)||0,
+    gapVal: parseFloat(document.getElementById('fGapVal').value)||0,
+    contact: document.getElementById('fContact').value.trim(),
+    notes: document.getElementById('fNotes').value.trim(),
+    added: now,
+  };
+
+  const clients = load();
+  clients.push(client);
+  save(clients);
+
+  if(client.stage==='closed' && deal>0){
+    const rev = loadRev();
+    const mk = now.slice(0,7);
+    rev[mk] = (rev[mk]||0)+deal;
+    saveRev(rev);
+  }
+
+  // reset form
+  ['fName','fDeal','fGapsFound','fGapsFixed','fGapVal','fContact','fNotes'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('fGapsFound').value='0';
+  document.getElementById('fGapsFixed').value='0';
+
+  render();
+  toast('Client added to empire');
+}
+
+// ─── EDIT MODAL ──────────────────────────────────
+function openEdit(id){
+  const clients = load();
+  const c = clients.find(x=>x.id===id);
+  if(!c) return;
+  editId = id;
+  document.getElementById('eName').value = c.name||'';
+  document.getElementById('eStage').value = c.stage||'lead';
+  document.getElementById('eDeal').value = c.deal||'';
+  document.getElementById('eGapsFound').value = c.gapsFound||0;
+  document.getElementById('eGapsFixed').value = c.gapsFixed||0;
+  document.getElementById('eNotes').value = c.notes||'';
+  document.getElementById('editModal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('editModal').classList.remove('open');
+  editId = null;
+}
+
+function saveEdit(){
+  if(!editId) return;
+  const clients = load();
+  const idx = clients.findIndex(c=>c.id===editId);
+  if(idx<0) return;
+
+  const prev = clients[idx];
+  const newDeal = parseFloat(document.getElementById('eDeal').value)||0;
+  const newStage = document.getElementById('eStage').value;
+
+  if(prev.stage!=='closed' && newStage==='closed' && newDeal>0){
+    const rev = loadRev();
+    const mk = (prev.added||new Date().toISOString().slice(0,10)).slice(0,7);
+    rev[mk] = (rev[mk]||0)+newDeal;
+    saveRev(rev);
+  }
+
+  clients[idx] = {
+    ...prev,
+    name: document.getElementById('eName').value.trim()||prev.name,
+    stage: newStage,
+    deal: newDeal,
+    gapsFound: parseInt(document.getElementById('eGapsFound').value)||0,
+    gapsFixed: parseInt(document.getElementById('eGapsFixed').value)||0,
+    notes: document.getElementById('eNotes').value.trim(),
+  };
+  save(clients);
+  closeModal();
+  render();
+  toast('Client updated');
+}
+
+function deleteClient(id){
+  if(!confirm('Delete this client? This cannot be undone.')) return;
+  const clients = load().filter(c=>c.id!==id);
+  save(clients);
+  render();
+  toast('Client removed');
+}
+
+// ─── EXPORT ──────────────────────────────────────
+function exportCSV(){
+  const clients = load();
+  if(!clients.length){ toast('No clients to export'); return; }
+  const headers = ['Name','Industry','Stage','Deal($)','GapsFound','GapsFixed','GapValue($/yr)','Contact','Notes','Added'];
+  const rows = clients.map(c=>[
+    c.name||'',c.industry||'',c.stage||'',c.deal||0,
+    c.gapsFound||0,c.gapsFixed||0,c.gapVal||0,
+    c.contact||'',c.notes||'',c.added||''
+  ].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','));
+  const csv = [headers.join(','),...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download = 'empire-clients-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  toast('CSV exported');
+}
+
+// ─── UTILS ───────────────────────────────────────
+function fmt(n){ return Number(n).toLocaleString('en-US'); }
+function esc(s){ const d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+function stageLabel(s){
+  return {lead:'Lead',proposal:'Proposal',active:'Active',closed:'Closed ✓',lost:'Lost'}[s]||s;
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ─── STARTUP ─────────────────────────────────────
+document.getElementById('addForm').style.display = 'none';
+if(sessionStorage.getItem('empireAuth')==='1'){
+  document.getElementById('lockScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('app').style.flexDirection='column';
+  init();
+} else {
+  document.getElementById('pwInput').focus();
+}
+</script>
+</body>
+</html>
