@@ -48,13 +48,13 @@
       consultLabel: 'Get Warrior Tier — $149',
     },
     'omniaguard': {
-      name: 'OmniGuard AI',
+      name: 'OmniaGuard AI',
       avatar: '🛡️',
       color: '#6c63ff',
       accent: '#4b43cc',
-      greeting: "OmniGuard here. What's your threat surface? I can help you find the right protection tier.",
+      greeting: "OmniaGuard here. What's your threat surface? I can help you find the right protection tier.",
       consultLink: 'https://paypal.me/techpetcage/499CAD',
-      consultLabel: 'Start OmniGuard Sentinel — $499/mo',
+      consultLabel: 'Start OmniaGuard Sentinel — $499/mo',
     },
     'cleanswarm': {
       name: 'CleanSwarm AI',
@@ -101,9 +101,9 @@
       answer: "The Francisco Holdings monthly strategy retainer is $1,500/mo — 4 sessions, priority access, direct line to Derek Francisco. Reply 'RETAINER' to get the agreement." },
     { kw: ['22 brands', 'empire', 'holdings', 'how do you', 'run'],
       answer: "Derek Francisco runs 22 brands with 2 people using AI automation, Loop A/B identity architecture, and a lean AI stack. That playbook is teachable in a single consulting session." },
-    // OmniGuard
+    // OmniaGuard
     { kw: ['omniaguard', 'security', 'threat', 'ai security', 'enterprise security', 'protection'],
-      answer: "OmniGuard offers enterprise-grade AI security:<br>🔹 Sentinel — $499/mo (monitoring)<br>🔸 Guardian — $1,499/mo (active defense)<br>🔥 Fortress — $4,999/mo (full suite)<br>💎 Sovereign — $15,000/mo (dedicated team)" },
+      answer: "OmniaGuard offers enterprise-grade AI security:<br>🔹 Sentinel — $499/mo (monitoring)<br>🔸 Guardian — $1,499/mo (active defense)<br>🔥 Fortress — $4,999/mo (full suite)<br>💎 Sovereign — $15,000/mo (dedicated team)" },
     // CleanSwarm
     { kw: ['cleanswarm', 'clean', 'swarm', 'document cleanup', 'ocr', 'extraction'],
       answer: "CleanSwarm automates document cleanup, OCR extraction, and data structuring at scale. Tiers:<br>🐝 Starter — $399/mo<br>🐝🐝 Growth — $999/mo<br>🐝🐝🐝 Scale — $2,499/mo" },
