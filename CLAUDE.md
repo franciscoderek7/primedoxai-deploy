@@ -87,13 +87,13 @@ Run this mentally at the start of every session:
 
 | Brand | Personal Info Visible | Cannabis Content | AI Branding |
 |-------|----------------------|-----------------|-------------|
-| OmniGuard | NO — anonymous | NEVER | Hidden |
+| OmniaGuard | NO — anonymous | NEVER | Hidden |
 | Kiaros | NO | NEVER | Hidden |
 | SoulStack | NO | NEVER | Hidden |
 | CCLDR / Doc Weedlaw | Derek Francisco visible | YES — core content | Hidden |
 | Francisco Holdings | Derek Francisco visible | Context only | Hidden |
 
-**Cross-contamination is a critical failure.** OmniGuard must never reference cannabis. CCLDR must never reference AI security products. Zero bleed. Always.
+**Cross-contamination is a critical failure.** OmniaGuard must never reference cannabis. CCLDR must never reference AI security products. Zero bleed. Always.
 
 ---
 
@@ -101,13 +101,13 @@ Run this mentally at the start of every session:
 
 | Brand | Correct | Wrong — Never Use |
 |-------|---------|-------------------|
-| OmniGuard | `OmniGuard` | OmniaGuard (RETIRED 2026-06-19), OMNIGUARD, Omni Guard, OMNI GUARD |
+| OmniaGuard | `OmniaGuard` | OmniGuard (RETIRED 2026-07-14), OMNIGUARD, Omni Guard, OMNI GUARD |
 | SoulStack | `SoulStack` | Soulstack, Soul Stack, soul stack |
 | Kiaros | `Kiaros` | kiaros, KIAROS |
 | PrimeDox | `PrimeDox` | Primedox, PrimeDocs (different thing) |
 | Francisco Holdings | `Francisco Holdings Inc.` | Francisco Holdings, FHI |
 
-**REBRAND NOTICE (2026-06-19, confirmed by Derek)**: `OmniaGuard` → `OmniGuard`. Domain `omniaguard.com` → `omni-guard.com`. Color identity: cyan/black SOC-dashboard → **blue `#4A90E2` / pink `#E91E63`** (OmniGuard is the ONLY brand permitted to use blue or pink anywhere in the empire). Manus is rebuilding the site under the new brand/domain/colors. The `omniaguard-site/` folder and `franciscoderek7/omniaguard` repo predate this rebrand — do not silently overwrite Manus's rebuild; confirm scope with Derek before editing that site further.
+**SPELLING CONFIRMED (2026-07-14, Derek direct order)**: Correct name is `OmniaGuard` (with A). `OmniGuard` (no A) is RETIRED as of 2026-07-14. Domain: `omniaguard.com`. Color identity: confirmed by Derek — **blue `#4A90E2` / pink `#E91E63`** (OmniaGuard is the ONLY brand permitted to use blue or pink anywhere in the empire). The `omniaguard-site/` folder and `franciscoderek7/omniaguard` repo are the active deploy targets. The `omni-guard-site/` folder was a Manus rebuild under the now-retired no-A spelling — do not deploy from that folder without Derek's explicit instruction.
 
 ---
 
