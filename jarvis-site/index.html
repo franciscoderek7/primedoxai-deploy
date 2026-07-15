@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jarvis — The Empire Automation Platform | Francisco Holdings Inc.</title>
+<meta name="description" content="Jarvis is the nervous system of the Francisco Holdings empire. 50+ integrations, neural graph visualization, voice assistant, Fortune 500 outreach automation.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Jarvis — Empire Automation Platform">
+<meta property="og:description" content="PrimeDox is the brain. Jarvis is the nervous system. Full automation: neural graph, tool armory, voice assistant, Fortune 500 outreach.">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"SoftwareApplication",
+  "name":"Jarvis",
+  "applicationCategory":"BusinessApplication",
+  "description":"Empire automation platform — neural graph, 50+ tool integrations, voice assistant, Fortune 500 outreach",
+  "creator":{"@type":"Organization","name":"Francisco Holdings Inc.","url":"https://franciscoholdingsinc.com"},
+  "offers":[
+    {"@type":"Offer","name":"Starter","price":"4997","priceCurrency":"USD","description":"$297/mo — 10 tools, basic neural graph"},
+    {"@type":"Offer","name":"Growth","price":"14997","priceCurrency":"USD","description":"$697/mo — 25 tools, 3D graph, voice assistant"},
+    {"@type":"Offer","name":"Empire","price":"49997","priceCurrency":"USD","description":"$1,997/mo — unlimited tools, white-label, API access"},
+    {"@type":"Offer","name":"Custom","price":"99997","priceCurrency":"USD","description":"Custom monthly — on-premise, enterprise SLA"}
+  ]
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#000008;--surface:#04040f;--card:#080816;--card2:#0b0b1c;
+  --border:#0e0e2a;--border2:#141430;
+  --cyan:#00ffff;--cyan2:#00d4ff;--cyan3:#00a8cc;
+  --blue:#0055ff;--blue2:#0040cc;
+  --purple:#4b0082;--purple2:#6b00b2;
+  --gold:#ffd700;--gold2:#ccac00;
+  --text:#e8eaf8;--muted:#6b7099;--dim:#2a2a4a;
+  --font:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+
+/* SCANLINES overlay */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,255,.012) 2px,rgba(0,255,255,.012) 4px);
+}
+
+/* EMPIRE NAV */
+.empire-nav{
+  position:relative;z-index:200;background:rgba(0,0,10,.97);
+  border-bottom:1px solid rgba(0,212,255,.15);padding:0 5%;height:32px;
+  display:flex;align-items:center;gap:1.5rem;overflow-x:auto;scrollbar-width:none;
+}
+.empire-nav::-webkit-scrollbar{display:none}
+.empire-nav-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:rgba(0,212,255,.4);font-weight:700;flex-shrink:0}
+.empire-nav a{font-size:.7rem;color:var(--muted);text-decoration:none;white-space:nowrap;transition:color .2s;font-weight:500}
+.empire-nav a:hover{color:var(--cyan2)}
+.empire-nav a.active{color:var(--cyan);font-weight:700}
+
+/* TOPNAV */
+nav{
+  position:sticky;top:32px;z-index:100;
+  background:rgba(0,0,12,.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(0,255,255,.08);
+  display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-brand-logo{
+  width:34px;height:34px;border-radius:50%;
+  background:conic-gradient(var(--cyan),var(--blue),var(--purple),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;
+  box-shadow:0 0 16px rgba(0,255,255,.5);animation:spin 8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav-brand-text{font-size:1.2rem;font-weight:900;letter-spacing:-.5px;color:var(--cyan);text-shadow:0 0 20px rgba(0,255,255,.6)}
+.nav-brand-sub{font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.nav-links{display:flex;gap:1.75rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;transition:color .2s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-cta{
+  background:transparent;border:1px solid var(--cyan);color:var(--cyan);
+  padding:.5rem 1.25rem;border-radius:6px;font-weight:700;font-size:.85rem;
+  text-decoration:none;transition:all .2s;letter-spacing:.5px;
+  box-shadow:0 0 12px rgba(0,255,255,.2);
+}
+.nav-cta:hover{background:rgba(0,255,255,.08);box-shadow:0 0 24px rgba(0,255,255,.4)}
+@media(max-width:768px){.nav-links{display:none}}
+
+/* HERO */
+.hero{
+  position:relative;z-index:1;min-height:94vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 5% 60px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid rgba(0,255,255,.25);border-radius:20px;padding:.35rem .9rem;
+  margin-bottom:1.75rem;font-size:.75rem;font-weight:700;color:var(--cyan2);
+  background:rgba(0,255,255,.05);letter-spacing:1.5px;text-transform:uppercase;
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--cyan)}50%{opacity:.4;box-shadow:none}}
+
+/* JARVIS AVATAR */
+.jarvis-avatar{
+  position:relative;width:140px;height:140px;margin:0 auto 2rem;
+}
+.ja-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid transparent;
+  background:linear-gradient(var(--bg),var(--bg)) padding-box,
+              conic-gradient(var(--cyan),var(--blue),var(--purple),var(--cyan2),var(--cyan)) border-box;
+  animation:ring-spin 4s linear infinite;
+}
+@keyframes ring-spin{to{transform:rotate(360deg)}}
+.ja-ring2{
+  position:absolute;inset:12px;border-radius:50%;
+  border:1px solid rgba(0,212,255,.3);
+  animation:ring-spin 8s linear infinite reverse;
+}
+.ja-core{
+  position:absolute;inset:24px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,212,255,.15) 0%,rgba(0,0,20,.9) 70%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.4rem;
+  box-shadow:0 0 30px rgba(0,212,255,.3),inset 0 0 20px rgba(0,212,255,.1);
+}
+.hero h1{
+  font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;line-height:1.05;
+  margin-bottom:1.25rem;letter-spacing:-1.5px;
+}
+.hero h1 .j{color:var(--cyan);text-shadow:0 0 30px rgba(0,255,255,.8)}
+.hero h1 .sub{
+  display:block;font-size:.48em;font-weight:400;letter-spacing:3px;
+  color:var(--muted);text-transform:uppercase;margin-top:.4rem;text-shadow:none;
+}
+.hero-desc{font-size:clamp(.95rem,2vw,1.2rem);color:var(--muted);max-width:640px;margin:0 auto 1.5rem}
+.hero-meta{
+  display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:2.5rem;font-size:.78rem;color:var(--muted);
+}
+.hero-meta span{display:flex;align-items:center;gap:.35rem}
+.hero-meta span::before{content:'●';color:var(--cyan);font-size:.5rem}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{
+  display:inline-block;background:linear-gradient(135deg,var(--cyan3),var(--blue));
+  color:#fff;padding:.9rem 2.4rem;border-radius:8px;font-weight:800;font-size:1rem;
+  text-decoration:none;transition:transform .2s,box-shadow .2s;letter-spacing:.5px;
+  box-shadow:0 4px 24px rgba(0,212,255,.35);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,212,255,.55)}
+.btn-secondary{
+  display:inline-block;border:1px solid rgba(0,255,255,.3);color:var(--cyan2);
+  padding:.9rem 2.4rem;border-radius:8px;font-weight:600;font-size:1rem;
+  text-decoration:none;transition:all .2s;
+}
+.btn-secondary:hover{border-color:var(--cyan);background:rgba(0,255,255,.05)}
+
+/* NEURAL GRAPH SECTION */
+#neural-section{
+  position:relative;z-index:1;padding:80px 5%;
+  background:radial-gradient(ellipse at center,rgba(0,85,255,.06) 0%,transparent 70%);
+}
+#neural-graph{
+  width:100%;height:500px;background:var(--card);border:1px solid var(--border2);
+  border-radius:16px;position:relative;overflow:hidden;
+  box-shadow:0 0 60px rgba(0,212,255,.08);
+}
+#neural-canvas{width:100%;height:100%}
+.neural-label{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  font-size:.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;
+}
+
+/* TOOL ARMORY */
+#armory{position:relative;z-index:1;padding:80px 5%}
+.armory-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;
+  max-width:1100px;margin:0 auto;
+}
+.tool-chip{
+  background:var(--card);border:1px solid var(--border2);border-radius:10px;
+  padding:12px 10px;text-align:center;cursor:default;transition:all .2s;
+}
+.tool-chip:hover{border-color:var(--cyan3);background:rgba(0,212,255,.04);transform:translateY(-2px)}
+.tool-chip .tc-icon{font-size:1.5rem;margin-bottom:4px}
+.tool-chip .tc-name{font-size:.7rem;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tool-chip.connected{border-color:rgba(0,212,255,.3)}
+.tool-chip.connected .tc-name{color:var(--cyan2)}
+
+/* VOICE SECTION */
+#voice-section{position:relative;z-index:1;padding:80px 5%;background:var(--surface)}
+.voice-demo{
+  max-width:560px;margin:0 auto;text-align:center;
+}
+.voice-avatar{
+  width:120px;height:120px;border-radius:50%;margin:0 auto 2rem;position:relative;
+  background:radial-gradient(circle,rgba(0,212,255,.12),rgba(0,0,20,.95));
+  border:2px solid rgba(0,212,255,.3);
+  display:flex;align-items:center;justify-content:center;font-size:2.8rem;
+  box-shadow:0 0 40px rgba(0,212,255,.2);
+  cursor:pointer;transition:box-shadow .3s;
+}
+.voice-avatar:hover,.voice-avatar.active{box-shadow:0 0 80px rgba(0,212,255,.5)}
+.voice-ring{
+  position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid rgba(0,212,255,.2);animation:none;
+}
+.voice-avatar.active .voice-ring{
+  animation:voice-pulse 1s ease-out infinite;
+}
+@keyframes voice-pulse{
+  0%{transform:scale(1);opacity:.8}
+  100%{transform:scale(1.4);opacity:0}
+}
+.voice-input-bar{
+  background:var(--card);border:1px solid var(--border2);border-radius:50px;
+  padding:14px 20px;font-size:.9rem;color:var(--text);text-align:left;
+  margin-bottom:1rem;min-height:52px;display:flex;align-items:center;gap:10px;
+  transition:border-color .2s;
+}
+.voice-input-bar.listening{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,255,255,.15)}
+.vib-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);flex-shrink:0;animation:pulse 1.5s infinite}
+.voice-examples{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.voice-ex{
+  font-size:.72rem;border:1px solid var(--border2);border-radius:20px;
+  padding:.3rem .75rem;color:var(--muted);cursor:pointer;transition:all .2s;
+  font-family:monospace;
+}
+.voice-ex:hover{border-color:var(--cyan3);color:var(--cyan2)}
+
+/* PRICING */
+#pricing{position:relative;z-index:1;padding:80px 5%}
+.pricing-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:1.5rem;max-width:1100px;margin:0 auto;
+}
+.price-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:16px;
+  padding:2rem 1.75rem;display:flex;flex-direction:column;
+  transition:border-color .25s,transform .25s;position:relative;overflow:hidden;
+}
+.price-card.featured{border-color:rgba(0,212,255,.4)}
+.price-card.featured::before{
+  content:'MOST POPULAR';position:absolute;top:14px;right:-26px;
+  background:linear-gradient(135deg,var(--cyan3),var(--blue));color:#fff;
+  font-size:.58rem;font-weight:800;letter-spacing:1px;padding:.25rem 2.5rem;transform:rotate(45deg);
+}
+.price-card:hover{border-color:rgba(0,212,255,.5);transform:translateY(-4px)}
+.price-tier{font-size:.65rem;text-transform:uppercase;letter-spacing:2.5px;color:var(--cyan2);font-weight:700;margin-bottom:.5rem}
+.price-name{font-size:1.3rem;font-weight:900;margin-bottom:.5rem}
+.price-setup{font-size:2.2rem;font-weight:900;line-height:1;color:var(--cyan);text-shadow:0 0 20px rgba(0,255,255,.4);margin-bottom:.15rem}
+.price-mo{font-size:.85rem;color:var(--muted);margin-bottom:1.25rem}
+.price-mo strong{color:var(--cyan2)}
+.price-features{list-style:none;flex:1;margin-bottom:1.75rem}
+.price-features li{
+  padding:.4rem 0;font-size:.82rem;color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;gap:.5rem;
+}
+.price-features li::before{content:'▹';color:var(--cyan);flex-shrink:0}
+.price-features li:last-child{border-bottom:none}
+.btn-price{
+  display:block;text-align:center;padding:.8rem;border-radius:8px;
+  font-weight:700;font-size:.88rem;text-decoration:none;transition:all .2s;letter-spacing:.5px;
+}
+.btn-cyan{background:linear-gradient(135deg,var(--cyan3),var(--blue));color:#fff}
+.btn-cyan:hover{opacity:.85;transform:translateY(-1px)}
+.btn-outline{border:1px solid rgba(0,212,255,.35);color:var(--cyan2)}
+.btn-outline:hover{background:rgba(0,212,255,.06);border-color:var(--cyan)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000}
+.btn-gold:hover{opacity:.85}
+
+/* SECTIONS common */
+section{position:relative;z-index:1;padding:80px 5%}
+.section-label{font-size:.72rem;text-transform:uppercase;letter-spacing:2.5px;color:var(--cyan2);font-weight:700;margin-bottom:.6rem}
+.section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:.9rem;letter-spacing:-.5px}
+.section-sub{color:var(--muted);font-size:.97rem;max-width:620px;margin-bottom:3rem;line-height:1.7}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
+.feature-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:1.5rem;
+  transition:border-color .2s;
+}
+.feature-card:hover{border-color:rgba(0,212,255,.3)}
+.fc-icon{font-size:2rem;margin-bottom:.75rem}
+.fc-title{font-size:.98rem;font-weight:700;margin-bottom:.4rem;color:var(--text)}
+.fc-desc{font-size:.82rem;color:var(--muted);line-height:1.65}
+
+/* FOOTER */
+footer{
+  position:relative;z-index:1;background:var(--surface);
+  border-top:1px solid var(--border2);padding:60px 5% 30px;
+}
+.footer-bottom{
+  max-width:1100px;margin:0 auto;border-top:1px solid var(--border2);
+  padding-top:1.5rem;display:flex;flex-wrap:wrap;justify-content:space-between;
+  align-items:center;gap:1rem;
+}
+.footer-copy{color:var(--muted);font-size:.72rem}
+.footer-empire{color:rgba(0,212,255,.35);font-size:.7rem}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  #neural-graph{height:320px}
+  .armory-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<!-- EMPIRE NAV -->
+<div class="empire-nav">
+  <span class="empire-nav-label">Francisco Holdings</span>
+  <a href="https://franciscoholdingsinc.com">FH Inc.</a>
+  <a href="https://zprimedoxaihq.com">PrimeDox AI</a>
+  <a href="https://ccldr.net">CCLDR</a>
+  <a href="https://omniaguard.com">OmniaGuard</a>
+  <a href="#" class="active">Jarvis</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-brand-logo">🤖</div>
+    <div>
+      <div class="nav-brand-text">JARVIS</div>
+      <div class="nav-brand-sub">Empire Automation Platform</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#neural">Neural Graph</a></li>
+    <li><a href="#armory">Tool Armory</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a class="nav-cta" href="#pricing">Get Jarvis</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="dot"></span>Now Live — Empire Edition</div>
+
+  <div class="jarvis-avatar">
+    <div class="ja-ring"></div>
+    <div class="ja-ring2"></div>
+    <div class="ja-core">🤖</div>
+  </div>
+
+  <h1><span class="j">JARVIS</span><span class="sub">The Nervous System of Your Empire</span></h1>
+  <p class="hero-desc">PrimeDox is the brain. Jarvis is the nervous system. 50+ integrations, live neural graph, voice assistant, Fortune 500 outreach automation — all in one platform.</p>
+  <div class="hero-meta">
+    <span>50+ Integrations</span>
+    <span>Neural Graph Visualization</span>
+    <span>Voice Assistant</span>
+    <span>Fortune 500 Outreach</span>
+    <span>Real-time Revenue Tracking</span>
+  </div>
+  <div class="hero-btns">
+    <a class="btn-primary" href="#pricing">Deploy Jarvis — From $4,997</a>
+    <a class="btn-secondary" href="#neural">See Neural Graph Demo</a>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="background:var(--surface)">
+  <div class="center">
+    <div class="section-label">What Jarvis Does</div>
+    <h2 class="section-title">Full-spectrum empire automation</h2>
+    <p class="section-sub">Every system in your empire wired together. Revenue, outreach, content, litigation — Jarvis runs while you sleep.</p>
+  </div>
+  <div class="features-grid" style="max-width:1100px;margin:0 auto">
+    <div class="feature-card">
+      <div class="fc-icon">🕸️</div>
+      <div class="fc-title">Neural Graph</div>
+      <div class="fc-desc">Live D3.js visualization of all 45+ companies as colored nodes with animated revenue flows. See your entire empire at a glance.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🎙️</div>
+      <div class="fc-title">Voice Assistant</div>
+      <div class="fc-desc">"Hey Jarvis" wake word. Ask anything — revenue, alerts, outreach status, content queue. Circular avatar with status ring.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🔧</div>
+      <div class="fc-title">Tool Armory</div>
+      <div class="fc-desc">50+ integrations: Canva, Zapier, GitHub, Notion, Figma, Webflow, PayPal, Stripe, Square, Gmail, LinkedIn, and more.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">💰</div>
+      <div class="fc-title">Revenue Command</div>
+      <div class="fc-desc">Real-time tracking across PayPal, Stripe, and Square. Per-company breakdowns, MRR/ARR projections, payment alerts.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🏢</div>
+      <div class="fc-title">Fortune 500 Outreach</div>
+      <div class="fc-desc">Prospecting → enrichment → scoring → outreach → follow-up. Automated pipeline from LinkedIn to signed contract.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">📝</div>
+      <div class="fc-title">Content Pipeline</div>
+      <div class="fc-desc">Jarvis → AI generation → WordPress/LinkedIn/YouTube. Automated publishing with brand voice enforcement per property.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">⚖️</div>
+      <div class="fc-title">Litigation Automation</div>
+      <div class="fc-desc">Court dates, filings, deadlines — all tracked. Auto-generate motions, affidavits, and correspondence via PrimeDox AI integration.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">📧</div>
+      <div class="fc-title">Email Sequences</div>
+      <div class="fc-desc">Behavior-triggered drip campaigns. Lead magnet download → onboarding → upsell. Per-brand voice, per-loop compliance.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">📊</div>
+      <div class="fc-title">Social Command</div>
+      <div class="fc-desc">Cross-platform posting, engagement tracking, ad performance. LinkedIn, X, Facebook, Instagram — one dashboard.</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEURAL GRAPH -->
+<section id="neural-section" id="neural">
+  <div class="center" style="margin-bottom:2rem">
+    <div class="section-label">Live Demo</div>
+    <h2 class="section-title">Empire Neural Graph</h2>
+    <p class="section-sub">Every company in the Francisco Holdings empire as a live node. Revenue flows, agent connections, health status — animated in real time.</p>
+  </div>
+  <div id="neural-graph">
+    <canvas id="neural-canvas"></canvas>
+    <div class="neural-label">FRANCISCO HOLDINGS INC. — EMPIRE NEURAL GRAPH — LIVE</div>
+  </div>
+</section>
+
+<!-- TOOL ARMORY -->
+<section id="armory" style="background:var(--surface)">
+  <div class="center" style="margin-bottom:2.5rem">
+    <div class="section-label">Integrations</div>
+    <h2 class="section-title">50+ Tool Armory</h2>
+    <p class="section-sub">Connect everything. Jarvis orchestrates your entire stack from one command center.</p>
+  </div>
+  <div class="armory-grid" id="armory-grid"></div>
+</section>
+
+<!-- VOICE ASSISTANT -->
+<section id="voice-section">
+  <div class="center" style="margin-bottom:2.5rem">
+    <div class="section-label">Voice Interface</div>
+    <h2 class="section-title">Say "Hey Jarvis"</h2>
+    <p class="section-sub">Natural language commands. Jarvis understands your empire.</p>
+  </div>
+  <div class="voice-demo">
+    <div class="voice-avatar" id="voice-avatar" onclick="toggleVoice()">
+      🤖
+      <div class="voice-ring" id="voice-ring"></div>
+    </div>
+    <div class="voice-input-bar" id="voice-bar">
+      <span class="vib-dot" id="vib-dot" style="display:none"></span>
+      <span id="voice-text" style="color:var(--muted);font-size:.88rem">Click the avatar to activate Jarvis voice mode…</span>
+    </div>
+    <div class="voice-examples">
+      <span class="voice-ex" onclick="demoVoice(this)">"Hey Jarvis, show revenue"</span>
+      <span class="voice-ex" onclick="demoVoice(this)">"Hey Jarvis, draft outreach for Apple"</span>
+      <span class="voice-ex" onclick="demoVoice(this)">"Hey Jarvis, post to LinkedIn"</span>
+      <span class="voice-ex" onclick="demoVoice(this)">"Hey Jarvis, open CCLDR dashboard"</span>
+      <span class="voice-ex" onclick="demoVoice(this)">"Hey Jarvis, next court deadline"</span>
+      <span class="voice-ex" onclick="demoVoice(this)">"Hey Jarvis, run OmniaGuard scan"</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:var(--surface);border-top:1px solid var(--border2)">
+  <div class="center">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Choose your automation tier</h2>
+    <p class="section-sub">One-time setup + monthly platform fee. No hidden costs. Revenue generated pays for itself in the first client.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Starter</div>
+      <div class="price-name">Jarvis Core</div>
+      <div class="price-setup">$4,997</div>
+      <div class="price-mo">then <strong>$297/mo</strong></div>
+      <ul class="price-features">
+        <li>10 tool integrations</li>
+        <li>Basic neural graph (2D)</li>
+        <li>Revenue dashboard</li>
+        <li>Email sequence builder</li>
+        <li>5 automation workflows</li>
+        <li>Standard support</li>
+      </ul>
+      <a class="btn-price btn-outline" href="https://paypal.me/derekfranciaco1/4997" target="_blank" rel="noopener">Get Started — $4,997</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier">Growth</div>
+      <div class="price-name">Jarvis Pro</div>
+      <div class="price-setup">$14,997</div>
+      <div class="price-mo">then <strong>$697/mo</strong></div>
+      <ul class="price-features">
+        <li>25 tool integrations</li>
+        <li>3D neural graph + voice</li>
+        <li>Fortune 500 outreach pipeline</li>
+        <li>Content pipeline (AI → publish)</li>
+        <li>Unlimited workflows</li>
+        <li>Social command center</li>
+        <li>Priority support</li>
+      </ul>
+      <a class="btn-price btn-cyan" href="https://paypal.me/derekfranciaco1/14997" target="_blank" rel="noopener">Deploy Growth — $14,997</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Empire</div>
+      <div class="price-name">Jarvis Empire</div>
+      <div class="price-setup">$49,997</div>
+      <div class="price-mo">then <strong>$1,997/mo</strong></div>
+      <ul class="price-features">
+        <li>Unlimited tool integrations</li>
+        <li>White-label + API access</li>
+        <li>Full litigation automation</li>
+        <li>Agent swarm monitoring</li>
+        <li>Multi-tenant dashboard</li>
+        <li>Dedicated account manager</li>
+        <li>24/7 enterprise support</li>
+      </ul>
+      <a class="btn-price btn-outline" href="https://paypal.me/derekfranciaco1/49997" target="_blank" rel="noopener">Go Empire — $49,997</a>
+    </div>
+    <div class="price-card" style="border-color:rgba(255,215,0,.2)">
+      <div class="price-tier" style="color:var(--gold)">Custom</div>
+      <div class="price-name">On-Premise</div>
+      <div class="price-setup" style="color:var(--gold);text-shadow:0 0 20px rgba(255,215,0,.4)">$99,997+</div>
+      <div class="price-mo">custom monthly</div>
+      <ul class="price-features">
+        <li>On-premise deployment</li>
+        <li>Enterprise SLA (99.99% uptime)</li>
+        <li>Custom AI model training</li>
+        <li>Dedicated infrastructure</li>
+        <li>Security clearance support</li>
+        <li>Executive onboarding</li>
+      </ul>
+      <a class="btn-price btn-gold" href="mailto:franciscoderek7@gmail.com?subject=Jarvis%20Custom%20Enterprise" target="_blank" rel="noopener">Contact for Custom</a>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--muted);font-size:.78rem;margin-top:1.75rem">After payment, email <a href="mailto:franciscoderek7@gmail.com" style="color:var(--cyan2)">franciscoderek7@gmail.com</a> for onboarding.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Francisco Holdings Inc. All rights reserved.</div>
+    <div class="footer-empire">JARVIS — Part of the Francisco Holdings Inc. Empire</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+/* ── TOOL ARMORY DATA ── */
+const TOOLS = [
+  {n:'Canva',i:'🎨',c:true},{n:'Zapier',i:'⚡',c:true},{n:'GitHub',i:'💻',c:true},
+  {n:'Notion',i:'📋',c:true},{n:'Figma',i:'✏️',c:false},{n:'Webflow',i:'🌐',c:false},
+  {n:'PayPal',i:'💳',c:true},{n:'Stripe',i:'💰',c:true},{n:'Square',i:'🟦',c:false},
+  {n:'Gmail',i:'📧',c:true},{n:'LinkedIn',i:'💼',c:false},{n:'Twitter/X',i:'🐦',c:false},
+  {n:'Facebook',i:'👥',c:false},{n:'Instagram',i:'📸',c:false},{n:'YouTube',i:'▶️',c:false},
+  {n:'WordPress',i:'📝',c:false},{n:'Shopify',i:'🛍️',c:false},{n:'Mailchimp',i:'📨',c:false},
+  {n:'SendGrid',i:'✉️',c:false},{n:'HubSpot',i:'🔶',c:false},{n:'Salesforce',i:'☁️',c:false},
+  {n:'Slack',i:'💬',c:false},{n:'Discord',i:'🎮',c:false},{n:'Telegram',i:'📱',c:false},
+  {n:'Twilio',i:'📞',c:false},{n:'OpenAI',i:'🤖',c:false},{n:'Anthropic',i:'🧠',c:true},
+  {n:'DeepSeek',i:'🔍',c:false},{n:'Supabase',i:'🗄️',c:false},{n:'Airtable',i:'📊',c:false},
+  {n:'Google Ads',i:'📈',c:false},{n:'Meta Ads',i:'📣',c:false},{n:'Porkbun',i:'🐷',c:false},
+  {n:'Cloudflare',i:'🌩️',c:false},{n:'Railway',i:'🚂',c:false},{n:'Render',i:'🚀',c:false},
+  {n:'Calendly',i:'📅',c:false},{n:'Typeform',i:'📋',c:false},{n:'Formspree',i:'📬',c:false},
+  {n:'Gumroad',i:'🛒',c:false},{n:'Loom',i:'🎬',c:false},{n:'Zoom',i:'📹',c:false},
+  {n:'DocuSign',i:'✍️',c:false},{n:'PandaDoc',i:'🐼',c:false},{n:'QuickBooks',i:'💵',c:false},
+  {n:'Xero',i:'🔢',c:false},{n:'Google Analytics',i:'📉',c:false},{n:'Hotjar',i:'🔥',c:false},
+  {n:'Intercom',i:'💬',c:false},{n:'Zendesk',i:'🎧',c:false},
+];
+
+const grid = document.getElementById('armory-grid');
+TOOLS.forEach(t => {
+  const el = document.createElement('div');
+  el.className = 'tool-chip' + (t.c ? ' connected' : '');
+  el.innerHTML = `<div class="tc-icon">${t.i}</div><div class="tc-name">${t.n}</div>`;
+  grid.appendChild(el);
+});
+
+/* ── NEURAL GRAPH (D3.js) ── */
+(function(){
+  const canvas = document.getElementById('neural-canvas');
+  const container = document.getElementById('neural-graph');
+
+  function resize() {
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const ctx = canvas.getContext('2d');
+
+  const COMPANIES = [
+    {id:'FH',label:'Francisco Holdings',color:'#c9a227',size:18,x:.5,y:.5},
+    {id:'OG',label:'OmniaGuard',color:'#4A90E2',size:13,x:.2,y:.2},
+    {id:'PD',label:'PrimeDox AI',color:'#0055ff',size:13,x:.8,y:.2},
+    {id:'CC',label:'CCLDR',color:'#228B22',size:12,x:.15,y:.55},
+    {id:'CS',label:'CleanSwarm',color:'#00d084',size:11,x:.35,y:.15},
+    {id:'VV',label:'VaultVelocity',color:'#ffd700',size:11,x:.75,y:.55},
+    {id:'KI',label:'Kiaros',color:'#9b59b6',size:11,x:.6,y:.8},
+    {id:'VX',label:'VIGILAX',color:'#e74c3c',size:11,x:.85,y:.75},
+    {id:'TPC',label:'TechPetCage',color:'#00bcd4',size:10,x:.25,y:.8},
+    {id:'MS',label:'MindShift',color:'#e896c8',size:10,x:.5,y:.85},
+    {id:'JV',label:'Jarvis',color:'#00ffff',size:14,x:.5,y:.3},
+    {id:'CCC',label:'CCC',color:'#DAA520',size:10,x:.4,y:.65},
+    {id:'WL',label:'WeedLaw',color:'#2ecc71',size:10,x:.7,y:.35},
+    {id:'CAN',label:'Cannabis Consulting',color:'#27ae60',size:10,x:.3,y:.4},
+  ];
+
+  const EDGES = [
+    ['FH','OG'],['FH','PD'],['FH','CC'],['FH','CS'],['FH','VV'],['FH','KI'],
+    ['FH','VX'],['FH','TPC'],['FH','MS'],['FH','JV'],['FH','CCC'],['FH','WL'],['FH','CAN'],
+    ['JV','PD'],['JV','OG'],['JV','CC'],['JV','VX'],
+    ['PD','CC'],['PD','WL'],['CC','WL'],['CC','CAN'],
+    ['OG','VX'],
+  ];
+
+  // Initialize positions with slight randomness
+  const W = () => canvas.width, H = () => canvas.height;
+  const nodes = COMPANIES.map(c => ({
+    ...c,
+    px: c.x * W() + (Math.random() - 0.5) * 40,
+    py: c.y * H() + (Math.random() - 0.5) * 40,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    pulse: Math.random() * Math.PI * 2,
+  }));
+
+  let t = 0;
+  function getNode(id) { return nodes.find(n => n.id === id); }
+
+  function draw() {
+    const w = W(), h = H();
+    ctx.clearRect(0, 0, w, h);
+
+    t += 0.008;
+
+    // Update physics
+    nodes.forEach(n => {
+      n.px += n.vx;
+      n.py += n.vy;
+      const margin = n.size + 16;
+      if (n.px < margin || n.px > w - margin) n.vx *= -0.8;
+      if (n.py < margin || n.py > h - margin) n.vy *= -0.8;
+      n.px = Math.max(margin, Math.min(w - margin, n.px));
+      n.py = Math.max(margin, Math.min(h - margin, n.py));
+      n.pulse += 0.04;
+    });
+
+    // Draw edges
+    EDGES.forEach(([a, b]) => {
+      const na = getNode(a), nb = getNode(b);
+      if (!na || !nb) return;
+      // Animated packet along edge
+      const progress = (t * 0.6 + EDGES.indexOf([a,b]) * 0.3) % 1;
+      const px = na.px + (nb.px - na.px) * progress;
+      const py = na.py + (nb.py - na.py) * progress;
+
+      ctx.beginPath();
+      ctx.moveTo(na.px, na.py);
+      ctx.lineTo(nb.px, nb.py);
+      ctx.strokeStyle = 'rgba(0,212,255,0.12)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Data packet
+      ctx.beginPath();
+      ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,255,255,0.7)';
+      ctx.fill();
+    });
+
+    // Draw nodes
+    nodes.forEach(n => {
+      const pulse = Math.sin(n.pulse) * 0.15 + 1;
+      const r = n.size * pulse;
+
+      // Glow
+      const grad = ctx.createRadialGradient(n.px, n.py, 0, n.px, n.py, r * 3);
+      grad.addColorStop(0, n.color + '40');
+      grad.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.arc(n.px, n.py, r * 3, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Node circle
+      ctx.beginPath();
+      ctx.arc(n.px, n.py, r, 0, Math.PI * 2);
+      ctx.fillStyle = n.color + '22';
+      ctx.fill();
+      ctx.strokeStyle = n.color;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Label
+      ctx.font = `${Math.max(9, n.size * 0.72)}px system-ui`;
+      ctx.fillStyle = '#e8eaf8';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.label, n.px, n.py + r + 12);
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── VOICE DEMO ── */
+let voiceActive = false;
+const DEMOS = [
+  'Scanning revenue across 14 companies…',
+  'Drafting outreach email for Apple procurement…',
+  'Scheduling LinkedIn post for 9:00 AM…',
+  'Opening CCLDR dashboard in new tab…',
+  'Next court deadline: Francisco v. Denby — checking calendar…',
+  'Initiating OmniaGuard threat scan…',
+];
+
+function toggleVoice() {
+  voiceActive = !voiceActive;
+  const av = document.getElementById('voice-avatar');
+  const bar = document.getElementById('voice-bar');
+  const dot = document.getElementById('vib-dot');
+  const txt = document.getElementById('voice-text');
+  av.classList.toggle('active', voiceActive);
+  bar.classList.toggle('listening', voiceActive);
+  dot.style.display = voiceActive ? 'block' : 'none';
+  txt.style.color = voiceActive ? 'var(--cyan2)' : 'var(--muted)';
+  txt.textContent = voiceActive ? 'Jarvis listening… speak a command' : 'Click the avatar to activate Jarvis voice mode…';
+}
+
+function demoVoice(el) {
+  const q = el.textContent;
+  const bar = document.getElementById('voice-bar');
+  const dot = document.getElementById('vib-dot');
+  const txt = document.getElementById('voice-text');
+  bar.classList.add('listening');
+  dot.style.display = 'block';
+  txt.style.color = 'var(--cyan2)';
+  txt.textContent = q;
+  const idx = Array.from(document.querySelectorAll('.voice-ex')).indexOf(el);
+  setTimeout(() => {
+    txt.style.color = 'var(--text)';
+    txt.textContent = DEMOS[idx] || 'Processing command…';
+    setTimeout(() => {
+      bar.classList.remove('listening');
+      dot.style.display = 'none';
+      txt.style.color = 'var(--muted)';
+      txt.textContent = 'Click the avatar to activate Jarvis voice mode…';
+    }, 3000);
+  }, 800);
+}
+</script>
+</body>
+</html>
