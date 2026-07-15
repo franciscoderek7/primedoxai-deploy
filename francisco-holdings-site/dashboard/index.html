@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Command Center — Francisco Holdings Inc. | 392-Floor Empire Dashboard</title>
+<meta name="robots" content="noindex,nofollow">
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/access-guard.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050d05;--surface:#091209;--card:#0d1a0d;--card2:#101e10;
+  --border:#1a3320;--border2:#1e3f26;
+  --em:#10b981;--em2:#059669;--em3:#34d399;--em-dim:rgba(16,185,129,.08);
+  --gold:#c9a227;--gold2:#f0cc60;--gold-dim:rgba(201,162,39,.08);
+  --red:#ef4444;--red-dim:rgba(239,68,68,.1);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,.1);
+  --text:#e5e4e2;--muted:#6b7280;--dim:#374151;
+  --font:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px}
+
+/* LAYOUT */
+#wrap{display:flex;flex-direction:column;min-height:100vh}
+#topbar{
+  display:flex;align-items:center;gap:12px;padding:0 20px;height:52px;
+  background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;
+}
+#topbar .logo{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold);white-space:nowrap}
+#topbar .tagline{font-size:10px;color:var(--muted);flex:1}
+#topbar .ss-badge{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:12px;white-space:nowrap;
+}
+.ss-live{background:rgba(16,185,129,.15);color:var(--em);border:1px solid rgba(16,185,129,.3)}
+.ss-pro{background:rgba(201,162,39,.15);color:var(--gold);border:1px solid rgba(201,162,39,.3)}
+.ss-elite{background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)}
+.ss-master{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+#topbar .time{font-size:10px;color:var(--muted);white-space:nowrap}
+#topbar .logout-btn{
+  background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);
+  font-size:10px;padding:4px 10px;cursor:pointer;white-space:nowrap;font-family:inherit;
+}
+#topbar .logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* STATS BAR */
+#stats-bar{
+  display:flex;gap:12px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);
+  overflow-x:auto;flex-wrap:nowrap;
+}
+.stat-card{
+  flex:0 0 auto;background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:10px 16px;min-width:120px;text-align:center;
+}
+.stat-card .sv{font-size:20px;font-weight:700;color:var(--gold)}
+.stat-card .sl{font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:2px;text-transform:uppercase}
+
+/* BODY */
+#body{display:flex;flex:1;overflow:hidden}
+#sidebar{
+  width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);
+  overflow-y:auto;padding:12px 0;
+}
+#sidebar .sb-section{padding:6px 14px 2px;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+#sidebar a{
+  display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:12px;color:var(--muted);
+  text-decoration:none;border-left:2px solid transparent;transition:all .15s;
+}
+#sidebar a:hover,#sidebar a.active{color:var(--text);border-left-color:var(--em);background:var(--em-dim)}
+#sidebar a.active{color:var(--em)}
+#sidebar .sb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot-live{background:var(--em)}
+.dot-pending{background:var(--amber)}
+.dot-off{background:var(--dim)}
+
+/* MAIN */
+#main{flex:1;overflow-y:auto;padding:20px}
+#main h2{font-size:14px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:16px}
+
+/* FLOOR GRID */
+#floor-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;
+}
+.floor-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;
+  cursor:default;transition:border-color .15s,background .15s;position:relative;
+}
+.floor-card:hover{border-color:var(--border2);background:var(--card2)}
+.floor-card.live{border-left:3px solid var(--em)}
+.floor-card.pending{border-left:3px solid var(--amber)}
+.floor-card.coming{border-left:3px solid var(--dim);opacity:.6}
+.fc-num{font-size:10px;color:var(--muted);margin-bottom:3px}
+.fc-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+.fc-rev{font-size:11px;color:var(--gold)}
+.fc-status{
+  position:absolute;top:10px;right:10px;font-size:8px;font-weight:700;letter-spacing:1px;
+  padding:2px 6px;border-radius:8px;
+}
+.s-live{background:rgba(16,185,129,.15);color:var(--em)}
+.s-pending{background:rgba(245,158,11,.15);color:var(--amber)}
+.s-coming{background:var(--em-dim);color:var(--dim)}
+
+/* SEARCH */
+#search-bar{
+  display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap;
+}
+#search-bar input{
+  flex:1;min-width:180px;padding:8px 14px;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;font-family:inherit;outline:none;
+}
+#search-bar input:focus{border-color:var(--em)}
+#search-bar select{
+  padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-size:12px;font-family:inherit;outline:none;cursor:pointer;
+}
+#floor-count{font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* HEALTH PANEL */
+#health{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+.health-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;
+}
+.hc-title{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+.hc-val{font-size:22px;font-weight:700}
+.hc-em{color:var(--em)}
+.hc-gold{color:var(--gold)}
+.hc-amber{color:var(--amber)}
+.hc-red{color:var(--red)}
+.hc-sub{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  #sidebar{display:none}
+  #stats-bar{gap:8px;padding:10px 12px}
+  .stat-card{min-width:100px;padding:8px 12px}
+  .stat-card .sv{font-size:16px}
+  #main{padding:12px}
+  #floor-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+}
+@media(max-width:480px){
+  #topbar{padding:0 12px;gap:8px}
+  #floor-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div id="wrap">
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="logo">FHI COMMAND CENTER</div>
+  <div class="tagline">Francisco Holdings Inc. — 392-Floor Empire</div>
+  <span class="ss-badge ss-live">SS-001 LIVE</span>
+  <span class="ss-badge ss-pro" id="badge-pro" style="display:none">SS-PRO</span>
+  <span class="ss-badge ss-elite" id="badge-elite" style="display:none">SS-ELITE</span>
+  <span class="ss-badge ss-master" id="badge-master" style="display:none">SS-MASTER</span>
+  <div class="time" id="topbar-time"></div>
+  <button class="logout-btn" onclick="logout()">LOCK</button>
+</div>
+
+<!-- STATS BAR -->
+<div id="stats-bar">
+  <div class="stat-card"><div class="sv" id="s-floors">392</div><div class="sl">Floors</div></div>
+  <div class="stat-card"><div class="sv hc-em" id="s-live">7</div><div class="sl">Live</div></div>
+  <div class="stat-card"><div class="sv hc-amber" id="s-pending">12</div><div class="sl">Pending</div></div>
+  <div class="stat-card"><div class="sv" id="s-coming">373</div><div class="sl">Coming</div></div>
+  <div class="stat-card"><div class="sv hc-gold" id="s-arr">$0</div><div class="sl">ARR Target Y1</div></div>
+  <div class="stat-card"><div class="sv hc-em" id="s-paypal">✓</div><div class="sl">PayPal Live</div></div>
+  <div class="stat-card"><div class="sv hc-amber">⬜</div><div class="sl">Stripe Pending</div></div>
+</div>
+
+<!-- BODY -->
+<div id="body">
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-section">Navigation</div>
+  <a href="#overview" class="active" onclick="showSection('overview',this)"><span class="sb-dot dot-live"></span>Overview</a>
+  <a href="#health" onclick="showSection('health-panel',this)"><span class="sb-dot dot-live"></span>System Health</a>
+  <a href="#floors" onclick="showSection('floors',this)"><span class="sb-dot dot-live"></span>All 392 Floors</a>
+
+  <div class="sb-section" style="margin-top:8px">Quick Links</div>
+  <a href="https://franciscoholdingsinc.com" target="_blank"><span class="sb-dot dot-live"></span>FH Main Site</a>
+  <a href="https://franciscoholdingsinc.com/empire-os.html" target="_blank"><span class="sb-dot dot-live"></span>Empire OS</a>
+  <a href="https://franciscoholdingsinc.com/empire-dashboard.html" target="_blank"><span class="sb-dot dot-live"></span>Empire Dashboard</a>
+  <a href="https://zprimedoxaihq.com" target="_blank"><span class="sb-dot dot-live"></span>ZPrimeDox HQ</a>
+  <a href="https://ccldr.net" target="_blank"><span class="sb-dot dot-pending"></span>CCLDR.net</a>
+  <a href="https://omniaguard.com" target="_blank"><span class="sb-dot dot-pending"></span>OmniaGuard</a>
+
+  <div class="sb-section" style="margin-top:8px">Actions</div>
+  <a href="https://dashboard.stripe.com" target="_blank"><span class="sb-dot dot-pending"></span>Stripe Dashboard</a>
+  <a href="https://www.paypal.com/myaccount/summary" target="_blank"><span class="sb-dot dot-live"></span>PayPal Account</a>
+  <a href="https://github.com/franciscoderek7" target="_blank"><span class="sb-dot dot-live"></span>GitHub</a>
+  <a href="https://porkbun.com/account/domainsSummary" target="_blank"><span class="sb-dot dot-pending"></span>Porkbun DNS</a>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- OVERVIEW section -->
+  <div id="section-overview">
+    <h2>SYSTEM HEALTH</h2>
+    <div id="health">
+      <div class="health-card">
+        <div class="hc-title">Live Floors</div>
+        <div class="hc-val hc-em">7 / 392</div>
+        <div class="hc-sub">FH · OmniaGuard · PrimeDox · CCLDR · CCC · Consulting · WeedLaw</div>
+      </div>
+      <div class="health-card">
+        <div class="hc-title">PayPal Status</div>
+        <div class="hc-val hc-em">LIVE</div>
+        <div class="hc-sub">paypal.me/derekfranciaco1 — confirmed working</div>
+      </div>
+      <div class="health-card">
+        <div class="hc-title">Stripe Status</div>
+        <div class="hc-val hc-amber">REVIEW</div>
+        <div class="hc-sub">$406.80 pending — links not yet active</div>
+      </div>
+      <div class="health-card">
+        <div class="hc-title">Referral Engine</div>
+        <div class="hc-val hc-em">LIVE</div>
+        <div class="hc-sub">20% commission, referral-engine.js on all floors</div>
+      </div>
+      <div class="health-card">
+        <div class="hc-title">CCLDR Domain</div>
+        <div class="hc-val hc-amber">60-DAY HOLD</div>
+        <div class="hc-sub">Using GitHub Pages URL until ~Aug 2026</div>
+      </div>
+      <div class="health-card">
+        <div class="hc-title">Supabase</div>
+        <div class="hc-val hc-amber">NEEDS TABLE</div>
+        <div class="hc-sub">apex_events table not yet created</div>
+      </div>
+      <div class="health-card">
+        <div class="hc-title">ARR Target Y1</div>
+        <div class="hc-val hc-gold">$1M</div>
+        <div class="hc-sub">2026 — in progress</div>
+      </div>
+      <div class="health-card">
+        <div class="hc-title">DNS Config</div>
+        <div class="hc-val hc-red">ACTION REQ</div>
+        <div class="hc-sub">Porkbun A records need .153 fix (not .15)</div>
+      </div>
+    </div>
+
+    <!-- SoulStack Tier Progress -->
+    <h2 style="margin-bottom:12px">SOULSTACK TIER STATUS</h2>
+    <div id="health" style="margin-bottom:0">
+      <div class="health-card" style="border-left:3px solid var(--em)">
+        <div class="hc-title">SS-001 — LIVE</div>
+        <div class="hc-val hc-em">ACTIVE</div>
+        <div class="hc-sub">Empire foundations live</div>
+      </div>
+      <div class="health-card" style="border-left:3px solid var(--gold)">
+        <div class="hc-title">SS-PRO — $1K+ MRR</div>
+        <div class="hc-val hc-amber">PENDING</div>
+        <div class="hc-sub">Unlock: first $1,000/mo recurring</div>
+      </div>
+      <div class="health-card" style="border-left:3px solid #818cf8">
+        <div class="hc-title">SS-ELITE — $10K+ MRR</div>
+        <div class="hc-val hc-red">LOCKED</div>
+        <div class="hc-sub">Unlock: $10,000/mo recurring</div>
+      </div>
+      <div class="health-card" style="border-left:3px solid var(--red)">
+        <div class="hc-title">SS-MASTER — $100K+ MRR</div>
+        <div class="hc-val hc-red">LOCKED</div>
+        <div class="hc-sub">Unlock: $100,000/mo recurring</div>
+      </div>
+    </div>
+  </div><!-- /section-overview -->
+
+  <!-- FLOORS section -->
+  <div id="section-floors" style="display:none">
+    <div id="search-bar">
+      <input type="text" id="floor-search" placeholder="Search floors by name or number…" oninput="filterFloors()">
+      <select id="floor-filter" onchange="filterFloors()">
+        <option value="">All statuses</option>
+        <option value="live">Live</option>
+        <option value="pending">Pending</option>
+        <option value="coming">Coming Soon</option>
+      </select>
+      <div class="floor-count" id="floor-count">392 floors</div>
+    </div>
+    <div id="floor-grid"></div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /body -->
+</div><!-- /wrap -->
+
+<script>
+// ── CLOCK ──
+function tick(){
+  const now=new Date();
+  document.getElementById('topbar-time').textContent=now.toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+tick(); setInterval(tick,1000);
+
+// ── LOGOUT ──
+function logout(){
+  localStorage.removeItem('ag_session_v1');
+  location.reload();
+}
+
+// ── SECTION TOGGLE ──
+function showSection(id,link){
+  ['section-overview','section-floors'].forEach(s=>{
+    document.getElementById(s).style.display=s==='section-'+id?'block':'none';
+  });
+  document.querySelectorAll('#sidebar a').forEach(a=>a.classList.remove('active'));
+  if(link) link.classList.add('active');
+}
+
+// ── FLOOR DATA ──
+const NAMED = {
+  1:  {name:'Francisco Holdings Inc.',domain:'franciscoholdingsinc.com',status:'live',rev:'Parent Co'},
+  2:  {name:'OmniaGuard',domain:'omniaguard.com',status:'live',rev:'$199–$4,999/mo'},
+  3:  {name:'PrimeDox AI',domain:'primedoxai.com',status:'live',rev:'$49–$999/mo'},
+  4:  {name:'CCLDR',domain:'ccldr.net',status:'live',rev:'$99–$1,499/mo'},
+  5:  {name:'Canadian Cannabis Consulting',domain:'TBD',status:'live',rev:'$499–$4,999'},
+  6:  {name:'Cannabis Compliance Canada',domain:'ccc.net',status:'live',rev:'$99–$999/mo'},
+  7:  {name:'CleanSwarm',domain:'cleanswarm.ca',status:'pending',rev:'$500–$2,000/mo'},
+  8:  {name:'WeedLaw / Doc Weedlaw',domain:'weedlaw.com + .ca',status:'live',rev:'$149–$999'},
+  9:  {name:'VIGILAX',domain:'vigilax.io',status:'pending',rev:'$199–$10K+'},
+  10: {name:'Kiaros AI Consulting',domain:'kiaros.ai',status:'pending',rev:'$299–$9,999/mo'},
+  11: {name:'Vault Velocity Auto',domain:'vaultvelocityauto.com',status:'pending',rev:'$99–$999/mo'},
+  12: {name:'TechPetCage',domain:'techpetcage.ca',status:'pending',rev:'$199–$999'},
+  13: {name:'MindShift by Michaella',domain:'mindshift-makayla.com',status:'pending',rev:'$49–$499/mo'},
+  14: {name:'SoulStack.ai',domain:'soulstack.ai',status:'pending',rev:'Infrastructure'},
+  15: {name:'ZPrimeDoxAI HQ',domain:'zprimedoxaihq.com',status:'live',rev:'Private HQ'},
+  16: {name:'BENO-X / Doc Weedlaw Media',domain:'beno-x.com',status:'pending',rev:'$299–$1,499/mo'},
+  17: {name:'Space Swarm',domain:'GitHub Pages',status:'pending',rev:'Space Ops AI'},
+  18: {name:'Auto Swarm',domain:'GitHub Pages',status:'pending',rev:'AV Intelligence'},
+  19: {name:'Quantum Swarm',domain:'GitHub Pages',status:'pending',rev:'Quantum AI'},
+  20: {name:'BioTech Swarm',domain:'GitHub Pages',status:'pending',rev:'Drug Discovery'},
+  21: {name:'Health Swarm',domain:'GitHub Pages',status:'pending',rev:'Clinical AI'},
+  22: {name:'FinTech Swarm',domain:'GitHub Pages',status:'pending',rev:'Payment AI'},
+  23: {name:'Energy Swarm',domain:'GitHub Pages',status:'pending',rev:'Renewables AI'},
+  24: {name:'Logistics Swarm',domain:'GitHub Pages',status:'pending',rev:'Supply Chain AI'},
+  25: {name:'Weedlaw Education',domain:'GitHub Pages',status:'pending',rev:'Course Platform'},
+  45: {name:'Francisco Phoenix — DYNASTY',domain:'Secret — Konami code',status:'live',rev:'Phoenix Dominion'},
+};
+
+// Build all 392 floors
+const FLOORS = [];
+for(let i=1;i<=392;i++){
+  if(NAMED[i]){
+    FLOORS.push({num:i,...NAMED[i]});
+  } else if(i<=45){
+    FLOORS.push({num:i,name:`Floor ${i} — TBD`,domain:'—',status:'coming',rev:'Coming Soon'});
+  } else {
+    FLOORS.push({num:i,name:`Floor ${i} — Phoenix Dominion`,domain:'—',status:'coming',rev:`$${(i*10).toLocaleString()}K+ ARR target`});
+  }
+}
+
+function renderFloors(list){
+  const grid=document.getElementById('floor-grid');
+  grid.innerHTML=list.map(f=>`
+    <div class="floor-card ${f.status}" data-num="${f.num}" data-name="${f.name.toLowerCase()}" data-status="${f.status}">
+      <div class="fc-num">FLOOR ${f.num}</div>
+      <div class="fc-name">${f.name}</div>
+      <div class="fc-rev">${f.rev}</div>
+      <span class="fc-status ${f.status==='live'?'s-live':f.status==='pending'?'s-pending':'s-coming'}">
+        ${f.status==='live'?'LIVE':f.status==='pending'?'PENDING':'COMING'}
+      </span>
+    </div>
+  `).join('');
+  document.getElementById('floor-count').textContent=`${list.length} floors`;
+}
+
+renderFloors(FLOORS);
+
+function filterFloors(){
+  const q=document.getElementById('floor-search').value.toLowerCase();
+  const s=document.getElementById('floor-filter').value;
+  const filtered=FLOORS.filter(f=>{
+    const matchQ=!q||f.name.toLowerCase().includes(q)||String(f.num).includes(q)||f.rev.toLowerCase().includes(q);
+    const matchS=!s||f.status===s;
+    return matchQ&&matchS;
+  });
+  renderFloors(filtered);
+}
+
+// ── SECTION NAV ──
+document.querySelectorAll('#sidebar a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    const id=this.getAttribute('href').slice(1);
+    showSection(id,this);
+  });
+});
+</script>
+</body>
+</html>
