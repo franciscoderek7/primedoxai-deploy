@@ -1,0 +1,47 @@
+name: Deploy Canadian Cannabis Consulting
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'canadian-cannabis-consulting-site/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify no Loop B bleed (no AI/security products on cannabis site)
+        run: |
+          if grep -r "OmniaGuard\|VIGILAX\|SoulStack\|omniaguard\|vigilax" \
+               canadian-cannabis-consulting-site/index.html 2>/dev/null | \
+               grep -v "footer\|Monitored by\|soulstack-badge\|empire-nav\|crosslink"; then
+            echo "ERROR: Loop B brand detected on Loop A cannabis site"
+            exit 1
+          fi
+          echo "Loop bleed check passed"
+
+      - name: Deploy to GitHub Pages
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          git clone --depth 1 \
+            "https://x-access-token:${DEPLOY_TOKEN}@github.com/franciscoderek7/canadian-cannabis-consulting.git" \
+            /tmp/ccc-deploy
+
+          rsync -av --delete canadian-cannabis-consulting-site/ /tmp/ccc-deploy/
+
+          echo "canadiancannabisconsulting.com" > /tmp/ccc-deploy/CNAME
+
+          cd /tmp/ccc-deploy
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy"
+          else
+            git commit -m "Deploy Canadian Cannabis Consulting — $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push origin main
+          fi
