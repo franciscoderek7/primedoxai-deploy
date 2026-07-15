@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Subscriptions — Francisco Holdings Inc.</title>
+<style>
+/* ══ DEREK: Replace these 3 values after creating your Stripe account ══
+   1. Go to stripe.com → Products → Create product → Add price (recurring)
+   2. Get Publishable Key from Developers → API Keys
+   3. Get Price IDs from each product's pricing page                      */
+</style>
+</head>
+<body>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+/* ══════════════════════════════════════════════════════════
+   STRIPE CONFIG — REPLACE THESE AFTER STRIPE ACCOUNT SETUP
+   ════════════════════════════════════════════════════════ */
+const STRIPE_PK = 'pk_live_REPLACE_WITH_YOUR_PUBLISHABLE_KEY';
+const SUCCESS_URL = 'https://franciscoholdingsinc.com/thank-you.html';
+const CANCEL_URL  = 'https://franciscoholdingsinc.com/stripe-pricing.html';
+
+const PLANS = [
+  {
+    name: 'OMNIAGUARD Shield',
+    price: '$49/mo',
+    priceId: 'price_REPLACE_OMNIAGUARD_SHIELD_MONTHLY',
+    desc: 'Personal device protection · AI threat monitoring · real-time alerts',
+  },
+  {
+    name: 'OMNIAGUARD Home',
+    price: '$99/mo',
+    priceId: 'price_REPLACE_OMNIAGUARD_HOME_MONTHLY',
+    desc: 'Home network shield · full device coverage · weekly reports',
+  },
+  {
+    name: 'OMNIAGUARD Enterprise',
+    price: '$497/mo',
+    priceId: 'price_REPLACE_OMNIAGUARD_ENTERPRISE_MONTHLY',
+    desc: 'Full enterprise defense · unlimited endpoints · 24/7 SOC',
+    featured: true,
+  },
+  {
+    name: 'PrimeDox AI Starter',
+    price: '$149/mo',
+    priceId: 'price_REPLACE_PRIMEDOX_STARTER_MONTHLY',
+    desc: 'AI document automation · 3 active matters · e-signature',
+  },
+  {
+    name: 'PrimeDox AI Pro',
+    price: '$499/mo',
+    priceId: 'price_REPLACE_PRIMEDOX_PRO_MONTHLY',
+    desc: 'Unlimited documents · client portal · AI intake · booking',
+    featured: true,
+  },
+  {
+    name: 'CCLDR Professional',
+    price: '$499/mo',
+    priceId: 'price_REPLACE_CCLDR_PRO_MONTHLY',
+    desc: 'Cannabis compliance tracking · Health Canada reporting · AI alerts',
+    featured: true,
+  },
+];
+
+/* ══════════════════════════════════════════════════════════
+   SUBSCRIPTION REDIRECT — DO NOT EDIT BELOW THIS LINE
+   ════════════════════════════════════════════════════════ */
+const stripe = Stripe(STRIPE_PK);
+
+async function subscribe(priceId, planName) {
+  const btn = event.currentTarget;
+  btn.disabled = true;
+  btn.textContent = 'Redirecting…';
+  try {
+    const { error } = await stripe.redirectToCheckout({
+      lineItems: [{ price: priceId, quantity: 1 }],
+      mode: 'subscription',
+      successUrl: SUCCESS_URL + '?plan=' + encodeURIComponent(planName),
+      cancelUrl: CANCEL_URL,
+    });
+    if (error) {
+      alert('Payment error: ' + error.message);
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }
+  } catch(e) {
+    alert('Stripe not configured yet. Use PayPal link while Stripe is being set up.');
+    btn.disabled = false;
+    btn.textContent = 'Subscribe';
+  }
+}
+
+/* Render plans on load */
+document.addEventListener('DOMContentLoaded', function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    :root{--primary:#C9B896;--dark:#0D0D0D;--surface:#141414;--card:#1A1A1A;--border:rgba(201,184,150,0.15);--text:#F5F0E8;--muted:#7A7267}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--dark);color:var(--text);font-family:Inter,sans-serif;font-weight:300;min-height:100vh;padding:60px 20px}
+    h1{font-family:serif;font-size:32px;font-weight:400;color:var(--primary);text-align:center;margin-bottom:8px;letter-spacing:2px}
+    .sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:40px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:900px;margin:0 auto}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:28px;position:relative}
+    .card.featured{border-color:var(--primary)}
+    .feat-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#000;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:3px 12px;border-radius:2px}
+    .plan-name{font-size:13px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
+    .plan-price{font-family:serif;font-size:28px;color:var(--text);margin-bottom:12px}
+    .plan-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+    .sub-btn{width:100%;background:linear-gradient(135deg,#8B7355,var(--primary));color:#000;border:none;padding:14px;font-family:Inter,sans-serif;font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:opacity .2s}
+    .sub-btn:hover{opacity:.9}
+    .sub-btn:disabled{opacity:.5;cursor:not-allowed}
+    .note{font-size:11px;color:var(--muted);text-align:center;margin-top:32px}
+    a{color:var(--primary)}
+  `;
+  document.head.appendChild(style);
+
+  const h1 = document.createElement('h1');
+  h1.textContent = 'Empire Subscriptions';
+  document.body.prepend(h1);
+  const sub = document.createElement('p');
+  sub.className = 'sub';
+  sub.textContent = 'Recurring monthly plans — cancel anytime · Powered by Stripe';
+  h1.after(sub);
+
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+  PLANS.forEach(plan => {
+    const card = document.createElement('div');
+    card.className = 'card' + (plan.featured ? ' featured' : '');
+    card.innerHTML = (plan.featured ? '<div class="feat-badge">Most Popular</div>' : '') +
+      `<div class="plan-name">${plan.name}</div>
+       <div class="plan-price">${plan.price}</div>
+       <div class="plan-desc">${plan.desc}</div>
+       <button class="sub-btn" onclick="subscribe('${plan.priceId}','${plan.name}',event)">Subscribe</button>`;
+    grid.appendChild(card);
+  });
+  document.body.appendChild(grid);
+
+  const note = document.createElement('p');
+  note.className = 'note';
+  note.innerHTML = 'All subscriptions include a 7-day free trial. <a href="index.html">← Back to Empire</a>';
+  document.body.appendChild(note);
+});
+</script>
+</body>
+</html>
