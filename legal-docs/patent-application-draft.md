@@ -16,7 +16,7 @@
 
 ## CROSS-REFERENCE TO RELATED APPLICATIONS
 
-This application claims priority to provisional application(s) related to the Francisco Protocol, the CCLDR Virtual Courthouse, the OmniaGuard AI Security Framework, and the ZPrimeDoxAI Constitutional Defense System.
+This application claims priority to provisional application(s) related to the Francisco Protocol, the CCLDR Virtual Courthouse, the OMNIAGUARD AI Security Framework, and the ZPrimeDoxAI Constitutional Defense System.
 
 ---
 
@@ -73,9 +73,9 @@ The invention provides an **Autonomous Multi-Entity Constitutional Governance Sy
 
 ## BRIEF DESCRIPTION OF THE DRAWINGS
 
-**FIG. 1** — System architecture overview: authority chain from PrimeDox → PrimeDocs → SoulStack → OmniaGuard → Claude (Builder).
+**FIG. 1** — System architecture overview: authority chain from PrimeDox → PrimeDocs → SoulStack → OMNIAGUARD → Claude (Builder).
 
-**FIG. 2** — Multi-entity governance layer: hub-and-spoke topology with ZPrimeDoxAI as central hub; OmniaGuard, CCLDR, CleanSwarm, CCC, Kiaros, SoulStack, TechPetCage, and 37 reserved entity slots as spokes.
+**FIG. 2** — Multi-entity governance layer: hub-and-spoke topology with ZPrimeDoxAI as central hub; OMNIAGUARD, CCLDR, CleanSwarm, CCC, Kiaros, SoulStack, TechPetCage, and 37 reserved entity slots as spokes.
 
 **FIG. 3** — Blockchain Docket System: case filing flowchart → hash generation → IPFS pinning → docket entry → AI Justice Council assignment → deliberation output → precedent recording.
 
@@ -101,7 +101,7 @@ The invention provides an **Autonomous Multi-Entity Constitutional Governance Sy
 - Voice signature frequency analysis (minimum 94% confidence interval);
 - Behavioral keystroke dynamics (dwell time, flight time, pressure pattern).
 
-**1.2** SAM maintains an immutable authority chain log. Any sub-agent action is traceable to the authorizing SAM session ID. Sub-agents below PrimeDox in the authority chain (PrimeDocs, SoulStack, OmniaGuard, Claude) may not self-authorize governance decisions.
+**1.2** SAM maintains an immutable authority chain log. Any sub-agent action is traceable to the authorizing SAM session ID. Sub-agents below PrimeDox in the authority chain (PrimeDocs, SoulStack, OMNIAGUARD, Claude) may not self-authorize governance decisions.
 
 **1.3** Emergency override ("PrimeDocs Protocol") is triggered by voice command containing the phrase "PrimeDocs override" followed by a valid biometric match. Emergency sessions are logged separately and expire after 24 hours or explicit deactivation.
 
@@ -118,7 +118,7 @@ The invention provides an **Autonomous Multi-Entity Constitutional Governance Sy
 - Pending action queues with priority and assigned executor;
 - Domain registration and DNS configuration state.
 
-**2.2** The MEGL enforces **zero-bleed rules** between entities with incompatible regulatory environments. In the preferred embodiment, AI-technology entities (OmniaGuard, SoulStack, Kiaros) and cannabis-regulatory entities (CCLDR, CCC) are maintained in strict information separation. The MEGL rejects any content generation request that would introduce cross-contamination.
+**2.2** The MEGL enforces **zero-bleed rules** between entities with incompatible regulatory environments. In the preferred embodiment, AI-technology entities (OMNIAGUARD, SoulStack, Kiaros) and cannabis-regulatory entities (CCLDR, CCC) are maintained in strict information separation. The MEGL rejects any content generation request that would introduce cross-contamination.
 
 **2.3** The MEGL scales to a maximum of N entities in the preferred embodiment, where N is architecturally bounded only by available compute and storage resources. The disclosed embodiment targets 22 entities in Year 1 and 392 entities by Year 4 using autonomous swarm-deployment protocols.
 

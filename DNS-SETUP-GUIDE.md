@@ -119,8 +119,8 @@ The primedoxai-deploy repo is deployed at:
 
 Sites accessible NOW (no custom domain needed):
 - `.../francisco-holdings-site/` → Francisco Holdings Inc.
-- `.../omniaguard-site/` → OmniaGuard
-- `.../omniaguard-site/app/` → OmniaGuard PWA
+- `.../omniaguard-site/` → OMNIAGUARD
+- `.../omniaguard-site/app/` → OMNIAGUARD PWA
 - `.../ccldr-site/` → CCLDR
 - `.../cleantech-automation-site/` → CleanSwarm
 - `.../telus-kudos-pitch/` → Telus pitch deck

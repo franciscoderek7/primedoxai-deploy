@@ -1,19 +1,19 @@
 /**
  * empire/floors/floor4-omniguard.js
  *
- * Floor 4 — OmniGuard cybersecurity lobby scene (Three.js module).
+ * Floor 4 — OMNIAGUARD cybersecurity lobby scene (Three.js module).
  *
  * NOTE ON FLOOR NUMBER: this was handed off labeled "Floor 1," but
- * AssetManifest.js (already shipped on main) places OmniGuard at Floor 4 —
+ * AssetManifest.js (already shipped on main) places OMNIAGUARD at Floor 4 —
  * Floor 1 is Francisco Holdings Inc., the parent/lobby floor, per EMPIRE.md's
  * Holding Structure table. Filed under Floor 4 to match the shipped manifest;
- * flag to Derek if OmniGuard should actually be Floor 1 (would require
+ * flag to Derek if OMNIAGUARD should actually be Floor 1 (would require
  * renumbering AssetManifest.js).
  *
- * Brand note: "OmniaGuard" was retired 2026-06-19 in favor of "OmniGuard"
+ * Brand note: "OMNIAGUARD" was retired 2026-06-19 in favor of "OMNIAGUARD"
  * (see CLAUDE.md brand enforcement table) — renamed accordingly. Neon point
  * light colors corrected to the brand-spec hex from CLAUDE.md
- * (blue #4A90E2 / pink #E91E63) — OmniGuard is the only brand permitted to
+ * (blue #4A90E2 / pink #E91E63) — OMNIAGUARD is the only brand permitted to
  * use blue or pink anywhere in the empire.
  *
  * Self-contained primitive-built scene (does not depend on
@@ -25,7 +25,7 @@
  * surrounds the core (hover-glow / click-pulse via a raycaster against 14
  * invisible hit-spheres — added with window-level listeners, which is safe
  * because floor-registry.js's loadFloorScene() caches this module's factory
- * result and only ever calls createOmniGuardScene() once per page load, so
+ * result and only ever calls createOMNIAGUARDScene() once per page load, so
  * the listeners are never re-attached/duplicated on repeat floor visits);
  * the flat threat-map placeholder is replaced with a rotating wireframe
  * globe with surface "blips"; three canvas-texture holographic data panels
@@ -37,7 +37,7 @@
  * that spec (ransomware blobs, prompt injection snakes, data broker gangs),
  * and destroys them with a laser-beam strike when in range; a clickable
  * "VPN CLOAK" panel temporarily drops the squad's opacity to simulate the
- * spec's invisibility effect. Pricing-tier buy buttons (paypal.me/techpetcage
+ * spec's invisibility effect. Pricing-tier buy buttons (paypal.me/derekfranciaco1
  * amounts copied verbatim from stripe-config.js's omniguard block) use the
  * shared empire/payments.js Option A floating-button system.
  */
@@ -51,9 +51,9 @@ const ROBOT_COUNT = 4;
 const MAX_ENEMIES = 6;
 const ENEMY_TYPES = ['ransomware', 'injection', 'databroker'];
 const OMNIGUARD_PLANS = [
-  { label: 'OMNIGUARD ENTRY', priceLabel: '$99 CAD', paypalUrl: 'https://paypal.me/techpetcage/99CAD' },
-  { label: 'OMNIGUARD MID', priceLabel: '$299 CAD', paypalUrl: 'https://paypal.me/techpetcage/299CAD' },
-  { label: 'OMNIGUARD PREMIUM', priceLabel: '$999 CAD', paypalUrl: 'https://paypal.me/techpetcage/999CAD' },
+  { label: 'OMNIGUARD ENTRY', priceLabel: '$99 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/99CAD' },
+  { label: 'OMNIGUARD MID', priceLabel: '$299 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/299CAD' },
+  { label: 'OMNIGUARD PREMIUM', priceLabel: '$999 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/999CAD' },
 ];
 
 function lerpColorHex(c1, c2, t) {
@@ -249,7 +249,7 @@ function createLaserBeam(THREE, color) {
   return line;
 }
 
-export function createOmniGuardScene(THREE) {
+export function createOMNIAGUARDScene(THREE) {
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x05070d, 10, 60);
 

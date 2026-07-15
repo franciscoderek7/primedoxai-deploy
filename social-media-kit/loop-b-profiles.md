@@ -6,25 +6,25 @@
 ## 1. OMNIAGUARD
 
 ### LinkedIn (Company Page)
-- **Name:** OmniaGuard
+- **Name:** OMNIAGUARD
 - **Tagline:** AI Security That Actually Works — 14-Agent Defense Swarm
-- **About:** OmniaGuard secures AI agent deployments against the attack vector most companies don't see coming: prompt injection — the manipulation of an AI agent through crafted inputs buried in documents, emails, or web content your agents process. We run a 14-agent coordinated defense swarm that watches every input in real time, flags manipulation attempts, and blocks them before they reach your production systems. Free security audits available.
+- **About:** OMNIAGUARD secures AI agent deployments against the attack vector most companies don't see coming: prompt injection — the manipulation of an AI agent through crafted inputs buried in documents, emails, or web content your agents process. We run a 14-agent coordinated defense swarm that watches every input in real time, flags manipulation attempts, and blocks them before they reach your production systems. Free security audits available.
 - **Industry:** Computer and Network Security
-- **Logo:** OmniaGuard shield icon — white/light on dark background
+- **Logo:** OMNIAGUARD shield icon — white/light on dark background
 - **Cover:** Dark (#0d1b2a) with cyan accent (#00b4d8): "Your AI agents are only as secure as their inputs."
 - **Website:** omniaguard.com
 
 ### X / Twitter
-- **Handle:** @OmniaGuard
+- **Handle:** @OMNIAGUARD
 - **Bio:** Real-time AI security for enterprise agent deployments. 14-agent defense swarm. Stopping prompt injection before it starts. Free audit → omniaguard.com
 - **Pinned tweet:** "Most companies running AI agents have no idea what their attack surface looks like. That's the problem we solve. Free 20-min audit — comment AUDIT 👇"
 
 ### Facebook (Business Page)
-- **Name:** OmniaGuard — AI Security
+- **Name:** OMNIAGUARD — AI Security
 - **Category:** Software / Technology
 - **Short description:** Enterprise AI security. 14-agent defense swarm. Real-time prompt injection detection. Free audits available at omniaguard.com
 
-### Brand Colors — OmniaGuard
+### Brand Colors — OMNIAGUARD
 | Element | Color |
 |---------|-------|
 | Primary dark | #0d1b2a |
@@ -159,7 +159,7 @@
 
 | Brand | Primary | Accent | Theme |
 |-------|---------|--------|-------|
-| OmniaGuard | #0d1b2a | #00b4d8 | Navy / Cyan |
+| OMNIAGUARD | #0d1b2a | #00b4d8 | Navy / Cyan |
 | Kiaros | #000000 | #00D4FF + #c9a84c | Black / Cyan / Gold |
 | SoulStack | #0f0f1a | #6a5acd | Dark / Purple |
 | CleanSwarm | #0a1a12 | #2e9e6b | Dark / Green |

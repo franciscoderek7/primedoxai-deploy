@@ -23,11 +23,11 @@ Go to: Dashboard → Products → Add Product
 
 | Product Name | Price | Billing |
 |---|---|---|
-| OmniaGuard Sentinel | $499.00 CAD | Monthly recurring |
-| OmniaGuard Warden | $1,999.00 CAD | Monthly recurring |
-| OmniaGuard Archon | $4,999.00 CAD | Monthly recurring |
-| OmniaGuard Sovereign | $24,999.00 CAD | Monthly recurring |
-| OmniaGuard Imperium | $99,999.00 CAD | Monthly recurring |
+| OMNIAGUARD Sentinel | $499.00 CAD | Monthly recurring |
+| OMNIAGUARD Warden | $1,999.00 CAD | Monthly recurring |
+| OMNIAGUARD Archon | $4,999.00 CAD | Monthly recurring |
+| OMNIAGUARD Sovereign | $24,999.00 CAD | Monthly recurring |
+| OMNIAGUARD Imperium | $99,999.00 CAD | Monthly recurring |
 
 ### PRIMEDOX AI PRODUCTS:
 
@@ -126,11 +126,11 @@ Replace these in the HTML files:
 
 | Placeholder | Product |
 |---|---|
-| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SENTINEL | OmniaGuard Sentinel $499/mo |
-| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_WARDEN | OmniaGuard Warden $1,999/mo |
-| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_ARCHON | OmniaGuard Archon $4,999/mo |
-| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SOVEREIGN | OmniaGuard Sovereign $24,999/mo |
-| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_IMPERIUM | OmniaGuard Imperium $99,999/mo |
+| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SENTINEL | OMNIAGUARD Sentinel $499/mo |
+| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_WARDEN | OMNIAGUARD Warden $1,999/mo |
+| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_ARCHON | OMNIAGUARD Archon $4,999/mo |
+| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_SOVEREIGN | OMNIAGUARD Sovereign $24,999/mo |
+| PASTE_STRIPE_LINK_HERE_OMNIAGUARD_IMPERIUM | OMNIAGUARD Imperium $99,999/mo |
 | PASTE_STRIPE_LINK_HERE_PRIMEDOX_PRO | PrimeDox Pro $49/mo |
 | PASTE_STRIPE_LINK_HERE_PRIMEDOX_ELITE | PrimeDox Elite $199/mo |
 | PASTE_STRIPE_LINK_HERE_PRIMEDOX_SOVEREIGN | PrimeDox Sovereign $999/mo |
@@ -155,14 +155,14 @@ If 1 client per product signs up in Week 1:
 
 | Product | Revenue/Month |
 |---|---|
-| OmniaGuard (avg 1 Sentinel) | $499 |
+| OMNIAGUARD (avg 1 Sentinel) | $499 |
 | PrimeDox (avg 1 Pro) | $49 |
 | CCLDR (avg 1 Warrior) | $149 |
 | CleanSwarm (avg 1 Starter) | $399 |
 | **Total MRR Week 1** | **$1,096/mo** |
 
 Scale: 10 clients/product = $10,960/mo MRR within 30 days.
-Scale: OmniaGuard Enterprise client (Archon+) = $4,999–$99,999/mo per client.
+Scale: OMNIAGUARD Enterprise client (Archon+) = $4,999–$99,999/mo per client.
 
 ---
 

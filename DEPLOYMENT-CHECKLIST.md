@@ -92,7 +92,7 @@ chmod +x MANUAL-FALLBACKS.sh
 | CleanSwarm | `https://franciscoderek7.github.io/cleanswarm-checkout` | [ ] Live |
 | CCLDR | `https://franciscoderek7.github.io/ccldr-payments` | [ ] Live |
 | Revenue Dashboard | `https://franciscoderek7.github.io/revenue-dashboard` | [ ] Live |
-| OmniaGuard | `https://franciscoderek7.github.io/omniaguard-site` | [ ] Live |
+| OMNIAGUARD | `https://franciscoderek7.github.io/omniaguard-site` | [ ] Live |
 | PrimeDox AI | `https://franciscoderek7.github.io/primedoxai-site` | [ ] Live |
 | MindShift *(untouched)* | `https://franciscoderek7.github.io/mindshift-makayla` | Already live |
 
@@ -104,9 +104,9 @@ chmod +x MANUAL-FALLBACKS.sh
 - [ ] CCLDR Professional button → opens `https://buy.stripe.com/...`
 - [ ] CCLDR Elite button → opens `https://buy.stripe.com/...`
 - [ ] CCLDR Sovereign button → opens `https://buy.stripe.com/...`
-- [ ] OmniaGuard Starter button → opens `https://buy.stripe.com/...`
-- [ ] OmniaGuard Professional button → opens `https://buy.stripe.com/...`
-- [ ] OmniaGuard Enterprise button → opens `https://buy.stripe.com/...`
+- [ ] OMNIAGUARD Starter button → opens `https://buy.stripe.com/...`
+- [ ] OMNIAGUARD Professional button → opens `https://buy.stripe.com/...`
+- [ ] OMNIAGUARD Enterprise button → opens `https://buy.stripe.com/...`
 - [ ] PrimeDox Pro button → opens `https://buy.stripe.com/...`
 - [ ] PrimeDox Elite button → opens `https://buy.stripe.com/...`
 
@@ -157,9 +157,9 @@ chmod +x MANUAL-FALLBACKS.sh
 | 8 | MindShift Neuro | CAD $497 | One-time |
 | 9 | MindShift Group Intensive | CAD $1,997 | One-time |
 | 10 | MindShift Premium | CAD $10,000 | One-time |
-| 11 | OmniaGuard Starter | CAD $99/mo | Recurring |
-| 12 | OmniaGuard Professional | CAD $499/mo | Recurring |
-| 13 | OmniaGuard Enterprise | CAD $1,999/mo | Recurring |
+| 11 | OMNIAGUARD Starter | CAD $99/mo | Recurring |
+| 12 | OMNIAGUARD Professional | CAD $499/mo | Recurring |
+| 13 | OMNIAGUARD Enterprise | CAD $1,999/mo | Recurring |
 | 14 | PrimeDox Pro | CAD $49/mo | Recurring |
 | 15 | PrimeDox Elite | CAD $199/mo | Recurring |
 
@@ -171,7 +171,7 @@ chmod +x MANUAL-FALLBACKS.sh
 |-------|-------------------|-------------|
 | CleanSwarm (avg $399/mo) | 3 customers | $1,197/mo |
 | CCLDR (avg $499 one-time) | 5 sales | $2,495 |
-| OmniaGuard (avg $299/mo) | 2 customers | $598/mo |
+| OMNIAGUARD (avg $299/mo) | 2 customers | $598/mo |
 | PrimeDox (avg $199/mo) | 5 customers | $995/mo |
 | **Total Day-1 Target** | | **$5,285** |
 

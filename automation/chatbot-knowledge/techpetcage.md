@@ -11,7 +11,7 @@ TBD — Derek to set
 
 ## Contact
 - techpetcage@gmail.com
-- Note: the live site's PayPal handle is `techpetcage` (paypal.me/techpetcage), for context.
+- Note: the live site's PayPal handle is `techpetcage` (paypal.me/derekfranciaco1), for context.
 
 ## FAQ
 

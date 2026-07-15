@@ -17,7 +17,7 @@
       color: '#27ae60',
       accent: '#1a7a40',
       greeting: "I'm Doc Weedlaw AI. Facing a cannabis charge? Ask me anything about your rights or BENO-X.",
-      consultLink: 'https://paypal.me/techpetcage/500CAD',
+      consultLink: 'https://paypal.me/derekfranciaco1/500CAD',
       consultLabel: 'Book Consultation ($500)',
     },
     'primedox': {
@@ -26,7 +26,7 @@
       color: '#00d4ff',
       accent: '#0099bb',
       greeting: "I'm PrimeDox AI. I can help you understand our document automation tiers. What are you looking for?",
-      consultLink: 'https://paypal.me/techpetcage/49CAD',
+      consultLink: 'https://paypal.me/derekfranciaco1/49CAD',
       consultLabel: 'Subscribe — $49/mo',
     },
     'francisco-holdings': {
@@ -35,7 +35,7 @@
       color: '#c9a84c',
       accent: '#9a7a2e',
       greeting: "Welcome to Francisco Holdings. I help founders get clarity fast. What challenge are you facing?",
-      consultLink: 'https://paypal.me/techpetcage/500CAD',
+      consultLink: 'https://paypal.me/derekfranciaco1/500CAD',
       consultLabel: 'Book Strategy Session ($500)',
     },
     'weedlaw': {
@@ -44,17 +44,17 @@
       color: '#27ae60',
       accent: '#1a7a40',
       greeting: "Know Your Rights. I'm here to help. Are you facing a charge, or do you want to learn BENO-X?",
-      consultLink: 'https://paypal.me/techpetcage/149CAD',
+      consultLink: 'https://paypal.me/derekfranciaco1/149CAD',
       consultLabel: 'Get Warrior Tier — $149',
     },
     'omniaguard': {
-      name: 'OmniaGuard AI',
+      name: 'OMNIAGUARD AI',
       avatar: '🛡️',
       color: '#6c63ff',
       accent: '#4b43cc',
-      greeting: "OmniaGuard here. What's your threat surface? I can help you find the right protection tier.",
-      consultLink: 'https://paypal.me/techpetcage/499CAD',
-      consultLabel: 'Start OmniaGuard Sentinel — $499/mo',
+      greeting: "OMNIAGUARD here. What's your threat surface? I can help you find the right protection tier.",
+      consultLink: 'https://paypal.me/derekfranciaco1/499CAD',
+      consultLabel: 'Start OMNIAGUARD Sentinel — $499/mo',
     },
     'cleanswarm': {
       name: 'CleanSwarm AI',
@@ -62,7 +62,7 @@
       color: '#f59e0b',
       accent: '#b45309',
       greeting: "Hey! CleanSwarm here. Let's automate your workflow. What are you cleaning up?",
-      consultLink: 'https://paypal.me/techpetcage/399CAD',
+      consultLink: 'https://paypal.me/derekfranciaco1/399CAD',
       consultLabel: 'Start CleanSwarm Starter — $399/mo',
     },
     'default': {
@@ -71,7 +71,7 @@
       color: '#c9a84c',
       accent: '#9a7a2e',
       greeting: "Welcome to Francisco Holdings. I help founders get clarity fast. What challenge are you facing?",
-      consultLink: 'https://paypal.me/techpetcage/500CAD',
+      consultLink: 'https://paypal.me/derekfranciaco1/500CAD',
       consultLabel: 'Book Strategy Session — $500',
     }
   };
@@ -101,9 +101,9 @@
       answer: "The Francisco Holdings monthly strategy retainer is $1,500/mo — 4 sessions, priority access, direct line to Derek Francisco. Reply 'RETAINER' to get the agreement." },
     { kw: ['22 brands', 'empire', 'holdings', 'how do you', 'run'],
       answer: "Derek Francisco runs 22 brands with 2 people using AI automation, Loop A/B identity architecture, and a lean AI stack. That playbook is teachable in a single consulting session." },
-    // OmniaGuard
+    // OMNIAGUARD
     { kw: ['omniaguard', 'security', 'threat', 'ai security', 'enterprise security', 'protection'],
-      answer: "OmniaGuard offers enterprise-grade AI security:<br>🔹 Sentinel — $499/mo (monitoring)<br>🔸 Guardian — $1,499/mo (active defense)<br>🔥 Fortress — $4,999/mo (full suite)<br>💎 Sovereign — $15,000/mo (dedicated team)" },
+      answer: "OMNIAGUARD offers enterprise-grade AI security:<br>🔹 Sentinel — $499/mo (monitoring)<br>🔸 Guardian — $1,499/mo (active defense)<br>🔥 Fortress — $4,999/mo (full suite)<br>💎 Sovereign — $15,000/mo (dedicated team)" },
     // CleanSwarm
     { kw: ['cleanswarm', 'clean', 'swarm', 'document cleanup', 'ocr', 'extraction'],
       answer: "CleanSwarm automates document cleanup, OCR extraction, and data structuring at scale. Tiers:<br>🐝 Starter — $399/mo<br>🐝🐝 Growth — $999/mo<br>🐝🐝🐝 Scale — $2,499/mo" },

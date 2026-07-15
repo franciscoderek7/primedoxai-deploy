@@ -157,7 +157,7 @@ AI HEROES ONLINE:
 👻 GhostMind — Privacy
 
 SECURITY:
-Protected by OmniaGuard SDK. Zero prompt injection guarantee. End-to-end encrypted.
+Protected by OMNIAGUARD SDK. Zero prompt injection guarantee. End-to-end encrypted.
 PIPEDA compliant. Canadian data residency.
 
 NOTE: CCLDR/LexMind content is for educational purposes only.
@@ -179,7 +179,7 @@ Not legal representation. Retain qualified counsel for legal matters.
 
 ## SECTION 2: AI HERO SYSTEM — 14 SPECIALIZED AGENTS
 
-Each hero is a specialized AI module inside PrimeDox, powered by Agent Swarm Technologies and protected by OmniaGuard SDK.
+Each hero is a specialized AI module inside PrimeDox, powered by Agent Swarm Technologies and protected by OMNIAGUARD SDK.
 
 | # | Hero Name | Industry | Color | Emoji | Specialty |
 |---|-----------|----------|-------|-------|-----------|
@@ -527,4 +527,4 @@ NOT LEGAL REPRESENTATION — EDUCATION ONLY
 
 ---
 *© 2026 PrimeDox AI. A Francisco Holdings Inc. Company.*
-*🌿 Carbon Neutral 2028 | OmniaGuard Protected | BENO-X Framework*
+*🌿 Carbon Neutral 2028 | OMNIAGUARD Protected | BENO-X Framework*

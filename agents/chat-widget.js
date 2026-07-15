@@ -64,13 +64,13 @@
 
   const OFFLINE_RESPONSES = {
     vpn: {
-      text: "I can help protect your online privacy with OmniGuard's military-grade VPN. Zero logs, 40+ countries, 256-bit AES encryption. One tap and you're invisible.",
+      text: "I can help protect your online privacy with OMNIAGUARD's military-grade VPN. Zero logs, 40+ countries, 256-bit AES encryption. One tap and you're invisible.",
     },
     vault: {
-      text: "I'll secure your passwords and sensitive data with OmniGuard's AES-256-GCM encrypted vault. Biometric unlock, local storage only — we never see your data.",
+      text: "I'll secure your passwords and sensitive data with OMNIAGUARD's AES-256-GCM encrypted vault. Biometric unlock, local storage only — we never see your data.",
     },
     threat: {
-      text: "Threat analysis initiated. OmniGuard's AI antivirus engine detects zero-day threats in real time — before signature databases even know they exist.",
+      text: "Threat analysis initiated. OMNIAGUARD's AI antivirus engine detects zero-day threats in real time — before signature databases even know they exist.",
     },
     audit: {
       text: "I can run a full security audit of your website — SSL, security headers, exposed files, and software vulnerabilities. Full PDF report with remediation plan.",

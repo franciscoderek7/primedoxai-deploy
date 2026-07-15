@@ -59,8 +59,8 @@ Create these links and paste the URLs into `agents/stripe-payment-links.js`:
 
 | Product | Amount | Type | Config | Variable Name |
 |---------|--------|------|--------|---------------|
-| OmniaGuard Security Audit | $500 CAD | One-time | Currency: CAD | `OMNIGUARD_AUDIT_500` |
-| OmniaGuard VPN Monthly | $99 CAD/mo | Recurring | Monthly subscription | `OMNIGUARD_VPN_99` |
+| OMNIAGUARD Security Audit | $500 CAD | One-time | Currency: CAD | `OMNIGUARD_AUDIT_500` |
+| OMNIAGUARD VPN Monthly | $99 CAD/mo | Recurring | Monthly subscription | `OMNIGUARD_VPN_99` |
 | CCLDR Foundation | $149 CAD | One-time | | `CCLDR_FOUNDATION_149` |
 | CCLDR Practitioner | $499 CAD | One-time | | `CCLDR_PRACTITIONER_499` |
 | CCLDR Elite | $1,499 CAD | One-time | | `CCLDR_ELITE_1499` |
@@ -94,10 +94,10 @@ Create forms for:
 - CCLDR contact → copy form ID → replace in `ccldr-site/contact.html`
 - TechPetCage contact → replace in `techpetcage-site/contact.html`
 - FH Strategy inquiry → replace in `francisco-holdings-site/book.html`
-- OmniaGuard free scan → replace in `omniaguard-site/free-scan.html` (action URL)
+- OMNIAGUARD free scan → replace in `omniaguard-site/free-scan.html` (action URL)
 
 **Account 2 (omniaguard1@gmail.com) — Loop B forms:**
-- OmniaGuard contact → replace in `omniaguard-site/contact.html`
+- OMNIAGUARD contact → replace in `omniaguard-site/contact.html`
 - Vigilax quote request → replace in `vigilax-site/pricing.html`
 
 Form ID looks like: `xpwzybkv` → full URL: `https://formspree.io/f/xpwzybkv`
@@ -189,7 +189,7 @@ For Loop A (franciscoderek7@gmail.com account):
 After creating, send Claude the button HTML → Claude wires in everywhere.
 
 For Loop B (omniaguard1@gmail.com):
-- OmniaGuard VPN $99/mo
+- OMNIAGUARD VPN $99/mo
 - Vigilax Retainer $10,000/mo
 
 ---
@@ -209,7 +209,7 @@ Current CDN URLs reference `primedoxai-deploy@main` for `payment-provider.js` an
 
 | Site | Primary Product | Price | Monthly Revenue at 5 sales |
 |------|----------------|-------|---------------------------|
-| OmniaGuard (free-scan → $500 audit) | Security Audit | $500 CAD | $2,500 |
+| OMNIAGUARD (free-scan → $500 audit) | Security Audit | $500 CAD | $2,500 |
 | CCLDR (Foundation → Elite) | Legal education | $149–$1,499 | $745–$7,495 |
 | TechPetCage | Subscriptions | $19–$149/mo | $95–$745/mo |
 | Francisco Holdings (skyscraper) | Strategy sessions | $500 | $2,500 |
@@ -230,8 +230,8 @@ Current CDN URLs reference `primedoxai-deploy@main` for `payment-provider.js` an
 | Referral engine | `agents/referral-engine.js` | ✅ Done |
 | Payment provider | `agents/payment-provider.js` | ✅ Done |
 | FH Skyscraper 45 floors | `francisco-holdings-site/index.html` | ✅ Done + Stripe buttons |
-| OmniaGuard free-scan lead funnel | `omniaguard-site/free-scan.html` | ✅ Done + $500 upsell |
-| OmniaGuard $500 audit section | `omniaguard-site/free-scan.html` | ✅ Done |
+| OMNIAGUARD free-scan lead funnel | `omniaguard-site/free-scan.html` | ✅ Done + $500 upsell |
+| OMNIAGUARD $500 audit section | `omniaguard-site/free-scan.html` | ✅ Done |
 | CCLDR education hub | `ccldr-site/education.html` | ✅ Done |
 | Kiaros pricing | `kiaros-site/index.html` | ✅ Done |
 | Vault Velocity pricing | `vaultvelocityauto-site/index.html` | ✅ Done |

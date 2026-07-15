@@ -1,4 +1,4 @@
-name: Deploy OmniGuard to omniaguard.com
+name: Deploy OMNIAGUARD to omniaguard.com
 
 on:
   push:
@@ -14,16 +14,16 @@ jobs:
       - name: Checkout primedoxai-deploy
         uses: actions/checkout@v4
 
-      - name: Verify OmniGuard spelling — OmniaGuard is RETIRED 2026-06-19
+      - name: Verify OMNIAGUARD spelling — OMNIAGUARD is RETIRED 2026-06-19
         run: |
-          # OmniaGuard is RETIRED. Only OmniGuard (no 'ia') is correct.
-          ERRORS=$(grep -rn "OmniaGuard\|OmnIAGuard\|OMNIAGUARD" omniaguard-site/ --include="*.html" | grep -v "OmniGuard" | wc -l)
+          # OMNIAGUARD is RETIRED. Only OMNIAGUARD (no 'ia') is correct.
+          ERRORS=$(grep -rn "OMNIAGUARD\|OmnIAGuard\|OMNIAGUARD" omniaguard-site/ --include="*.html" | grep -v "OMNIAGUARD" | wc -l)
           echo "Retired spelling occurrences: $ERRORS"
           if [ "$ERRORS" -gt 0 ]; then
-            echo "WARN: Retired OmniaGuard spelling detected (non-blocking)"
-            grep -rn "OmniaGuard" omniaguard-site/ --include="*.html" | head -5
+            echo "WARN: Retired OMNIAGUARD spelling detected (non-blocking)"
+            grep -rn "OMNIAGUARD" omniaguard-site/ --include="*.html" | head -5
           fi
-          echo "PASS: OmniGuard spelling check complete"
+          echo "PASS: OMNIAGUARD spelling check complete"
 
       - name: Verify no personal info leaked
         run: |
@@ -63,7 +63,7 @@ jobs:
         run: |
           cd /tmp/omniaguard
           git config user.email "deploy@omniaguard.com"
-          git config user.name "OmniaGuard Deploy Bot"
+          git config user.name "OMNIAGUARD Deploy Bot"
           git add -A
           git diff --cached --stat
           git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}

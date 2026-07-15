@@ -1,4 +1,4 @@
-# OmniaGuard Email Sequence — AI Security Lead Nurture
+# OMNIAGUARD Email Sequence — AI Security Lead Nurture
 # 5-Email Series | Deploy via Mailchimp / ConvertKit / Brevo
 # All emails send FROM: security@omniaguard.com (never personal email on Loop B)
 
@@ -14,7 +14,7 @@ Hi [First Name],
 
 Thanks for requesting your free AI Security Assessment.
 
-Your assessment has been queued. Within 24 hours, an OmniaGuard security engineer will review your submission and send your personalized AI Security Risk Score.
+Your assessment has been queued. Within 24 hours, an OMNIAGUARD security engineer will review your submission and send your personalized AI Security Risk Score.
 
 While you wait — one number worth knowing:
 
@@ -24,7 +24,7 @@ Your assessment will tell you exactly where you stand.
 
 If you have urgent security concerns in the meantime, message us at **contact@omniaguard.com** and we'll prioritize your review.
 
-— The OmniaGuard Security Team
+— The OMNIAGUARD Security Team
 
 ---
 
@@ -48,13 +48,13 @@ The agent then executes that instruction with full system privileges.
 
 This is the threat vector that firewall, EDR, and SIEM solutions completely miss.
 
-**The $7.38B AI security market emerged specifically because of this gap.** Legacy security tools cannot see it. OmniaGuard's 14-layer defense was built to close it.
+**The $7.38B AI security market emerged specifically because of this gap.** Legacy security tools cannot see it. OMNIAGUARD's 14-layer defense was built to close it.
 
 Your assessment results are coming in [X] hours.
 
 In the meantime, if you want to understand your current exposure in detail, reply to this email with "ASSESS" and we'll expedite your review.
 
-— OmniaGuard Security Team
+— OMNIAGUARD Security Team
 
 **P.S.** Our Guardian plan at $2,499/mo has protected organizations from 14 distinct attack vectors. [Book a 20-minute demo →](mailto:contact@omniaguard.com?subject=Guardian%20Demo%20Request)
 
@@ -62,15 +62,15 @@ In the meantime, if you want to understand your current exposure in detail, repl
 
 ## Email 3 — Day 3
 **Subject:** How 14 agents stop the attack before it starts
-**Preview:** Inside OmniaGuard's defense architecture — and why it works when everything else fails.
+**Preview:** Inside OMNIAGUARD's defense architecture — and why it works when everything else fails.
 
 ---
 
 Hi [First Name],
 
-Let me show you exactly how OmniaGuard works.
+Let me show you exactly how OMNIAGUARD works.
 
-**The OmniaGuard Architecture — 14 Layers:**
+**The OMNIAGUARD Architecture — 14 Layers:**
 
 1. **Input Sanitizer** — Strips injection patterns before they reach your agents
 2. **Intent Classifier** — Identifies manipulative intent in inputs
@@ -91,7 +91,7 @@ Each layer is an independent defense. An attacker who bypasses one faces 13 more
 
 **Your assessment results:** [ASSESSMENT LINK / email if custom]
 
-— OmniaGuard Security Team
+— OMNIAGUARD Security Team
 
 **Ready to get protected?**
 → [Guardian $2,499/mo — Contact Sales](mailto:contact@omniaguard.com?subject=Guardian%20Plan%20Inquiry)
@@ -123,7 +123,7 @@ To claim the discount, reply to this email with your company name and selected t
 
 This offer expires [DATE — 7 days from this email].
 
-— OmniaGuard Security Team
+— OMNIAGUARD Security Team
 
 [Contact Sales to Claim 20% Off →](mailto:contact@omniaguard.com?subject=Claiming%2020%25%20First%20Month%20Discount)
 
@@ -143,18 +143,18 @@ We currently have **5 enterprise onboarding slots remaining** for Q3 2026. After
 
 If your AI agents are in production, unprotected, you're operating on borrowed time. The breach statistics are unambiguous.
 
-**What OmniaGuard clients say after 90 days:**
+**What OMNIAGUARD clients say after 90 days:**
 
-> "We thought we had security covered. OmniaGuard found 7 active vulnerabilities we had no idea existed. Three of them could have caused a data breach within 60 days." — CTO, Healthcare AI Platform
+> "We thought we had security covered. OMNIAGUARD found 7 active vulnerabilities we had no idea existed. Three of them could have caused a data breach within 60 days." — CTO, Healthcare AI Platform
 
-> "The ROI was immediate. One blocked attack would have cost us more than a year of OmniaGuard fees." — VP Engineering, Financial Services SaaS
+> "The ROI was immediate. One blocked attack would have cost us more than a year of OMNIAGUARD fees." — VP Engineering, Financial Services SaaS
 
 If you're ready to proceed, reply to this email or contact us at **contact@omniaguard.com**. If you've decided to pass, no problem — let us know and we'll close your assessment file.
 
-— OmniaGuard Security Team
+— OMNIAGUARD Security Team
 
 [Claim Your Q3 Slot →](mailto:contact@omniaguard.com?subject=Q3%20Enterprise%20Onboarding%20Slot)
 
 ---
 *All emails from: security@omniaguard.com | Unsubscribe: [link]*
-*© 2026 Francisco Holdings Inc. — OmniaGuard*
+*© 2026 Francisco Holdings Inc. — OMNIAGUARD*

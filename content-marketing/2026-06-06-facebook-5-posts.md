@@ -3,7 +3,7 @@
 **1 — CCLDR donation (pin this one to the top of the Page)**
 > Health Canada has gone silent on this case again — patients are stuck waiting while the system stalls. I'm fighting it, and I need help funding the next round of filings. $25 makes a real difference. Donate at ccldr.net 🔗
 
-**2 — OmniaGuard free audit**
+**2 — OMNIAGUARD free audit**
 > Quick gut-check: do you know if your AI tools could be tricked into leaking data or doing something they shouldn't? Most companies don't. I'm offering free AI security audits this week — comment "AUDIT" and I'll send you the link. 🔒
 
 **3 — CCC Starter Grow Kit ($149)**

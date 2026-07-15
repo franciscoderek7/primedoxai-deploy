@@ -17,7 +17,7 @@
 
 [First Name],
 
-Thanks for reaching out to OmniaGuard.
+Thanks for reaching out to OMNIAGUARD.
 
 You're already ahead of most companies — most don't think about AI security until something goes wrong. We'd rather help you get ahead of it.
 
@@ -26,7 +26,7 @@ Your free security audit request is in. Here's what happens next: our team revie
 While you wait, here's a quick primer on the threat landscape we work in every day: omniaguard.com
 
 Talk soon,
-The OmniaGuard Team
+The OMNIAGUARD Team
 
 ---
 
@@ -39,11 +39,11 @@ Here's the number that should make every company running AI agents sit up: the A
 
 The most common failure mode isn't a hacked server. It's **prompt injection** — an AI agent doing something it was never supposed to do because of a cleverly worded input buried in a document, email, or webpage it processed.
 
-Most companies don't know this is happening to them. That's the problem OmniaGuard exists to solve.
+Most companies don't know this is happening to them. That's the problem OMNIAGUARD exists to solve.
 
 Want to see where your stack stands? Reply "AUDIT" and we'll prioritize your free review.
 
-— OmniaGuard
+— OMNIAGUARD
 
 ---
 
@@ -52,33 +52,33 @@ Want to see where your stack stands? Reply "AUDIT" and we'll prioritize your fre
 
 [First Name],
 
-Here's a look under the hood: OmniaGuard runs a **14-agent defense swarm** that watches every input your AI systems process — in real time — and flags or blocks manipulation attempts before they reach your production agents.
+Here's a look under the hood: OMNIAGUARD runs a **14-agent defense swarm** that watches every input your AI systems process — in real time — and flags or blocks manipulation attempts before they reach your production agents.
 
 No single point of failure. No relying on one model to police itself. Layered, coordinated, constantly watching.
 
 That's the difference between hoping your AI is secure and **knowing** it is.
 
-Ready to see it applied to your stack? Reply "AUDIT" for your free review, or book a call: [Schedule a Call →] mailto:franciscoderek7@gmail.com?subject=OmniaGuard%20Security%20Call
+Ready to see it applied to your stack? Reply "AUDIT" for your free review, or book a call: [Schedule a Call →] mailto:franciscoderek7@gmail.com?subject=OMNIAGUARD%20Security%20Call
 
-— OmniaGuard
+— OMNIAGUARD
 
 ---
 
 ### Day 7 — "Limited time: 20% off first month"
-**Subject:** Limited time: 20% off your first month with OmniaGuard
+**Subject:** Limited time: 20% off your first month with OMNIAGUARD
 
 [First Name],
 
-Quick one — for the leads who've engaged with us this week, we're opening **20% off your first month** on any OmniaGuard tier (Guardian / Archon / Sovereign).
+Quick one — for the leads who've engaged with us this week, we're opening **20% off your first month** on any OMNIAGUARD tier (Guardian / Archon / Sovereign).
 
 This isn't a permanent offer — it closes once our enterprise onboarding queue fills for the quarter.
 
 Ready to lock it in?
-💳 PayPal: paypal.me/techpetcage
-🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "OmniaGuard — 20% Offer — [First Name]" in the message)
-📅 Or book a call first: mailto:franciscoderek7@gmail.com?subject=OmniaGuard%20Onboarding%20Call
+💳 PayPal: paypal.me/derekfranciaco1
+🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "OMNIAGUARD — 20% Offer — [First Name]" in the message)
+📅 Or book a call first: mailto:franciscoderek7@gmail.com?subject=OMNIAGUARD%20Onboarding%20Call
 
-— OmniaGuard
+— OMNIAGUARD
 
 ---
 
@@ -92,13 +92,13 @@ This is the last note in this sequence — and the last call on the 20%-off offe
 If your AI agents are processing customer data, internal documents, or anything from the open web, the question isn't *if* someone will try to manipulate them. It's *when*.
 
 Let's get ahead of it together:
-💳 PayPal: paypal.me/techpetcage
+💳 PayPal: paypal.me/derekfranciaco1
 🏦 Interac e-Transfer: franciscoderek7@gmail.com
-📅 Book a call: mailto:franciscoderek7@gmail.com?subject=OmniaGuard%20Final%20Call
+📅 Book a call: mailto:franciscoderek7@gmail.com?subject=OMNIAGUARD%20Final%20Call
 
 Either way — thanks for taking AI security seriously. Most don't.
 
-— OmniaGuard
+— OMNIAGUARD
 
 ---
 ---
@@ -179,7 +179,7 @@ For the people who've been with me since they joined this list — I want to mak
 Join the **Warrior tier** ($149/mo) this week and get full access to the BENO-X framework, the 12-Appearance timeline tracker, and the complete case law library — everything you need to actually understand your situation before your next court date.
 
 Ready?
-💳 PayPal: paypal.me/techpetcage
+💳 PayPal: paypal.me/derekfranciaco1
 🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "CCLDR Warrior — [First Name]")
 🔗 Or enroll directly: ccldr.net/index.html#pricing
 
@@ -200,7 +200,7 @@ That instinct was right. The system moves fast, and it doesn't wait for you to c
 
 If you haven't yet, this is the moment to get the full toolkit behind you:
 🔗 ccldr.net/index.html#pricing
-💳 PayPal: paypal.me/techpetcage
+💳 PayPal: paypal.me/derekfranciaco1
 🏦 Interac: franciscoderek7@gmail.com
 📅 Or just reply — tell me where you're at, and I'll point you to exactly what you need next.
 
@@ -286,7 +286,7 @@ If you're reading this because something just happened — a charge, a court dat
 
 🚨 **Emergency Defense package — $99 one-time** — instant access, no appointment needed. Gets you a framework walkthrough for your exact situation and a Charter rights reference card for the next 24-72 hours.
 
-💳 PayPal: paypal.me/techpetcage
+💳 PayPal: paypal.me/derekfranciaco1
 🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "PrimeDox Emergency Defense" in the message)
 📅 Or book a call: mailto:franciscoderek7@gmail.com?subject=PrimeDox%20Emergency%20Call
 
@@ -301,7 +301,7 @@ You don't have to wait for office hours to start understanding what's happening 
 ## Notes — please read before sending
 
 - **All "Schedule a Call" / booking links** route to `mailto:franciscoderek7@gmail.com` — replace with a Calendly link if/when one exists.
-- **PayPal links** use `paypal.me/techpetcage` per the payment info on file. Confirm amounts match what's live on each pricing page before including specific dollar figures in any automated send.
-- **OmniaGuard "20% off first month" (Day 7/14):** this is a promotional offer drafted per your brief — confirm you actually want to run it (and for how long) before activating, since it isn't reflected on the live OmniaGuard pricing page yet.
+- **PayPal links** use `paypal.me/derekfranciaco1` per the payment info on file. Confirm amounts match what's live on each pricing page before including specific dollar figures in any automated send.
+- **OMNIAGUARD "20% off first month" (Day 7/14):** this is a promotional offer drafted per your brief — confirm you actually want to run it (and for how long) before activating, since it isn't reflected on the live OMNIAGUARD pricing page yet.
 - **Sending mechanism:** Claude has no email-sending or scheduling capability — load these into ConvertKit, Mailchimp, or your tool of choice, or send manually. Replace `[First Name]` with your merge-tag syntax.
-- **Brand voice:** OmniaGuard sequence is written in the anonymous "team" voice (per the zero-bleed rule — no Derek Francisco branding on OmniaGuard). CCLDR and PrimeDox sequences are written in Derek's voice, since both brands have his identity attached.
+- **Brand voice:** OMNIAGUARD sequence is written in the anonymous "team" voice (per the zero-bleed rule — no Derek Francisco branding on OMNIAGUARD). CCLDR and PrimeDox sequences are written in Derek's voice, since both brands have his identity attached.

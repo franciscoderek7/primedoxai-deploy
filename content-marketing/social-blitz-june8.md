@@ -56,7 +56,7 @@
 
 ---
 
-### C. Twitter/X — OmniaGuard Thread (5 Tweets)
+### C. Twitter/X — OMNIAGUARD Thread (5 Tweets)
 
 **Tweet 1:**
 > 🧵 Thread: 5 ways your phone is being tracked RIGHT NOW — and what to do about it.
@@ -77,7 +77,7 @@
 >
 > 5. Most people never know it happened.
 >
-> **OmniaGuard** monitors your threat surface and deploys countermeasures.
+> **OMNIAGUARD** monitors your threat surface and deploys countermeasures.
 > Deploy in 4 hours: omniaguard.com
 >
 > Reply "PROTECT" if you want the full threat assessment checklist.
@@ -162,7 +162,7 @@ Link: ccldr.net
 
 ---
 
-### B. Google Search Ad — OmniaGuard
+### B. Google Search Ad — OMNIAGUARD
 
 **Campaign type:** Search
 **Budget:** $50/day
@@ -173,16 +173,16 @@ Link: ccldr.net
 **Ad 1:**
 Headline 1: Stop Government Surveillance Now
 Headline 2: Enterprise AI Security — Deploy in 4h
-Headline 3: OmniaGuard | Active Threat Defense
-Description 1: Your location, calls, and browsing are being sold by your carrier. OmniaGuard deploys countermeasures.
+Headline 3: OMNIAGUARD | Active Threat Defense
+Description 1: Your location, calls, and browsing are being sold by your carrier. OMNIAGUARD deploys countermeasures.
 Description 2: 4 tiers from $499/mo. Enterprise teams to $15,000/mo Sovereign. Free threat assessment.
 URL: omniaguard.com
 
 **Ad 2:**
 Headline 1: Is Your Business Being Monitored?
 Headline 2: AI Security Platform | $499/mo
-Headline 3: OmniaGuard | 24/7 Threat Detection
-Description 1: Government and corporate surveillance is real. OmniaGuard's AI watches your threat surface 24/7.
+Headline 3: OMNIAGUARD | 24/7 Threat Detection
+Description 1: Government and corporate surveillance is real. OMNIAGUARD's AI watches your threat surface 24/7.
 Description 2: Sentinel, Guardian, Fortress, Sovereign. Deploy today.
 URL: omniaguard.com
 
@@ -271,7 +271,7 @@ URL: franciscoholdingsinc.com/book.html
 >
 > Revenue streams:
 > - CCLDR: $149–$1,499 digital products
-> - OmniaGuard: $499–$15,000/mo enterprise security
+> - OMNIAGUARD: $499–$15,000/mo enterprise security
 > - PrimeDox AI: $49–$499/mo SaaS
 > - Francisco Holdings Consulting: $500/hr, $1,500/mo retainer
 >
@@ -293,10 +293,10 @@ These require browser access — Claude cannot execute:
 |------|--------|--------|
 | Facebook CCLDR post | Copy Post A above, paste in Facebook | facebook.com |
 | LinkedIn consulting post | Copy Post B above, paste in LinkedIn | linkedin.com |
-| Twitter/X OmniaGuard thread | Post tweets 1-5 above | x.com |
+| Twitter/X OMNIAGUARD thread | Post tweets 1-5 above | x.com |
 | Instagram CCC post | Copy Post D above, add to IG | instagram.com |
 | Facebook Ad CCLDR | Create campaign, paste Variant 1 or 2 | business.facebook.com |
-| Google Ad OmniaGuard | Create campaign, paste Ad 1 or 2 | ads.google.com |
+| Google Ad OMNIAGUARD | Create campaign, paste Ad 1 or 2 | ads.google.com |
 | LinkedIn Ad FH | Create campaign, paste copy | linkedin.com/campaign-manager |
 | Partner emails | Send Template A to cannabis lawyers in your area | franciscoderek7@gmail.com |
 

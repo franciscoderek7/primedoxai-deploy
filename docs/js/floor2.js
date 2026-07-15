@@ -1,13 +1,13 @@
 /**
  * skyscraper-demo/js/floor2.js
  *
- * Floor 2 — OmniGuard Cyber Defense template config. Pure data, no
+ * Floor 2 — OMNIAGUARD Cyber Defense template config. Pure data, no
  * rendering logic — consumed by engine.js's applyTemplate(config).
  */
-export const Floor2OmniGuard = {
+export const Floor2OMNIAGUARD = {
   id: 'F2_OMNIGUARD',
   floor: 2,
-  name: 'OmniGuard Cyber Defense',
+  name: 'OMNIAGUARD Cyber Defense',
   domain: 'omniaguard.com',
 
   theme: {
@@ -45,11 +45,11 @@ export const Floor2OmniGuard = {
   payments: {
     enabled: true,
     buttons: [
-      { label: 'WARDEN', amount: 299, url: 'https://paypal.me/techpetcage/299', color: '#00BFFF' },
-      { label: 'SENTINEL', amount: 599, url: 'https://paypal.me/techpetcage/599', color: '#FF1493' },
-      { label: 'ORACLE', amount: 999, url: 'https://paypal.me/techpetcage/999', color: '#C0C0C0' },
+      { label: 'WARDEN', amount: 299, url: 'https://paypal.me/derekfranciaco1/299', color: '#00BFFF' },
+      { label: 'SENTINEL', amount: 599, url: 'https://paypal.me/derekfranciaco1/599', color: '#FF1493' },
+      { label: 'ORACLE', amount: 999, url: 'https://paypal.me/derekfranciaco1/999', color: '#C0C0C0' },
     ],
   },
 };
 
-export default Floor2OmniGuard;
+export default Floor2OMNIAGUARD;

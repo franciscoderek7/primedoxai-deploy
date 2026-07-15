@@ -7,7 +7,7 @@
  * NOTE ON FLOOR NUMBER: handed off labeled "Floor 2," filed under Floor 9 to
  * match AssetManifest.js (per Derek's decision to keep manifest numbers as
  * authoritative rather than renumber per incoming scene labels -- same
- * resolution applied to the OmniGuard scene, which arrived labeled "Floor 1"
+ * resolution applied to the OMNIAGUARD scene, which arrived labeled "Floor 1"
  * and was filed under its manifest floor, 4).
  *
  * Self-contained primitive-built scene (does not depend on
@@ -18,7 +18,7 @@
  * spec: "robots building documents on conveyor belts, click to generate"):
  * a conveyor belt now carries document panels past a robot arm that stamps
  * each one; clicking the belt spawns a fresh document immediately ("click
- * to generate"). Pricing-tier buy buttons (paypal.me/techpetcage amounts
+ * to generate"). Pricing-tier buy buttons (paypal.me/derekfranciaco1 amounts
  * copied verbatim from stripe-config.js's zprimedox block — the same
  * standardized tiers used on zprimedoxaihq.com) use the shared
  * empire/payments.js Option A floating-button system.
@@ -27,9 +27,9 @@
 import { createBuyButtonMesh, PaymentHotspots } from '../payments.js';
 
 const PRIMEDOX_PLANS = [
-  { label: 'INDIVIDUAL', priceLabel: '$49 CAD', paypalUrl: 'https://paypal.me/techpetcage/49CAD' },
-  { label: 'TEAM', priceLabel: '$149 CAD', paypalUrl: 'https://paypal.me/techpetcage/149CAD' },
-  { label: 'ENTERPRISE', priceLabel: '$499 CAD', paypalUrl: 'https://paypal.me/techpetcage/499CAD' },
+  { label: 'INDIVIDUAL', priceLabel: '$49 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/49CAD' },
+  { label: 'TEAM', priceLabel: '$149 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/149CAD' },
+  { label: 'ENTERPRISE', priceLabel: '$499 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/499CAD' },
 ];
 
 function createDocumentPanel(THREE) {

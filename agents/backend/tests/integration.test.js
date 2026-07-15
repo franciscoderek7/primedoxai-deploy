@@ -381,7 +381,7 @@ async function suite6() {
     assertEqual(r.status, 200, `Expected 200, got ${r.status}`);
     assert(r.body.checkout_url || r.body.paypal_url, 'Expected checkout_url or paypal_url');
     if (r.body.paypal_url) {
-      assert(r.body.paypal_url.includes('paypal.me/techpetcage'), 'PayPal URL must use techpetcage handle');
+      assert(r.body.paypal_url.includes('paypal.me/derekfranciaco1'), 'PayPal URL must use techpetcage handle');
     }
   });
 

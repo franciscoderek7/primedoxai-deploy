@@ -62,7 +62,7 @@ These are business assets — use them for demos:
 **Total estimated impact: $1.96B/yr for Telus/Kudos**
 
 **Innovation #10 — Sovereign AI (most powerful):**
-Every major telecom uses US-based AI (OpenAI, Google, Amazon). Derek offers a 100% Canadian AI stack — PrimeDox + OmniaGuard — that is PIPEDA-native and makes Telus eligible for federal government AI contracts. This is genuinely first in the world for a Canadian telecom.
+Every major telecom uses US-based AI (OpenAI, Google, Amazon). Derek offers a 100% Canadian AI stack — PrimeDox + OMNIAGUARD — that is PIPEDA-native and makes Telus eligible for federal government AI contracts. This is genuinely first in the world for a Canadian telecom.
 
 ---
 
@@ -71,7 +71,7 @@ Every major telecom uses US-based AI (OpenAI, Google, Amazon). Derek offers a 10
 | Item | Status |
 |---|---|
 | CleanSwarm demo | ✅ `cleantech-automation-site/pitch.html` — live |
-| OmniaGuard security demo | ✅ `omniaguard.com` (after hotfix deployed) |
+| OMNIAGUARD security demo | ✅ `omniaguard.com` (after hotfix deployed) |
 | Francisco Continuity Equation | ✅ `francisco-holdings-site/continuity.html` |
 | **Telus/Kudos pitch deck** | ⏳ Building now → `telus-kudos-pitch/index.html` |
 | Revenue projections | ✅ In pitch deck |

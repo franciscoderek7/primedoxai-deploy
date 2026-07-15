@@ -1,7 +1,7 @@
 # Francisco Holdings — Consulting Email Sequence
 # 3-Email Series | Deploy via Mailchimp / ConvertKit
 # FROM: derek@franciscoholdingsinc.com | Reply-To: franciscoderek7@gmail.com
-# Payment: paypal.me/techpetcage/500CAD | Interac: franciscoderek7@gmail.com
+# Payment: paypal.me/derekfranciaco1/500CAD | Interac: franciscoderek7@gmail.com
 
 ---
 

@@ -17,11 +17,11 @@ jobs:
       - name: Verify Loop A identity (Derek Francisco visible, no AI/security bleed)
         run: |
           # CCLDR is Loop A — Derek Francisco is allowed, cannabis content is core
-          # Must NOT reference OmniaGuard, Kiaros, SoulStack, CleanSwarm (Loop B bleed)
-          BLEED=$(grep -rn "OmniaGuard\|Kiaros\|SoulStack\|CleanSwarm" ccldr-site/ --include="*.html" | grep -v "legal-partners" | wc -l)
+          # Must NOT reference OMNIAGUARD, Kiaros, SoulStack, CleanSwarm (Loop B bleed)
+          BLEED=$(grep -rn "OMNIAGUARD\|Kiaros\|SoulStack\|CleanSwarm" ccldr-site/ --include="*.html" | grep -v "legal-partners" | wc -l)
           if [ "$BLEED" -gt 0 ]; then
             echo "FAIL: Loop B brand bleed detected in CCLDR site"
-            grep -rn "OmniaGuard\|Kiaros\|SoulStack\|CleanSwarm" ccldr-site/ --include="*.html" | grep -v "legal-partners"
+            grep -rn "OMNIAGUARD\|Kiaros\|SoulStack\|CleanSwarm" ccldr-site/ --include="*.html" | grep -v "legal-partners"
             exit 1
           fi
           echo "PASS: Zero Loop B bleed"

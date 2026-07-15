@@ -20,5 +20,5 @@ Francisco v. Denby is one of the active cases tracked on the CCLDR / Doc Weedlaw
 CCLDR / Doc Weedlaw provides legal education materials and document templates related to cannabis law and litigation. Specific template availability may vary — check the site's documents section for the current list.
 
 ## Brand Notes (internal)
-- This brand visibly shows Derek Francisco's identity — this is expected and correct for this brand (unlike OmniGuard).
+- This brand visibly shows Derek Francisco's identity — this is expected and correct for this brand (unlike OMNIAGUARD).
 - Cannabis-related and legal content is core to this brand, not restricted.

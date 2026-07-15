@@ -382,7 +382,7 @@ function registerRoutes(app, limiter, requireAuth, requireAdmin, supa) {
 
     // Stripe not configured — return PayPal fallback
     res.json({
-      checkout_url: `https://paypal.me/techpetcage/${agent.setup_price_cad}CAD`,
+      checkout_url: `https://paypal.me/derekfranciaco1/${agent.setup_price_cad}CAD`,
       note: 'Stripe not configured — redirecting to PayPal. Include agent name in payment note.',
       agent_id: id,
       amount_cad: agent.setup_price_cad,

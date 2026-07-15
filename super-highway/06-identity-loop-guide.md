@@ -7,7 +7,7 @@ Zero cross-contamination between Loop A (Derek-identity brands) and Loop B (anon
 
 ## 1. The Core Problem
 
-A user who buys CCLDR Warrior access and OmniaGuard Guardian access must never have those two facts algorithmically linked — not in analytics, not in ads retargeting, not in a database query, not in an error log. One set of facts could expose Derek Francisco to cross-brand contamination (e.g., a court adversary correlating OmniaGuard with CCLDR). The other could deanonymize what was supposed to be an anonymous security product purchase.
+A user who buys CCLDR Warrior access and OMNIAGUARD Guardian access must never have those two facts algorithmically linked — not in analytics, not in ads retargeting, not in a database query, not in an error log. One set of facts could expose Derek Francisco to cross-brand contamination (e.g., a court adversary correlating OMNIAGUARD with CCLDR). The other could deanonymize what was supposed to be an anonymous security product purchase.
 
 This isn't a privacy preference — it's a business-critical and potentially legally material requirement.
 
@@ -90,7 +90,7 @@ CREATE POLICY "self_update"  ON users_a FOR UPDATE USING (auth.uid() = id);
 | Property | Analytics Stack | Why |
 |---|---|---|
 | Loop A properties (CCLDR, PrimeDox, Weedlaw Ed, Francisco Holdings, CCC) | Google Analytics 4 + Plausible | GA4 is acceptable because Derek's identity is already public on these sites; cross-property linking is desired for funnel optimization |
-| Loop B properties (OmniaGuard, Kiaros, SoulStack, CleanSwarm, etc.) | Plausible (privacy-first) only — NO Google Analytics | GA4 cross-device fingerprinting could theoretically link anonymous Loop B behavior to a Google identity; Plausible has no cookies, no fingerprinting, no cross-site tracking |
+| Loop B properties (OMNIAGUARD, Kiaros, SoulStack, CleanSwarm, etc.) | Plausible (privacy-first) only — NO Google Analytics | GA4 cross-device fingerprinting could theoretically link anonymous Loop B behavior to a Google identity; Plausible has no cookies, no fingerprinting, no cross-site tracking |
 
 **Loop B analytics implementation:**
 ```html
@@ -129,7 +129,7 @@ Loop B emails: Sent from impersonal brand addresses (e.g., `team@omniaguard.com`
 
 **Never use the same email sending account for both loops.** Dedicated email domains per loop, ideally separate SendGrid/Mailchimp/ConvertKit accounts so the subscriber lists are physically separate.
 
-**Unsubscribe lists are separate.** A user unsubscribing from CCLDR emails must NOT unsubscribe them from OmniaGuard emails, and vice versa. They're independent subscriptions from the user's perspective.
+**Unsubscribe lists are separate.** A user unsubscribing from CCLDR emails must NOT unsubscribe them from OMNIAGUARD emails, and vice versa. They're independent subscriptions from the user's perspective.
 
 ---
 
@@ -187,7 +187,7 @@ Before a new module goes live, verify all of the following:
 
 **Cross-promo content (if using Phase 2 traffic loop snippet):**
 - [ ] Loop B config only cross-links to other Loop B modules (never to CCLDR, PrimeDox, Weedlaw Ed, or Francisco Holdings)
-- [ ] Loop A config only cross-links to other Loop A modules (never to OmniaGuard, Kiaros, SoulStack, CleanSwarm)
+- [ ] Loop A config only cross-links to other Loop A modules (never to OMNIAGUARD, Kiaros, SoulStack, CleanSwarm)
 
 **Advertising:**
 - [ ] Loop B: No tracking pixels, contextual-only ad targeting

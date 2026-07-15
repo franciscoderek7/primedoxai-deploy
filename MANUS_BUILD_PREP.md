@@ -28,9 +28,9 @@ Tried `create_repository` via my GitHub tools — got `403: Resource not accessi
 
 | Product | Price | Currency |
 |---------|-------|----------|
-| OmniGuard CA Starter | 99/mo | CAD |
-| OmniGuard CA Pro | 299/mo | CAD |
-| OmniGuard CA Sentinel | 499/mo | CAD |
+| OMNIAGUARD CA Starter | 99/mo | CAD |
+| OMNIAGUARD CA Pro | 299/mo | CAD |
+| OMNIAGUARD CA Sentinel | 499/mo | CAD |
 | Vault Velocity Starter | 99/mo | CAD |
 | Vault Velocity Pro | 499/mo | CAD |
 | Vault Velocity Empire | 2499/mo | CAD |
@@ -88,4 +88,4 @@ Cloud setting: grey cloud (DNS only, no proxy). SSL: Full. Always Use HTTPS: ON.
 
 ## 6. MONITORING MANUS'S BUILD — limitation
 
-I have no direct visibility into Manus (separate app, Derek drives it manually) — I can't watch its build process in real time. What I *can* do: review any zip/file/screenshot you share here for build errors, missing files, wrong colors (must be blue `#4A90E2`/pink `#E91E63` for OmniGuard, Crown Green/Gold/Platinum for Francisco Holdings variants), broken links, or pricing mismatches against what's locked in `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` — just paste/upload it and I'll flag anything wrong immediately.
+I have no direct visibility into Manus (separate app, Derek drives it manually) — I can't watch its build process in real time. What I *can* do: review any zip/file/screenshot you share here for build errors, missing files, wrong colors (must be blue `#4A90E2`/pink `#E91E63` for OMNIAGUARD, Crown Green/Gold/Platinum for Francisco Holdings variants), broken links, or pricing mismatches against what's locked in `MASTER_PROMPT_MANUS_KEEP_BUILDING.md` — just paste/upload it and I'll flag anything wrong immediately.

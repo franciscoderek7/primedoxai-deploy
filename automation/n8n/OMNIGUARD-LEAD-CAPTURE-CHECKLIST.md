@@ -1,4 +1,4 @@
-# OmniGuard Lead Capture — Deployment Checklist
+# OMNIAGUARD Lead Capture — Deployment Checklist
 
 Four deliverables for this deploy phase, all authored in this commit:
 
@@ -29,7 +29,7 @@ Four deliverables for this deploy phase, all authored in this commit:
      `REPLACE-WITH-DEREK-TELEGRAM-CHAT-ID` with that chat ID.
   5. Send your new bot a `/start` message first — Telegram bots can't message
      a chat ID until the user has initiated contact with the bot at least once.
-- [ ] **Activate the workflow**, then copy the "OmniGuard Lead Webhook" node's
+- [ ] **Activate the workflow**, then copy the "OMNIAGUARD Lead Webhook" node's
   Production URL (Webhook node -> double-click -> Production URL, only visible
   once the workflow is active).
 - [ ] **Wire the form.** Open `omni-guard-site/lead-form.html`, find

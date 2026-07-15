@@ -50,7 +50,7 @@ function buildLobby(THREE) {
   scene.background = new THREE.Color(0x000000);
   // Procedural HDR-style environment (zero external .hdr asset) so the brushed
   // steel doors get real reflections — same fallback generator AssetLoader uses
-  // per-floor, reused here for the lobby/elevator shell. OmniGuard blue accent
+  // per-floor, reused here for the lobby/elevator shell. OMNIAGUARD blue accent
   // since this is the brand permitted to use blue/pink per CLAUDE.md.
   scene.environment = generateFallbackHDRI(THREE, { themeColor: '#4A90E2', floor: 'lobby' });
 

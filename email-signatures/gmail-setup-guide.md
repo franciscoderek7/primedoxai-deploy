@@ -34,7 +34,7 @@ This guide covers:
 |------------------------|---------------|
 | CCLDR / cannabis defense | CCLDR — Doc WeedLaw |
 | CCC consulting inquiries | CCC — Canadian Cannabis Consulting |
-| OmniaGuard security | OmniaGuard |
+| OMNIAGUARD security | OMNIAGUARD |
 | CleanSwarm workforce | CleanSwarm |
 | TechPetCage products | TechPetCage |
 | SoulStack marketing | SoulStack.ai |
@@ -116,12 +116,12 @@ If you're in immediate legal jeopardy (arrest, imminent court date), please call
 
 ---
 
-### TEMPLATE 4: OmniaGuard Product Support
-**Template Name:** "OmniaGuard — Support Response"
-**Subject:** Re: OmniaGuard Support Request
+### TEMPLATE 4: OMNIAGUARD Product Support
+**Template Name:** "OMNIAGUARD — Support Response"
+**Subject:** Re: OMNIAGUARD Support Request
 
 ```
-Thank you for contacting OmniaGuard support.
+Thank you for contacting OMNIAGUARD support.
 
 To help you most efficiently, please provide:
 1. Your account tier (Sentinel/Guardian/Warden/Protector)
@@ -135,7 +135,7 @@ Our response SLA:
 - Warden: 4 business hours
 - Protector: 1 hour (24/7)
 
-[OmniaGuard Signature]
+[OMNIAGUARD Signature]
 ```
 
 ---
@@ -195,7 +195,7 @@ I'm in Lindsay, Ontario and available for video calls at most times.
 ### Set Up Labels First:
 1. Gmail sidebar → **Create new label** → Create these labels:
    - `Empire/CCLDR`
-   - `Empire/OmniaGuard`
+   - `Empire/OMNIAGUARD`
    - `Empire/CleanSwarm`
    - `Empire/CCC`
    - `Empire/Legal`
@@ -208,7 +208,7 @@ I'm in Lindsay, Ontario and available for video calls at most times.
 | From/To/Subject Contains | Label |
 |-------------------------|-------|
 | docweedlaw@gmail.com received | `Empire/CCLDR` |
-| Subject: OmniaGuard OR omniaguard.com | `Empire/OmniaGuard` |
+| Subject: OMNIAGUARD OR omniaguard.com | `Empire/OMNIAGUARD` |
 | Subject: CleanSwarm OR cleanswarm | `Empire/CleanSwarm` |
 | Subject: CCC OR cannabis consulting | `Empire/CCC` |
 | Subject: legal defense OR charter OR court | `Empire/Legal` |
@@ -230,7 +230,7 @@ For urgent matters:
 📞 705-307-8080 (text "URGENT" for same-day response)
 
 My businesses:
-🛡️ OmniaGuard — omniaguard.com
+🛡️ OMNIAGUARD — omniaguard.com
 ⚖️ CCLDR.NET — ccldr.net  
 🍁 Canadian Cannabis Consulting — ccc.net
 🧹 CleanSwarm — cleanswarm.ca

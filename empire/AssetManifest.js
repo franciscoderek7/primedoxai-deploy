@@ -42,7 +42,7 @@ export const FLOORS = [
   mkFloor(1, 'francisco-holdings', 'Francisco Holdings Inc.', 'Francisco Holdings Inc.', 'A', 'LIVE — 45-FLOOR SKYSCRAPER + STRIPE/PAYPAL PER FLOOR', 'franciscoholdingsinc.com', '#d4af37', { toneProfile: 'grand-lobby', geometryHint: 'reception-desk' }),
   mkFloor(2, 'cleanswarm', 'CleanSwarm', 'CleanSwarm', 'A', 'LIVE', 'cleanswarm.ca', '#10b981', { toneProfile: 'industrial-hum', geometryHint: 'cleaning-bot' }),
   mkFloor(3, 'ccldr', 'CCLDR', 'CCLDR', 'A', 'LIVE + REFERRAL ENGINE + EDUCATION HUB', 'franciscoderek7.github.io/Ccldr-net/', '#22c55e', { toneProfile: 'library-quiet', geometryHint: 'bookshelf' }),
-  mkFloor(4, 'omniguard', 'OmniGuard', 'OmniGuard', 'B', 'REBRANDING (was OmniaGuard)', 'omniaguard.com', '#4A90E2', { toneProfile: 'soc-pulse', geometryHint: 'server-rack' }),
+  mkFloor(4, 'omniguard', 'OMNIAGUARD', 'OMNIAGUARD', 'B', 'REBRANDING (was OMNIAGUARD)', 'omniaguard.com', '#4A90E2', { toneProfile: 'soc-pulse', geometryHint: 'server-rack' }),
   mkFloor(5, 'beno-x', 'BENO-X / Doc Weedlaw', 'BENO-X / Doc Weedlaw', 'A', 'LIVE', 'franciscoderek7.github.io/Ccldr-net/', '#22c55e', { toneProfile: 'library-quiet', geometryHint: 'desk' }),
   mkFloor(6, 'vigilax', 'VIGILAX', 'VIGILAX', 'B', 'LIVE — PRICING UPDATED + STRIPE LIVE', 'franciscoderek7.github.io/vigilax/', '#ef4444', { toneProfile: 'soc-pulse', geometryHint: 'monitor-wall' }),
   mkFloor(7, 'kiaros', 'Kiaros', 'Kiaros', 'B', 'LIVE — STRIPE LIVE + PAYPAL.ME DIRECT', 'franciscoderek7.github.io/kiaros/', '#8b5cf6', { toneProfile: 'consulting-calm', geometryHint: 'meeting-table' }),

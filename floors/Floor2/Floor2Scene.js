@@ -1,9 +1,9 @@
 /**
  * floors/Floor2/Floor2Scene.js
  *
- * OmniGuard, wrapped into the FloorInterface contract. Renders the real
- * existing OmniGuard Three.js scene (empire/floors/floor4-omniguard.js's
- * createOmniGuardScene) rather than fabricated content — that module
+ * OMNIAGUARD, wrapped into the FloorInterface contract. Renders the real
+ * existing OMNIAGUARD Three.js scene (empire/floors/floor4-omniguard.js's
+ * createOMNIAGUARDScene) rather than fabricated content — that module
  * already returns { scene, camera, update, dispose }; this file owns the
  * renderer, the render loop, and resize handling, and guarantees a
  * memory-safe destroy().
@@ -16,7 +16,7 @@
  */
 
 import * as THREE from 'three';
-import { createOmniGuardScene } from '../../empire/floors/floor4-omniguard.js';
+import { createOMNIAGUARDScene } from '../../empire/floors/floor4-omniguard.js';
 
 export default class Floor2Scene {
   constructor() {
@@ -33,7 +33,7 @@ export default class Floor2Scene {
   async init(container, data = {}) {
     this.container = container;
 
-    const built = createOmniGuardScene(THREE);
+    const built = createOMNIAGUARDScene(THREE);
     this.scene = built.scene;
     this.camera = built.camera;
     this.sceneUpdate = built.update;
@@ -59,7 +59,7 @@ export default class Floor2Scene {
   }
 
   update(data = {}) {
-    // Backend-driven state hook. createOmniGuardScene's own update() drives
+    // Backend-driven state hook. createOMNIAGUARDScene's own update() drives
     // the visual pulse/rotation; this is where future live threat/node data
     // from data.payload would be applied once the backend sends real values.
   }

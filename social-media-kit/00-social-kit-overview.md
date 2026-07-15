@@ -2,7 +2,7 @@
 **June 2026 — All 45 Properties**
 
 > **Zero-bleed rules apply to social exactly as they do to websites:**
-> OmniaGuard/Kiaros/SoulStack/CleanSwarm accounts must have zero cannabis content,
+> OMNIAGUARD/Kiaros/SoulStack/CleanSwarm accounts must have zero cannabis content,
 > zero Derek Francisco branding, zero cross-references to Loop A brands.
 > CCLDR/PrimeDox/Weedlaw Ed/Francisco Holdings use Derek's voice and may include cannabis.
 
@@ -19,7 +19,7 @@
 | Weedlaw Education | Create | Create | Create | Create | — | A |
 | Francisco Holdings Inc. | Create | — | Create | — | — | A |
 | CCC.net | Create | Create | Create | Create | — | A |
-| OmniaGuard | Create | Create | Create | — | — | B |
+| OMNIAGUARD | Create | Create | Create | — | — | B |
 | Kiaros | Create | Create | Create | — | — | B |
 | SoulStack | Create | Create | — | — | — | B |
 | CleanSwarm | Create | Create | Create | Create | — | B |

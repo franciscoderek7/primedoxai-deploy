@@ -341,7 +341,7 @@ function buildQuote(gaps, profile) {
     estimated_monthly_value_recovered_cad: monthly_value_recovered,
     roi_breakeven_months: roi_months && roi_months > 0 && roi_months < 24 ? roi_months : null,
     cta_url: 'https://primedoxaihq.com/#contact',
-    paypal_url: `https://paypal.me/techpetcage/${Math.round(setupTotal * (1 - discount))}CAD`,
+    paypal_url: `https://paypal.me/derekfranciaco1/${Math.round(setupTotal * (1 - discount))}CAD`,
   };
 }
 

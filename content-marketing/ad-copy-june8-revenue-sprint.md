@@ -76,14 +76,14 @@
 
 ---
 
-## TWITTER/X THREAD — OmniaGuard
+## TWITTER/X THREAD — OMNIAGUARD
 
 **Tweet 1:**
 > Most small businesses have zero AI threat protection.
 >
 > CrowdStrike starts at $150K/yr.
 >
-> OmniaGuard starts at $499/mo.
+> OMNIAGUARD starts at $499/mo.
 >
 > Same category. Different price. Thread 🧵
 
@@ -99,7 +99,7 @@
 > You need AI watching AI.
 
 **Tweet 3:**
-> What OmniaGuard does:
+> What OMNIAGUARD does:
 >
 > → 14 AI agents monitoring your endpoints 24/7
 > → Automated threat response (stops attacks in seconds, not hours)
@@ -152,7 +152,7 @@ I've spent the last several months building out a full suite of AI tools for leg
 Link: https://ccldr.net
 
 **If you need cybersecurity for your business:**
-→ OmniaGuard — AI threat protection. $499/mo, deployed in 4 hours.
+→ OMNIAGUARD — AI threat protection. $499/mo, deployed in 4 hours.
 Link: https://omniaguard.com
 
 **If you want an hour of my time to sort out your strategy:**

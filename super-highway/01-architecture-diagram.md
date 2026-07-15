@@ -24,7 +24,7 @@ graph TD
     LA --> A4["Francisco Holdings\nfranciscoholdings.com"]
     LA --> A5["CCC.net\nccc.net"]
 
-    LB --> B1["OmniaGuard\nomniaguard.com"]
+    LB --> B1["OMNIAGUARD\nomniaguard.com"]
     LB --> B2["Kiaros\nkiaros.ai"]
     LB --> B3["SoulStack\nsoulstack.ai"]
     LB --> B4["CleanSwarm\ncleanswarm.ca"]
@@ -150,7 +150,7 @@ mindmap
         Compliance SaaS
         Grow Kit products
     Loop B — Anonymous
-      OmniaGuard
+      OMNIAGUARD
         Guardian / Archon / Sovereign SaaS
         Free audit funnel
       Kiaros

@@ -30,7 +30,7 @@ Tech Pet Cage provides software-as-a-service (SaaS) products for Canadian busine
 
 1. CleanSwarm — AI-powered scheduling and operations software for cleaning businesses ($399–$2,499/month CAD recurring subscriptions)
 2. PrimeDox AI — AI productivity platform for small businesses ($49–$9,999/month CAD recurring subscriptions)
-3. OmniaGuard — AI cybersecurity platform ($499–$99,999/month CAD recurring subscriptions)
+3. OMNIAGUARD — AI cybersecurity platform ($499–$99,999/month CAD recurring subscriptions)
 
 All products are digital services delivered via web platform. No physical goods. No high-risk categories. No adult content. No cryptocurrency. Customers are Canadian businesses.
 

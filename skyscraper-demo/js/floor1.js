@@ -44,7 +44,7 @@ export const Floor1CorporateHQ = {
   payments: {
     enabled: true,
     buttons: [
-      { label: 'INVEST NOW', amount: 0, url: 'https://paypal.me/techpetcage', color: '#FFD700' },
+      { label: 'INVEST NOW', amount: 0, url: 'https://paypal.me/derekfranciaco1', color: '#FFD700' },
     ],
   },
 };

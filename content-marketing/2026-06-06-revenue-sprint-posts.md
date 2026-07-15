@@ -13,7 +13,7 @@
 **2 — PrimeDoxAI doc-prep offer** *(now matches the live $99 tier on primedoxai-site)*
 > Want to understand your case and prep your own paperwork? Our $99 Educational Document Prep walks you through the framework and gives you annotated templates — you draft, you file, we educate. DM "DEFENSE" for details. (Educational resource — not legal representation.)
 
-**3 — OmniaGuard audit lead-gen**
+**3 — OMNIAGUARD audit lead-gen**
 > Is your AI agent stack secure? Recent testing found a majority of agentic AI deployments carry at least one exploitable weakness. Get a free security audit — comment "AUDIT" and I'll DM you the link.
 
 **4 — Sovereign tier scarcity**
@@ -22,8 +22,8 @@
 **5 — CleanSwarm launch**
 > Launching CleanSwarm — automation tools built for Canadian cleaning businesses. First month free for early adopters. Comment "CLEAN" for early access.
 
-**6 — OmniaGuard enterprise**
-> Built OmniaGuard to solve a problem most companies don't know they have: AI agents that can be manipulated by the inputs they process. Free audits this week — comment "GUARD".
+**6 — OMNIAGUARD enterprise**
+> Built OMNIAGUARD to solve a problem most companies don't know they have: AI agents that can be manipulated by the inputs they process. Free audits this week — comment "GUARD".
 
 **7 — CCC pre-order (now matches the live funnel on ccc-site)**
 > Pro-grade full-spectrum grow lights — coming to the Canadian market. Lock in 50% off launch pricing with a $50 fully-refundable deposit (balance due only when it ships), or join the free waitlist. Comment "LIGHTS" for the link.

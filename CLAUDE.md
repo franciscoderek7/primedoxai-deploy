@@ -14,7 +14,7 @@ PrimeDocs                      ← Override/backup AI layer — activated by Pri
     ↓
 SoulStack                      ← Observer AI — watches empire, flags anomalies, reports up
     ↓
-OmniaGuard                     ← Security layer — guards all sites and agent behavior
+OMNIAGUARD                     ← Security layer — guards all sites and agent behavior
     ↓
 Claude                         ← Builder/executor — acts ONLY on direct PrimeDox orders
 ```
@@ -87,27 +87,29 @@ Run this mentally at the start of every session:
 
 | Brand | Personal Info Visible | Cannabis Content | AI Branding |
 |-------|----------------------|-----------------|-------------|
-| OmniaGuard | NO — anonymous | NEVER | Hidden |
+| OMNIAGUARD | NO — anonymous | NEVER | Hidden |
 | Kiaros | NO | NEVER | Hidden |
 | SoulStack | NO | NEVER | Hidden |
 | CCLDR / Doc Weedlaw | Derek Francisco visible | YES — core content | Hidden |
 | Francisco Holdings | Derek Francisco visible | Context only | Hidden |
 
-**Cross-contamination is a critical failure.** OmniaGuard must never reference cannabis. CCLDR must never reference AI security products. Zero bleed. Always.
+**Cross-contamination is a critical failure.** OMNIAGUARD must never reference cannabis. CCLDR must never reference AI security products. Zero bleed. Always.
 
 ---
 
 ## Spelling and Brand Enforcement (Zero Tolerance)
 
-| Brand | Correct | Wrong — Never Use |
-|-------|---------|-------------------|
-| OmniaGuard | `OmniaGuard` | OmniGuard (RETIRED 2026-07-14), OMNIGUARD, Omni Guard, OMNI GUARD |
-| SoulStack | `SoulStack` | Soulstack, Soul Stack, soul stack |
-| Kiaros | `Kiaros` | kiaros, KIAROS |
-| PrimeDox | `PrimeDox` | Primedox, PrimeDocs (different thing) |
-| Francisco Holdings | `Francisco Holdings Inc.` | Francisco Holdings, FHI |
+| Brand | Correct (display) | Correct (sentence) | Wrong — Never Use |
+|-------|-------------------|--------------------|-------------------|
+| OMNIAGUARD | `OMNIAGUARD` | `OmniGuard` | OmniaGuard, OmniAGuard, OmniGuard (when standalone), OMNIGUARD, Omni Guard |
+| SoulStack | `SoulStack` | `SoulStack` | Soulstack, Soul Stack, soul stack |
+| Kiaros | `Kiaros` | `Kiaros` | kiaros, KIAROS |
+| PrimeDox | `PrimeDox` | `PrimeDox` | Primedox, PrimeDocs (different thing) |
+| Francisco Holdings | `Francisco Holdings Inc.` | `Francisco Holdings Inc.` | Francisco Holdings, FHI |
 
-**SPELLING CONFIRMED (2026-07-14, Derek direct order)**: Correct name is `OmniaGuard` (with A). `OmniGuard` (no A) is RETIRED as of 2026-07-14. Domain: `omniaguard.com`. Color identity: confirmed by Derek — **blue `#4A90E2` / pink `#E91E63`** (OmniaGuard is the ONLY brand permitted to use blue or pink anywhere in the empire). The `omniaguard-site/` folder and `franciscoderek7/omniaguard` repo are the active deploy targets. The `omni-guard-site/` folder was a Manus rebuild under the now-retired no-A spelling — do not deploy from that folder without Derek's explicit instruction.
+**SPELLING CONFIRMED (2026-07-15, Derek direct order)**: Brand display name is `OMNIAGUARD` (ALL CAPS, with A). In sentences/body text use `OmniGuard`. Domain: `omniaguard.com`. Color identity: blue `#4A90E2` / pink `#E91E63` (OMNIAGUARD is the ONLY brand permitted to use blue or pink anywhere in the empire). The `omniaguard-site/` folder and `franciscoderek7/omniaguard` repo are the active deploy targets. The `omni-guard-site/` folder — do not deploy without Derek's explicit instruction.
+
+**PAYPAL HANDLE CONFIRMED (2026-07-15, Derek direct order)**: `paypal.me/derekfranciaco1` is the confirmed working PayPal handle. All payment links empire-wide use this handle. Do NOT use `techpetcage` for PayPal payment links.
 
 ---
 

@@ -129,7 +129,7 @@ GET /modules/:module_key
 Response 200:
 {
   "module_key": "omniaguard",
-  "display_name": "OmniaGuard",
+  "display_name": "OMNIAGUARD",
   "domain": "omniaguard.com",
   "loop": "B",
   "category": "subscription",

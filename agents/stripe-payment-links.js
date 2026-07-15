@@ -8,7 +8,7 @@
 
 window.STRIPE_PAYMENT_LINKS = {
 
-  // ── OmniGuard (Loop B — omniaguard1@gmail.com) ─────────────────────────
+  // ── OMNIAGUARD (Loop B — omniaguard1@gmail.com) ─────────────────────────
   // Create these at dashboard.stripe.com/payment-links → New
   'omniguard-audit-500':    'REPLACE_WITH_STRIPE_LINK',  // One-time $500 CAD
   'omniguard-vpn-99':       'REPLACE_WITH_STRIPE_LINK',  // Recurring $99/mo CAD

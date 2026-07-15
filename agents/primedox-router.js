@@ -9,8 +9,8 @@
 (function(global) {
 
   const ROUTING_RULES = [
-    // Security — OmniGuard
-    { patterns: ['vpn','privacy','encrypt','anonymous','hide my ip','internet security','password manager','vault','2fa','authenticator','biometric','virus','malware','ransomware','phish','hack my','protect my device','cyber','antivirus','scan','security audit','ssl','data broker','identity theft','dark web','breach notification'], agentId: 'sentinel', company: 'OmniGuard' },
+    // Security — OMNIAGUARD
+    { patterns: ['vpn','privacy','encrypt','anonymous','hide my ip','internet security','password manager','vault','2fa','authenticator','biometric','virus','malware','ransomware','phish','hack my','protect my device','cyber','antivirus','scan','security audit','ssl','data broker','identity theft','dark web','breach notification'], agentId: 'sentinel', company: 'OMNIAGUARD' },
 
     // Counter-surveillance — VIGILAX
     { patterns: ['surveillance','stalker','spy','being watched','track me','corporate espionage','counter intel','opsec','operational security','monitor me','someone is tracking'], agentId: 'warden', company: 'VIGILAX' },
@@ -53,25 +53,25 @@
   ];
 
   const REVENUE_QUICK = {
-    sentinel:   [{ label: '🛡️ OmniGuard Starter — $99/year',       url: 'https://omniaguard.com/pricing.html', primary: true  }, { label: '🔍 Free Security Scan', url: 'https://omniaguard.com/free-scan.html', primary: false }],
+    sentinel:   [{ label: '🛡️ OMNIAGUARD Starter — $99/year',       url: 'https://omniaguard.com/pricing.html', primary: true  }, { label: '🔍 Free Security Scan', url: 'https://omniaguard.com/free-scan.html', primary: false }],
     warden:     [{ label: '🔐 VIGILAX Scout — $299/year',            url: 'https://vigilax.com/pricing.html',    primary: true  }, { label: '💬 Custom Quote', url: 'mailto:omniaguard1@gmail.com?subject=VIGILAX+Inquiry', primary: false }],
-    counsel:    [{ label: '🚨 BENO-X Session — $500',               url: 'https://paypal.me/techpetcage/500', primary: true }, { label: '📄 Defense Document — $49', url: 'https://paypal.me/techpetcage/49', primary: false }, { label: '🌐 Weedlaw Education Portal', url: 'https://franciscoderek7.github.io/weedlaw-education/', primary: false }],
-    defender:   [{ label: '⚖️ BENO-X Session — $500',               url: 'https://paypal.me/techpetcage/500', primary: true }, { label: '📄 Document — $49', url: 'https://paypal.me/techpetcage/49', primary: false }],
-    archivist:  [{ label: '📄 Generate Document — $49',             url: 'https://paypal.me/techpetcage/49',  primary: true }, { label: '📦 3-Doc Bundle — $99', url: 'https://paypal.me/techpetcage/99', primary: false }, { label: '🌐 Visit CCLDR', url: 'https://franciscoderek7.github.io/Ccldr-net/', primary: false }],
-    vetbot:     [{ label: '📍 GPS Pet Tracker — $49',               url: 'https://paypal.me/techpetcage/49',  primary: true }, { label: '❤️ Health Monitor — $99', url: 'https://paypal.me/techpetcage/99', primary: false }],
-    torque:     [{ label: '🔧 Vehicle Diagnostic — $99',            url: 'https://paypal.me/techpetcage/99',  primary: true }, { label: '💬 Finance Consult — $500', url: 'https://paypal.me/techpetcage/500', primary: false }, { label: '🌐 Visit Vault Velocity Auto', url: 'https://vaultvelocityauto.com', primary: false }],
+    counsel:    [{ label: '🚨 BENO-X Session — $500',               url: 'https://paypal.me/derekfranciaco1/500', primary: true }, { label: '📄 Defense Document — $49', url: 'https://paypal.me/derekfranciaco1/49', primary: false }, { label: '🌐 Weedlaw Education Portal', url: 'https://franciscoderek7.github.io/weedlaw-education/', primary: false }],
+    defender:   [{ label: '⚖️ BENO-X Session — $500',               url: 'https://paypal.me/derekfranciaco1/500', primary: true }, { label: '📄 Document — $49', url: 'https://paypal.me/derekfranciaco1/49', primary: false }],
+    archivist:  [{ label: '📄 Generate Document — $49',             url: 'https://paypal.me/derekfranciaco1/49',  primary: true }, { label: '📦 3-Doc Bundle — $99', url: 'https://paypal.me/derekfranciaco1/99', primary: false }, { label: '🌐 Visit CCLDR', url: 'https://franciscoderek7.github.io/Ccldr-net/', primary: false }],
+    vetbot:     [{ label: '📍 GPS Pet Tracker — $49',               url: 'https://paypal.me/derekfranciaco1/49',  primary: true }, { label: '❤️ Health Monitor — $99', url: 'https://paypal.me/derekfranciaco1/99', primary: false }],
+    torque:     [{ label: '🔧 Vehicle Diagnostic — $99',            url: 'https://paypal.me/derekfranciaco1/99',  primary: true }, { label: '💬 Finance Consult — $500', url: 'https://paypal.me/derekfranciaco1/500', primary: false }, { label: '🌐 Visit Vault Velocity Auto', url: 'https://vaultvelocityauto.com', primary: false }],
     chronos:    [{ label: '⏱️ Kiaros Professional — $79/month',     url: 'https://kiaros.ai',                     primary: true }, { label: '🆓 Start Free Trial', url: 'https://kiaros.ai', primary: false }],
-    phoenix:    [{ label: '💎 Boardroom Session — $500',            url: 'https://paypal.me/techpetcage/500', primary: true }, { label: '🏢 Francisco Holdings', url: 'https://franciscoholdingsinc.com', primary: false }],
-    swarm:      [{ label: '🧹 CleanSwarm Business — $299/year',     url: 'https://paypal.me/techpetcage/299', primary: true }, { label: '💬 Book Demo', url: 'https://cleanswarm.ca', primary: false }],
-    ratehawk:   [{ label: '🏠 Mortgage Strategy — $500',            url: 'https://paypal.me/techpetcage/500', primary: true }, { label: '💬 Free Rate Check', url: 'mailto:franciscoderek7@gmail.com?subject=Rate+Check', primary: false }],
-    gavel:      [{ label: '⚖️ Employment Rights Review — $149',     url: 'https://paypal.me/techpetcage/149', primary: true }, { label: '📄 Wrongful Dismissal Brief — $299', url: 'https://paypal.me/techpetcage/299', primary: false }],
-    cipher:     [{ label: '🔐 Privacy Audit — $499',                url: 'https://paypal.me/techpetcage/499', primary: true }, { label: '📋 Privacy Policy — $99', url: 'https://paypal.me/techpetcage/99', primary: false }],
-    visapath:   [{ label: '✈️ Immigration Strategy — $499',         url: 'https://paypal.me/techpetcage/499', primary: true }, { label: '💬 Free Assessment', url: 'mailto:franciscoderek7@gmail.com?subject=Immigration+Assessment', primary: false }],
-    primedox:   [{ label: '🤖 AI Access — $99/year',                url: 'https://paypal.me/techpetcage/99',  primary: true }, { label: '🏢 Francisco Holdings', url: 'https://franciscoholdingsinc.com', primary: false }],
+    phoenix:    [{ label: '💎 Boardroom Session — $500',            url: 'https://paypal.me/derekfranciaco1/500', primary: true }, { label: '🏢 Francisco Holdings', url: 'https://franciscoholdingsinc.com', primary: false }],
+    swarm:      [{ label: '🧹 CleanSwarm Business — $299/year',     url: 'https://paypal.me/derekfranciaco1/299', primary: true }, { label: '💬 Book Demo', url: 'https://cleanswarm.ca', primary: false }],
+    ratehawk:   [{ label: '🏠 Mortgage Strategy — $500',            url: 'https://paypal.me/derekfranciaco1/500', primary: true }, { label: '💬 Free Rate Check', url: 'mailto:franciscoderek7@gmail.com?subject=Rate+Check', primary: false }],
+    gavel:      [{ label: '⚖️ Employment Rights Review — $149',     url: 'https://paypal.me/derekfranciaco1/149', primary: true }, { label: '📄 Wrongful Dismissal Brief — $299', url: 'https://paypal.me/derekfranciaco1/299', primary: false }],
+    cipher:     [{ label: '🔐 Privacy Audit — $499',                url: 'https://paypal.me/derekfranciaco1/499', primary: true }, { label: '📋 Privacy Policy — $99', url: 'https://paypal.me/derekfranciaco1/99', primary: false }],
+    visapath:   [{ label: '✈️ Immigration Strategy — $499',         url: 'https://paypal.me/derekfranciaco1/499', primary: true }, { label: '💬 Free Assessment', url: 'mailto:franciscoderek7@gmail.com?subject=Immigration+Assessment', primary: false }],
+    primedox:   [{ label: '🤖 AI Access — $99/year',                url: 'https://paypal.me/derekfranciaco1/99',  primary: true }, { label: '🏢 Francisco Holdings', url: 'https://franciscoholdingsinc.com', primary: false }],
   };
 
   const AGENT_NAMES = {
-    sentinel: 'Sentinel (OmniGuard)', warden: 'Warden (VIGILAX)', counsel: 'Counsel (BENO-X)',
+    sentinel: 'Sentinel (OMNIAGUARD)', warden: 'Warden (VIGILAX)', counsel: 'Counsel (BENO-X)',
     defender: 'Defender', archivist: 'Archivist (CCLDR)', vetbot: 'VetBot (TechPetCage)',
     torque: 'Torque (Vault Velocity)', chronos: 'Chronos (Kiaros)', phoenix: 'Phoenix',
     swarm: 'Swarm (CleanSwarm)', ratehawk: 'RateHawk',
@@ -79,7 +79,7 @@
   };
 
   const AGENT_RESPONSES = {
-    sentinel:  "Sentinel activated. I've analyzed your security concern. OmniGuard provides 14 layers of real-time AI protection — including military-grade VPN, encrypted vault, and AI antivirus.",
+    sentinel:  "Sentinel activated. I've analyzed your security concern. OMNIAGUARD provides 14 layers of real-time AI protection — including military-grade VPN, encrypted vault, and AI antivirus.",
     warden:    "Warden online. VIGILAX counter-surveillance protocols initiated. I can assess your exposure and deploy appropriate counter-measures. What threat are you managing?",
     counsel:   "Counsel standing by. The BENO-X constitutional education framework has helped hundreds of Canadians understand their Charter rights. Note: Educational only — not legal advice.",
     defender:  "Defender ready. Your constitutional rights are shields — but only if you know how to use them. Let me walk you through the relevant Charter protections. Educational only.",

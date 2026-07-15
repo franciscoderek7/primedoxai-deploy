@@ -3,7 +3,7 @@
 
 > Schedule with Buffer, Hootsuite, or Later. Times shown in ET.
 > Loop A posts: post under Derek Francisco / CCLDR / PrimeDox / Weedlaw Ed accounts.
-> Loop B posts: post under OmniaGuard / CleanSwarm accounts ONLY — never cross-post.
+> Loop B posts: post under OMNIAGUARD / CleanSwarm accounts ONLY — never cross-post.
 
 ---
 
@@ -253,7 +253,7 @@
 >
 > This week:
 > → [X] new CCLDR members
-> → [X] free OmniaGuard audits delivered
+> → [X] free OMNIAGUARD audits delivered
 > → [X] CleanSwarm trials started
 > → [X] investor inquiries received
 >
@@ -278,10 +278,10 @@
 
 | Day | Loop A Post | Loop B Post | Platform Priority |
 |-----|------------|------------|-------------------|
-| Monday | Derek/CCLDR — authority/investor | OmniaGuard — audit CTA | LinkedIn first |
+| Monday | Derek/CCLDR — authority/investor | OMNIAGUARD — audit CTA | LinkedIn first |
 | Tuesday | CCLDR — BENO-X education | CleanSwarm — pain point | Facebook + LinkedIn |
-| Wednesday | PrimeDox — urgency | OmniaGuard — stats | X/Twitter + LinkedIn |
-| Thursday | Derek — hiring/partnerships | OmniaGuard/CleanSwarm — offer | LinkedIn |
+| Wednesday | PrimeDox — urgency | OMNIAGUARD — stats | X/Twitter + LinkedIn |
+| Thursday | Derek — hiring/partnerships | OMNIAGUARD/CleanSwarm — offer | LinkedIn |
 | Friday | Derek — progress/wins | CleanSwarm — social proof | LinkedIn + Facebook |
 | Saturday | Doc Weedlaw — video (TikTok/IG) | — | TikTok + Instagram |
 | Sunday | — | — | Rest day |

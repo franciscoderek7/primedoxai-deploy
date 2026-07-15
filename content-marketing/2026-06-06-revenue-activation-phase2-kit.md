@@ -1,22 +1,22 @@
 # Revenue Activation — Phase 2 Kit
 **Drafted for Derek Francisco / Doc Weedlaw — June 6, 2026**
 
-> Continuation of `2026-06-06-revenue-activation-master-kit.md`. Three deliverables below: fresh OmniaGuard posts in the anonymous "team" voice, a copy-paste cross-promo snippet (sticky header + footer block + exit-intent popup) to drop into your live site templates, and Stripe/MDG follow-up email templates for the account-recovery thread. As always — copy-paste only. I can't post, deploy, send email, or log into any payment dashboard.
+> Continuation of `2026-06-06-revenue-activation-master-kit.md`. Three deliverables below: fresh OMNIAGUARD posts in the anonymous "team" voice, a copy-paste cross-promo snippet (sticky header + footer block + exit-intent popup) to drop into your live site templates, and Stripe/MDG follow-up email templates for the account-recovery thread. As always — copy-paste only. I can't post, deploy, send email, or log into any payment dashboard.
 
 ---
 
 ## 1. OMNIAGUARD — ANONYMOUS-VOICE POSTS (5, fresh — distinct from the email sequence)
 
-*Per the zero-bleed rule (CLAUDE.md): zero Derek Francisco branding, zero cannabis references, anonymous "team" voice. Use these on OmniaGuard's own LinkedIn/X/Facebook presence — do NOT cross-post these under Derek's personal accounts.*
+*Per the zero-bleed rule (CLAUDE.md): zero Derek Francisco branding, zero cannabis references, anonymous "team" voice. Use these on OMNIAGUARD's own LinkedIn/X/Facebook presence — do NOT cross-post these under Derek's personal accounts.*
 
 **1 — The stat that should worry every CTO**
-> The agentic-AI security market is projected at $7.38B — and it's growing because the threat is real, not theoretical. Most companies running AI agents have no idea what their attack surface actually looks like until something goes wrong. We built OmniaGuard to change that. Free audits open this week — comment "AUDIT" for the link. 🔒
+> The agentic-AI security market is projected at $7.38B — and it's growing because the threat is real, not theoretical. Most companies running AI agents have no idea what their attack surface actually looks like until something goes wrong. We built OMNIAGUARD to change that. Free audits open this week — comment "AUDIT" for the link. 🔒
 
 **2 — Prompt injection, explained in one line**
 > Prompt injection isn't a hacked server. It's an AI agent doing something it was never supposed to do — because of a few cleverly worded sentences buried in a document, email, or webpage it processed. Most teams don't know it's happening to them. That's the gap we close.
 
 **3 — Why one model can't police itself**
-> Would you trust a single guard to watch every door in a building, all night, alone? That's what most "AI safety" amounts to today — one model checking its own work. OmniaGuard runs a 14-agent defense swarm instead: layered, coordinated, watching every input in real time. No single point of failure.
+> Would you trust a single guard to watch every door in a building, all night, alone? That's what most "AI safety" amounts to today — one model checking its own work. OMNIAGUARD runs a 14-agent defense swarm instead: layered, coordinated, watching every input in real time. No single point of failure.
 
 **4 — The question every AI deployment skips**
 > Before you ask "what can our AI agent do for us," ask "what could someone else make our AI agent do FOR THEM." That second question is the one most security reviews skip — and it's the one that actually matters once an agent is processing real customer data. Free stack audit this week: comment "AUDIT."
@@ -36,9 +36,9 @@ This snippet is brand-agnostic, but the *content* you put in it is not. Per CLAU
 | Loop | Properties (safe to cross-link to each other) | Why |
 |---|---|---|
 | **Loop A — "Derek's voice" properties** | CCLDR.net, PrimeDox AI, Weedlaw Education, Francisco Holdings | All already carry Derek Francisco's identity and/or cannabis-education content — no new exposure created by linking them together |
-| **Loop B — Anonymous / no-cannabis properties** | OmniaGuard, Kiaros, SoulStack, CleanSwarm | None carry Derek's personal identity or cannabis content — safe to cross-promote as a "Francisco Holdings portfolio" without naming Derek |
+| **Loop B — Anonymous / no-cannabis properties** | OMNIAGUARD, Kiaros, SoulStack, CleanSwarm | None carry Derek's personal identity or cannabis content — safe to cross-promote as a "Francisco Holdings portfolio" without naming Derek |
 
-Do **not** place a Loop A link/banner on any Loop B site (or vice versa) — that's the exact cross-contamination CLAUDE.md prohibits (e.g., OmniaGuard visitors must never see a CCLDR link, and CCLDR visitors must never see "AI security" framing that bleeds into Derek's anonymous brands).
+Do **not** place a Loop A link/banner on any Loop B site (or vice versa) — that's the exact cross-contamination CLAUDE.md prohibits (e.g., OMNIAGUARD visitors must never see a CCLDR link, and CCLDR visitors must never see "AI security" framing that bleeds into Derek's anonymous brands).
 
 ### 2a. Drop-in CSS (works for both loops — paste once per site, in `<head>`)
 
@@ -119,7 +119,7 @@ Do **not** place a Loop A link/banner on any Loop B site (or vice versa) — tha
     }
   };
 
-  // LOOP B example (paste on an anonymous property, e.g. OmniaGuard) — uncomment & use instead:
+  // LOOP B example (paste on an anonymous property, e.g. OMNIAGUARD) — uncomment & use instead:
   // var XP_CONFIG = {
   //   siteId: "omniaguard",
   //   barText: "Free 14-day trial for cleaning-business owners — ",

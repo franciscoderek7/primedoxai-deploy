@@ -1,4 +1,4 @@
-> Confirmed by Derek 2026-06-19: OmniaGuard → OmniGuard rebrand (domain omni-guard.com, blue `#4A90E2` / pink `#E91E63`) is deliberate and supersedes the prior cyan/black identity referenced elsewhere in this repo (`omniaguard-site/`, `franciscoderek7/omniaguard`, CLAUDE.md pre-2026-06-19). See CLAUDE.md "REBRAND NOTICE" and EMPIRE.md "MANUS COORDINATION NOTICE" for details.
+> Confirmed by Derek 2026-06-19: OMNIAGUARD → OMNIAGUARD rebrand (domain omni-guard.com, blue `#4A90E2` / pink `#E91E63`) is deliberate and supersedes the prior cyan/black identity referenced elsewhere in this repo (`omniaguard-site/`, `franciscoderek7/omniaguard`, CLAUDE.md pre-2026-06-19). See CLAUDE.md "REBRAND NOTICE" and EMPIRE.md "MANUS COORDINATION NOTICE" for details.
 
 ---
 
@@ -28,9 +28,9 @@ WHAT YOU'RE ALREADY BUILDING (Continue)
 
 | Site | Status | Keep Building |
 |------|--------|----------------|
-| franciscoholdingsinc.com | Rebuilding | Posh boardroom aesthetic, green/gold/platinum, no blue/pink except OmniGuard |
+| franciscoholdingsinc.com | Rebuilding | Posh boardroom aesthetic, green/gold/platinum, no blue/pink except OMNIAGUARD |
 | zprimedoxaihq.com | Rebuilding | Command center, lock code, 199/499 tiers, empire dashboard |
-| omni-guard.com | Rebuilding | OmniGuard site, blue/pink branded, security services |
+| omni-guard.com | Rebuilding | OMNIAGUARD site, blue/pink branded, security services |
 | ccldr.net | Rebuilding | CCDLR education, 6 Quintinity modules, 4 pricing tiers, BENO-X framework |
 
 ---
@@ -105,7 +105,7 @@ Keep creating until all are done:
 
 | Company | Products | Prices (CAD) |
 |---------|----------|---------------|
-| OmniGuard | Free, Starter, Pro, Sentinel, Enterprise | 0, 99/mo, 299/mo, 499/mo, 1499/mo |
+| OMNIAGUARD | Free, Starter, Pro, Sentinel, Enterprise | 0, 99/mo, 299/mo, 499/mo, 1499/mo |
 | VIGILAX | Standard, Pro, Enterprise | 500/mo, 1500/mo, 2500/mo |
 | CCDLR | Free, Basic, Warrior, Defender, Corporate, Litigation | 0, 49/mo, 149/mo, 299/mo, 799/mo, 2500/mo |
 | TechPetCage | Family, Pro, Kennel | 29/mo, 49/mo, 199/mo |
@@ -144,10 +144,10 @@ COLOR RULES — EMPIRE WIDE
 | Platinum | #E5E4E2 | Body text, cards |
 | Silver | #C0C0C0 | Secondary, dividers |
 | Crown Black | #0A0A0A | Footer, deep contrast |
-| OmniGuard Blue | #4A90E2 | OmniGuard ONLY |
-| OmniGuard Pink | #E91E63 | OmniGuard ONLY |
+| OMNIAGUARD Blue | #4A90E2 | OMNIAGUARD ONLY |
+| OMNIAGUARD Pink | #E91E63 | OMNIAGUARD ONLY |
 
-NO blue or pink anywhere except OmniGuard.
+NO blue or pink anywhere except OMNIAGUARD.
 
 ---
 
@@ -184,11 +184,11 @@ KEEP BUILDING. DON'T STOP. EMPIRE GROWS. MONEY FLOWS.
 
 ## CHECKPOINT UPDATE — 2026-06-19 (third update, same day)
 
-Derek resolved three conflicts between the latest Manus brief ("PROMPT FOR CLAUDE — PROMPT MANUS": OmniGuard space theme, CCLDR revamp, Francisco Holdings boardroom, MindShift) and what was already logged in EMPIRE.md as complete:
+Derek resolved three conflicts between the latest Manus brief ("PROMPT FOR CLAUDE — PROMPT MANUS": OMNIAGUARD space theme, CCLDR revamp, Francisco Holdings boardroom, MindShift) and what was already logged in EMPIRE.md as complete:
 
 1. **Francisco Holdings**: the new brief said "posh boardroom aesthetic, NOT skyscraper." Derek confirmed: **restyle the existing 45-floor skyscraper** with the new boardroom palette — do not replace the skyscraper structure. Per-floor Stripe/PayPal buttons, the referral engine, and the secret Floor 45 Konami-code easter egg must all survive the restyle.
 2. **CCLDR pricing**: two conflicting tables existed (old 6-tier Stripe table vs. new 4-tier brief). Derek confirmed the **4-tier structure is authoritative**: Warrior $149/mo, Professional $499/mo, Elite $999/mo, Sovereign $1499/mo. The old 6-tier table (Free/Basic/Warrior/Defender/Corporate/Litigation) is retired.
-3. **OmniGuard repo**: the new brief implied a rename/move to `franciscoderek7/omni-guard`. Derek confirmed: **keep both repos** — `franciscoderek7/omniaguard` (legacy, do not delete) and `franciscoderek7/omni-guard` (new build target) — for now.
+3. **OMNIAGUARD repo**: the new brief implied a rename/move to `franciscoderek7/omni-guard`. Derek confirmed: **keep both repos** — `franciscoderek7/omniaguard` (legacy, do not delete) and `franciscoderek7/omni-guard` (new build target) — for now.
 
 The block below is the corrected, self-contained prompt — paste this to Manus instead of the raw brief Derek typed, since it fixes the three conflicts above.
 
@@ -199,12 +199,12 @@ MASTER PROMPT FOR MANUS — KEEP BUILDING THE EMPIRE (CHECKPOINT v3)
 Manus — three corrections before you continue on the next build order. These supersede anything conflicting in earlier prompts:
 
 **1. Francisco Holdings (franciscoholdingsinc.com) — RESTYLE, don't replace.**
-Derek confirmed: keep the existing 45-floor skyscraper structure exactly as-is — per-floor Stripe/PayPal buttons, the referral engine with discount tiers + commission tracking, and the secret Floor 45 Konami-code easter egg must all stay functional. Apply the new boardroom palette (Crown Green #0B3D2E, Executive Gold #C9A227, Platinum #E5E4E2, Silver #C0C0C0, Crown Black #0A0A0A — no blue/pink anywhere except the OmniGuard floor's card) on top of that structure. This is a re-skin, not a rebuild. Do not remove floors, the referral engine, or the Konami egg.
+Derek confirmed: keep the existing 45-floor skyscraper structure exactly as-is — per-floor Stripe/PayPal buttons, the referral engine with discount tiers + commission tracking, and the secret Floor 45 Konami-code easter egg must all stay functional. Apply the new boardroom palette (Crown Green #0B3D2E, Executive Gold #C9A227, Platinum #E5E4E2, Silver #C0C0C0, Crown Black #0A0A0A — no blue/pink anywhere except the OMNIAGUARD floor's card) on top of that structure. This is a re-skin, not a rebuild. Do not remove floors, the referral engine, or the Konami egg.
 
 **2. CCLDR (ccldr.net) — pricing is now locked at 4 tiers.**
 Authoritative pricing, supersedes any 6-tier table you saw earlier: Warrior $149/mo, Professional $499/mo, Elite $999/mo, Sovereign $1499/mo. Build the 6 Quintinity modules, BENO-X framework, 12-Appearance Method, Inmate Academy, and The Library (A-Z Cannabis Law Database) around these 4 tiers only. Deploy to `franciscoderek7/Ccldr-net` (overwrite existing — but preserve the existing correct PayPal payment format: PayPal.me/techpetcage, Interac docweedla@gmail.com, CAD amounts matching the 4 tiers above). Still on 60-day DNS hold — use the GitHub Pages URL, don't touch DNS.
 
-**3. OmniGuard — keep BOTH repos for now.**
+**3. OMNIAGUARD — keep BOTH repos for now.**
 Don't retire or rename `franciscoderek7/omniaguard` (legacy). Build the new space-theme/blue-pink rebrand in `franciscoderek7/omni-guard` (new repo) — it deploys to `omniaguard.com` (the domain Derek actually owns — `omni-guard.com` with a hyphen is NOT a registered domain, ignore that spelling if you saw it anywhere). Leave the old repo's content alone; Derek will manually switch GitHub Pages' custom-domain setting to the new repo when he's ready to flip the live domain over.
 
 Everything else in the prior build queue stands: TechPetCage/TechPackCage separation, vaultvelocityauto.com, primedoxai.com, cleanswarm.ca, mindshift-makayla.github.io, the 40+ Stripe products table, Make.com integration, and the empire-wide color rules — all unchanged from the CHECKPOINT v2 prompt above. Keep building. Don't stop.
@@ -243,7 +243,7 @@ Derek confirmed a new universal pricing/conversion strategy for revenue maximiza
 
 ## CHECKPOINT UPDATE — 2026-06-19 (sixth update — build owned domains only)
 
-Derek wants Manus focused exclusively on domains already registered — get those live and making money before buying/building anything else. Confirmed: the OmniGuard rebrand domain is `omniaguard.com` (no hyphen) — `omni-guard.com` is not a real registered domain and should be ignored anywhere it appeared in earlier prompts. Also confirmed: a hidden, unlisted page for rare/exotic car inventory goes on Vault Velocity Auto (not linked from main nav, kept separate from the core automation-workflow product).
+Derek wants Manus focused exclusively on domains already registered — get those live and making money before buying/building anything else. Confirmed: the OMNIAGUARD rebrand domain is `omniaguard.com` (no hyphen) — `omni-guard.com` is not a real registered domain and should be ignored anywhere it appeared in earlier prompts. Also confirmed: a hidden, unlisted page for rare/exotic car inventory goes on Vault Velocity Auto (not linked from main nav, kept separate from the core automation-workflow product).
 
 MESSAGE FOR MANUS — paste this as the next build order:
 
@@ -279,7 +279,7 @@ Manus, stop. Build only the sites for domains Derek already owns. Nothing else u
 
 **BUILD ORDER — PRIORITY**
 
-1. **OmniGuard variants** (omniaguard.ca, .io, .pro, .tech) — clone the omniaguard.com space theme; .ca = CAD pricing; .io = API docs/developer focus; .pro = enterprise/consulting focus; .tech = technology showcase + blog. 24-hour free trial on all (see mechanic below).
+1. **OMNIAGUARD variants** (omniaguard.ca, .io, .pro, .tech) — clone the omniaguard.com space theme; .ca = CAD pricing; .io = API docs/developer focus; .pro = enterprise/consulting focus; .tech = technology showcase + blog. 24-hour free trial on all (see mechanic below).
 2. **Francisco Holdings variants** (.ca, .buzz) — clone the franciscoholdingsinc.com skyscraper; .ca = Canadian focus, CAD pricing, local contact; .buzz = marketing landing page, lead capture, viral referral.
 3. **Vault Velocity Auto** (vaultvelocityauto.com) — 25 workflow automations, AI agent swarm, pricing Starter $99/Pro $499/Empire $2,499/mo, 24-hour free trial. **Also build a secret car page** at `/vault` or `/secret` — password-protected or invite-only, no public nav link. Rare/exotic/grey-market inventory, high-ticket sales ($50K–$500K cars), dark theme, exclusive "by referral only" feel, contact form for serious buyers. Keep this completely separate in copy/imagery from the automation-workflow product pages.
 4. **TechPetCage** (techpetcage.com, .ca) — pet tech, GPS tracking, health alerts, pricing Family $29/Pro $49/Kennel $199/mo, 24-hour free trial; .ca = CAD pricing.
@@ -294,10 +294,10 @@ Manus, stop. Build only the sites for domains Derek already owns. Nothing else u
 
 | Product | Price | Domain |
 |---------|-------|--------|
-| OmniGuard Starter | $99/mo | omniaguard.com |
-| OmniGuard Pro | $299/mo | omniaguard.com |
-| OmniGuard Sentinel | $499/mo | omniaguard.com |
-| OmniGuard Enterprise | $1,499/mo | omniaguard.com |
+| OMNIAGUARD Starter | $99/mo | omniaguard.com |
+| OMNIAGUARD Pro | $299/mo | omniaguard.com |
+| OMNIAGUARD Sentinel | $499/mo | omniaguard.com |
+| OMNIAGUARD Enterprise | $1,499/mo | omniaguard.com |
 | Vault Velocity Starter | $99/mo | vaultvelocityauto.com |
 | Vault Velocity Pro | $499/mo | vaultvelocityauto.com |
 | Vault Velocity Empire | $2,499/mo | vaultvelocityauto.com |
@@ -311,7 +311,7 @@ Manus, stop. Build only the sites for domains Derek already owns. Nothing else u
 
 BUILD ONLY OWNED DOMAINS. DEPLOY FAST. MAKE MONEY. THEN BUY MORE DOMAINS.
 
-Applies to: OmniGuard, Vault Velocity, TechPetCage, TechPackCage, CleanSwarm, VIGILAX, Kiaros, MindShift, and any other site without already-wired live pricing. PrimeDox AI and CCLDR are explicitly excluded — frozen as logged above.
+Applies to: OMNIAGUARD, Vault Velocity, TechPetCage, TechPackCage, CleanSwarm, VIGILAX, Kiaros, MindShift, and any other site without already-wired live pricing. PrimeDox AI and CCLDR are explicitly excluded — frozen as logged above.
 
 ---
 
@@ -381,10 +381,10 @@ Manus, infrastructure setup — do this alongside the build queue, not instead o
 | `franciscoderek7/techpetcage-ca` | TechPetCage Canadian | techpetcage.ca |
 | `franciscoderek7/franciscoholdingsinc-ca` | Francisco Holdings Canada | franciscoholdingsinc.ca |
 | `franciscoderek7/franciscoholdingsinc-buzz` | Francisco Holdings marketing | franciscoholdingsinc.buzz |
-| `franciscoderek7/omniaguard-ca` | OmniGuard Canada | omniaguard.ca |
-| `franciscoderek7/omniaguard-io` | OmniGuard API docs | omniaguard.io |
-| `franciscoderek7/omniaguard-pro` | OmniGuard pro services | omniaguard.pro |
-| `franciscoderek7/omniaguard-tech` | OmniGuard tech blog | omniaguard.tech |
+| `franciscoderek7/omniaguard-ca` | OMNIAGUARD Canada | omniaguard.ca |
+| `franciscoderek7/omniaguard-io` | OMNIAGUARD API docs | omniaguard.io |
+| `franciscoderek7/omniaguard-pro` | OMNIAGUARD pro services | omniaguard.pro |
+| `franciscoderek7/omniaguard-tech` | OMNIAGUARD tech blog | omniaguard.tech |
 
 For each: create repo → push site files → Settings → Pages → Source: main/root → Custom domain: (see table) → Enforce HTTPS ON → verify the Pages URL loads before moving to DNS.
 
@@ -411,9 +411,9 @@ A records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111
 | TechPetCage Family | $29/mo |
 | TechPetCage Pro | $49/mo |
 | TechPetCage Kennel | $199/mo |
-| OmniGuard CA Starter | $99/mo |
-| OmniGuard CA Pro | $299/mo |
-| OmniGuard CA Sentinel | $499/mo |
+| OMNIAGUARD CA Starter | $99/mo |
+| OMNIAGUARD CA Pro | $299/mo |
+| OMNIAGUARD CA Sentinel | $499/mo |
 
 (These match the pricing already locked in CHECKPOINT v6 above — don't invent new tiers, just create the actual Stripe products/links for the prices already specified.)
 
@@ -451,7 +451,7 @@ Manus, next up once Vault Velocity is finished: Francisco Holdings (franciscohol
 - Desert gold-hour gradient backdrop (sunset oranges/golds blending into the existing Crown Black) behind the skyline.
 - Tagline/copy adjustment positioning Francisco Holdings as a global financial capital player — keep this subtle, don't rewrite the existing per-floor copy.
 
-**Do NOT add:** new colors outside the existing palette (Crown Green #0B3D2E, Executive Gold #C9A227, Platinum #E5E4E2, Silver #C0C0C0, Crown Black #0A0A0A). No blue/pink — still OmniGuard-exclusive.
+**Do NOT add:** new colors outside the existing palette (Crown Green #0B3D2E, Executive Gold #C9A227, Platinum #E5E4E2, Silver #C0C0C0, Crown Black #0A0A0A). No blue/pink — still OMNIAGUARD-exclusive.
 
 Deliver as a zip or push to a feature branch on `franciscoderek7/francisco-holdings` same as your other work. Then move to Batch 3 below.
 
@@ -508,7 +508,7 @@ Derek wants the whole pipeline queued now rather than written one piece at a tim
 
 ### PROMPT 1 — send the moment Manus finishes the Dubai skyscraper (v9 follow-up)
 
-> Manus, skyscraper delivered — good work. Now add: Gemma 41B AI concierge on every floor of the Francisco Holdings tower. Natural-language navigation ("take me to OmniGuard" → elevator visual moves to that floor). Auto-booking, auto-payment, auto-onboarding through the concierge chat. This is the same Gemma 41B customer-facing AI layer from the empire-wide plan, scoped to this site first. Build and deliver.
+> Manus, skyscraper delivered — good work. Now add: Gemma 41B AI concierge on every floor of the Francisco Holdings tower. Natural-language navigation ("take me to OMNIAGUARD" → elevator visual moves to that floor). Auto-booking, auto-payment, auto-onboarding through the concierge chat. This is the same Gemma 41B customer-facing AI layer from the empire-wide plan, scoped to this site first. Build and deliver.
 
 ### PROMPT 2 — send after Prompt 1 (refined v10 — Batch 3, audit-and-finish + 24h trial)
 
@@ -605,7 +605,7 @@ Go past the "no dead links" hardening sweep already done (CHECKPOINT v12) — th
 - Every pricing page: highlight the recommended tier visually (border/badge), don't present all tiers as equal weight.
 - Every site: the urgency timer and social-proof rotator from Claude's APEX agent (`agents/apex-agent.js`, already live on CCLDR/VIGILAX/PrimeDox AI) — extend to every other live site.
 - Design and deliver the 3 lead-magnet PDFs APEX needs that don't exist yet: "7 Cannabis Charter Defense Tactics" (CCLDR), "Security Incident Response Checklist" (VIGILAX), "AI Document Automation Starter Guide" (PrimeDox AI). Claude can write the backend wiring for these but can't generate a designed PDF — that's you.
-- Visual consistency pass per brand palette already locked in EMPIRE.md (OmniGuard blue/pink exclusive, MindShift's separate purple/gold/pink, empire green/gold elsewhere) — flag anything you find off-palette, don't silently leave it.
+- Visual consistency pass per brand palette already locked in EMPIRE.md (OMNIAGUARD blue/pink exclusive, MindShift's separate purple/gold/pink, empire green/gold elsewhere) — flag anything you find off-palette, don't silently leave it.
 
 **6. AI AGENT CONTROLLING THE ALGORITHMS — WITH A LIMIT**
 I want the AI agents actually driving lead-scoring, SEO, and conversion decisions site-wide, not just sitting there as unused code. Wire APEX's lead-scoring and SEO injection live everywhere once the Formspree IDs exist. One rule that doesn't change: the AI agents can surface pricing/promo recommendations to me, but they don't change live prices or business logic without me approving it first — same rule Claude operates under, applies to whatever you build too.

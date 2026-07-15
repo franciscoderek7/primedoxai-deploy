@@ -7,7 +7,7 @@
  * RESOLVED FLOOR-1 OVERRIDE: this registry previously wired
  * floor4-omniguard.js to key 1 as a live-demo-only override, flagged in
  * comments as a likely mismatch against AssetManifest.js (Floor 1 =
- * Francisco Holdings Inc., Floor 4 = OmniGuard, per EMPIRE.md's Holding
+ * Francisco Holdings Inc., Floor 4 = OMNIAGUARD, per EMPIRE.md's Holding
  * Structure table). Now that floor1-francisco-holdings.js exists, both
  * floors are filed under their real manifest numbers and the override
  * comment no longer applies.
@@ -26,8 +26,8 @@ const REGISTRY = {
   },
   4: {
     loader: () => import('./floors/floor4-omniguard.js'),
-    exportName: 'createOmniGuardScene',
-    label: 'OmniGuard',
+    exportName: 'createOMNIAGUARDScene',
+    label: 'OMNIAGUARD',
   },
   9: {
     loader: () => import('./floors/floor9-primedox-ai.js'),

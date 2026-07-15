@@ -18,7 +18,7 @@ Modal shows:
 - Product name + original price
 - Input: "Have a referral code? Enter it here" (pre-filled from localStorage if stored)
 - On valid code: apply 10% discount → "You save $X with code DEREK001!"
-- "Confirm & Pay" → redirect to `https://paypal.me/techpetcage/DISCOUNTED_AMOUNTcad`
+- "Confirm & Pay" → redirect to `https://paypal.me/derekfranciaco1/DISCOUNTED_AMOUNTcad`
 - If no code: redirect at full price
 
 ### 3. Valid Codes Array
@@ -51,9 +51,9 @@ After checkout confirmation:
 |---------|-------|------|------------|
 | BENO-X Playbook | $49 | 30% | $14.70 |
 | PrimeDox AI | $49/mo | 30% recurring | $14.70/mo |
-| OmniaGuard Sentinel | $499 | 20% | $99.80 |
-| OmniaGuard Warden | $2,499 | 20% | $499.80 |
-| OmniaGuard Archon | $9,999 | 15% | $1,499.85 |
+| OMNIAGUARD Sentinel | $499 | 20% | $99.80 |
+| OMNIAGUARD Warden | $2,499 | 20% | $499.80 |
+| OMNIAGUARD Archon | $9,999 | 15% | $1,499.85 |
 | CCLDR Warrior | $99 | 30% | $29.70 |
 | CCLDR Sovereign | $1,499 | 20% | $299.80 |
 | Swarm Bundle | $299 | 25% | $74.75 |
@@ -118,7 +118,7 @@ function openCheckout(productName, price, paypalBase) {
   var storedRef = localStorage.getItem('fh_ref_code') || '';
   // Build and show modal with productName, price, storedRef pre-filled
   // On confirm with valid code: finalPrice = (price * 0.9).toFixed(2)
-  // Redirect: 'https://paypal.me/techpetcage/' + finalPrice + 'cad'
+  // Redirect: 'https://paypal.me/derekfranciaco1/' + finalPrice + 'cad'
   // On confirm no code: redirect at full price
 }
 

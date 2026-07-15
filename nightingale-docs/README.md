@@ -9,7 +9,7 @@ Each document is Phase 1 operational intelligence for the 45+ company empire com
 
 | File | Phase | Company | Status |
 |------|-------|---------|--------|
-| `omnia_guard_clean.md` | Week 1 | OmniaGuard | Pending upload from RunPod |
+| `omnia_guard_clean.md` | Week 1 | OMNIAGUARD | Pending upload from RunPod |
 | `ccldr_weedlaw_clean.md` | Week 2 | CCLDR / Doc Weedlaw | Pending upload from RunPod |
 
 ## How to Access

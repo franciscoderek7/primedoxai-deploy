@@ -31,9 +31,9 @@ EMPIRE HUB (Parent)
 ├── Auth Layer (single login, all guilds)
 ├── Payment Layer (Stripe + Interac + PayPal + Crypto)
 ├── AI Layer (PrimeDox API → 14 Heroes)
-├── Security Layer (OmniaGuard SDK)
+├── Security Layer (OMNIAGUARD SDK)
 └── 10 GUILDS
-    ├── CyberGuard Guild    → OmniaGuard        → ShieldMind
+    ├── CyberGuard Guild    → OMNIAGUARD        → ShieldMind
     ├── HealthSwarm Guild   → Health Swarm       → MediMind
     ├── LegalDefense Guild  → CCLDR/Weedlaw      → LexMind + CannaMind
     ├── CleanOps Guild      → CleanSwarm         → SwarmMind
@@ -51,7 +51,7 @@ EMPIRE HUB (Parent)
 
 | Guild | Companies | AI Moderator | Primary Revenue |
 |---|---|---|---|
-| CyberGuard | OmniaGuard, Omnia Shield | ShieldMind | $499–$99,999/mo |
+| CyberGuard | OMNIAGUARD, Omnia Shield | ShieldMind | $499–$99,999/mo |
 | HealthSwarm | Health Swarm, PrimeDox Health | MediMind | $999–$9,999/mo |
 | LegalDefense | CCLDR, Cannabis Compliance Canada, CCC, Global Cannabis Alliance, Weedlaw Defense, BENO-X, Weedlaw Education, Weedlaw Publishing, Weedlaw Trinity, Doc Weedlaw Media, Constitutional Defense Labs | LexMind + CannaMind | $149–$1,499/mo |
 | CleanOps | CleanSwarm, CleanTech Automation | SwarmMind | $399–$2,499/mo |
@@ -76,7 +76,7 @@ EMPIRE HUB (Parent)
 - "Francisco Holdings Inc." as parent — visible in ALL footers
 - "A Francisco Holdings Inc. Company" — standard footer on all 41 sites
 - "Powered by PrimeDox AI" — all sites
-- "Protected by OmniaGuard" — all sites
+- "Protected by OMNIAGUARD" — all sites
 
 **ANONYMOUS AUTHORITY VOICE:**
 > "Built by the empire. Backed by 20 years of litigation. Secured by 14 AI Heroes."
@@ -142,4 +142,4 @@ EMPIRE HUB (Parent)
 ---
 
 *Francisco Holdings Inc. | Empire Hub Architecture v1 | 2026-06-03*
-*Architect: PrimeDox AI | Security: OmniaGuard | Framework: BENO-X*
+*Architect: PrimeDox AI | Security: OMNIAGUARD | Framework: BENO-X*

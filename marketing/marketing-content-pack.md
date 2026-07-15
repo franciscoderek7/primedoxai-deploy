@@ -4,11 +4,11 @@ Ready-to-copy-paste marketing content for 7 companies. Source facts pulled exclu
 
 **Coverage gap:** BENO-X and Kiaros are skipped in this pack — there is no `automation/chatbot-knowledge/*.md` file for either company yet, so no source facts exist to draft from. Once knowledge-base files are created for those two, this pack can be extended to match.
 
-Companies covered: OmniGuard, PrimeDox, CCLDR / Doc Weedlaw, CCC, TechPetCage, Vault Velocity, CleanSwarm.
+Companies covered: OMNIAGUARD, PrimeDox, CCLDR / Doc Weedlaw, CCC, TechPetCage, Vault Velocity, CleanSwarm.
 
 ---
 
-## 1. OmniGuard
+## 1. OMNIAGUARD
 
 *Brand rules applied: zero AI branding, zero cannabis mentions, no personal-identity framing — pure security/privacy product voice.*
 
@@ -18,7 +18,7 @@ Your personal data is for sale right now — and you probably don't know who's b
 
 Data brokers collect your name, address, browsing habits, and more, then sell it to anyone willing to pay. Add an unprotected internet connection and unmonitored devices, and you've got three open doors into your private life.
 
-OmniGuard closes them. Our security plans include:
+OMNIAGUARD closes them. Our security plans include:
 - VPN protection that encrypts your connection and hides your real IP address, so your data isn't exposed on public or untrusted networks
 - Data broker removal — we identify the companies selling your information and submit takedown requests on your behalf
 - Device monitoring to help keep watch over your connected devices
@@ -43,7 +43,7 @@ Here's an uncomfortable truth: your personal information — name, address, phon
 
 Add an unencrypted internet connection on public Wi-Fi, and your data can be intercepted in transit too. Most people have no visibility into either problem until something goes wrong.
 
-OmniGuard was built to close both gaps — encrypting your connection and actively removing your data from broker databases.
+OMNIAGUARD was built to close both gaps — encrypting your connection and actively removing your data from broker databases.
 
 Over the next couple of emails, I'll walk you through exactly how it works and what it costs. No fluff.
 
@@ -51,7 +51,7 @@ Talk soon.
 
 **Email 2 — Solution / How It Works**
 
-Subject: Here's how OmniGuard actually works
+Subject: Here's how OMNIAGUARD actually works
 
 Hi [Name],
 
@@ -73,7 +73,7 @@ Subject: Plans and pricing
 
 Hi [Name],
 
-Here's what OmniGuard costs:
+Here's what OMNIAGUARD costs:
 
 - $29/mo — entry-level protection
 - $79/mo — mid-tier plan
@@ -103,7 +103,7 @@ Ready to get started, or have a question first? Reach out: omniaguard1@gmail.com
 
 ### D. Twitter/X Post (under 280 chars)
 
-Your data is for sale to companies you've never heard of. OmniGuard encrypts your connection, hides your IP, and gets your info removed from data broker lists. One plan, three layers of protection. DM me to lock it down. #DataPrivacy #VPN
+Your data is for sale to companies you've never heard of. OMNIAGUARD encrypts your connection, hides your IP, and gets your info removed from data broker lists. One plan, three layers of protection. DM me to lock it down. #DataPrivacy #VPN
 
 ---
 

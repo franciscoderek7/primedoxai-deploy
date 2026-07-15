@@ -114,7 +114,7 @@ these into the workflow JSON itself), connect the HTTP Header Auth credential fo
 n8n API call, connect Gmail and Supabase credentials. Same `errorWorkflow` placeholder
 note as Workflow 4.
 
-## Workflow 7 — OmniGuard Lead Capture
+## Workflow 7 — OMNIAGUARD Lead Capture
 
 File: `workflow-7-omniguard-lead-capture.json`. Webhook receives `{name, email,
 company, message}` from `omni-guard-site/lead-form.html` -> inserts into the

@@ -3,7 +3,7 @@
 
 ---
 
-## OmniaGuard WORKFLOWS
+## OMNIAGUARD WORKFLOWS
 
 ### Starter ($99/yr) — VPN + Password Manager
 **Customer pays via PayPal → You get email → Do this:**
@@ -23,14 +23,14 @@
 
 **Email Template — Starter Delivery:**
 ```
-Subject: Your OmniaGuard Starter — VPN + Password Manager Active
+Subject: Your OMNIAGUARD Starter — VPN + Password Manager Active
 
 Hi [NAME],
 
-Your OmniaGuard Starter is now active. Here's how to get started:
+Your OMNIAGUARD Starter is now active. Here's how to get started:
 
 VPN ACCESS:
-Service: OmniaGuard Shield (powered by [reseller])
+Service: OMNIAGUARD Shield (powered by [reseller])
 Email: [their email]
 Temporary password: [TEMP_PASS]
 → Download app: [reseller app link]
@@ -41,7 +41,7 @@ PASSWORD MANAGER:
 
 Need help? Reply to this email or contact omniaguard1@gmail.com
 
-— OmniaGuard Security Team
+— OMNIAGUARD Security Team
 ```
 
 **Time per delivery: ~15 minutes**
@@ -60,12 +60,12 @@ Need help? Reply to this email or contact omniaguard1@gmail.com
 3. Screenshot all findings
 4. Open report template (create in Google Docs or Canva)
 5. Fill in: Client name, URL, findings, risk score (A-F), action items
-6. Export as PDF with OmniaGuard branding
+6. Export as PDF with OMNIAGUARD branding
 7. Email PDF + "Monthly Security Newsletter" (can be simple email update)
 8. Schedule: Repeat audit in 3 months
 
 **PDF Report Template (create once, reuse):**
-- Cover: OmniaGuard logo, client name, date, "CONFIDENTIAL SECURITY REPORT"
+- Cover: OMNIAGUARD logo, client name, date, "CONFIDENTIAL SECURITY REPORT"
 - Page 2: Executive summary, overall score
 - Pages 3-5: Each finding (SSL, headers, exposed files, software)
 - Page 6: Priority action plan (Critical/High/Medium/Low)
@@ -79,7 +79,7 @@ Need help? Reply to this email or contact omniaguard1@gmail.com
 **Same as Professional PLUS:**
 
 1. Send Calendly booking link (sign up at calendly.com — free plan works)
-2. Create event: "OmniaGuard Security Strategy Call — 60 min"
+2. Create event: "OMNIAGUARD Security Strategy Call — 60 min"
 3. Set: Zoom link, PayPal payment required before booking (Calendly + PayPal integration)
 4. Customer books → Zoom link auto-generated
 5. YOU SHOW UP. Talk for 60 min. Cover their specific security concerns.
@@ -99,7 +99,7 @@ Need help? Reply to this email or contact omniaguard1@gmail.com
 ### Security Remediation ($1,500 flat — from free-scan.html upsell)
 
 1. Customer emails omniaguard1@gmail.com requesting remediation
-2. Send PayPal.Me link: paypal.me/techpetcage/1500
+2. Send PayPal.Me link: paypal.me/derekfranciaco1/1500
 3. After payment confirmed:
    - Request FTP/SSH access OR WordPress admin access
    - Fix critical + high findings from their scan report
@@ -120,7 +120,7 @@ Need help? Reply to this email or contact omniaguard1@gmail.com
 ## BENO-X / CCLDR STRATEGY SESSION ($500)
 
 1. Customer books via email (until Calendly set up): franciscoderek7@gmail.com
-2. Send PayPal.Me link: paypal.me/techpetcage/500
+2. Send PayPal.Me link: paypal.me/derekfranciaco1/500
 3. Confirm payment → send Zoom link manually (or Google Meet)
 4. 60-min constitutional education session on their specific situation
 5. Follow-up: Send educational resources (links to CCLDR content)

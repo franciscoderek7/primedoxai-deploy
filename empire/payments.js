@@ -4,7 +4,7 @@
  * Shared "Option A" PayPal buy-button system for every floor scene, per
  * Derek's "BUILD FOUR 3D SITES + PAYPAL INTEGRATION" order: a floating
  * holographic button next to each product that opens
- * `paypal.me/techpetcage/<amount>` in a new tab on click. No backend, no
+ * `paypal.me/derekfranciaco1/<amount>` in a new tab on click. No backend, no
  * in-scene overlay/card form — chosen because it ships today with zero
  * new infrastructure, unlike Option B (HTML overlay) or Option C (QR code).
  *
@@ -39,7 +39,7 @@ function createBuyButtonCanvas(label, priceLabel, accentColor) {
 
 /**
  * Builds one floating buy-button mesh. paypalUrl must be a full
- * https://paypal.me/techpetcage/AMOUNT URL — callers own the pricing data.
+ * https://paypal.me/derekfranciaco1/AMOUNT URL — callers own the pricing data.
  */
 export function createBuyButtonMesh(THREE, { label, priceLabel, accentColor = '#00ffae', paypalUrl, width = 2.4, height = 0.94 }) {
   if (!paypalUrl) throw new Error('createBuyButtonMesh: paypalUrl is required');
@@ -103,7 +103,7 @@ export class PaymentHotspots {
     const hits = this._pick(point.clientX, point.clientY);
     if (!hits.length) return;
     const target = hits[0].object;
-    // Every paypalUrl here is paypal.me/techpetcage/AMOUNT — Derek's single
+    // Every paypalUrl here is paypal.me/derekfranciaco1/AMOUNT — Derek's single
     // confirmed empire-wide checkout account (EMPIRE.md 2026-06-28 entry).
     if (target.userData.isBuyButton && target.userData.paypalUrl) {
       window.open(target.userData.paypalUrl, '_blank', 'noopener,noreferrer');

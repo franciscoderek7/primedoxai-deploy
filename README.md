@@ -6,7 +6,7 @@
   (mounts exactly one floor at a time: destroy old → fetch state → init new),
   `FloorRegistry.js` (hard imports for floors 1–10, no dynamic imports elsewhere).
 - `floors/Floor1` — Francisco Holdings HQ placeholder.
-- `floors/Floor2` — OmniGuard, wrapping the existing Three.js scene in
+- `floors/Floor2` — OMNIAGUARD, wrapping the existing Three.js scene in
   `empire/floors/floor4-omniguard.js` into the FloorInterface contract.
 - `floors/Floor3`–`Floor10` — minimal branded placeholder stubs.
 - `backend/` — FastAPI skeleton: `GET /api/floors/{id}/state`, `GET /health`.

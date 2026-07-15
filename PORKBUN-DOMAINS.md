@@ -129,7 +129,7 @@ For each custom domain on GitHub Pages:
 | Tier 4 (brand protect) | 11 | ~$165 |
 | **Total Year 1** | **31** | **~$465** |
 
-Return on first OmniaGuard Archon client: $4,999/mo = 10.7x domain cost in month 1.
+Return on first OMNIAGUARD Archon client: $4,999/mo = 10.7x domain cost in month 1.
 
 ---
 

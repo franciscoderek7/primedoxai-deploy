@@ -1,4 +1,4 @@
-name: Deploy OmniGuard (new rebrand) to omniaguard.com
+name: Deploy OMNIAGUARD (new rebrand) to omniaguard.com
 
 on:
   push:
@@ -14,16 +14,16 @@ jobs:
       - name: Checkout primedoxai-deploy
         uses: actions/checkout@v4
 
-      - name: Verify OmniGuard spelling (zero tolerance)
+      - name: Verify OMNIAGUARD spelling (zero tolerance)
         run: |
-          ERRORS=$(grep -rln "OmniaGuard\|OMNIGUARD\|Omni Guard\|OMNI GUARD" omni-guard-site/ --include="*.html" | wc -l)
+          ERRORS=$(grep -rln "OMNIAGUARD\|OMNIGUARD\|Omni Guard\|OMNI GUARD" omni-guard-site/ --include="*.html" | wc -l)
           echo "Spelling errors found: $ERRORS"
           if [ "$ERRORS" -gt 0 ]; then
-            echo "FAIL: Wrong OmniGuard spelling detected"
-            grep -rln "OmniaGuard\|OMNIGUARD\|Omni Guard" omni-guard-site/ --include="*.html"
+            echo "FAIL: Wrong OMNIAGUARD spelling detected"
+            grep -rln "OMNIAGUARD\|OMNIGUARD\|Omni Guard" omni-guard-site/ --include="*.html"
             exit 1
           fi
-          echo "PASS: OmniGuard spelling correct on all pages"
+          echo "PASS: OMNIAGUARD spelling correct on all pages"
 
       - name: Verify no personal info leaked
         run: |
@@ -62,7 +62,7 @@ jobs:
         run: |
           cd /tmp/omniaguard
           git config user.email "deploy@omniaguard.com"
-          git config user.name "OmniGuard Deploy Bot"
+          git config user.name "OMNIAGUARD Deploy Bot"
           git add -A
           git diff --cached --stat
           git commit -m "deploy: auto-deploy from primedoxai-deploy @ ${{ github.sha }}

@@ -3,7 +3,7 @@
  *
  * Floor 3 — CCLDR / Doc Weedlaw constitutional courtroom (per
  * AssetManifest.js #3, 'ccldr', color #22c55e — filed under the manifest's
- * canonical floor number, same resolution applied to OmniGuard (4) and
+ * canonical floor number, same resolution applied to OMNIAGUARD (4) and
  * PrimeDox AI (9): renumbering to match Derek's "Floor 4" handoff label
  * would reintroduce the exact AssetManifest/floor-registry mismatch fixed
  * earlier this session).
@@ -24,9 +24,9 @@ const BLUE = 0x1e3a8a;
 const WHITE = 0xf5f5f0;
 
 const CCLDR_PLANS = [
-  { label: 'CCLDR DIGITAL', priceLabel: '$99 CAD', paypalUrl: 'https://paypal.me/techpetcage/99CAD' },
-  { label: 'CCLDR PREMIUM', priceLabel: '$499 CAD', paypalUrl: 'https://paypal.me/techpetcage/499CAD' },
-  { label: 'CCLDR ELITE', priceLabel: '$1,499 CAD', paypalUrl: 'https://paypal.me/techpetcage/1499CAD' },
+  { label: 'CCLDR DIGITAL', priceLabel: '$99 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/99CAD' },
+  { label: 'CCLDR PREMIUM', priceLabel: '$499 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/499CAD' },
+  { label: 'CCLDR ELITE', priceLabel: '$1,499 CAD', paypalUrl: 'https://paypal.me/derekfranciaco1/1499CAD' },
 ];
 
 function createPrecedentTower(THREE, label, height) {

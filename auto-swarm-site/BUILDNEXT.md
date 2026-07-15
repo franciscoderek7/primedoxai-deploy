@@ -101,7 +101,7 @@ Build this site until it is the most compelling AV AI security product page on t
 - Contact: partnerships@franciscoholdings.com — never personal email
 - Derek Francisco: INVISIBLE on this site
 - Cannabis: ZERO bleed — never
-- OmniaGuard: Do not reference directly — "AI agent protection infrastructure" only
+- OMNIAGUARD: Do not reference directly — "AI agent protection infrastructure" only
 
 ---
 

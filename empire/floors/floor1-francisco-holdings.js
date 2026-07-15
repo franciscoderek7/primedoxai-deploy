@@ -4,10 +4,10 @@
  * Floor 1 — Francisco Holdings Inc. HQ (ground floor / lobby), per
  * AssetManifest.js's canonical numbering (#1, 'francisco-holdings', color
  * #d4af37, toneProfile 'grand-lobby'). Floor-registry.js previously had
- * OmniGuard squatting on the live-demo's floor-1 slot with a note flagging
+ * OMNIAGUARD squatting on the live-demo's floor-1 slot with a note flagging
  * it as a probably-wrong override; this module fills the slot it was
  * always meant to hold, and floor-registry.js was updated alongside this
- * file to move OmniGuard back to its manifest floor (4).
+ * file to move OMNIAGUARD back to its manifest floor (4).
  *
  * Stat panel figures are pulled verbatim from francisco-holdings-site/
  * francisco-holdings-expanded.html's own published meta description and

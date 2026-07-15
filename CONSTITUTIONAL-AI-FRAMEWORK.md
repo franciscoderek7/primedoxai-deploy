@@ -21,7 +21,7 @@ This is not marketing. It is architecture.
 |---|---|---|---|
 | s.2 | Freedom of thought, belief, expression | PrimeDox AI | AI persona = extension of constitutionally protected expression |
 | s.7 | Life, liberty, security of the person | BENO-X Framework | Procedural defense against automated overreach |
-| s.8 | Unreasonable search and seizure | OmniaGuard | Constitutional AI security layer — logs every access |
+| s.8 | Unreasonable search and seizure | OMNIAGUARD | Constitutional AI security layer — logs every access |
 | s.11 | Rights of persons charged | BENO-X + LexMind | Automated procedural defense education |
 | s.15 | Equality rights | 12-Appearance Method | Equal access to procedural knowledge for all citizens |
 | s.24 | Enforcement / Remedy | Full Constitutional Stack | Evidence chain → procedure → defense → damages |
@@ -35,7 +35,7 @@ This is not marketing. It is architecture.
 "The first constitutional AI security layer."
 
 Section 8 of the Canadian Charter protects against unreasonable search and
-seizure. OmniaGuard operationalizes this right in AI architecture:
+seizure. OMNIAGUARD operationalizes this right in AI architecture:
 
 - Every data access attempt logged with cryptographic proof
 - Unauthorized collection blocked at the agent level
@@ -43,7 +43,7 @@ seizure. OmniaGuard operationalizes this right in AI architecture:
 - Constitutional threshold alerts before violations occur
 
 **Competitive moat:** No other AI security company builds to s.8 compliance
-by default. OmniaGuard doesn't just protect data — it protects constitutional
+by default. OMNIAGUARD doesn't just protect data — it protects constitutional
 rights to data.
 
 ---
@@ -119,7 +119,7 @@ When a constitutional violation occurs against a Francisco Holdings system:
 ```
 Breach/Violation Detected
         ↓
-OmniaGuard creates cryptographic evidence trail
+OMNIAGUARD creates cryptographic evidence trail
         ↓
 12-Appearance Method activates procedural response
         ↓
@@ -173,7 +173,7 @@ What this means for organizations that deploy Francisco Holdings AI:
 4. **Government contract eligible** — 100% Canadian sovereign AI stack.
    Federal procurement preference for Canadian-controlled AI.
 
-5. **Constitutional indemnification** — if OmniaGuard fails to log a breach,
+5. **Constitutional indemnification** — if OMNIAGUARD fails to log a breach,
    the evidence trail still exists at the Charter level.
 
 ---
@@ -186,7 +186,7 @@ framework and Telus's regulatory position:
 - Telus currently uses US-based AI (OpenAI, Google, Amazon)
 - These are subject to US CLOUD Act — data accessible to US government
 - A Canadian telecom using US AI is constitutionally exposed under s.8
-- PrimeDox + OmniaGuard = 100% Canadian stack, s.8 compliant by design
+- PrimeDox + OMNIAGUARD = 100% Canadian stack, s.8 compliant by design
 - Telus becomes the first Canadian telecom with constitutionally sovereign AI
 - This unlocks federal government contracts worth $1B+
 

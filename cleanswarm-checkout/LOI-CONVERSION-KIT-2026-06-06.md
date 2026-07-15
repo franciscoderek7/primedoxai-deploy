@@ -43,7 +43,7 @@ Quick recap of what it handles for you:
 - One dashboard for jobs, invoices, and team status
 
 If it's saving you time after the 14 days, plans start at [PRICE]/mo:
-💳 PayPal: https://www.paypal.me/techpetcage/[AMOUNT]cad
+💳 PayPal: https://www.paypal.me/derekfranciaco1/[AMOUNT]cad
 🏦 Interac e-Transfer: franciscoderek7@gmail.com (include "CleanSwarm — Ali" in the message)
 
 Send your receipt to this email and I'll have you fully activated within the hour.
@@ -82,7 +82,7 @@ Following up — want to get you set up on CleanSwarm today so you can start sav
 Two ways to go:
 1. **Free trial first (14 days, no card):** 👉 [TRIAL_SIGNUP_LINK]
 2. **Skip the trial, start now:** [PRICE]/mo — pay via:
-   💳 PayPal: https://www.paypal.me/techpetcage/[AMOUNT]cad
+   💳 PayPal: https://www.paypal.me/derekfranciaco1/[AMOUNT]cad
    🏦 Interac: franciscoderek7@gmail.com ("CleanSwarm — Matt" in the message)
 
 Either way, reply or send your receipt and I'll have your account live within the hour.
@@ -95,9 +95,9 @@ Derek Francisco
 
 | Plan | Amount | PayPal.me Link | Interac |
 |---|---|---|---|
-| Starter | $[X]/mo | https://www.paypal.me/techpetcage/[X]cad | franciscoderek7@gmail.com |
-| Growth | $[Y]/mo | https://www.paypal.me/techpetcage/[Y]cad | franciscoderek7@gmail.com |
-| Pro | $[Z]/mo | https://www.paypal.me/techpetcage/[Z]cad | franciscoderek7@gmail.com |
+| Starter | $[X]/mo | https://www.paypal.me/derekfranciaco1/[X]cad | franciscoderek7@gmail.com |
+| Growth | $[Y]/mo | https://www.paypal.me/derekfranciaco1/[Y]cad | franciscoderek7@gmail.com |
+| Pro | $[Z]/mo | https://www.paypal.me/derekfranciaco1/[Z]cad | franciscoderek7@gmail.com |
 
 *(Fill in [X]/[Y]/[Z] from `cleanswarm-checkout/pricing.html` — I left them as placeholders since I want to confirm I'm quoting the same numbers that are live on the page before texting them to prospects.)*
 

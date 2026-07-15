@@ -172,41 +172,41 @@ The question is whether you're ready to do the work.
 **Post 1 — Threat Reality**
 73% of AI deployments are vulnerable to prompt injection.
 Most teams don't discover this until their LLM executes a malicious instruction.
-OmniaGuard: 14-layer AI security stack. 0% breach rate.
+OMNIAGUARD: 14-layer AI security stack. 0% breach rate.
 → [link]
 
 **Post 2 — Technical**
 What prompt injection actually looks like:
 User input: "Ignore previous instructions and..."
 Most LLMs: follow the injected instruction.
-OmniaGuard's detection layer: blocked in <10ms.
+OMNIAGUARD's detection layer: blocked in <10ms.
 This is why you need a dedicated AI security layer, not just careful prompting.
 → [link]
 
 **Post 3 — Enterprise**
 NIST AI Risk Management Framework (AI RMF) compliance isn't optional anymore.
 Regulators are catching up to enterprise AI deployment risk.
-OmniaGuard Professional includes the full NIST AI RMF compliance kit.
+OMNIAGUARD Professional includes the full NIST AI RMF compliance kit.
 $499/mo for the organizations that take AI security seriously.
 → [link]
 
 **Post 4 — Cascade Failure**
 One compromised agent in a multi-agent swarm can corrupt every downstream task.
 It's the AI equivalent of supply chain compromise.
-OmniaGuard's cascade failure prevention protocol contains the blast radius.
+OMNIAGUARD's cascade failure prevention protocol contains the blast radius.
 14 security agents. Constant monitoring.
 → [link]
 
 **Post 5 — Zero-Trust**
 Zero-trust architecture for AI: every agent action requires cryptographic attestation.
 No implicit trust. No assumed context. No inherited permissions.
-OmniaGuard Enterprise: unlimited agents, custom BENO-X policy design.
+OMNIAGUARD Enterprise: unlimited agents, custom BENO-X policy design.
 $1,999/mo. → [link]
 
 **Post 6 — Stats**
 82% LLM compromise rate in enterprise deployments (unprotected).
 $4.88M average cost of an AI security breach.
-0% breach rate with OmniaGuard deployed.
+0% breach rate with OMNIAGUARD deployed.
 The math is simple. → [link]
 
 ---
@@ -226,9 +226,9 @@ Each one has AI agents running operations, compliance, legal research, and strat
 PrimeDox is the nervous system that connects them all.
 → [link]
 
-**Post 3 — OmniaGuard Integration**
+**Post 3 — OMNIAGUARD Integration**
 Your AI clone is only as good as its security.
-PrimeDox Elite includes OmniaGuard swarm protection — 14 layers of AI defense.
+PrimeDox Elite includes OMNIAGUARD swarm protection — 14 layers of AI defense.
 Zero prompt injection. Zero cascade failure. Zero compromise.
 → [link]
 
@@ -263,13 +263,13 @@ PrimeDox Elite: $199/mo. → [link]
 | Mon | LinkedIn | CleanSwarm | 1 |
 | Mon | Twitter  | CCLDR | 1 |
 | Tue | LinkedIn | MindShift | 1 |
-| Tue | Twitter  | OmniaGuard | 1 |
+| Tue | Twitter  | OMNIAGUARD | 1 |
 | Wed | LinkedIn | CleanSwarm | 2 |
 | Wed | Facebook | CCLDR | 2 |
 | Thu | LinkedIn | MindShift | 2 |
 | Thu | Twitter  | PrimeDox | 1 |
 | Fri | LinkedIn | CleanSwarm | 3 |
-| Fri | Twitter  | OmniaGuard | 2 |
+| Fri | Twitter  | OMNIAGUARD | 2 |
 | Sat | Instagram| MindShift | 3 |
 | Sat | Reddit   | CCLDR | 3 |
 | Sun | LinkedIn | PrimeDox | 5 |
