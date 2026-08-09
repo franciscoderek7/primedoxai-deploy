@@ -1,16 +1,10 @@
-const express=require('express');
+const express=require("express");
 const router=express.Router();
-const registry=require('../services/registry');
 
-router.get('/api/dashboard',(req,res)=>{
-  const data=registry.getServices();
+const state=require("../core/dashboard/state");
 
-  res.json({
-    platform:"Francisco Holdings AI Operating System",
-    core:"Phoenix Core",
-    services:data.services,
-    status:"operational"
-  });
+router.get("/api/dashboard",(req,res)=>{
+res.json(state);
 });
 
 module.exports=router;

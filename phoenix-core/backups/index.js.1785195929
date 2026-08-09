@@ -18,19 +18,13 @@ const tasksRoute=require('./routes/tasks');
 
 const app = express();
 
-const businessRoute=require('../primedoxai-system/api/business');
-
-const dashboardLiveRoute=require('./routes/dashboard-live');
-
-const commandCenterRoute = require('./routes/command-center');
-
 const loadModules=require('./core/module-loader');
 
 app.use(cors());
 app.use(express.json());
 
-// productsRoute disabled - route not created yet
-// products route disabled
+const productsRoute=require('./routes/products');
+app.use(productsRoute);
 app.use(express.json());
 
 const routerRoute=require('./routes/router');
@@ -53,7 +47,6 @@ const dashboardRoute = require('./routes/dashboard');
 app.use(servicesRoute);
 app.use(systemRoute);
 app.use(dashboardRoute);
-app.use(commandCenterRoute);
 
 const PORT = process.env.PORT || 3000;
 const VIGILAX_URL = process.env.VIGILAX_URL || "http://localhost:3002";
@@ -87,10 +80,6 @@ app.get('/api/vigilax/status', async (req, res) => {
 });
 
 loadModules(app);
-
-app.use(dashboardLiveRoute);
-
-app.use('/api/business',businessRoute);
 
 app.listen(PORT, () => {
   console.log(`

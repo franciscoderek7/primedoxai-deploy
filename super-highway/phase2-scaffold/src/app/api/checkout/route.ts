@@ -3,7 +3,7 @@ import Stripe from 'stripe'
 import { createHubServerClient } from '@/lib/supabase'
 import { z } from 'zod'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-06-20' })
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-04-10' })
 
 const CheckoutBody = z.object({
   session_id: z.string().uuid(),
