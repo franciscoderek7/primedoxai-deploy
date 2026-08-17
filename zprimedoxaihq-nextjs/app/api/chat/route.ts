@@ -10,11 +10,11 @@ export async function POST(request: NextRequest) {
     }
 
     const domainResponses: Record<string, string> = {
-      legal:    `I'm PrimeDox AI analyzing your legal query: "${message}". The full constitutional cannabis law engine launches July 2026. Pre-order now for priority access to automated motion drafting, case strategy, and charter analysis.`,
-      cyber:    `I'm VIGILAX scanning your security query: "${message}". The full threat intelligence engine launches July 2026. Pre-order for enterprise-grade protection.`,
-      safety:   `I'm OmniaGuard processing your public safety query: "${message}". The full first responder AI launches July 2026. Pre-order for departmental deployment.`,
-      business: `I'm Francisco Holdings AI analyzing: "${message}". The full empire management engine launches July 2026. Pre-order for strategic intelligence.`,
-      general:  `I'm zPrimeDox AI HQ. You asked: "${message}". The complete intelligence engine with all five powers launches July 2026. Get early access now.`,
+      legal:    `I'm PrimeDox AI analyzing your legal query: "${message}". PrimeDox AI provides document intelligence and legal-education workflow assistance. Review all generated material before use.`,
+      cyber:    `I'm VIGILAX scanning your security query: "${message}". Cybersecurity intelligence and protection capabilities are being developed for enterprise deployment.`,
+      safety:   `I'm OmniaGuard processing your public safety query: "${message}". Public-safety workflow capabilities are being developed for organizational deployment.`,
+      business: `I'm Francisco Holdings AI analyzing: "${message}". Francisco Holdings AI provides an intelligent interface for business and workflow operations.`,
+      general:  `I'm zPrimeDox AI HQ. You asked: "${message}". PrimeDox AI HQ is the document-intelligence foundation of the Phoenix Core ecosystem.`,
     };
 
     const response = domainResponses[domain || "general"] || domainResponses.general;
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       response,
       domain: domain || "general",
       timestamp: new Date().toISOString(),
-      note: "Full AI engine launching July 2026. Pre-order at zprimedoxaihq.com",
+      note: "PrimeDox AI HQ — production development and deployment platform.",
     });
   } catch {
     return NextResponse.json(

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Scale, Shield, Ambulance, BrushCleaning, GraduationCap, Lock, Clock } from "lucide-react";
+import { Scale, Shield, Ambulance, Sparkles, GraduationCap, Lock, Clock } from "lucide-react";
 
 function cn(...inputs: ClassValue[]) { return twMerge(clsx(inputs)); }
 
@@ -11,7 +11,7 @@ const iconMap: Record<string, React.ReactNode> = {
   scale:      <Scale className="w-8 h-8" />,
   shield:     <Shield className="w-8 h-8" />,
   ambulance:  <Ambulance className="w-8 h-8" />,
-  broom:      <BrushCleaning className="w-8 h-8" />,
+  broom:      <Sparkles className="w-8 h-8" />,
   graduation: <GraduationCap className="w-8 h-8" />,
 };
 
