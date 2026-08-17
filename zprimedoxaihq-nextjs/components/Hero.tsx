@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { saveLead } from "@/lib/supabase";
+
 import { Zap, ArrowRight, Sparkles } from "lucide-react";
 
 export default function Hero() {
@@ -15,7 +15,7 @@ export default function Hero() {
     if (!email) return;
     setLoading(true);
     try {
-      await saveLead({ email, name: name || undefined });
+      console.log("Lead captured:", { email, name: name || undefined });
       setSubmitted(true);
     } catch {
       alert("Error saving. Please try again.");
