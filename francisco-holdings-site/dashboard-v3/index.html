@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Command Center v3 — Francisco Holdings Inc.</title>
+<link rel="stylesheet" href="empire-v3.css">
+<script src="cisco1170.js"></script>
+</head>
+<body>
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <button class="nav-btn active" data-view="overview" title="Overview">
+      🏛️<span class="tooltip">OVERVIEW</span>
+    </button>
+    <button class="nav-btn" data-view="floors" title="Floors">
+      🏢<span class="tooltip">FLOORS</span>
+    </button>
+    <button class="nav-btn" data-view="revenue" title="Revenue">
+      💰<span class="tooltip">REVENUE</span>
+    </button>
+    <button class="nav-btn" data-view="gap-hunter" title="Gap Hunter">
+      🎯<span class="tooltip">GAP HUNTER</span>
+    </button>
+    <button class="nav-btn" data-view="subscriptions" title="Subscriptions">
+      💳<span class="tooltip">SUBSCRIPTIONS</span>
+    </button>
+    <div class="nav-divider"></div>
+    <button class="nav-btn" data-view="jarvis" title="Jarvis">
+      ⚡<span class="tooltip">JARVIS</span>
+    </button>
+    <button class="nav-btn" data-view="omniaguard" title="OMNIAGUARD">
+      🛡️<span class="tooltip">OMNIAGUARD</span>
+    </button>
+    <button class="nav-btn" data-view="ccldr" title="CCLDR">
+      🌿<span class="tooltip">CCLDR</span>
+    </button>
+    <div class="nav-divider"></div>
+    <button class="nav-btn" data-view="settings" title="Settings">
+      ⚙️<span class="tooltip">SETTINGS</span>
+    </button>
+  </nav>
+
+  <!-- HEADER -->
+  <header id="header">
+    <div class="hdr-brand">Francisco Holdings Inc.</div>
+    <div class="hdr-title">COMMAND CENTER v3</div>
+    <div class="hdr-right">
+      <div id="clock">--:--:-- UTC</div>
+      <div class="status-dot" title="Systems Nominal"></div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main">
+
+    <!-- OVERVIEW -->
+    <div id="view-overview" class="view active">
+      <div class="metrics-grid">
+        <div class="metric-card cyan">
+          <div class="metric-val" id="metric-live">0</div>
+          <div class="metric-label">Live Sites</div>
+        </div>
+        <div class="metric-card green">
+          <div class="metric-val" id="metric-dev">0</div>
+          <div class="metric-label">In Dev</div>
+        </div>
+        <div class="metric-card gold">
+          <div class="metric-val" id="metric-floors">0</div>
+          <div class="metric-label">Total Floors</div>
+        </div>
+        <div class="metric-card red">
+          <div class="metric-val" id="metric-mrr">$0</div>
+          <div class="metric-label">MRR</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">EMPIRE STATUS — REVENUE SPRINT ACTIVE</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <div style="padding:12px;background:var(--surface);border-radius:4px;border:1px solid var(--border);">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:6px;">AUTHORITY</div>
+            <div style="font-size:12px;color:var(--text);">PrimeDox (Derek Francisco)</div>
+          </div>
+          <div style="padding:12px;background:var(--surface);border-radius:4px;border:1px solid var(--border);">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:6px;">PHASE</div>
+            <div style="font-size:12px;color:var(--text);">Emergency Revenue Sprint</div>
+          </div>
+          <div style="padding:12px;background:var(--surface);border-radius:4px;border:1px solid var(--border);">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--green);margin-bottom:6px;">TARGET</div>
+            <div style="font-size:12px;color:var(--text);">$10K MRR</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">QUICK ACTIONS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <a href="https://paypal.me/derekfranciaco1" target="_blank" rel="noopener" class="btn btn-gold">💳 PayPal Payments</a>
+          <a href="../demo.html" target="_blank" class="btn btn-primary">🎯 Prospect Demo</a>
+          <a href="../gap-hunter.html" target="_blank" class="btn btn-primary">📊 Gap Hunter (v2)</a>
+          <a href="../stripe-pricing.html" target="_blank" class="btn btn-primary">💳 Stripe Plans</a>
+          <a href="https://franciscoholdingsinc.com" target="_blank" rel="noopener" class="btn btn-gold">🌐 FHI Site</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOORS -->
+    <div id="view-floors" class="view">
+      <div class="card">
+        <div class="card-title">EMPIRE FLOORS — 392-FLOOR COMMAND</div>
+        <div class="search-bar" style="max-width:360px;">
+          <span style="color:var(--muted);">🔍</span>
+          <input id="floor-search" type="text" placeholder="Search floors, brands, roles…">
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="floor-table">
+            <thead>
+              <tr>
+                <th>FLOOR</th>
+                <th>BRAND</th>
+                <th>ROLE</th>
+                <th>DOMAIN</th>
+                <th>STATUS</th>
+                <th>MRR</th>
+              </tr>
+            </thead>
+            <tbody id="floor-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVENUE -->
+    <div id="view-revenue" class="view">
+      <div class="card">
+        <div class="card-title">REVENUE CHANNELS — ACTIVE</div>
+
+        <div style="margin-bottom:20px;">
+          <div style="font-family:var(--font-hud);font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">PAYPAL — DIRECT PAYMENTS</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+            <a href="https://paypal.me/derekfranciaco1/500" target="_blank" rel="noopener" class="btn btn-gold">
+              Strategy Call — $500
+            </a>
+            <a href="https://paypal.me/derekfranciaco1/1500" target="_blank" rel="noopener" class="btn btn-gold">
+              Gap Audit — $1,500
+            </a>
+            <a href="https://paypal.me/derekfranciaco1/4997" target="_blank" rel="noopener" class="btn btn-gold">
+              Jarvis Pro — $4,997
+            </a>
+            <a href="https://paypal.me/derekfranciaco1/14997" target="_blank" rel="noopener" class="btn btn-gold">
+              Jarvis Elite — $14,997
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family:var(--font-hud);font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:10px;">STRIPE — SUBSCRIPTION PLANS</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Configure Stripe keys to activate subscription billing. See the Subscriptions tab.</p>
+          <a href="stripe-checkout.js" target="_blank" class="btn btn-primary">View Stripe Config →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAP HUNTER -->
+    <div id="view-gap-hunter" class="view">
+      <div class="card">
+        <div class="card-title">GAP HUNTER v3 — REVENUE INTELLIGENCE</div>
+        <div id="gh-content"></div>
+      </div>
+    </div>
+
+    <!-- SUBSCRIPTIONS -->
+    <div id="view-subscriptions" class="view">
+      <div class="card">
+        <div class="card-title">STRIPE SUBSCRIPTION PLANS</div>
+        <div style="background:rgba(255,184,0,0.06);border:1px solid rgba(255,184,0,0.2);padding:12px 16px;border-radius:4px;margin-bottom:20px;font-size:12px;color:#FFB800;">
+          ⚠️ Configure Stripe: replace <code style="font-family:var(--font-code);">pk_live_REPLACE_...</code> and <code style="font-family:var(--font-code);">price_REPLACE_...</code> in stripe-checkout.js
+        </div>
+        <div id="stripe-plans-container"></div>
+      </div>
+    </div>
+
+    <!-- JARVIS -->
+    <div id="view-jarvis" class="view">
+      <div class="card">
+        <div class="card-title">JARVIS — EMPIRE AUTOMATION</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="../../jarvis-site/index.html" target="_blank" class="btn btn-primary">Open Jarvis Platform →</a>
+          <a href="https://paypal.me/derekfranciaco1/4997" target="_blank" rel="noopener" class="btn btn-gold">Jarvis Pro — $4,997</a>
+          <a href="https://paypal.me/derekfranciaco1/14997" target="_blank" rel="noopener" class="btn btn-gold">Jarvis Elite — $14,997</a>
+          <a href="https://paypal.me/derekfranciaco1/49997" target="_blank" rel="noopener" class="btn btn-gold">Jarvis Empire — $49,997</a>
+        </div>
+        <div style="margin-top:20px;font-size:12px;color:var(--muted);line-height:1.8;">
+          <div>• D3.js neural operations graph with physics simulation</div>
+          <div>• 50+ tool armory (Claude AI, Stripe, Zapier, GitHub Actions…)</div>
+          <div>• Voice command interface with wake-word detection</div>
+          <div>• 4-tier pricing: Starter / Professional / Elite / Empire</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OMNIAGUARD -->
+    <div id="view-omniaguard" class="view">
+      <div class="card">
+        <div class="card-title">OMNIAGUARD — AI CYBERSECURITY</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+          <a href="https://omniaguard.com" target="_blank" rel="noopener" class="btn btn-primary">omniaguard.com →</a>
+          <a href="https://paypal.me/derekfranciaco1/49" target="_blank" rel="noopener" class="btn btn-gold">Shield — $49/mo</a>
+          <a href="https://paypal.me/derekfranciaco1/99" target="_blank" rel="noopener" class="btn btn-gold">Home — $99/mo</a>
+          <a href="https://paypal.me/derekfranciaco1/497" target="_blank" rel="noopener" class="btn btn-gold">Enterprise — $497/mo</a>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+          <div>• Brand: <strong style="color:var(--text);">OMNIAGUARD</strong> (display) / OmniGuard (sentences)</div>
+          <div>• Color identity: blue #4A90E2 / pink #E91E63 (EXCLUSIVE to this brand)</div>
+          <div>• Deployed to: <code style="font-family:var(--font-code);color:var(--cyan);">franciscoderek7/omniaguard</code> → GitHub Pages</div>
+          <div>• Zero bleed: NEVER reference cannabis on this site</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CCLDR -->
+    <div id="view-ccldr" class="view">
+      <div class="card">
+        <div class="card-title">CCLDR — CANNABIS COMPLIANCE</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+          <a href="https://ccldr.ca" target="_blank" rel="noopener" class="btn btn-primary">ccldr.ca →</a>
+          <a href="https://paypal.me/derekfranciaco1/499" target="_blank" rel="noopener" class="btn btn-gold">CCLDR Pro — $499/mo</a>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+          <div>• Cannabis compliance tracking for Health Canada licensed producers</div>
+          <div>• Derek Francisco visible (cannabis brand — personal branding allowed)</div>
+          <div>• Doc Weedlaw alias active for content marketing</div>
+          <div>• Zero bleed: NEVER reference AI security on this site</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="view-settings" class="view">
+      <div class="card">
+        <div class="card-title">COMMAND CENTER SETTINGS</div>
+        <div style="font-size:12px;color:var(--muted);line-height:2;">
+          <div>Access Gate: <span style="color:var(--green);">Cisco1170 ACTIVE</span> — 24hr session TTL</div>
+          <div>Gap Hunter Gate: <span style="color:var(--green);">PHOENIX392 ACTIVE</span> — session scoped</div>
+          <div>PayPal Handle: <code style="font-family:var(--font-code);color:var(--cyan);">paypal.me/derekfranciaco1</code></div>
+          <div>Stripe Status: <span style="color:#FFB800;">AWAITING KEYS — configure stripe-checkout.js</span></div>
+          <div>Branch: <code style="font-family:var(--font-code);color:var(--cyan);">claude/francisco-revenue-sprint-MEva6</code></div>
+        </div>
+        <div style="margin-top:16px;">
+          <button onclick="localStorage.removeItem('cc_v3_auth');location.reload();" class="btn btn-danger">
+            🔒 Lock Session
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <aside id="right-panel">
+
+    <div class="panel-section">
+      <div class="panel-title">SYSTEM HEALTH</div>
+      <div id="health-panel"></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-title">EMPIRE ACTIVITY</div>
+      <div id="activity-feed"></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-title">AUTHORITY CHAIN</div>
+      <div style="font-size:11px;line-height:2;font-family:var(--font-code);color:var(--muted);">
+        <div style="color:var(--gold);">PrimeDox (Derek)</div>
+        <div style="padding-left:16px;">↓ PrimeDocs</div>
+        <div style="padding-left:32px;">↓ SoulStack</div>
+        <div style="padding-left:48px;">↓ OMNIAGUARD</div>
+        <div style="padding-left:64px;">↓ Claude</div>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<script src="gap-hunter.js"></script>
+<script src="stripe-checkout.js"></script>
+<script src="empire-v3.js"></script>
+<script>
+  /* Init Gap Hunter and Stripe after main JS */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (sessionStorage.getItem('gh_v3_auth') === '1') {
+      if (window.GapHunter) window.GapHunter.init();
+    }
+    if (window.StripeCheckout) window.StripeCheckout.init('stripe-plans-container');
+  });
+</script>
+</body>
+</html>
