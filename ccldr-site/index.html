@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="manifest" href="/manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCLDR.NET — Cannabis Legal Education &amp; Defense Resources</title>
+  <meta name="description" content="The world's most comprehensive cannabis law education platform. 3,000+ resources, AI-powered consultation, court-ready documents, and inmate support. Est. 2006." />
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2D5016">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CCLDR.NET">
+  <meta property="og:title" content="CCLDR.NET — Cannabis Legal Education &amp; Defense Resources">
+  <meta property="og:description" content="The world's most comprehensive cannabis law education platform. 3,000+ resources, AI-powered consultation, court-ready documents, and inmate support. Est. 2006.">
+  <meta property="og:url" content="https://franciscoderek7.github.io/Ccldr-net/">
+  <meta property="og:image" content="https://franciscoderek7.github.io/Ccldr-net/cannabis-facility.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@ccldrnet">
+  <meta name="twitter:image" content="https://franciscoderek7.github.io/Ccldr-net/cannabis-facility.webp">
+  <link rel="canonical" href="https://franciscoderek7.github.io/Ccldr-net/">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23000'/><text y='.9em' font-size='80' text-anchor='middle' x='50'>🌿</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Unique-branding pass 2026-06-22: green/gold/purple/white, formal — no cyan */
+      --black:      #0a0a0a;
+      --near-black: #111111;
+      --card-bg:    #141414;
+      --gold:       #c9a227;
+      --gold-light: #e0b840;
+      --green:      #27ae60;
+      --green-dark: #1e8449;
+      --cyan:       #8e44ad;
+      --white:      #f5f5f5;
+      --muted:      #888888;
+      --border:     #2a2a2a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.96);
+      border-bottom: 1px solid var(--gold);
+      padding: 0 20px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .nav-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-title-main {
+      font-family: 'Georgia', 'Cinzel', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: 2px;
+    }
+
+    .nav-title-sub {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      background: var(--green);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    .nav-menu {
+      display: none;
+      position: absolute;
+      top: 68px;
+      left: 0;
+      right: 0;
+      background: rgba(10, 10, 10, 0.98);
+      border-bottom: 1px solid var(--border);
+      padding: 20px;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-menu.open { display: flex; }
+
+    .nav-menu a {
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--white);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-menu a:hover { background: var(--card-bg); color: var(--gold); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      background-image: linear-gradient(160deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.80) 100%), url('doc-weedlaw-portrait.png');
+      background-size: cover;
+      background-position: center top;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+
+    .hero-inner {
+      max-width: 760px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 28px;
+    }
+
+    .hero-h1 {
+      font-family: 'Cinzel', 'Georgia', serif;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .hero-h1 .line-white  { display: block; font-size: clamp(52px, 10vw, 88px); color: var(--white); font-weight: 900; }
+    .hero-h1 .line-gold   { display: block; font-size: clamp(48px, 9vw, 80px); color: var(--gold); font-weight: 700; }
+    .hero-h1 .line-green  { display: block; font-size: clamp(44px, 8.5vw, 74px); color: var(--green); font-weight: 700; }
+
+    .hero-sub {
+      font-size: clamp(15px, 2.5vw, 18px);
+      color: #cccccc;
+      max-width: 600px;
+      margin: 0 auto 36px;
+      line-height: 1.75;
+    }
+
+    .hero-sub strong { color: var(--white); }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-solid {
+      background: var(--green-dark);
+      color: var(--white);
+      padding: 15px 32px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .btn-solid:hover { background: var(--green); transform: translateY(-2px); }
+
+    .btn-ghost {
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      padding: 13px 30px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+
+    .btn-ghost:hover { background: var(--gold); color: var(--black); transform: translateY(-2px); }
+
+    /* ===== SECTION INTRO ===== */
+    .section-intro {
+      text-align: center;
+      padding: 60px 24px 16px;
+    }
+
+    .section-intro p {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(17px, 3vw, 22px);
+      font-style: italic;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* ===== CARDS SECTION ===== */
+    .cards-section {
+      padding: 32px 20px 64px;
+    }
+
+    .cards-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .card:hover { border-color: var(--gold); transform: translateY(-3px); }
+
+    .card-photo {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* CSS gradient fallback photos */
+    .photo-boardroom {
+      background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)), url('doc-weedlaw-portrait.png');
+      background-size: cover;
+      background-position: center top;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-boardroom::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(201,162,39,0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 70%, rgba(139,90,10,0.15) 0%, transparent 50%);
+    }
+
+    .photo-library {
+      background: linear-gradient(135deg, #0d0a04 0%, #1e1408 30%, #2a1a0a 60%, #120d05 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-library::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(180,120,20,0.1) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 70%, rgba(100,60,10,0.12) 0%, transparent 50%);
+    }
+
+    .photo-templates {
+      background: linear-gradient(135deg, #060d0a 0%, #0d1e14 30%, #081408 60%, #050d08 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-templates::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 40% 40%, rgba(39,174,96,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 70%, rgba(20,100,50,0.1) 0%, transparent 50%);
+    }
+
+    .card-icon-wrap {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      z-index: 3;
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      z-index: 3;
+    }
+
+    .badge-vip      { background: var(--gold); color: var(--black); }
+    .badge-new      { background: var(--green-dark); color: var(--white); }
+    .badge-featured { background: var(--cyan); color: #000; }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    .card-category {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 15px;
+      color: #aaaaaa;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .card-cta {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-cta:hover { color: var(--gold-light); }
+
+    /* ===== PRICING SECTION ===== */
+    #pricing {
+      padding: 72px 20px;
+      background: var(--near-black);
+      border-top: 1px solid var(--border);
+    }
+
+    .section-heading {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      text-align: center;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 500px;
+      margin: 0 auto 48px;
+    }
+
+    .pricing-grid {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .pricing-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      transition: border-color 0.3s;
+    }
+
+    .pricing-card.featured-tier {
+      border-color: var(--gold);
+      position: relative;
+    }
+
+    .pricing-card.featured-tier::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      padding: 4px 14px;
+      border-radius: 999px;
+    }
+
+    .pricing-card:hover { border-color: var(--gold); }
+
+    .pricing-tier-name {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .pricing-price {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin: 12px 0 6px;
+    }
+
+    .pricing-price span {
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .pricing-desc {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .pricing-features li {
+      font-size: 14px;
+      color: #cccccc;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .pricing-features li::before {
+      content: '\2713';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .btn-pricing {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+    }
+
+    .btn-pricing-green {
+      background: var(--green-dark);
+      color: var(--white);
+    }
+
+    .btn-pricing-green:hover { background: var(--green); }
+
+    .btn-pricing-gold {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .btn-pricing-gold:hover { background: var(--gold-light); }
+
+    .btn-pricing-outline {
+      border: 2px solid var(--border);
+      color: var(--white);
+    }
+
+    .btn-pricing-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ===== CONTACT SECTION ===== */
+    #contact {
+      padding: 72px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-card {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .contact-name {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .contact-role {
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 16px;
+    }
+
+    .contact-item a {
+      color: var(--white);
+      transition: color 0.2s;
+    }
+
+    .contact-item a:hover { color: var(--gold); }
+
+    .contact-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(201,162,39,0.1);
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #070707;
+      border-top: 1px solid var(--border);
+      padding: 48px 24px 32px;
+    }
+
+    .footer-brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .footer-brand-name {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 3px;
+    }
+
+    .footer-brand-sub {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      margin-top: 4px;
+    }
+
+    .footer-disclaimer {
+      max-width: 720px;
+      margin: 0 auto 28px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+    }
+
+    .footer-disclaimer-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #e05c00;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .footer-disclaimer p {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.75;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      font-size: 12px;
+      color: #444;
+    }
+
+    /* ===== FLOATING CHAT ===== */
+    .float-chat {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f0c030, #c9a227);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 6px 24px rgba(201,162,39,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+
+    .float-chat:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 32px rgba(201,162,39,0.6);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (min-width: 640px) {
+      .hero-ctas { flex-wrap: nowrap; }
+      .pricing-grid { gap: 24px; }
+    }
+
+    @media (min-width: 768px) {
+      .card-photo { height: 240px; }
+    }
+
+    /* Mobile fixes */
+    @media (max-width: 768px) {
+      .hero { background-attachment: scroll; } /* iOS Safari fix */
+      body { overflow-x: hidden; }
+      .hero-ctas { flex-direction: column; align-items: stretch; }
+      .btn-solid, .btn-ghost { text-align: center; }
+      .contact-card { padding: 28px 20px; }
+    }
+    @media (max-width: 480px) {
+      .cards-section { padding: 24px 14px 48px; }
+      #pricing, #contact { padding: 48px 14px; }
+    }
+    a, button, [role="button"] { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+    img { max-width: 100%; height: auto; }
+  </style>
+<script src="https://js.stripe.com/v3/"></script>
+<script>var STRIPE_PK='pk_live_51TG0cIASsTLqnu8VNnDoJjPYgVz73h2lpqhcS1E9bGLGHYl8t6NAvJdri1zk2radt3jb5G0DYuuCMXtNvA81UNeg00RvGs96kz';var stripe=Stripe(STRIPE_PK);</script>
+</head>
+<body>
+
+  <!-- EMPIRE NAV -->
+  <div style="background:rgba(6,9,16,0.97);border-bottom:1px solid rgba(201,162,39,0.2);padding:0 20px;height:30px;display:flex;align-items:center;gap:1.25rem;overflow-x:auto;scrollbar-width:none;position:relative;z-index:1001">
+    <span style="font-size:.6rem;text-transform:uppercase;letter-spacing:1px;color:rgba(201,162,39,0.4);font-weight:700;flex-shrink:0">Francisco Holdings</span>
+    <a href="https://franciscoholdingsinc.com" style="font-size:.68rem;color:#666;text-decoration:none;white-space:nowrap;transition:color .2s" onmouseover="this.style.color='#c9a227'" onmouseout="this.style.color='#666'">FH Inc.</a>
+    <a href="https://zprimedoxaihq.com" style="font-size:.68rem;color:#666;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#c9a227'" onmouseout="this.style.color='#666'">PrimeDox AI</a>
+    <a href="https://weedlaw.com" style="font-size:.68rem;color:#666;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#c9a227'" onmouseout="this.style.color='#666'">WeedLaw</a>
+    <a href="#" style="font-size:.68rem;color:#27ae60;text-decoration:none;white-space:nowrap;font-weight:700">CCLDR</a>
+    <a href="https://canadiancannabisconsulting.com" style="font-size:.68rem;color:#666;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#c9a227'" onmouseout="this.style.color='#666'">Consulting</a>
+    <a href="https://omniaguard.com" style="font-size:.68rem;color:#666;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#c9a227'" onmouseout="this.style.color='#666'">OmniaGuard</a>
+    <a href="https://vaultvelocityauto.com" style="font-size:.68rem;color:#666;text-decoration:none;white-space:nowrap" onmouseover="this.style.color='#c9a227'" onmouseout="this.style.color='#666'">Vault Velocity</a>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-brand">
+      <img src="doc-weedlaw-logo.jpg" alt="Doc WeedLaw" class="nav-logo" />
+      <div class="nav-title">
+        <span class="nav-title-main">CCLDR</span>
+        <span class="nav-title-sub">.NET &mdash; EST. 2006</span>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-menu" id="nav-menu" role="navigation">
+      <a href="education.html">Education</a>
+      <a href="weedlaw-education.html">Weedlaw Education</a>
+      <a href="courses.html">Courses</a>
+      <a href="case-review.html">Case Review</a>
+      <a href="cases.html">Active Cases</a>
+      <a href="consultation.html">Book Session</a>
+      <a href="membership.html">Membership</a>
+      <a href="cases.html#donate" style="color:#D4AF37;font-weight:700">⚖ Support</a>
+    </div>
+  </nav>
+
+  <!-- URGENCY BAR -->
+  <div id="ccldr-urgency" style="background:linear-gradient(90deg,#050a07,#071007,#050a07);border-bottom:1px solid rgba(39,174,96,0.3);padding:9px 16px;text-align:center;font-size:13px;color:#888;position:relative;z-index:998;">
+    <span style="display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;">
+      <span style="width:7px;height:7px;border-radius:50%;background:#27ae60;display:inline-block;animation:ccldrpulse 2s infinite;flex-shrink:0;"></span>
+      <strong style="color:#f5f5f5;">Only 7 consultation spots left this month.</strong>
+      Offer expires in: <strong id="ccldr-countdown" style="color:#27ae60;font-family:monospace;letter-spacing:1px;">--:--:--</strong>
+      <a href="#pricing" style="color:#fbbf24;font-weight:800;text-decoration:none;margin-left:4px;">See Pricing →</a>
+      <button onclick="document.getElementById('ccldr-urgency').style.display='none'" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#444;font-size:18px;line-height:1;background:none;border:none;cursor:pointer;padding:4px;">&times;</button>
+    </span>
+  </div>
+  <style>@keyframes ccldrpulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">&#x1F525; 200+ EDUCATIONAL VICTORIES · BENO-X FRAMEWORK</div>
+      <h1 class="hero-h1">
+        <span class="line-white">Beat Cannabis</span>
+        <span class="line-gold">Charges.</span>
+        <span class="line-green">Learn Constitutional Self-Defense.</span>
+      </h1>
+      <p class="hero-sub">
+        The world's most comprehensive cannabis law education platform. Doc WeedLaw's 20+ years of knowledge — applied to <em>your</em> situation. <strong>Not a lawyer. Better.</strong>
+      </p>
+      <div class="hero-ctas">
+        <a href="#pricing" class="btn-solid">Enroll Now &rarr;</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Free%20Consultation&body=Hi%20Derek%2C%0A%0AI'd%20like%20to%20book%20a%20free%20consultation%20about%20my%20cannabis%20charge%20situation.%0A%0AMy%20situation%3A%20%5Bdescribe%5D" class="btn-ghost">📅 Book Free Consultation</a>
+        <button onclick="document.getElementById('checklist-popup').style.display='flex'" class="btn-ghost" style="border-color:var(--green);color:var(--green);cursor:pointer;background:none;font-family:inherit;font-size:15px;">🎁 Free Checklist</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STATS BAR -->
+  <div style="background:#111;border-top:1px solid var(--gold);border-bottom:1px solid #222;padding:28px 20px;">
+    <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;text-align:center;">
+      <div>
+        <div style="font-size:clamp(30px,5vw,48px);font-weight:900;color:var(--gold);line-height:1;" id="counter-victories">0</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Educational Victories</div>
+      </div>
+      <div>
+        <div style="font-size:clamp(30px,5vw,48px);font-weight:900;color:var(--green);line-height:1;" id="counter-charges">0</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Charges Stayed</div>
+      </div>
+      <div>
+        <div style="font-size:clamp(30px,5vw,48px);font-weight:900;color:var(--white);line-height:1;">20+</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Years Experience</div>
+      </div>
+      <div>
+        <div style="font-size:clamp(24px,4vw,36px);font-weight:900;color:var(--cyan);line-height:1;padding-top:6px;">BENO-X</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Framework · Proven</div>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    function animateCounter(el, target, suffix){
+      var start=0, duration=1800, step=target/60;
+      var timer=setInterval(function(){
+        start+=step;
+        if(start>=target){start=target;clearInterval(timer);}
+        el.textContent=(suffix?suffix:'')+Math.floor(start).toLocaleString()+(suffix===undefined?'+':'');
+      },30);
+    }
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          animateCounter(document.getElementById('counter-victories'),200);
+          animateCounter(document.getElementById('counter-charges'),4000);
+          obs.disconnect();
+        }
+      });
+    },{threshold:0.3});
+    var el=document.getElementById('counter-victories');
+    if(el) obs.observe(el.parentElement.parentElement);
+  })();
+  </script>
+
+  <!-- SECTION INTRO -->
+  <div class="section-intro">
+    <p>Each section is a weapon in your arsenal. Click to explore.</p>
+  </div>
+
+  <!-- CARDS -->
+  <section class="cards-section" id="cards">
+    <div class="cards-wrap">
+
+      <!-- Card 1: The Boardroom -->
+      <article class="card">
+        <div class="card-photo photo-boardroom">
+          <div class="card-icon-wrap">&#x1F451;</div>
+          <span class="card-badge badge-vip">VIP</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">AI-Powered Legal Consultation</div>
+          <h2 class="card-title">The Boardroom</h2>
+          <p class="card-desc">
+            Type your hypothetical. Get Doc WeedLaw's 20+ years of knowledge applied to your situation. Cannabis charges, civil matters, constitutional education &mdash; the Boardroom educates you on how to handle it.
+          </p>
+          <a href="#pricing" class="card-cta">Enter the Boardroom &rarr;</a>
+        </div>
+      </article>
+
+      <!-- Card 2: The Library -->
+      <article class="card">
+        <div class="card-photo photo-library">
+          <div class="card-icon-wrap">&#x1F4DA;</div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">A-Z Cannabis Law Database</div>
+          <h2 class="card-title">The Library</h2>
+          <p class="card-desc">
+            3,000+ resources. 2,400+ case law entries. 180+ constitutional arguments. The largest cannabis law database ever assembled &mdash; from <em>R. v. Parker</em> to <em>R. v. Smith</em>.
+          </p>
+          <a href="#pricing" class="card-cta">Browse the Library &rarr;</a>
+        </div>
+      </article>
+
+      <!-- Card 3: Legal Templates -->
+      <article class="card">
+        <div class="card-photo photo-templates">
+          <div class="card-icon-wrap">&#x1F4C4;</div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">350+ Court-Ready Documents</div>
+          <h2 class="card-title">Legal Templates</h2>
+          <p class="card-desc">
+            Fill-in-the-blank motions, affidavits, Charter arguments, and defense packages. Everything you need to represent yourself &mdash; no lawyer required.
+          </p>
+          <a href="#pricing" class="card-cta">View Templates &rarr;</a>
+        </div>
+      </article>
+
+      <!-- Card 4: Inmate Academy -->
+      <article class="card">
+        <div class="card-photo">
+          <img src="inmate-academy.webp" alt="Inmate Academy — Self-Defense Legal Education" loading="lazy" />
+          <div class="card-icon-wrap">&#x1F511;</div>
+          <span class="card-badge badge-new">NEW</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Self-Defense Education</div>
+          <h2 class="card-title">Inmate Academy</h2>
+          <p class="card-desc">
+            For inmates and their families. Learn to represent yourself in civil and criminal matters. Gift education to a loved one inside. 80% discount for fixed income.
+          </p>
+          <a href="#pricing" class="card-cta">Start Learning &rarr;</a>
+        </div>
+      </article>
+
+      <!-- Card 5: Superhero Spectacular -->
+      <article class="card">
+        <div class="card-photo">
+          <img src="superhero-spectacular.webp" alt="Superhero Spectacular — Cannabis Rights Masterclass" loading="lazy" />
+          <div class="card-icon-wrap">&#x26A1;</div>
+          <span class="card-badge badge-featured">FEATURED</span>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Special Program</div>
+          <h2 class="card-title">Superhero Spectacular</h2>
+          <p class="card-desc">
+            The cannabis rights hero you didn't know you needed. A one-of-a-kind intensive masterclass combining constitutional defense strategies with Doc WeedLaw's most powerful frameworks.
+          </p>
+          <a href="#pricing" class="card-cta">Learn More &rarr;</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <h2 class="section-heading">Choose Your Arsenal</h2>
+    <p class="section-sub">Flat monthly access. Cancel anytime. No lawyers needed.</p>
+
+    <div class="pricing-grid">
+
+      <!-- Tier 0: Digital (NEW $99/mo) -->
+      <div class="pricing-card" style="border-color:rgba(39,174,96,0.5);">
+        <div class="pricing-tier-name">&#x1F4F1; Digital Access</div>
+        <div class="pricing-price">$99<span>/mo</span></div>
+        <p class="pricing-desc">Start your cannabis defense education today. Core library access, constitutional basics, and essential templates to understand your rights.</p>
+        <ul class="pricing-features">
+          <li>Core Library access (cannabis case law database, Charter education guides, defense resources)</li>
+          <li>Essential Charter rights templates</li>
+          <li>Cannabis charge overview guides</li>
+          <li>Section 8 &amp; Section 9 basics</li>
+          <li>Email Q&amp;A access to Doc WeedLaw</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/99CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-green" data-paypal-product="ccldr-digital-99" style="margin-bottom:8px">💳 Pay via PayPal — $99/mo</a>
+        <p style="font-size:12px;color:rgba(255,255,255,0.65);margin:8px 0 10px;line-height:1.6;text-align:center;">After payment, email <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Digital%20Access" style="color:#27ae60;">docweedlaw@gmail.com</a> with subject "CCLDR Digital Access" — you'll receive your document templates and library access within 24 hours.</p>
+        <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Digital%20Access%20%E2%80%94%20%2499%2Fmo&body=I%20want%20Digital%20Access%20at%20%2499%2Fmo.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- Tier 0b: charter education Course ($299 one-time) -->
+      <div class="pricing-card" style="border-color:rgba(39,174,96,0.4);position:relative;">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#27ae60;color:#fff;font-size:10px;font-weight:900;padding:3px 14px;border-radius:20px;letter-spacing:1.5px;white-space:nowrap;">ONE-TIME PAYMENT</div>
+        <div class="pricing-tier-name">&#x1F4DC; charter education Course</div>
+        <div class="pricing-price">$299<span style="font-size:14px;font-weight:500;color:var(--green);"> once</span></div>
+        <p class="pricing-desc">Master the BENO-X framework. One payment, lifetime access. Learn to challenge cannabis charges using constitutional self-defense.</p>
+        <ul class="pricing-features">
+          <li>BENO-X framework — full course</li>
+          <li>Charter sections 7, 8, 9, 10, 15 deep-dive</li>
+          <li>Real case strategy breakdowns</li>
+          <li>35+ court-ready document templates</li>
+          <li>Lifetime access — no subscription</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/299CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-green" data-paypal-product="ccldr-course-299" style="margin-bottom:8px">💳 Pay $299 via PayPal — Lifetime Access</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Charter%20Defense%20Course%20%E2%80%94%20%24299&body=I%20want%20the%20Charter%20Defense%20Course%20at%20%24299%20one-time.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- Tier 1: Foundation -->
+      <div class="pricing-card">
+        <div class="pricing-tier-name">&#x1F393; Foundation</div>
+        <div class="pricing-price">$149<span>/mo</span></div>
+        <p class="pricing-desc">Access the Library and Templates vault. Build your knowledge base from 3,000+ cannabis law resources and 350+ court-ready documents.</p>
+        <ul class="pricing-features">
+          <li>Full Library access (3,000+ resources)</li>
+          <li>350+ legal templates and documents</li>
+          <li>Constitutional arguments database</li>
+          <li>Case law entries A&ndash;Z</li>
+          <li>Email support</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/149CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-green" data-paypal-product="ccldr-foundation-149" style="margin-bottom:8px">💳 Pay via PayPal — $149/mo</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Foundation%20%E2%80%94%20%24149%2Fmo&body=I%20want%20Foundation%20access%20at%20%24149%2Fmo.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- Tier 2: Practitioner -->
+      <div class="pricing-card featured-tier">
+        <div class="pricing-tier-name">&#x2696;&#xFE0F; Practitioner</div>
+        <div class="pricing-price">$499<span>/mo</span></div>
+        <p class="pricing-desc">Everything in Foundation plus AI-powered Boardroom consultation and real-world case strategies from 20+ years of cannabis defense experience.</p>
+        <ul class="pricing-features">
+          <li>Everything in Foundation</li>
+          <li>Boardroom AI consultation access</li>
+          <li>Live case strategy frameworks</li>
+          <li>Cannabis charge defense playbooks</li>
+          <li>Charter argument templates</li>
+          <li>Priority email support</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/499CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-green" data-paypal-product="ccldr-practitioner-499" style="margin-bottom:8px">💳 Pay via PayPal — $499/mo</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Practitioner%20%E2%80%94%20%24499%2Fmo&body=I%20want%20Practitioner%20access%20at%20%24499%2Fmo.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- Tier 3: Sovereignty -->
+      <div class="pricing-card">
+        <div class="pricing-tier-name">&#x1F511; Sovereignty</div>
+        <div class="pricing-price">$999<span>/mo</span></div>
+        <p class="pricing-desc">Full platform access including Inmate Academy and automated document assembly. The complete self-representation toolkit.</p>
+        <ul class="pricing-features">
+          <li>Everything in Practitioner</li>
+          <li>Inmate Academy full access</li>
+          <li>Automated document assembly</li>
+          <li>Gift access for incarcerated family</li>
+          <li>80% fixed-income discount available</li>
+          <li>Phone support</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/999CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-green" data-paypal-product="ccldr-sovereignty-999" style="margin-bottom:8px">💳 Pay via PayPal — $999/mo</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Sovereignty%20%E2%80%94%20%24999%2Fmo&body=I%20want%20Sovereignty%20access%20at%20%24999%2Fmo.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- Tier 4: Sovereign Elite -->
+      <div class="pricing-card" style="border-color:var(--gold);position:relative;">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:11px;font-weight:900;padding:4px 18px;border-radius:20px;letter-spacing:1.5px;white-space:nowrap;">⚡ 7 SPOTS LEFT THIS MONTH</div>
+        <div class="pricing-tier-name">&#x1F451; Sovereign Elite</div>
+        <div class="pricing-price">$1,499<span>/mo</span></div>
+        <p class="pricing-desc">The full empire. Every resource, personal strategy sessions with Doc WeedLaw, and VIP concierge access. For serious fighters only.</p>
+        <ul class="pricing-features">
+          <li>Everything in Sovereignty</li>
+          <li>Personal strategy sessions with Doc WeedLaw</li>
+          <li>Superhero Spectacular masterclass included</li>
+          <li>VIP Boardroom priority queue</li>
+          <li>Direct line &mdash; phone + email</li>
+          <li>Custom document drafting review</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/1499CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-gold" data-paypal-product="ccldr-elite-1499" style="margin-bottom:8px">💳 Pay via PayPal — $1,499/mo</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Sovereign%20Elite%20%E2%80%94%20%241499%2Fmo&body=I%20want%20Sovereign%20Elite%20access%20at%20%241%2C499%2Fmo.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- NEW: Live Court Case Access $97/mo -->
+      <div class="pricing-card" style="border-color:rgba(39,174,96,0.6);position:relative;">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#e74c3c;color:#fff;font-size:10px;font-weight:900;padding:3px 14px;border-radius:20px;letter-spacing:1.5px;white-space:nowrap;">🔴 LIMITED TIME — NEW</div>
+        <div class="pricing-tier-name">📡 Live Court Case Access</div>
+        <div class="pricing-price">$97<span>/mo</span></div>
+        <p class="pricing-desc">Watch real cannabis defense cases unfold — live transcripts, arguments, and outcomes. Learn from active constitutional battles in Canadian courts.</p>
+        <ul class="pricing-features">
+          <li>Live court case transcripts (cannabis focus)</li>
+          <li>Real-time Charter argument breakdowns</li>
+          <li>Weekly case debrief with Doc WeedLaw</li>
+          <li>Active case law database updates</li>
+          <li>Alert system for landmark rulings</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/97CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-green" data-paypal-product="ccldr-live-97" style="margin-bottom:8px">💳 Pay $97/mo via PayPal</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=Live%20Court%20Case%20Access%20%E2%80%94%20%2497%2Fmo&body=I%20want%20Live%20Court%20Case%20Access%20at%20%2497%2Fmo.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- NEW: Doc Weedlaw Constitutional Law Masterclass $497 -->
+      <div class="pricing-card" style="border-color:var(--gold);position:relative;">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:11px;font-weight:900;padding:4px 18px;border-radius:20px;letter-spacing:1.5px;white-space:nowrap;">⭐ BESTSELLER — ONE-TIME</div>
+        <div class="pricing-tier-name">🎓 Constitutional Law Masterclass</div>
+        <div class="pricing-price">$497<span style="font-size:14px;font-weight:500;color:var(--gold);"> once</span></div>
+        <p class="pricing-desc">Doc WeedLaw's definitive masterclass — 20+ years of constitutional defense distilled into one comprehensive program. Challenge any charge. Know your rights absolutely.</p>
+        <ul class="pricing-features">
+          <li>12-module deep-dive into Charter sections 7–15</li>
+          <li>BENO-X advanced framework — full system</li>
+          <li>Landmark case study breakdowns (R. v. Parker, Smith, etc.)</li>
+          <li>Constitutional argument construction toolkit</li>
+          <li>Self-representation courtroom playbook</li>
+          <li>Lifetime access + all future updates</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/497CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-gold" data-paypal-product="ccldr-masterclass-497" style="margin-bottom:8px">💳 Pay $497 via PayPal — Lifetime Access</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=Constitutional%20Law%20Masterclass%20%E2%80%94%20%24497&body=I%20want%20the%20Constitutional%20Law%20Masterclass%20at%20%24497%20one-time.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+      <!-- NEW: Self-Represented Litigation Blueprint $1,997 -->
+      <div class="pricing-card" style="border-color:#c0392b;position:relative;">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;font-size:11px;font-weight:900;padding:4px 18px;border-radius:20px;letter-spacing:1.5px;white-space:nowrap;">🔥 ONLY 3 SPOTS LEFT</div>
+        <div class="pricing-tier-name">⚔️ Self-Represented Litigation Blueprint</div>
+        <div class="pricing-price">$1,997<span style="font-size:14px;font-weight:500;color:#e74c3c;"> once</span></div>
+        <p class="pricing-desc">The ultimate self-representation package. Everything you need to walk into any Canadian court prepared, confident, and armed with 20+ years of Doc WeedLaw's strategy. Built to win.</p>
+        <ul class="pricing-features">
+          <li>Full Constitutional Law Masterclass included</li>
+          <li>Custom case strategy session with Derek Francisco</li>
+          <li>Complete document drafting package (all motions + affidavits)</li>
+          <li>Step-by-step courtroom navigation guide</li>
+          <li>30 days of direct email support from Derek</li>
+          <li>Emergency filing review (same business day)</li>
+          <li>Lifetime platform access included</li>
+        </ul>
+        <a href="https://paypal.me/techpetcage/1997CAD" target="_blank" rel="noopener" class="btn-pricing btn-pricing-gold" data-paypal-product="ccldr-blueprint-1997" style="margin-bottom:8px">💳 Pay $1,997 via PayPal</a>
+        <a href="mailto:docweedlaw@gmail.com?subject=Self-Represented%20Litigation%20Blueprint%20%E2%80%94%20%241%2C997&body=I%20want%20the%20Self-Represented%20Litigation%20Blueprint%20at%20%241%2C997.%20Sending%20Interac%20e-transfer." class="btn-pricing btn-pricing-outline">💸 Pay via Interac</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2 class="section-heading">Reach Doc WeedLaw</h2>
+    <p class="section-sub">Questions? Ready to enroll? Get in touch directly.</p>
+    <div class="contact-card">
+      <div class="contact-name">Derek Francisco</div>
+      <div class="contact-role">Doc WeedLaw &mdash; Founder &amp; Lead Educator</div>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-icon">&#x1F4E7;</div>
+          <a href="mailto:docweedlaw@gmail.com">docweedlaw@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">&#x1F4DE;</div>
+          <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Inquiry">Contact Derek →</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">&#x1F4AC;</div>
+          <a href="https://t.me/OmniguardSec_bot" target="_blank" rel="noopener noreferrer">Telegram &mdash; Live Chat</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAWYER PARTNER PROGRAM -->
+  <section style="background:#111;border-top:1px solid #222;padding:64px 20px;text-align:center;">
+    <div style="max-width:700px;margin:0 auto;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;">Partner Program</div>
+      <h2 style="font-size:clamp(24px,4vw,36px);font-weight:900;color:var(--white);margin-bottom:12px;">Lawyers &amp; Advocates:<br>Earn 25% Recurring Commission</h2>
+      <p style="color:var(--muted);font-size:16px;line-height:1.75;margin-bottom:28px;">Refer your clients to CCLDR.NET and earn 25% of every subscription payment — every month, for as long as they stay enrolled. Our platform supports your work. Your referrals build your income.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px;">
+        <div style="background:#0a0a0a;border:1px solid #222;border-radius:12px;padding:20px;">
+          <div style="font-size:24px;font-weight:900;color:var(--gold);">25%</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Monthly Recurring</div>
+        </div>
+        <div style="background:#0a0a0a;border:1px solid #222;border-radius:12px;padding:20px;">
+          <div style="font-size:24px;font-weight:900;color:var(--green);">Lifetime</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Per Referred Client</div>
+        </div>
+        <div style="background:#0a0a0a;border:1px solid #222;border-radius:12px;padding:20px;">
+          <div style="font-size:24px;font-weight:900;color:var(--white);">$37+</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Per Referral / Month</div>
+        </div>
+      </div>
+      <a href="mailto:docweedlaw@gmail.com?subject=CCLDR%20Partner%20Program%20Application&body=Hi%20Derek%2C%0A%0AI'd%20like%20to%20apply%20for%20the%20CCLDR%20partner%20program.%0A%0AName%3A%20%5Byour%20name%5D%0APractice%2FOrganization%3A%20%5Byour%20practice%5D%0AContact%3A%20%5Byour%20email%5D" style="display:inline-block;background:var(--gold);color:#000;font-weight:700;font-size:15px;padding:15px 36px;border-radius:8px;text-decoration:none;">Apply to Partner Program &rarr;</a>
+    </div>
+  </section>
+
+  <!-- SUPPORT THE FIGHT STRIP -->
+  <section style="background:linear-gradient(90deg,#0c0800,#100c00,#0c0800);border-top:1px solid rgba(212,175,55,0.3);border-bottom:1px solid rgba(212,175,55,0.3);padding:40px 5%;text-align:center;">
+    <div style="max-width:700px;margin:0 auto;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#D4AF37;margin-bottom:10px;">⚖ June 29, 2026 — CPL Motion · Ontario Superior Court</div>
+      <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.3rem,4vw,2rem);font-weight:900;color:#f5f5f5;margin-bottom:10px;">Support Doc Weedlaw's Fight</h2>
+      <p style="font-size:0.92rem;color:#888;max-width:520px;margin:0 auto 24px;line-height:1.7;">Derek Francisco is self-represented, fighting two concurrent cases in Ontario Superior Court — a $35M constitutional claim and a CPL motion. Your support funds court fees and keeps the fight going.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="cases.html#donate" style="display:inline-block;background:#D4AF37;color:#000;font-weight:800;font-size:0.9rem;padding:13px 28px;border-radius:3px;text-decoration:none;letter-spacing:0.05em;">⚖ Support the Fight →</a>
+        <a href="cases.html" style="display:inline-block;border:1px solid rgba(212,175,55,0.4);color:#D4AF37;font-weight:700;font-size:0.9rem;padding:13px 28px;border-radius:3px;text-decoration:none;">View Active Cases</a>
+        <a href="https://paypal.me/techpetcage" target="_blank" rel="noopener" style="display:inline-block;background:#FFC439;color:#003087;font-weight:800;font-size:0.9rem;padding:13px 28px;border-radius:3px;text-decoration:none;">💳 Donate via PayPal</a>
+      </div>
+      <div style="margin-top:18px;font-family:monospace;font-size:0.78rem;color:#666;">₿ BTC: bc1qqdjsf6senn899jmrav2x6hd32q94ma5ukh6z4x</div>
+    </div>
+  </section>
+
+  <!-- EMPIRE CTA SECTION -->
+  <section style="background:#0d0d0d;border-top:1px solid #1e8449;border-bottom:1px solid #1e8449;padding:60px 5%">
+    <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start">
+      <!-- Charter Section -->
+      <div>
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:#27ae60;font-weight:700;margin-bottom:.75rem">Charter of Rights</div>
+        <h2 style="font-size:1.8rem;font-weight:900;margin-bottom:1rem;color:#f5f5f5">Section 7 &amp; Section 15<br>Arguments</h2>
+        <p style="color:#888;font-size:.9rem;margin-bottom:1.25rem;line-height:1.7">The Canadian Charter of Rights and Freedoms provides powerful tools for cannabis defense. Section 7 protects life, liberty, and security of the person. Section 15 guarantees equal protection under the law.</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <div style="background:#141414;border:1px solid #2a2a2a;border-left:3px solid #27ae60;border-radius:8px;padding:1rem">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.35rem;color:#f5f5f5">Section 7 — Security of Person</div>
+            <div style="font-size:.825rem;color:#888">Arbitrary laws that criminalize personal cannabis use violate the right to security of person. Used successfully in R v Parker (2000) to challenge medical access restrictions.</div>
+          </div>
+          <div style="background:#141414;border:1px solid #2a2a2a;border-left:3px solid #c9a227;border-radius:8px;padding:1rem">
+            <div style="font-weight:700;font-size:.9rem;margin-bottom:.35rem;color:#f5f5f5">Section 15 — Equality Rights</div>
+            <div style="font-size:.825rem;color:#888">Disproportionate enforcement against marginalized communities and discriminatory application of cannabis laws may violate equality protections under s.15.</div>
+          </div>
+        </div>
+        <a href="https://weedlaw.com" style="display:inline-block;margin-top:1.5rem;background:#27ae60;color:#000;padding:.7rem 1.5rem;border-radius:8px;font-weight:800;font-size:.875rem;text-decoration:none">Learn More at WeedLaw.com →</a>
+      </div>
+      <!-- PayPal + Consulting CTA -->
+      <div>
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:#c9a227;font-weight:700;margin-bottom:.75rem">Document Packages</div>
+        <h2 style="font-size:1.8rem;font-weight:900;margin-bottom:1rem;color:#f5f5f5">Get Court-Ready<br>Documents</h2>
+        <p style="color:#888;font-size:.9rem;margin-bottom:1.5rem;line-height:1.7">Access Derek's document packages — Charter arguments, court templates, and compliance frameworks built from 20+ years of cannabis law experience.</p>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <a href="https://paypal.me/techpetcage/99" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;background:#141414;border:1px solid rgba(201,162,39,0.3);border-radius:12px;padding:1.25rem;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor='#c9a227'" onmouseout="this.style.borderColor='rgba(201,162,39,0.3)'">
+            <div>
+              <div style="font-weight:700;font-size:.9rem;color:#f5f5f5;margin-bottom:.2rem">Charter Argument Templates</div>
+              <div style="font-size:.78rem;color:#888">Section 7 &amp; 15 filing-ready documents</div>
+            </div>
+            <div style="font-size:1.1rem;font-weight:900;color:#c9a227">$99</div>
+          </a>
+          <a href="https://paypal.me/techpetcage/199" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;background:#141414;border:1px solid rgba(39,174,96,0.3);border-radius:12px;padding:1.25rem;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor='#27ae60'" onmouseout="this.style.borderColor='rgba(39,174,96,0.3)'">
+            <div>
+              <div style="font-weight:700;font-size:.9rem;color:#f5f5f5;margin-bottom:.2rem">Full Compliance Package</div>
+              <div style="font-size:.78rem;color:#888">Compliance frameworks + court guide bundle</div>
+            </div>
+            <div style="font-size:1.1rem;font-weight:900;color:#27ae60">$199</div>
+          </a>
+          <a href="https://canadiancannabisconsulting.com" target="_blank" rel="noopener" style="display:block;text-align:center;background:linear-gradient(135deg,#c9a227,#a07d1a);color:#000;padding:.85rem;border-radius:10px;font-weight:800;font-size:.9rem;text-decoration:none;margin-top:.5rem">Need a Consultant? → canadiancannabisconsulting.com</a>
+        </div>
+        <div style="margin-top:1rem;font-size:.72rem;color:#555;text-align:center">After payment, email <a href="mailto:franciscoderek7@gmail.com" style="color:#27ae60">franciscoderek7@gmail.com</a> for your documents</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMPIRE FOOTER LINE -->
+  <div style="background:#0a0a0a;border-top:1px solid #1a1a1a;padding:.5rem 5%;text-align:center;font-size:.68rem;color:#444">Part of the Francisco Holdings Inc. Empire — <a href="https://franciscoholdingsinc.com" style="color:#666;text-decoration:none">franciscoholdingsinc.com</a></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <div class="footer-brand-name">CCLDR.NET</div>
+      <div class="footer-brand-sub">Cannabis Constitutional Law Defense Resources &mdash; Est. 2006</div>
+    </div>
+    <div class="footer-disclaimer">
+      <div class="footer-disclaimer-title">&#x26A0;&#xFE0F; Important Legal Disclaimer</div>
+      <p>
+        All content on CCLDR.NET is provided for educational and informational purposes only. Nothing on this platform constitutes educational information, creates a educator-student relationship, or serves as a substitute for qualified legal counsel. Doc WeedLaw is not a licensed attorney. All case law references, legal templates, and educational materials are presented for informational purposes and may not reflect the current state of the law in your jurisdiction. You should always consult a licensed lawyer before taking any legal action. By accessing any part of this platform you acknowledge that you are receiving education, not educational information, and that CCLDR.NET and Derek Francisco accept no liability for actions taken based on information provided here. Cannabis laws vary significantly by jurisdiction &mdash; know the laws that apply to you.
+      </p>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2006&ndash;2026 CCLDR.NET &mdash; Derek Francisco &mdash; All rights reserved.
+    </div>
+  </footer>
+
+  <!-- FLOATING CHAT BUTTON -->
+  <a href="https://t.me/OmniguardSec_bot" target="_blank" rel="noopener noreferrer" class="float-chat" title="Chat with Doc WeedLaw on Telegram">&#x1F4AC;</a>
+
+  <!-- JS: Hamburger toggle -->
+  <script>
+    (function () {
+      var btn  = document.getElementById('hamburger');
+      var menu = document.getElementById('nav-menu');
+      if (!btn || !menu) return;
+
+      btn.addEventListener('click', function () {
+        var isOpen = menu.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      // Close menu when a nav link is clicked
+      menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          menu.classList.remove('open');
+          btn.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>
+
+
+<!-- FREE CHARTER RIGHTS CHECKLIST POPUP -->
+<div id="checklist-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#111;border:1px solid var(--gold);border-radius:20px;padding:48px 36px;max-width:500px;width:90%;text-align:center;position:relative;box-shadow:0 0 80px rgba(201,162,39,0.2);">
+    <button onclick="document.getElementById('checklist-popup').style.display='none'" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#666;font-size:22px;cursor:pointer;line-height:1;">×</button>
+    <div style="font-size:40px;margin-bottom:12px;">📋</div>
+    <h3 style="font-size:clamp(20px,4vw,26px);font-weight:900;color:var(--gold);margin-bottom:10px;">Free Charter Rights Checklist</h3>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.7;">The exact 12-point checklist Doc WeedLaw uses to identify Charter violations in cannabis cases. Know your rights before your first court date.</p>
+    <a href="mailto:docweedlaw@gmail.com?subject=Free%20Charter%20Rights%20Checklist%20Request&body=Hi%20Derek%2C%0A%0APlease%20send%20me%20the%20Free%20Charter%20Rights%20Checklist.%0A%0AMy%20situation%20(optional)%3A%20%5Bdescribe%5D"
+       onclick="document.getElementById('checklist-popup').style.display='none'"
+       style="display:inline-block;background:var(--gold);color:#000;font-weight:700;font-size:15px;padding:14px 32px;border-radius:8px;text-decoration:none;margin-bottom:10px;">
+      Send Me the Checklist &rarr;
+    </a>
+    <br>
+    <button onclick="document.getElementById('checklist-popup').style.display='none'" style="background:none;border:none;color:#555;font-size:12px;cursor:pointer;margin-top:8px;">I already know my rights</button>
+  </div>
+</div>
+
+<!-- EXIT-INTENT: show Free Checklist offer when leaving -->
+<script>
+(function(){
+  var shown = sessionStorage.getItem('ccldr_exit_shown');
+  if(shown) return;
+  var triggered = false;
+  document.addEventListener('mouseleave', function(e){
+    if(e.clientY < 20 && !triggered){
+      triggered = true;
+      sessionStorage.setItem('ccldr_exit_shown','1');
+      document.getElementById('checklist-popup').style.display='flex';
+    }
+  });
+  setTimeout(function(){
+    if(!triggered && window.innerWidth < 768){
+      triggered = true;
+      sessionStorage.setItem('ccldr_exit_shown','1');
+      document.getElementById('checklist-popup').style.display='flex';
+    }
+  }, 50000);
+  document.getElementById('checklist-popup').addEventListener('click', function(e){
+    if(e.target === this) this.style.display = 'none';
+  });
+})();
+</script>
+
+
+  <!-- EMAIL CAPTURE -->
+  <section id="email-capture" style="background:#050a07;border-top:1px solid rgba(39,174,96,0.15);padding:52px 20px;">
+    <div style="max-width:520px;margin:0 auto;text-align:center;">
+      <div style="font-size:11px;font-weight:900;letter-spacing:3px;color:#27ae60;text-transform:uppercase;margin-bottom:12px;">🎁 FREE RESOURCE</div>
+      <h2 style="font-family:'Cinzel',serif;font-size:clamp(20px,4vw,26px);font-weight:700;color:#f5f5f5;margin-bottom:10px;">Get the BENO-X Framework Guide — Free</h2>
+      <p style="font-size:14px;color:#666;margin-bottom:24px;line-height:1.6;">The exact constitutional framework used in 200+ cannabis defense cases. Enter your email and we'll send it right away.</p>
+      <form id="ccldr-email-form" onsubmit="ccldrEmailSubmit(event)" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;">
+        <input type="email" id="ccldr-email-field" placeholder="your@email.com" required style="flex:1;min-width:220px;background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:12px 16px;color:#f5f5f5;font-size:14px;outline:none;font-family:inherit;">
+        <button type="submit" style="background:#27ae60;color:#fff;border:none;border-radius:8px;padding:12px 22px;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;font-family:inherit;">Get Free Guide →</button>
+      </form>
+      <div id="ccldr-email-success" style="display:none;color:#27ae60;font-weight:700;font-size:15px;padding:12px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:8px;margin-bottom:10px;"></div>
+      <p style="font-size:11px;color:#444;">No spam. Unsubscribe anytime. Educational content only.</p>
+    </div>
+  </section>
+
+  <script>
+  // CCLDR Urgency countdown — counts down to midnight tonight
+  function ccldrUpdateCountdown() {
+    var el = document.getElementById('ccldr-countdown');
+    if (!el) return;
+    var now = new Date(), midnight = new Date();
+    midnight.setHours(23,59,59,0);
+    var diff = midnight - now;
+    if (diff <= 0) { el.textContent = '00:00:00'; return; }
+    var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+    el.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }
+  setInterval(ccldrUpdateCountdown, 1000); ccldrUpdateCountdown();
+
+  // CCLDR Email capture
+  function ccldrEmailSubmit(e) {
+    e.preventDefault();
+    var email = document.getElementById('ccldr-email-field').value;
+    document.getElementById('ccldr-email-form').style.display = 'none';
+    var s = document.getElementById('ccldr-email-success');
+    s.style.display = 'block';
+    s.textContent = '✓ Got it! Sending the BENO-X guide to ' + email + ' — check your inbox (and spam folder).';
+    try { window.open('mailto:docweedlaw@gmail.com?subject=CCLDR+Lead+%E2%80%94+'+encodeURIComponent(email)+'&body=New+subscriber:+'+encodeURIComponent(email), '_blank'); } catch(err){}
+  }
+  </script>
+<script>window.REVEREND_SITE='ccldr';</script>
+<script src="reverend-ai.js"></script>
+<div style="background:#0d0d14;border-top:2px solid #d4af37;padding:20px 24px;text-align:center;font-size:12px;color:#8892a4;line-height:1.8;"><strong style="color:#d4af37;display:block;margin-bottom:8px;font-size:13px;letter-spacing:1px;text-transform:uppercase;">⚖️ Educational Content Only — Not Legal Advice</strong>Derek Francisco is a <strong style="color:#c8d0dc">legal educator and constitutional advocate</strong>, not a licensed lawyer. All content on this site is based on <strong style="color:#c8d0dc">20+ years of personal litigation experience</strong> and constitutional research, provided for <strong style="color:#c8d0dc">educational purposes only</strong>. No lawyer-client relationship is created by use of this site. For legal representation in your matter, please consult a <strong style="color:#c8d0dc">licensed attorney in your jurisdiction</strong>.</div>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/referral-engine.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/stripe-payment-links.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/payment-provider.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/franciscoderek7/primedoxai-deploy@main/agents/apex-agent.js"></script>
+<script>
+// APEX lead magnet: PDF asset does not exist yet — Derek needs to create/upload
+// it before this offer is real. The capture form itself works today either way.
+window.Apex && window.Apex.initExitIntent({ magnet: '7 Cannabis Charter Defense Tactics', formspreeId: 'YOUR_FORM_ID' });
+</script>
+</body>
+</html>
