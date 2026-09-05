@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { db, leads } from '@/lib/db';
 
 const ConsultationSchema = z.object({
   projectType: z.enum(['new', 'replace', 'reno', 'commercial', '']),
@@ -28,6 +29,29 @@ export async function POST(req: NextRequest) {
     }
 
     const lead = data.data;
+
+    // Write to database (non-fatal if DATABASE_URL not configured)
+    if (process.env.DATABASE_URL) {
+      try {
+        await db.insert(leads).values({
+          firstName: lead.firstName,
+          lastName: lead.lastName,
+          email: lead.email,
+          phone: lead.phone,
+          city: lead.city,
+          projectType: lead.projectType,
+          propertyType: lead.propertyType,
+          products: lead.products,
+          roomsCount: lead.roomsCount,
+          timeline: lead.timeline,
+          notes: lead.notes,
+          status: 'new',
+          source: 'website',
+        });
+      } catch {
+        console.error('[Northern Blinds] Failed to write lead to database');
+      }
+    }
 
     // Send notification email via Resend if configured
     const resendKey = process.env.RESEND_API_KEY;
