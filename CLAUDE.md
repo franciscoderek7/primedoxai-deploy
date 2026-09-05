@@ -109,7 +109,7 @@ Run this mentally at the start of every session:
 
 **SPELLING CONFIRMED (2026-07-15, Derek direct order)**: Brand display name is `OMNIAGUARD` (ALL CAPS, with A). In sentences/body text use `OmniGuard`. Domain: `omniaguard.com`. Color identity: blue `#4A90E2` / pink `#E91E63` (OMNIAGUARD is the ONLY brand permitted to use blue or pink anywhere in the empire). The `omniaguard-site/` folder and `franciscoderek7/omniaguard` repo are the active deploy targets. The `omni-guard-site/` folder — do not deploy without Derek's explicit instruction.
 
-**PAYPAL HANDLE CONFIRMED (2026-07-15, Derek direct order)**: `paypal.me/derekfranciaco1` is the confirmed working PayPal handle. All payment links empire-wide use this handle. Do NOT use `techpetcage` for PayPal payment links.
+**PAYPAL HANDLE CONFIRMED (2026-09-05, Derek direct order — SUPERSEDES 2026-07-15 order)**: `paypal.me/techpetcage` is the confirmed working PayPal handle. All CCLDR payment links use this handle. `derekfranciaco1` is retired for CCLDR. Do NOT revert to `derekfranciaco1` without a new direct Derek order.
 
 ---
 

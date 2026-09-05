@@ -87,7 +87,7 @@
       if (origEl) origEl.textContent = total > 0 ? ('$' + base) : '';
       if (tagEl) tagEl.style.display = total > 0 ? 'inline' : 'none';
       if (tagEl) tagEl.textContent = total > 0 ? ('-' + total + '% applied') : '';
-      if (payBtn) payBtn.href = 'https://paypal.me/derekfranciaco1/' + final;
+      if (payBtn) payBtn.href = 'https://paypal.me/techpetcage/' + final;
     });
   };
 
