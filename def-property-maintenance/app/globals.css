@@ -1,0 +1,493 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── DEF Property Maintenance Design System ─────────────────────────────── */
+
+:root {
+  /* Brand Colors — Muskoka Slate + Warm Copper */
+  --def-night:       #0D1421;
+  --def-slate:       #161C2D;
+  --def-graphite:    #1F2638;
+  --def-stone:       #3A4060;
+  --def-smoke:       #656B80;
+  --def-mist:        #9BA3B8;
+  --def-cloud:       #CDD1DC;
+  --def-snow:        #F0F2F6;
+  --def-copper:      #A87840;
+  --def-copper-h:    #BC8C50;
+  --def-copper-d:    #845F30;
+  --def-forest:      #1A2E1C;
+  --def-pine:        #2D4A32;
+  --def-sage:        #4A7058;
+  --def-alert:       #C44B3B;
+  --def-alert-bg:    #2A1410;
+
+  /* Fonts */
+  --font-display: 'Playfair Display', 'Georgia', serif;
+  --font-body:    'Inter', 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-label:   'Space Grotesk', 'DM Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Surface tokens */
+  --surface-page:   var(--def-snow);
+  --surface-card:   #FFFFFF;
+  --surface-dark:   var(--def-night);
+  --surface-muted:  #E8EBF2;
+
+  /* Text tokens */
+  --text-primary:   var(--def-night);
+  --text-secondary: var(--def-stone);
+  --text-muted:     var(--def-mist);
+  --text-inverse:   var(--def-snow);
+  --text-copper:    var(--def-copper);
+
+  /* Border tokens */
+  --border-light:   rgba(58, 64, 96, 0.1);
+  --border-mid:     rgba(58, 64, 96, 0.2);
+  --border-dark:    rgba(58, 64, 96, 0.4);
+  --border-copper:  rgba(168, 120, 64, 0.28);
+
+  /* Spacing */
+  --section-y:    7rem;
+  --container-x:  clamp(1.5rem, 5vw, 6rem);
+
+  /* Radius */
+  --radius-sm:    0.375rem;
+  --radius-md:    0.75rem;
+  --radius-lg:    1.25rem;
+  --radius-xl:    2rem;
+
+  /* Transitions */
+  --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --transition-fast:  180ms var(--ease-out-expo);
+  --transition-base:  280ms var(--ease-out-expo);
+  --transition-slow:  480ms var(--ease-out-expo);
+}
+
+/* ── Base reset ─────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--def-snow);
+  color: var(--def-night);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Typography ─────────────────────────────────────────────────── */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ── Container ──────────────────────────────────────────────────── */
+
+.container-def {
+  width: 100%;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-x);
+  padding-right: var(--container-x);
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-x);
+  padding-right: var(--container-x);
+}
+
+/* ── Section spacing ─────────────────────────────────────────────── */
+
+.section-y {
+  padding-top: var(--section-y);
+  padding-bottom: var(--section-y);
+}
+
+/* ── Glass morphism ──────────────────────────────────────────────── */
+
+.glass-dark {
+  background: rgba(13, 20, 33, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-light {
+  background: rgba(240, 242, 246, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(58, 64, 96, 0.1);
+}
+
+/* ── Copper accent line ──────────────────────────────────────────── */
+
+.copper-line {
+  display: inline-block;
+  width: 3rem;
+  height: 2px;
+  background: var(--def-copper);
+  border-radius: 2px;
+}
+
+/* ── Eyebrow label ───────────────────────────────────────────────── */
+
+.eyebrow {
+  font-family: var(--font-label);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--def-copper);
+}
+
+/* ── Hero background ──────────────────────────────────────────────── */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(13, 20, 33, 0.2) 0%,
+    rgba(13, 20, 33, 0.55) 55%,
+    rgba(13, 20, 33, 0.96) 100%
+  );
+}
+
+/* ── DEF Button system ───────────────────────────────────────────── */
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2.25rem;
+  background: var(--def-copper);
+  color: white;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--def-copper);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--def-copper-h);
+  border-color: var(--def-copper-h);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(168, 120, 64, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2.25rem;
+  background: transparent;
+  color: var(--def-snow);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-md);
+  border: 1.5px solid rgba(240, 242, 246, 0.28);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: rgba(240, 242, 246, 0.08);
+  border-color: rgba(240, 242, 246, 0.55);
+  transform: translateY(-1px);
+}
+
+.btn-outline-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2.25rem;
+  background: transparent;
+  color: var(--def-night);
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--def-night);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-outline-dark:hover {
+  background: var(--def-night);
+  color: var(--def-snow);
+  transform: translateY(-1px);
+}
+
+/* ── Card base ───────────────────────────────────────────────────── */
+
+.card-def {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.card-def:hover {
+  border-color: var(--border-copper);
+  box-shadow: 0 8px 48px rgba(13, 20, 33, 0.10), 0 2px 8px rgba(13, 20, 33, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ── Input base ──────────────────────────────────────────────────── */
+
+.input-def {
+  width: 100%;
+  padding: 0.875rem 1.125rem;
+  background: white;
+  color: var(--def-night);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border-mid);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.input-def:focus {
+  border-color: var(--def-copper);
+  box-shadow: 0 0 0 3px rgba(168, 120, 64, 0.15);
+}
+
+.input-def::placeholder {
+  color: var(--def-mist);
+}
+
+/* ── DEF AI chat bubbles ──────────────────────────────────────────── */
+
+.chat-bubble-ai {
+  background: rgba(22, 28, 45, 0.08);
+  border: 1px solid rgba(58, 64, 96, 0.14);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+  padding: 1rem 1.25rem;
+  color: var(--def-night);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.chat-bubble-user {
+  background: var(--def-copper);
+  border-radius: var(--radius-lg) 0 var(--radius-lg) var(--radius-lg);
+  padding: 1rem 1.25rem;
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+/* ── Progress bar ────────────────────────────────────────────────── */
+
+.progress-bar {
+  height: 3px;
+  background: var(--border-light);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--def-copper), var(--def-copper-h));
+  border-radius: 99px;
+  transition: width 0.4s var(--ease-out-expo);
+}
+
+/* ── Option card ─────────────────────────────────────────────────── */
+
+.option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  background: white;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.option-card:hover,
+.option-card.selected {
+  border-color: var(--def-copper);
+  background: rgba(168, 120, 64, 0.05);
+  box-shadow: 0 0 0 3px rgba(168, 120, 64, 0.1);
+}
+
+.option-card.selected {
+  background: rgba(168, 120, 64, 0.08);
+}
+
+/* ── AI thinking dots ────────────────────────────────────────────── */
+
+.thinking-dots span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--def-copper);
+  border-radius: 50%;
+  animation: thinkingDot 1.4s ease-in-out infinite;
+}
+
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes thinkingDot {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40%           { transform: scale(1.0); opacity: 1; }
+}
+
+/* ── Scroll indicator ────────────────────────────────────────────── */
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+
+.scroll-indicator {
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+/* ── Horizontal rule ─────────────────────────────────────────────── */
+
+.hr-def {
+  border: none;
+  height: 1px;
+  background: var(--border-light);
+}
+
+/* ── Status badge ────────────────────────────────────────────────── */
+
+.status-online {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  background: rgba(45, 74, 50, 0.12);
+  border: 1px solid rgba(74, 112, 88, 0.25);
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--def-sage);
+  font-family: var(--font-label);
+  letter-spacing: 0.08em;
+}
+
+.status-dot-green {
+  width: 6px;
+  height: 6px;
+  background: var(--def-sage);
+  border-radius: 50%;
+  animation: pulse-status 2s ease-in-out infinite;
+}
+
+@keyframes pulse-status {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* ── FHI floor designation ───────────────────────────────────────── */
+
+.fhi-designation {
+  font-family: var(--font-label);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(155, 163, 184, 0.45);
+}
+
+/* ── Property 360 tech grid ──────────────────────────────────────── */
+
+.tech-card {
+  background: rgba(31, 38, 56, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  transition: all var(--transition-base);
+}
+
+.tech-card:hover {
+  border-color: rgba(168, 120, 64, 0.25);
+  background: rgba(31, 38, 56, 0.8);
+}
+
+/* ── Area badge ──────────────────────────────────────────────────── */
+
+.area-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4375rem 0.875rem;
+  background: rgba(74, 112, 88, 0.08);
+  border: 1px solid rgba(74, 112, 88, 0.2);
+  border-radius: 99px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--def-sage);
+  white-space: nowrap;
+  font-family: var(--font-label);
+}
