@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FHI Executive War Room</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:#050505;
+  color:#eee;
+  font-family:system-ui,-apple-system,Segoe UI,sans-serif
+}
+header{
+  padding:24px;
+  text-align:center;
+  border-bottom:1px solid #222
+}
+h1{margin:0;color:#d4af37;letter-spacing:3px}
+.subtitle{color:#888;margin-top:8px}
+.status{
+  display:inline-block;
+  margin-top:12px;
+  padding:6px 12px;
+  border:1px solid #245b39;
+  border-radius:20px;
+  color:#5cff9a;
+  font-size:12px
+}
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:24px
+}
+.council{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px
+}
+.card{
+  padding:20px;
+  background:#0d0d0d;
+  border:1px solid #292929;
+  border-radius:14px;
+  cursor:pointer
+}
+.card.active{border-color:#d4af37;box-shadow:0 0 20px #d4af3720}
+.card h2{margin:0 0 5px}
+.role{color:#d4af37}
+.domains{color:#999;font-size:13px;line-height:1.5}
+.panel{
+  margin-top:20px;
+  padding:22px;
+  background:#0b0b0b;
+  border:1px solid #222;
+  border-radius:14px
+}
+#identity{color:#d4af37}
+textarea{
+  width:100%;
+  min-height:110px;
+  margin-top:14px;
+  padding:14px;
+  background:#111;
+  color:#fff;
+  border:1px solid #333;
+  border-radius:10px;
+  resize:vertical
+}
+button{
+  margin-top:12px;
+  padding:12px 18px;
+  border-radius:8px;
+  border:1px solid #d4af37;
+  background:#161208;
+  color:#d4af37;
+  cursor:pointer
+}
+button:hover{background:#241d09}
+#result{
+  white-space:pre-wrap;
+  margin-top:18px;
+  padding:16px;
+  background:#050505;
+  border:1px solid #222;
+  border-radius:10px;
+  color:#ccc;
+  min-height:80px
+}
+.warning{
+  margin-top:15px;
+  padding:12px;
+  border-left:3px solid #d4af37;
+  color:#aaa;
+  font-size:13px
+}
+@media(max-width:700px){
+  .council{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FHI EXECUTIVE WAR ROOM</h1>
+  <div class="subtitle">Living Empire — Executive Intelligence Interface</div>
+  <div class="status">LOCAL / PROPOSAL-ONLY / HUMAN AUTHORITY</div>
+</header>
+
+<main>
+  <section class="council" id="council"></section>
+
+  <section class="panel">
+    <div>ACTIVE EXECUTIVE</div>
+    <h2 id="identity">Loading...</h2>
+    <div id="description"></div>
+
+    <textarea id="question"
+      placeholder="Ask the executive council a business, product, security, automation, or revenue question..."></textarea>
+
+    <button id="ask">ASK THE COUNCIL</button>
+
+    <div class="warning">
+      This interface may analyze and generate proposals. It does not authorize
+      payments, credential changes, legal filings, production deployment,
+      destructive actions, or other consequential execution.
+    </div>
+
+    <div id="result">Waiting for your question.</div>
+  </section>
+</main>
+
+<script>
+let avatars = [];
+let active = null;
+
+async function load() {
+  const response = await fetch("/api/avatars");
+  const data = await response.json();
+
+  if (!data.ok) throw new Error(data.error);
+
+  avatars = data.avatars;
+  active = avatars[0];
+
+  render();
+}
+
+function render() {
+  const council = document.getElementById("council");
+
+  council.innerHTML = avatars.map(a => `
+    <div class="card ${a.id === active.id ? "active" : ""}" data-id="${a.id}">
+      <h2>${a.name}</h2>
+      <div class="role">${a.archetype}</div>
+      <p class="domains">${a.domains.join(" · ")}</p>
+    </div>
+  `).join("");
+
+  document.querySelectorAll(".card").forEach(card => {
+    card.onclick = () => {
+      active = avatars.find(a => a.id === card.dataset.id);
+      render();
+    };
+  });
+
+  document.getElementById("identity").textContent =
+    `${active.name} — ${active.archetype}`;
+
+  document.getElementById("description").textContent =
+    active.personality.strength;
+}
+
+document.getElementById("ask").onclick = async () => {
+  const box = document.getElementById("result");
+  const question = document.getElementById("question").value.trim();
+
+  if (!question) {
+    box.textContent = "Enter a question first.";
+    return;
+  }
+
+  box.textContent = "Council deliberation in progress...";
+
+  try {
+    const response = await fetch("/api/council", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        question:
+          `Active executive: ${active.name} (${active.archetype}).\n\n` +
+          `Executive specialization: ${active.domains.join(", ")}.\n\n` +
+          `User question: ${question}`
+      })
+    });
+
+    const data = await response.json();
+
+    if (!data.ok) {
+      box.textContent = `Council error:\n${data.error}`;
+      return;
+    }
+
+    box.textContent =
+      `MODE: ${data.mode}\n` +
+      `HUMAN APPROVAL REQUIRED: ${data.humanApprovalRequired}\n\n` +
+      `${data.result.output || "(No proposal output returned.)"}`;
+  } catch (error) {
+    box.textContent = `Connection error:\n${error.message}`;
+  }
+};
+
+load().catch(error => {
+  document.getElementById("result").textContent =
+    `Avatar initialization failed:\n${error.message}`;
+});
+</script>
+
+</body>
+</html>
