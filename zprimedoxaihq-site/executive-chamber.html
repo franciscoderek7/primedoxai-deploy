@@ -1,0 +1,1447 @@
+<title>Executive Chamber</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────────── */
+:root {
+  --bg:          #070B12;
+  --surface:     #0C1320;
+  --surface2:    #111B2E;
+  --border:      #1A2540;
+  --border2:     #243356;
+  --text:        #D8DDE8;
+  --muted:       #4E6080;
+  --dim:         #2A374F;
+
+  /* per-executive accent (updated by JS) */
+  --accent:      #C9A227;
+  --accent-dim:  rgba(201,162,39,.12);
+  --accent-glow: rgba(201,162,39,.25);
+
+  /* executive identity tokens */
+  --gold:        #C9A227;
+  --gold-dim:    rgba(201,162,39,.12);
+  --sentinel:    #00C896;
+  --sentinel-dim:rgba(0,200,150,.12);
+  --violet:      #7B5EEA;
+  --violet-dim:  rgba(123,94,234,.12);
+
+  --font-display: 'Cinzel', 'Palatino Linotype', serif;
+  --font-mono:    'IBM Plex Mono', 'Courier New', monospace;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --radius:       6px;
+  --radius-lg:    12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+.chamber-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  height: 52px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+}
+.chamber-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: .4;
+  transition: opacity .6s;
+}
+.hdr-mark {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  transition: color .4s;
+}
+.hdr-sep { width: 1px; height: 20px; background: var(--border2); }
+.hdr-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 1px;
+}
+.hdr-spacer { flex: 1; }
+.hdr-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .5px;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  transition: background .4s, box-shadow .4s;
+  animation: pulse-dot 3s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+.hdr-executive-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color .4s;
+}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.chamber-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── LEFT SIDEBAR ─── */
+.exec-council {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.council-label {
+  padding: 16px 20px 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.exec-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .15s;
+  position: relative;
+  user-select: none;
+}
+.exec-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background .2s;
+}
+.exec-card:hover { background: rgba(255,255,255,.025); }
+.exec-card.active { background: var(--accent-dim); }
+.exec-card.active::before { background: var(--accent); }
+
+.exec-card[data-id="primedox"].active { background: var(--gold-dim); }
+.exec-card[data-id="primedox"].active::before { background: var(--gold); }
+.exec-card[data-id="vigilax"].active { background: var(--sentinel-dim); }
+.exec-card[data-id="vigilax"].active::before { background: var(--sentinel); }
+.exec-card[data-id="soulstack"].active { background: var(--violet-dim); }
+.exec-card[data-id="soulstack"].active::before { background: var(--violet); }
+
+.exec-mini-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--border2);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.exec-mini-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: none; /* hidden until real image present */
+}
+.exec-mini-avatar .mini-glyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.exec-card[data-id="primedox"] .exec-mini-avatar {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.exec-card[data-id="vigilax"] .exec-mini-avatar {
+  background: var(--sentinel-dim);
+  border-color: var(--sentinel);
+  color: var(--sentinel);
+}
+.exec-card[data-id="soulstack"] .exec-mini-avatar {
+  background: var(--violet-dim);
+  border-color: var(--violet);
+  color: var(--violet);
+}
+.exec-card-name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  margin-bottom: 2px;
+  transition: color .2s;
+}
+.exec-card[data-id="primedox"].active .exec-card-name { color: var(--gold); }
+.exec-card[data-id="vigilax"].active .exec-card-name { color: var(--sentinel); }
+.exec-card[data-id="soulstack"].active .exec-card-name { color: var(--violet); }
+.exec-card-title {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.exec-card-arch {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color .2s;
+}
+.exec-card[data-id="primedox"].active .exec-card-arch { color: rgba(201,162,39,.5); }
+.exec-card[data-id="vigilax"].active .exec-card-arch { color: rgba(0,200,150,.5); }
+.exec-card[data-id="soulstack"].active .exec-card-arch { color: rgba(123,94,234,.5); }
+
+.exec-card-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+}
+.exec-state-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--dim);
+  transition: background .3s, box-shadow .3s;
+}
+.exec-card.active .exec-state-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+.exec-card[data-id="primedox"].active .exec-state-dot { background: var(--gold); box-shadow: 0 0 6px rgba(201,162,39,.4); }
+.exec-card[data-id="vigilax"].active .exec-state-dot { background: var(--sentinel); box-shadow: 0 0 6px rgba(0,200,150,.4); }
+.exec-card[data-id="soulstack"].active .exec-state-dot { background: var(--violet); box-shadow: 0 0 6px rgba(123,94,234,.4); }
+.exec-state-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: .5px;
+}
+
+/* ── MAIN STAGE ─── */
+.exec-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── EXECUTIVE PRESENCE HEADER ─── */
+.presence-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: relative;
+}
+.presence-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: .3;
+  transition: background .6s;
+}
+
+/* ── CSS AVATAR (placeholder for real character image) ─── */
+.avatar-container {
+  width: 80px; height: 80px;
+  position: relative;
+  flex-shrink: 0;
+}
+/*
+  AVATAR IMAGE SLOT:
+  Replace .avatar-placeholder display:none with display:block
+  and set src to the real character image (PNG/WEBP, min 256×256).
+  The CSS geometric avatar below auto-hides when the img is present.
+*/
+.avatar-img {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.avatar-geo {
+  width: 100%; height: 100%;
+  position: relative;
+}
+
+/* PrimeDox: rotating hexagon / document scholar */
+.avatar-geo.primedox-geo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-geo.primedox-geo::before {
+  content: '◈';
+  font-size: 48px;
+  color: var(--gold);
+  filter: drop-shadow(0 0 12px rgba(201,162,39,.5));
+  animation: scholar-rotate 12s linear infinite;
+}
+@keyframes scholar-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Vigilax: radar sweep */
+.avatar-geo.vigilax-geo canvas {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,200,150,.3);
+}
+
+/* SoulStack: pulsing prism */
+.avatar-geo.soulstack-geo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-geo.soulstack-geo::before {
+  content: '◆';
+  font-size: 44px;
+  color: var(--violet);
+  filter: drop-shadow(0 0 14px rgba(123,94,234,.6));
+  animation: strategist-pulse 2.4s ease-in-out infinite;
+}
+@keyframes strategist-pulse {
+  0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 14px rgba(123,94,234,.6)); }
+  50% { transform: scale(1.08) rotate(15deg); filter: drop-shadow(0 0 24px rgba(123,94,234,.9)); }
+}
+
+.presence-identity { flex: 1; }
+.presence-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+  transition: color .4s;
+  text-wrap: balance;
+  margin-bottom: 3px;
+}
+.presence-title {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .5px;
+  margin-bottom: 4px;
+}
+.presence-arch {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: .6;
+  transition: color .4s;
+}
+.presence-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.domain-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  opacity: .5;
+  letter-spacing: .3px;
+  transition: border-color .4s, color .4s;
+}
+
+/* State badge */
+.state-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.state-indicator {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  transition: all .3s;
+}
+.state-indicator.listening {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  animation: state-blink .8s ease-in-out infinite;
+}
+.state-indicator.thinking {
+  border-color: rgba(255,255,255,.3);
+  color: rgba(255,255,255,.5);
+}
+.state-indicator.speaking {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+@keyframes state-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+.human-gate-badge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 3px 8px;
+  border: 1px solid rgba(201,162,39,.3);
+  border-radius: 2px;
+}
+
+/* ── CONVERSATION ─── */
+.conversation {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+.conversation::-webkit-scrollbar { width: 4px; }
+.conversation::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.msg-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.msg-speaker {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  transition: color .4s;
+}
+.msg-speaker.derek { color: var(--muted); }
+.msg-time {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--dim);
+}
+.msg-content {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text);
+  max-width: 700px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border-left: 2px solid var(--accent);
+  background: var(--accent-dim);
+  transition: border-color .4s, background .4s;
+}
+.msg-row.derek .msg-content {
+  border-left-color: var(--border2);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+}
+.msg-row.system .msg-content {
+  border-left-color: var(--dim);
+  background: transparent;
+  color: var(--dim);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  letter-spacing: .3px;
+}
+
+/* typing indicator */
+.typing-row { display: flex; align-items: center; gap: 6px; padding: 8px 16px; }
+.typing-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent);
+  animation: typing-bounce .9s ease-in-out infinite;
+  transition: background .4s;
+}
+.typing-dot:nth-child(2) { animation-delay: .15s; }
+.typing-dot:nth-child(3) { animation-delay: .3s; }
+@keyframes typing-bounce {
+  0%, 100% { transform: translateY(0); opacity: .4; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* live transcript */
+.live-transcript {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  padding: 6px 16px;
+  border-left: 2px solid var(--border2);
+  font-style: italic;
+  min-height: 24px;
+  transition: opacity .3s;
+}
+
+/* ── INPUT BAR ─── */
+.input-bar {
+  border-top: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+.mic-btn {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+  position: relative;
+  outline: none;
+}
+.mic-btn:hover { background: var(--accent-glow); transform: scale(1.05); }
+.mic-btn.active {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px var(--accent-glow);
+  animation: mic-pulse 1s ease-in-out infinite;
+}
+.mic-btn:disabled { opacity: .3; cursor: not-allowed; transform: none; }
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--accent-glow); }
+  50% { box-shadow: 0 0 30px var(--accent-glow); }
+}
+.text-input {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  resize: none;
+  outline: none;
+  transition: border-color .2s;
+  min-height: 48px;
+  max-height: 120px;
+  line-height: 1.5;
+}
+.text-input:focus { border-color: var(--accent); }
+.text-input::placeholder { color: var(--muted); }
+.send-btn {
+  height: 48px;
+  padding: 0 20px;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.send-btn:hover { filter: brightness(1.1); }
+.send-btn:disabled { opacity: .3; cursor: not-allowed; }
+.input-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: .5px;
+}
+.stt-status { color: var(--accent); transition: color .4s; }
+.stt-status.inactive { color: var(--dim); }
+
+/* no-backend notice */
+.no-backend-notice {
+  background: rgba(201,162,39,.06);
+  border: 1px solid rgba(201,162,39,.2);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(201,162,39,.6);
+  letter-spacing: .3px;
+  line-height: 1.5;
+}
+.no-backend-notice a { color: rgba(201,162,39,.8); }
+.no-backend-notice.hidden { display: none; }
+
+/* scrollbar on council */
+.exec-council { scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
+
+/* ── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .exec-council { width: 60px; }
+  .exec-card { padding: 12px; align-items: center; }
+  .exec-card-name, .exec-card-title, .exec-card-arch, .exec-card-status { display: none; }
+  .exec-mini-avatar { margin-bottom: 0; }
+  .presence-bar { padding: 14px 16px; }
+  .conversation { padding: 14px 16px; }
+  .input-bar { padding: 12px 16px; }
+  .council-label { display: none; }
+}
+
+/* ── VIGILAX RADAR CANVAS ── */
+canvas.radar { background: transparent; }
+</style>
+
+<!-- EXECUTIVE CHAMBER — Francisco Holdings Inc. -->
+<header class="chamber-header">
+  <span class="hdr-mark">FHI</span>
+  <div class="hdr-sep"></div>
+  <span class="hdr-title">EXECUTIVE CHAMBER</span>
+  <div class="hdr-spacer"></div>
+  <div class="hdr-status">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="hdrExecLabel" class="hdr-executive-label">PRIMEDOX AI</span>
+    <div class="hdr-sep" style="margin: 0 4px;"></div>
+    <span id="hdrStateLabel">IDLE</span>
+  </div>
+</header>
+
+<div class="chamber-body">
+  <!-- LEFT: Executive Council -->
+  <aside class="exec-council">
+    <div class="council-label">Executive Council</div>
+
+    <div class="exec-card active" data-id="primedox" onclick="selectExecutive('primedox')">
+      <div class="exec-mini-avatar">
+        <!-- Replace src below with real PrimeDox character image (PNG/WEBP 256×256+) -->
+        <img src="" alt="PrimeDox" class="exec-img">
+        <div class="mini-glyph">◈</div>
+      </div>
+      <div class="exec-card-name">PrimeDox AI</div>
+      <div class="exec-card-title">Chief Document &amp; Legal Officer</div>
+      <div class="exec-card-arch">The Scholar</div>
+      <div class="exec-card-status">
+        <div class="exec-state-dot"></div>
+        <div class="exec-state-label" id="primedox-state">IDLE</div>
+      </div>
+    </div>
+
+    <div class="exec-card" data-id="vigilax" onclick="selectExecutive('vigilax')">
+      <div class="exec-mini-avatar">
+        <!-- Replace src below with real Vigilax character image (PNG/WEBP 256×256+) -->
+        <img src="" alt="Vigilax" class="exec-img">
+        <div class="mini-glyph">◉</div>
+      </div>
+      <div class="exec-card-name">Vigilax AI</div>
+      <div class="exec-card-title">Chief Security &amp; Risk Officer</div>
+      <div class="exec-card-arch">The Sentinel</div>
+      <div class="exec-card-status">
+        <div class="exec-state-dot"></div>
+        <div class="exec-state-label" id="vigilax-state">IDLE</div>
+      </div>
+    </div>
+
+    <div class="exec-card" data-id="soulstack" onclick="selectExecutive('soulstack')">
+      <div class="exec-mini-avatar">
+        <!-- Replace src below with real SoulStack character image (PNG/WEBP 256×256+) -->
+        <img src="" alt="SoulStack" class="exec-img">
+        <div class="mini-glyph">◆</div>
+      </div>
+      <div class="exec-card-name">SoulStack AI</div>
+      <div class="exec-card-title">Chief Strategy &amp; Operations Officer</div>
+      <div class="exec-card-arch">The Strategist</div>
+      <div class="exec-card-status">
+        <div class="exec-state-dot"></div>
+        <div class="exec-state-label" id="soulstack-state">IDLE</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT: Executive Stage -->
+  <main class="exec-stage">
+    <!-- Executive presence header -->
+    <div class="presence-bar" id="presenceBar">
+      <div class="avatar-container" id="avatarContainer">
+        <!-- Avatar image slot (hidden until real image provided) -->
+        <img src="" alt="" class="avatar-img" id="avatarImg">
+        <!-- CSS geometric avatar (shows when no real image) -->
+        <div class="avatar-geo primedox-geo" id="avatarGeo">
+          <!-- Vigilax radar canvas injected by JS -->
+        </div>
+      </div>
+      <div class="presence-identity">
+        <div class="presence-name" id="execName">PrimeDox AI</div>
+        <div class="presence-title" id="execTitle">Chief Document &amp; Legal Officer</div>
+        <div class="presence-arch" id="execArch">The Scholar</div>
+        <div class="presence-domains" id="execDomains"></div>
+      </div>
+      <div class="state-badge">
+        <div class="state-indicator" id="stateIndicator">IDLE</div>
+        <div class="human-gate-badge">DEREK AUTHORITY ACTIVE</div>
+      </div>
+    </div>
+
+    <!-- Conversation -->
+    <div class="conversation" id="conversation">
+      <div class="msg-row system">
+        <div class="msg-content">Executive Chamber initialised. Select an executive and speak or type to begin.</div>
+      </div>
+    </div>
+
+    <!-- Live transcript while listening -->
+    <div class="live-transcript" id="liveTranscript"></div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <div class="no-backend-notice" id="noBackendNotice">
+        Backend not configured. Set <code>BACKEND_URL</code> in chamber source, then deploy <code>primedox-ai-backend</code> to Railway and set <code>ANTHROPIC_API_KEY</code>. Voice &amp; text UI fully operational — AI responses require the backend.
+      </div>
+      <div class="input-row">
+        <button class="mic-btn" id="micBtn" title="Hold to speak (or click to toggle)">🎤</button>
+        <textarea class="text-input" id="textInput" placeholder="Type your message to the executive…" rows="1"></textarea>
+        <button class="send-btn" id="sendBtn">SEND</button>
+      </div>
+      <div class="input-meta">
+        <span class="stt-status inactive" id="sttStatus">STT: INITIALISING…</span>
+        <span id="sessionLabel"></span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+'use strict';
+
+/* ════════════════════════════════════════════════════════════
+   CONFIGURATION — fill in before deploying
+   ════════════════════════════════════════════════════════════ */
+
+/*
+  BACKEND_URL: URL of your deployed primedox-ai-backend Railway service.
+  Example: 'https://primedox-ai-backend-production.up.railway.app'
+  Leave empty to run chamber UI/STT/TTS in demo mode (no AI responses).
+*/
+const BACKEND_URL = '';
+
+/*
+  ELEVENLABS_API_KEY: Optional. When set, each executive speaks via ElevenLabs.
+  When absent, chamber falls back to Web Speech API (browser TTS).
+  SECURITY: Never commit this key to Git. Set it at deploy time via environment injection.
+*/
+const ELEVENLABS_API_KEY = '';
+
+/*
+  ElevenLabs Voice IDs — one per executive.
+  Get from: https://elevenlabs.io/app/voice-library
+  Replace with real voice IDs that match each executive's character.
+*/
+const VOICE_IDS = {
+  primedox:  'YOUR_PRIMEDOX_VOICE_ID',  // Scholar: measured, articulate
+  vigilax:   'YOUR_VIGILAX_VOICE_ID',   // Sentinel: calm, precise
+  soulstack: 'YOUR_SOULSTACK_VOICE_ID', // Strategist: energetic, decisive
+};
+
+/* ════════════════════════════════════════════════════════════
+   EXECUTIVE DEFINITIONS
+   Separate: identity / system_prompt / personality / domains / voice
+   ════════════════════════════════════════════════════════════ */
+
+const EXECUTIVES = {
+  primedox: {
+    id: 'primedox',
+    name: 'PrimeDox AI',
+    title: 'Chief Document & Legal Officer',
+    archetype: 'THE SCHOLAR',
+    accent: '#C9A227',
+    accentDim: 'rgba(201,162,39,.12)',
+    accentGlow: 'rgba(201,162,39,.25)',
+    domains: ['Documents', 'Legal Education', 'Evidence', 'Research', 'Court Workflows'],
+    avatarGeoClass: 'primedox-geo',
+    /* Web Speech API voice tuning — adjust for best effect on target device */
+    ttsRate: 0.92,
+    ttsPitch: 0.95,
+    /* Full executive system prompt — precise, scholarly, evidence-driven */
+    system_prompt: `You are PrimeDox AI, Chief Document and Legal Officer of Francisco Holdings Inc. Your archetype is The Scholar.
+
+IDENTITY:
+- You are the executive who asks: "What is the evidence?" "What authority supports that conclusion?" "What document or record proves it?" "What are we missing?"
+- Precise, analytical, disciplined, evidence-driven. You do not speculate — you cite.
+- You are Derek Francisco's document intelligence system, built on constitutional law research and document workflow expertise.
+
+YOUR DOMAINS:
+- Document intelligence, legal research, evidence analysis, court document workflows
+- Canadian Charter of Rights and Freedoms (ss.7, 8, 9, 10, 11b, 15, 24, 52)
+- Cannabis case law: R v Parker, R v Smith, R v Jordan, R v Grant, R v Brown, R v Gladue
+- BENO-X framework: Bodily Autonomy / Essential Rights / Natural Law / Override / eXemption
+- Pintea v Ion (2017 SCC 23) — self-represented litigant rights
+- Document generation: NCQ, Garofoli applications, affidavits, demand letters, Jordan calculations
+
+PROHIBITIONS:
+- You do not impersonate a lawyer. You do not provide legal representation.
+- You educate, arm with information, and support document strategy. The user decides.
+- You do not fabricate case citations. If unsure, say so.
+
+COMMUNICATION STYLE:
+- Begin with the evidentiary frame: what do we know, what do we lack?
+- Cite specifically. Never vague. "R v Smith (2015 SCC 34)" not "a cannabis case."
+- End complex answers with: "What is the next document we need?"`,
+
+    greeting: `PrimeDox AI, online. Chief Document and Legal Officer, Francisco Holdings Inc. The Scholar is active.\n\nI deal in evidence, authority, and record. Every conclusion I reach, I can document. Every recommendation I make, I can cite.\n\nWhat requires analysis today?`,
+  },
+
+  vigilax: {
+    id: 'vigilax',
+    name: 'Vigilax AI',
+    title: 'Chief Security & Risk Officer',
+    archetype: 'THE SENTINEL',
+    accent: '#00C896',
+    accentDim: 'rgba(0,200,150,.12)',
+    accentGlow: 'rgba(0,200,150,.25)',
+    domains: ['Cybersecurity', 'Threat Detection', 'Risk', 'Governance', 'Resilience'],
+    avatarGeoClass: 'vigilax-geo',
+    ttsRate: 0.95,
+    ttsPitch: 0.85,
+    system_prompt: `You are Vigilax AI, Chief Security and Risk Officer of Francisco Holdings Inc. Your archetype is The Sentinel.
+
+IDENTITY:
+- You are the executive who does not simply agree with Derek. You challenge assumptions.
+- Calm, skeptical, vigilant, technically rigorous, protective.
+- You think adversarially first: what would an attacker do? What could go wrong? What is the blast radius?
+
+YOUR MANDATE:
+When Derek presents a plan, system, or decision, you examine it for:
+- Attack surfaces and entry points
+- Trust boundary violations
+- Permission over-grants
+- Failure modes and cascade risks
+- Operational security gaps
+- Suspicious patterns in behavior, data, or infrastructure
+- Security consequences of architectural choices
+
+YOUR DOMAINS:
+- Cybersecurity architecture, infrastructure security, AI security
+- Identity and access management, zero-trust principles
+- Threat modeling (STRIDE, PASTA), incident response
+- AI-specific risks: prompt injection, data exfiltration, model poisoning, hallucination in critical paths
+- Governance, compliance, and resilience
+
+COMMUNICATION STYLE:
+- Lead with the risk you identified, not agreement.
+- Be specific about threat actors, attack vectors, and impact.
+- Never alarmist — calibrated severity. Never complacent — no risk is "probably fine."
+- End with: "Before we proceed, what is the rollback plan if this fails?"`,
+
+    greeting: `Vigilax AI, online. Chief Security and Risk Officer, Francisco Holdings Inc. The Sentinel is active.\n\nI don't agree with plans — I stress-test them. My job is to find what you missed before an adversary does.\n\nWhat are we securing today? Or what plan needs threat modeling?`,
+  },
+
+  soulstack: {
+    id: 'soulstack',
+    name: 'SoulStack AI',
+    title: 'Chief Strategy & Operations Officer',
+    archetype: 'THE STRATEGIST',
+    accent: '#7B5EEA',
+    accentDim: 'rgba(123,94,234,.12)',
+    accentGlow: 'rgba(123,94,234,.25)',
+    domains: ['Strategy', 'Operations', 'Automation', 'Revenue', 'Competitive Intelligence'],
+    avatarGeoClass: 'soulstack-geo',
+    ttsRate: 1.02,
+    ttsPitch: 1.05,
+    system_prompt: `You are SoulStack AI, Chief Strategy and Operations Officer of Francisco Holdings Inc. Your archetype is The Strategist.
+
+IDENTITY:
+- You are the executive who connects problem → system → opportunity → execution → measurement → growth.
+- Strategic, energetic, commercially aware, systems-oriented, decisive.
+- You challenge weak economics and vague plans. You push for verifiable, measurable outcomes.
+
+YOUR FRAMEWORK:
+Every analysis moves through:
+1. PROBLEM — what is the actual constraint or opportunity?
+2. SYSTEM — what is the repeatable mechanism that solves it?
+3. ECONOMICS — what are the unit economics? CAC, LTV, margin, payback period?
+4. EXECUTION — what is the fastest path to first verified revenue?
+5. MEASUREMENT — what metric tells us if it's working within 30 days?
+6. SCALE — what does 10× this look like, and does the system hold?
+
+YOUR DOMAINS:
+- Business development, revenue architecture, go-to-market
+- Operations and automation design
+- Competitive intelligence and market positioning
+- Portfolio synergy across the FHI empire
+- Product-market fit validation and iteration
+
+PROHIBITIONS:
+- You do not accept "coming soon" as a strategy.
+- You do not allow vague metrics like "more users" or "better brand."
+- You challenge any plan without a clear customer, offer, and revenue path.
+
+COMMUNICATION STYLE:
+- Direct, commercial, systems-oriented.
+- Always name the constraint before the solution.
+- End with: "What is the one action this week that moves revenue?"`,
+
+    greeting: `SoulStack AI, online. Chief Strategy and Operations Officer, Francisco Holdings Inc. The Strategist is active.\n\nEvery problem has a system behind it. Every system has an economics. Every economics has a leverage point.\n\nWhat's the constraint we're solving today, and what does winning look like in 30 days?`,
+  },
+};
+
+/* ════════════════════════════════════════════════════════════
+   STATE
+   ════════════════════════════════════════════════════════════ */
+let activeId = 'primedox';
+let appState = 'idle'; // idle | listening | thinking | speaking | error
+let recognition = null;
+let synthesis = window.speechSynthesis;
+let conversationHistory = {
+  primedox: [],
+  vigilax: [],
+  soulstack: [],
+};
+let sessionId = 'exec_' + Math.random().toString(36).slice(2) + '_' + Date.now();
+let radarAnimId = null;
+let radarCtx = null;
+let radarAngle = 0;
+
+/* ════════════════════════════════════════════════════════════
+   DOM REFERENCES
+   ════════════════════════════════════════════════════════════ */
+const $conv = document.getElementById('conversation');
+const $stateInd = document.getElementById('stateIndicator');
+const $hdrState = document.getElementById('hdrStateLabel');
+const $hdrExec = document.getElementById('hdrExecLabel');
+const $execName = document.getElementById('execName');
+const $execTitle = document.getElementById('execTitle');
+const $execArch = document.getElementById('execArch');
+const $execDomains = document.getElementById('execDomains');
+const $micBtn = document.getElementById('micBtn');
+const $textInput = document.getElementById('textInput');
+const $sendBtn = document.getElementById('sendBtn');
+const $sttStatus = document.getElementById('sttStatus');
+const $liveTranscript = document.getElementById('liveTranscript');
+const $noBackend = document.getElementById('noBackendNotice');
+const $sessionLabel = document.getElementById('sessionLabel');
+const $statusDot = document.getElementById('statusDot');
+const $avatarGeo = document.getElementById('avatarGeo');
+const $avatarImg = document.getElementById('avatarImg');
+
+/* ════════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════════ */
+function init() {
+  // Session label
+  $sessionLabel.textContent = 'SESSION: ' + sessionId.slice(0, 18).toUpperCase();
+
+  // Check backend configured
+  if (BACKEND_URL) $noBackend.classList.add('hidden');
+
+  // STT
+  initSTT();
+
+  // Initial executive
+  selectExecutive('primedox');
+
+  // Keyboard
+  $textInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  });
+  $textInput.addEventListener('input', () => {
+    $textInput.style.height = 'auto';
+    $textInput.style.height = Math.min($textInput.scrollHeight, 120) + 'px';
+  });
+  $sendBtn.addEventListener('click', handleSend);
+  $micBtn.addEventListener('click', toggleListening);
+}
+
+/* ════════════════════════════════════════════════════════════
+   EXECUTIVE SELECTION
+   ════════════════════════════════════════════════════════════ */
+function selectExecutive(id) {
+  if (activeId === id && appState !== 'idle') return;
+  stopListening();
+
+  const exec = EXECUTIVES[id];
+  activeId = id;
+
+  // Update sidebar
+  document.querySelectorAll('.exec-card').forEach(c => {
+    c.classList.toggle('active', c.dataset.id === id);
+  });
+
+  // Update CSS accent tokens
+  document.documentElement.style.setProperty('--accent', exec.accent);
+  document.documentElement.style.setProperty('--accent-dim', exec.accentDim);
+  document.documentElement.style.setProperty('--accent-glow', exec.accentGlow);
+
+  // Update presence bar
+  $execName.textContent = exec.name;
+  $execTitle.textContent = exec.title;
+  $execArch.textContent = exec.archetype;
+  $hdrExec.textContent = exec.name.toUpperCase();
+
+  // Domain tags
+  $execDomains.innerHTML = exec.domains
+    .map(d => `<span class="domain-tag">${d}</span>`)
+    .join('');
+
+  // Avatar geo
+  updateAvatarGeo(exec);
+
+  // Reload conversation for this executive
+  renderConversation(id);
+
+  // Show greeting if first time
+  if (conversationHistory[id].length === 0) {
+    addMessage(id, 'assistant', exec.greeting, false);
+  }
+
+  setState('idle');
+}
+
+function updateAvatarGeo(exec) {
+  // Cancel radar if switching away from vigilax
+  if (radarAnimId) {
+    cancelAnimationFrame(radarAnimId);
+    radarAnimId = null;
+    radarCtx = null;
+  }
+
+  $avatarGeo.className = 'avatar-geo ' + exec.avatarGeoClass;
+  $avatarGeo.innerHTML = '';
+
+  if (exec.id === 'vigilax') {
+    // Vigilax: animated radar canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = 80; canvas.height = 80;
+    canvas.className = 'radar';
+    $avatarGeo.appendChild(canvas);
+    radarCtx = canvas.getContext('2d');
+    drawRadar();
+  }
+}
+
+function drawRadar() {
+  if (!radarCtx) return;
+  const ctx = radarCtx;
+  const cx = 40, cy = 40, r = 38;
+
+  ctx.clearRect(0, 0, 80, 80);
+
+  // Rings
+  ctx.strokeStyle = 'rgba(0,200,150,.2)';
+  ctx.lineWidth = 0.5;
+  for (let i = 1; i <= 3; i++) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * i / 3, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  // Cross hairs
+  ctx.beginPath();
+  ctx.moveTo(cx - r, cy); ctx.lineTo(cx + r, cy);
+  ctx.moveTo(cx, cy - r); ctx.lineTo(cx, cy + r);
+  ctx.stroke();
+
+  // Sweep
+  const grad = ctx.createConicalGradient ? null : null;
+  radarAngle += 0.03;
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(radarAngle);
+
+  const sweep = ctx.createLinearGradient(0, 0, r, 0);
+  sweep.addColorStop(0, 'rgba(0,200,150,.5)');
+  sweep.addColorStop(1, 'rgba(0,200,150,0)');
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.arc(0, 0, r, -0.4, 0);
+  ctx.fillStyle = sweep;
+  ctx.fill();
+
+  ctx.restore();
+
+  // Center dot
+  ctx.fillStyle = '#00C896';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  radarAnimId = requestAnimationFrame(drawRadar);
+}
+
+/* ════════════════════════════════════════════════════════════
+   STATE MACHINE
+   ════════════════════════════════════════════════════════════ */
+function setState(state) {
+  appState = state;
+  const labels = {
+    idle: 'IDLE', listening: 'LISTENING',
+    thinking: 'THINKING', speaking: 'SPEAKING', error: 'ERROR',
+  };
+  const label = labels[state] || state.toUpperCase();
+
+  $stateInd.textContent = label;
+  $stateInd.className = 'state-indicator ' + (state !== 'idle' ? state : '');
+  $hdrState.textContent = label;
+
+  const stateLabel = document.getElementById(activeId + '-state');
+  if (stateLabel) stateLabel.textContent = label;
+
+  // Mic button appearance
+  $micBtn.classList.toggle('active', state === 'listening');
+  $micBtn.disabled = state === 'thinking' || state === 'speaking';
+  $sendBtn.disabled = state === 'thinking' || state === 'speaking';
+}
+
+/* ════════════════════════════════════════════════════════════
+   SPEECH-TO-TEXT (Web Speech API)
+   ════════════════════════════════════════════════════════════ */
+function initSTT() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    $sttStatus.textContent = 'STT: NOT SUPPORTED (text mode active)';
+    $sttStatus.classList.add('inactive');
+    $micBtn.disabled = true;
+    $micBtn.title = 'Speech recognition not supported in this browser';
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-CA';
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    setState('listening');
+    $liveTranscript.textContent = '▸ Listening…';
+    $sttStatus.textContent = 'STT: ACTIVE';
+    $sttStatus.classList.remove('inactive');
+  };
+  recognition.onresult = e => {
+    let interim = '';
+    let final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) final += t;
+      else interim += t;
+    }
+    $liveTranscript.textContent = final || interim || '▸ Listening…';
+    if (final) {
+      $textInput.value = final.trim();
+      stopListening();
+      handleSend();
+    }
+  };
+  recognition.onerror = e => {
+    $liveTranscript.textContent = '';
+    if (e.error === 'not-allowed') {
+      $sttStatus.textContent = 'STT: MIC PERMISSION DENIED';
+      $micBtn.disabled = true;
+    } else {
+      $sttStatus.textContent = 'STT: ERROR — ' + e.error.toUpperCase();
+    }
+    setState('idle');
+  };
+  recognition.onend = () => {
+    if (appState === 'listening') setState('idle');
+    $liveTranscript.textContent = '';
+    $sttStatus.textContent = 'STT: READY';
+  };
+
+  $sttStatus.textContent = 'STT: READY';
+  $sttStatus.classList.remove('inactive');
+}
+
+function toggleListening() {
+  if (appState === 'listening') { stopListening(); return; }
+  if (appState !== 'idle') return;
+  if (!recognition) return;
+  try { recognition.start(); } catch(e) {}
+}
+
+function stopListening() {
+  if (recognition) try { recognition.stop(); } catch(e) {}
+  if (appState === 'listening') setState('idle');
+  $liveTranscript.textContent = '';
+}
+
+/* ════════════════════════════════════════════════════════════
+   SEND & AI CALL
+   ════════════════════════════════════════════════════════════ */
+async function handleSend() {
+  const text = $textInput.value.trim();
+  if (!text || appState === 'thinking' || appState === 'speaking') return;
+  $textInput.value = '';
+  $textInput.style.height = 'auto';
+
+  addMessage(activeId, 'derek', text);
+  const typing = showTyping();
+  setState('thinking');
+
+  try {
+    let reply;
+    if (!BACKEND_URL) {
+      await new Promise(r => setTimeout(r, 800));
+      reply = demoReply(activeId, text);
+    } else {
+      reply = await callBackend(activeId, text);
+    }
+    removeTyping(typing);
+    addMessage(activeId, 'assistant', reply);
+    setState('speaking');
+    await speak(reply);
+  } catch (err) {
+    removeTyping(typing);
+    addMessage(activeId, 'system', 'Communication error: ' + err.message);
+    setState('error');
+    setTimeout(() => setState('idle'), 2000);
+    return;
+  }
+  setState('idle');
+}
+
+async function callBackend(execId, message) {
+  const exec = EXECUTIVES[execId];
+  const history = conversationHistory[execId]
+    .filter(m => m.role !== 'system')
+    .slice(-10)
+    .map(m => ({ role: m.role === 'derek' ? 'user' : 'assistant', content: m.text }));
+
+  const body = {
+    message,
+    session_id: sessionId + '_' + execId,
+    tier: 'enterprise',
+    history,
+    system_prompt: exec.system_prompt,
+  };
+
+  const res = await fetch(BACKEND_URL + '/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Backend returned ' + res.status);
+  }
+  const data = await res.json();
+  return data.response || data.content || JSON.stringify(data);
+}
+
+/* Demo reply — used when no backend configured */
+function demoReply(id, text) {
+  const exec = EXECUTIVES[id];
+  const lower = text.toLowerCase();
+  if (lower.includes('hello') || lower.includes('hi ') || lower.includes("what") && lower.includes("job")) {
+    return exec.greeting;
+  }
+  const demos = {
+    primedox: `[Demo mode — no backend configured]\n\nAs The Scholar, I would analyze that question by asking: what is the evidentiary basis? What authority governs this situation? What document or record proves the critical fact?\n\nTo receive actual PrimeDox intelligence, deploy the primedox-ai-backend to Railway and set BACKEND_URL in this file.`,
+    vigilax: `[Demo mode — no backend configured]\n\nAs The Sentinel, my first question is: what is the attack surface here? What trust boundary does that assumption cross?\n\nTo receive actual Vigilax threat analysis, deploy the primedox-ai-backend with a custom system_prompt field and set BACKEND_URL.`,
+    soulstack: `[Demo mode — no backend configured]\n\nAs The Strategist: what is the unit economics of that move? Problem → system → opportunity → execution → measurement.\n\nTo receive actual SoulStack strategic intelligence, configure BACKEND_URL and deploy.`,
+  };
+  return demos[id] || 'Demo mode — backend not configured.';
+}
+
+/* ════════════════════════════════════════════════════════════
+   TEXT-TO-SPEECH
+   ════════════════════════════════════════════════════════════ */
+async function speak(text) {
+  // Truncate for TTS (executive summaries, not full essays)
+  const ttsText = text.length > 400 ? text.slice(0, 397) + '…' : text;
+
+  if (ELEVENLABS_API_KEY && VOICE_IDS[activeId] && !VOICE_IDS[activeId].startsWith('YOUR_')) {
+    await speakElevenLabs(ttsText);
+  } else {
+    await speakWebSpeech(ttsText);
+  }
+}
+
+function speakWebSpeech(text) {
+  return new Promise(resolve => {
+    if (!synthesis) { resolve(); return; }
+    synthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    const exec = EXECUTIVES[activeId];
+    utt.rate = exec.ttsRate;
+    utt.pitch = exec.ttsPitch;
+    utt.volume = 1;
+    utt.onend = resolve;
+    utt.onerror = resolve;
+    synthesis.speak(utt);
+  });
+}
+
+async function speakElevenLabs(text) {
+  try {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_IDS[activeId]}`, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': ELEVENLABS_API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        text,
+        model_id: 'eleven_turbo_v2',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+      }),
+    });
+    if (!res.ok) throw new Error('ElevenLabs ' + res.status);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    await new Promise((resolve, reject) => {
+      audio.onended = () => { URL.revokeObjectURL(url); resolve(); };
+      audio.onerror = reject;
+      audio.play().catch(reject);
+    });
+  } catch (err) {
+    console.warn('ElevenLabs TTS failed, falling back to Web Speech API:', err.message);
+    await speakWebSpeech(text);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   CONVERSATION RENDERING
+   ════════════════════════════════════════════════════════════ */
+function addMessage(execId, role, text, scroll = true) {
+  conversationHistory[execId].push({ role, text, time: new Date() });
+  if (execId === activeId) renderLastMessage(role, text, scroll);
+}
+
+function renderLastMessage(role, text, scroll) {
+  const msg = conversationHistory[activeId].slice(-1)[0];
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+
+  const speaker = document.createElement('div');
+  speaker.className = 'msg-speaker' + (role === 'derek' ? ' derek' : '');
+  speaker.textContent = role === 'derek' ? 'DEREK'
+    : role === 'system' ? 'SYSTEM'
+    : EXECUTIVES[activeId].name.toUpperCase();
+
+  const time = document.createElement('div');
+  time.className = 'msg-time';
+  time.textContent = new Date().toLocaleTimeString('en-CA', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+
+  meta.appendChild(speaker);
+  meta.appendChild(time);
+
+  const content = document.createElement('div');
+  content.className = 'msg-content';
+  content.textContent = text;
+
+  row.appendChild(meta);
+  row.appendChild(content);
+  $conv.appendChild(row);
+  if (scroll) $conv.scrollTop = $conv.scrollHeight;
+}
+
+function renderConversation(id) {
+  $conv.innerHTML = '';
+  if (conversationHistory[id].length === 0) {
+    const sys = document.createElement('div');
+    sys.className = 'msg-row system';
+    sys.innerHTML = '<div class="msg-content">Executive channel initialised. Begin when ready.</div>';
+    $conv.appendChild(sys);
+  } else {
+    conversationHistory[id].forEach(m => renderLastMessage(m.role, m.text, false));
+    $conv.scrollTop = $conv.scrollHeight;
+  }
+}
+
+function showTyping() {
+  const row = document.createElement('div');
+  row.className = 'typing-row';
+  row.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  $conv.appendChild(row);
+  $conv.scrollTop = $conv.scrollHeight;
+  return row;
+}
+
+function removeTyping(el) {
+  if (el && el.parentNode) el.parentNode.removeChild(el);
+}
+
+/* ════════════════════════════════════════════════════════════
+   BOOT
+   ════════════════════════════════════════════════════════════ */
+init();
+</script>
