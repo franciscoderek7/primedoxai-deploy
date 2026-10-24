@@ -10,6 +10,22 @@ const CREATOR_PCT = 0.70;
 
 // ── In-memory catalog (Supabase writes when available) ─────────────────────
 
+// NOTE — `verified` and `kpis` on every entry below.
+//
+// `verified` is false on all listings and must stay false until a named human
+// has actually reviewed that listing and recorded how. It previously read
+// `verified: true` as a hard-coded literal: nothing computed it, nothing could
+// falsify it, and it is rendered to customers as a "VERIFIED" badge
+// (admin-dashboard/index.html:574) and echoed by the API
+// (marketplace.js res.json({ ...agent, reviews })).
+//
+// `kpis` is empty on all listings. It previously carried figures such as
+// no_show_reduction '52%', revenue_saved_per_month '$1,200 avg' and
+// conversion_lift '12%'. None was measured, sourced or reproducible, and all
+// were customer-facing outcome claims.
+//
+// Do not repopulate either field with an estimate. A KPI belongs here only
+// with a measured value AND a sibling `source` naming where it was measured.
 const BUILT_IN_AGENTS = [
   {
     id: 'booking_agent',
@@ -20,7 +36,7 @@ const BUILT_IN_AGENTS = [
     industries: ['dental','medical_clinic','fitness','salon_beauty','legal_criminal','pet_services','childcare'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: true,
     setup_price_cad: 297,
     monthly_price_cad: 97,
@@ -32,7 +48,7 @@ const BUILT_IN_AGENTS = [
     demo_url: 'https://primedoxaihq.com/demo/booking',
     manifest_version: '1.0',
     permissions: ['calendar:read','calendar:write','sms:send','email:send'],
-    kpis: { no_show_reduction: '42%', booking_increase: '28%', setup_time_hours: 2 },
+    kpis: {},
   },
   {
     id: 'chat_agent',
@@ -43,7 +59,7 @@ const BUILT_IN_AGENTS = [
     industries: ['all'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: true,
     setup_price_cad: 197,
     monthly_price_cad: 79,
@@ -55,7 +71,7 @@ const BUILT_IN_AGENTS = [
     demo_url: 'https://primedoxaihq.com/demo/chat',
     manifest_version: '1.0',
     permissions: ['chat:send','chat:receive','crm:write'],
-    kpis: { lead_response_time: '<30s', qualification_rate: '68%', after_hours_capture: '34%' },
+    kpis: {},
   },
   {
     id: 'review_agent',
@@ -66,7 +82,7 @@ const BUILT_IN_AGENTS = [
     industries: ['dental','restaurant','fitness','salon_beauty','automotive_repair','cleaning','pet_services'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 197,
     monthly_price_cad: 69,
@@ -78,7 +94,7 @@ const BUILT_IN_AGENTS = [
     demo_url: 'https://primedoxaihq.com/demo/review',
     manifest_version: '1.0',
     permissions: ['sms:send','email:send','google_business:read'],
-    kpis: { review_volume_increase: '340%', response_rate: '28%', avg_rating_lift: '+0.6 stars' },
+    kpis: {},
   },
   {
     id: 'seo_agent',
@@ -89,7 +105,7 @@ const BUILT_IN_AGENTS = [
     industries: ['all'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 297,
     monthly_price_cad: 89,
@@ -101,7 +117,7 @@ const BUILT_IN_AGENTS = [
     demo_url: null,
     manifest_version: '1.0',
     permissions: ['website:read','sitemap:write'],
-    kpis: { ranking_improvement: '3-8 positions', organic_traffic_increase: '45%', setup_time_hours: 4 },
+    kpis: {},
   },
   {
     id: 'lead_agent',
@@ -112,7 +128,7 @@ const BUILT_IN_AGENTS = [
     industries: ['all'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 197,
     monthly_price_cad: 79,
@@ -124,7 +140,7 @@ const BUILT_IN_AGENTS = [
     demo_url: null,
     manifest_version: '1.0',
     permissions: ['email:send','crm:write','website:modify'],
-    kpis: { list_growth_rate: '180%', conversion_lift: '12%', revenue_per_lead: '$340 avg' },
+    kpis: {},
   },
   {
     id: 'intake_agent',
@@ -135,7 +151,7 @@ const BUILT_IN_AGENTS = [
     industries: ['dental','medical_clinic','legal_criminal','childcare','financial_advisory'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 149,
     monthly_price_cad: 49,
@@ -147,7 +163,7 @@ const BUILT_IN_AGENTS = [
     demo_url: null,
     manifest_version: '1.0',
     permissions: ['sms:send','email:send','crm:write'],
-    kpis: { admin_time_saved_min: 15, data_accuracy: '99.2%', patient_satisfaction: '+18%' },
+    kpis: {},
   },
   {
     id: 'reminder_agent',
@@ -158,7 +174,7 @@ const BUILT_IN_AGENTS = [
     industries: ['dental','medical_clinic','fitness','salon_beauty','legal_criminal'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 149,
     monthly_price_cad: 49,
@@ -170,7 +186,7 @@ const BUILT_IN_AGENTS = [
     demo_url: null,
     manifest_version: '1.0',
     permissions: ['sms:send','email:send','calendar:read'],
-    kpis: { no_show_reduction: '52%', reschedule_fill_rate: '78%', revenue_saved_per_month: '$1,200 avg' },
+    kpis: {},
   },
   {
     id: 'follow_up_agent',
@@ -181,7 +197,7 @@ const BUILT_IN_AGENTS = [
     industries: ['dental','medical_clinic','fitness','salon_beauty','restaurant','automotive_repair'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 149,
     monthly_price_cad: 59,
@@ -193,7 +209,7 @@ const BUILT_IN_AGENTS = [
     demo_url: null,
     manifest_version: '1.0',
     permissions: ['sms:send','email:send','crm:read'],
-    kpis: { reactivation_rate: '23%', referral_lift: '41%', ltv_increase: '18%' },
+    kpis: {},
   },
   {
     id: 'analytics_agent',
@@ -204,7 +220,7 @@ const BUILT_IN_AGENTS = [
     industries: ['all'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 149,
     monthly_price_cad: 49,
@@ -216,7 +232,7 @@ const BUILT_IN_AGENTS = [
     demo_url: null,
     manifest_version: '1.0',
     permissions: ['analytics:read','analytics:write'],
-    kpis: { setup_time_hours: 1, insights_per_week: 5, decision_speed_improvement: '60%' },
+    kpis: {},
   },
   {
     id: 'social_agent',
@@ -227,7 +243,7 @@ const BUILT_IN_AGENTS = [
     industries: ['restaurant','salon_beauty','fitness','real_estate','ecommerce','cleaning'],
     creator: 'Francisco Holdings Inc.',
     creator_id: 'fhi-official',
-    verified: true,
+    verified: false,
     featured: false,
     setup_price_cad: 249,
     monthly_price_cad: 89,
@@ -239,7 +255,7 @@ const BUILT_IN_AGENTS = [
     demo_url: null,
     manifest_version: '1.0',
     permissions: ['social:read','social:write'],
-    kpis: { posts_per_month: 30, engagement_lift: '85%', time_saved_hours: 8 },
+    kpis: {},
   },
 ];
 
