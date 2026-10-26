@@ -377,7 +377,7 @@ async function scanUrl(targetUrl, options = {}) {
   const hostname = parsed.hostname.replace(/^www\./, '');
 
   const detectedIndustry = options.industry || detectIndustry(page.body, hostname);
-  const profile = profiles.find(p => p.industry === detectedIndustry) || null;
+  const profile = (profiles.industries && profiles.industries[detectedIndustry]) || null;
 
   const scoreResult = calcGapScore(evidence, profile);
   const gaps = buildGaps(evidence, profile);
