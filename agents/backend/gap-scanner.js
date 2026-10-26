@@ -14,7 +14,12 @@ function loadProfiles() {
   if (!industryProfiles) {
     industryProfiles = require('./industry-profiles.json');
   }
-  return industryProfiles;
+  // The JSON is { _meta, industries: { <id>: profile } } — an object, not an
+  // array. Enumerate it into the array both callers below expect, carrying
+  // each object KEY through as the canonical id. The id is spread LAST so a
+  // profile property can never override it.
+  return Object.entries(industryProfiles.industries)
+    .map(([id, p]) => ({ ...p, id }));
 }
 
 // ── HTTP Fetcher ────────────────────────────────────────────────────────────
@@ -377,7 +382,12 @@ async function scanUrl(targetUrl, options = {}) {
   const hostname = parsed.hostname.replace(/^www\./, '');
 
   const detectedIndustry = options.industry || detectIndustry(page.body, hostname);
-  const profile = (profiles.industries && profiles.industries[detectedIndustry]) || null;
+  // detectIndustry() yields an INDUSTRY_SIGNALS key ("dental"); a caller may
+  // instead pass the display label ("Dental"). Accept either. An unsupported
+  // industry stays null — never fall back to another industry's profile.
+  const profile = profiles.find(
+    p => p.id === detectedIndustry || p.industry === detectedIndustry
+  ) || null;
 
   const scoreResult = calcGapScore(evidence, profile);
   const gaps = buildGaps(evidence, profile);
@@ -452,9 +462,9 @@ function registerRoutes(app, limiter) {
   app.get('/api/gap-scan/industries', (req, res) => {
     const profiles = loadProfiles();
     res.json(profiles.map(p => ({
-      id: p.industry,
+      id: p.id,                 // canonical key, e.g. "dental"
       group: p.group,
-      industry: p.industry,
+      industry: p.industry,     // human-readable label, e.g. "Dental"
       sub_industries: p.sub_industries,
     })));
   });
