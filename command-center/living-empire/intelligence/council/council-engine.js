@@ -2,7 +2,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const aiRuntime = require("./ai-runtime");
 
 const ROOT = path.resolve(__dirname, "..");
 const AVATAR_DIR = path.join(ROOT, "avatars");
@@ -24,6 +23,23 @@ function slug(value) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 80);
+}
+
+// What an analysisStatus of COMPLETE is actually based on. Model output
+// that parses is not evidence that the analysis is correct.
+const ANALYSIS_BASIS = "structural_response_acceptance";
+
+function summarizeAnalysis(executives) {
+  const list = Array.isArray(executives) ? executives : [];
+  const count = status =>
+    list.filter(e => e && e.analysisStatus === status).length;
+  return {
+    total: list.length,
+    complete: count("COMPLETE"),
+    unavailable: count("UNAVAILABLE"),
+    error: count("ERROR"),
+    missing: list.filter(e => !e || !e.analysisStatus).length
+  };
 }
 
 async function createCouncilCase(problem, customer = "UNSPECIFIED") {
@@ -84,16 +100,45 @@ async function createCouncilCase(problem, customer = "UNSPECIFIED") {
   // Authority flags above are set before this call and cannot be
   // modified by AI output. File write always executes regardless.
   try {
+    // Required lazily: a missing SDK must degrade like a missing API key,
+    // not crash the engine before any proposal is recorded.
+    const aiRuntime = require("./ai-runtime");
     const aiResults = await aiRuntime.analyzeCouncil({ problem, profiles });
     const aiById = Object.fromEntries(aiResults.map(r => [r.id, r]));
     proposal.executives = proposal.executives.map(exec => ({
       ...exec,
       ...aiById[exec.id]
     }));
-    proposal.councilPipelineStage = "SPECIALIST_ANALYSIS";
   } catch (e) {
-    proposal.councilPipelineStage = "INTAKE";
     proposal.aiRuntimeStatus = "ERROR";
+    proposal.aiRuntimeError = "AI runtime unavailable";
+  }
+
+  // The stage records what actually happened, not that the attempt was
+  // made. A stage may only advance on evidence of completed work.
+  const outcome = summarizeAnalysis(proposal.executives);
+
+  // "COMPLETE" means the model returned a non-empty string and nothing
+  // more (see ai-runtime.js). That is structural response acceptance,
+  // not independent factual verification. Record the basis explicitly so
+  // no downstream reader can mistake one for the other.
+  proposal.specialistAnalysis = {
+    ...outcome,
+    basis: ANALYSIS_BASIS
+  };
+
+  // No verification has been performed. Verification requires explicit
+  // evidence and a defined passing policy, neither of which exists in
+  // this engine. Recorded as an explicit null rather than omitted, so an
+  // absent field can never be read as "not yet migrated".
+  proposal.verification = null;
+  proposal.councilPipelineStage =
+    outcome.complete > 0 ? "SPECIALIST_ANALYSIS" : "INTAKE";
+  if (!proposal.aiRuntimeStatus) {
+    proposal.aiRuntimeStatus =
+      outcome.complete > 0
+        ? outcome.complete === outcome.total ? "COMPLETE" : "PARTIAL"
+        : outcome.error > 0 ? "ERROR" : "UNAVAILABLE";
   }
 
   const output = path.join(PROPOSAL_DIR, `${id}.json`);
@@ -103,6 +148,10 @@ async function createCouncilCase(problem, customer = "UNSPECIFIED") {
 
   return { output, proposal };
 }
+
+module.exports = { createCouncilCase, summarizeAnalysis, ANALYSIS_BASIS };
+
+if (require.main !== module) return;
 
 const problem = process.argv.slice(2).join(" ").trim();
 
@@ -131,8 +180,12 @@ createCouncilCase(problem).then(result => {
   console.log(`STATUS:   ${result.proposal.status}`);
   console.log(`DECISION: ${result.proposal.humanDecision}`);
   console.log(`STAGE:    ${result.proposal.councilPipelineStage || "INTAKE"}`);
+  console.log(`BASIS:    ${result.proposal.specialistAnalysis.basis}`);
+  console.log(`VERIFIED: ${result.proposal.verification === null
+    ? "NO — no verification has been performed"
+    : "see verification record"}`);
   console.log("");
-  console.log("EXECUTIVE ANALYSIS:");
+  console.log("EXECUTIVE ANALYSIS (model output — not independently verified):");
   console.log("");
 
   for (const executive of result.proposal.executives) {
