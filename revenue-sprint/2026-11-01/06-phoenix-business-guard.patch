@@ -1,0 +1,47 @@
+--- a/phoenix-core/index.js	2026-11-01 10:18:07.321589424 +0000
++++ b/phoenix-core/index.js	2026-11-01 10:18:29.380344639 +0000
+@@ -18,7 +18,21 @@
+ 
+ const app = express();
+ 
+-const businessRoute=require('../primedoxai-system/api/business');
++// The business API lives in a sibling project (primedoxai-system) that is
++// not part of this repository. Resolve it before requiring it: when it is
++// absent Phoenix Core must still start, but when it is present and broken
++// the real error must surface instead of being masked as "unavailable".
++let businessRoute = null;
++let businessUnavailableReason = null;
++try {
++  require.resolve('../primedoxai-system/api/business');
++} catch (e) {
++  businessUnavailableReason =
++    'primedoxai-system/api/business is not present in this deployment';
++}
++if (!businessUnavailableReason) {
++  businessRoute = require('../primedoxai-system/api/business');
++}
+ 
+ const dashboardLiveRoute=require('./routes/dashboard-live');
+ 
+@@ -90,7 +104,20 @@
+ 
+ app.use(dashboardLiveRoute);
+ 
+-app.use('/api/business',businessRoute);
++if (businessRoute) {
++  app.use('/api/business', businessRoute);
++} else {
++  // Reports why the endpoint is unavailable rather than 404-ing as if the
++  // route had never existed. No stub implementation is provided: nothing
++  // here answers a business request.
++  app.use('/api/business', (req, res) => {
++    res.status(503).json({
++      status: 'unavailable',
++      service: 'business',
++      reason: businessUnavailableReason
++    });
++  });
++}
+ 
+ app.listen(PORT, () => {
+   console.log(`
