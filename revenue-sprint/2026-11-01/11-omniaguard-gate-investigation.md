@@ -24,7 +24,9 @@ Access: **read-only** — this session cannot push to that repository.
    never fire, and is **non-blocking** anyway. `deploy-omni-guard.yml:19` is
    **inverted** — it fails the build when it finds the *correct* brand name.
    **Neither tests for `OmniAGuard`, the forbidden form actually on the live
-   site.**
+   site.** **Both defects are branch-scoped: the gates are intact on
+   `origin/main` and broken on `MEva6` and this branch — see the CORRECTION in
+   §C.**
 4. **Both personal-info gates scan the SOURCE folder, never the publish
    artifact.** Anything introduced during the wipe/copy/CNAME steps is
    unscanned.
@@ -79,7 +81,7 @@ before any recovery step.**
 | Workflow | Source folder | Trigger | Gates |
 |---|---|---|---|
 | `deploy-omniaguard.yml` | `omniaguard-site/**` | push to `main` **and `claude/francisco-revenue-sprint-MEva6`**, + dispatch | spelling (inert, non-blocking), personal-info (blocking, source-only) |
-| `deploy-omni-guard.yml` | `omni-guard-site/**` | push to `main`, + dispatch | spelling (**inverted**, blocking), personal-info (blocking, source-only) |
+| `deploy-omni-guard.yml` | `omni-guard-site/**` | push to `main`, + dispatch | spelling (**inverted on the feature branches; correct on `main`** — see §C CORRECTION), personal-info (blocking, source-only) |
 
 Both end with `git push origin main` to `franciscoderek7/omniaguard`. CLAUDE.md
 says of `omni-guard-site/`: *"do not deploy without Derek's explicit
@@ -141,7 +143,39 @@ warning and exits 0**: there is no `exit 1`. The in-file comment
 (*"OMNIAGUARD is RETIRED. Only OMNIAGUARD (no 'ia') is correct"*) names the same
 string on both sides of the sentence and cannot be satisfied as written.
 
-**`deploy-omni-guard.yml:19` — inverted:**
+### CORRECTION (2026-11-03) — both spelling defects are BRANCH-SCOPED
+
+The two defects described below were read from this working branch. Verified
+afterwards across all three refs, the gates are **intact on `origin/main`** and
+**broken on both feature branches**:
+
+| File:line | `origin/main` | `MEva6` | `claude/revenue-intake-review` |
+|---|---|---|---|
+| `deploy-omni-guard.yml:19` | `OmniaGuard\|OMNIGUARD\|Omni Guard\|OMNI GUARD` — **correct** | `OMNIAGUARD\|…` — **inverted** | `OMNIAGUARD\|…` — **inverted** |
+| `deploy-omniaguard.yml:20` | `OmniaGuard\|OmnIAGuard\|OMNIAGUARD` — **correct** | `OMNIAGUARD\|OmnIAGuard\|OMNIAGUARD` — **self-cancelling** | same — **self-cancelling** |
+
+Neither workflow file is modified in the working tree, so this is committed
+branch content, not a local edit.
+
+**Cause:** collateral damage from commit `b10c78d`, *"P0 brand fixes: OMNIAGUARD
+rename empire-wide … across 290+ files."* A blanket find-and-replace rewrote the
+safety gates' own detection patterns, turning the string they were built to
+*detect* into the string they now *require*.
+
+**Why this still matters, and arguably matters more:** **26 workflows are armed
+on `MEva6`**, and `MEva6` carries both broken gates. A deploy from that branch
+runs a spelling check that fails on correct branding and no longer detects the
+forbidden form. Anything merged from these branches into `main` also carries the
+breakage back.
+
+**Everything else in §C stands unchanged**, including the bypass finding — that
+rests on the file-level source mismatch, not on either gate.
+
+Read the two subsections below as describing **the feature-branch copies**.
+
+---
+
+**`deploy-omni-guard.yml:19` — inverted (on the feature branches):**
 
 ```bash
 ERRORS=$(grep -rln "OMNIAGUARD\|OMNIGUARD\|Omni Guard\|OMNI GUARD" \
